@@ -9,7 +9,7 @@ jobs:
       - run:
           name: Build Docker Images
           command: |
-            ./docker/build_docker.sh
+            ./build_docker.sh
 workflows:
   version: 2
   full_build:
