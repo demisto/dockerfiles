@@ -2,7 +2,7 @@ version: 2.0
 jobs:
   docker_build:
     docker:
-      - image: circleci/python:2.7.15-stretch
+      - image: devdemisto/dockerbuild:1.0.0.4
     steps:
       - checkout
       - setup_remote_docker
