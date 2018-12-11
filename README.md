@@ -2,11 +2,11 @@
 
 This repository's `master` branch tracks images pushed to the official Demisto Docker Hub organization at: https://hub.docker.com/u/demisto/. Other branches` images are pushed to (devdemisto)[https://hub.docker.com/u/devdemisto].
 
-Each docker image is managed in its own directory. The directory should be named the same as the image name (without the organization prefix). 
+Each docker image is managed in its own directory. The directory should be named the same as the image name (without the organization prefix). All image directories are located under the `docker` dir.
 
 The directory should contain one Dockerfile which will be used for building the docker image. Each image when it is built is tagged with the commit hash and version. The version is obtained from a `version` file in the directory and if not present a default version of `1.0.0` is used. Additionally, the CircleCI build number is appended to the version as a revision (for example: `1.0.0.15519`).
 
-The script `build_docker.sh` is used to build all modified docker images. The script detects modified directories by comparing against origin/master if on a branch or if on master by using the CIRCLE_COMPARE_URL environment variable to obtain the commit range of the current build.
+The script `docker/build_docker.sh` is used to build all modified docker images. The script detects modified directories by comparing against origin/master if on a branch or if on master by using the CIRCLE_COMPARE_URL environment variable to obtain the commit range of the current build.
 
 ## Support for Pipenv (Pipfile)
 Our recommendation is to use [Pipenv](https://pipenv.readthedocs.io/en/latest/) to manage python dependencies as it ensures that the build produces a deterministic list of python dependencies.
