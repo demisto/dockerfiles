@@ -1,0 +1,17 @@
+version: 2.0
+jobs:
+  docker_build:
+    docker:
+      - image: circleci/python:2.7.15-stretch
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build Docker Images
+          command: |
+            ./docker/build_docker.sh
+workflows:
+  version: 2
+  full_build:
+    jobs:
+      - docker_build
