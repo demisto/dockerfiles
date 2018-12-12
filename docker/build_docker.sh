@@ -78,6 +78,7 @@ DIFF_COMPARE=origin/master
 
 echo "python version: "
 python --version
+env | grep -v DOCKERHUB
 echo "pyenv versions:"
 pyenv versions
 
