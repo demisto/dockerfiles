@@ -83,6 +83,10 @@ fi
 
 echo "python version: "
 python --version
+pwd
+id
+ls -la
+ls -la ~
 env | grep -v DOCKERHUB
 echo "pyenv versions:"
 pyenv versions
