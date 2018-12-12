@@ -76,6 +76,11 @@ fi
 # default compare against master
 DIFF_COMPARE=origin/master
 
+echo "python version: "
+python --version
+echo "pyenv versions:"
+pyenv versions
+
 if [ "$CIRCLE_BRANCH" == "master" ]; then
     # on master we use the range obtained from CIRCLE_COMPARE_URL
     # example of comapre url: https://github.com/demisto/content/compare/62f0bd03be73...1451bf0f3c2a
