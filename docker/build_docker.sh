@@ -76,6 +76,11 @@ fi
 # default compare against master
 DIFF_COMPARE=origin/master
 
+if [[ ! $(which pyenv) ]]; then 
+    echo "pyenv not found. sourcing bashrc to enable";\
+    . ~/.bashrc
+fi
+
 echo "python version: "
 python --version
 env | grep -v DOCKERHUB
