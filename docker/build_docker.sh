@@ -77,8 +77,10 @@ fi
 DIFF_COMPARE=origin/master
 
 if [[ ! $(which pyenv) ]]; then 
-    echo "pyenv not found. sourcing bashrc to enable";\
-    . ~/.bashrc
+    echo "pyenv not found. setting up necessary env for pyenv";\
+    export PATH="$HOME/.pyenv/bin:$PATH"
+    eval "$(pyenv init -)"
+    eval "$(pyenv virtualenv-init -)"
 fi
 
 echo "python version: "
