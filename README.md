@@ -4,9 +4,15 @@ This repository's `master` branch tracks images pushed to the official Demisto D
 
 Each docker image is managed in its own directory. The directory should be named the same as the image name (without the organization prefix). All image directories are located under the `docker` dir.
 
-The directory should contain one Dockerfile which will be used for building the docker image. Each image when it is built is tagged with the commit hash and version. The version is obtained from a `version` file in the directory and if not present a default version of `1.0.0` is used. Additionally, the CircleCI build number is appended to the version as a revision (for example: `1.0.0.15519`).
+The directory should contain one Dockerfile which will be used for building the docker image. Each image when it is built is tagged with the commit hash and version. 
 
 The script `docker/build_docker.sh` is used to build all modified docker images. The script detects modified directories by comparing against origin/master if on a branch or if on master by using the CIRCLE_COMPARE_URL environment variable to obtain the commit range of the current build.
+
+## Build configuration
+The build script will check for a `build.conf` file in the target image directory and will read from it `name=value` properties. Supported properties:
+
+* **version**: The version to use for tagging. Default: `1.0.0`. Note: that additionally, the CircleCI build number is always appended to the version as a revision (for example: `1.0.0.15519`) to create a unique version per build.
+* **devonly**: If set the image will be pushed only the the `devdemisto` org in docker hub and will not be pushed to `demisto` org. Should be used for images which are for development purposes only (such as the image used in CircleCI to build this project).
 
 ## Support for Pipenv (Pipfile)
 Our recommendation is to use [Pipenv](https://pipenv.readthedocs.io/en/latest/) to manage python dependencies as it ensures that the build produces a deterministic list of python dependencies.
