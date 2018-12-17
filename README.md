@@ -24,6 +24,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 **Note**: build will fail if a `Pipfile` is detected without a corresponding `Pipfile.lock` file.
 
 ### Pipenv quick start:
+* Install pyenv:
+  * Mac: `brew install pyenv`
+  * Other: see https://github.com/pyenv/pyenv-installer 
 * Install pipenv globally using: `pip install pipenv`
 * In the relevant folder initialize the pipenv environment:
     * python 2: `PIPENV_MAX_DEPTH=1 pipenv --two`
