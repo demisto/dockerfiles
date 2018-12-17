@@ -35,6 +35,37 @@ RUN pip install --no-cache-dir -r requirements.txt
 * Make sure to commit both `Pipfile` and `Pipfile.lock` files
 * To see the locked dependencies run: `pipenv lock -r` 
 
+## Base Python Images
+There are 4 base python images which should be used when building a new image which is based upon python:
+
+* python: Python 2 image based upon alpine
+* python3: Python 3 image based upon alpine
+* python-deb: Python 2 image based upon debian
+* python3-deb: Python 3 image based upon debian
+
+### Which image to choose as a base?
+
+If you are using pure python dependencies then choose the alpine image with the proper python version which fits your needs (two or three). The alpine based images are smaller and recommended for use. If you require installing binaries or binary python dependencies ([manylinux](https://github.com/pypa/manylinux)), you are probably best choosing the debian based images. See the following link: https://github.com/docker-library/docs/issues/904 .
+
+### Installing a Common Dependency
+If you want to install a new common dependency in all python base images use the script: `install_common_python_dep.sh`. Usage:
+```
+Usage: ./docker/install_common_python_dep.sh <dependency name>
+
+Install a common python dependency in all docker python base images.
+Will use pipenv to install the dependency in each directory.
+Base images:
+   python
+   python3
+   python-deb
+   python3-deb
+
+For example: ./docker/install_common_python_dep.sh dateparser
+```
+**Note:** By default pipenv will install the specified dependency and also update all other dependencies if possible. If you want to only install a dependency and not update the existing dependencies run the script with the env variable: `PIPENV_KEEP_OUTDATED`. For example:
+```
+PIPENV_KEEP_OUTDATED=true ./docker/install_common_python_dep.sh dateparser
+```
 ## Building Locally a Test Build
 It is possible to run a local build to verify that the build process is working. Requirements:
 * Local install of docker
