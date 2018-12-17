@@ -50,7 +50,7 @@ If you are using pure python dependencies then choose the alpine image with the 
 ### Installing a Common Dependency
 If you want to install a new common dependency in all python base images use the script: `install_common_python_dep.sh`. Usage:
 ```
-Usage: ./docker/install_common_python_dep.sh <dependency name>
+Usage: ./docker/install_common_python_dep.sh [packages]
 
 Install a common python dependency in all docker python base images.
 Will use pipenv to install the dependency in each directory.

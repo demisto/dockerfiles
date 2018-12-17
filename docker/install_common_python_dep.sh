@@ -6,7 +6,7 @@ set -e
 BASE_IMAGES=(python python3 python-deb python3-deb)
 
 if [[ -z "$1" ]] || [[ "$1" == -* ]]; then    
-    echo "Usage: ${BASH_SOURCE} <dependency name>"
+    echo "Usage: ${BASH_SOURCE} [packages]"
     echo ""
     echo "Install a common python dependency in all docker python base images."
     echo "Will use pipenv to install the dependency in each directory."
@@ -25,10 +25,10 @@ SCRIPT_DIR=$(dirname ${BASH_SOURCE})
 
 for dir in ${BASE_IMAGES[*]}
 do
-    echo "===== Installing $1 in dir: $dir... ====="
+    echo "===== Installing [$@] in dir: $dir... ====="
     cd "${SCRIPT_DIR}/${dir}"
     #make sure we start with a clean env
     pipenv --rm || echo "Proceeding. It is ok that no virtualenv is available to remove"
-    pipenv install $1
+    pipenv install "$@"
     cd $current_dir
 done
