@@ -47,11 +47,10 @@ function docker_login {
 # build docker. 
 # Param $1: docker dir with all relevant files
 function docker_build {
-    DOCKER_ORG=${DOCKER_ORG:-devdemisto}
-    current_dir=`pwd`
+    DOCKER_ORG=${DOCKER_ORG:-devdemisto}    
     image_name=$(basename $1)
-    echo "Starting build for dir: $1, image: ${image_name}, pwd: ${current_dir}"
-    cd $1    
+    echo "Starting build for dir: $1, image: ${image_name}, pwd: $(pwd)"
+    cd $1        
     if  [[ "$CIRCLE_BRANCH" == "master" ]] && [[ "$(prop 'devonly')" ]]; then
         echo "== skipping image [${image_name}] as it is marked devonly =="
         return 0
@@ -82,8 +81,7 @@ function docker_build {
     if docker_login; then
         docker push ${DOCKER_ORG}/${image_name}:${CIRCLE_SHA1}
         docker push ${DOCKER_ORG}/${image_name}:${VERSION}
-    fi
-    cd ${current_dir}
+    fi    
 }
 
 if [ -z "$CIRCLE_SHA1" ]; then
@@ -126,9 +124,9 @@ fi
 
 SCRIPT_DIR=$(dirname ${BASH_SOURCE})
 
-echo "DIFF_COMPARE: [${DIFF_COMPARE}], SCRIPT_DIR: [${SCRIPT_DIR}], PWD: [$(pwd)]"
+current_dir=`pwd`
 
-ls ${SCRIPT_DIR}
+echo "DIFF_COMPARE: [${DIFF_COMPARE}], SCRIPT_DIR: [${SCRIPT_DIR}], CIRCLE_BRANCH: ${CIRCLE_BRANCH}, PWD: [$(current_dir)]"
 
 for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | sort`; do
     if [[ ${DIFF_COMPARE} = "ALL" ]] || [[ $(git diff $DIFF_COMPARE -- ${docker_dir}) ]]; then
@@ -138,6 +136,7 @@ for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | so
         fi
         echo "=============== `date`: Starting docker build in dir: ${docker_dir} ==============="
         docker_build ${docker_dir}
+        cd ${current_dir}
         echo ">>>>>>>>>>>>>>> `date`: Done docker build <<<<<<<<<<<<<"
     fi
 done
