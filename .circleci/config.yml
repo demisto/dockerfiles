@@ -1,0 +1,17 @@
+version: 2.0
+jobs:
+  docker_build:
+    docker:
+      - image: devdemisto/dockerbuild:1.0.0.4
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build Docker Images
+          command: |
+            ./docker/build_docker.sh
+workflows:
+  version: 2
+  full_build:
+    jobs:
+      - docker_build
