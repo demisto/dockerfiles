@@ -119,14 +119,14 @@ if [ "$CIRCLE_BRANCH" == "master" ]; then
             exit 1
         fi
     fi
-    #DOCKER_ORG=demisto # TODO: once approved we change this to demisto
+    DOCKER_ORG=demisto
 fi
 
 SCRIPT_DIR=$(dirname ${BASH_SOURCE})
 
 current_dir=`pwd`
 
-echo "DIFF_COMPARE: [${DIFF_COMPARE}], SCRIPT_DIR: [${SCRIPT_DIR}], CIRCLE_BRANCH: ${CIRCLE_BRANCH}, PWD: [$(current_dir)]"
+echo "DOCKER_ORG: ${DOCKER_ORG}, DIFF_COMPARE: [${DIFF_COMPARE}], SCRIPT_DIR: [${SCRIPT_DIR}], CIRCLE_BRANCH: ${CIRCLE_BRANCH}, PWD: [$(current_dir)]"
 
 for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | sort`; do
     if [[ ${DIFF_COMPARE} = "ALL" ]] || [[ $(git diff $DIFF_COMPARE -- ${docker_dir}) ]]; then
