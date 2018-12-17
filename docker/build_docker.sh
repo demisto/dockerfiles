@@ -49,8 +49,9 @@ function docker_login {
 function docker_build {
     DOCKER_ORG=${DOCKER_ORG:-devdemisto}
     current_dir=`pwd`
-    cd $1
-    image_name=$(basename ${docker_dir})
+    image_name=$(basename $1)
+    echo "Starting build for dir: $1, image: ${image_name}, pwd: ${current_dir}"
+    cd $1    
     if  [[ "$CIRCLE_BRANCH" == "master" ]] && [[ "$(prop 'devonly')" ]]; then
         echo "== skipping image [${image_name}] as it is marked devonly =="
         return 0
@@ -125,7 +126,7 @@ fi
 
 SCRIPT_DIR=$(dirname ${BASH_SOURCE})
 
-echo "DIFF_COMPARE: [${DIFF_COMPARE}], SCRIPT_DIR: [${SCRIPT_DIR}]"
+echo "DIFF_COMPARE: [${DIFF_COMPARE}], SCRIPT_DIR: [${SCRIPT_DIR}], PWD: [$(pwd)]"
 
 ls ${SCRIPT_DIR}
 
