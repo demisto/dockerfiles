@@ -111,11 +111,7 @@ if [ "$CIRCLE_BRANCH" == "master" ]; then
     # example of comapre url: https://github.com/demisto/content/compare/62f0bd03be73...1451bf0f3c2a
     # if there wasn't a successful build CIRCLE_COMPARE_URL is empty. We set diff compare to special ALL
     if [ -z "$CIRCLE_COMPARE_URL" ]; then
-<<<<<<< HEAD
-        echo "CIRCLE_COMPARE_URL not set. Assuming no successful build yet and setting to ALL."
-=======
         echo "CIRCLE_COMPARE_URL not set. Assuming no successful build yet and setting DIFF to ALL."
->>>>>>> build-fix
         DIFF_COMPARE="ALL"
     else
         DIFF_COMPARE=$(echo "$CIRCLE_COMPARE_URL" | sed 's:^.*/compare/::g')    
