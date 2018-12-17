@@ -45,7 +45,7 @@ There are 4 base python images which should be used when building a new image wh
 
 ### Which image to choose as a base?
 
-If you are using pure python dependencies then choose the alpine image with the proper python version which fits your needs (two or three). The alpine based images are smaller and recommended for use. If you require installing binaries or binary python dependencies ([manylinux](https://github.com/pypa/manylinux)), you are probably best choosing the debian based images. See the following link: https://github.com/docker-library/docs/issues/904 .
+If you are using pure python dependencies then choose the alpine image with the proper python version which fits your needs (two or three). The alpine based images are smaller and recommended for use. If you require installing binaries or pre-compiled binary python dependencies ([manylinux](https://github.com/pypa/manylinux)), you are probably best choosing the debian based images. See the following link: https://github.com/docker-library/docs/issues/904 .
 
 ### Installing a Common Dependency
 If you want to install a new common dependency in all python base images use the script: `install_common_python_dep.sh`. Usage:
