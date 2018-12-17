@@ -109,10 +109,16 @@ pyenv versions
 if [ "$CIRCLE_BRANCH" == "master" ]; then
     # on master we use the range obtained from CIRCLE_COMPARE_URL
     # example of comapre url: https://github.com/demisto/content/compare/62f0bd03be73...1451bf0f3c2a
-    DIFF_COMPARE=$(echo "$CIRCLE_COMPARE_URL" | sed 's:^.*/compare/::g')    
-    if [ -z "${DIFF_COMPARE}" ]; then
-        echo "Failed: extracting diff compare from CIRCLE_COMPARE_URL: ${CIRCLE_COMPARE_URL}"
-        exit 1
+    # if there wasn't a successful build CIRCLE_COMPARE_URL is empty. We set diff compare to special ALL
+    if [ -z "$CIRCLE_COMPARE_URL" ]; then
+        echo "CIRCLE_COMPARE_URL not set. Assuming no successful build yet and setting to ALL."
+        DIFF_COMPARE="ALL"
+    else
+        DIFF_COMPARE=$(echo "$CIRCLE_COMPARE_URL" | sed 's:^.*/compare/::g')    
+        if [ -z "${DIFF_COMPARE}" ]; then
+            echo "Failed: extracting diff compare from CIRCLE_COMPARE_URL: ${CIRCLE_COMPARE_URL}"
+            exit 1
+        fi
     fi
     #DOCKER_ORG=demisto # TODO: once approved we change this to demisto
 fi
@@ -122,7 +128,7 @@ SCRIPT_DIR=$(dirname ${BASH_SOURCE})
 echo "DIFF_COMPARE: [${DIFF_COMPARE}]"
 
 for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | sort`; do
-    if [[ $(git diff $DIFF_COMPARE -- ${docker_dir}) ]]; then
+    if [[ ${DIFF_COMPARE} = "ALL" ]] || [[ $(git diff $DIFF_COMPARE -- ${docker_dir}) ]]; then
         if [ -n "${DOCKER_INCLUDE_GREP}" ] && [ -z "$(echo ${docker_dir} | grep -E ${DOCKER_INCLUDE_GREP})" ]; then
             echo "Skipping dir: '${docker_dir}' as not included in grep expression DOCKER_INCLUDE_GREP: '${DOCKER_INCLUDE_GREP}'"
             continue
