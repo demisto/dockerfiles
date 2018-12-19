@@ -1,14 +1,9 @@
-version: 2.1
-orbs:
-  # https://circleci.com/orbs/registry/orb/iynere/compare-url
-  compare-url: iynere/compare-url@volatile
 jobs:
   docker_build:
     docker:
-      - image: devdemisto/dockerbuild:1.0.0.4
+      - image: devdemisto/dockerbuild:1.0.0.26
     steps:
       - checkout
-      - compare-url/reconstruct
       - setup_remote_docker
       - run:
           name: Build Docker Images
