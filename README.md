@@ -8,6 +8,35 @@ The directory should contain one Dockerfile which will be used for building the 
 
 The script `docker/build_docker.sh` is used to build all modified docker images. The script detects modified directories by comparing against origin/master if on a branch or if on master by using the CIRCLE_COMPARE_URL environment variable to obtain the commit range of the current build.
 
+## Getting Started
+To get up and running fast with a python image with additional packages use the script: `docker/create_new_python_image.py`. Usage:
+```
+./docker/create_new_python_image.py -h
+usage: create_new_python_image.py [-h] [-p {two,three}] [-l {alpine,debian}]
+                                  [--pkg PKG]
+                                  name
+
+Create a new python based docker image
+
+positional arguments:
+  name                  The image name to use
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -p {two,three}, --python {two,three}
+                        Specify python version to use (default: two)
+  -l {alpine,debian}, --linux {alpine,debian}
+                        Specify linux distro to use (default: alpine)
+  --pkg PKG             Specify a python package to install. Can be specified
+                        multiple times. (default: None)
+```
+
+For example to create a new image named ldap using python 3 and with the python package ldap3 run the following:
+```
+./docker/create_new_python_image.py -p three --pkg ldap3 ldap
+```
+The above command will create a directory `docker/ldap` with all relevant files all setup for building a docker image. You can now build the image locally by jumping straight to: [Building Locally a Test Build](#building-locally-a-test-build).
+
 ## Build configuration
 The build script will check for a `build.conf` file in the target image directory and will read from it `name=value` properties. Supported properties:
 
@@ -69,7 +98,16 @@ PIPENV_KEEP_OUTDATED=true ./docker/install_common_python_dep.sh dateparser
 ## Building Locally a Test Build
 It is possible to run a local build to verify that the build process is working. Requirements:
 * Local install of docker
-* Make sure you are working on a branch and the changes are committed (so the script can detect the changed folders)
+* Local install of pipenv (if building an image which is managing packages via pipenv - recommended)
+
+
+If you want to test how the script detects commit changes: Make sure you are working on a branch and the changes are committed. If you haven't committed the changes and want to run a local build you can run the script with a image name (which corresponds to a directory name) to the run the build on. For example:
+
+```
+./docker/build_docker.sh ldap
+```
+
+The above example will then run the build against the `ldap` directory.
 
 When running locally, the script will then use a docker organization of `devtesting` and will tag the image with a `testing` tag and a version which has a timestamp as a revision. If you would like to test with a different organization name set the env variable: DOCKER_ORG. If you would like to test the push functionality set the env variable DOCKERHUB_USER. It is also possible to set DOCKERHUB_PASSWORD to avoid being prompted for the password during the build process.
 
