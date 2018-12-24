@@ -105,6 +105,17 @@ python --version
 echo "pyenv versions:"
 pyenv versions
 
+SCRIPT_DIR=$(dirname ${BASH_SOURCE})
+
+if [[ -n "$1" ]]; then
+    if [[ ! -d  "${SCRIPT_DIR}/$1" ]]; then
+        echo "Image: [$1] specified as command line parameter but directory not found: [${SCRIPT_DIR}/$1]"
+        exit 1
+    fi
+    DIFF_COMPARE="ALL"
+    DOCKER_INCLUDE_GREP="/${1}$"
+fi
+
 if [ "$CIRCLE_BRANCH" == "master" ]; then
     # on master we use the range obtained from CIRCLE_COMPARE_URL
     # example of comapre url: https://github.com/demisto/content/compare/62f0bd03be73...1451bf0f3c2a
@@ -122,7 +133,7 @@ if [ "$CIRCLE_BRANCH" == "master" ]; then
     DOCKER_ORG=demisto
 fi
 
-SCRIPT_DIR=$(dirname ${BASH_SOURCE})
+
 
 current_dir=`pwd`
 
@@ -131,7 +142,7 @@ echo "DOCKER_ORG: ${DOCKER_ORG}, DIFF_COMPARE: [${DIFF_COMPARE}], SCRIPT_DIR: [$
 for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | sort`; do
     if [[ ${DIFF_COMPARE} = "ALL" ]] || [[ $(git diff $DIFF_COMPARE -- ${docker_dir}) ]]; then
         if [ -n "${DOCKER_INCLUDE_GREP}" ] && [ -z "$(echo ${docker_dir} | grep -E ${DOCKER_INCLUDE_GREP})" ]; then
-            echo "Skipping dir: '${docker_dir}' as not included in grep expression DOCKER_INCLUDE_GREP: '${DOCKER_INCLUDE_GREP}'"
+            [[ -z "$1" ]] && echo "Skipping dir: '${docker_dir}' as not included in grep expression DOCKER_INCLUDE_GREP: '${DOCKER_INCLUDE_GREP}'"
             continue
         fi
         echo "=============== `date`: Starting docker build in dir: ${docker_dir} ==============="
