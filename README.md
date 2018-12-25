@@ -14,6 +14,7 @@ The script `docker/build_docker.sh` is used to build all modified docker images.
   * Mac: `brew install pyenv`
   * Other: see https://github.com/pyenv/pyenv-installer 
 * Install pipenv globally using: `pip install pipenv`
+* Install requests globally: `pip install requests`
 
 To get up and running fast with a python image with additional packages use the script: `docker/create_new_python_image.py`. Usage:
 ```
