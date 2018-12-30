@@ -1,4 +1,4 @@
-FROM python:3.7.1-slim-stretch
+FROM python:3.7.2-slim-stretch
 
 # Basic linux utilities
 RUN apt-get update && apt-get install -y --no-install-recommends \
