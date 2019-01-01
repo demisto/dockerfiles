@@ -5,9 +5,8 @@ jobs:
     steps:
       - checkout
       - run:
-        name: Validate Approved Licenses File
-        command: |
-          python -m jsonschema -i docker/approved_licenses.json docker/approved_licenses.schema.json
+          name: Validate Approved Licenses File
+          command: python -m jsonschema -i docker/approved_licenses.json docker/approved_licenses.schema.json
       - setup_remote_docker
       - run:
           name: Build Docker Images
