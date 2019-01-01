@@ -4,6 +4,12 @@
 set -e
 
 REVISION=${CIRCLE_BUILD_NUM:-`date +%s`}
+CURRENT_DIR=`pwd`
+SCRIPT_DIR=$(dirname ${BASH_SOURCE})
+DOCKER_SRC_DIR=${SCRIPT_DIR}
+if [[ "${DOCKER_SRC_DIR}" != /* ]]; then
+    DOCKER_SRC_DIR="${CURRENT_DIR}/${SCRIPT_DIR}"
+fi
 
 # parse a propty form build.conf file in current dir
 # param $1: property name
@@ -78,6 +84,7 @@ function docker_build {
         rm requirements.txt
     fi
     docker tag ${DOCKER_ORG}/${image_name}:${CIRCLE_SHA1} ${DOCKER_ORG}/${image_name}:${VERSION}
+    ${DOCKER_SRC_DIR}/verify_licenses.py ${DOCKER_ORG}/${image_name}:${VERSION}
     if docker_login; then
         docker push ${DOCKER_ORG}/${image_name}:${CIRCLE_SHA1}
         docker push ${DOCKER_ORG}/${image_name}:${VERSION}
@@ -105,8 +112,6 @@ python --version
 echo "pyenv versions:"
 pyenv versions
 
-SCRIPT_DIR=$(dirname ${BASH_SOURCE})
-
 if [[ -n "$1" ]]; then
     if [[ ! -d  "${SCRIPT_DIR}/$1" ]]; then
         echo "Image: [$1] specified as command line parameter but directory not found: [${SCRIPT_DIR}/$1]"
@@ -133,11 +138,7 @@ if [ "$CIRCLE_BRANCH" == "master" ]; then
     DOCKER_ORG=demisto
 fi
 
-
-
-current_dir=`pwd`
-
-echo "DOCKER_ORG: ${DOCKER_ORG}, DIFF_COMPARE: [${DIFF_COMPARE}], SCRIPT_DIR: [${SCRIPT_DIR}], CIRCLE_BRANCH: ${CIRCLE_BRANCH}, PWD: [$(current_dir)]"
+echo "DOCKER_ORG: ${DOCKER_ORG}, DIFF_COMPARE: [${DIFF_COMPARE}], SCRIPT_DIR: [${SCRIPT_DIR}], CIRCLE_BRANCH: ${CIRCLE_BRANCH}, PWD: [${CURRENT_DIR}]"
 
 for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | sort`; do
     if [[ ${DIFF_COMPARE} = "ALL" ]] || [[ $(git diff $DIFF_COMPARE -- ${docker_dir}) ]]; then
@@ -147,7 +148,7 @@ for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | so
         fi
         echo "=============== `date`: Starting docker build in dir: ${docker_dir} ==============="
         docker_build ${docker_dir}
-        cd ${current_dir}
+        cd ${CURRENT_DIR}
         echo ">>>>>>>>>>>>>>> `date`: Done docker build <<<<<<<<<<<<<"
     fi
 done
