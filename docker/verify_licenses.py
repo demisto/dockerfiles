@@ -14,7 +14,7 @@ def main():
     parser.add_argument("docker_image", help="The docker image with tag version to use. For example: demisto/python3:1.5.0.27")
     args = parser.parse_args()
     with open('{}/approved_licenses.json'.format(sys.path[0])) as f:
-        licenses = json.load(f)
+        licenses = json.load(f)["licenses"]
     pip_list_json = subprocess.check_output(["docker", "run", "--rm", args.docker_image, "pip", "list", "--format", "json"])
     pip_list = json.loads(pip_list_json)
     for pkg in pip_list:
