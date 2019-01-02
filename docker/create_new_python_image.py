@@ -38,7 +38,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \\
 def get_latest_tag(image_name):
     last_tag = None
     last_date = None
-    url = "https://registry.hub.docker.com/v2/repositories/{}/tags/".format(image_name)
+    url = "https://registry.hub.docker.com/v2/repositories/{}/tags/?page_size=25".format(image_name)
     while True:
         print("Querying docker hub url: {}".format(url))
         res = requests.get(url)
