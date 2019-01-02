@@ -88,6 +88,7 @@ function docker_build {
     if docker_login; then
         docker push ${DOCKER_ORG}/${image_name}:${CIRCLE_SHA1}
         docker push ${DOCKER_ORG}/${image_name}:${VERSION}
+        ${DOCKER_SRC_DIR}/post_github_comment.py ${DOCKER_ORG}/${image_name}:${VERSION}
     fi    
 }
 
