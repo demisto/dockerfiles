@@ -1,5 +1,9 @@
-FROM python:alpine3.7
+FROM demisto/python3:1.5.0.53
 
-RUN apk --update add --virtual build-dependencies libffi-dev openssl-dev python-dev py-pip build-base gcc libxml2-dev libxslt-dev
+COPY requirements.txt .
 
-RUN pip install zeep
+RUN apk --update add --no-cache libxml2 libxslt
+
+RUN apk --update add --no-cache --virtual .build-dependencies python-dev build-base libxml2-dev libxslt-dev wget \
+  && pip install --no-cache-dir -r requirements.txt \
+  && apk del .build-dependencies
