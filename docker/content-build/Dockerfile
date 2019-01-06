@@ -7,6 +7,8 @@ RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-instal
   && echo 'eval "$(pyenv init -)"' >> ~/.bashrc \
   && echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.bashrc
 
+COPY requirements.txt .
+
 RUN pip install --user --no-cache-dir -r requirements.txt
 
 RUN sudo easy_install pip
