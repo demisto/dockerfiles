@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   python-dev \
 && rm -rf /var/lib/apt/lists/*
 
-RUN mkdir =p /usr/share/man/man1 \
+RUN mkdir -p /usr/share/man/man1 \
 && apt-get update && apt-get install -y --no-install-recommends \
   libreoffice \
   openjdk-8-jre \
