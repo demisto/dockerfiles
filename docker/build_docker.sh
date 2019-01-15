@@ -102,8 +102,13 @@ if [ -z "$CIRCLE_SHA1" ]; then
     DOCKER_ORG=${DOCKER_ORG:-devtesting}    
 fi
 
+if [ -z "$CIRCLE_BRANCH" ]; then
+    CIRCLE_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+    echo "CIRCLE_BRANCH set to: ${CIRCLE_BRANCH}"
+fi
+
 # default compare against master
-DIFF_COMPARE=origin/master
+DIFF_COMPARE=origin/master...${CIRCLE_BRANCH}
 
 if [[ ! $(which pyenv) ]]; then 
     echo "pyenv not found. setting up necessary env for pyenv";\
