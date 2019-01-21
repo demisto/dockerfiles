@@ -70,7 +70,7 @@ def main():
     parser.add_argument("-l", "--linux", help="Specify linux distro to use",
                         choices=['alpine', 'debian'], default='alpine')
     parser.add_argument('--pkg', action='append', help='Specify a python package to install. Can be specified multiple times.')
-    parser.add_argument("name", help="The image name to use")
+    parser.add_argument("name", help="The image name to use without the organization prefix. For example: ldap3")
 
     args = parser.parse_args()
 
