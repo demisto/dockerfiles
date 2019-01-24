@@ -76,21 +76,19 @@ function docker_build {
         cat requirements.txt
         del_requirements=yes
     fi        
-    docker build . -t ${DOCKER_ORG}/${image_name}:${CIRCLE_SHA1} \
+    docker build . -t ${DOCKER_ORG}/${image_name}:${VERSION} \
         --label "org.opencontainers.image.authors=Demisto <containers@demisto.com>" \
         --label "org.opencontainers.image.version=${VERSION}" \
         --label "org.opencontainers.image.revision=${CIRCLE_SHA1}"
     if [ ${del_requirements} = "yes" ]; then
         rm requirements.txt
     fi
-    docker tag ${DOCKER_ORG}/${image_name}:${CIRCLE_SHA1} ${DOCKER_ORG}/${image_name}:${VERSION}
     if [[ "$(prop 'devonly')" ]]; then
         echo "Skipping license verification for devonly image"
     else
         ${DOCKER_SRC_DIR}/verify_licenses.py ${DOCKER_ORG}/${image_name}:${VERSION}
     fi
     if docker_login; then
-        docker push ${DOCKER_ORG}/${image_name}:${CIRCLE_SHA1}
         docker push ${DOCKER_ORG}/${image_name}:${VERSION}
         ${DOCKER_SRC_DIR}/post_github_comment.py ${DOCKER_ORG}/${image_name}:${VERSION}
     fi    
