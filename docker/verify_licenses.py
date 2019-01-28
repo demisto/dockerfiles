@@ -24,7 +24,8 @@ def main():
         res.raise_for_status()
         pypi_info = res.json()
         for classifier in pypi_info["info"]["classifiers"]:
-            if classifier.startswith("License ::"):
+            # check that we have license and not just the OSI Approved string
+            if classifier.startswith("License ::") and not classifier == "License :: OSI Approved":
                 print("{}: found license classifier: {}".format(name, classifier))
                 # check that we have at least one approved license that matches
                 found = False
