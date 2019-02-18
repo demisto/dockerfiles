@@ -38,7 +38,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \\
 def get_latest_tag(image_name):
     last_tag = None
     last_date = None
-    url = "https://registry.hub.docker.com/v2/repositories/{}/tags/".format(image_name)
+    url = "https://registry.hub.docker.com/v2/repositories/{}/tags/?page_size=25".format(image_name)
     while True:
         print("Querying docker hub url: {}".format(url))
         res = requests.get(url)
@@ -69,8 +69,9 @@ def main():
                         choices=['two', 'three'], default='two')
     parser.add_argument("-l", "--linux", help="Specify linux distro to use",
                         choices=['alpine', 'debian'], default='alpine')
-    parser.add_argument('--pkg', action='append', help='Specify a python package to install. Can be specified multiple times.')
-    parser.add_argument("name", help="The image name to use")
+    parser.add_argument('--pkg', action='append', help='Specify a python package to install. Can be specified multiple times. ' +
+                        'Each package needs to be specified with --pkg. For example: --pkg google-cloud-storage --pkg oath2client')
+    parser.add_argument("name", help="The image name to use without the organization prefix. For example: ldap3")
 
     args = parser.parse_args()
 

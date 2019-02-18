@@ -1,0 +1,47 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://demisto.com/schemas/approved_licenses.schema.json",
+    "type": "object",
+    "properties": {
+        "licenses": {
+            "description": "Array of licenses",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "Name of the license"
+                    },
+                    "url": {
+                        "type": "string",
+                        "description": "URL pointing to the full license text"
+                    },
+                    "regex": {
+                        "type": "string",
+                        "description": "python regex to use to detect this license"
+                    }
+                },
+                "defaultSnippets": [
+                    {
+                        "label": "New License",
+                        "description": "New License Type",
+                        "body": {
+                            "name": "$1",
+                            "url": "$2",
+                            "regex": "$3"
+                        }
+                    }
+                ],
+                "required": [
+                    "name",
+                    "url",
+                    "regex"
+                ]
+            }
+        }
+    },
+    "required": [
+        "licenses"
+    ]
+}

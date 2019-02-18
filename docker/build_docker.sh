@@ -4,6 +4,12 @@
 set -e
 
 REVISION=${CIRCLE_BUILD_NUM:-`date +%s`}
+CURRENT_DIR=`pwd`
+SCRIPT_DIR=$(dirname ${BASH_SOURCE})
+DOCKER_SRC_DIR=${SCRIPT_DIR}
+if [[ "${DOCKER_SRC_DIR}" != /* ]]; then
+    DOCKER_SRC_DIR="${CURRENT_DIR}/${SCRIPT_DIR}"
+fi
 
 # parse a propty form build.conf file in current dir
 # param $1: property name
@@ -70,17 +76,21 @@ function docker_build {
         cat requirements.txt
         del_requirements=yes
     fi        
-    docker build . -t ${DOCKER_ORG}/${image_name}:${CIRCLE_SHA1} \
+    docker build . -t ${DOCKER_ORG}/${image_name}:${VERSION} \
         --label "org.opencontainers.image.authors=Demisto <containers@demisto.com>" \
         --label "org.opencontainers.image.version=${VERSION}" \
         --label "org.opencontainers.image.revision=${CIRCLE_SHA1}"
     if [ ${del_requirements} = "yes" ]; then
         rm requirements.txt
     fi
-    docker tag ${DOCKER_ORG}/${image_name}:${CIRCLE_SHA1} ${DOCKER_ORG}/${image_name}:${VERSION}
+    if [[ "$(prop 'devonly')" ]]; then
+        echo "Skipping license verification for devonly image"
+    else
+        ${DOCKER_SRC_DIR}/verify_licenses.py ${DOCKER_ORG}/${image_name}:${VERSION}
+    fi
     if docker_login; then
-        docker push ${DOCKER_ORG}/${image_name}:${CIRCLE_SHA1}
         docker push ${DOCKER_ORG}/${image_name}:${VERSION}
+        ${DOCKER_SRC_DIR}/post_github_comment.py ${DOCKER_ORG}/${image_name}:${VERSION}
     fi    
 }
 
@@ -90,8 +100,13 @@ if [ -z "$CIRCLE_SHA1" ]; then
     DOCKER_ORG=${DOCKER_ORG:-devtesting}    
 fi
 
+if [ -z "$CIRCLE_BRANCH" ]; then
+    CIRCLE_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+    echo "CIRCLE_BRANCH set to: ${CIRCLE_BRANCH}"
+fi
+
 # default compare against master
-DIFF_COMPARE=origin/master
+DIFF_COMPARE=origin/master...${CIRCLE_BRANCH}
 
 if [[ ! $(which pyenv) ]]; then 
     echo "pyenv not found. setting up necessary env for pyenv";\
@@ -104,8 +119,6 @@ echo "python version: "
 python --version
 echo "pyenv versions:"
 pyenv versions
-
-SCRIPT_DIR=$(dirname ${BASH_SOURCE})
 
 if [[ -n "$1" ]]; then
     if [[ ! -d  "${SCRIPT_DIR}/$1" ]]; then
@@ -133,11 +146,7 @@ if [ "$CIRCLE_BRANCH" == "master" ]; then
     DOCKER_ORG=demisto
 fi
 
-
-
-current_dir=`pwd`
-
-echo "DOCKER_ORG: ${DOCKER_ORG}, DIFF_COMPARE: [${DIFF_COMPARE}], SCRIPT_DIR: [${SCRIPT_DIR}], CIRCLE_BRANCH: ${CIRCLE_BRANCH}, PWD: [$(current_dir)]"
+echo "DOCKER_ORG: ${DOCKER_ORG}, DIFF_COMPARE: [${DIFF_COMPARE}], SCRIPT_DIR: [${SCRIPT_DIR}], CIRCLE_BRANCH: ${CIRCLE_BRANCH}, PWD: [${CURRENT_DIR}]"
 
 for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | sort`; do
     if [[ ${DIFF_COMPARE} = "ALL" ]] || [[ $(git diff $DIFF_COMPARE -- ${docker_dir}) ]]; then
@@ -147,7 +156,7 @@ for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | so
         fi
         echo "=============== `date`: Starting docker build in dir: ${docker_dir} ==============="
         docker_build ${docker_dir}
-        cd ${current_dir}
+        cd ${CURRENT_DIR}
         echo ">>>>>>>>>>>>>>> `date`: Done docker build <<<<<<<<<<<<<"
     fi
 done
