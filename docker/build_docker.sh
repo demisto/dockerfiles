@@ -56,14 +56,15 @@ function cr_login {
         return 0;
     fi
     if [ -z "${CR_USER}" ]; then
-        echo "CR_USER not set. Not logging in to docker hub"
+        echo "CR_USER not set. Not logging in to container registry"
         return 1;
     fi
+    cr_url="https://$(echo ${CR_REPO} | cut -d / -f 1)"
     if [ -z "$CR_PASSWORD" ]; then
         #for local testing scenarios to allow password to be passed via stdin
-        docker login -u "${CR_USER}" 
+        docker login -u "${CR_USER}" ${cr_url}
     else
-        docker login -u "${CR_USER}" -p "${CR_PASSWORD}" 
+        docker login -u "${CR_USER}" -p "${CR_PASSWORD}" ${cr_url}
     fi
     if [ $? -ne 0 ]; then
         echo "Failed docker login for user: ${CR_USER}"
