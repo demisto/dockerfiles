@@ -50,6 +50,30 @@ function docker_login {
     return 0;
 }
 
+CR_LOGIN_DONE=no
+function cr_login {
+    if [ "${CR_LOGIN_DONE}" = "yes" ]; then
+        return 0;
+    fi
+    if [ -z "${CR_USER}" ]; then
+        echo "CR_USER not set. Not logging in to container registry"
+        return 1;
+    fi
+    cr_url="https://$(echo ${CR_REPO} | cut -d / -f 1)"
+    if [ -z "$CR_PASSWORD" ]; then
+        #for local testing scenarios to allow password to be passed via stdin
+        docker login -u "${CR_USER}" ${cr_url}
+    else
+        docker login -u "${CR_USER}" -p "${CR_PASSWORD}" ${cr_url}
+    fi
+    if [ $? -ne 0 ]; then
+        echo "Failed docker login for user: ${CR_USER}"
+        return 2; 
+    fi
+    CR_LOGIN_DONE=yes
+    return 0;
+}
+
 # build docker. 
 # Param $1: docker dir with all relevant files
 function docker_build {
@@ -64,6 +88,7 @@ function docker_build {
     VERSION=$(prop 'version' '1.0.0')    
     VERSION="${VERSION}.${REVISION}"
     echo "${image_name}: using version: ${VERSION}"
+    image_full_name="${DOCKER_ORG}/${image_name}:${VERSION}"
     del_requirements=no
     if [ -f "Pipfile" -a ! -f "requirements.txt" ]; then
         if [ ! -f "Pipfile.lock" ]; then
@@ -76,7 +101,7 @@ function docker_build {
         cat requirements.txt
         del_requirements=yes
     fi        
-    docker build . -t ${DOCKER_ORG}/${image_name}:${VERSION} \
+    docker build . -t ${image_full_name} \
         --label "org.opencontainers.image.authors=Demisto <containers@demisto.com>" \
         --label "org.opencontainers.image.version=${VERSION}" \
         --label "org.opencontainers.image.revision=${CIRCLE_SHA1}"
@@ -86,12 +111,23 @@ function docker_build {
     if [[ "$(prop 'devonly')" ]]; then
         echo "Skipping license verification for devonly image"
     else
-        ${DOCKER_SRC_DIR}/verify_licenses.py ${DOCKER_ORG}/${image_name}:${VERSION}
+        ${DOCKER_SRC_DIR}/verify_licenses.py ${image_full_name}
     fi
     if docker_login; then
-        docker push ${DOCKER_ORG}/${image_name}:${VERSION}
-        ${DOCKER_SRC_DIR}/post_github_comment.py ${DOCKER_ORG}/${image_name}:${VERSION}
-    fi    
+        docker push ${image_full_name}
+        echo "Done docker push for: ${image_full_name}"
+        ${DOCKER_SRC_DIR}/post_github_comment.py ${image_full_name}
+    else
+        echo "Skipping docker push"
+    fi
+    if [ -n "$CR_REPO" ] && cr_login; then
+        docker tag ${image_full_name} ${CR_REPO}/${image_full_name}
+        docker push ${CR_REPO}/${image_full_name} > /dev/null
+        echo "Done docker push for cr: ${image_full_name}"
+    else
+        echo "Skipping docker push for cr"
+    fi
+
 }
 
 if [ -z "$CIRCLE_SHA1" ]; then
