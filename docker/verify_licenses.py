@@ -8,7 +8,11 @@ import re
 import sys
 
 
+IS_PY3 = sys.version_info[0] == 3
+
+
 def main():
+    print("Python version: {}".format(sys.version))
     parser = argparse.ArgumentParser(description='Verify licenses used in a docker image',
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("docker_image", help="The docker image with tag version to use. For example: demisto/python3:1.5.0.27")
@@ -35,7 +39,11 @@ def main():
                 print("{}: found license classifier: {}".format(name, classifier))
                 found_licenses.append(classifier)
         if len(found_licenses) == 0:  # try getting via pip show
-            pip_show = subprocess.check_output(["docker", "run", "--rm", args.docker_image, "pip", "show", name], text=True)
+            docker_cmd_arr = ["docker", "run", "--rm", args.docker_image, "pip", "show", name]
+            if IS_PY3:
+                pip_show = subprocess.check_output(docker_cmd_arr, text=True)
+            else:
+                pip_show = subprocess.check_output(docker_cmd_arr)
             for line in pip_show.splitlines():
                 if line.startswith("License:"):
                     print("{}: found license from pip show: {}".format(name, line))
