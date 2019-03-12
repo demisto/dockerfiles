@@ -114,7 +114,8 @@ def main():
         subprocess.call(cmd_arr, cwd=folder, env=my_env)
     print('========================================')
     print("Done creating image files in folder: " + folder)
-    print("To install additional python packages: cd {}; pipenv install <package>".format(folder))
+    print("\nTo install additional python packages: cd {}; pipenv install <package>".format(folder))
+    print("\nTo build locally the docker image run: {}/build_docker.sh {}".format(sys.path[0], args.name))
 
 
 if __name__ == "__main__":
