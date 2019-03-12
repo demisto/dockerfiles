@@ -66,7 +66,7 @@ def main():
     parser = argparse.ArgumentParser(description='Create a new python based docker image',
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("-p", "--python", help="Specify python version to use",
-                        choices=['two', 'three'], default='two')
+                        choices=['two', 'three'], default='three')
     parser.add_argument("-l", "--linux", help="Specify linux distro to use",
                         choices=['alpine', 'debian'], default='alpine')
     parser.add_argument('--pkg', action='append', help='Specify a python package to install. Can be specified multiple times. ' +

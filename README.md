@@ -31,7 +31,7 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
   -p {two,three}, --python {two,three}
-                        Specify python version to use (default: two)
+                        Specify python version to use (default: three)
   -l {alpine,debian}, --linux {alpine,debian}
                         Specify linux distro to use (default: alpine)
   --pkg PKG             Specify a python package to install. Can be specified
