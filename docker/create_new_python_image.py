@@ -66,7 +66,7 @@ def main():
     parser = argparse.ArgumentParser(description='Create a new python based docker image',
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("-p", "--python", help="Specify python version to use",
-                        choices=['two', 'three'], default='two')
+                        choices=['two', 'three'], default='three')
     parser.add_argument("-l", "--linux", help="Specify linux distro to use",
                         choices=['alpine', 'debian'], default='alpine')
     parser.add_argument('--pkg', action='append', help='Specify a python package to install. Can be specified multiple times. ' +
@@ -114,7 +114,8 @@ def main():
         subprocess.call(cmd_arr, cwd=folder, env=my_env)
     print('========================================')
     print("Done creating image files in folder: " + folder)
-    print("To install additional python packages: cd {}; pipenv install <package>".format(folder))
+    print("\nTo install additional python packages: cd {}; pipenv install <package>".format(folder))
+    print("\nTo build locally the docker image run: {}/build_docker.sh {}".format(sys.path[0], args.name))
 
 
 if __name__ == "__main__":
