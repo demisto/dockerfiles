@@ -1,5 +1,5 @@
-# Last modified: Thu, 14 Mar 2019 10:39:33 +0000
-FROM python:3.7.2-alpine3.9
+# Last modified: Sun, 31 Mar 2019 11:05:57 +0000
+FROM python:3.7.3-alpine3.9
 
 COPY requirements.txt .
 
