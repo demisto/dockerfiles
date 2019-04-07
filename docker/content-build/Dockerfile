@@ -1,4 +1,4 @@
-FROM circleci/node:9.11
+FROM circleci/python:3.7.3-stretch
 
 RUN sudo apt-get update && \
   sudo apt-get install -y --no-install-recommends python-dev libxml2-dev libxslt1-dev zlib1g-dev python-setuptools jq \
@@ -6,10 +6,6 @@ RUN sudo apt-get update && \
   libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
   xz-utils tk-dev libffi-dev liblzma-dev python-openssl \
   python3 python3-dev
-
-RUN sudo easy_install pip
-RUN sudo npm install npm -g
-RUN sudo npm install -g jsdoc-to-markdown
 
 RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
   && echo 'export PATH="/home/circleci/.pyenv/bin:$PATH"' >> ~/.bashrc \
@@ -20,8 +16,8 @@ RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-instal
 RUN bash -i -c 'pyenv install 2.7.15 && pyenv versions | grep 2.7.15'
 # python 3.7.2 requires newer openssl than provided with debian 8
 # for now we stick to 3.6.8
-RUN bash -i -c 'pyenv install 3.6.8 && pyenv versions | grep 3.6.8'
-RUN bash -i -c 'pyenv global 2.7.15 3.6.8'
+RUN bash -i -c 'pyenv install 3.7.3 && pyenv versions | grep 3.7.3'
+RUN bash -i -c 'pyenv global 2.7.15 3.7.3'
 RUN bash -i -c 'pyenv exec pip install --upgrade --no-cache-dir pip'
 RUN bash -i -c 'pyenv exec pip3 install --upgrade --no-cache-dir pip'
 RUN bash -i -c 'pyenv exec pip install --no-cache-dir git+https://github.com/demisto/demisto-py.git@test-content'
