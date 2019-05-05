@@ -1,4 +1,4 @@
-FROM circleci/python:3.7.3-stretch
+FROM circleci/python:3.7.3-stretch-node
 
 RUN sudo apt-get update && \
   sudo apt-get install -y --no-install-recommends python-dev libxml2-dev libxslt1-dev zlib1g-dev python-setuptools jq \
@@ -15,7 +15,6 @@ RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-instal
 # install python versions
 RUN bash -i -c 'pyenv install 2.7.15 && pyenv versions | grep 2.7.15'
 # python 3.7.2 requires newer openssl than provided with debian 8
-# for now we stick to 3.6.8
 RUN bash -i -c 'pyenv install 3.7.3 && pyenv versions | grep 3.7.3'
 RUN bash -i -c 'pyenv global 2.7.15 3.7.3'
 RUN bash -i -c 'pyenv exec pip install --upgrade --no-cache-dir pip'
@@ -26,3 +25,6 @@ RUN bash -i -c 'pyenv exec pip install --no-cache-dir git+https://github.com/rah
 COPY requirements.txt .
 
 RUN bash -i -c 'pyenv exec pip install --no-cache-dir -r requirements.txt'
+
+RUN sudo npm install npm -g
+RUN sudo npm install -g jsdoc-to-markdown
