@@ -24,6 +24,11 @@ RUN apt-get update && apt-get -t stretch-backports install -y --no-install-recom
   tesseract-ocr-jpn-vert \
   && rm -rf /var/lib/apt/lists/*
 
+RUN apt-get update && apt-get -t stretch-backports install -y --no-install-recommends \
+  imagemagick \
+  file \
+  && rm -rf /var/lib/apt/lists/*
+
 # Python packages not needed
 # COPY requirements.txt .
 
