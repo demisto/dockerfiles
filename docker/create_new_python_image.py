@@ -112,6 +112,8 @@ def main():
         cmd_arr = ["pipenv", "install"]
         cmd_arr.extend(args.pkg)
         subprocess.call(cmd_arr, cwd=folder, env=my_env)
+    else:
+        subprocess.call(["pipenv", "lock"], cwd=folder, env=my_env)
     print('========================================')
     print("Done creating image files in folder: " + folder)
     print("\nTo install additional python packages: cd {}; pipenv install <package>".format(folder))
