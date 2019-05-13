@@ -145,17 +145,20 @@ if [ -z "$CIRCLE_SHA1" ]; then
 fi
 
 
-if [[ ! $(which pyenv) ]]; then 
-    echo "pyenv not found. setting up necessary env for pyenv";\
+if [[ ! $(which pyenv) ]] && [[ -n "${CIRCLECI}" ]]; then 
+    echo "pyenv not found. setting up necessary env for pyenv on circle ci";\
     export PATH="$HOME/.pyenv/bin:$PATH"
     eval "$(pyenv init -)"
     eval "$(pyenv virtualenv-init -)"
 fi
 
-echo "python version: "
-python --version
-echo "pyenv versions:"
-pyenv versions
+echo "default python versions: "
+python --version || echo "python not found"
+python3 --version || echo "python3 not found"
+if [[ $(which pyenv) ]]; then
+    echo "pyenv versions:"
+    pyenv versions
+fi
 
 if [[ -n "$1" ]]; then
     if [[ ! -d  "${SCRIPT_DIR}/$1" ]]; then

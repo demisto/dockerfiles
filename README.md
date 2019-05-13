@@ -12,9 +12,11 @@ The script `docker/build_docker.sh` is used to build all modified docker images.
 
 ## Getting Started
 **Pre-requisites:**
-* Install pyenv:
-  * Mac: `brew install pyenv` . Make sure to run then: `pyenv init` and follow instructions to add to either `~/.zshrc` or `~/.bash_profile` depending on you shell.
-  * Other: see https://github.com/pyenv/pyenv-installer 
+* Install python 2 and 3:
+  * Mac: use brew to install (more info at: https://docs.brew.sh/Homebrew-and-Python): `brew install python3` and then: `brew install python@2`
+* Or install pyenv (recommended for managing multiple python versions):
+    * Mac: `brew install pyenv` . Make sure to run then: `pyenv init` and follow instructions to add to either `~/.zshrc` or `~/.bash_profile` depending on you shell.
+    * Other: see https://github.com/pyenv/pyenv-installer 
 * Install pipenv globally using: `pip install pipenv`
 * Install requests globally: `pip install requests`
 
