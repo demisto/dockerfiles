@@ -3,7 +3,7 @@ FROM demisto/python3:3.7.2.155
 
 COPY requirements.txt .
 
-RUN apk --update add --no-cache libssl-dev libffi-dev
+RUN apk --update add --no-cache musl-dev libffi-dev openssl-dev
 
 RUN apk --update add --no-cache --virtual .build-dependencies python-dev build-base wget git \
   && pip install --no-cache-dir -r requirements.txt \
