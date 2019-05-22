@@ -1,9 +1,7 @@
 
-FROM demisto/python3:3.7.3.260
+FROM demisto/python3:3.7.3.286
 
 COPY requirements.txt .
-
-RUN apk --update add --no-cache libffi openssl
 
 RUN apk --update add --no-cache --virtual .build-dependencies python-dev build-base wget git \
   libffi-dev openssl-dev \

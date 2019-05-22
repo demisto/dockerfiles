@@ -145,17 +145,20 @@ if [ -z "$CIRCLE_SHA1" ]; then
 fi
 
 
-if [[ ! $(which pyenv) ]]; then 
-    echo "pyenv not found. setting up necessary env for pyenv";\
+if [[ ! $(which pyenv) ]] && [[ -n "${CIRCLECI}" ]]; then 
+    echo "pyenv not found. setting up necessary env for pyenv on circle ci";\
     export PATH="$HOME/.pyenv/bin:$PATH"
     eval "$(pyenv init -)"
     eval "$(pyenv virtualenv-init -)"
 fi
 
-echo "python version: "
-python --version
-echo "pyenv versions:"
-pyenv versions
+echo "default python versions: "
+python --version || echo "python not found"
+python3 --version || echo "python3 not found"
+if [[ $(which pyenv) ]]; then
+    echo "pyenv versions:"
+    pyenv versions
+fi
 
 if [[ -n "$1" ]]; then
     if [[ ! -d  "${SCRIPT_DIR}/$1" ]]; then
@@ -171,8 +174,8 @@ if [ "$CIRCLE_BRANCH" == "master" ]; then
     # example of comapre url: https://github.com/demisto/content/compare/62f0bd03be73...1451bf0f3c2a
     # if there wasn't a successful build CIRCLE_COMPARE_URL is empty. We set diff compare to special ALL
     if [ -z "$CIRCLE_COMPARE_URL" ]; then
-        echo "CIRCLE_COMPARE_URL not set. Assuming no successful build yet and setting DIFF to ALL."
-        DIFF_COMPARE="ALL"
+        echo "CIRCLE_COMPARE_URL not set. Assuming 'rebuild'. Comparing last commit."
+        DIFF_COMPARE="HEAD^1...HEAD"
     else
         DIFF_COMPARE=$(echo "$CIRCLE_COMPARE_URL" | sed 's:^.*/compare/::g')    
         if [ -z "${DIFF_COMPARE}" ]; then
@@ -186,7 +189,7 @@ fi
 echo "DOCKER_ORG: ${DOCKER_ORG}, DIFF_COMPARE: [${DIFF_COMPARE}], SCRIPT_DIR: [${SCRIPT_DIR}], CIRCLE_BRANCH: ${CIRCLE_BRANCH}, PWD: [${CURRENT_DIR}]"
 
 for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | sort`; do
-    if [[ ${DIFF_COMPARE} = "ALL" ]] || [[ $(git diff $DIFF_COMPARE -- ${docker_dir}) ]]; then
+    if [[ ${DIFF_COMPARE} = "ALL" ]] || [[ $(git diff --name-status $DIFF_COMPARE -- ${docker_dir}) ]]; then
         if [ -n "${DOCKER_INCLUDE_GREP}" ] && [ -z "$(echo ${docker_dir} | grep -E ${DOCKER_INCLUDE_GREP})" ]; then
             [[ -z "$1" ]] && echo "Skipping dir: '${docker_dir}' as not included in grep expression DOCKER_INCLUDE_GREP: '${DOCKER_INCLUDE_GREP}'"
             continue
