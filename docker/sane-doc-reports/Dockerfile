@@ -12,5 +12,3 @@ RUN mkdir sandbox
 COPY sane_src sandbox/ 
 WORKDIR sandbox
 RUN pip install -e .
-
-# DOCKER_ORG=demisto ./docker/build_docker.sh sane-doc-reports
