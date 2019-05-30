@@ -9,6 +9,6 @@ RUN apk --update add --no-cache --virtual .build-dependencies build-base wget gi
   && apk del .build-dependencies
 
 RUN mkdir sandbox
-COPY sane_src sandbox/ 
+COPY src sandbox/ 
 WORKDIR sandbox
 RUN pip install -e .
