@@ -1,3 +1,5 @@
+import os
+from pathlib import Path
 from typing import List
 
 from docx import Document
@@ -11,6 +13,16 @@ from sane_doc_reports.utils import insert_by_type
 from sane_doc_reports.conf import DEBUG, A4_MM_HEIGHT, A4_MM_WIDTH, \
     TOP_MARGIN_PT, BOTTOM_MARGIN_PT, LEFT_MARGIN_PT, RIGHT_MARGIN_PT
 from sane_doc_reports.populate.grid import get_cell, merge_cells
+from docx.enum.style import WD_STYLE_TYPE
+
+
+def _debug_show_styles(document):
+    styles = document.styles
+    styles_p = [s for s in styles if s.type == WD_STYLE_TYPE.PARAGRAPH]
+    styles_t = [s for s in styles if s.type == WD_STYLE_TYPE.TABLE]
+    styles = styles_p + styles_t
+    for style in styles:
+        print(style.name)
 
 
 class Report:
@@ -19,7 +31,16 @@ class Report:
     """
 
     def __init__(self, pages: List[Page], sane_json: SaneJson):
-        self.document = Document()
+        template_path = Path(os.path.dirname(__file__)) / 'template.docx'
+        with template_path.open('rb') as f:
+            self.document = Document(f)
+
+            # Remove the default paragraph in the template.
+            self.document._body.clear_content()
+
+        if DEBUG:
+            _debug_show_styles(self.document)
+
         self.pages = pages
 
         # Used to calculate and create the page grid(layout)

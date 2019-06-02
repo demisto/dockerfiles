@@ -10,7 +10,7 @@ from sane_doc_reports.populate.utils import insert_text
 def fix_order(ordered, readable_headers) -> list:
     """ Return the readable headers by the order given """
     temp_readable = {i[0].lower() + i[1:]: i for i in readable_headers}
-    # Investigations are not lowercased
+    # Old json format table columns are not lowercased
     inv_fix = {i: i for i in readable_headers}
     temp_readable = {**temp_readable, **inv_fix}
 
@@ -52,7 +52,7 @@ class TableElement(Element):
                 if header_text not in r:
                     continue
 
-                # Investigations can have 'Avatars', which are images
+                # Olf json format can have 'Avatars', which are images
                 if isinstance(r[header_text], dict) and \
                         r[header_text]['type'] == 'image':
                     row_temp = r[header_text]
