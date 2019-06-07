@@ -12,3 +12,5 @@ RUN echo "deb https://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo
 
 RUN sudo npm install -g firebase-tools && \
   firebase --version
+
+RUN go get -u golang.org/x/lint/golint
