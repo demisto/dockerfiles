@@ -13,4 +13,5 @@ RUN echo "deb https://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo
 RUN sudo npm install -g firebase-tools && \
   firebase --version
 
-RUN go get -u golang.org/x/lint/golint
+RUN curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sudo sh -s -- -b $(go env GOPATH)/bin v1.16.0 && \
+  golangci-lint --version
