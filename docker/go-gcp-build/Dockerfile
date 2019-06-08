@@ -15,3 +15,7 @@ RUN sudo npm install -g firebase-tools && \
 
 RUN curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sudo sh -s -- -b $(go env GOPATH)/bin v1.16.0 && \
   golangci-lint --version
+
+RUN sudo apt-get update && \
+  sudo apt-get install -y postgresql-client && \
+  psql --version
