@@ -23,10 +23,22 @@ import sane_doc_reports
 1) Install the mypy addon for your IDE
 2) Dev:
 ```sh
+$ pipenv install --dev
 $ pipenv shell
 $ pytest # For testing
 $ pytest --cov=sane_doc_reports # For coverage
 ```
+
+### Terminology
+1) Grid Layout - all of the docs are created in a table so we could position them.
+2) CellObject - corresponds to a cell when the element will be inserted into
+3) Section - Usually an element that we will place into a cell (has a type, contents (which can be more sections), layout (style and position), extra (metadata used mainly in recursive stuff), attrs (hold any markdown attributes generated from the html generated)).
+4) Element - a `python-docx` implementation of an element from the sane-reports.
+5) Styles - Element styles.
+6) elements/md_* - Markdown generated elements
+7) Wrapper - Holds one or more elements inside, usually to color the background / indent (lists)
+8) SaneJson - holds the raw sane-json sections.
+
 
 ### Generating JSON files
 1) Start a new demisto server with: `report.remove.data=false`

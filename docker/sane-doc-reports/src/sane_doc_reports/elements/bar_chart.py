@@ -5,8 +5,8 @@ from sane_doc_reports import utils
 from sane_doc_reports.domain.Section import Section
 from sane_doc_reports.conf import DEBUG, DEFAULT_ALPHA, \
     DEFAULT_BAR_WIDTH, DEFAULT_BAR_ALPHA, CHART_LABEL_NONE_STRING, \
-    X_AXIS_PADDING, DEFAULT_WORD_FONT, DEFAULT_FONT_DARK_COLOR, \
-    DEFAULT_TITLE_FONT_SIZE, DEFAULT_LEGEND_FONT_SIZE, DEFAULT_FONT_LIGHT_COLOR
+    X_AXIS_PADDING, DEFAULT_WORD_FONT, DEFAULT_FONT_COLOR, \
+    DEFAULT_TITLE_FONT_SIZE
 
 from sane_doc_reports.elements import image, error
 from sane_doc_reports.styles.colors import get_colors
@@ -17,7 +17,7 @@ class BarChartElement(Element):
     style = {
         'title': {
             'fontname': DEFAULT_WORD_FONT,
-            'color': DEFAULT_FONT_DARK_COLOR,
+            'color': DEFAULT_FONT_COLOR,
             'fontsize': DEFAULT_TITLE_FONT_SIZE
         }
     }

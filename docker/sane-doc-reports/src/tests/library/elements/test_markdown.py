@@ -52,7 +52,7 @@ def test_markdown():
 
     # Find OLs
     assert len(
-        d.element.xpath('//w:p//w:pStyle[contains(@w:val,"ListNumber")]')) == 4
+        d.element.xpath('//w:p//w:pStyle[contains(@w:val,"ListNumber")]')) == 6
 
     # Find one link
     assert len(d.element.xpath("//w:hyperlink//w:t[text()='link text']")) == 1

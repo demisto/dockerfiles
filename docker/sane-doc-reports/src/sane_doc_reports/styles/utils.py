@@ -1,13 +1,17 @@
+from docx.oxml import parse_xml
 from docx.shared import Pt
+from docx.table import _Cell
+from docx.oxml.ns import nsdecls
 
 from sane_doc_reports.domain import CellObject
 from sane_doc_reports.domain.Section import Section
-from sane_doc_reports.styles.colors import name_to_rgb, hex_to_rgb
+from sane_doc_reports.styles.colors import name_to_rgb, hex_to_rgb, name_to_hex
 from sane_doc_reports.conf import PYDOCX_FONT_SIZE, PYDOCX_FONT_NAME, \
     PYDOCX_FONT_BOLD, PYDOCX_FONT_STRIKE, PYDOCX_FONT_UNDERLINE, \
     PYDOCX_FONT_ITALIC, PYDOCX_FONT_COLOR, PYDOCX_TEXT_ALIGN, \
     DEFAULT_WORD_FONT, ALIGN_LEFT, ALIGN_RIGHT, ALIGN_CENTER, \
-    DEFAULT_FONT_DARK_COLOR, BASE_HEADER_FONT_SIZE, BASE_FONT_SIZE
+    DEFAULT_FONT_COLOR, BASE_HEADER_FONT_SIZE, BASE_FONT_SIZE, \
+    DEFAULT_COLORED_CELL_COLOR, PYDOCX_BACKGROUND_COLOR
 
 
 def _apply_cell_styling(cell_object: CellObject, section: Section):
@@ -43,6 +47,11 @@ def _apply_cell_styling(cell_object: CellObject, section: Section):
             cell_object.run.font.color.rgb = hex_to_rgb(
                 style[PYDOCX_FONT_COLOR])
 
+    # Background color
+    if 'backgroundColor' in style:
+        cell_object.cell = insert_cell_background(cell_object.cell,
+                               style[PYDOCX_BACKGROUND_COLOR])
+
     # Paragraph styling
     if PYDOCX_TEXT_ALIGN in style:
         if style[PYDOCX_TEXT_ALIGN] == 'left':
@@ -74,7 +83,7 @@ def insert_header_style(section: Section) -> Section:
     header_font_size = BASE_HEADER_FONT_SIZE - (level - 1) * 2
     base_style = {
         "fontSize": header_font_size,
-        "color": DEFAULT_FONT_DARK_COLOR
+        "color": DEFAULT_FONT_COLOR
     }
 
     return _attach_all_styles(section, base_style)
@@ -85,9 +94,19 @@ def insert_text_style(section: Section) -> Section:
     """
     base_style = {
         'fontSize': BASE_FONT_SIZE,
-        'color': DEFAULT_FONT_DARK_COLOR
+        'color': DEFAULT_FONT_COLOR
     }
     return _attach_all_styles(section, base_style)
+
+
+def insert_cell_background(cell: _Cell,
+                           color_hex=DEFAULT_COLORED_CELL_COLOR) -> _Cell:
+    """ Add a background color to a cell, from hex color """
+    shading_elm_1 = parse_xml(
+        f'<w:shd {nsdecls("w")} w:fill="{color_hex}"/>')
+    cell._tc.get_or_add_tcPr().append(shading_elm_1)
+
+    return cell
 
 
 def apply_style(cell_object: CellObject, section: Section) -> None:

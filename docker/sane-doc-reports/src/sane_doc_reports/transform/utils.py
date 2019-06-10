@@ -4,7 +4,8 @@ from typing import List
 
 from sane_doc_reports.conf import LAYOUT_KEY, ROW_POSITION_KEY, \
     COL_POSITION_KEY, HEIGHT_POSITION_KEY, WIDTH_POSITION_KEY, DATA_KEY, \
-    OLD_JSON_FORMAT_GRID_MAX, BASE_FONT_SIZE
+    OLD_JSON_FORMAT_GRID_MAX, BASE_FONT_SIZE, DEFAULT_COLORED_CELL_COLOR, \
+    PYDOCX_BACKGROUND_COLOR
 from sane_doc_reports.domain.Section import sane_to_section
 from sane_doc_reports.transform.markdown.md_helpers import \
     markdown_to_section_list
@@ -126,6 +127,10 @@ def transform_old_json_format(json_data: List[dict]) -> List[dict]:
         if json_data[i]['type'] in ['header', 'divider', 'markdown',
                                     'globalSection']:
             json_data[i][LAYOUT_KEY][WIDTH_POSITION_KEY] = 10
+
+        if json_data[i]['type'] == 'header':
+            json_data[i][LAYOUT_KEY]['style'][
+                PYDOCX_BACKGROUND_COLOR] = DEFAULT_COLORED_CELL_COLOR
 
         if json_data[i]['type'] == 'table':
             if 'tableColumns' not in json_data[i]['layout']:

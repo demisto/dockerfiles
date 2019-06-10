@@ -14,6 +14,7 @@ class UlWrapper(Wrapper):
 
         temp_section = MarkdownSection('markdown', self.section.contents, {},
                                        {})
+
         p_style, list_level, list_type = get_current_li(self.section.extra,
                                                         UNORDERED_LIST_NAME)
         temp_section.propagate_extra('list_level', list_level,

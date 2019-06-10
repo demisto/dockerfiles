@@ -16,6 +16,7 @@ class UlWrapper(Wrapper):
 
         p_style, list_level, list_type = get_current_li(self.section.extra,
                                                         ORDERED_LIST_NAME)
+
         temp_section.propagate_extra('list_level', list_level,
                                      only_multiple_children=False)
         temp_section.propagate_extra('list_type', list_type,

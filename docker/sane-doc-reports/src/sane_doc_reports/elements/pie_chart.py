@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 
 from sane_doc_reports.domain.Section import Section
-from sane_doc_reports.conf import DEBUG, DEFAULT_WORD_FONT, DEFAULT_FONT_DARK_COLOR, \
+from sane_doc_reports.conf import DEBUG, DEFAULT_WORD_FONT, DEFAULT_FONT_COLOR, \
     DEFAULT_TITLE_FONT_SIZE
 
 from sane_doc_reports.elements import image, error
@@ -15,7 +15,7 @@ class PieChartElement(Element):
     style = {
         'title': {
             'fontname': DEFAULT_WORD_FONT,
-            'color': DEFAULT_FONT_DARK_COLOR,
+            'color': DEFAULT_FONT_COLOR,
             'fontsize': DEFAULT_TITLE_FONT_SIZE
         }
     }

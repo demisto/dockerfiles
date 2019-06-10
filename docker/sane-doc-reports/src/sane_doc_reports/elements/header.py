@@ -11,7 +11,8 @@ class HeaderElement(Element):
         if DEBUG:
             print('Adding text...')
 
-        insert_header(self.cell_object, self.section.contents, header='h1')
+        insert_header(self.cell_object, self.section.contents, header='h1',
+                      style=self.section.get_style())
 
 
 def invoke(cell_object, section) -> None:
