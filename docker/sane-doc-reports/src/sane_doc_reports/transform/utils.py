@@ -117,7 +117,7 @@ def transform_old_json_format(json_data: List[dict]) -> List[dict]:
         json_data[i] = _font_transformations(json_data[i])
 
         # Fix nil data
-        if not json_data[i][DATA_KEY]:
+        if DATA_KEY not in json_data[i] or not json_data[i][DATA_KEY]:
             json_data[i][DATA_KEY] = ""
 
         if json_data[i]['type'] == 'logo':
@@ -131,6 +131,10 @@ def transform_old_json_format(json_data: List[dict]) -> List[dict]:
         if json_data[i]['type'] == 'header':
             json_data[i][LAYOUT_KEY]['style'][
                 PYDOCX_BACKGROUND_COLOR] = DEFAULT_COLORED_CELL_COLOR
+
+        if json_data[i]['type'] == 'chart':
+            if 'title' not in json_data[i]:
+                json_data[i]['title'] = ''
 
         if json_data[i]['type'] == 'table':
             if 'tableColumns' not in json_data[i]['layout']:

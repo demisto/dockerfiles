@@ -32,9 +32,13 @@ def open_b64_image(image_base64):
 def insert_by_type(type: str, cell_object: CellObject,
                    section: Section):
     """ Call a elements elemnt's insert method """
-    func = importlib.import_module(f'sane_doc_reports.elements.{type}')
+    try:
+        func = importlib.import_module(f'sane_doc_reports.elements.{type}')
+        func.invoke(cell_object, section)
+    except ModuleNotFoundError:
+        import sane_doc_reports.elements.empty as empty
+        empty.invoke(cell_object, section)
 
-    func.invoke(cell_object, section)
 
 
 def _insert_paragraph_after(paragraph):

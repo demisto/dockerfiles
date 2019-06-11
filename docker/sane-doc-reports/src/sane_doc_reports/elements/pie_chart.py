@@ -40,7 +40,11 @@ class PieChartElement(Element):
 
         # If we have predefined colors, use them
         if 'legend' in self.section.layout and self.section.layout['legend']:
-            colors = [i['color'] for i in self.section.layout['legend']]
+            for i in self.section.layout['legend']:
+                if 'color' in i:
+                    colors.append(i['color'])
+                elif 'fill' in i:
+                    colors.append(i['fill'])
 
         color_keys = {}
         for i, k in enumerate(objects):
