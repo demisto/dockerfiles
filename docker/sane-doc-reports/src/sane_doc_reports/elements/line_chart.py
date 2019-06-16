@@ -3,15 +3,41 @@ from matplotlib.pyplot import figure
 
 from sane_doc_reports import utils
 from sane_doc_reports.domain.Element import Element
-from sane_doc_reports.conf import DEBUG, DEFAULT_ALPHA
+from sane_doc_reports.conf import DEBUG, DEFAULT_ALPHA, DEFAULT_WORD_FONT, \
+    DEFAULT_FONT_COLOR, DEFAULT_TITLE_FONT_SIZE
 from sane_doc_reports.domain.Section import Section
 from sane_doc_reports.elements import error, image
-from sane_doc_reports.utils import get_ax_location, remove_plot_borders, \
+from sane_doc_reports.styles.colors import get_colors
+from sane_doc_reports.utils import remove_plot_borders, \
     set_legend_style
 
 
-class LineChartElement(Element):
+def _fix_date_range(groups):
+    date_range = []
+    for _, g in groups.items():
+        for date in g['dates']:
+            if date not in date_range:
+                date_range.append(date)
 
+    for k, v in groups.items():
+        for date in date_range:
+            if date not in groups[k]['dates']:
+                groups[k]['dates'].append(date)
+                groups[k]['values'].append(0)
+
+    return groups
+
+
+class LineChartElement(Element):
+    style = {
+        'title': {
+            'fontname': DEFAULT_WORD_FONT,
+            'color': DEFAULT_FONT_COLOR,
+            'fontsize': DEFAULT_TITLE_FONT_SIZE
+        }
+    }
+
+    @utils.plot
     def insert(self):
         if DEBUG:
             print("Adding line chart...")
@@ -44,14 +70,38 @@ class LineChartElement(Element):
                 groups[line['name']]['dates'].append(date_group['name'])
                 groups[line['name']]['values'].append(line['data'][0])
 
-        legend_colors = {i['name']: i['color'] for i in
-                         self.section.layout['legend']}
+        # Fix empty key
+        if '' in groups.keys():
+            groups['None'] = groups.pop('')
+
+        # Generate the default colors
+        colors = get_colors(self.section.layout, groups.keys())
+        unassigned_color = 'darkgrey'
+
+        # If we have predefined colors, use them
+        if 'legend' in self.section.layout and self.section.layout['legend']:
+            for i in self.section.layout['legend']:
+                if 'color' in i:
+                    colors.append(i['color'])
+                elif 'fill' in i:
+                    colors.append(i['fill'])
+
+        color_keys = {}
+        for i, k in enumerate(groups.keys()):
+            color_keys[k] = colors[i]
+            if k == 'Unassigned':
+                color_keys['Unassigned'] = unassigned_color
+
+        final_colors = {k: color_keys[k] for k in groups.keys()}
+
+        # Padd the dates
+        groups = _fix_date_range(groups)
 
         # Plot the lines
         for group, line in groups.items():
             x_axis = line['dates']
             y_axis = line['values']
-            plt.plot(x_axis, y_axis, marker='', color=legend_colors[group],
+            plt.plot(x_axis, y_axis, marker='', color=final_colors[group],
                      linewidth=2)
 
         # Create and move the legend outside
@@ -60,13 +110,11 @@ class LineChartElement(Element):
         legend_location = 'upper center'
         legend_location_relative_to_graph = (0.5, -0.35)
 
-        a = ax.legend([i for i in groups.keys()], loc=legend_location,
+        legend = ax.legend([i for i in groups.keys()], loc=legend_location,
                       bbox_to_anchor=legend_location_relative_to_graph)
 
-        set_legend_style(a)
-        a.get_frame().set_alpha(DEFAULT_ALPHA)
-        a.get_frame().set_linewidth(0.0)
-
+        set_legend_style(legend)
+        ax.set_title(self.section.extra['title'], **self.style['title'])
 
         # Add to docx as image
         plt_b64 = utils.plt_t0_b64(plt)

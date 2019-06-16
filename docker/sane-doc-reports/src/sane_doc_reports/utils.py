@@ -36,8 +36,8 @@ def insert_by_type(type: str, cell_object: CellObject,
         func = importlib.import_module(f'sane_doc_reports.elements.{type}')
         func.invoke(cell_object, section)
     except ModuleNotFoundError:
-        import sane_doc_reports.elements.empty as empty
-        empty.invoke(cell_object, section)
+        import sane_doc_reports.elements.unimplemented as unimplemented
+        unimplemented.invoke(cell_object, section)
 
 
 

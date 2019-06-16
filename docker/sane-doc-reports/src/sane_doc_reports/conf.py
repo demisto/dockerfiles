@@ -30,8 +30,8 @@ DEFAULT_FONT_COLOR = '#38383d'
 BASE_HEADER_FONT_SIZE = 16
 BASE_FONT_SIZE = 9
 DEFAULT_TABLE_FONT_SIZE = 8
-DEFAULT_TITLE_FONT_SIZE = 14
-DEFAULT_LEGEND_FONT_SIZE = 10
+DEFAULT_TITLE_FONT_SIZE = 10
+DEFAULT_LEGEND_FONT_SIZE = 7
 DEFAULT_TABLE_STYLE = 'TableDemisto'
 DEFAULT_COLORED_CELL_COLOR = '#f9f9fb'
 
@@ -99,3 +99,4 @@ HTML_NOT_WRAPABLES = ['span', 'li', 'ul', 'ol', 'code', 'blockquote']
 HTML_ATTRIBUTES = ['em', 'strong', 'del']
 HTML_ATTR_MARKDOWN_MAP = {'em': 'italic', 'strong': 'bold',
                           'del': 'strikethrough'}
+SHOULD_NEW_LINE = ['hr'] + MD_TYPES_HEADERS

@@ -9,7 +9,10 @@ from sane_doc_reports.populate.utils import insert_text
 
 def fix_order(ordered, readable_headers) -> list:
     """ Return the readable headers by the order given """
-    temp_readable = {i[0].lower() + i[1:]: i for i in readable_headers}
+    temp_readable = {**{i[0].lower() + i[1:]: i for i in readable_headers},
+            **{i.lower(): i for i in readable_headers}}
+    temp_readable = {k.replace(" ", ""): v for k, v in temp_readable.items()}
+
     # Old json format table columns are not lowercased
     inv_fix = {i: i for i in readable_headers}
     temp_readable = {**temp_readable, **inv_fix}

@@ -5,7 +5,7 @@ from sane_doc_reports.transform.markdown.MarkdownSection import MarkdownSection
 from sane_doc_reports.conf import MD_TYPE_DIV, MD_TYPE_CODE, MD_TYPE_QUOTE, \
     MD_TYPE_UNORDERED_LIST, MD_TYPE_ORDERED_LIST, MD_TYPE_LIST_ITEM, \
     MD_TYPE_HORIZONTAL_LINE, MD_TYPE_IMAGE, MD_TYPE_LINK, MD_TYPE_TEXT, \
-    MD_TYPE_INLINE_TEXT, MD_TYPES_HEADERS, MD_TYPE_TABLE
+    MD_TYPE_INLINE_TEXT, MD_TYPES_HEADERS, MD_TYPE_TABLE, SHOULD_NEW_LINE
 from sane_doc_reports.elements import md_code, md_ul, md_li, \
     md_blockquote, \
     md_hr, md_ol, md_link, md_image, table
@@ -32,7 +32,6 @@ class MarkdownWrapper(Wrapper):
                              '(must be a list)')
 
         for section in md_section_list:
-
             # === Start wrappers ===
             if section.type == MD_TYPE_DIV:
                 temp_section = MarkdownSection('markdown', section.contents,
@@ -91,16 +90,22 @@ class MarkdownWrapper(Wrapper):
                     is_inside_wrapper = True
 
                 if section.type == 'span':
-                    section.propagate_extra('inline', True)
+                    section.propagate_extra('check_newline', True,
+                                            only_multiple_children=False)
 
                 # TODO: Fix problem with H1 no newline even if in span.
                 temp_section = MarkdownSection('markdown', section.contents,
-                                               {}, {}, section.attrs)
+                                               {}, section.extra, section.attrs)
                 invoke(self.cell_object, temp_section,
                        invoked_from_wrapper=is_inside_wrapper)
                 continue
 
             # === Elements ===
+
+            if section.type in SHOULD_NEW_LINE and section.get_extra(
+                    'check_newline'):
+                self.cell_object.add_paragraph()
+
             if section.type == MD_TYPE_HORIZONTAL_LINE:
                 md_hr.invoke(self.cell_object, section)
                 continue
