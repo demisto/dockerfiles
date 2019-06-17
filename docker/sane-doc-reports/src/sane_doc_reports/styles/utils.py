@@ -1,7 +1,7 @@
-from docx.oxml import parse_xml
+from docx.oxml import parse_xml, OxmlElement
 from docx.shared import Pt
 from docx.table import _Cell
-from docx.oxml.ns import nsdecls
+from docx.oxml.ns import nsdecls, qn
 
 from sane_doc_reports.domain import CellObject
 from sane_doc_reports.domain.Section import Section
@@ -50,7 +50,8 @@ def _apply_cell_styling(cell_object: CellObject, section: Section):
     # Background color
     if 'backgroundColor' in style:
         cell_object.cell = insert_cell_background(cell_object.cell,
-                               style[PYDOCX_BACKGROUND_COLOR])
+                                                  style[
+                                                      PYDOCX_BACKGROUND_COLOR])
 
     # Paragraph styling
     if PYDOCX_TEXT_ALIGN in style:
@@ -99,6 +100,11 @@ def insert_text_style(section: Section) -> Section:
     return _attach_all_styles(section, base_style)
 
 
+def style_cell(cell: _Cell, margins={}):
+    insert_cell_background(cell)
+    set_cell_margins(cell, margins)
+
+
 def insert_cell_background(cell: _Cell,
                            color_hex=DEFAULT_COLORED_CELL_COLOR) -> _Cell:
     """ Add a background color to a cell, from hex color """
@@ -119,3 +125,20 @@ def apply_style(cell_object: CellObject, section: Section) -> None:
     }[section.type](section)
 
     _apply_cell_styling(cell_object, section)
+
+
+def set_cell_margins(cell: _Cell, margins):
+    """
+    margins{top:, start:, bottom:, end:} sizes in Pt
+    """
+    tc = cell._tc
+    tcPr = tc.get_or_add_tcPr()
+    tcMar = OxmlElement('w:tcMar')
+
+    for k, m in margins.items():
+        node = OxmlElement(f'w:{k}')
+        node.set(qn('w:w'), str(m))
+        node.set(qn('w:type'), 'dxa')
+        tcMar.append(node)
+
+    tcPr.append(tcMar)

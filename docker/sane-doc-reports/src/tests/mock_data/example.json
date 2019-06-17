@@ -15,13 +15,6 @@
           2
         ],
         "groups": null
-      },
-      {
-        "name": "Doron Sharon",
-        "data": [
-          1
-        ],
-        "groups": null
       }
     ],
     "layout": {
@@ -34,7 +27,7 @@
       "chartType": "bar",
       "columnPos": 0,
       "dimensions": {
-        "height": 138,
+        "height": 108,
         "width": 409
       },
       "h": 2,
@@ -64,11 +57,11 @@
         "query": "-category:job and -status:archived and -status:closed",
         "period": {
           "by": "day",
-          "byFrom": "days",
           "byTo": "",
-          "field": "",
+          "byFrom": "days",
+          "toValue": null,
           "fromValue": 7,
-          "toValue": null
+          "field": ""
         },
         "fromDate": "0001-01-01T00:00:00Z",
         "toDate": "0001-01-01T00:00:00Z"
@@ -80,7 +73,7 @@
       "args": null,
       "noEvent": false
     },
-    "fromDate": "2019-06-07T18:02:49+03:00",
+    "fromDate": "2019-06-09T14:27:33+03:00",
     "title": "Active Incidents Assigned by User"
   },
   {
@@ -102,11 +95,11 @@
         "query": "status:closed",
         "period": {
           "by": "day",
-          "byFrom": "days",
           "byTo": "",
-          "field": "",
+          "byFrom": "days",
+          "toValue": null,
           "fromValue": 7,
-          "toValue": null
+          "field": ""
         },
         "fromDate": "0001-01-01T00:00:00Z",
         "toDate": "0001-01-01T00:00:00Z"
@@ -118,7 +111,7 @@
       "args": null,
       "noEvent": false
     },
-    "fromDate": "2019-06-07T18:02:49+03:00",
+    "fromDate": "2019-06-09T14:27:33+03:00",
     "title": "Closed Incidents by Role"
   },
   {
@@ -127,7 +120,7 @@
       {
         "name": "Low",
         "data": [
-          3
+          2
         ],
         "groups": null
       },
@@ -196,11 +189,11 @@
         "query": "-category:job and -status:archived and -status:closed",
         "period": {
           "by": "day",
-          "byFrom": "days",
           "byTo": "",
-          "field": "",
+          "byFrom": "days",
+          "toValue": null,
           "fromValue": 7,
-          "toValue": null
+          "field": ""
         },
         "fromDate": "0001-01-01T00:00:00Z",
         "toDate": "0001-01-01T00:00:00Z"
@@ -212,73 +205,12 @@
       "args": null,
       "noEvent": false
     },
-    "fromDate": "2019-06-07T18:02:49+03:00",
+    "fromDate": "2019-06-09T14:27:33+03:00",
     "title": "Active Incidents - Pie chart"
   },
   {
     "type": "list",
     "data": [
-      {
-        "CustomFields": "N/A",
-        "Detection SLA": "Status: idle",
-        "Detection SLA.runStatus": "Idle",
-        "Detection SLA.totalElapsed": "0",
-        "Remediation SLA": "Status: idle",
-        "Remediation SLA.runStatus": "Idle",
-        "Remediation SLA.totalElapsed": "0",
-        "Time to Assignment": "Status: idle",
-        "Time to Assignment.runStatus": "Idle",
-        "Time to Assignment.totalElapsed": "0",
-        "account": "N/A",
-        "activated": "N/A",
-        "attachment": "N/A",
-        "autime": "1560077347176109000",
-        "canvases": "N/A",
-        "category": "N/A",
-        "closeNotes": "N/A",
-        "closeReason": "N/A",
-        "closed": "N/A",
-        "closingUserId": "N/A",
-        "created": "Sun, 09 Jun 2019 13:49:07 IDT",
-        "details": "N/A",
-        "droppedCount": "0",
-        "dueDate": "Mon, 10 Jun 2019 13:49:07 IDT",
-        "hasRole": "N/A",
-        "id": "26",
-        "investigationId": "N/A",
-        "isPlayground": "N/A",
-        "labels": "map[type:Instance value:admin], map[type:Brand value:Manual]",
-        "lastOpen": "0001-01-01 00:00:00 +0000 UTC",
-        "linkedCount": "0",
-        "linkedIncidents": "N/A",
-        "modified": "Mon, 10 Jun 2019 13:49:07 IDT",
-        "name": "some incident with long name",
-        "notifyTime": "0001-01-01 00:00:00 +0000 UTC",
-        "occurred": "Sun, 09 Jun 2019 13:49:07 IDT",
-        "openDuration": "0h 0m 0s",
-        "owner": "dorsha",
-        "parent": "N/A",
-        "phase": "Unassigned",
-        "playbookId": "N/A",
-        "previousRoles": "N/A",
-        "rawCategory": "N/A",
-        "rawCloseReason": "N/A",
-        "rawJSON": "N/A",
-        "rawName": "some incident with long name",
-        "rawPhase": "N/A",
-        "rawType": "Access",
-        "reason": "N/A",
-        "reminder": "N/A",
-        "roles": "Unassigned",
-        "runStatus": "N/A",
-        "severity": "Low",
-        "sla": "0",
-        "sourceBrand": "Manual",
-        "sourceInstance": "admin",
-        "status": "Pending",
-        "type": "Access",
-        "version": "1"
-      },
       {
         "CustomFields": "N/A",
         "Detection SLA": "Status: idle",
@@ -541,11 +473,11 @@
         "query": "-category:job and -status:archived and -status:closed and dueDate:\u003cnow",
         "period": {
           "by": "day",
-          "byFrom": "days",
           "byTo": "",
-          "field": "",
+          "byFrom": "days",
+          "toValue": null,
           "fromValue": 7,
-          "toValue": null
+          "field": ""
         },
         "fromDate": "0001-01-01T00:00:00Z",
         "toDate": "0001-01-01T00:00:00Z"
@@ -557,7 +489,7 @@
       "args": null,
       "noEvent": false
     },
-    "fromDate": "2019-06-07T18:02:49+03:00",
+    "fromDate": "2019-06-09T14:27:33+03:00",
     "title": "Late Incidents"
   },
   {
@@ -566,7 +498,7 @@
       {
         "name": "Unassigned",
         "data": [
-          5
+          4
         ],
         "groups": null
       }
@@ -609,11 +541,11 @@
         "query": "-category:job",
         "period": {
           "by": "day",
-          "byFrom": "days",
           "byTo": "",
-          "field": "",
+          "byFrom": "days",
+          "toValue": null,
           "fromValue": 7,
-          "toValue": null
+          "field": ""
         },
         "fromDate": "0001-01-01T00:00:00Z",
         "toDate": "0001-01-01T00:00:00Z"
@@ -625,39 +557,18 @@
       "args": null,
       "noEvent": false
     },
-    "fromDate": "2019-06-07T18:02:49+03:00",
+    "fromDate": "2019-06-09T14:27:33+03:00",
     "title": "Incidents by Phase"
   },
   {
     "type": "chart",
     "data": [
       {
-        "name": "2019-06-07",
-        "data": [
-          0
-        ],
-        "groups": []
-      },
-      {
-        "name": "2019-06-08",
-        "data": [
-          0
-        ],
-        "groups": []
-      },
-      {
         "name": "2019-06-09",
         "data": [
-          2
+          1
         ],
         "groups": [
-          {
-            "name": "Doron Sharon",
-            "data": [
-              1
-            ],
-            "groups": null
-          },
           {
             "name": "",
             "data": [
@@ -716,6 +627,20 @@
           0
         ],
         "groups": []
+      },
+      {
+        "name": "2019-06-15",
+        "data": [
+          0
+        ],
+        "groups": []
+      },
+      {
+        "name": "2019-06-16",
+        "data": [
+          0
+        ],
+        "groups": []
       }
     ],
     "layout": {
@@ -763,11 +688,11 @@
         "query": "-status:closed -category:job",
         "period": {
           "by": "day",
-          "byFrom": "days",
           "byTo": "",
-          "field": "",
+          "byFrom": "days",
+          "toValue": null,
           "fromValue": 7,
-          "toValue": null
+          "field": ""
         },
         "fromDate": "0001-01-01T00:00:00Z",
         "toDate": "0001-01-01T00:00:00Z"
@@ -779,7 +704,251 @@
       "args": null,
       "noEvent": false
     },
-    "fromDate": "2019-06-07T18:02:49+03:00",
+    "fromDate": "2019-06-09T14:27:33+03:00",
     "title": "demo"
+  },
+  {
+    "type": "number",
+    "data": 0,
+    "layout": {
+      "columnPos": 0,
+      "h": 1,
+      "i": "f925b3c0-9028-11e9-bef0-1f71ac94f371",
+      "layout": "horizontal",
+      "rowPos": 13,
+      "sign": "",
+      "signAlignment": "left",
+      "style": {},
+      "w": 3
+    },
+    "query": {
+      "type": "audit",
+      "filter": {
+        "query": "",
+        "period": {
+          "by": "day",
+          "byTo": "",
+          "byFrom": "days",
+          "toValue": null,
+          "fromValue": 7,
+          "field": ""
+        },
+        "fromDate": "0001-01-01T00:00:00Z",
+        "toDate": "0001-01-01T00:00:00Z"
+      }
+    },
+    "automation": {
+      "name": "",
+      "id": "",
+      "args": null,
+      "noEvent": false
+    },
+    "fromDate": "2019-06-09T14:27:33+03:00",
+    "title": "Incidents Dropped in Preprocessing"
+  },
+  {
+    "type": "duration",
+    "data": [],
+    "layout": {
+      "chartProperties": {
+        "daysLabel": "DAYS",
+        "hoursLabel": "HOURS",
+        "minutesLabel": "MIN"
+      },
+      "columnPos": 3,
+      "h": 1,
+      "i": "ff7dd900-9028-11e9-bef0-1f71ac94f371",
+      "rowPos": 13,
+      "w": 5
+    },
+    "query": {
+      "type": "incident",
+      "filter": {
+        "query": "-category:job and detectionsla.runStatus:ended",
+        "period": {
+          "by": "day",
+          "byTo": "",
+          "byFrom": "days",
+          "toValue": null,
+          "fromValue": 7,
+          "field": ""
+        },
+        "fromDate": "0001-01-01T00:00:00Z",
+        "toDate": "0001-01-01T00:00:00Z"
+      },
+      "keys": [
+        "avg|detectionsla.totalDuration"
+      ]
+    },
+    "automation": {
+      "name": "",
+      "id": "",
+      "args": null,
+      "noEvent": false
+    },
+    "fromDate": "2019-06-09T14:27:33+03:00",
+    "title": "Mean Time to Detection"
+  },
+  {
+    "type": "list",
+    "data": [
+      {
+        "CustomFields": "N/A",
+        "Detection SLA": "Status: idle",
+        "Detection SLA.runStatus": "Idle",
+        "Detection SLA.totalElapsed": "0",
+        "Remediation SLA": "Status: idle",
+        "Remediation SLA.runStatus": "Idle",
+        "Remediation SLA.totalElapsed": "0",
+        "Time to Assignment": "Status: idle",
+        "Time to Assignment.runStatus": "Idle",
+        "Time to Assignment.totalElapsed": "0",
+        "account": "N/A",
+        "activated": "N/A",
+        "attachment": "N/A",
+        "autime": "1560091181480488000",
+        "canvases": "N/A",
+        "category": "N/A",
+        "closeNotes": "N/A",
+        "closeReason": "N/A",
+        "closed": "N/A",
+        "closingUserId": "N/A",
+        "created": "Sun, 09 Jun 2019 17:39:41 IDT",
+        "details": "N/A",
+        "droppedCount": "0",
+        "dueDate": "Tue, 11 Jun 2019 17:39:41 IDT",
+        "hasRole": "N/A",
+        "id": "27",
+        "investigationId": "N/A",
+        "isPlayground": "N/A",
+        "labels": "map[type:Instance value:admin], map[type:Brand value:Manual]",
+        "lastOpen": "0001-01-01 00:00:00 +0000 UTC",
+        "linkedCount": "0",
+        "linkedIncidents": "N/A",
+        "modified": "Mon, 10 Jun 2019 17:39:41 IDT",
+        "name": "some incident with long name",
+        "notifyTime": "0001-01-01 00:00:00 +0000 UTC",
+        "occurred": "Sun, 09 Jun 2019 17:39:41 IDT",
+        "openDuration": "0h 0m 0s",
+        "owner": "N/A",
+        "parent": "N/A",
+        "phase": "Unassigned",
+        "playbookId": "N/A",
+        "previousRoles": "N/A",
+        "rawCategory": "N/A",
+        "rawCloseReason": "N/A",
+        "rawJSON": "N/A",
+        "rawName": "some incident with long name",
+        "rawPhase": "N/A",
+        "rawType": "Access",
+        "reason": "N/A",
+        "reminder": "N/A",
+        "roles": "Unassigned",
+        "runStatus": "N/A",
+        "severity": "Low",
+        "sla": "0",
+        "sourceBrand": "Manual",
+        "sourceInstance": "admin",
+        "status": "Pending",
+        "type": "Access",
+        "version": "1"
+      },
+      {
+        "CustomFields": "N/A",
+        "Detection SLA": "Status: idle",
+        "Detection SLA.runStatus": "Idle",
+        "Detection SLA.totalElapsed": "0",
+        "Remediation SLA": "Status: idle",
+        "Remediation SLA.runStatus": "Idle",
+        "Remediation SLA.totalElapsed": "0",
+        "Time to Assignment": "Status: idle",
+        "Time to Assignment.runStatus": "Idle",
+        "Time to Assignment.totalElapsed": "0",
+        "account": "N/A",
+        "activated": "N/A",
+        "attachment": "N/A",
+        "autime": "1560153690452991000",
+        "canvases": "N/A",
+        "category": "N/A",
+        "closeNotes": "N/A",
+        "closeReason": "N/A",
+        "closed": "N/A",
+        "closingUserId": "N/A",
+        "created": "Mon, 10 Jun 2019 11:01:30 IDT",
+        "details": "N/A",
+        "droppedCount": "0",
+        "dueDate": "Tue, 11 Jun 2019 11:01:30 IDT",
+        "hasRole": "N/A",
+        "id": "28",
+        "investigationId": "N/A",
+        "isPlayground": "N/A",
+        "labels": "map[type:Instance value:admin], map[type:Brand value:Manual]",
+        "lastOpen": "0001-01-01 00:00:00 +0000 UTC",
+        "linkedCount": "0",
+        "linkedIncidents": "N/A",
+        "modified": "Tue, 11 Jun 2019 11:01:30 IDT",
+        "name": "some incident with long name",
+        "notifyTime": "0001-01-01 00:00:00 +0000 UTC",
+        "occurred": "Mon, 10 Jun 2019 11:01:30 IDT",
+        "openDuration": "0h 0m 0s",
+        "owner": "N/A",
+        "parent": "N/A",
+        "phase": "Unassigned",
+        "playbookId": "N/A",
+        "previousRoles": "N/A",
+        "rawCategory": "N/A",
+        "rawCloseReason": "N/A",
+        "rawJSON": "N/A",
+        "rawName": "some incident with long name",
+        "rawPhase": "N/A",
+        "rawType": "Hunt",
+        "reason": "N/A",
+        "reminder": "N/A",
+        "roles": "Unassigned",
+        "runStatus": "N/A",
+        "severity": "Unknown",
+        "sla": "0",
+        "sourceBrand": "Manual",
+        "sourceInstance": "admin",
+        "status": "Pending",
+        "type": "Hunt",
+        "version": "1"
+      }
+    ],
+    "layout": {
+      "columnPos": 8,
+      "h": 2,
+      "i": "0c5b9c20-9029-11e9-bef0-1f71ac94f371",
+      "rowPos": 13,
+      "tableColumns": [
+        "name",
+        "severity"
+      ],
+      "w": 4
+    },
+    "query": {
+      "type": "incident",
+      "filter": {
+        "query": "-category:job and -status:archived and -status:closed and owner:\"\"",
+        "period": {
+          "by": "day",
+          "byTo": "",
+          "byFrom": "days",
+          "toValue": null,
+          "fromValue": 7,
+          "field": ""
+        },
+        "fromDate": "0001-01-01T00:00:00Z",
+        "toDate": "0001-01-01T00:00:00Z"
+      }
+    },
+    "automation": {
+      "name": "",
+      "id": "",
+      "args": null,
+      "noEvent": false
+    },
+    "fromDate": "2019-06-09T14:27:33+03:00",
+    "title": "Unassigned Incidents"
   }
 ]

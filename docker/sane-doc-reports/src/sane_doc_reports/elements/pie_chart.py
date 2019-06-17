@@ -1,11 +1,12 @@
 import matplotlib.pyplot as plt
 
 from sane_doc_reports.domain.Section import Section
-from sane_doc_reports.conf import DEBUG, DEFAULT_WORD_FONT, DEFAULT_FONT_COLOR, \
+from sane_doc_reports.conf import DEBUG, DEFAULT_FONT_COLOR, \
     DEFAULT_TITLE_FONT_SIZE
 
 from sane_doc_reports.elements import image, error
-from sane_doc_reports.utils import get_ax_location, set_legend_style
+from sane_doc_reports.utils import set_legend_style, \
+    get_chart_font, set_axis_font
 from sane_doc_reports.styles.colors import get_colors
 from sane_doc_reports import utils
 from sane_doc_reports.domain.Element import Element
@@ -14,7 +15,7 @@ from sane_doc_reports.domain.Element import Element
 class PieChartElement(Element):
     style = {
         'title': {
-            'fontname': DEFAULT_WORD_FONT,
+            'fontname': get_chart_font(),
             'color': DEFAULT_FONT_COLOR,
             'fontsize': DEFAULT_TITLE_FONT_SIZE
         }
@@ -70,10 +71,11 @@ class PieChartElement(Element):
         legend = ax.legend(wedges, keys_with_numbers,
                            title="",
                            loc=legend_location,
-                           bbox_to_anchor=legend_location_relative_to_graph
+                           bbox_to_anchor=legend_location_relative_to_graph,
+                           handlelength=0.7
                            )
         set_legend_style(legend)
-
+        set_axis_font(ax)
         ax.set_title(self.section.extra['title'], **self.style['title'])
         circle = plt.Circle((0, 0), 0.7, fc='white')
         ax.add_artist(circle)

@@ -9,29 +9,34 @@ from sane_doc_reports.domain.Section import Section
 from sane_doc_reports.elements import error, image
 from sane_doc_reports.styles.colors import get_colors
 from sane_doc_reports.utils import remove_plot_borders, \
-    set_legend_style
+    set_legend_style, get_chart_font, set_axis_font
 
 
-def _fix_date_range(groups):
-    date_range = []
-    for _, g in groups.items():
-        for date in g['dates']:
-            if date not in date_range:
-                date_range.append(date)
+def fix_data(data):
+    dates = [i['name'] for i in data]
+    new_groups = {}
 
-    for k, v in groups.items():
-        for date in date_range:
-            if date not in groups[k]['dates']:
-                groups[k]['dates'].append(date)
-                groups[k]['values'].append(0)
+    for group in data:
+        for line in group['groups']:
+            if line['name'] not in new_groups:
+                new_groups[line['name']] = {
+                    'dates': dates,
+                    'values': [0] * len(dates)
+                }
 
-    return groups
+    # Populate the data
+    for index, group in enumerate(data):
+        for line in group['groups']:
+            if line['name'] in new_groups:
+                new_groups[line['name']]['values'][index] += line['data'][0]
+
+    return new_groups
 
 
 class LineChartElement(Element):
     style = {
         'title': {
-            'fontname': DEFAULT_WORD_FONT,
+            'fontname': get_chart_font(),
             'color': DEFAULT_FONT_COLOR,
             'fontsize': DEFAULT_TITLE_FONT_SIZE
         }
@@ -48,6 +53,8 @@ class LineChartElement(Element):
 
         data = self.section.contents
 
+        fix_data(data)
+
         # Make the groups look like:
         # groups = {
         #   'Type A': {
@@ -58,17 +65,7 @@ class LineChartElement(Element):
         #         dates: ['2000', '2001', '2002'],
         #         values : ['4', '5', '6']
         # }
-        groups = {}
-        for date_group in data:
-            for line in date_group['groups']:
-                if line['name'] not in groups:
-                    groups[line['name']] = {
-                        'dates': [date_group['name']],
-                        'values': [line['data'][0]]
-                    }
-                    continue
-                groups[line['name']]['dates'].append(date_group['name'])
-                groups[line['name']]['values'].append(line['data'][0])
+        groups = fix_data(data)
 
         # Fix empty key
         if '' in groups.keys():
@@ -94,9 +91,6 @@ class LineChartElement(Element):
 
         final_colors = {k: color_keys[k] for k in groups.keys()}
 
-        # Padd the dates
-        groups = _fix_date_range(groups)
-
         # Plot the lines
         for group, line in groups.items():
             x_axis = line['dates']
@@ -106,14 +100,17 @@ class LineChartElement(Element):
 
         # Create and move the legend outside
         ax = plt.gca()
+        plt.setp(ax.get_xticklabels(), rotation=30, horizontalalignment='right')
         remove_plot_borders(ax)
         legend_location = 'upper center'
         legend_location_relative_to_graph = (0.5, -0.35)
 
         legend = ax.legend([i for i in groups.keys()], loc=legend_location,
-                      bbox_to_anchor=legend_location_relative_to_graph)
+                           bbox_to_anchor=legend_location_relative_to_graph,
+                           handlelength=0.7)
 
         set_legend_style(legend)
+        set_axis_font(ax)
         ax.set_title(self.section.extra['title'], **self.style['title'])
 
         # Add to docx as image
