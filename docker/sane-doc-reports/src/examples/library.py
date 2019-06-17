@@ -57,6 +57,11 @@ def example_duration(out_file_name='example.docx'):
     main.run(get_mock('elements/duration.json', ret_dict=False), out_file_name)
 
 
+def example_unimplemented(out_file_name='example.docx'):
+    main.run(get_mock('elements/unimplemented.json', ret_dict=False),
+             out_file_name)
+
+
 def example():
     main.run(get_mock('example.json', ret_dict=False), 'example.docx')
 
@@ -73,7 +78,8 @@ def run_all():
         example_old_json,
         example_bar_chart,
         example_duration,
-        example_line_chart
+        example_line_chart,
+        example_unimplemented
     ]
     for out_index, fun in enumerate(examples):
         out_file_name = f'example_{out_index}.docx'

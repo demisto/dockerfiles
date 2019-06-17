@@ -8,7 +8,7 @@ def test_unimplemented_element_generated():
 
     d = report.document
 
-    assert len(d.element.xpath('//w:p')) == 1
+    assert len(d.element.xpath('//w:p')) == 3
 
     # Styles or error
     assert len(d.element.xpath('//w:i[@w:val="0"]')) == 1

@@ -105,9 +105,10 @@ class LineChartElement(Element):
         legend_location = 'upper center'
         legend_location_relative_to_graph = (0.5, -0.35)
 
-        legend = ax.legend([i for i in groups.keys()], loc=legend_location,
+        handles = [plt.Rectangle((0, 0), 1, 1, fc=final_colors[i]) for i in groups.keys()]
+        legend = ax.legend(handles, [i for i in groups.keys()], loc=legend_location,
                            bbox_to_anchor=legend_location_relative_to_graph,
-                           handlelength=0.7)
+                           handlelength=0.7, handleheight=0.7)
 
         set_legend_style(legend)
         set_axis_font(ax)

@@ -19,7 +19,7 @@ def test_error():
     # This will invoke an error element because of the wrong type:
     text.invoke(c, test_section)
 
-    assert len(d.element.xpath('//w:p')) == 1
+    assert len(d.element.xpath('//w:p')) == 3
 
     # Styles or error
     assert len(d.element.xpath('//w:i[@w:val="0"]')) == 1

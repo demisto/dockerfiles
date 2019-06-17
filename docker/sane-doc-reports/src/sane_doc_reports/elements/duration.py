@@ -6,7 +6,6 @@ from sane_doc_reports.conf import DEBUG, DEFAULT_DURATION_TITLE, \
     DEFAULT_DURATION_FONT_SIZE, \
     DEFAULT_DURATION_LABEL_FONT_SIZE, DURATION_MINUTES_LABEL, \
     DURATION_HOURS_LABEL, DURATION_DAYS_LABEL, PYDOCX_TEXT_ALIGN
-
 from sane_doc_reports.elements import error
 from sane_doc_reports.populate.utils import insert_text
 from sane_doc_reports.styles.utils import set_cell_margins, style_cell
