@@ -4,7 +4,9 @@ from sane_doc_reports.elements import error
 from sane_doc_reports.populate.utils import insert_text
 from sane_doc_reports.conf import DEBUG, TREND_MAIN_NUMBER_FONT_SIZE, \
     TREND_SECOND_NUMBER_FONT_SIZE, PYDOCX_TEXT_ALIGN, \
-    PYDOCX_FONT_SIZE, ALIGN_CENTER
+    PYDOCX_FONT_SIZE, ALIGN_CENTER, DEFAULT_COLORED_CELL_COLOR
+from sane_doc_reports.styles.utils import style_cell
+
 
 class NumberElement(Element):
     style = {
@@ -29,6 +31,7 @@ class NumberElement(Element):
 
         # Add the main number
         inner_cell = table.cell(0, 0)
+        style_cell(inner_cell)
         main_number = CellObject(inner_cell)
 
         insert_text(main_number, str(self.section.contents), self.style['main'])

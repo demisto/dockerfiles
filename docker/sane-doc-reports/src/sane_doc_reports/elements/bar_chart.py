@@ -3,20 +3,21 @@ import matplotlib.pyplot as plt
 from sane_doc_reports.domain.Element import Element
 from sane_doc_reports import utils
 from sane_doc_reports.domain.Section import Section
-from sane_doc_reports.conf import DEBUG, DEFAULT_ALPHA, \
+from sane_doc_reports.conf import DEBUG, \
     DEFAULT_BAR_WIDTH, DEFAULT_BAR_ALPHA, CHART_LABEL_NONE_STRING, \
-    X_AXIS_PADDING, DEFAULT_WORD_FONT, DEFAULT_FONT_COLOR, \
+    X_AXIS_PADDING, DEFAULT_FONT_COLOR, \
     DEFAULT_TITLE_FONT_SIZE
 
 from sane_doc_reports.elements import image, error
 from sane_doc_reports.styles.colors import get_colors
-from sane_doc_reports.utils import remove_plot_borders, set_legend_style
+from sane_doc_reports.utils import remove_plot_borders, set_legend_style, \
+    get_chart_font, set_axis_font
 
 
 class BarChartElement(Element):
     style = {
         'title': {
-            'fontname': DEFAULT_WORD_FONT,
+            'fontname': get_chart_font(),
             'color': DEFAULT_FONT_COLOR,
             'fontsize': DEFAULT_TITLE_FONT_SIZE
         }
@@ -61,13 +62,13 @@ class BarChartElement(Element):
         legend_location_relative_to_graph = (0.5, -0.35)
 
         a = ax.legend(rects, fixed_legends, loc=legend_location,
-                  bbox_to_anchor=legend_location_relative_to_graph)
+                      bbox_to_anchor=legend_location_relative_to_graph,
+                      handlelength=0.7)
 
         set_legend_style(a)
-        a.get_frame().set_alpha(DEFAULT_ALPHA)
-        a.get_frame().set_linewidth(0.0)
 
         # Fix the axises
+        set_axis_font(ax)
         ax.set_yticks(y_axis)
         ax.set_yticklabels([])
         ax.invert_yaxis()  # labels read top-to-bottom

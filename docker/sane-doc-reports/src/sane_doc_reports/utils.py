@@ -4,17 +4,18 @@ import tempfile
 from io import BytesIO
 import importlib
 from pathlib import Path
-from typing import Tuple
 
 from docx.oxml import OxmlElement
 import matplotlib
 from docx.text.paragraph import Paragraph
-from matplotlib import pyplot as plt, font_manager
+from matplotlib import pyplot as plt
+import matplotlib.font_manager as fm
 
 from sane_doc_reports.domain import CellObject, Section
-from sane_doc_reports.conf import SIZE_H_INCHES, SIZE_W_INCHES, DPI, \
+from sane_doc_reports.conf import SIZE_H_INCHES, SIZE_W_INCHES, \
     DEFAULT_DPI, DEFAULT_LEGEND_FONT_SIZE, DEFAULT_WORD_FONT, \
-    DEFAULT_ALPHA, DEFAULT_FONT_COLOR
+    DEFAULT_ALPHA, DEFAULT_FONT_COLOR, DEFAULT_WORD_FONT_FALLBACK, \
+    DEFAULT_FONT_AXIS_COLOR
 
 
 def open_b64_image(image_base64):
@@ -36,9 +37,8 @@ def insert_by_type(type: str, cell_object: CellObject,
         func = importlib.import_module(f'sane_doc_reports.elements.{type}')
         func.invoke(cell_object, section)
     except ModuleNotFoundError:
-        import sane_doc_reports.elements.empty as empty
-        empty.invoke(cell_object, section)
-
+        import sane_doc_reports.elements.unimplemented as unimplemented
+        unimplemented.invoke(cell_object, section)
 
 
 def _insert_paragraph_after(paragraph):
@@ -81,7 +81,7 @@ def plt_t0_b64(plt: matplotlib.pyplot):
         next(tempfile._get_candidate_names()) + '.png')
 
     plt.savefig(str(path), format='png', bbox_inches='tight', figsize=(1, 1),
-                dpi=80)
+                dpi=DEFAULT_DPI)
 
     with open(str(path), "rb") as f:
         img_base64 = base64.b64encode(f.read()).decode("utf-8", "ignore")
@@ -93,7 +93,7 @@ def plt_t0_b64(plt: matplotlib.pyplot):
 
 def convert_plt_size(section: Section):
     """ Convert the plot size from pixels to word """
-    size_w, size_h, dpi = (SIZE_W_INCHES, SIZE_H_INCHES, DPI)
+    size_w, size_h, dpi = (SIZE_W_INCHES, SIZE_H_INCHES, DEFAULT_DPI)
     if 'dimensions' in section.layout:
         h = section.layout['dimensions']['height'] / DEFAULT_DPI
         w = section.layout['dimensions']['width'] / DEFAULT_DPI
@@ -198,12 +198,35 @@ def remove_plot_borders(ax):
     ax.spines['left'].set_visible(False)
 
 
+def set_axis_font(ax):
+    font = fm.FontProperties(family=get_chart_font(),
+                             size=DEFAULT_LEGEND_FONT_SIZE)
+
+    ax.tick_params(axis='x', colors=DEFAULT_FONT_AXIS_COLOR)
+    ax.tick_params(axis='y', colors=DEFAULT_FONT_AXIS_COLOR)
+
+    for label in ax.get_xticklabels():
+        label.set_fontproperties(font)
+
+    for label in ax.get_yticklabels():
+        label.set_fontproperties(font)
+
+
 def set_legend_style(legend):
     legend.get_frame().set_alpha(DEFAULT_ALPHA)
     legend.get_frame().set_linewidth(0.0)
 
-    font = font_manager.FontProperties(family=DEFAULT_WORD_FONT,
-                                       size=DEFAULT_LEGEND_FONT_SIZE)
+    font = fm.FontProperties(family=get_chart_font(),
+                             size=DEFAULT_LEGEND_FONT_SIZE)
+
     for text in legend.get_texts():
         text.set_fontproperties(font)
         text.set_color(DEFAULT_FONT_COLOR)
+
+
+def get_chart_font():
+    names = [f.name for f in matplotlib.font_manager.fontManager.ttflist]
+
+    if DEFAULT_WORD_FONT not in names:
+        return DEFAULT_WORD_FONT_FALLBACK
+    return DEFAULT_WORD_FONT

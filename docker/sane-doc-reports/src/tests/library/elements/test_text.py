@@ -16,7 +16,7 @@ def test_text():
     assert len(d.element.xpath('//w:rFonts')) == 2
 
     # Check with Arial font too
-    assert len(d.element.xpath('//w:rFonts[@w:ascii="Arial"]')) == 1
+    assert len(d.element.xpath('//w:rFonts[@w:ascii="Verdana"]')) == 1
 
     # Find one H1
     assert len(d.element.xpath('//w:sz[@w:val="48"]')) == 1

@@ -5,6 +5,7 @@ from sane_doc_reports.conf import DEBUG, TREND_MAIN_NUMBER_FONT_SIZE, \
     PYDOCX_TEXT_ALIGN
 from sane_doc_reports.elements import error
 from sane_doc_reports.populate.utils import insert_text
+from sane_doc_reports.styles.utils import style_cell
 
 
 class TrendElement(Element):
@@ -32,6 +33,7 @@ class TrendElement(Element):
         # Add the main number
         current_sum = self.section.contents['currSum']
         inner_cell = table.cell(0, 1)
+        style_cell(inner_cell)
         main_number = CellObject(inner_cell)
         insert_text(main_number, str(current_sum), self.style['main'])
 

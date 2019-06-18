@@ -5,16 +5,17 @@ from sane_doc_reports.domain.Element import Element
 from sane_doc_reports.domain.Section import Section
 from sane_doc_reports.conf import DEBUG, DEFAULT_BAR_WIDTH, \
     DEFAULT_BAR_ALPHA, CHART_LABEL_NONE_STRING, \
-    DEFAULT_WORD_FONT, DEFAULT_FONT_COLOR, DEFAULT_TITLE_FONT_SIZE
+    DEFAULT_FONT_COLOR, DEFAULT_TITLE_FONT_SIZE
 from sane_doc_reports.elements import image, error
 from sane_doc_reports.styles.colors import get_colors
-from sane_doc_reports.utils import set_legend_style, remove_plot_borders
+from sane_doc_reports.utils import set_legend_style, remove_plot_borders, \
+    get_chart_font, set_axis_font
 
 
 class ColumnChartElement(Element):
     style = {
         'title': {
-            'fontname': DEFAULT_WORD_FONT,
+            'fontname': get_chart_font(),
             'color': DEFAULT_FONT_COLOR,
             'fontsize': DEFAULT_TITLE_FONT_SIZE
         }
@@ -57,12 +58,14 @@ class ColumnChartElement(Element):
         legend_location = 'upper center'
         legend_location_relative_to_graph = (0.5, -0.35)
         a = ax.legend(rects, fixed_legends, loc=legend_location,
-                      bbox_to_anchor=legend_location_relative_to_graph)
+                      bbox_to_anchor=legend_location_relative_to_graph,
+                      handlelength=0.7)
 
         set_legend_style(a)
 
         ax.set_xlim(-len(objects), len(objects))
 
+        set_axis_font(ax)
         plt.xticks(y_axis, objects)
         plt.title(self.section.extra['title'], **self.style['title'])
 
