@@ -22,6 +22,14 @@ def main():
         licenses = json.load(f)["licenses"]
     with open("{}/packages_license_check_exclude.json".format(sys.path[0])) as f:
         ignore_packages = json.load(f)["packages"]
+    try:
+        subprocess.check_call(["docker", "run", "--rm", args.docker_image, "which", "python"])
+    except subprocess.CalledProcessError as err:
+        if err.returncode == 1:
+            print("Skipping python license verification for [{}] as this is not a python image.".format(args.docker_image))
+            return
+        else:
+            raise
     pip_list_json = subprocess.check_output(
         ["docker", "run", "--rm", args.docker_image, "pip", "list", "--format", "json"])
     pip_list = json.loads(pip_list_json)
