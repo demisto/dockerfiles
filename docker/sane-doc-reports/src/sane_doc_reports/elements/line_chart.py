@@ -16,9 +16,15 @@ def fix_data(data):
     dates = [i['name'] for i in data]
     new_groups = {}
 
+    last_name = 'value'
     for group in data:
-        for line in group['groups']:
+        if group.get('groups', None) is None:
+            data_val = group.get('data', [0])[0]
+            group['groups'] = [{'name': last_name, "data": [data_val]}]
+
+        for line in group.get('groups', []):
             if line['name'] not in new_groups:
+                last_name = line['name']
                 new_groups[line['name']] = {
                     'dates': dates,
                     'values': [0] * len(dates)
@@ -26,7 +32,7 @@ def fix_data(data):
 
     # Populate the data
     for index, group in enumerate(data):
-        for line in group['groups']:
+        for line in group.get('groups', []):
             if line['name'] in new_groups:
                 new_groups[line['name']]['values'][index] += line['data'][0]
 
