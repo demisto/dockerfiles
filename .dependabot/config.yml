@@ -1,0 +1,19 @@
+version: 1
+
+# This controls how dependabot creates PRs for dependencies:
+# See: https://dependabot.com/docs/config-file/
+
+update_configs:
+  - package_manager: python
+    directory: /docker/ldap
+    update_schedule: live    
+  - package_manager: docker
+    directory: /docker/ldap
+    update_schedule: daily
+  
+  - package_manager: python
+    directory: /docker/pcap-http-extractor
+    update_schedule: live    
+  - package_manager: docker
+    directory: /docker/pcap-http-extractor
+    update_schedule: daily
