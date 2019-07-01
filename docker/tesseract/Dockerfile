@@ -1,5 +1,5 @@
 
-FROM demisto/python3-deb:3.7.3.260
+FROM demisto/python3-deb:3.7.3.373
 
 RUN echo 'deb http://deb.debian.org/debian stretch-backports main' >> /etc/apt/sources.list
 
