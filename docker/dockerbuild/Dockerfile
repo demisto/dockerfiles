@@ -1,4 +1,4 @@
-FROM circleci/python:2.7.15-stretch
+FROM circleci/python:3.7.3-stretch
 
 # Setup pyenv and install python 3.7.1
 RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
