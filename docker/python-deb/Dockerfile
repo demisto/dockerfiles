@@ -1,5 +1,5 @@
 # Last modified: Sun, 30 Jun 2019 11:27:45 +0000
-FROM python:2.7.16-slim-stretch
+FROM python:3.7.3-slim-stretch
 
 # Basic linux utilities
 RUN apt-get update && apt-get install -y --no-install-recommends \
