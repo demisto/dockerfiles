@@ -1,4 +1,4 @@
-FROM circleci/golang:1.11.5-stretch-node
+FROM circleci/golang:1.12.6-stretch-node
 
 RUN sudo apt-get update && sudo apt-get install -y --no-install-recommends apt-transport-https
 
