@@ -6,7 +6,8 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-slackclient = "*"
+slackclient = {editable = true,git = "https://github.com/slackapi/python-slackclient",ref = "master"}
+aiodns = ">1.0"
 
 [requires]
 python_version = "3.7"
