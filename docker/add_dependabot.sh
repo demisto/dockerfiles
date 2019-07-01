@@ -44,11 +44,22 @@ fi
 if [[ $(grep -B 1 -E "directory: /$1"'$' .dependabot/config.yml | grep 'package_manager: docker') ]]; then
     echo "[$1]: Not adding docker dependency config as it seems to exist"
 else
-MODIFIED=1
+    AUTO_MERGE=""
+    if [[ $(grep -E '^FROM\s+demisto/' $1/Dockerfile) ]]; then
+AUTO_MERGE=$(cat <<-EOM
+
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+EOM
+)
+    fi
+    MODIFIED=1
 cat >> $DEPNDABOT_CONF <<- EOM
   - package_manager: docker
     directory: /$1
-    update_schedule: daily
+    update_schedule: daily $AUTO_MERGE
 
 EOM
 fi
