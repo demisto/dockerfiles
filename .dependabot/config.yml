@@ -4,267 +4,384 @@ version: 1
 # See: https://dependabot.com/docs/config-file/
 
 update_configs:
-  - package_manager: python
-    directory: /docker/ldap
-    update_schedule: live    
-  - package_manager: docker
-    directory: /docker/ldap
-    update_schedule: daily
-  
+
   - package_manager: python
     directory: /docker/pcap-http-extractor
-    update_schedule: live    
+    update_schedule: live
   - package_manager: docker
     directory: /docker/pcap-http-extractor
-    update_schedule: daily
+    update_schedule: daily 
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
 
   - package_manager: python
     directory: /docker/office-utils
     update_schedule: live
   - package_manager: docker
     directory: /docker/office-utils
-    update_schedule: daily
+    update_schedule: daily 
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
 
   - package_manager: python
     directory: /docker/docxpy
     update_schedule: live
   - package_manager: docker
     directory: /docker/docxpy
-    update_schedule: daily
+    update_schedule: daily 
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
 
   - package_manager: python
     directory: /docker/sane-doc-reports
     update_schedule: live
   - package_manager: docker
     directory: /docker/sane-doc-reports
-    update_schedule: daily
+    update_schedule: daily 
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
 
   - package_manager: python
     directory: /docker/python-deb
     update_schedule: live
   - package_manager: docker
     directory: /docker/python-deb
-    update_schedule: daily
+    update_schedule: daily 
 
   - package_manager: python
     directory: /docker/crypto
     update_schedule: live
   - package_manager: docker
     directory: /docker/crypto
-    update_schedule: daily
+    update_schedule: daily 
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
 
   - package_manager: python
     directory: /docker/pymisp
     update_schedule: live
   - package_manager: docker
     directory: /docker/pymisp
-    update_schedule: daily
+    update_schedule: daily 
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
 
   - package_manager: python
     directory: /docker/content-build-2and3
     update_schedule: live
   - package_manager: docker
     directory: /docker/content-build-2and3
-    update_schedule: daily
+    update_schedule: daily 
 
   - package_manager: python
     directory: /docker/archer
     update_schedule: live
   - package_manager: docker
     directory: /docker/archer
-    update_schedule: daily
+    update_schedule: daily 
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
 
   - package_manager: python
     directory: /docker/pykafka
     update_schedule: live
   - package_manager: docker
     directory: /docker/pykafka
-    update_schedule: daily
+    update_schedule: daily 
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
 
   - package_manager: python
     directory: /docker/blueliv
     update_schedule: live
   - package_manager: docker
     directory: /docker/blueliv
-    update_schedule: daily
+    update_schedule: daily 
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
 
   - package_manager: python
     directory: /docker/python3
     update_schedule: live
   - package_manager: docker
     directory: /docker/python3
-    update_schedule: daily
+    update_schedule: daily 
 
   - package_manager: python
     directory: /docker/content-build
     update_schedule: live
   - package_manager: docker
     directory: /docker/content-build
-    update_schedule: daily
+    update_schedule: daily 
 
   - package_manager: python
     directory: /docker/python
     update_schedule: live
   - package_manager: docker
     directory: /docker/python
-    update_schedule: daily
+    update_schedule: daily 
 
   - package_manager: python
     directory: /docker/hashicorp
     update_schedule: live
   - package_manager: docker
     directory: /docker/hashicorp
-    update_schedule: daily
+    update_schedule: daily 
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/ldap
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/ldap
+    update_schedule: daily 
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
 
   - package_manager: python
     directory: /docker/powershell-core
     update_schedule: live
   - package_manager: docker
     directory: /docker/powershell-core
-    update_schedule: daily
+    update_schedule: daily 
 
   - package_manager: docker
     directory: /docker/openssh
-    update_schedule: daily
+    update_schedule: daily 
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
 
   - package_manager: python
     directory: /docker/gvault
     update_schedule: live
   - package_manager: docker
     directory: /docker/gvault
-    update_schedule: daily
+    update_schedule: daily 
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
 
   - package_manager: python
     directory: /docker/python_pancloud
     update_schedule: live
   - package_manager: docker
     directory: /docker/python_pancloud
-    update_schedule: daily
+    update_schedule: daily 
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
 
   - package_manager: docker
     directory: /docker/go-gcp-build
-    update_schedule: daily
+    update_schedule: daily 
 
   - package_manager: python
     directory: /docker/bigquery
     update_schedule: live
   - package_manager: docker
     directory: /docker/bigquery
-    update_schedule: daily
+    update_schedule: daily 
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
 
   - package_manager: python
     directory: /docker/stix2
     update_schedule: live
   - package_manager: docker
     directory: /docker/stix2
-    update_schedule: daily
+    update_schedule: daily 
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
 
   - package_manager: python
     directory: /docker/snowflake
     update_schedule: live
   - package_manager: docker
     directory: /docker/snowflake
-    update_schedule: daily
+    update_schedule: daily 
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
 
   - package_manager: python
     directory: /docker/tesseract
     update_schedule: live
   - package_manager: docker
     directory: /docker/tesseract
-    update_schedule: daily
+    update_schedule: daily 
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
 
   - package_manager: python
     directory: /docker/duoadmin
     update_schedule: live
   - package_manager: docker
     directory: /docker/duoadmin
-    update_schedule: daily
+    update_schedule: daily 
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
 
   - package_manager: python
     directory: /docker/pymongo
     update_schedule: live
   - package_manager: docker
     directory: /docker/pymongo
-    update_schedule: daily
+    update_schedule: daily 
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
 
   - package_manager: python
     directory: /docker/iputils
     update_schedule: live
   - package_manager: docker
     directory: /docker/iputils
-    update_schedule: daily
+    update_schedule: daily 
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
 
   - package_manager: docker
     directory: /docker/powershell
-    update_schedule: daily
+    update_schedule: daily 
 
   - package_manager: python
     directory: /docker/zeep
     update_schedule: live
   - package_manager: docker
     directory: /docker/zeep
-    update_schedule: daily
+    update_schedule: daily 
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
 
   - package_manager: python
     directory: /docker/dockerbuild
     update_schedule: live
   - package_manager: docker
     directory: /docker/dockerbuild
-    update_schedule: daily
+    update_schedule: daily 
 
   - package_manager: python
     directory: /docker/faker3
     update_schedule: live
   - package_manager: docker
     directory: /docker/faker3
-    update_schedule: daily
+    update_schedule: daily 
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
 
   - package_manager: python
     directory: /docker/slack
     update_schedule: live
   - package_manager: docker
     directory: /docker/slack
-    update_schedule: daily
+    update_schedule: daily 
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
 
   - package_manager: python
     directory: /docker/python3-deb
     update_schedule: live
   - package_manager: docker
     directory: /docker/python3-deb
-    update_schedule: daily
+    update_schedule: daily 
 
   - package_manager: python
     directory: /docker/cloaken
     update_schedule: live
   - package_manager: docker
     directory: /docker/cloaken
-    update_schedule: daily
+    update_schedule: daily 
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
 
   - package_manager: python
     directory: /docker/boto3py3
     update_schedule: live
   - package_manager: docker
     directory: /docker/boto3py3
-    update_schedule: daily
+    update_schedule: daily 
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
 
   - package_manager: python
     directory: /docker/vertica
     update_schedule: live
   - package_manager: docker
     directory: /docker/vertica
-    update_schedule: daily
+    update_schedule: daily 
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
 
   - package_manager: python
     directory: /docker/readpdf
     update_schedule: live
   - package_manager: docker
     directory: /docker/readpdf
-    update_schedule: daily
+    update_schedule: daily 
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
 
   - package_manager: python
     directory: /docker/google-api
     update_schedule: live
   - package_manager: docker
     directory: /docker/google-api
-    update_schedule: daily
+    update_schedule: daily 
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
 
