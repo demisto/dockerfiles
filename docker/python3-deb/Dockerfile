@@ -1,9 +1,19 @@
 # Last modified: Sun, 30 Jun 2019 11:27:45 +0000
 FROM python:3.7.3-slim-stretch
 
+RUN echo 'deb http://deb.debian.org/debian stretch-backports main' >> /etc/apt/sources.list
+
 # Basic linux utilities
 RUN apt-get update && apt-get install -y --no-install-recommends \
   procps \
+&& rm -rf /var/lib/apt/lists/*
+
+# Upgrade all packages to latest
+RUN apt-get update && apt-get -y --no-install-recommends upgrade \
+&& rm -rf /var/lib/apt/lists/*
+
+# Upgrade using backports
+RUN apt-get update && apt-get -t stretch-backports -y --no-install-recommends upgrade \
 && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
