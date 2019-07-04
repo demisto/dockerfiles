@@ -2,7 +2,7 @@
 
 [![CircleCI](https://circleci.com/gh/demisto/dockerfiles.svg?style=svg)](https://circleci.com/gh/demisto/dockerfiles)
 
-This repository's `master` branch tracks images pushed to the official Demisto Docker Hub organization at: https://hub.docker.com/u/demisto/. Other branches` images are pushed to (devdemisto)[https://hub.docker.com/u/devdemisto].
+This repository's `master` branch tracks images pushed to the official Demisto Docker Hub organization at: https://hub.docker.com/u/demisto/. Other branches` images are pushed to [devdemisto](https://hub.docker.com/u/devdemisto).
 
 Each docker image is managed in its own directory. The directory should be named the same as the image name (without the organization prefix). All image directories are located under the `docker` dir.
 
