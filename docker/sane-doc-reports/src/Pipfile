@@ -1,0 +1,25 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+sane-doc-reports = {editable = true,path = "."}
+pytest = "*"
+pytest-clarity = "*"
+pytest-cov = "*"
+
+[packages]
+python-docx = "*"
+fastjsonschema = "*"
+matplotlib = "*"
+pyquery = "*"
+mistune = "*"
+requests = "*"
+moment = "*"
+
+[requires]
+python_version = "3.7"
+
+[pipenv]
+allow_prereleases = true
