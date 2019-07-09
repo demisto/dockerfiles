@@ -81,9 +81,15 @@ update_configs:
   - package_manager: python
     directory: /docker/content-build-2and3
     update_schedule: live
+    allowed_updates:
+    - match:
+        update_type: "security"
   - package_manager: docker
     directory: /docker/content-build-2and3
     update_schedule: daily 
+    allowed_updates:
+    - match:
+        update_type: "security"
 
   - package_manager: python
     directory: /docker/archer
@@ -128,9 +134,15 @@ update_configs:
   - package_manager: python
     directory: /docker/content-build
     update_schedule: live
+    allowed_updates:
+    - match:
+        update_type: "security"
   - package_manager: docker
     directory: /docker/content-build
     update_schedule: daily 
+    allowed_updates:
+    - match:
+        update_type: "security"
 
   - package_manager: python
     directory: /docker/python
@@ -201,6 +213,9 @@ update_configs:
   - package_manager: docker
     directory: /docker/go-gcp-build
     update_schedule: daily 
+    allowed_updates:
+    - match:
+        update_type: "security"
 
   - package_manager: python
     directory: /docker/bigquery
@@ -297,9 +312,15 @@ update_configs:
   - package_manager: python
     directory: /docker/dockerbuild
     update_schedule: live
+    allowed_updates:
+    - match:
+        update_type: "security"
   - package_manager: docker
     directory: /docker/dockerbuild
-    update_schedule: daily 
+    update_schedule: daily
+    allowed_updates:
+    - match:
+        update_type: "security"
 
   - package_manager: python
     directory: /docker/faker3
