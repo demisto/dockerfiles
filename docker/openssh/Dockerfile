@@ -1,5 +1,5 @@
 
-FROM demisto/python3:3.7.3.373
+FROM demisto/python3:3.7.4.977
 
 # No python deps for now
 # COPY requirements.txt .
