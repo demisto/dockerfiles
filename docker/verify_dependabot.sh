@@ -13,7 +13,7 @@ if [[ "${DOCKER_SRC_DIR}" != /* ]]; then
 fi
 DEPENDABOT_CONFIG="$DOCKER_SRC_DIR/../.dependabot/config.yml"
 
-for d in `find "$DOCKER_SRC_DIR" -type d -depth 1`; do
+for d in `find "$DOCKER_SRC_DIR" -depth 1 -type d`; do
     echo "Verifying dir: $d"
     name=`basename $d`
     dir=`dirname $d`
