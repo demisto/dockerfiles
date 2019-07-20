@@ -114,6 +114,8 @@ def main():
         subprocess.call(cmd_arr, cwd=folder, env=my_env)
     else:
         subprocess.call(["pipenv", "lock"], cwd=folder, env=my_env)
+    print('Adding: {} to .dependabot/config.yml ...'.format(folder))
+    subprocess.check_call([sys.path[0] + "/add_dependabot.sh", "docker/" + args.name])
     print('========================================')
     print("Done creating image files in folder: " + folder)
     print("\nTo install additional python packages: cd {}; pipenv install <package>".format(folder))
