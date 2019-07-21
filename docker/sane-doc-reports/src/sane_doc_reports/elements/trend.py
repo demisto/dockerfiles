@@ -53,11 +53,13 @@ class TrendElement(Element):
 
         value_percent = f'{direction}{change}%'
         inner_cell = table.cell(0, 2)
+        style_cell(inner_cell)
         trend_number = CellObject(inner_cell)
         insert_text(trend_number, value_percent, self.style['trend'])
 
         # Add the title
         third_cell = table.cell(1, 1)
+        style_cell(third_cell)
         table.cell(1, 2).merge(third_cell)
         title = CellObject(third_cell)
         insert_text(title, str(self.section.extra['title']),

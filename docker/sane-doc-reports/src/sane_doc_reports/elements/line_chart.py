@@ -4,7 +4,8 @@ from matplotlib.pyplot import figure
 from sane_doc_reports import utils
 from sane_doc_reports.domain.Element import Element
 from sane_doc_reports.conf import DEBUG, DEFAULT_ALPHA, DEFAULT_WORD_FONT, \
-    DEFAULT_FONT_COLOR, DEFAULT_TITLE_FONT_SIZE
+    DEFAULT_FONT_COLOR, DEFAULT_TITLE_FONT_SIZE, PYDOCX_FONT_NAME, \
+    PYDOCX_FONT_COLOR, PYDOCX_FONT_SIZE
 from sane_doc_reports.domain.Section import Section
 from sane_doc_reports.elements import error, image
 from sane_doc_reports.styles.colors import get_colors
@@ -42,9 +43,9 @@ def fix_data(data):
 class LineChartElement(Element):
     style = {
         'title': {
-            'fontname': get_chart_font(),
-            'color': DEFAULT_FONT_COLOR,
-            'fontsize': DEFAULT_TITLE_FONT_SIZE
+            PYDOCX_FONT_NAME: get_chart_font(),
+            PYDOCX_FONT_COLOR: DEFAULT_FONT_COLOR,
+            PYDOCX_FONT_SIZE: DEFAULT_TITLE_FONT_SIZE
         }
     }
 
@@ -106,7 +107,10 @@ class LineChartElement(Element):
 
         # Create and move the legend outside
         ax = plt.gca()
-        plt.setp(ax.get_xticklabels(), rotation=30, horizontalalignment='right')
+        rotation = 0
+        if len(ax.get_xticklabels()) > 9:
+            rotation = 30
+        plt.setp(ax.get_xticklabels(), rotation=rotation, horizontalalignment='right')
         remove_plot_borders(ax)
         legend_location = 'upper center'
         legend_location_relative_to_graph = (0.5, -0.35)
