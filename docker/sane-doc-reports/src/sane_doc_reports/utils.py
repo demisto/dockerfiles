@@ -67,7 +67,10 @@ def plot(func):
     """ A decorator used to clear and resize each chart """
 
     def wrapper(*args, **kwargs):
+        if plt:
+            plt.close()
         plt.clf()
+        plt.cla()
         # Fix cropping of plot
         plt.rcParams['figure.constrained_layout.use'] = True
         func(*args, **kwargs)

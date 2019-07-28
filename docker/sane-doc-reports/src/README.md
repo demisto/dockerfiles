@@ -61,7 +61,11 @@ The function needs to create an instance of the same class in the file (see the 
 You can create an Element (text, hr...) or a Wrapper (which holds other elements, quote, ul...).  
 Wrappers usually call markdown again (to create more wrappers/elements inside the same cell object).
 
-### Docker usage:
-1) Generate a `whl` file:
-`python3 setup.py sdist bdist_wheel`
-2) Copy to the .dockerfile directory and add to `copy` command
+### Docker update:
+1) Clone the https://github.com/demisto/dockerfiles
+2) cd to `dockerfiles/docker/sane-doc-reports/`
+3) Remove the src dir `rm -r ./src`
+4) Clone the new updates `git clone git@github.com:demisto/sane-doc-reports.git src` or with a specific branch: `git clone git@github.com:demisto/sane-doc-reports.git -b <branch name> src`
+5) Remove unnecessary dirs: `rm -rf ./src/.gt ./src/.circleci`
+6) Build the docker image: `DOCKER_ORG=devdemisto ./build_docker.sh sane-doc-reports` (from the docker dir)
+7) Go to demisto: https://localhost:8443/#/automation find the `SaneDocReports` automation and change the docker image to the one you just generated.

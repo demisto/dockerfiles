@@ -24,6 +24,7 @@ class BarChartElement(Element):
         }
     }
 
+    @utils.plot
     def insert(self):
         """
             This is a bar chart on the side (bar goes right)
