@@ -6,7 +6,7 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-requests = "*"
+requests = {extras = ["socks"],version = "*"}
 olefile = "*"
 python-dateutil = "*"
 dateparser = "*"
