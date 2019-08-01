@@ -62,9 +62,16 @@ class Report:
 
             page = self.pages[page_num]
             for section in page:
-                cell = get_cell(grid, section)
+                cell, grid_pos = get_cell(grid, section)
+                grid_pos = {
+                    "width": 0 if not len(grid_pos) == 2 else grid_pos[0],
+                    "height": 0 if not len(grid_pos) == 2 else grid_pos[1],
+                    "global_rows": rows,
+                    "global_cols": cols
+                }
                 merge_cells(grid, section)
-                cell_object = CellObject(cell, add_run=False)
+                cell_object = CellObject(cell, add_run=False,
+                                         grid_position=grid_pos)
                 self._insert_section(cell_object, section)
 
     @staticmethod

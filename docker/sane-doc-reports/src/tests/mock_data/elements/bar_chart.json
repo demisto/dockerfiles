@@ -98,5 +98,224 @@
     },
     "fromDate": "2019-04-15T17:34:56+03:00",
     "title": "Incidents By Close Reason"
+  },
+  {
+    "type": "chart",
+    "data": [
+      {
+        "name": "Low",
+        "data": [
+          33
+        ],
+        "groups": [
+          {
+            "name": "Phishing",
+            "data": [
+              14
+            ],
+            "groups": null
+          },
+          {
+            "name": "Malware",
+            "data": [
+              10
+            ],
+            "groups": null
+          },
+          {
+            "name": "Unclassified",
+            "data": [
+              9
+            ],
+            "groups": null
+          }
+        ]
+      },
+      {
+        "name": "High",
+        "data": [
+          32
+        ],
+        "groups": [
+          {
+            "name": "Malware",
+            "data": [
+              8
+            ],
+            "groups": null
+          },
+          {
+            "name": "Unclassified",
+            "data": [
+              17
+            ],
+            "groups": null
+          },
+          {
+            "name": "Phishing",
+            "data": [
+              7
+            ],
+            "groups": null
+          }
+        ]
+      },
+      {
+        "name": "Unknown",
+        "data": [
+          27
+        ],
+        "groups": [
+          {
+            "name": "Unclassified",
+            "data": [
+              6
+            ],
+            "groups": null
+          },
+          {
+            "name": "Phishing",
+            "data": [
+              13
+            ],
+            "groups": null
+          },
+          {
+            "name": "Malware",
+            "data": [
+              8
+            ],
+            "groups": null
+          }
+        ]
+      },
+      {
+        "name": "Critical",
+        "data": [
+          30
+        ],
+        "groups": [
+          {
+            "name": "Unclassified",
+            "data": [
+              12
+            ],
+            "groups": null
+          },
+          {
+            "name": "Phishing",
+            "data": [
+              8
+            ],
+            "groups": null
+          },
+          {
+            "name": "Malware",
+            "data": [
+              10
+            ],
+            "groups": null
+          }
+        ]
+      },
+      {
+        "name": "Medium",
+        "data": [
+          23
+        ],
+        "groups": [
+          {
+            "name": "Unclassified",
+            "data": [
+              4
+            ],
+            "groups": null
+          },
+          {
+            "name": "Phishing",
+            "data": [
+              9
+            ],
+            "groups": null
+          },
+          {
+            "name": "Malware",
+            "data": [
+              10
+            ],
+            "groups": null
+          }
+        ]
+      }
+    ],
+    "layout": {
+      "chartProperties": {
+        "barSize": 15,
+        "format": "DD MMM Y",
+        "isDatesChart": false,
+        "layout": "vertical"
+      },
+      "chartType": "bar",
+      "columnPos": 0,
+      "dimensions": {
+        "height": 246,
+        "width": 277
+      },
+      "h": 3,
+      "i": "ebc42a00-b1fb-11e9-bf3e-5b011f9eb50a",
+      "legend": [
+        {
+          "color": "#3AD1D6",
+          "name": "Phishing"
+        },
+        {
+          "color": "#FF8F14",
+          "name": "Malware"
+        },
+        {
+          "color": "#03B0FF",
+          "name": "Unclassified"
+        }
+      ],
+      "legendStyle": {
+        "align": "center",
+        "hideLegend": false,
+        "iconType": "square",
+        "layout": "horizontal",
+        "verticalAlign": "top",
+        "wrapperStyle": {
+          "maxHeight": 96,
+          "top": 5,
+          "width": "100%"
+        }
+      },
+      "rowPos": 0,
+      "w": 5
+    },
+    "query": {
+      "type": "incident",
+      "groupBy": [
+        "severity",
+        "type"
+      ],
+      "filter": {
+        "query": "-category:job and -status:archived and -status:closed",
+        "period": {
+          "byFrom": "days",
+          "fromValue": 7,
+          "by": "day"
+        }
+      }
+    },
+    "automation": {
+      "name": "",
+      "id": "",
+      "args": null,
+      "noEvent": false
+    },
+    "fromDate": "2019-07-22T12:26:49Z",
+    "title": "Incident Severity by Type",
+    "emptyNotification": "No results found",
+    "titleStyle": null
   }
 ]

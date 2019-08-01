@@ -48,6 +48,20 @@ def _font_transformations(json_item: dict) -> dict:
     return json_item
 
 
+def general_json_fixes(json_data: List[dict]) -> List[dict]:
+    """ Fixes general probelms that may arise in the json
+    (not necessarily related to the old format) """
+
+    # Fix null values in the col / row positions
+    for i in range(len(json_data)):
+        if not json_data[i][LAYOUT_KEY][ROW_POSITION_KEY]:
+            json_data[i][LAYOUT_KEY][ROW_POSITION_KEY] = 0
+        if not json_data[i][LAYOUT_KEY][COL_POSITION_KEY]:
+            json_data[i][LAYOUT_KEY][COL_POSITION_KEY] = 0
+
+    return json_data
+
+
 def transform_old_json_format(json_data: List[dict]) -> List[dict]:
     """ Fixes all of the old json format, trying to convert
         it to the new json format.

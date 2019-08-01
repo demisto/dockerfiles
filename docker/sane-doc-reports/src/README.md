@@ -5,7 +5,11 @@ An extension to [sane-reports](https://github.com/demisto/sane-reports),
 
 ## Installation
 *This project uses Python 3*  
-`pipenv install sane-doc-reports`
+1) Install python3
+2) Install pipenv
+3) Clone the repository and `cd` into it.
+4) pipenv install --dev
+5) To start working: `pipenv shell` then `python examples/library.py` should run the example script.
 
 ## Usage
 **CLI**  

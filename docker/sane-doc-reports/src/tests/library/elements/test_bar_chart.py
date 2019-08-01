@@ -20,4 +20,4 @@ def test_bar_charts_in_report():
         assert len(table.rows) == 3
 
     # Check that there is indeed an image
-    assert len(d.element.xpath('//pic:pic')) == 2
+    assert len(d.element.xpath('//pic:pic')) == 3
