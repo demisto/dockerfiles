@@ -48,6 +48,12 @@ For example to create a new image named ldap using python 3 and with the python 
 ```
 The above command will create a directory `docker/ldap` with all relevant files all setup for building a docker image. You can now build the image locally by following: [Building Locally a Test Build](#building-locally-a-test-build).
 
+
+## Pushing the new image into the repo/hub
+First, you'll need to make sure to run the script above on a new branch, and then open a pull request with the new image data. (The new image name must be in lowercaes)
+
+After the test pass in the PR, dc-builder bot will update the PR with a link to the new image in the Docker Hub (under demistodev), and after the PR is merged, the bot will post the link to Demisto Hub.
+
 ## Building Locally a Test Build
 It is possible to run a local build to verify that the build process is working. Requirements:
 * Local install of docker
