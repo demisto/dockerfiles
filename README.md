@@ -50,9 +50,24 @@ The above command will create a directory `docker/ldap` with all relevant files 
 
 
 ## Pushing the new image into the repo/hub
-First, you'll need to make sure to run the script above on a new branch, and then open a pull request with the new image data. (The new image name must be in lowercaes)
+First, you'll need to make sure to run the script above on a new branch, and then open a pull request with the new image data. (The new image name must be lowercase)
 
-After the test pass in the PR, dc-builder bot will update the PR with a link to the new image in the Docker Hub (under demistodev), and after the PR is merged, the bot will post the link to Demisto Hub.
+After the tests pass in the PR, dc-builder bot will update the PR with a link to the new image in the Docker Hub (under demistodev), and after the PR is merged, the bot will post the link to Demisto Hub.
+
+Some tips:
+ - Choose base image that is relevent to the new image.
+ - Run the image locally, and make sure your code runs inside the container without errors before creating a PR.
+ 
+ if you have a script, you can run it with following command:
+ 
+ ```docker run -i --name <temporary container name> --rm <IMAGE ID> python3 < <script path>```
+ 
+  for example:  
+ 
+ ```docker run -i --name mytest --rm 96c1ae44bef7 python3 < /Users/me/myscript.py ```
+ 
+ \* `image id` can be found with ```docker images``` after pulling the image with ```docker pull```
+ 
 
 ## Building Locally a Test Build
 It is possible to run a local build to verify that the build process is working. Requirements:
