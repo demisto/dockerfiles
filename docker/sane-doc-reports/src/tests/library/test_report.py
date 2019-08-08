@@ -46,6 +46,34 @@ def test_creation_of_report_layout_full():
     ]
     assert get_vtable_merged(table) == vtable
 
+    # Check the page breaks
+    assert len(d.element.xpath('//w:br')) == 0
+
+
+def test_creation_of_report_layout_full_paged():
+    report = Report(*_transform('grid_checks/fullgridpaged.json'))
+    report.populate_report()
+
+    d = report.document
+    table = next(utils.iter_block_items(d))
+    assert isinstance(table, Table)
+    assert len(table.columns) == 12
+    assert len(table.rows) == 11
+
+    # Check the specific merged cells
+    vtable = [
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ]
+    assert get_vtable_merged(table) == vtable
+
+    # Check the page breaks
+    assert len(d.element.xpath('//w:br')) == 1
 
 def test_creation_of_report_layout_merged():
     report = Report(*_transform('grid_checks/mergegrid.json'))

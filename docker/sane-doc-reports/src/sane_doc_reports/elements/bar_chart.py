@@ -7,7 +7,7 @@ from sane_doc_reports.conf import DEBUG, \
     DEFAULT_BAR_WIDTH, DEFAULT_BAR_ALPHA, CHART_LABEL_NONE_STRING, \
     X_AXIS_PADDING, DEFAULT_FONT_COLOR, \
     DEFAULT_TITLE_FONT_SIZE, PYDOCX_FONT_NAME, PYDOCX_FONT_COLOR, \
-    PYDOCX_FONT_SIZE
+    PYDOCX_FONT_SIZE, LEGEND_STYLE
 
 from sane_doc_reports.elements import image, error
 from sane_doc_reports.styles.colors import get_colors
@@ -41,25 +41,41 @@ class BarChartElement(Element):
         x_axis = None
 
         if any([True for i in data if 'groups' in i and i['groups']]):
+            # Note for future maintainer, I really really... hate stacked
+            # bar charts, it made this file look like hell. I hope you cope
+            # with matplotlib's shitt* implementation.
+            # May the force be with you :pray:
+
             # Create the stacks
             agg = []
             y_axis = [i['name'] for i in data]
-            labels = [i['name'] for i in
-                      sorted(data[0]['groups'], key=lambda x: x['name'])]
+            max_labels_stacked = []
             for v in data:
-                cols = [i['data'][0] for i in
-                        sorted(v['groups'], key=lambda x: x['name'])]
+                names = [i['name'] for i in v['groups']]
+                max_labels_stacked = list(set(max_labels_stacked) | set(names))
+
+            labels = sorted(max_labels_stacked)
+            colors = get_colors(self.section.layout, labels)
+
+            for v in data:
+                current_labels = {i['name']: i['data'][0] for i in v['groups']}
+                cols = []
+                for l in labels:
+                    if l in current_labels:
+                        cols.append(current_labels[l])
+                    else:
+                        cols.append(0)
                 agg.append(cols)
 
             stacked = [i for i in zip(*agg)]
 
             # Draw each stack
-            rects = [plt.barh(y_axis, stacked[0], DEFAULT_BAR_WIDTH)]
+            rects = [plt.barh(y_axis, stacked[0], DEFAULT_BAR_WIDTH, color=colors.pop(0))]
 
             for i in range(1, len(stacked)):
                 left_padding = [sum(i) for i in zip(*stacked[:i])]
                 rects.append(plt.barh(y_axis, stacked[i], DEFAULT_BAR_WIDTH,
-                                      left=left_padding))
+                                      left=left_padding, color=colors.pop(0)))
 
             ax = plt.gca()
             legend_location = 'upper center'
@@ -99,7 +115,7 @@ class BarChartElement(Element):
             ax.set_yticklabels([])
 
         # Style the axis and labels
-        set_legend_style(a)
+        set_legend_style(a, self.section.layout[LEGEND_STYLE])
 
         # Fix the axises
         set_axis_font(ax)

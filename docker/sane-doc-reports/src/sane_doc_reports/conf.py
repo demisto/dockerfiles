@@ -106,3 +106,4 @@ HTML_ATTRIBUTES = ['em', 'strong', 'del']
 HTML_ATTR_MARKDOWN_MAP = {'em': 'italic', 'strong': 'bold',
                           'del': 'strikethrough'}
 SHOULD_NEW_LINE = ['hr'] + MD_TYPES_HEADERS
+MD_PAGE_BREAK = '\\pagebreak'

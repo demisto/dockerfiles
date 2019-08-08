@@ -1,4 +1,5 @@
 import os
+from docx.enum.text import WD_BREAK
 from pathlib import Path
 from typing import List
 
@@ -14,6 +15,7 @@ from sane_doc_reports.conf import DEBUG, A4_MM_HEIGHT, A4_MM_WIDTH, \
     TOP_MARGIN_PT, BOTTOM_MARGIN_PT, LEFT_MARGIN_PT, RIGHT_MARGIN_PT
 from sane_doc_reports.populate.grid import get_cell, merge_cells
 from docx.enum.style import WD_STYLE_TYPE
+from docx.enum.section import WD_ORIENT
 
 
 def _debug_show_styles(document):
@@ -21,8 +23,9 @@ def _debug_show_styles(document):
     styles_p = [s for s in styles if s.type == WD_STYLE_TYPE.PARAGRAPH]
     styles_t = [s for s in styles if s.type == WD_STYLE_TYPE.TABLE]
     styles = styles_p + styles_t
+    print("Styles: ")
     for style in styles:
-        print(style.name)
+        print("\t", style.name)
 
 
 class Report:
@@ -30,7 +33,7 @@ class Report:
     In charge of generating a DOCX report form a SANE report (JSON)
     """
 
-    def __init__(self, pages: List[Page], sane_json: SaneJson):
+    def __init__(self, pages: List[Page], sane_json: SaneJson, options: dict):
         template_path = Path(os.path.dirname(__file__)) / 'template.docx'
         with template_path.open('rb') as f:
             self.document = Document(f)
@@ -46,9 +49,12 @@ class Report:
         # Used to calculate and create the page grid(layout)
         self.sane_json = sane_json
 
+        self.options = options
+
     def populate_report(self) -> None:
         self.change_page_size('A4')
         self._decrease_layout_margins()
+        page_count = self.sane_json.get_pages_count() - 1
         for page_num, sane_page in enumerate(self.sane_json.get_sane_pages()):
             cols, rows = sane_page.calculate_page_grid()
 
@@ -74,6 +80,20 @@ class Report:
                                          grid_position=grid_pos)
                 self._insert_section(cell_object, section)
 
+            # If this isn't the last page, we can add another page break.
+            if page_num != page_count:
+                p = self.document.add_paragraph()
+                r = p.add_run()
+                if DEBUG:
+                    r.text = f'Page break ({page_num})'
+                r.add_break(WD_BREAK.PAGE)
+
+        orientation = self.options.get('orientation', 'portrait')
+        if orientation:
+            if DEBUG:
+                print("Changing orientation to landscape.")
+            self.orient_landscape()
+
     @staticmethod
     def _insert_section(cell_object: CellObject, section: Section) -> None:
         section_type = section.type
@@ -87,6 +107,12 @@ class Report:
 
     def save(self, output_file_path: str):
         self.document.save(output_file_path)
+
+    def orient_landscape(self):
+        section = self.document.sections[-1]
+        section.orientation = WD_ORIENT.LANDSCAPE
+        section.page_height = Mm(A4_MM_WIDTH)
+        section.page_width = Mm(A4_MM_HEIGHT)
 
     def change_page_size(self, paper_size: str) -> None:
         if paper_size == 'A4':

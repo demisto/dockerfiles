@@ -3,7 +3,7 @@
     "type": "chart",
     "data": [
       {
-        "name": "Unclassified",
+        "name": "Unknown",
         "data": [
           3
         ],
@@ -24,11 +24,10 @@
         "width": 277
       },
       "h": 3,
-      "i": "410efa20-64f0-11e9-8ee3-b5b70ad799cb",
       "legend": [
         {
           "color": "#03B0FF",
-          "name": "Unclassified"
+          "name": "Unknown"
         }
       ],
       "legendStyle": {
@@ -45,7 +44,7 @@
       "w": 5
     },
     "fromDate": "2019-04-15T17:34:56+03:00",
-    "title": "Active Incidents - Line chart 2"
+    "title": "Things - Line chart 2"
   },
   {
     "type": "chart",
@@ -79,7 +78,6 @@
         "width": 277
       },
       "h": 3,
-      "i": "43192200-64f0-11e9-8ee3-b5b70ad799cb",
       "legend": null,
       "legendStyle": {
         "align": "center",
@@ -97,7 +95,7 @@
       "w": 5
     },
     "fromDate": "2019-04-15T17:34:56+03:00",
-    "title": "Incidents By Close Reason"
+    "title": "By Someone"
   },
   {
     "type": "chart",
@@ -109,21 +107,21 @@
         ],
         "groups": [
           {
-            "name": "Phishing",
+            "name": "Fishing",
             "data": [
               14
             ],
             "groups": null
           },
           {
-            "name": "Malware",
+            "name": "Monsters",
             "data": [
               10
             ],
             "groups": null
           },
           {
-            "name": "Unclassified",
+            "name": "Unknown",
             "data": [
               9
             ],
@@ -138,21 +136,21 @@
         ],
         "groups": [
           {
-            "name": "Malware",
+            "name": "Monsters",
             "data": [
               8
             ],
             "groups": null
           },
           {
-            "name": "Unclassified",
+            "name": "Unknown",
             "data": [
               17
             ],
             "groups": null
           },
           {
-            "name": "Phishing",
+            "name": "Fishing",
             "data": [
               7
             ],
@@ -167,21 +165,21 @@
         ],
         "groups": [
           {
-            "name": "Unclassified",
+            "name": "Unknown",
             "data": [
               6
             ],
             "groups": null
           },
           {
-            "name": "Phishing",
+            "name": "Fishing",
             "data": [
               13
             ],
             "groups": null
           },
           {
-            "name": "Malware",
+            "name": "Monsters",
             "data": [
               8
             ],
@@ -196,21 +194,21 @@
         ],
         "groups": [
           {
-            "name": "Unclassified",
+            "name": "Unknown",
             "data": [
               12
             ],
             "groups": null
           },
           {
-            "name": "Phishing",
+            "name": "Fishing",
             "data": [
               8
             ],
             "groups": null
           },
           {
-            "name": "Malware",
+            "name": "Monsters",
             "data": [
               10
             ],
@@ -225,21 +223,21 @@
         ],
         "groups": [
           {
-            "name": "Unclassified",
+            "name": "Unknown",
             "data": [
               4
             ],
             "groups": null
           },
           {
-            "name": "Phishing",
+            "name": "Fishing",
             "data": [
               9
             ],
             "groups": null
           },
           {
-            "name": "Malware",
+            "name": "Monsters",
             "data": [
               10
             ],
@@ -262,19 +260,18 @@
         "width": 277
       },
       "h": 3,
-      "i": "ebc42a00-b1fb-11e9-bf3e-5b011f9eb50a",
       "legend": [
         {
           "color": "#3AD1D6",
-          "name": "Phishing"
+          "name": "Fishing"
         },
         {
           "color": "#FF8F14",
-          "name": "Malware"
+          "name": "Monsters"
         },
         {
           "color": "#03B0FF",
-          "name": "Unclassified"
+          "name": "Unknown"
         }
       ],
       "legendStyle": {
@@ -293,9 +290,9 @@
       "w": 5
     },
     "query": {
-      "type": "incident",
+      "type": "problems",
       "groupBy": [
-        "severity",
+        "level",
         "type"
       ],
       "filter": {
@@ -314,7 +311,7 @@
       "noEvent": false
     },
     "fromDate": "2019-07-22T12:26:49Z",
-    "title": "Incident Severity by Type",
+    "title": "level by Type",
     "emptyNotification": "No results found",
     "titleStyle": null
   }
