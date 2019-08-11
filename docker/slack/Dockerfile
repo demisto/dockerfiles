@@ -9,3 +9,7 @@ RUN apk --update add --no-cache --virtual .build-dependencies python-dev build-b
   libffi-dev \
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies
+
+# Install Chrome
+RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+RUN dpkg -i google-chrome-stable_current_amd64.deb; apt-get -fy install
