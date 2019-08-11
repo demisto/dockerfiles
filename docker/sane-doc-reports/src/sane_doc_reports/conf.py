@@ -1,6 +1,8 @@
 from os import getenv
 
 # Environment
+from docx.shared import Mm
+
 DEBUG = getenv('SANE_DEBUG', 'False') == 'True'
 
 # Grid Constants
@@ -21,8 +23,15 @@ TOP_MARGIN_PT = 10
 BOTTOM_MARGIN_PT = 10
 LEFT_MARGIN_PT = 25
 RIGHT_MARGIN_PT = 15
-A4_MM_HEIGHT = 297
-A4_MM_WIDTH = 210
+PAPER_A4 = 'A4'
+A4_MM_HEIGHT = Mm(297)
+A4_MM_WIDTH = Mm(210)
+PAPER_A3 = 'A3'
+A3_MM_HEIGHT = Mm(420)
+A3_MM_WIDTH = Mm(297)
+PAPER_LETTER = 'letter'
+LETTER_MM_HEIGHT = Mm(279)
+LETTER_MM_WIDTH = Mm(216)
 
 # Base Styles
 DEFAULT_WORD_FONT = 'Arial'  # 'Source Sans Pro'

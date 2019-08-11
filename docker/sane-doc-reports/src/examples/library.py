@@ -82,6 +82,10 @@ def example_orientation_landscape(out_file_name='example.docx'):
              out_file_name, {'orientation': 'landscape'})
 
 
+def example_paper_size_a3(out_file_name='example.docx'):
+    main.run(get_mock('grid_checks/fullgrid.json', ret_dict=False),
+             out_file_name, {'paper_size': 'A3'})
+
 def example():
     main.run(get_mock('example.json', ret_dict=False), 'example.docx')
 
@@ -109,7 +113,7 @@ def example_all():
 
 
 def run():
-    example_orientation_landscape()
+    example_paper_size_a3()
 
 
 if __name__ == '__main__':

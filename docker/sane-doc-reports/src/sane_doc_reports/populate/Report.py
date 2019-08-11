@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import List
 
 from docx import Document
-from docx.shared import Pt, Mm
+from docx.shared import Pt
 
 from sane_doc_reports.domain.CellObject import CellObject
 from sane_doc_reports.domain.Page import Page
@@ -12,7 +12,9 @@ from sane_doc_reports.domain.Section import Section
 from sane_doc_reports.domain import SaneJson
 from sane_doc_reports.utils import insert_by_type
 from sane_doc_reports.conf import DEBUG, A4_MM_HEIGHT, A4_MM_WIDTH, \
-    TOP_MARGIN_PT, BOTTOM_MARGIN_PT, LEFT_MARGIN_PT, RIGHT_MARGIN_PT
+    TOP_MARGIN_PT, BOTTOM_MARGIN_PT, LEFT_MARGIN_PT, RIGHT_MARGIN_PT, \
+    A3_MM_WIDTH, A3_MM_HEIGHT, LETTER_MM_WIDTH, LETTER_MM_HEIGHT, PAPER_A4, \
+    PAPER_A3, PAPER_LETTER
 from sane_doc_reports.populate.grid import get_cell, merge_cells
 from docx.enum.style import WD_STYLE_TYPE
 from docx.enum.section import WD_ORIENT
@@ -33,7 +35,7 @@ class Report:
     In charge of generating a DOCX report form a SANE report (JSON)
     """
 
-    def __init__(self, pages: List[Page], sane_json: SaneJson, options: dict):
+    def __init__(self, pages: List[Page], sane_json: SaneJson, options={}):
         template_path = Path(os.path.dirname(__file__)) / 'template.docx'
         with template_path.open('rb') as f:
             self.document = Document(f)
@@ -50,9 +52,12 @@ class Report:
         self.sane_json = sane_json
 
         self.options = options
+        self.page_width = A4_MM_WIDTH
+        self.page_height = A4_MM_HEIGHT
 
     def populate_report(self) -> None:
-        self.change_page_size('A4')
+        paper_size = self.options.get('paper_size', 'A4')
+        self.change_page_size(paper_size)
         self._decrease_layout_margins()
         page_count = self.sane_json.get_pages_count() - 1
         for page_num, sane_page in enumerate(self.sane_json.get_sane_pages()):
@@ -89,7 +94,7 @@ class Report:
                 r.add_break(WD_BREAK.PAGE)
 
         orientation = self.options.get('orientation', 'portrait')
-        if orientation:
+        if orientation == 'landscape':
             if DEBUG:
                 print("Changing orientation to landscape.")
             self.orient_landscape()
@@ -109,17 +114,34 @@ class Report:
         self.document.save(output_file_path)
 
     def orient_landscape(self):
-        section = self.document.sections[-1]
-        section.orientation = WD_ORIENT.LANDSCAPE
-        section.page_height = Mm(A4_MM_WIDTH)
-        section.page_width = Mm(A4_MM_HEIGHT)
+        sections = self.document.sections
+        for section in sections:
+            section.orientation = WD_ORIENT.LANDSCAPE
+
+            # Swap the width and height to get landscape
+            section.page_height = self.page_width
+            section.page_width = self.page_height
 
     def change_page_size(self, paper_size: str) -> None:
-        if paper_size == 'A4':
-            sections = self.document.sections
-            for section in sections:
-                section.page_height = Mm(A4_MM_HEIGHT)
-                section.page_width = Mm(A4_MM_WIDTH)
+        if DEBUG:
+            print("Paper size:", paper_size)
+
+        if paper_size == PAPER_A4:
+            self.page_width = A4_MM_WIDTH
+            self.page_height = A4_MM_HEIGHT
+
+        elif paper_size == PAPER_A3:
+            self.page_width = A3_MM_WIDTH
+            self.page_height = A3_MM_HEIGHT
+
+        elif paper_size == PAPER_LETTER:
+            self.page_width = LETTER_MM_WIDTH
+            self.page_height = LETTER_MM_HEIGHT
+
+        sections = self.document.sections
+        for section in sections:
+            section.page_height = self.page_height
+            section.page_width = self.page_width
 
     def _decrease_layout_margins(self) -> None:
         sections = self.document.sections
