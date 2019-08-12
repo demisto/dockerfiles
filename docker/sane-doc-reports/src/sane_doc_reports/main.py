@@ -2,7 +2,7 @@ from sane_doc_reports.populate.Report import Report
 from sane_doc_reports.transform.Transform import Transform
 
 
-def run(sane_json_path: str, docx_output_path: str, options: dict) -> None:
+def run(sane_json_path: str, docx_output_path: str, options={}) -> None:
     """
     Create a elements report main invoker.
     Steps:

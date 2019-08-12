@@ -1,4 +1,6 @@
 import os
+
+from docx.enum.table import WD_TABLE_ALIGNMENT
 from docx.enum.text import WD_BREAK
 from pathlib import Path
 from typing import List
@@ -60,12 +62,20 @@ class Report:
         self.change_page_size(paper_size)
         self._decrease_layout_margins()
         page_count = self.sane_json.get_pages_count() - 1
+        orientation = self.options.get('orientation', 'portrait')
+
         for page_num, sane_page in enumerate(self.sane_json.get_sane_pages()):
             cols, rows = sane_page.calculate_page_grid()
 
             if DEBUG:
                 print(f'Creating a layout grid of size ({rows},{cols})' +
                       f' for page: {page_num}')
+
+            if orientation == 'landscape':
+                if DEBUG:
+                    print("Changing orientation to landscape.")
+                self.orient_landscape()
+
             grid = self.document.add_table(rows=rows, cols=cols)
 
             if DEBUG:
@@ -92,12 +102,6 @@ class Report:
                 if DEBUG:
                     r.text = f'Page break ({page_num})'
                 r.add_break(WD_BREAK.PAGE)
-
-        orientation = self.options.get('orientation', 'portrait')
-        if orientation == 'landscape':
-            if DEBUG:
-                print("Changing orientation to landscape.")
-            self.orient_landscape()
 
     @staticmethod
     def _insert_section(cell_object: CellObject, section: Section) -> None:
