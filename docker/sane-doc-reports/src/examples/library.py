@@ -87,7 +87,7 @@ def run_all():
 
 
 def run():
-    example()
+    run_all()
 
 
 if __name__ == '__main__':
