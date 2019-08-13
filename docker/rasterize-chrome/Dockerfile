@@ -6,13 +6,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   gcc \
   python-dev \
   wget \
-&& pip install --no-cache-dir -r requirements.txt \
-&& apt-get purge -y --auto-remove \
-  gcc \
-  python-dev \
-&& rm -rf /var/lib/apt/lists/*
+&& pip3 install --no-cache-dir -r requirements.txt
 
 # Install Chrome
-RUN apt-get update
-RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-RUN dpkg -i google-chrome-stable_current_amd64.deb; apt-get -fy install
+RUN wget https://dl.google.co/linux/direct/google-chrome-stable_current_amd64.deb; \
+dpkg -i google-chrome-stable_current_amd64.deb; \
+apt-get -fy install unzip; \
+apt --fix-broken -y install
+
+# Clean Up
+RUN apt-get purge -y --auto-remove \
+  gcc \
+  python-dev \
+&& rm -rf /var/lib/apt/lists/* \
+&& rm -f google-chrome*.deb;
