@@ -77,7 +77,6 @@ class Report:
                 self.orient_landscape()
 
             grid = self.document.add_table(rows=rows, cols=cols)
-
             if DEBUG:
                 grid.style = 'Table Grid'
 
