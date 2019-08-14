@@ -5,7 +5,7 @@ from sane_doc_reports.domain.Element import Element
 from sane_doc_reports.domain.Section import Section
 from sane_doc_reports.conf import DEBUG, DEFAULT_BAR_WIDTH, \
     DEFAULT_BAR_ALPHA, CHART_LABEL_NONE_STRING, \
-    DEFAULT_FONT_COLOR, DEFAULT_TITLE_FONT_SIZE
+    DEFAULT_FONT_COLOR, DEFAULT_TITLE_FONT_SIZE, LEGEND_STYLE
 from sane_doc_reports.elements import image, error
 from sane_doc_reports.styles.colors import get_colors
 from sane_doc_reports.utils import set_legend_style, remove_plot_borders, \
@@ -61,7 +61,7 @@ class ColumnChartElement(Element):
                       bbox_to_anchor=legend_location_relative_to_graph,
                       handlelength=0.7)
 
-        set_legend_style(a)
+        set_legend_style(a, self.section.layout[LEGEND_STYLE])
 
         ax.set_xlim(-len(objects), len(objects))
 

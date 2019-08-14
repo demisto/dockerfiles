@@ -2,7 +2,7 @@
   {
     "type": "markdown",
     "data": {
-      "text": "# **Some text here**\n\nMon, 15 Apr 2019 11:42:09 IDT\n\n---",
+      "text": "# **Some markdown title**\n\nMon, 15 Apr 2019 11:42:09 IDT\n\n---",
       "groups": [
         {
           "name": "",
@@ -59,20 +59,20 @@
       "rowPos": 4,
       "w": 6
     },
-    "title": "Time"
+    "title": "SLA"
   },
   {
     "type": "chart",
     "data": [
       {
-        "name": "Teleportation",
+        "name": "Some type",
         "data": [
           1
         ],
         "groups": null
       },
       {
-        "name": "Orks",
+        "name": "Blob",
         "data": [
           1
         ],
@@ -98,11 +98,11 @@
       "legend": [
         {
           "color": "#ADE901",
-          "name": "Teleportation"
+          "name": "Some type"
         },
         {
           "color": "#00C853",
-          "name": "Orks"
+          "name": "Blob"
         }
       ],
       "legendStyle": {
@@ -121,7 +121,7 @@
     "type": "chart",
     "data": [
       {
-        "name": "nolan winston",
+        "name": "Noah Parish",
         "data": [
           2
         ],
@@ -203,28 +203,30 @@
       "rowPos": 2,
       "w": 6
     },
-    "title": "level"
+    "title": "Severity"
   },
   {
     "type": "table",
     "data": [
       {
-        "Owner": "boris",
-        "Name":"JDoe",
-        "Occurred": "Mon, 08 Apr 2018 16:16:48 IDT",
-        "level": "1337",
-        "Status": "zero",
-        "Type": "Oak Tree",
-        "DueDate": "Thu, 18 Apr 2019 17:16:46 IDT"
+        "DueDate": "Thu, 18 Apr 2019 16:16:48 IDT",
+        "Name": "4444",
+        "Occurred": "Mon, 08 Apr 2019 16:16:48 IDT",
+        "Owner": "molan",
+        "level": "Low",
+        "Type": "Teleportation",
+        "Status": "Done",
+        "Over Time": "Status: n/a"
       },
       {
-        "Owner": "nolan",
-        "Name":"JDoe 2",
+        "DueDate": "Thu, 18 Apr 2019 16:16:48 IDT",
+        "Name": "33333",
         "Occurred": "Mon, 08 Apr 2019 16:16:48 IDT",
-        "level": "9000",
-        "Status": "nada",
+        "Owner": "nolan",
+        "level": "High",
         "Type": "Teleportation",
-        "DueDate": "Thu, 18 Apr 2019 16:16:46 IDT"
+        "Status": "Done",
+        "Over Time": "Status: idle"
       }
     ],
     "layout": {
@@ -236,7 +238,7 @@
         "name": "Name",
         "occurred": "Occurred",
         "owner": "Owner",
-        "level": "level",
+        "severity": "Severity",
         "status": "Status",
         "type": "Type"
       },
@@ -246,18 +248,18 @@
         "occurred",
         "type",
         "owner",
-        "level",
+        "severity",
         "status",
         "dueDate"
       ],
       "w": 12
     },
-    "title": "Problems"
+    "title": "High Issues"
   },
   {
     "type": "markdown",
     "data": {
-      "text": "# Total open problems: 2",
+      "text": "# Total open issues: 2",
       "groups": [
         {
           "name": "",
@@ -293,21 +295,21 @@
             "groups": null
           },
           {
-            "name": "Orks",
+            "name": "Blob",
             "data": [
               2
             ],
             "groups": null
           },
           {
-            "name": "Teleportation",
+            "name": "Some type",
             "data": [
               1
             ],
             "groups": null
           },
           {
-            "name": "Snakes",
+            "name": "Exploration",
             "data": [
               1
             ],
@@ -343,15 +345,15 @@
         },
         {
           "color": "#00C853",
-          "name": "Orks"
+          "name": "Blob"
         },
         {
           "color": "#ADE901",
-          "name": "Teleportation"
+          "name": "Some type"
         },
         {
           "color": "#2979FF",
-          "name": "Snakes"
+          "name": "Exploration"
         }
       ],
       "legendStyle": {
@@ -367,7 +369,7 @@
       "rowPos": 8,
       "w": 5
     },
-    "title": "Things - Line chart"
+    "title": "Issues - Line chart"
   },
   {
     "type": "chart",
@@ -423,13 +425,13 @@
       "rowPos": 8,
       "w": 4
     },
-    "title": "Things - Pie chart"
+    "title": "Issues - Pie chart"
   },
   {
     "type": "chart",
     "data": [
       {
-        "name": "nolan winston",
+        "name": "Noah Parish",
         "data": [
           2
         ],
@@ -450,7 +452,7 @@
         "groups": null
       },
       {
-        "name": "Jonathan",
+        "name": "Yevgeny Botch",
         "data": [
           1
         ],
@@ -458,6 +460,9 @@
       }
     ],
     "layout": {
+      "style": {
+        "pageBreakBefore": true
+      },
       "chartProperties": {
         "barSize": 15,
         "format": "DD MMM Y",
@@ -487,7 +492,7 @@
       "rowPos": 8,
       "w": 3
     },
-    "title": "Things Done by User"
+    "title": "Issues Done by User"
   },
   {
     "type": "markdown",

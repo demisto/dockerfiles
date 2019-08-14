@@ -1,3 +1,4 @@
+from math import ceil
 from typing import Tuple, Union
 
 from docx.oxml import OxmlElement
@@ -23,12 +24,13 @@ class CellObject(object):
      - run (holds: text, pictures, text-styling (font))
      """
 
-    def __init__(self, cell, add_run=True):
+    def __init__(self, cell, add_run=True, grid_position=None):
         self.cell = cell
 
         cell_paragraph, cell_run = self._get_cell_wrappers(add_run=add_run)
         self.paragraph = cell_paragraph
         self.run = cell_run
+        self.grid_position = grid_position
 
     def _get_cell_wrappers(self, add_run=True) -> Tuple[
         Paragraph, Union[Run, None]]:
@@ -54,6 +56,23 @@ class CellObject(object):
 
     def get_last_paragraph(self) -> Paragraph:
         return self.cell.paragraphs[-1]
+
+    # current_width - width of the element currently in pt
+    # Returns - bool (should resize), int (with in Pt to resize to)
+    def get_cell_width_resize(self, current_width=None) -> (bool, int):
+        if not self.grid_position:
+            return False, 0
+
+        # The default word doc has a 612Pt width, we find the relative size of
+        #  this cell in Pt via it's grid position.
+        col = 1 if self.grid_position["width"] == 0 else self.grid_position[
+            "width"]
+        resize_pt = (612 * col // self.grid_position["global_cols"])
+
+        # We don't want to scale images to be bigger (hurts resolution)
+        if current_width < resize_pt:
+            return False, 0
+        return True, resize_pt
 
     def update_paragraph(self):
         self.paragraph = self.get_last_paragraph()
