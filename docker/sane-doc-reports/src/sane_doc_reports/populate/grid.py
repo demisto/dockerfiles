@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 
 from docx.table import Table, _Cell
 
@@ -17,12 +17,12 @@ def merge_cells(grid: Table, section: Section) -> None:
     grid.cell(row, col).merge(grid.cell(row + height - 1, col + width - 1))
 
 
-def get_cell(table: Table, section: Section) -> _Cell:
+def get_cell(table: Table, section: Section) -> (_Cell, Tuple[int, int]):
     """
     Get the sections corresponding cell
     """
     row, col = row_pos(section), col_pos(section)
-    return table.rows[row].cells[col]
+    return table.rows[row].cells[col], (get_width(section), get_height(section))
 
 
 def get_vtable_merged(table: Table) -> List[List]:

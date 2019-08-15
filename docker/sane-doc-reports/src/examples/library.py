@@ -7,6 +7,16 @@ def example_basic(out_file_name='example.docx'):
              out_file_name)
 
 
+def example_paged(out_file_name='example.docx'):
+    main.run(get_mock('grid_checks/fullgridpaged.json', ret_dict=False),
+             out_file_name)
+
+
+def example_paged_complex(out_file_name='example.docx'):
+    main.run(get_mock('grid_checks/complexpaged.json', ret_dict=False),
+             out_file_name)
+
+
 def example_table(out_file_name='example.docx'):
     main.run(get_mock('elements/table.json', ret_dict=False), out_file_name)
 
@@ -27,6 +37,11 @@ def example_pie_chart(out_file_name='example.docx'):
 
 def example_markdown(out_file_name='example.docx'):
     main.run(get_mock('elements/markdown.json', ret_dict=False), out_file_name)
+
+
+def example_markdown_paged(out_file_name='example.docx'):
+    main.run(get_mock('elements/markdown_paged2.json', ret_dict=False),
+             out_file_name)
 
 
 def example_hr(out_file_name='example.docx'):
@@ -62,18 +77,30 @@ def example_unimplemented(out_file_name='example.docx'):
              out_file_name)
 
 
+def example_orientation_landscape(out_file_name='example.docx'):
+    main.run(get_mock('grid_checks/fullgrid.json', ret_dict=False),
+             out_file_name, {'orientation': 'landscape'})
+
+
+def example_paper_size_a3(out_file_name='example.docx'):
+    main.run(get_mock('grid_checks/fullgrid.json', ret_dict=False),
+             out_file_name, {'paper_size': 'A3'})
+
+
 def example():
     main.run(get_mock('example.json', ret_dict=False), 'example.docx')
 
 
-def run_all():
+def example_all():
     examples = [
         example_basic,
+        example_paged,
         example_table,
         example_number,
         example_text,
         example_pie_chart,
         example_markdown,
+        example_markdown_paged,
         example_hr,
         example_old_json,
         example_bar_chart,
@@ -87,7 +114,7 @@ def run_all():
 
 
 def run():
-    run_all()
+    example_orientation_landscape()
 
 
 if __name__ == '__main__':

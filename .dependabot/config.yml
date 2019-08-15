@@ -415,6 +415,28 @@ update_configs:
         update_type: all
 
   - package_manager: python
+    directory: /docker/btfl-soup
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/btfl-soup
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/netutils
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/netutils
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+  
+  - package_manager: python
     directory: /docker/uptycs
     update_schedule: live
   - package_manager: docker
@@ -430,7 +452,62 @@ update_configs:
     update_schedule: live
   - package_manager: docker
     directory: /docker/nltk
-    update_schedule: daily 
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+    
+  - package_manager: python
+    directory: /docker/teams
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/teams
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/pyjwt3
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/pyjwt3
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/oauthlib
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/oauthlib
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/chromium
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/chromium
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/google-vision-api
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/google-vision-api
+    update_schedule: daily
     automerged_updates:
     - match:
         dependency_name: demisto/*

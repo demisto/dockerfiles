@@ -1,6 +1,8 @@
 from os import getenv
 
 # Environment
+from docx.shared import Mm
+
 DEBUG = getenv('SANE_DEBUG', 'False') == 'True'
 
 # Grid Constants
@@ -10,7 +12,6 @@ ROW_POSITION_KEY = 'rowPos'
 COL_POSITION_KEY = 'columnPos'
 HEIGHT_POSITION_KEY = 'h'
 WIDTH_POSITION_KEY = 'w'
-PAGE_GRID_HEIGHT = 12
 STYLE_KEY = 'style'
 PAGEBREAK_KEY = 'pageBreakBefore'
 SHOULD_HAVE_12_GRID = False
@@ -21,8 +22,15 @@ TOP_MARGIN_PT = 10
 BOTTOM_MARGIN_PT = 10
 LEFT_MARGIN_PT = 25
 RIGHT_MARGIN_PT = 15
-A4_MM_HEIGHT = 297
-A4_MM_WIDTH = 210
+PAPER_A4 = 'A4'
+A4_MM_HEIGHT = Mm(297)
+A4_MM_WIDTH = Mm(210)
+PAPER_A3 = 'A3'
+A3_MM_HEIGHT = Mm(420)
+A3_MM_WIDTH = Mm(297)
+PAPER_LETTER = 'letter'
+LETTER_MM_HEIGHT = Mm(279)
+LETTER_MM_WIDTH = Mm(216)
 
 # Base Styles
 DEFAULT_WORD_FONT = 'Arial'  # 'Source Sans Pro'
@@ -66,6 +74,9 @@ TREND_MAIN_NUMBER_FONT_SIZE = 20
 TREND_SECOND_NUMBER_FONT_SIZE = 11
 DEFAULT_HR_DASHES_SIZE = 85
 
+# PLOT constants
+LEGEND_STYLE = 'legendStyle'
+
 # ALIGNMENT
 ALIGN_LEFT = 0
 ALIGN_RIGHT = 2
@@ -103,3 +114,4 @@ HTML_ATTRIBUTES = ['em', 'strong', 'del']
 HTML_ATTR_MARKDOWN_MAP = {'em': 'italic', 'strong': 'bold',
                           'del': 'strikethrough'}
 SHOULD_NEW_LINE = ['hr'] + MD_TYPES_HEADERS
+MD_PAGE_BREAK = '\\pagebreak'

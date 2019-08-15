@@ -1,3 +1,4 @@
+from sane_doc_reports import conf
 from sane_doc_reports.populate.Report import Report
 from tests.utils import _transform
 
@@ -60,3 +61,35 @@ def test_markdown():
     # Find one image
     assert len(
         d.element.xpath("//w:drawing//pic:cNvPr[@name='image.png']")) == 1
+
+    assert len(d.element.xpath('//w:br')) == 0
+
+
+def test_markdown_paged():
+    report = Report(*_transform('elements/markdown_paged.json'))
+    report.populate_report()
+
+    d = report.document
+
+    # Find 6 headings
+    assert len(d.element.xpath("//w:t[contains(text(), 'Heading')]")) == 2
+
+    # Page break (none because it is the first and only element)
+    assert len(d.element.xpath('//w:br')) == 0
+
+
+def test_markdown_paged():
+    report = Report(*_transform('elements/markdown_paged2.json'))
+    report.populate_report()
+
+    d = report.document
+
+    # Find 6 headings
+    assert len(d.element.xpath("//w:t[contains(text(), 'Heading')]")) == 2
+
+    # Page break
+    assert len(d.element.xpath('//w:br')) == 1
+
+    # Structure sanity check (heading -> break -> heading)
+    assert len(d.element.xpath("//w:t[contains(text(),'page 1')]/following::w:br")) == 1
+    assert len(d.element.xpath("//w:t[contains(text(),'page 2')]/preceding::w:br")) == 1

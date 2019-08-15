@@ -80,12 +80,6 @@ def test_sane_json_invalid_layout_keys():
     assert 'data[0].layout.h must be bigger than or equal to 1' in str(e.value)
 
 
-def test__separate_pages():
-    # Sorry for checking a private function
-    sane_json = SaneJson(get_mock('three_pages.json'))
-    assert len(sane_json._separate_pages()) == 3
-
-
 def test_pages_grid_constructor():
     sane_json = SaneJson(get_mock('basic.json'))
     assert len(sane_json.sane_pages) == 1

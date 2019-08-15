@@ -1,4 +1,4 @@
-# Last modified: Sun, 30 Jun 2019 11:27:45 +0000
+# Last modified: Mon, 29 Jul 2019 14:43:53 +0000
 FROM python:3.7.4-slim-stretch
 
 RUN echo 'deb http://deb.debian.org/debian stretch-backports main' >> /etc/apt/sources.list
