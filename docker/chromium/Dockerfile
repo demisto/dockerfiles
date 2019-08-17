@@ -9,13 +9,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   wget \
   libxss1 \
   libappindicator1 \
-&& pip3 install --no-cache-dir -r requirements.txt
+&& pip3 install --no-cache-dir -r requirements.txt \
+&& apt-get purge -y --auto-remove \
+  python-dev \
+&& rm -rf /var/lib/apt/lists/*
 
 # Install Chrome
-RUN dpkg -i google-chrome*.deb; \
+RUN apt-get update && dpkg -i google-chrome*.deb; \
 apt --fix-broken -y install; \
 apt-get -y install unzip \
 && rm -f google-chrome*.deb \
 && python3 -c "from webdriver_manager.chrome import ChromeDriverManager; ChromeDriverManager().install()" \
-&& apt-get purge -y --auto-remove python-dev \
 && rm -rf /var/lib/apt/lists/*
