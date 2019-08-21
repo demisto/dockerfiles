@@ -17,6 +17,7 @@ jobs:
             ./docker/build_docker.sh
       - store_artifacts:
           path: artifacts
+          destination: docker_images
 workflows:
   version: 2
   full_build:
