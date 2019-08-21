@@ -118,8 +118,14 @@ function docker_build {
         echo "Done docker push for: ${image_full_name}"
         ${DOCKER_SRC_DIR}/post_github_comment.py ${image_full_name}
     else
-        echo "Skipping docker push"
+        echo "Skipping docker push"        
     fi
+    echo "Creating artifact of docker image..."
+    ARTDIR="${DOCKER_SRC_DIR}/../artifacts"
+    mkdir -p "${ARTDIR}"
+    IMAGESAVE=${ARTDIR}/`echo ${image_full_name} | tr / _`.tar
+    docker save -o "$IMAGESAVE" ${image_full_name}
+    gzip "$IMAGESAVE"
     if [ -n "$CR_REPO" ] && cr_login; then
         docker tag ${image_full_name} ${CR_REPO}/${image_full_name}
         docker push ${CR_REPO}/${image_full_name} > /dev/null
