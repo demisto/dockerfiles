@@ -15,7 +15,7 @@ jobs:
           name: Build Docker Images
           command: |
             ./docker/build_docker.sh
-      - store_artifacts
+      - store_artifacts:
           path: artifacts
 workflows:
   version: 2
