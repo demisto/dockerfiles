@@ -6,7 +6,7 @@ from docx.oxml.ns import nsdecls, qn
 from sane_doc_reports.domain import CellObject
 from sane_doc_reports.domain.Section import Section
 from sane_doc_reports.styles.colors import name_to_rgb, hex_to_rgb, name_to_hex
-from sane_doc_reports.conf import PYDOCX_FONT_SIZE, PYDOCX_FONT_NAME, \
+from sane_doc_reports.conf import PYDOCX_FONT_SIZE, PYDOCX_FONT, \
     PYDOCX_FONT_BOLD, PYDOCX_FONT_STRIKE, PYDOCX_FONT_UNDERLINE, \
     PYDOCX_FONT_ITALIC, PYDOCX_FONT_COLOR, PYDOCX_TEXT_ALIGN, \
     DEFAULT_WORD_FONT, ALIGN_LEFT, ALIGN_RIGHT, ALIGN_CENTER, \
@@ -25,8 +25,8 @@ def _apply_cell_styling(cell_object: CellObject, section: Section):
     cell_object.run.font.name = DEFAULT_WORD_FONT
 
     # Font family
-    if PYDOCX_FONT_NAME in style:
-        cell_object.run.font.name = style[PYDOCX_FONT_NAME]
+    if PYDOCX_FONT in style:
+        cell_object.run.font.name = style[PYDOCX_FONT]
 
     # Other characteristics
     if PYDOCX_FONT_BOLD in style:
