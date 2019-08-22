@@ -524,3 +524,14 @@ update_configs:
         dependency_name: demisto/*
         update_type: all
 
+  - package_manager: python
+    directory: /smime-encrypt
+    update_schedule: live
+  - package_manager: docker
+    directory: /smime-encrypt
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
