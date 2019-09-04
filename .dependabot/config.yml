@@ -545,3 +545,7 @@ update_configs:
         dependency_name: demisto/*
         update_type: all
 
+  - package_manager: docker
+    directory: /docker/fips-compiler
+    update_schedule: daily
+
