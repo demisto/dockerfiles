@@ -9,15 +9,17 @@ ENV GOROOT_BOOTSTRAP=/tmp/go
 # Setup linux env vars and directory structure
 WORKDIR $HOME
 RUN mkdir -p /root/dev/go
-RUN echo "export GOROOT_BOOTSTRAP=/tmp/go" >> .bashrc
-RUN echo "export GOROOT=/usr/local/go" >> .bashrc
-RUN echo "export GOPATH=$HOME/dev/go" >> .bashrc
-RUN echo "export PATH=$GOPATH/bin:$GOROOT/bin:$PATH" >> .bashrc
+RUN echo "export GOROOT_BOOTSTRAP=/tmp/go\n\
+export GOROOT=/usr/local/go\n\
+export GOPATH=$HOME/dev/go\n\
+export PATH=$GOPATH/bin:$GOROOT/bin:$PATH\n\
+alias sudo=\"\"" >> .bashrc
 RUN source .bashrc
 
 # Install dependencies
 RUN apt-get update
-RUN apt-get install -y git wget gcc
+RUN apt-get install -y git wget gcc autoconf automake libtool curl make g++ unzip libxml2-dev libxslt1-dev libxslt-dev zlib1g-dev libxmlsec1 xmlsec1 libxml2-dev libxmlsec1-dev libxmlsec1-openssl
+# Excluded python-dev for now
 
 # Get regular go (for go + boringcrypto compilation)
 WORKDIR /tmp
