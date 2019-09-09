@@ -88,6 +88,21 @@ def test_markdown_to_html_text_styles():
     assert markdown_to_html(md_input) == ex_output
 
 
+def test_markdown_to_html_md_button():
+    md_input = '%%%{"message":"hi 1", "action":"Print", "params": {"value": "we are the best"}}%%%'
+    ex_output = '<p><p>hi 1</p></p>'
+    assert markdown_to_html(md_input) == ex_output
+
+    inner = '{\'message":"hi 1", "action":"Print", "params": {"value": "we are the best"}}'
+    md_input = f'%%%{inner}%%%'
+    ex_output = f'<p><p>{inner}</p></p>'
+    assert markdown_to_html(md_input) == ex_output
+
+    inner = '123123'
+    md_input = f'%%%{inner}%%%'
+    ex_output = f'<p><p>{inner}</p></p>'
+    assert markdown_to_html(md_input) == ex_output
+
 def test_fix_unwrapped_no_tags():
     html = 'test'
     root_elem = PyQuery(html)

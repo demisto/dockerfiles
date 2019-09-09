@@ -12,7 +12,7 @@ from sane_doc_reports.conf import DEBUG, \
 from sane_doc_reports.elements import image, error
 from sane_doc_reports.styles.colors import get_colors
 from sane_doc_reports.utils import remove_plot_borders, set_legend_style, \
-    get_chart_font, set_axis_font
+    get_chart_font, set_axis_font, change_legend_vertical_alignment
 
 
 class BarChartElement(Element):
@@ -115,6 +115,7 @@ class BarChartElement(Element):
             ax.set_yticklabels([])
 
         # Style the axis and labels
+        self.section = change_legend_vertical_alignment(self.section, top=1)
         set_legend_style(a, self.section.layout[LEGEND_STYLE])
 
         # Fix the axises
@@ -134,7 +135,7 @@ class BarChartElement(Element):
 
         plt_b64 = utils.plt_t0_b64(plt)
 
-        s = Section('image', plt_b64, {}, {})
+        s = Section('image', plt_b64, {}, {'should_shrink': True})
         image.invoke(self.cell_object, s)
 
 

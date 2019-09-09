@@ -9,7 +9,7 @@ from sane_doc_reports.conf import DEBUG, DEFAULT_BAR_WIDTH, \
 from sane_doc_reports.elements import image, error
 from sane_doc_reports.styles.colors import get_colors
 from sane_doc_reports.utils import set_legend_style, remove_plot_borders, \
-    get_chart_font, set_axis_font
+    get_chart_font, set_axis_font, change_legend_vertical_alignment
 
 
 class ColumnChartElement(Element):
@@ -61,6 +61,7 @@ class ColumnChartElement(Element):
                       bbox_to_anchor=legend_location_relative_to_graph,
                       handlelength=0.7)
 
+        self.section = change_legend_vertical_alignment(self.section, top=3)
         set_legend_style(a, self.section.layout[LEGEND_STYLE])
 
         ax.set_xlim(-len(objects), len(objects))
@@ -71,7 +72,7 @@ class ColumnChartElement(Element):
 
         plt_b64 = utils.plt_t0_b64(plt)
 
-        s = Section('image', plt_b64, {}, {})
+        s = Section('image', plt_b64, {}, {'should_shrink': True})
         image.invoke(self.cell_object, s)
 
 
