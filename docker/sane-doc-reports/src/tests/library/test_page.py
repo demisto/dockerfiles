@@ -1,7 +1,7 @@
 from functools import reduce
 
 import pytest
-from sane_doc_reports.domain.SaneJson import SaneJson, get_vertical_pos
+from sane_doc_reports.domain.SaneJson import SaneJson, get_vertical_pos, row_pos
 from tests.utils import get_mock
 from sane_doc_reports.conf import *
 
@@ -40,12 +40,10 @@ def test_calculate_page_grid_merge():
 
 
 def test_normalize_row_positions():
-    sane_json = SaneJson(get_mock('three_pages.json'))
+    sane_json = SaneJson(get_mock('grid_checks/fullgridpaged.json'))
 
     for sane_page in sane_json.get_sane_pages():
         sections = sane_page.get_sections()
-        assert reduce(lambda last_vertical_pos, current_section:
-                      min(
-                          get_vertical_pos(last_vertical_pos),
-                          get_vertical_pos(current_section)
-                      ), sections)[LAYOUT_KEY][ROW_POSITION_KEY] == 0
+
+        # Let's test that the page starts with 0
+        assert sorted([row_pos(s) for s in sections])[0] == 0

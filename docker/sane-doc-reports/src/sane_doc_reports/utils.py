@@ -4,7 +4,9 @@ import tempfile
 from io import BytesIO
 import importlib
 from pathlib import Path
+from time import gmtime
 
+import arrow
 from docx.oxml import OxmlElement
 import matplotlib
 from docx.text.paragraph import Paragraph
@@ -15,7 +17,7 @@ from sane_doc_reports.domain import CellObject, Section
 from sane_doc_reports.conf import SIZE_H_INCHES, SIZE_W_INCHES, \
     DEFAULT_DPI, DEFAULT_LEGEND_FONT_SIZE, DEFAULT_WORD_FONT, \
     DEFAULT_ALPHA, DEFAULT_FONT_COLOR, DEFAULT_WORD_FONT_FALLBACK, \
-    DEFAULT_FONT_AXIS_COLOR
+    DEFAULT_FONT_AXIS_COLOR, LEGEND_STYLE
 
 
 def open_b64_image(image_base64):
@@ -67,7 +69,10 @@ def plot(func):
     """ A decorator used to clear and resize each chart """
 
     def wrapper(*args, **kwargs):
+        if plt:
+            plt.close()
         plt.clf()
+        plt.cla()
         # Fix cropping of plot
         plt.rcParams['figure.constrained_layout.use'] = True
         func(*args, **kwargs)
@@ -115,7 +120,7 @@ def get_ax_location(legend_style):
     return f'{vertical_align} {align}'
 
 
-def get_current_li(extra, list_type):
+def get_current_li(extra, list_type='List Number'):
     """ Return the current list item style and indent level """
     list_type = list_type if 'list_type' not in extra else extra['list_type']
     if not extra or 'list_level' not in extra:
@@ -126,6 +131,11 @@ def get_current_li(extra, list_type):
     if extra_list_level == 0:
         list_level = 2
         p_style = list_type
+    elif extra_list_level > 3:
+        # The docx template doesn't support more than
+        #   4 levels of indentation.
+        list_level = 4
+        p_style = f'{list_type} {list_level}'
     elif extra_list_level > 0:
         list_level += extra['list_level'] + 1
         p_style = f'{list_type} {list_level}'
@@ -212,7 +222,13 @@ def set_axis_font(ax):
         label.set_fontproperties(font)
 
 
-def set_legend_style(legend):
+def set_legend_style(legend, options=None):
+    plt.gcf().autofmt_xdate()
+    if options:
+        if 'hideLegend' in options and options['hideLegend']:
+            plt.gca().legend().set_visible(False)
+            return
+
     legend.get_frame().set_alpha(DEFAULT_ALPHA)
     legend.get_frame().set_linewidth(0.0)
 
@@ -222,6 +238,13 @@ def set_legend_style(legend):
     for text in legend.get_texts():
         text.set_fontproperties(font)
         text.set_color(DEFAULT_FONT_COLOR)
+        if 'valign' in options:
+            text.set_position((0, options['valign']))
+
+
+def change_legend_vertical_alignment(section: Section, top=0):
+    section.layout[LEGEND_STYLE]['valign'] = top
+    return section
 
 
 def get_chart_font():
@@ -230,3 +253,26 @@ def get_chart_font():
     if DEFAULT_WORD_FONT not in names:
         return DEFAULT_WORD_FONT_FALLBACK
     return DEFAULT_WORD_FONT
+
+
+def get_formatted_date(input_date,
+                       layout=None) -> str:
+    """ Returns the formatted date string
+            input_date - date we want to format
+            layout - custom formats from the sane JSONs
+
+        Note: ParserError is raised and should be catched if used.
+    """
+    date = arrow.now()
+
+    # Use the date if supplied, and not now()
+    if input_date:
+        date = arrow.get(input_date)
+
+    formatted_date = date.isoformat()
+
+    # Use the user supplied format
+    if layout and 'format' in layout:
+        formatted_date = date.format(layout['format'])
+
+    return formatted_date

@@ -448,6 +448,17 @@ update_configs:
         update_type: all
 
   - package_manager: python
+    directory: /docker/nltk
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/nltk
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+    
+  - package_manager: python
     directory: /docker/teams
     update_schedule: live
   - package_manager: docker
@@ -496,6 +507,49 @@ update_configs:
     update_schedule: live
   - package_manager: docker
     directory: /docker/google-vision-api
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/smime-encrypt
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/smime-encrypt
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+  - package_manager: python
+    directory: /docker/google-cloud-storage
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/google-cloud-storage
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/elasticsearch
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/elasticsearch
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/circleci
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/circleci
     update_schedule: daily
     automerged_updates:
     - match:

@@ -1,4 +1,4 @@
-FROM demisto/python3-deb:3.7.4.1163
+FROM demisto/python3-deb:3.7.4.1502
 
 COPY requirements.txt .
 COPY google-chrome-stable_current_amd64.deb .
@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN apt-get update && dpkg -i google-chrome*.deb; \
 apt --fix-broken -y install; \
 apt-get -y install unzip \
-&& unzip chromedriver_mac64.zip \
+&& unzip chromedriver_linux64.zip \
 && mv chromedriver /usr/bin/chromedriver \
 && rm -rf /var/lib/apt/lists/* google-chrome*.deb chromedriver_linux64.zip \
 && google-chrome --version \

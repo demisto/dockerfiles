@@ -74,7 +74,10 @@ class DurationElement(Element):
         title_cell.merge(table.cell(0, 4))
 
         title = DEFAULT_DURATION_TITLE
-        if len(contents) > 0 and 'name' in contents[0] and contents[0][
+
+        if 'title' in self.section.extra:
+            title = self.section.extra['title']
+        elif len(contents) > 0 and 'name' in contents[0] and contents[0][
             'name'] != '':
             title = contents['data']['name']
 

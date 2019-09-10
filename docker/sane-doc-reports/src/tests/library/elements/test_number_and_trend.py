@@ -20,8 +20,12 @@ def test_number_and_trend_in_report():
         assert len(table.columns) == 9
         assert len(table.rows) == 4
 
-    # Check that there is indeed an image
+    # Check that there is indeed a table within a table
     assert len(d.element.xpath('//w:tbl//w:tbl')) == 2
 
     # Check that it has the right amount of rows
     assert len(d.element.xpath('//w:tbl//w:tbl//w:t')) == 5
+
+    # Check that there is an extra sign
+    assert len(
+        d.element.xpath("//w:tbl//w:tbl//w:t[contains(text(),'%')]")) == 2
