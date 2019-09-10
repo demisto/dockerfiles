@@ -128,6 +128,9 @@ class MarkdownWrapper(Wrapper):
                 if invoked_from_wrapper:
                     self.cell_object.add_run()
 
+                if not section.contents:
+                    continue
+
                 if '{date}' in section.contents:
                     try:
                         formatted_date = get_formatted_date(
