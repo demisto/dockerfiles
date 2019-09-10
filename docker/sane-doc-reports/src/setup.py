@@ -13,7 +13,7 @@ setup(
         'mistune',
         'requests',
         'python-docx',
-        'moment'
+        'arrow'
     ],
     entry_points='''
         [console_scripts]

@@ -34,7 +34,9 @@ class NumberElement(Element):
         style_cell(inner_cell)
         main_number = CellObject(inner_cell)
 
-        insert_text(main_number, str(self.section.contents), self.style['main'])
+        sign = self.section.layout.get('sign', '')
+        insert_text(main_number, str(self.section.contents) + sign,
+                    self.style['main'])
 
         main_number.add_paragraph(add_run=True)
         insert_text(main_number, str(self.section.extra['title']),

@@ -27,8 +27,10 @@ class ImageElement(Element):
         # Some dark magic here to determine the image width (png)
         w_px, _ = struct.unpack(">LL", image.read(26)[16:24])
         width_pt = int(w_px) * 72 / 96
+
+        should_shrink = self.section.extra.get('should_shrink', False)
         should_resize, size_pt = self.cell_object.get_cell_width_resize(
-            width_pt)
+            width_pt, should_shrink)
 
         if should_resize:
             self.cell_object.run.add_picture(image, width=Pt(size_pt))

@@ -71,3 +71,10 @@ Wrappers usually call markdown again (to create more wrappers/elements inside th
 5) Remove unnecessary dirs: `rm -rf ./src/.gt ./src/.circleci`
 6) Build the docker image: `DOCKER_ORG=devdemisto ./build_docker.sh sane-doc-reports` (from the docker dir)
 7) Go to demisto: https://localhost:8443/#/automation find the `SaneDocReports` automation and change the docker image to the one you just generated.
+
+### How to update the sane-doc-reports docker tag
+1) Go to Automations in Demisto
+2) Search for "SaneDocReports"
+3) Copy it, and Go to settings
+4) Chagne the docker image (probably need to `docker pull` before)
+5) Change the `reports.docx.script` to the name of the new script.
