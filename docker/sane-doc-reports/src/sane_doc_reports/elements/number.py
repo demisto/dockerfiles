@@ -35,6 +35,7 @@ class NumberElement(Element):
         main_number = CellObject(inner_cell)
 
         sign = self.section.layout.get('sign', '')
+        sign = '' if sign is None else sign
         insert_text(main_number, str(self.section.contents) + sign,
                     self.style['main'])
 
