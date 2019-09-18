@@ -113,6 +113,11 @@ function docker_build {
     else
         ${DOCKER_SRC_DIR}/verify_licenses.py ${image_full_name}
     fi
+    if [ -f "verify.py" ]; then
+        echo "==========================="            
+        echo "Verifying docker image by running the python script verify.py within the docker image"
+        cat verify.py | docker run --rm -i ${image_full_name} python '-'
+    fi
     if docker_login; then
         docker push ${image_full_name}
         echo "Done docker push for: ${image_full_name}"
