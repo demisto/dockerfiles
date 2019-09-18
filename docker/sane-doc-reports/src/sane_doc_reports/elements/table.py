@@ -52,6 +52,9 @@ class TableElement(Element):
         if 'tableColumns' not in self.section.layout:
             return
 
+        if isinstance(table_data, dict):
+            table_data = table_data.get('data', table_data)
+
         if 'readableHeaders' in self.section.layout:
             ordered = self.section.layout['tableColumns']
             readable_headers = self.section.layout['readableHeaders'].values()
