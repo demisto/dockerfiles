@@ -22,6 +22,8 @@ def main():
         licenses = json.load(f)["licenses"]
     with open("{}/packages_license_check_exclude.json".format(sys.path[0])) as f:
         ignore_packages = json.load(f)["packages"]
+    with open("{}/known_licenses.json".format(sys.path[0])) as f:
+        known_licenses = json.load(f)["packages"]
     try:
         subprocess.check_call(["docker", "run", "--rm", args.docker_image, "which", "python"])
     except subprocess.CalledProcessError as err:
