@@ -22,6 +22,8 @@ def main():
         licenses = json.load(f)["licenses"]
     with open("{}/packages_license_check_exclude.json".format(sys.path[0])) as f:
         ignore_packages = json.load(f)["packages"]
+    with open("{}/known_licenses.json".format(sys.path[0])) as f:
+        known_licenses = json.load(f)["packages"]
     try:
         subprocess.check_call(["docker", "run", "--rm", args.docker_image, "which", "python"])
     except subprocess.CalledProcessError as err:
@@ -40,16 +42,19 @@ def main():
                     [x for x in ignore_packages[name].get("docker_images") if x in args.docker_image])):
             print("Ignoring package: " + name)
             continue
-        print("Checking license for package: {} ...".format(name))
+        print("Checking license for package: {} ...".format(name))        
         classifiers = []
         found_licenses = []
-        try:
-            res = requests.get("https://pypi.org/pypi/{}/json".format(name))
-            res.raise_for_status()
-            pip_info = res.json()
-            classifiers = pip_info["info"].get("classifiers")
-        except Exception as ex:
-            print("Failed getting info from pypi (will try pip): " + str(ex))
+        if name in known_licenses:
+            classifiers = [known_licenses[name]['license']]
+        else:
+            try:
+                res = requests.get("https://pypi.org/pypi/{}/json".format(name))
+                res.raise_for_status()
+                pip_info = res.json()
+                classifiers = pip_info["info"].get("classifiers")
+            except Exception as ex:
+                print("Failed getting info from pypi (will try pip): " + str(ex))
         for classifier in classifiers:
             # check that we have license and not just the OSI Approved string
             if classifier.startswith("License ::") and not classifier == "License :: OSI Approved":
