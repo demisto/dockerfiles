@@ -15,6 +15,9 @@ if [[ ! $(which pyenv) ]] && [[ -n "${CIRCLECI}" ]]; then
     eval "$(pyenv virtualenv-init -)"
 fi
 
+git config --global user.email "dc-builder@users.noreply.github.com"
+git config --global user.name "dc-builder"
+
 git checkout --track origin/repository-info
 
 echo ""
@@ -30,7 +33,7 @@ if [[ $(git status --short) ]]; then
     git status --short
     git add . 
     git commit -m "`date`: automatic docker repository update"
-    # git push
+    git push
 fi
 
 echo ""
