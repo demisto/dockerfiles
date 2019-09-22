@@ -23,6 +23,7 @@ jobs:
       - image: devdemisto/dockerbuild:1.0.0.56
     steps:
       - checkout
+      - setup_remote_docker
       - run:
           name: Update Docker Repo Info
           command: |
