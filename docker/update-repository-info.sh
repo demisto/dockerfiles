@@ -8,6 +8,13 @@ if [ -z "$CI" ]; then
     exit 1
 fi
 
+if [[ ! $(which pyenv) ]] && [[ -n "${CIRCLECI}" ]]; then 
+    echo "pyenv not found. setting up necessary env for pyenv on circle ci";\
+    export PATH="$HOME/.pyenv/bin:$PATH"
+    eval "$(pyenv init -)"
+    eval "$(pyenv virtualenv-init -)"
+fi
+
 git checkout --track origin/repository-info
 
 echo ""
