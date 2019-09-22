@@ -14,7 +14,9 @@ echo ""
 echo "====== `date`: Starting docker repository update ====="
 echo ""
 
-./update-docker-repo-info.py
+pipenv install
+
+pipenv run ./update-docker-repo-info.py
 
 if [[ $(git status --short) ]]; then
     echo "found modified/new files to commit"
