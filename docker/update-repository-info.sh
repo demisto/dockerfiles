@@ -8,17 +8,22 @@ if [ -z "$CI" ]; then
     exit 1
 fi
 
-git checkout repository-info
+git checkout --track origin/repository-info
 
-# ./update-docker-repo-info.py
+echo ""
+echo "====== `date`: Starting docker repository update ====="
+echo ""
 
-touch test.txt
+./update-docker-repo-info.py
 
 if [[ $(git status --short) ]]; then
     echo "found modified/new files to commit"
-    git status
-    # git add . 
-    #git commit -m "`date`: automatic docker repository update"
+    git status --short
+    git add . 
+    git commit -m "`date`: automatic docker repository update"
+    # git push
 fi
 
-echo "Completed updating docker repo info"
+echo ""
+echo "====== `date`: Done docker repository update ====="
+echo ""

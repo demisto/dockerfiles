@@ -18,8 +18,27 @@ jobs:
       - store_artifacts:
           path: artifacts
           destination: docker_images
+  update_repo_info:
+    docker:
+      - image: devdemisto/dockerbuild:1.0.0.56
+    steps:
+      - checkout
+      - run:
+          name: Update Docker Repo Info
+          command: |
+            ./docker/update-repository-info.sh
 workflows:
   version: 2
   full_build:
     jobs:
       - docker_build
+  repo_inf:
+    jobs:
+      - update_repo_info
+    triggers:
+      - schedule:
+          cron: "0,30 * * * *"
+          filters:
+            branches:
+              only:
+                - master
