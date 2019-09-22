@@ -41,7 +41,7 @@ workflows:
       - update_repo_info
     triggers:
       - schedule:
-          cron: "0,30 * * * *"
+          cron: "0 1 * * *"
           filters:
             branches:
               only:
