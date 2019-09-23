@@ -49,7 +49,7 @@ class Transform:
 
         # Check basic validity of json, will validate in SaneJson
         if any([LAYOUT_KEY not in i for i in json_data]):
-            return
+            return False
 
         has_w = WIDTH_POSITION_KEY in json_data[0][LAYOUT_KEY]
         has_h = HEIGHT_POSITION_KEY in json_data[0][LAYOUT_KEY]
