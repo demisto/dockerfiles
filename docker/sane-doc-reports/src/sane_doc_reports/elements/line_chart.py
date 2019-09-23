@@ -3,14 +3,15 @@ from matplotlib.pyplot import figure
 
 from sane_doc_reports import utils
 from sane_doc_reports.domain.Element import Element
-from sane_doc_reports.conf import DEBUG, DEFAULT_ALPHA, DEFAULT_WORD_FONT, \
-    DEFAULT_FONT_COLOR, DEFAULT_TITLE_FONT_SIZE, PYDOCX_FONT_NAME, \
-    PYDOCX_FONT_COLOR, PYDOCX_FONT_SIZE
+from sane_doc_reports.conf import DEBUG, PYDOCX_FONT_NAME, \
+    DEFAULT_FONT_COLOR, DEFAULT_TITLE_FONT_SIZE, \
+    PYDOCX_FONT_COLOR, PYDOCX_FONT_SIZE, LEGEND_STYLE
 from sane_doc_reports.domain.Section import Section
 from sane_doc_reports.elements import error, image
 from sane_doc_reports.styles.colors import get_colors
 from sane_doc_reports.utils import remove_plot_borders, \
-    set_legend_style, get_chart_font, set_axis_font
+    set_legend_style, get_chart_font, set_axis_font, \
+    change_legend_vertical_alignment
 
 
 def fix_data(data):
@@ -56,7 +57,8 @@ class LineChartElement(Element):
 
             # Fix sizing
         size_w, size_h, dpi = utils.convert_plt_size(self.section)
-        figure(num=2, figsize=(size_w, size_h), dpi=dpi)
+        figure(num=2, figsize=(size_w, size_h), dpi=dpi,
+               constrained_layout=False)
 
         data = self.section.contents
 
@@ -107,26 +109,27 @@ class LineChartElement(Element):
 
         # Create and move the legend outside
         ax = plt.gca()
-        rotation = 0
-        if len(ax.get_xticklabels()) > 9:
-            rotation = 30
-        plt.setp(ax.get_xticklabels(), rotation=rotation, horizontalalignment='right')
+
+        # Auto rotate the labels
         remove_plot_borders(ax)
         legend_location = 'upper center'
         legend_location_relative_to_graph = (0.5, -0.35)
 
-        handles = [plt.Rectangle((0, 0), 1, 1, fc=final_colors[i]) for i in groups.keys()]
-        legend = ax.legend(handles, [i for i in groups.keys()], loc=legend_location,
+        handles = [plt.Rectangle((0, 0), 1, 1, fc=final_colors[i]) for i in
+                   groups.keys()]
+        legend = ax.legend(handles, [i for i in groups.keys()],
+                           loc=legend_location,
                            bbox_to_anchor=legend_location_relative_to_graph,
                            handlelength=0.7, handleheight=0.7)
 
-        set_legend_style(legend)
+        self.section = change_legend_vertical_alignment(self.section, top=1)
+        set_legend_style(legend, self.section.layout[LEGEND_STYLE])
         set_axis_font(ax)
         ax.set_title(self.section.extra['title'], **self.style['title'])
 
         # Add to docx as image
         plt_b64 = utils.plt_t0_b64(plt)
-        s = Section('image', plt_b64, {}, {})
+        s = Section('image', plt_b64, {}, {'should_shrink': True})
         image.invoke(self.cell_object, s)
 
 

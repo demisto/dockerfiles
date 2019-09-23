@@ -5,14 +5,16 @@ An extension to [sane-reports](https://github.com/demisto/sane-reports),
 
 ## Installation
 *This project uses Python 3*  
-`pipenv install sane-doc-reports`
+1) Install python3
+2) Install pipenv
+3) Clone the repository and `cd` into it.
+4) pipenv install --dev
+5) To start working: `pipenv shell` then `python examples/library.py` should run the example script.
 
 ## Usage
 **CLI**  
 First, generate a JSON file with the sane-reports repo.
-```sh
-$ sane-doc some.json -w out.docx # Not implemented yet. Use the library.
-```
+Then do `Instalation` phase 5, to change the example ouput, place your json in the `tests/mock_data/example.json` file and make sure that `examples/library.py` is running `example()` in the `run` method.
 
 **Library**
 ```
@@ -40,13 +42,13 @@ $ pytest --cov=sane_doc_reports # For coverage
 8) SaneJson - holds the raw sane-json sections.
 
 
-### Generating JSON files
+### Generating JSON files (in demisto)
 1) Start a new demisto server with: `report.remove.data=false`
 2) Go to the reports, generate a desired report
 3) Get the json from `<demisto_path>/debug/lib/temp`
 
 To check how it looks in the sane-reports:
-1) Change the `incidentDailyReportTempalte.json` file with the json from the last step (in `lib/temp`)
+1) Change the `DailyReportTempalte.json` file with the json from the last step (in `lib/temp`)
 2) `npm run start`
 3) To mark the tables there you can open the console and add this:
 ```js
@@ -61,7 +63,22 @@ The function needs to create an instance of the same class in the file (see the 
 You can create an Element (text, hr...) or a Wrapper (which holds other elements, quote, ul...).  
 Wrappers usually call markdown again (to create more wrappers/elements inside the same cell object).
 
-### Docker usage:
-1) Generate a `whl` file:
-`python3 setup.py sdist bdist_wheel`
-2) Copy to the .dockerfile directory and add to `copy` command
+### Docker update:
+1) Clone the https://github.com/demisto/dockerfiles
+2) cd to `dockerfiles/docker/sane-doc-reports/`
+3) Remove the src dir `rm -r ./src`
+4) Clone the new updates `git clone git@github.com:demisto/sane-doc-reports.git src` or with a specific branch: `git clone git@github.com:demisto/sane-doc-reports.git -b <branch name> src`
+5) Remove unnecessary dirs: `rm -rf ./src/.gt ./src/.circleci`
+6) Build the docker image: `DOCKER_ORG=devdemisto ./build_docker.sh sane-doc-reports` (from the docker dir)
+7) Go to demisto: https://localhost:8443/#/automation find the `SaneDocReports` automation and change the docker image to the one you just generated.
+
+### How to update the sane-doc-reports docker tag
+1) Go to Automations in Demisto
+2) Search for "SaneDocReports"
+3) Copy it, and Go to settings
+4) Chagne the docker image (probably need to `docker pull` before)
+5) Change the `reports.docx.script` to the name of the new script.
+
+### Demisto specific Settings
+`reports.docx.script` - the custom SaneDocReport automation name (default: ``)
+`report.remove.data` - keep the json when generating a report.

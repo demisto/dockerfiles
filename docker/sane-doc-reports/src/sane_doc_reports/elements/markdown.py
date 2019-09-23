@@ -1,3 +1,4 @@
+from arrow.parser import ParserError
 from pyquery import PyQuery
 
 from sane_doc_reports.populate.utils import insert_text, insert_header
@@ -13,6 +14,7 @@ from sane_doc_reports.domain import CellObject
 from sane_doc_reports.domain.Section import Section
 from sane_doc_reports.domain.Wrapper import Wrapper
 from sane_doc_reports.elements import error
+from sane_doc_reports.utils import get_formatted_date
 
 
 class MarkdownWrapper(Wrapper):
@@ -125,6 +127,18 @@ class MarkdownWrapper(Wrapper):
             if section.type in [MD_TYPE_TEXT, MD_TYPE_INLINE_TEXT]:
                 if invoked_from_wrapper:
                     self.cell_object.add_run()
+
+                if not section.contents:
+                    continue
+
+                if '{date}' in section.contents:
+                    try:
+                        formatted_date = get_formatted_date(
+                            '',
+                            section.layout)
+                    except ParserError as e:
+                        formatted_date = 'n/a'
+                    section.contents = section.contents.replace('{date}', formatted_date)
 
                 insert_text(self.cell_object, section)
                 continue

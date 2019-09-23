@@ -113,13 +113,41 @@ function docker_build {
     else
         ${DOCKER_SRC_DIR}/verify_licenses.py ${image_full_name}
     fi
+    if [ -f "verify.py" ]; then
+        echo "==========================="            
+        echo "Verifying docker image by running the python script verify.py within the docker image"
+        cat verify.py | docker run --rm -i ${image_full_name} python '-'
+    fi
     if docker_login; then
         docker push ${image_full_name}
         echo "Done docker push for: ${image_full_name}"
         ${DOCKER_SRC_DIR}/post_github_comment.py ${image_full_name}
     else
         echo "Skipping docker push"
+        if [ -n "$CI" ]; then
+            echo "Creating artifact of docker image..."
+            ARTDIR="${DOCKER_SRC_DIR}/../artifacts"
+            mkdir -p "${ARTDIR}"
+            IMAGENAMESAVE=`echo ${image_full_name} | tr / _`.tar
+            IMAGESAVE=${ARTDIR}/$IMAGENAMESAVE
+            docker save -o "$IMAGESAVE" ${image_full_name}
+            gzip "$IMAGESAVE"
+            cat << EOF
+=========================
+
+Docker image [$image_full_name] has been saved as an artificat. It is available at the following link: 
+https://${VERSION}-161347705-gh.circle-artifacts.com/0/docker_images/$IMAGENAMESAVE.gz
+
+Load it locally into docker by running:
+
+curl "https://${VERSION}-161347705-gh.circle-artifacts.com/0/docker_images/$IMAGENAMESAVE.gz" | gunzip | docker load
+
+=========================
+EOF
+        fi
     fi
+    
+
     if [ -n "$CR_REPO" ] && cr_login; then
         docker tag ${image_full_name} ${CR_REPO}/${image_full_name}
         docker push ${CR_REPO}/${image_full_name} > /dev/null

@@ -5,7 +5,8 @@ from sane_doc_reports.conf import LAYOUT_KEY, \
     HEIGHT_POSITION_KEY, WIDTH_POSITION_KEY
 from sane_doc_reports.domain.SaneJson import SaneJson
 from sane_doc_reports.domain.Page import Page
-from sane_doc_reports.transform.utils import transform_old_json_format
+from sane_doc_reports.transform.utils import transform_old_json_format, \
+    general_json_fixes
 
 
 class Transform:
@@ -19,6 +20,7 @@ class Transform:
         if self.is_old_json_format():
             self.json_data = transform_old_json_format(self.json_data)
 
+        self.json_data = general_json_fixes(self.json_data)
         self.sane_json = SaneJson(self.json_data)
 
     def get_pages(self) -> List[Page]:
@@ -47,7 +49,7 @@ class Transform:
 
         # Check basic validity of json, will validate in SaneJson
         if any([LAYOUT_KEY not in i for i in json_data]):
-            return
+            return False
 
         has_w = WIDTH_POSITION_KEY in json_data[0][LAYOUT_KEY]
         has_h = HEIGHT_POSITION_KEY in json_data[0][LAYOUT_KEY]

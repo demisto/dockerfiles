@@ -13,8 +13,7 @@ class LiWrapper(Wrapper):
         if DEBUG:
             print("Wrapping list item...")
 
-        p_style, list_level, list_type = get_current_li(self.section.extra,
-                                                        'List Number')
+        p_style, list_level, list_type = get_current_li(self.section.extra)
 
         self.cell_object.add_paragraph(style=p_style)
 

@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from sane_doc_reports.domain.Section import Section
 from sane_doc_reports.conf import DEBUG, DEFAULT_FONT_COLOR, \
     DEFAULT_TITLE_FONT_SIZE, PYDOCX_FONT_COLOR, PYDOCX_FONT_NAME, \
-    PYDOCX_FONT_SIZE
+    PYDOCX_FONT_SIZE, LEGEND_STYLE
 
 from sane_doc_reports.elements import image, error
 from sane_doc_reports.utils import set_legend_style, \
@@ -75,7 +75,7 @@ class PieChartElement(Element):
                            bbox_to_anchor=legend_location_relative_to_graph,
                            handlelength=0.7
                            )
-        set_legend_style(legend)
+        set_legend_style(legend, self.section.layout[LEGEND_STYLE])
         set_axis_font(ax)
         ax.set_title(self.section.extra['title'], **self.style['title'])
         circle = plt.Circle((0, 0), 0.7, fc='white')
@@ -83,7 +83,7 @@ class PieChartElement(Element):
 
         plt_b64 = utils.plt_t0_b64(plt)
 
-        s = Section('image', plt_b64, {}, {})
+        s = Section('image', plt_b64, {}, {'should_shrink': True})
         image.invoke(self.cell_object, s)
 
 

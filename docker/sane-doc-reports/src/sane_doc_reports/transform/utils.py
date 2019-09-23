@@ -48,6 +48,33 @@ def _font_transformations(json_item: dict) -> dict:
     return json_item
 
 
+def general_json_fixes(json_data: List[dict]) -> List[dict]:
+    """ Fixes general probelms that may arise in the json
+    (not necessarily related to the old format) """
+
+    # Fix null values in the col / row positions
+    for i in range(len(json_data)):
+        if not json_data[i][LAYOUT_KEY][ROW_POSITION_KEY]:
+            json_data[i][LAYOUT_KEY][ROW_POSITION_KEY] = 0
+        if not json_data[i][LAYOUT_KEY][COL_POSITION_KEY]:
+            json_data[i][LAYOUT_KEY][COL_POSITION_KEY] = 0
+        if not json_data[i][DATA_KEY]:
+            json_data[i][DATA_KEY] = []
+        if json_data[i]['type'] in ['markdown', 'text', 'header'] \
+                and ('text' not in json_data[i][DATA_KEY] or isinstance(
+            json_data[i][DATA_KEY], str)):
+
+            json_data[i][DATA_KEY] = {
+                'text': json_data[i][DATA_KEY]}
+        if json_data[i]['type'] == 'globalSection':
+            json_data[i]['type'] = 'elem_list'
+            json_data[i][DATA_KEY] = general_json_fixes(
+                json_data[i][DATA_KEY])
+            continue
+
+    return json_data
+
+
 def transform_old_json_format(json_data: List[dict]) -> List[dict]:
     """ Fixes all of the old json format, trying to convert
         it to the new json format.
@@ -150,8 +177,8 @@ def transform_old_json_format(json_data: List[dict]) -> List[dict]:
                 json_data[i][DATA_KEY])
             continue
 
-        # Fix the markdown/text/header types
-        if json_data[i]['type'] in ['markdown', 'text', 'header']:
+        if json_data[i]['type'] in ['markdown', 'text', 'header'] \
+                and 'text' not in json_data[i][DATA_KEY]:
             json_data[i][DATA_KEY] = {
                 'text': json_data[i][DATA_KEY]}
 
