@@ -12,13 +12,25 @@ from sane_doc_reports.utils import get_chart_font
 
 def fix_order(ordered, readable_headers) -> list:
     """ Return the readable headers by the order given """
-    temp_readable = {**{i[0].lower() + i[1:]: i for i in readable_headers},
-                     **{i.lower(): i for i in readable_headers}}
+    readable_headers_values = readable_headers.values()
+    temp_readable = {
+        **{i[0].lower() + i[1:]: i for i in readable_headers_values},
+        **{i.lower(): i for i in readable_headers_values}}
     temp_readable = {k.replace(" ", ""): v for k, v in temp_readable.items()}
 
     # Old json format table columns are not lowercase
-    inv_fix = {i: i for i in readable_headers}
+    inv_fix = {i: i for i in readable_headers_values}
     temp_readable = {**temp_readable, **inv_fix}
+
+    # New format fix
+    if any([isinstance(i, dict) for i in ordered]):
+        ret = []
+        for k in ordered:
+            key = k.get('key')
+            key = readable_headers.get(key, key)
+            if key not in ret:
+                ret.append(key)
+        return ret
 
     ret = []
     for ordered_key in ordered:
@@ -55,12 +67,35 @@ class TableElement(Element):
         if isinstance(table_data, dict):
             table_data = table_data.get('data', table_data)
 
+        # Fix new lists
+        if isinstance(table_data, dict):
+            wrapper_table = self.cell_object.cell.add_table(rows=2, cols=len(
+                table_data.keys()))
+            i = 0
+
+            # Add the wrapping headers
+            for wrapper_header, table_contents in table_data.items():
+                hdr = wrapper_table.cell(0, i)
+                insert_text(hdr, wrapper_header,
+                            self.style['title'])
+                body = wrapper_table.cell(1, i)
+                c = CellObject(body)
+                # Hacky but will do the job
+                invoke(c, Section('table', table_contents, {}, {}))
+                i += 1
+            return
+
         if 'readableHeaders' in self.section.layout:
             ordered = self.section.layout['tableColumns']
-            readable_headers = self.section.layout['readableHeaders'].values()
+            readable_headers = self.section.layout['readableHeaders']
             table_columns = fix_order(ordered, readable_headers)
         else:
             table_columns = self.section.layout['tableColumns']
+
+
+        # Quick fix, word crashes on more than 64 columns.
+        table_columns = table_columns[0:63]
+
 
         for i, header_text in enumerate(table_columns):
             if not isinstance(header_text, str):
@@ -81,11 +116,16 @@ class TableElement(Element):
 
         table.style = DEFAULT_TABLE_STYLE
 
-        if 'list_style' in self.section.extra and self.section.extra['list_style']:
+        if 'list_style' in self.section.extra and self.section.extra[
+            'list_style']:
             table.style = None
 
         for i, header_text in enumerate(table_columns):
             insert_text(hdr_cells[i], header_text, self.style['text'])
+
+        if len(table_columns) > 63:
+            # TODO: add error.
+            pass
 
         for r in table_data:
             row_cells = table.add_row().cells

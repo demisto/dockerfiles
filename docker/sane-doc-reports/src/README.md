@@ -78,3 +78,7 @@ Wrappers usually call markdown again (to create more wrappers/elements inside th
 3) Copy it, and Go to settings
 4) Chagne the docker image (probably need to `docker pull` before)
 5) Change the `reports.docx.script` to the name of the new script.
+
+### Demisto specific Settings
+`reports.docx.script` - the custom SaneDocReport automation name (default: ``)
+`report.remove.data` - keep the json when generating a report.
