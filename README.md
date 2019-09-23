@@ -6,13 +6,20 @@ This repository's `master` branch tracks images pushed to the official Demisto D
 
 **Note:** We generate nightly information about packages and os dependencies used in each of Demisto's docker images. Checkout the `repository-info` branch [README](https://github.com/demisto/dockerfiles/blob/repository-info/README.md) for a full listing.
 
+## Contributing
+Contributions are welcome and appreciated. To contribute follow the [Getting Started](#getting-started) section and submit a PR. 
+
+Before merging any PRs, we need all contributors to sign a contributor license agreement. By signing a contributor license agreement, we ensure that the community is free to use your contributions.
+
+When you open a new pull request, a bot will evaluate whether you have signed the CLA. If required, the bot will comment on the pull request, including a link to accept the agreement. The CLA document is also available for review as a [PDF](https://github.com/demisto/content/blob/master/docs/cla.pdf).
+
+## Getting Started
 Each docker image is managed in its own directory. The directory should be named the same as the image name (without the organization prefix). All image directories are located under the `docker` dir.
 
 The directory should contain one Dockerfile which will be used for building the docker image. Each image when it is built is tagged with the commit hash and version. 
 
 The script `docker/build_docker.sh` is used to build all modified docker images. The script detects modified directories by comparing against origin/master if on a branch or if on master by using the CIRCLE_COMPARE_URL environment variable to obtain the commit range of the current build.
 
-## Getting Started
 **Pre-requisites:**
 * Install python 2 and 3 (so you can create both python 2 and 3 images):
   * Mac: use brew to install (more info at: https://docs.brew.sh/Homebrew-and-Python): `brew install python3` and then: `brew install python@2`
@@ -92,6 +99,24 @@ There are 4 base python images which should be used when building a new image wh
 ### Which image to choose as a base?
 
 If you are using pure python dependencies then choose the alpine image with the proper python version which fits your needs (two or three). The alpine based images are smaller and recommended for use. If you require installing binaries or pre-compiled binary python dependencies ([manylinux](https://github.com/pypa/manylinux)), you are probably best choosing the debian based images. See the following link: https://github.com/docker-library/docs/issues/904 .
+
+## Adding a `verify.py` script
+As part of the build we support running a `verify.py` script in the created image. This allows you to add logic which tests and checks that the docker image built is matching what you expect. 
+
+Simply create a file named: `vefify.py`. It may contain any python code and all it needs is to exit with status 0 as a sign for success. Once the docker image is built, if the script is present it will be run within the image using the following command:
+```bash
+cat verify.py | docker run --rm -i <image_name> python '-'
+```
+Example of docker image with simple `verify.py` script can be seen [here](https://github.com/demisto/dockerfiles/tree/master/docker/m2crypto)
+
+## Docker Image Deployment
+When you first open a PR, a `development` docker image is built (via CircleCI) under the `devdemisto` docker organization. So for example if your image is named `ldap3` an image with the name `devdemisto/ldap3` will be built. 
+
+If the PR is on a local branch of the `dockerfiles` github project (relevant only for members of the project with commit access), the image will be deployed to the [devdemisto](https://hub.docker.com/u/devdemisto) docker hub organization. A bot will add a comment to the PR stating that the image has been deployed and available. You can then test the image out simply by doing `docker pull <image_name>` (instructions will be included in the comment added to the PR).
+
+If you are contributing (**thank you!!**) via an external fork, then the image built will not be deployed to docker hub. It will be available to download from the build artifacts. You can download the image and load it locally by running the `docker load` command. If you go into the build details in CircleCI you will see also instructions in the end of the `Build Docker Images` step on how to load it with a one liner bash command. Example contribution build can be seen [here](https://circleci.com/gh/demisto/dockerfiles/1976#artifacts/containers/0).
+
+Once merged into master, CircleCI will run another build and create a `production` ready docker image which will be deployed at Docker Hub under the [demisto](https://hub.docker.com/u/demisto) organization. A bot will add a comment to the original PR about the production deployment and the image will then be fully available for usage. An example `production` comment added to a PR can be seen [here](https://github.com/demisto/dockerfiles/pull/462#issuecomment-533150059).
 
 ## Advanced
 ### Support for Pipenv (Pipfile)
