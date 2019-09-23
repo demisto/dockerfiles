@@ -4,6 +4,8 @@
 
 This repository's `master` branch tracks images pushed to the official Demisto Docker Hub organization at: https://hub.docker.com/u/demisto/. Other branches` images are pushed to [devdemisto](https://hub.docker.com/u/devdemisto).
 
+**Note:** We generate nightly information about packages and os dependencies used in each of Demisto's docker images. Checkout the `repository-info` branch [README](https://github.com/demisto/dockerfiles/blob/repository-info/README.md) for a full listing.
+
 Each docker image is managed in its own directory. The directory should be named the same as the image name (without the organization prefix). All image directories are located under the `docker` dir.
 
 The directory should contain one Dockerfile which will be used for building the docker image. Each image when it is built is tagged with the commit hash and version. 
@@ -12,7 +14,7 @@ The script `docker/build_docker.sh` is used to build all modified docker images.
 
 ## Getting Started
 **Pre-requisites:**
-* Install python 2 and 3:
+* Install python 2 and 3 (so you can create both python 2 and 3 images):
   * Mac: use brew to install (more info at: https://docs.brew.sh/Homebrew-and-Python): `brew install python3` and then: `brew install python@2`
 * Or install pyenv (recommended for managing multiple python versions):
     * Mac: `brew install pyenv` . Make sure to run then: `pyenv init` and follow instructions to add to either `~/.zshrc` or `~/.bash_profile` depending on you shell.
@@ -128,4 +130,14 @@ For example: ./docker/install_common_python_dep.sh dateparser
 **Note:** By default pipenv will install the specified dependency and also update all other dependencies if possible. If you want to only install a dependency and not update the existing dependencies run the script with the env variable: `PIPENV_KEEP_OUTDATED`. For example:
 ```
 PIPENV_KEEP_OUTDATED=true ./docker/install_common_python_dep.sh dateparser
+```
+
+### Automatic updates via Dependabot
+We use [dependabot](https://dependabot.com/) for automated dependency updates. When a new image is added to the repository there is need to add the proper config to [.dependabot/config.yml](.dependabot/config.yml). If you used the `./docker/create_new_python_image.py` to create the docker image, then this config will be added automatically by the script. Otherwise, you will need to add the proper dependabot config. The build will fail without this config. You can add the dependabot config by running the script:
+```
+./docker/add_dependabot.sh <folder path to new docker image>
+```
+For example:
+```
+./docker/add_dependabot.sh docker/nmap
 ```
