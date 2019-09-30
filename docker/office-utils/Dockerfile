@@ -1,5 +1,5 @@
 
-FROM demisto/python-deb:2.7.16.1902
+FROM demisto/python-deb:2.7.16.2245
 
 COPY requirements.txt .
 
