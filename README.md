@@ -14,7 +14,7 @@ Before merging any PRs, we need all contributors to sign a contributor license a
 When you open a new pull request, a bot will evaluate whether you have signed the CLA. If required, the bot will comment on the pull request, including a link to accept the agreement. The CLA document is also available for review as a [PDF](https://github.com/demisto/content/blob/master/docs/cla.pdf).
 
 ## Getting Started
-Each docker image is managed in its own directory. The directory should be named the same as the image name (without the organization prefix). All image directories are located under the `docker` dir.
+Each docker image is managed in its own directory. The directory should be named the same as the image name (without the organization prefix). If needed, we prefer using a dash (`-`) as a separator in the name. All image directories are located under the `docker` dir.
 
 The directory should contain one Dockerfile which will be used for building the docker image. Each image when it is built is tagged with the commit hash and version. 
 
