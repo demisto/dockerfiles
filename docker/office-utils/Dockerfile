@@ -13,8 +13,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /usr/share/man/man1 \
-&& apt-get update && apt-get install -y \
+&& apt-get update && apt-get install -y --no-install-recommends \
+  libreoffice-base \
+  libreoffice-calc \
+  libreoffice-core \
+  libreoffice-draw \
+  ibreoffice-impress \
+  libreoffice-math \
+  libreoffice-report-builder-bin \
+  libreoffice-writer \
+  libreoffice-avmedia-backend-gstreamer \
+  python3-uno \
   libreoffice \
   unoconv \
 && rm -rf /var/lib/apt/lists/*
-
