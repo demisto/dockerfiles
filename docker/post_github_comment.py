@@ -75,7 +75,7 @@ if CIRCLE_PULL_REQUEST will try to get issue id from last commit comment
         "docker pull {}\n".format(args.docker_image) +
         "```\n\n" +
         "## Docker Metadata\n" +
-        "- Image Size: {}\n".format(get_docker_image_size((args.docker_image))) +
+        "- Image Size: `{}`\n".format(get_docker_image_size((args.docker_image))) +
         docker_info
     )
     print("Going to post comment:\n\n{}".format(message))
