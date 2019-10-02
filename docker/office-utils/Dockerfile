@@ -18,7 +18,7 @@ RUN mkdir -p /usr/share/man/man1 \
   libreoffice-calc \
   libreoffice-core \
   libreoffice-draw \
-  ibreoffice-impress \
+  libreoffice-impress \
   libreoffice-math \
   libreoffice-report-builder-bin \
   libreoffice-writer \
