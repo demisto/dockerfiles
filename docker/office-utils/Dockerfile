@@ -1,5 +1,5 @@
 
-FROM demisto/python-deb:2.7.16.1902
+FROM demisto/python-deb:2.7.16.2245
 
 COPY requirements.txt .
 
@@ -13,8 +13,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /usr/share/man/man1 \
-&& apt-get update && apt-get install -y --no-install-recommends \
+&& apt-get update && apt-get install -y \
   libreoffice \
-  openjdk-8-jre \
+  unoconv \
 && rm -rf /var/lib/apt/lists/*
 
