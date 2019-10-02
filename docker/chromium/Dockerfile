@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   wget \
   libxss1 \
   libappindicator1 \
+  poppler-utils \
 && pip3 install --no-cache-dir -r requirements.txt \
 && apt-get purge -y --auto-remove \
   python-dev \
