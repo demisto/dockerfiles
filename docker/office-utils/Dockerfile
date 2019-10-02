@@ -14,17 +14,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN mkdir -p /usr/share/man/man1 \
 && apt-get update && apt-get install -y --no-install-recommends \
-  libgpgmepp6 \
-  libreoffice-base \
-  libreoffice-calc \
-  libreoffice-core \
-  libreoffice-draw \
-  libreoffice-impress \
-  libreoffice-math \
-  libreoffice-report-builder-bin \
-  libreoffice-writer \
-  libreoffice-avmedia-backend-gstreamer \
-  python3-uno \
+  libgpgme11 \
   libreoffice \
   unoconv \
 && rm -rf /var/lib/apt/lists/*
