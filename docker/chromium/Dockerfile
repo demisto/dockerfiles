@@ -16,8 +16,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Installing Google Chrome 76.0.3809.100 and ChromeDriver 76.0.3809.126
 # IMPORTANT: we use wget to avoid using copy to get a small image. If you update the zip files you must update the download links to the proper commit hash
 RUN apt-get update && \
-wget -q --no-check-certificate https://github.com/demisto/dockerfiles/raw/133fbf8dbb1c1baf7f0b991cc85ef1dc6e676624/docker/chromium/chromedriver_linux64.zip && \
-wget -q --no-check-certificate https://github.com/demisto/dockerfiles/raw/133fbf8dbb1c1baf7f0b991cc85ef1dc6e676624/docker/chromium/google-chrome-stable_current_amd64.deb && \
+wget -q https://github.com/demisto/dockerfiles/raw/133fbf8dbb1c1baf7f0b991cc85ef1dc6e676624/docker/chromium/chromedriver_linux64.zip && \
+wget -q https://github.com/demisto/dockerfiles/raw/133fbf8dbb1c1baf7f0b991cc85ef1dc6e676624/docker/chromium/google-chrome-stable_current_amd64.deb && \
 dpkg -i google-chrome*.deb; \
 apt --fix-broken -y install; \
 apt-get -y install unzip \
