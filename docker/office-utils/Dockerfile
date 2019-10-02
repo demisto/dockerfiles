@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN mkdir -p /usr/share/man/man1 \
 && apt-get update && apt-get install -y --no-install-recommends \
+  libgpgmepp6 \
   libreoffice-base \
   libreoffice-calc \
   libreoffice-core \
