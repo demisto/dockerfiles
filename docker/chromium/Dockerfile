@@ -1,8 +1,6 @@
 FROM demisto/python3-deb:3.7.4.2245
 
 COPY requirements.txt .
-COPY google-chrome-stable_current_amd64.deb .
-COPY chromedriver_linux64.zip .
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
   python-dev \
@@ -16,7 +14,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 && rm -rf /var/lib/apt/lists/*
 
 # Installing Google Chrome 76.0.3809.100 and ChromeDriver 76.0.3809.126
-RUN apt-get update && dpkg -i google-chrome*.deb; \
+# IMPORTANT: we use wget to avoid using copy to get a small image. If you update the zip files you must update the download links to the proper commit hash
+RUN apt-get update && \
+wget -q https://github.com/demisto/dockerfiles/raw/133fbf8dbb1c1baf7f0b991cc85ef1dc6e676624/docker/chromium/chromedriver_linux64.zip && \
+wget -q https://github.com/demisto/dockerfiles/raw/133fbf8dbb1c1baf7f0b991cc85ef1dc6e676624/docker/chromium/google-chrome-stable_current_amd64.deb && \
+dpkg -i google-chrome*.deb; \
 apt --fix-broken -y install; \
 apt-get -y install unzip \
 && unzip chromedriver_linux64.zip \
