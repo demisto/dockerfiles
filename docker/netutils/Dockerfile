@@ -1,4 +1,4 @@
-FROM demisto/iputils:1.0.0.2026
+FROM demisto/iputils:1.0.0.2334
 
 COPY requirements.txt .
 
