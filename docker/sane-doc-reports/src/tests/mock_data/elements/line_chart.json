@@ -234,33 +234,6 @@
       "rowPos": 0,
       "w": 12
     },
-    "query": {
-      "type": "problems",
-      "groupBy": [
-        "occurred(d)",
-        "type"
-      ],
-      "filter": {
-        "query": "-category:job and -status:archived and -status:closed",
-        "fromDate": "0001-01-01T00:00:00Z",
-        "toDate": "0001-01-01T00:00:00Z",
-        "period": {
-          "by": "day",
-          "byTo": "",
-          "byFrom": "days",
-          "toValue": null,
-          "fromValue": 20,
-          "field": ""
-        },
-        "fromDateLicense": "0001-01-01T00:00:00Z"
-      }
-    },
-    "automation": {
-      "name": "",
-      "id": "",
-      "args": null,
-      "noEvent": false
-    },
     "fromDate": "2018-11-14T15:55:19+02:00",
     "title": "Things - Line chart"
   }

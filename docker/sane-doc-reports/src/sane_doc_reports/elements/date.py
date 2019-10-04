@@ -1,8 +1,8 @@
 from arrow.parser import ParserError
 
+from sane_doc_reports import utils
 from sane_doc_reports.domain.Element import Element
 from sane_doc_reports.conf import DEBUG
-from sane_doc_reports.elements import error
 from sane_doc_reports.populate.utils import insert_text
 from sane_doc_reports.utils import get_formatted_date
 
@@ -25,7 +25,7 @@ class DateElement(Element):
 
 def invoke(cell_object, section) -> None:
     if section.type != 'date':
-        section.contents = f'Called date but not date -  [{section}]'
-        return error.invoke(cell_object, section)
+        err_msg = f'Called date but not date -  [{section}]'
+        return utils.insert_error(cell_object, err_msg)
 
     DateElement(cell_object, section).insert()

@@ -1,3 +1,4 @@
+from sane_doc_reports import utils
 from sane_doc_reports.domain.CellObject import CellObject
 from sane_doc_reports.domain.Element import Element
 from sane_doc_reports.conf import DEBUG, PYDOCX_FONT_SIZE, \
@@ -5,7 +6,7 @@ from sane_doc_reports.conf import DEBUG, PYDOCX_FONT_SIZE, \
     PYDOCX_FONT_COLOR, DEFAULT_FONT_COLOR, DEFAULT_TITLE_FONT_SIZE, \
     PYDOCX_FONT_BOLD, DEFAULT_TITLE_COLOR
 from sane_doc_reports.domain.Section import Section
-from sane_doc_reports.elements import error, image
+from sane_doc_reports.elements import image
 from sane_doc_reports.populate.utils import insert_text
 from sane_doc_reports.utils import get_chart_font
 
@@ -26,10 +27,13 @@ def fix_order(ordered, readable_headers) -> list:
     if any([isinstance(i, dict) for i in ordered]):
         ret = []
         for k in ordered:
-            key = k.get('key')
-            key = readable_headers.get(key, key)
-            if key not in ret:
-                ret.append(key)
+            if isinstance(k, dict):
+                key = k.get('key')
+                key = readable_headers.get(key, key)
+                if key not in ret and not k.get('hidden', False):
+                    ret.append(key)
+            else:
+                ret.append(temp_readable[k])
         return ret
 
     ret = []
@@ -61,11 +65,13 @@ class TableElement(Element):
             print("Adding table...")
 
         table_data = self.section.contents
-        if 'tableColumns' not in self.section.layout:
-            return
 
         if isinstance(table_data, dict):
             table_data = table_data.get('data', table_data)
+
+        if 'tableColumns' not in self.section.layout:
+            # Quick dirty fix for test - will be refactored in upcoming PR
+            self.section.layout['tableColumns'] = list(table_data[0].keys())
 
         # Fix new lists
         if isinstance(table_data, dict):
@@ -94,8 +100,8 @@ class TableElement(Element):
 
 
         # Quick fix, word crashes on more than 64 columns.
+        # See: https://stackoverflow.com/questions/36921010/docx-does-not-support-more-than-63-columns-in-a-table
         table_columns = table_columns[0:63]
-
 
         for i, header_text in enumerate(table_columns):
             if not isinstance(header_text, str):
@@ -147,7 +153,7 @@ class TableElement(Element):
 
 def invoke(cell_object, section):
     if section.type != 'table':
-        section.contents = f'Called table but not table -  [{section}]'
-        return error.invoke(cell_object, section)
+        err_msg = f'Called table but not table -  [{section}]'
+        return utils.insert_error(cell_object, err_msg)
 
     TableElement(cell_object, section).insert()

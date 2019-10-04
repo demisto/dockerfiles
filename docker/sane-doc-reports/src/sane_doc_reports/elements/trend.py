@@ -1,9 +1,9 @@
+from sane_doc_reports import utils
 from sane_doc_reports.domain.CellObject import CellObject
 from sane_doc_reports.domain.Element import Element
 from sane_doc_reports.conf import DEBUG, TREND_MAIN_NUMBER_FONT_SIZE, \
     ALIGN_RIGHT, TREND_SECOND_NUMBER_FONT_SIZE, PYDOCX_FONT_SIZE, \
     PYDOCX_TEXT_ALIGN
-from sane_doc_reports.elements import error
 from sane_doc_reports.populate.utils import insert_text
 from sane_doc_reports.styles.utils import style_cell
 
@@ -68,7 +68,7 @@ class TrendElement(Element):
 
 def invoke(cell_object, section):
     if section.type != 'trend':
-        section.contents = f'Called trend but not trend -  [{section}]'
-        return error.invoke(cell_object, section)
+        err_msg = f'Called trend but not trend -  [{section}]'
+        return utils.insert_error(cell_object, err_msg)
 
     TrendElement(cell_object, section).insert()

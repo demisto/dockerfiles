@@ -71,6 +71,9 @@ def general_json_fixes(json_data: List[dict]) -> List[dict]:
             json_data[i][DATA_KEY] = general_json_fixes(
                 json_data[i][DATA_KEY])
             continue
+        if json_data[i]['type'] == 'itemsSection':
+            json_data[i]['type'] = 'items_section'
+            continue
 
     return json_data
 

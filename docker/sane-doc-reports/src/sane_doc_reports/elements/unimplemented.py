@@ -1,6 +1,6 @@
+from sane_doc_reports import utils
 from sane_doc_reports.domain.Element import Element
 from sane_doc_reports.conf import DEBUG
-from sane_doc_reports.elements import error, md_hr
 
 
 class UnimplementedElement(Element):
@@ -10,9 +10,9 @@ class UnimplementedElement(Element):
         if DEBUG:
             print('Adding unimplemented...')
 
-        self.section.contents = f'"{self.section.type}" is not implemented' + \
-                                ' in Docx yet. If required, use PDF instead'
-        error.invoke(self.cell_object, self.section)
+        err_msg = f'"{self.section.type}" is not implemented' + \
+                  ' in Docx yet. If required, use PDF instead'
+        utils.insert_error(self.cell_object, err_msg)
 
 
 def invoke(cell_object, section) -> None:
