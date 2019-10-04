@@ -5,6 +5,7 @@ import requests
 import subprocess
 import os
 import re
+import time
 
 
 def get_docker_image_size(docker_image):
@@ -13,15 +14,20 @@ def get_docker_image_size(docker_image):
     Arguments:
         docker_image {string} -- the full name of hthe image
     """
-    try:
-        name, tag = docker_image.split(':')
-        res = requests.get('https://hub.docker.com/v2/repositories/{}/tags/{}/'.format(name, tag))
-        res.raise_for_status()
-        size_bytes = res.json()['images'][0]['size']
-        return '{0:.2f} MB'.format(float(size_bytes)/1024/1024)
-    except Exception as ex:
-        print("failed getting image size for image: {}. Err: {}".format(docker_image, ex))
-        return "failed querying size"
+    size = "failed querying size"
+    for i in (1, 2, 3):
+        try:
+            name, tag = docker_image.split(':')
+            res = requests.get('https://hub.docker.com/v2/repositories/{}/tags/{}/'.format(name, tag))
+            res.raise_for_status()
+            size_bytes = res.json()['images'][0]['size']
+            size = '{0:.2f} MB'.format(float(size_bytes)/1024/1024)
+        except Exception as ex:
+            print("[{}] failed getting image size for image: {}. Err: {}".format(i, docker_image, ex))
+            if i != 3:
+                print("Sleeping 5 seconds and trying again...")
+                time.sleep(5)
+    return size
 
 
 def main():
