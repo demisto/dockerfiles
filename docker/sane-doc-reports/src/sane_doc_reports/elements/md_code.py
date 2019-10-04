@@ -1,11 +1,9 @@
-from docx.oxml import parse_xml
-from docx.oxml.ns import nsdecls
-
+from sane_doc_reports import utils
 from sane_doc_reports.domain.CellObject import CellObject
 from sane_doc_reports.styles.utils import insert_cell_background
 from sane_doc_reports.transform.markdown.MarkdownSection import MarkdownSection
 from sane_doc_reports.conf import DEBUG, MD_TYPE_CODE
-from sane_doc_reports.elements import markdown, error
+from sane_doc_reports.elements import markdown
 from sane_doc_reports.styles.colors import name_to_hex
 from sane_doc_reports.domain.Wrapper import Wrapper
 
@@ -41,7 +39,7 @@ class CodeWrapper(Wrapper):
 
 def invoke(cell_object, section):
     if section.type != MD_TYPE_CODE:
-        section.contents = f'Called code but not code -  [{section}]'
-        return error.invoke(cell_object, section)
+        err_msg = f'Called code but not code -  [{section}]'
+        return utils.insert_error(cell_object, err_msg)
 
     CodeWrapper(cell_object, section).wrap()

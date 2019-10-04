@@ -1,3 +1,5 @@
+import pytest
+from unittest.mock import patch
 from docx.table import Table
 
 from sane_doc_reports.populate.grid import get_vtable_merged
@@ -167,7 +169,7 @@ def test_creation_of_report_layout_full_landscape():
 
     # Check the page breaks
     assert len(d.element.xpath('//w:br')) == 0
-    
+
     assert len(d.element.xpath('//w:pgSz[@w:orient="landscape"]')) == 1
 
     # Check page size
@@ -231,3 +233,24 @@ def test_creation_of_report_layout_merged():
         [1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1],
     ]
     assert get_vtable_merged(table) == vtable
+
+
+def test_creation_of_report_with_exception():
+    # Mock an error generating the json
+    with patch('sane_doc_reports.elements.table.invoke',
+               side_effect=KeyError('mocked error')):
+        report = Report(*_transform('elements/table.json'))
+        report.populate_report()
+        assert len(report.document.element.xpath(
+            '//w:t[contains(text(), "mocked error")]')) == 1
+
+
+def test_creation_of_report_with_exception_with_stack():
+    # Mock an error generating the json
+    with patch('sane_doc_reports.elements.table.invoke',
+               side_effect=KeyError('mocked error')):
+        report = Report(*_transform('elements/table.json'),
+                        options={'trace': True})
+        report.populate_report()
+        assert len(report.document.element.xpath(
+            '//w:t[contains(text(), "Traceback ")]')) == 1

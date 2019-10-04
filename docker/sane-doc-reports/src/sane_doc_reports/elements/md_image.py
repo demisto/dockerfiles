@@ -2,10 +2,11 @@ import base64
 
 import requests
 
+from sane_doc_reports import utils
 from sane_doc_reports.domain.Element import Element
 from sane_doc_reports.domain.Section import Section
 from sane_doc_reports.conf import DEBUG, MD_TYPE_IMAGE
-from sane_doc_reports.elements import image, error
+from sane_doc_reports.elements import image
 
 
 def image_contents_from_url(url):
@@ -31,7 +32,7 @@ class ExternalImageElement(Element):
 
 def invoke(cell_object, section) -> None:
     if section.type != MD_TYPE_IMAGE:
-        section.contents = f'Called image but not image -  [{section}]'
-        return error.invoke(cell_object, section)
+        err_msg = f'Called image but not image -  [{section}]'
+        return utils.insert_error(cell_object, err_msg)
 
     ExternalImageElement(cell_object, section).insert()

@@ -4,7 +4,7 @@ import tempfile
 from io import BytesIO
 import importlib
 from pathlib import Path
-from time import gmtime
+import traceback
 
 import arrow
 from docx.oxml import OxmlElement
@@ -14,6 +14,7 @@ from matplotlib import pyplot as plt
 import matplotlib.font_manager as fm
 
 from sane_doc_reports.domain import CellObject, Section
+from sane_doc_reports.domain.Section import Section as SectionFactory
 from sane_doc_reports.conf import SIZE_H_INCHES, SIZE_W_INCHES, \
     DEFAULT_DPI, DEFAULT_LEGEND_FONT_SIZE, DEFAULT_WORD_FONT, \
     DEFAULT_ALPHA, DEFAULT_FONT_COLOR, DEFAULT_WORD_FONT_FALLBACK, \
@@ -33,7 +34,7 @@ def open_b64_image(image_base64):
 
 
 def insert_by_type(type: str, cell_object: CellObject,
-                   section: Section):
+                   section: Section, trace=False):
     """ Call a elements elemnt's insert method """
     try:
         func = importlib.import_module(f'sane_doc_reports.elements.{type}')
@@ -41,7 +42,21 @@ def insert_by_type(type: str, cell_object: CellObject,
     except ModuleNotFoundError:
         import sane_doc_reports.elements.unimplemented as unimplemented
         unimplemented.invoke(cell_object, section)
+    except Exception as e:
+        # We want to have a graceful failure instead of early quitting.
+        # Maybe we can "salvage" other elements that were generated
+        # without any exceptions. Here we will display the faulty
+        # elements in the doc.
+        trace_str = f'\n({traceback.format_exc()})' if trace else ''
+        error_msg = f'{section.type} had an error: `{repr(e)}`{trace_str}'
+        insert_error(cell_object, error_msg)
 
+
+def insert_error(cell_object, error_msg):
+    from sane_doc_reports.elements import error
+    """ Insert an error element """
+    section = SectionFactory("error", error_msg, {}, {}, {})
+    error.invoke(cell_object, section)
 
 def _insert_paragraph_after(paragraph):
     """Insert a new paragraph after the given paragraph."""

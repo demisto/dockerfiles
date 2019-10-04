@@ -9,7 +9,7 @@ from sane_doc_reports.conf import DEBUG, \
     DEFAULT_TITLE_FONT_SIZE, PYDOCX_FONT_NAME, PYDOCX_FONT_COLOR, \
     PYDOCX_FONT_SIZE, LEGEND_STYLE
 
-from sane_doc_reports.elements import image, error
+from sane_doc_reports.elements import image
 from sane_doc_reports.styles.colors import get_colors
 from sane_doc_reports.utils import remove_plot_borders, set_legend_style, \
     get_chart_font, set_axis_font, change_legend_vertical_alignment
@@ -141,7 +141,7 @@ class BarChartElement(Element):
 
 def invoke(cell_object, section):
     if section.type != 'bar_chart':
-        section.contents = f'Called bar_chart but not bar_chart -  [{section}]'
-        return error.invoke(cell_object, section)
+        err_msg = f'Called bar_chart but not bar_chart -  [{section}]'
+        return utils.insert_error(cell_object, err_msg)
 
     BarChartElement(cell_object, section).insert()

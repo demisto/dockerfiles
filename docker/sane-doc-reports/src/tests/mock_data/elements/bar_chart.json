@@ -289,27 +289,6 @@
       "rowPos": 0,
       "w": 5
     },
-    "query": {
-      "type": "problems",
-      "groupBy": [
-        "level",
-        "type"
-      ],
-      "filter": {
-        "query": "-category:job and -status:archived and -status:closed",
-        "period": {
-          "byFrom": "days",
-          "fromValue": 7,
-          "by": "day"
-        }
-      }
-    },
-    "automation": {
-      "name": "",
-      "id": "",
-      "args": null,
-      "noEvent": false
-    },
     "fromDate": "2019-07-22T12:26:49Z",
     "title": "level by Type",
     "emptyNotification": "No results found",

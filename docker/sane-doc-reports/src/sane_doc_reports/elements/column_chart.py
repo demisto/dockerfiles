@@ -6,7 +6,7 @@ from sane_doc_reports.domain.Section import Section
 from sane_doc_reports.conf import DEBUG, DEFAULT_BAR_WIDTH, \
     DEFAULT_BAR_ALPHA, CHART_LABEL_NONE_STRING, \
     DEFAULT_FONT_COLOR, DEFAULT_TITLE_FONT_SIZE, LEGEND_STYLE
-from sane_doc_reports.elements import image, error
+from sane_doc_reports.elements import image
 from sane_doc_reports.styles.colors import get_colors
 from sane_doc_reports.utils import set_legend_style, remove_plot_borders, \
     get_chart_font, set_axis_font, change_legend_vertical_alignment
@@ -78,8 +78,8 @@ class ColumnChartElement(Element):
 
 def invoke(cell_object, section):
     if section.type != 'column_chart':
-        section.contents = 'Called column_chart but not column_chart - ' + \
+        err_msg = 'Called column_chart but not column_chart - ' + \
                            f'[{section}]'
-        return error.invoke(cell_object, section)
+        return utils.insert_error(cell_object, err_msg)
 
     ColumnChartElement(cell_object, section).insert()

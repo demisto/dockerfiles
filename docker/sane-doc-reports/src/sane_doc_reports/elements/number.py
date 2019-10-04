@@ -1,10 +1,10 @@
+from sane_doc_reports import utils
 from sane_doc_reports.domain.CellObject import CellObject
 from sane_doc_reports.domain.Element import Element
-from sane_doc_reports.elements import error
 from sane_doc_reports.populate.utils import insert_text
 from sane_doc_reports.conf import DEBUG, TREND_MAIN_NUMBER_FONT_SIZE, \
     TREND_SECOND_NUMBER_FONT_SIZE, PYDOCX_TEXT_ALIGN, \
-    PYDOCX_FONT_SIZE, ALIGN_CENTER, DEFAULT_COLORED_CELL_COLOR
+    PYDOCX_FONT_SIZE, ALIGN_CENTER
 from sane_doc_reports.styles.utils import style_cell
 
 
@@ -46,7 +46,7 @@ class NumberElement(Element):
 
 def invoke(cell_object, section):
     if section.type != 'number':
-        section.contents = f'Called number but not number -  [{section}]'
-        return error.invoke(cell_object, section)
+        err_msg = f'Called number but not number -  [{section}]'
+        return utils.insert_error(cell_object, err_msg)
 
     NumberElement(cell_object, section).insert()

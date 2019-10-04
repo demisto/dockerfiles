@@ -5,7 +5,7 @@ from sane_doc_reports.conf import DEBUG, DEFAULT_FONT_COLOR, \
     DEFAULT_TITLE_FONT_SIZE, PYDOCX_FONT_COLOR, PYDOCX_FONT_NAME, \
     PYDOCX_FONT_SIZE, LEGEND_STYLE
 
-from sane_doc_reports.elements import image, error
+from sane_doc_reports.elements import image
 from sane_doc_reports.utils import set_legend_style, \
     get_chart_font, set_axis_font
 from sane_doc_reports.styles.colors import get_colors
@@ -89,7 +89,7 @@ class PieChartElement(Element):
 
 def invoke(cell_object, section):
     if section.type != 'pie_chart':
-        section.contents = f'Called pie_chart but not pie_chart - [{section}]'
-        return error.invoke(cell_object, section)
+        err_msg = f'Called pie_chart but not pie_chart - [{section}]'
+        return utils.insert_error(cell_object, err_msg)
 
     PieChartElement(cell_object, section).insert()
