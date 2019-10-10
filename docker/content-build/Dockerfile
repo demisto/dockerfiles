@@ -19,7 +19,7 @@ RUN bash -i -c 'pyenv install 3.7.3 && pyenv versions | grep 3.7.3'
 RUN bash -i -c 'pyenv global 2.7.15 3.7.3'
 RUN bash -i -c 'pyenv exec pip install --upgrade --no-cache-dir pip'
 RUN bash -i -c 'pyenv exec pip3 install --upgrade --no-cache-dir pip'
-RUN bash -i -c 'pyenv exec pip install --no-cache-dir git+https://github.com/demisto/demisto-py.git@test-content'
+RUN bash -i -c 'pyenv exec pip install --no-cache-dir git+https://github.com/demisto/demisto-py.git@v1.0.0'
 RUN bash -i -c 'pyenv exec pip install --no-cache-dir git+https://github.com/rahulrrixe/parinx.git@master'
 
 COPY requirements.txt .
