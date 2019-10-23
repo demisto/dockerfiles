@@ -1,4 +1,4 @@
-FROM devdemisto/content-build-2and3:2.0.0.2991
+FROM devdemisto/content-build:2.0.0.3028
 
 COPY requirements.txt ./requirements3.txt
 
