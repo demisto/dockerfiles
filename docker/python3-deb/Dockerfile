@@ -1,7 +1,7 @@
-# Last modified: Mon, 19 Aug 2019 08:08:25 +0000
-FROM python:3.7.4-slim-stretch
+# Last modified: Wed, 25 Sep 2019 18:49:18 +0000
+FROM python:3.7.4-slim-buster
 
-RUN echo 'deb http://deb.debian.org/debian stretch-backports main' >> /etc/apt/sources.list
+RUN echo 'deb http://deb.debian.org/debian buster-backports main' >> /etc/apt/sources.list
 
 # Basic linux utilities
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -13,7 +13,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 && rm -rf /var/lib/apt/lists/*
 
 # Upgrade using backports
-RUN apt-get update && apt-get -t stretch-backports -y --no-install-recommends upgrade \
+RUN apt-get update && apt-get -t buster-backports -y --no-install-recommends upgrade \
 && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .

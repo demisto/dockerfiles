@@ -1,6 +1,7 @@
+from sane_doc_reports import utils
 from sane_doc_reports.domain.Element import Element
 from sane_doc_reports.conf import DEBUG
-from sane_doc_reports.elements import error, md_hr
+from sane_doc_reports.elements import md_hr
 
 
 class DividerElement(Element):
@@ -16,7 +17,7 @@ class DividerElement(Element):
 
 def invoke(cell_object, section) -> None:
     if section.type != 'divider':
-        section.contents = f'Called divider but not divider -  [{section}]'
-        return error.invoke(cell_object, section)
+        err_msg = f'Called divider but not divider -  [{section}]'
+        return utils.insert_error(cell_object, err_msg)
 
     DividerElement(cell_object, section).insert()

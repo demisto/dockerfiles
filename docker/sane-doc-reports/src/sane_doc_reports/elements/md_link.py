@@ -1,10 +1,11 @@
 import docx
 from docx.enum.dml import MSO_THEME_COLOR_INDEX
 
+from sane_doc_reports import utils
 from sane_doc_reports.domain.Element import Element
 from sane_doc_reports.conf import DEBUG
-from sane_doc_reports.elements import error
 from sane_doc_reports.populate.utils import insert_text
+
 
 def add_hyperlink_into_run(paragraph, run, url):
     runs = paragraph.runs
@@ -46,7 +47,7 @@ class LinkElement(Element):
 
 def invoke(cell_object, section) -> None:
     if section.type not in ['a']:
-        section.contents = f'Called link but not link -  [{section}]'
-        return error.invoke(cell_object, section)
+        err_msg = f'Called link but not link -  [{section}]'
+        return utils.insert_error(cell_object, err_msg)
 
     LinkElement(cell_object, section).insert()

@@ -3,7 +3,7 @@ from sane_doc_reports.populate.utils import insert_text
 from sane_doc_reports.transform.markdown.MarkdownSection import MarkdownSection
 from sane_doc_reports.domain.Wrapper import Wrapper
 from sane_doc_reports.conf import DEBUG, MD_TYPE_LIST_ITEM, ORDERED_LIST_NAME
-from sane_doc_reports.elements import markdown, error
+from sane_doc_reports.elements import markdown
 from sane_doc_reports.utils import get_current_li
 
 
@@ -38,7 +38,7 @@ class LiWrapper(Wrapper):
 
 def invoke(cell_object, section):
     if section.type != MD_TYPE_LIST_ITEM:
-        section.contents = f'Called li but not li -  [{section}]'
-        return error.invoke(cell_object, section)
+        err_msg = f'Called li but not li -  [{section}]'
+        return utils.insert_error(cell_object, err_msg)
 
     LiWrapper(cell_object, section).wrap()

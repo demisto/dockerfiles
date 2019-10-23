@@ -74,6 +74,14 @@ class SaneJsonPage:
         rows = self.get_max_vertical_position()
         cols = self.get_max_horizontal_position()
 
+        if rows > MAX_RECOMMENDED_ROWS_COUNT:
+            print(f'There are {rows} rows which is going to take'
+                  f' a very long time to generate a DOCX.')
+
+        if cols > MAX_RECOMMENDED_COLS_COUNT:
+            print(f'There are {cols} columns which is going to take'
+                  f' a very long time to generate a DOCX.')
+
         return cols, rows
 
     def get_sections(self) -> List:

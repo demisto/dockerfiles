@@ -4,7 +4,9 @@ import tempfile
 from io import BytesIO
 import importlib
 from pathlib import Path
+import traceback
 
+import arrow
 from docx.oxml import OxmlElement
 import matplotlib
 from docx.text.paragraph import Paragraph
@@ -12,10 +14,11 @@ from matplotlib import pyplot as plt
 import matplotlib.font_manager as fm
 
 from sane_doc_reports.domain import CellObject, Section
+from sane_doc_reports.domain.Section import Section as SectionFactory
 from sane_doc_reports.conf import SIZE_H_INCHES, SIZE_W_INCHES, \
     DEFAULT_DPI, DEFAULT_LEGEND_FONT_SIZE, DEFAULT_WORD_FONT, \
     DEFAULT_ALPHA, DEFAULT_FONT_COLOR, DEFAULT_WORD_FONT_FALLBACK, \
-    DEFAULT_FONT_AXIS_COLOR
+    DEFAULT_FONT_AXIS_COLOR, LEGEND_STYLE
 
 
 def open_b64_image(image_base64):
@@ -31,7 +34,7 @@ def open_b64_image(image_base64):
 
 
 def insert_by_type(type: str, cell_object: CellObject,
-                   section: Section):
+                   section: Section, trace=False):
     """ Call a elements elemnt's insert method """
     try:
         func = importlib.import_module(f'sane_doc_reports.elements.{type}')
@@ -39,7 +42,21 @@ def insert_by_type(type: str, cell_object: CellObject,
     except ModuleNotFoundError:
         import sane_doc_reports.elements.unimplemented as unimplemented
         unimplemented.invoke(cell_object, section)
+    except Exception as e:
+        # We want to have a graceful failure instead of early quitting.
+        # Maybe we can "salvage" other elements that were generated
+        # without any exceptions. Here we will display the faulty
+        # elements in the doc.
+        trace_str = f'\n({traceback.format_exc()})' if trace else ''
+        error_msg = f'{section.type} had an error: `{repr(e)}`{trace_str}'
+        insert_error(cell_object, error_msg)
 
+
+def insert_error(cell_object, error_msg):
+    from sane_doc_reports.elements import error
+    """ Insert an error element """
+    section = SectionFactory("error", error_msg, {}, {}, {})
+    error.invoke(cell_object, section)
 
 def _insert_paragraph_after(paragraph):
     """Insert a new paragraph after the given paragraph."""
@@ -221,6 +238,7 @@ def set_axis_font(ax):
 
 
 def set_legend_style(legend, options=None):
+    plt.gcf().autofmt_xdate()
     if options:
         if 'hideLegend' in options and options['hideLegend']:
             plt.gca().legend().set_visible(False)
@@ -235,6 +253,13 @@ def set_legend_style(legend, options=None):
     for text in legend.get_texts():
         text.set_fontproperties(font)
         text.set_color(DEFAULT_FONT_COLOR)
+        if 'valign' in options:
+            text.set_position((0, options['valign']))
+
+
+def change_legend_vertical_alignment(section: Section, top=0):
+    section.layout[LEGEND_STYLE]['valign'] = top
+    return section
 
 
 def get_chart_font():
@@ -243,3 +268,26 @@ def get_chart_font():
     if DEFAULT_WORD_FONT not in names:
         return DEFAULT_WORD_FONT_FALLBACK
     return DEFAULT_WORD_FONT
+
+
+def get_formatted_date(input_date,
+                       layout=None) -> str:
+    """ Returns the formatted date string
+            input_date - date we want to format
+            layout - custom formats from the sane JSONs
+
+        Note: ParserError is raised and should be catched if used.
+    """
+    date = arrow.now()
+
+    # Use the date if supplied, and not now()
+    if input_date:
+        date = arrow.get(input_date)
+
+    formatted_date = date.isoformat()
+
+    # Use the user supplied format
+    if layout and 'format' in layout:
+        formatted_date = date.format(layout['format'])
+
+    return formatted_date

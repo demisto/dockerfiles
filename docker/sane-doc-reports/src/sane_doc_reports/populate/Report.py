@@ -102,8 +102,8 @@ class Report:
                     r.text = f'Page break ({page_num})'
                 r.add_break(WD_BREAK.PAGE)
 
-    @staticmethod
-    def _insert_section(cell_object: CellObject, section: Section) -> None:
+    def _insert_section(self, cell_object: CellObject,
+                        section: Section) -> None:
         section_type = section.type
 
         # Fix the chart name
@@ -111,7 +111,8 @@ class Report:
             section_type = section.layout['chartType'] + '_chart'
             section.type = section_type
 
-        insert_by_type(section_type, cell_object, section)
+        insert_by_type(section_type, cell_object, section,
+                       trace=self.options.get('trace', False))
 
     def save(self, output_file_path: str):
         self.document.save(output_file_path)

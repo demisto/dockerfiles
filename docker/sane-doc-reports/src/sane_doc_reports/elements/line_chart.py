@@ -7,10 +7,11 @@ from sane_doc_reports.conf import DEBUG, PYDOCX_FONT_NAME, \
     DEFAULT_FONT_COLOR, DEFAULT_TITLE_FONT_SIZE, \
     PYDOCX_FONT_COLOR, PYDOCX_FONT_SIZE, LEGEND_STYLE
 from sane_doc_reports.domain.Section import Section
-from sane_doc_reports.elements import error, image
+from sane_doc_reports.elements import image
 from sane_doc_reports.styles.colors import get_colors
 from sane_doc_reports.utils import remove_plot_borders, \
-    set_legend_style, get_chart_font, set_axis_font
+    set_legend_style, get_chart_font, set_axis_font, \
+    change_legend_vertical_alignment
 
 
 def fix_data(data):
@@ -110,7 +111,6 @@ class LineChartElement(Element):
         ax = plt.gca()
 
         # Auto rotate the labels
-        plt.gcf().autofmt_xdate()
         remove_plot_borders(ax)
         legend_location = 'upper center'
         legend_location_relative_to_graph = (0.5, -0.35)
@@ -122,19 +122,20 @@ class LineChartElement(Element):
                            bbox_to_anchor=legend_location_relative_to_graph,
                            handlelength=0.7, handleheight=0.7)
 
+        self.section = change_legend_vertical_alignment(self.section, top=1)
         set_legend_style(legend, self.section.layout[LEGEND_STYLE])
         set_axis_font(ax)
         ax.set_title(self.section.extra['title'], **self.style['title'])
 
         # Add to docx as image
         plt_b64 = utils.plt_t0_b64(plt)
-        s = Section('image', plt_b64, {}, {})
+        s = Section('image', plt_b64, {}, {'should_shrink': True})
         image.invoke(self.cell_object, s)
 
 
 def invoke(cell_object, section):
     if section.type != 'line_chart':
-        section.contents = f'Called line_chart but not line_chart - [{section}]'
-        return error.invoke(cell_object, section)
+        err_msg = f'Called line_chart but not line_chart - [{section}]'
+        return utils.insert_error(cell_object, err_msg)
 
     LineChartElement(cell_object, section).insert()

@@ -5,6 +5,8 @@ from docx.oxml import OxmlElement
 from docx.text.paragraph import Paragraph
 from docx.text.run import Run
 
+from sane_doc_reports.conf import SMALL_RESIZE_FIX, DEFAULT_DOC_PORTRAIT_WIDTH
+
 
 def _insert_paragraph_after(paragraph, text=None, style=None):
     """Insert a new paragraph after the given paragraph."""
@@ -59,7 +61,8 @@ class CellObject(object):
 
     # current_width - width of the element currently in pt
     # Returns - bool (should resize), int (with in Pt to resize to)
-    def get_cell_width_resize(self, current_width=None) -> (bool, int):
+    def get_cell_width_resize(self, current_width=None,
+                              should_shrink=False) -> (bool, int):
         if not self.grid_position:
             return False, 0
 
@@ -67,8 +70,14 @@ class CellObject(object):
         #  this cell in Pt via it's grid position.
         col = 1 if self.grid_position["width"] == 0 else self.grid_position[
             "width"]
-        resize_pt = (612 * col // self.grid_position["global_cols"])
 
+        resize_pt = int(DEFAULT_DOC_PORTRAIT_WIDTH * col / self.grid_position[
+            "global_cols"])
+
+        if should_shrink:
+            resize_pt *= SMALL_RESIZE_FIX
+
+        resize_pt = int(resize_pt)
         # We don't want to scale images to be bigger (hurts resolution)
         if current_width < resize_pt:
             return False, 0

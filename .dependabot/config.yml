@@ -57,7 +57,7 @@ update_configs:
     update_schedule: daily
     ignored_updates:
     - match:
-        dependency_name: "python"
+        dependency_name: "python-deb"
         version_requirement: "3.x"
 
   - package_manager: python
@@ -550,6 +550,61 @@ update_configs:
     update_schedule: live
   - package_manager: docker
     directory: /docker/circleci
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/m2crypto
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/m2crypto
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/nmap
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/nmap
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/devo
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/devo
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/googleapi-python3
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/googleapi-python3
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/google-kms
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/google-kms
     update_schedule: daily
     automerged_updates:
     - match:

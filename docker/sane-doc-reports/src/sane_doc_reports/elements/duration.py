@@ -1,12 +1,12 @@
 from math import floor
 
+from sane_doc_reports import utils
 from sane_doc_reports.domain.Element import Element
 from sane_doc_reports.conf import DEBUG, DEFAULT_DURATION_TITLE, \
     PYDOCX_FONT_SIZE, DEFAULT_DURATION_TITLE_FONT_SIZE, \
     DEFAULT_DURATION_FONT_SIZE, \
     DEFAULT_DURATION_LABEL_FONT_SIZE, DURATION_MINUTES_LABEL, \
     DURATION_HOURS_LABEL, DURATION_DAYS_LABEL, PYDOCX_TEXT_ALIGN
-from sane_doc_reports.elements import error
 from sane_doc_reports.populate.utils import insert_text
 from sane_doc_reports.styles.utils import set_cell_margins, style_cell
 
@@ -74,7 +74,10 @@ class DurationElement(Element):
         title_cell.merge(table.cell(0, 4))
 
         title = DEFAULT_DURATION_TITLE
-        if len(contents) > 0 and 'name' in contents[0] and contents[0][
+
+        if 'title' in self.section.extra:
+            title = self.section.extra['title']
+        elif len(contents) > 0 and 'name' in contents[0] and contents[0][
             'name'] != '':
             title = contents['data']['name']
 
@@ -114,7 +117,7 @@ class DurationElement(Element):
 
 def invoke(cell_object, section):
     if section.type != 'duration':
-        section.contents = f'Called duration but not duration -  [{section}]'
-        return error.invoke(cell_object, section)
+        err_msg = f'Called duration but not duration -  [{section}]'
+        return utils.insert_error(cell_object, err_msg)
 
     DurationElement(cell_object, section).insert()

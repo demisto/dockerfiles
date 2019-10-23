@@ -1,5 +1,7 @@
+from arrow.parser import ParserError
 from pyquery import PyQuery
 
+from sane_doc_reports import utils
 from sane_doc_reports.populate.utils import insert_text, insert_header
 from sane_doc_reports.transform.markdown.MarkdownSection import MarkdownSection
 from sane_doc_reports.conf import MD_TYPE_DIV, MD_TYPE_CODE, MD_TYPE_QUOTE, \
@@ -12,7 +14,7 @@ from sane_doc_reports.elements import md_code, md_ul, md_li, \
 from sane_doc_reports.domain import CellObject
 from sane_doc_reports.domain.Section import Section
 from sane_doc_reports.domain.Wrapper import Wrapper
-from sane_doc_reports.elements import error
+from sane_doc_reports.utils import get_formatted_date
 
 
 class MarkdownWrapper(Wrapper):
@@ -126,6 +128,18 @@ class MarkdownWrapper(Wrapper):
                 if invoked_from_wrapper:
                     self.cell_object.add_run()
 
+                if not section.contents:
+                    continue
+
+                if '{date}' in section.contents:
+                    try:
+                        formatted_date = get_formatted_date(
+                            '',
+                            section.layout)
+                    except ParserError as e:
+                        formatted_date = 'n/a'
+                    section.contents = section.contents.replace('{date}', formatted_date)
+
                 insert_text(self.cell_object, section)
                 continue
 
@@ -143,8 +157,8 @@ class MarkdownWrapper(Wrapper):
 def invoke(cell_object: CellObject, section: Section,
            invoked_from_wrapper=False):
     if section.type != 'markdown':
-        section.contents = f'Called markdown but not markdown -  [{section}]'
-        return error.invoke(cell_object, section)
+        err_msg = f'Called markdown but not markdown -  [{section}]'
+        return utils.insert_error(cell_object, err_msg)
 
     MarkdownWrapper(cell_object, section).wrap(
         invoked_from_wrapper=invoked_from_wrapper)
