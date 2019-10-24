@@ -1,6 +1,6 @@
+from sane_doc_reports import utils
 from sane_doc_reports.domain.Element import Element
 from sane_doc_reports.conf import DEBUG
-from sane_doc_reports.elements import error
 from sane_doc_reports.populate.utils import insert_header
 
 
@@ -17,7 +17,7 @@ class HeaderElement(Element):
 
 def invoke(cell_object, section) -> None:
     if section.type != 'header':
-        section.contents = f'Called header but not header -  [{section}]'
-        return error.invoke(cell_object, section)
+        err_msg = f'Called header but not header -  [{section}]'
+        return utils.insert_error(cell_object, err_msg)
 
     HeaderElement(cell_object, section).insert()

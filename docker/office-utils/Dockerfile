@@ -1,5 +1,5 @@
 
-FROM demisto/python-deb:2.7.16.1902
+FROM demisto/python-deb:2.7.16.2350
 
 COPY requirements.txt .
 
@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN mkdir -p /usr/share/man/man1 \
 && apt-get update && apt-get install -y --no-install-recommends \
+  libgpgme11 \
   libreoffice \
-  openjdk-8-jre \
+  default-jre-headless \
 && rm -rf /var/lib/apt/lists/*
-

@@ -1,6 +1,6 @@
+from sane_doc_reports import utils
 from sane_doc_reports.domain.Element import Element
 from sane_doc_reports.conf import DEBUG
-from sane_doc_reports.elements import error
 from sane_doc_reports.styles.utils import apply_style
 from sane_doc_reports.utils import has_run
 
@@ -18,8 +18,8 @@ class TextElement(Element):
 def invoke(cell_object, section, apply_styling=True) -> None:
     if section.type not in ['header', 'paragraph',
                             'span', 'text', 'p']:
-        section.contents = f'Called text but not text -  [{section}]'
-        return error.invoke(cell_object, section)
+        err_msg = f'Called text but not text -  [{section}]'
+        return utils.insert_error(cell_object, err_msg)
 
     # Used when called directly from a text element (in the json)
     # So we have to apply the style manually.

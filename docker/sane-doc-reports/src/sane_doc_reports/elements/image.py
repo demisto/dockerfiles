@@ -1,9 +1,10 @@
 import struct
 
 from docx.shared import Pt
+
+from sane_doc_reports import utils
 from sane_doc_reports.domain.Element import Element
 from sane_doc_reports.conf import DEBUG
-from sane_doc_reports.elements import error
 from sane_doc_reports.utils import open_b64_image, has_run
 
 
@@ -40,8 +41,8 @@ class ImageElement(Element):
 
 def invoke(cell_object, section):
     if section.type != 'image':
-        section.contents = f'Called image but not image -  [{section}]'
-        return error.invoke(cell_object, section)
+        err_msg = f'Called image but not image -  [{section}]'
+        return utils.insert_error(cell_object, err_msg)
 
     has_run(cell_object)
 

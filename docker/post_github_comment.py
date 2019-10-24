@@ -5,6 +5,29 @@ import requests
 import subprocess
 import os
 import re
+import time
+
+
+def get_docker_image_size(docker_image):
+    """Get the size of the image form docker hub
+
+    Arguments:
+        docker_image {string} -- the full name of hthe image
+    """
+    size = "failed querying size"
+    for i in (1, 2, 3):
+        try:
+            name, tag = docker_image.split(':')
+            res = requests.get('https://hub.docker.com/v2/repositories/{}/tags/{}/'.format(name, tag))
+            res.raise_for_status()
+            size_bytes = res.json()['images'][0]['size']
+            size = '{0:.2f} MB'.format(float(size_bytes)/1024/1024)
+        except Exception as ex:
+            print("[{}] failed getting image size for image: {}. Err: {}".format(i, docker_image, ex))
+            if i != 3:
+                print("Sleeping 5 seconds and trying again...")
+                time.sleep(5)
+    return size
 
 
 def main():
@@ -36,7 +59,6 @@ if CIRCLE_PULL_REQUEST will try to get issue id from last commit comment
         print("Issue id found from last commit comment: " + issue_id)
         post_url = "https://api.github.com/repos/demisto/dockerfiles/issues/{}/comments".format(issue_id)
     inspect_format = '''
-## Docker Metadata
 - Image ID: `{{ .Id }}`
 - Created: `{{ .Created }}`
 - Arch: `{{ .Os }}`/`{{ .Architecture }}`
@@ -58,6 +80,8 @@ if CIRCLE_PULL_REQUEST will try to get issue id from last commit comment
         "```\n" +
         "docker pull {}\n".format(args.docker_image) +
         "```\n\n" +
+        "## Docker Metadata\n" +
+        "- Image Size: `{}`\n".format(get_docker_image_size((args.docker_image))) +
         docker_info
     )
     print("Going to post comment:\n\n{}".format(message))
