@@ -27,5 +27,5 @@ apt-get update && apt install -y --no-install-recommends \
 && chromedriver --version
 
 # Installing Java for tika
-RUN apt install default-jre
+RUN apt install default-jre \
 && java -version
