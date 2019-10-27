@@ -15,7 +15,7 @@ def test_list_in_report():
     assert len(table.rows) == 2
 
     # Check that there is indeed an image
-    assert len(d.element.xpath('//w:tbl//w:tbl')) == 1
+    assert len(d.element.xpath('//w:tbl//w:tbl')) == 3
 
     # Check that it has the right amount of rows
-    assert len(d.element.xpath('//w:tbl//w:tbl//w:t')) == 7
+    assert len(d.element.xpath('//w:tbl//w:tbl//w:t')) == 12

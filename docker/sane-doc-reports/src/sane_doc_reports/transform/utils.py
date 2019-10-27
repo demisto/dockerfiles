@@ -63,7 +63,6 @@ def general_json_fixes(json_data: List[dict]) -> List[dict]:
         if json_data[i]['type'] in ['markdown', 'text', 'header'] \
                 and ('text' not in json_data[i][DATA_KEY] or isinstance(
             json_data[i][DATA_KEY], str)):
-
             json_data[i][DATA_KEY] = {
                 'text': json_data[i][DATA_KEY]}
         if json_data[i]['type'] == 'globalSection':
@@ -82,6 +81,9 @@ def transform_old_json_format(json_data: List[dict]) -> List[dict]:
     """ Fixes all of the old json format, trying to convert
         it to the new json format.
     """
+
+    if isinstance(json_data, str):
+        return []
 
     # Fix the first element
     json_data[0][LAYOUT_KEY][ROW_POSITION_KEY] = 0

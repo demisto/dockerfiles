@@ -26,7 +26,7 @@ def example_table_new(out_file_name='example.docx'):
              out_file_name)
 
 
-def example_number(out_file_name='example.docx'):
+def example_number_and_trend(out_file_name='example.docx'):
     main.run(get_mock('elements/number_and_trend.json', ret_dict=False),
              out_file_name)
 
@@ -120,7 +120,7 @@ def example_all():
         example_paged,
         example_table,
         example_table_new,
-        example_number,
+        example_number_and_trend,
         example_text,
         example_pie_chart,
         example_markdown,
@@ -140,7 +140,7 @@ def example_all():
 
 
 def run():
-    example_items_section()
+    example()
 
 
 if __name__ == '__main__':

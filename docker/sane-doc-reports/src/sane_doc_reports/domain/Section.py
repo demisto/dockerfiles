@@ -61,7 +61,8 @@ def sane_to_section(json):
     type = json['type']
     contents = json[DATA_KEY]
     if type in ['markdown', 'text', 'header']:
-        contents = json[DATA_KEY]['text']
+        if isinstance(contents, dict) and 'text' in contents:
+            contents = contents['text']
 
     layout = json[LAYOUT_KEY]
     extra = {}
