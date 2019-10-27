@@ -51,6 +51,7 @@ class TrendElement(Element):
         else:
             direction = '⏶'  # Up arrow
 
+        change = "{0:.2f}".format(change)
         value_percent = f'{direction}{change}%'
         inner_cell = table.cell(0, 2)
         style_cell(inner_cell)
