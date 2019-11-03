@@ -131,7 +131,7 @@ class TableElement(Element):
                         row_item[row_title]['type'] == 'image':
                     insert_table_image(row_item, row_title, row_cells[i])
                 else:
-                    insert_text(row_cells[i], row_item[row_title],
+                    insert_text(row_cells[i], str(row_item[row_title]),
                                 self.style['text'])
 
 

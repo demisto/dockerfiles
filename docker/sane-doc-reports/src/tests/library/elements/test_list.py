@@ -11,11 +11,12 @@ def test_list_in_report():
     d = report.document
     table = next(utils.iter_block_items(d))
     assert isinstance(table, Table)
-    # assert len(table.columns) == 9
-    assert len(table.rows) == 2
 
-    # Check that there is indeed an image
-    assert len(d.element.xpath('//w:tbl//w:tbl')) == 3
+    assert len(d.element.xpath('//w:tbl//w:tbl')) == 4
 
-    # Check that it has the right amount of rows
-    assert len(d.element.xpath('//w:tbl//w:tbl//w:t')) == 12
+    assert len(d.element.xpath('//w:tbl//w:tbl//w:t')) == 16
+
+    # Check that we have a string conversion
+    assert len(d.element.xpath('//w:t[contains(text(),\'[]\')]')) == 1
+    assert len(d.element.xpath('//w:t[contains(text(),\'0\')]')) == 1
+
