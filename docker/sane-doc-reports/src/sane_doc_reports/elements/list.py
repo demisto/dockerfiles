@@ -32,11 +32,10 @@ class ListElement(Element):
             print("Adding list...")
 
         list_data = self.section.contents
-        list_columns = []
-        if 'tableColumns' in self.section.layout:
-            list_columns = self.section.layout['tableColumns']
+        if isinstance(list_data, dict) and len(list_data) != 1:
+            list_data = [list_data]
 
-        if isinstance(list_data, dict):
+        if isinstance(list_data, dict) and len(list_data) == 1:
             # Create the parent title
             wrapper_table = self.cell_object.cell.add_table(rows=2, cols=1)
             title_cell = wrapper_table.cell(0, 0)
@@ -46,13 +45,14 @@ class ListElement(Element):
 
             # Create a list in a list because this is a grouped list
             co = CellObject(wrapper_table.cell(1, 0))
-            invoke(co,
-                   Section('list', list_data[title_text], self.section.layout,
-                           {}))
 
+            table_data = list_data[title_text]
+            invoke(co,
+                   Section('list', table_data, self.section.layout,
+                           {}))
         else:
             table.invoke(self.cell_object,
-                         Section('table', self.section.contents,
+                         Section('table', list_data,
                                  self.section.layout,
                                  {'list_style': True}))
 
