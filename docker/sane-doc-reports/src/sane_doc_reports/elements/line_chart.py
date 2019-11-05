@@ -1,11 +1,12 @@
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import figure
+import matplotlib.ticker as mticker
 
 from sane_doc_reports import utils
 from sane_doc_reports.domain.Element import Element
 from sane_doc_reports.conf import DEBUG, PYDOCX_FONT_NAME, \
     DEFAULT_FONT_COLOR, DEFAULT_TITLE_FONT_SIZE, \
-    PYDOCX_FONT_COLOR, PYDOCX_FONT_SIZE, LEGEND_STYLE
+    PYDOCX_FONT_COLOR, PYDOCX_FONT_SIZE, LEGEND_STYLE, MAX_AXIS_LABELS
 from sane_doc_reports.domain.Section import Section
 from sane_doc_reports.elements import image
 from sane_doc_reports.styles.colors import get_colors
@@ -117,12 +118,18 @@ class LineChartElement(Element):
 
         handles = [plt.Rectangle((0, 0), 1, 1, fc=final_colors[i]) for i in
                    groups.keys()]
+
         legend = ax.legend(handles, [i for i in groups.keys()],
                            loc=legend_location,
                            bbox_to_anchor=legend_location_relative_to_graph,
                            handlelength=0.7, handleheight=0.7)
 
         self.section = change_legend_vertical_alignment(self.section, top=1)
+
+        # Set max ticks in xaxis to be MAX_AXIS_LABELS
+        myLocator = mticker.MaxNLocator(MAX_AXIS_LABELS)
+        ax.xaxis.set_major_locator(myLocator)
+
         set_legend_style(legend, self.section.layout[LEGEND_STYLE])
         set_axis_font(ax)
         ax.set_title(self.section.extra['title'], **self.style['title'])

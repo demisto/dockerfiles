@@ -18,7 +18,7 @@ from sane_doc_reports.domain.Section import Section as SectionFactory
 from sane_doc_reports.conf import SIZE_H_INCHES, SIZE_W_INCHES, \
     DEFAULT_DPI, DEFAULT_LEGEND_FONT_SIZE, DEFAULT_WORD_FONT, \
     DEFAULT_ALPHA, DEFAULT_FONT_COLOR, DEFAULT_WORD_FONT_FALLBACK, \
-    DEFAULT_FONT_AXIS_COLOR, LEGEND_STYLE
+    DEFAULT_FONT_AXIS_COLOR, LEGEND_STYLE, DEBUG
 
 
 def open_b64_image(image_base64):
@@ -47,6 +47,8 @@ def insert_by_type(type: str, cell_object: CellObject,
         # Maybe we can "salvage" other elements that were generated
         # without any exceptions. Here we will display the faulty
         # elements in the doc.
+        if DEBUG:
+            traceback.print_exc()
         trace_str = f'\n({traceback.format_exc()})' if trace else ''
         error_msg = f'{section.type} had an error: `{repr(e)}`{trace_str}'
         insert_error(cell_object, error_msg)

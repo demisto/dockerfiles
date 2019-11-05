@@ -4,7 +4,7 @@ from sane_doc_reports.domain.Element import Element
 from sane_doc_reports.conf import DEBUG, PYDOCX_FONT_SIZE, \
     DEFAULT_TABLE_FONT_SIZE, DEFAULT_TABLE_STYLE, PYDOCX_FONT_NAME, \
     PYDOCX_FONT_COLOR, DEFAULT_FONT_COLOR, DEFAULT_TITLE_FONT_SIZE, \
-    PYDOCX_FONT_BOLD, DEFAULT_TITLE_COLOR
+    PYDOCX_FONT_BOLD, DEFAULT_TITLE_COLOR, MAX_MS_TABLE_COLS_LIMIT
 from sane_doc_reports.domain.Section import Section
 from sane_doc_reports.elements import image
 from sane_doc_reports.populate.utils import insert_text
@@ -43,6 +43,13 @@ def fix_order(ordered, readable_headers) -> list:
     return ret
 
 
+def insert_table_image(item, item_key, insertion_cell):
+    row_temp = item[item_key]
+    s = Section(row_temp['type'], row_temp['data'], {}, {})
+    co = CellObject(insertion_cell, add_run=False)
+    image.invoke(co, s)
+
+
 class TableElement(Element):
     style = {
         'text': {
@@ -69,28 +76,12 @@ class TableElement(Element):
         if isinstance(table_data, dict):
             table_data = table_data.get('data', table_data)
 
+        # If table columns isn't present, use the dict values of the table data
+        # as table columns (kind of like list).
         if 'tableColumns' not in self.section.layout:
-            # Quick dirty fix for test - will be refactored in upcoming PR
             self.section.layout['tableColumns'] = list(table_data[0].keys())
 
-        # Fix new lists
-        if isinstance(table_data, dict):
-            wrapper_table = self.cell_object.cell.add_table(rows=2, cols=len(
-                table_data.keys()))
-            i = 0
-
-            # Add the wrapping headers
-            for wrapper_header, table_contents in table_data.items():
-                hdr = wrapper_table.cell(0, i)
-                insert_text(hdr, wrapper_header,
-                            self.style['title'])
-                body = wrapper_table.cell(1, i)
-                c = CellObject(body)
-                # Hacky but will do the job
-                invoke(c, Section('table', table_contents, {}, {}))
-                i += 1
-            return
-
+        # Use and order according to readableHeaders if present.
         if 'readableHeaders' in self.section.layout:
             ordered = self.section.layout['tableColumns']
             readable_headers = self.section.layout['readableHeaders']
@@ -98,14 +89,14 @@ class TableElement(Element):
         else:
             table_columns = self.section.layout['tableColumns']
 
-
-        # Quick fix, word crashes on more than 64 columns.
+        # Quick fix, word crashes on more than MAX_MS_TABLE_COLS_LIMIT
+        #   (64 right now) columns.
         # See: https://stackoverflow.com/questions/36921010/docx-does-not-support-more-than-63-columns-in-a-table
-        table_columns = table_columns[0:63]
+        table_columns = table_columns[0:MAX_MS_TABLE_COLS_LIMIT]
 
-        for i, header_text in enumerate(table_columns):
-            if not isinstance(header_text, str):
-                table_columns.remove(header_text)
+        for i, row_title in enumerate(table_columns):
+            if not isinstance(row_title, str):
+                table_columns.remove(row_title)
 
         if 'title' in self.section.extra:
             table = self.cell_object.cell.add_table(rows=2,
@@ -126,28 +117,21 @@ class TableElement(Element):
             'list_style']:
             table.style = None
 
-        for i, header_text in enumerate(table_columns):
-            insert_text(hdr_cells[i], header_text, self.style['text'])
+        for i, row_title in enumerate(table_columns):
+            insert_text(hdr_cells[i], row_title, self.style['text'])
 
-        if len(table_columns) > 63:
-            # TODO: add error.
-            pass
-
-        for r in table_data:
+        for row_item in table_data:
             row_cells = table.add_row().cells
-            for i, header_text in enumerate(table_columns):
-                if header_text not in r:
+            for i, row_title in enumerate(table_columns):
+                if row_title not in row_item:
                     continue
 
                 # Old json format can have 'Avatars', which are images
-                if isinstance(r[header_text], dict) and \
-                        r[header_text]['type'] == 'image':
-                    row_temp = r[header_text]
-                    s = Section(row_temp['type'], row_temp['data'], {}, {})
-                    co = CellObject(row_cells[i], add_run=False)
-                    image.invoke(co, s)
+                if isinstance(row_item[row_title], dict) and \
+                        row_item[row_title]['type'] == 'image':
+                    insert_table_image(row_item, row_title, row_cells[i])
                 else:
-                    insert_text(row_cells[i], r[header_text],
+                    insert_text(row_cells[i], str(row_item[row_title]),
                                 self.style['text'])
 
 
