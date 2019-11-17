@@ -1,0 +1,15 @@
+name: Auto approve
+on: pull_request
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump Github context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+      - uses: hmarr/auto-approve-action@v2.0.0
+        if: github.actor == 'dependabot-preview[bot]' && startsWith(github.event.pull_request.title, 'Bump demisto/')
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
