@@ -135,12 +135,6 @@ update_configs:
     directory: /docker/python3
     update_schedule: daily 
 
-  - package_manager: python
-    directory: /docker/content-build
-    update_schedule: live
-    allowed_updates:
-    - match:
-        update_type: "security"
   - package_manager: docker
     directory: /docker/content-build
     update_schedule: daily 
@@ -605,6 +599,47 @@ update_configs:
     update_schedule: live
   - package_manager: docker
     directory: /docker/google-kms
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/geopy
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/geopy
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/google-api-py3
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/google-api-py3
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/marketo
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/marketo
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: docker
+    directory: /docker/powershell-cli
     update_schedule: daily
     automerged_updates:
     - match:
