@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import figure
-import matplotlib.ticker as mticker
 
 from sane_doc_reports import utils
 from sane_doc_reports.domain.Element import Element
@@ -12,7 +11,7 @@ from sane_doc_reports.elements import image
 from sane_doc_reports.styles.colors import get_colors
 from sane_doc_reports.utils import remove_plot_borders, \
     set_legend_style, get_chart_font, set_axis_font, \
-    change_legend_vertical_alignment
+    change_legend_vertical_alignment, set_legend_max_count
 
 
 def fix_data(data):
@@ -57,7 +56,8 @@ class LineChartElement(Element):
             print("Adding line chart...")
 
             # Fix sizing
-        size_w, size_h, dpi = utils.convert_plt_size(self.section)
+        size_w, size_h, dpi = utils.convert_plt_size(self.section,
+                                                     self.cell_object)
         figure(num=2, figsize=(size_w, size_h), dpi=dpi,
                constrained_layout=False)
 
@@ -122,20 +122,19 @@ class LineChartElement(Element):
         legend = ax.legend(handles, [i for i in groups.keys()],
                            loc=legend_location,
                            bbox_to_anchor=legend_location_relative_to_graph,
-                           handlelength=0.7, handleheight=0.7)
+                           handlelength=0.7, handleheight=0.7, ncol=2)
 
         self.section = change_legend_vertical_alignment(self.section, top=1)
 
         # Set max ticks in xaxis to be MAX_AXIS_LABELS
-        myLocator = mticker.MaxNLocator(MAX_AXIS_LABELS)
-        ax.xaxis.set_major_locator(myLocator)
+        set_legend_max_count(ax, self.cell_object)
 
         set_legend_style(legend, self.section.layout[LEGEND_STYLE])
         set_axis_font(ax)
         ax.set_title(self.section.extra['title'], **self.style['title'])
 
         # Add to docx as image
-        plt_b64 = utils.plt_t0_b64(plt)
+        plt_b64 = utils.plt_t0_b64(plt, (size_w, size_h), dpi)
         s = Section('image', plt_b64, {}, {'should_shrink': True})
         image.invoke(self.cell_object, s)
 
