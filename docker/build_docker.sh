@@ -10,6 +10,7 @@ DOCKER_SRC_DIR=${SCRIPT_DIR}
 if [[ "${DOCKER_SRC_DIR}" != /* ]]; then
     DOCKER_SRC_DIR="${CURRENT_DIR}/${SCRIPT_DIR}"
 fi
+DOCKERFILES_TRUST_DIR="${DOCKER_SRC_DIR}/../dockerfiles-trust"
 
 # parse a propty form build.conf file in current dir
 # param $1: property name
@@ -27,7 +28,7 @@ function prop {
     fi
 }
 
-DOCKER_LOGIN_DONE=no
+DOCKER_LOGIN_DONE=${DOCKER_LOGIN_DONE:-no}
 function docker_login {
     if [ "${DOCKER_LOGIN_DONE}" = "yes" ]; then
         return 0;
@@ -74,6 +75,42 @@ function cr_login {
     return 0;
 }
 
+SIGN_SETUP_DONE=no
+function sign_setup {
+    if [ "${SIGN_SETUP_DONE}" = "yes" ]; then
+        return 0;
+    fi
+    if [ -z "${DOCKER_CONTENT_TRUST_REPOSITORY_PASSPHRASE}" -o -z "${DOCKER_CONTENT_TRUST_ROOT_PASSPHRASE}" -o -z "${DOCKERFILE_TRUST_GIT}" ]; then
+        echo "Content trust passphrases not set. Not setting up docker signing."
+        return 1;
+    fi
+    if [ ! -d "${DOCKERFILES_TRUST_DIR}" ]; then
+        git clone "${DOCKERFILE_TRUST_GIT}" "${DOCKERFILES_TRUST_DIR}"   
+        git config --file "${DOCKERFILES_TRUST_DIR}/.git/config"  user.email "dc-builder@users.noreply.github.com"
+        git config --file "${DOCKERFILES_TRUST_DIR}/.git/config" user.name "dc-builder"           
+    else
+        echo "${DOCKERFILES_TRUST_DIR} already checked out"
+    fi
+    export DOCKER_CONFIG="${DOCKERFILES_TRUST_DIR}/.docker"
+    SIGN_SETUP_DONE=yes
+    return 0;
+}
+
+function commit_dockerfiles_trust {
+    cwd="$PWD"
+    cd "${DOCKERFILES_TRUST_DIR}"
+    if [[ $(git status --short) ]]; then
+        echo "dockerfiles-trust: found modified/new files to commit"
+        git status --short
+        git add .
+        git commit -m "`date`: automatic dockerfiles trust update"
+        git push
+    else
+        echo "dockerfiles-trust: no changed files. nothing to commit and push"
+    fi
+    cd "$cwd"
+}
+
 # build docker. 
 # Param $1: docker dir with all relevant files
 function docker_build {
@@ -118,10 +155,18 @@ function docker_build {
         echo "Verifying docker image by running the python script verify.py within the docker image"
         cat verify.py | docker run --rm -i ${image_full_name} python '-'
     fi
+    docker_trust=0
+    if sign_setup && [[ "$image_full_name" =~ "signed" ]]; then
+        docker_trust=1
+        echo "using DOCKER_TRUST=${docker_trust} DOCKER_CONFIG=${DOCKER_CONFIG}"
+    fi
     if docker_login; then
-        docker push ${image_full_name}
+        env DOCKER_CONTENT_TRUST=$docker_trust DOCKER_CONFIG="${DOCKER_CONFIG}"  docker push ${image_full_name}
         echo "Done docker push for: ${image_full_name}"
         ${DOCKER_SRC_DIR}/post_github_comment.py ${image_full_name}
+        if [[ "$docker_trust" == "1" ]]; then
+            commit_dockerfiles_trust
+        fi
     else
         echo "Skipping docker push"
         if [ -n "$CI" ]; then
