@@ -103,7 +103,7 @@ function commit_dockerfiles_trust {
         echo "dockerfiles-trust: found modified/new files to commit"
         git status --short
         git add .
-        git commit -m "`date`: automatic dockerfiles trust update"
+        git commit -m "`date`: dockerfiles trust update from PR: ${CIRCLE_PULL_REQUEST}"
         git push
     else
         echo "dockerfiles-trust: no changed files. nothing to commit and push"
