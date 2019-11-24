@@ -80,12 +80,12 @@ function sign_setup {
     if [ "${SIGN_SETUP_DONE}" = "yes" ]; then
         return 0;
     fi
-    if [ -z "${DOCKER_CONTENT_TRUST_REPOSITORY_PASSPHRASE}" -o -z "${DOCKER_CONTENT_TRUST_ROOT_PASSPHRASE}" -o -z "${DOCKERFILE_TRUST_GIT}" ]; then
+    if [ -z "${DOCKER_CONTENT_TRUST_REPOSITORY_PASSPHRASE}" -o -z "${DOCKER_CONTENT_TRUST_ROOT_PASSPHRASE}" -o -z "${DOCKERFILES_TRUST_GIT}" ]; then
         echo "Content trust passphrases not set. Not setting up docker signing."
         return 1;
     fi
     if [ ! -d "${DOCKERFILES_TRUST_DIR}" ]; then
-        git clone "${DOCKERFILE_TRUST_GIT}" "${DOCKERFILES_TRUST_DIR}"   
+        git clone "${DOCKERFILES_TRUST_GIT}" "${DOCKERFILES_TRUST_DIR}"   
         git config --file "${DOCKERFILES_TRUST_DIR}/.git/config"  user.email "dc-builder@users.noreply.github.com"
         git config --file "${DOCKERFILES_TRUST_DIR}/.git/config" user.name "dc-builder"           
     else
