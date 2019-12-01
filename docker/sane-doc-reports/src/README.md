@@ -80,5 +80,5 @@ Wrappers usually call markdown again (to create more wrappers/elements inside th
 5) Change the `reports.docx.script` to the name of the new script.
 
 ### Demisto specific Settings
-`reports.docx.script` - the custom SaneDocReport automation name (default: ``)
+`reports.docx.script` - the custom SaneDocReport automation name (default: ``)  
 `report.remove.data` - keep the json when generating a report.

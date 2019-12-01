@@ -45,9 +45,6 @@ class Report:
             # Remove the default paragraph in the template.
             self.document._body.clear_content()
 
-        if DEBUG:
-            _debug_show_styles(self.document)
-
         self.pages = pages
 
         # Used to calculate and create the page grid(layout)
@@ -91,7 +88,9 @@ class Report:
                 }
                 merge_cells(grid, section)
                 cell_object = CellObject(cell, add_run=False,
-                                         grid_position=grid_pos)
+                                         grid_position=grid_pos,
+                                         paper_size=paper_size,
+                                         orientation=orientation)
                 self._insert_section(cell_object, section)
 
             # If this isn't the last page, we can add another page break.
