@@ -83,19 +83,6 @@ update_configs:
         update_type: all
 
   - package_manager: python
-    directory: /docker/content-build-2and3
-    update_schedule: live
-    allowed_updates:
-    - match:
-        update_type: "security"
-  - package_manager: docker
-    directory: /docker/content-build-2and3
-    update_schedule: daily 
-    allowed_updates:
-    - match:
-        update_type: "security"
-
-  - package_manager: python
     directory: /docker/archer
     update_schedule: live
   - package_manager: docker
@@ -645,12 +632,3 @@ update_configs:
     - match:
         dependency_name: demisto/*
         update_type: all
-
-  - package_manager: docker
-    directory: /docker/test-signed
-    update_schedule: daily
-    automerged_updates:
-    - match:
-        dependency_name: demisto/*
-        update_type: all
-
