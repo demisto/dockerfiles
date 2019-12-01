@@ -156,7 +156,8 @@ function docker_build {
         cat verify.py | docker run --rm -i ${image_full_name} python '-'
     fi
     docker_trust=0
-    if sign_setup && [[ "$image_full_name" =~ "signed" ]]; then
+    # siging still in testing phase. staring with 2 images only
+    if sign_setup && [[ "$image_full_name" =~ "signed" -o "$image_full_name" =~ "/netutils" ]]; then
         docker_trust=1
         echo "using DOCKER_TRUST=${docker_trust} DOCKER_CONFIG=${DOCKER_CONFIG}"
     fi
