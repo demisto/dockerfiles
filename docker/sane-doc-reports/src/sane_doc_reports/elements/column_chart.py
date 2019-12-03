@@ -30,7 +30,8 @@ class ColumnChartElement(Element):
             print("Adding a column chart!")
 
         # Fix sizing
-        size_w, size_h, dpi = utils.convert_plt_size(self.section)
+        size_w, size_h, dpi = utils.convert_plt_size(self.section,
+                                                     self.cell_object)
         plt.figure(figsize=(size_w, size_h), dpi=dpi)
 
         data = self.section.contents
@@ -70,7 +71,7 @@ class ColumnChartElement(Element):
         plt.xticks(y_axis, objects)
         plt.title(self.section.extra['title'], **self.style['title'])
 
-        plt_b64 = utils.plt_t0_b64(plt)
+        plt_b64 = utils.plt_t0_b64(plt, (size_w, size_h), dpi)
 
         s = Section('image', plt_b64, {}, {'should_shrink': True})
         image.invoke(self.cell_object, s)

@@ -12,13 +12,16 @@ import matplotlib
 from docx.text.paragraph import Paragraph
 from matplotlib import pyplot as plt
 import matplotlib.font_manager as fm
+import matplotlib.ticker as mticker
 
 from sane_doc_reports.domain import CellObject, Section
 from sane_doc_reports.domain.Section import Section as SectionFactory
 from sane_doc_reports.conf import SIZE_H_INCHES, SIZE_W_INCHES, \
     DEFAULT_DPI, DEFAULT_LEGEND_FONT_SIZE, DEFAULT_WORD_FONT, \
     DEFAULT_ALPHA, DEFAULT_FONT_COLOR, DEFAULT_WORD_FONT_FALLBACK, \
-    DEFAULT_FONT_AXIS_COLOR, LEGEND_STYLE, DEBUG
+    DEFAULT_FONT_AXIS_COLOR, LEGEND_STYLE, DEBUG, WIDTH_POSITION_KEY, \
+    HEIGHT_POSITION_KEY, A3_MM_WIDTH, A4_MM_WIDTH, A4_MM_HEIGHT, \
+    LETTER_MM_HEIGHT, LETTER_MM_WIDTH, A3_MM_HEIGHT, MAX_AXIS_LABELS
 
 
 def open_b64_image(image_base64):
@@ -60,6 +63,7 @@ def insert_error(cell_object, error_msg):
     section = SectionFactory("error", error_msg, {}, {}, {})
     error.invoke(cell_object, section)
 
+
 def _insert_paragraph_after(paragraph):
     """Insert a new paragraph after the given paragraph."""
     new_p = OxmlElement("w:p")
@@ -97,13 +101,19 @@ def plot(func):
     return wrapper
 
 
-def plt_t0_b64(plt: matplotlib.pyplot):
+def plt_t0_b64(plt: matplotlib.pyplot, figsize=None, dpi=None):
     """ Matplotlib to base64 url """
     path = Path(tempfile.mkdtemp()) / Path(
         next(tempfile._get_candidate_names()) + '.png')
 
-    plt.savefig(str(path), format='png', bbox_inches='tight', figsize=(1, 1),
-                dpi=DEFAULT_DPI)
+    figsize = figsize if figsize else (1, 1)
+    dpi = dpi if dpi else DEFAULT_DPI
+
+    # Remove paddings
+    plt.tight_layout()
+
+    plt.savefig(str(path), format='png', figsize=figsize,
+                dpi=dpi)
 
     with open(str(path), "rb") as f:
         img_base64 = base64.b64encode(f.read()).decode("utf-8", "ignore")
@@ -113,13 +123,40 @@ def plt_t0_b64(plt: matplotlib.pyplot):
     return b64
 
 
-def convert_plt_size(section: Section):
+def convert_plt_size(section: Section, cell_object: CellObject):
     """ Convert the plot size from pixels to word """
     size_w, size_h, dpi = (SIZE_W_INCHES, SIZE_H_INCHES, DEFAULT_DPI)
-    if 'dimensions' in section.layout:
-        h = section.layout['dimensions']['height'] / DEFAULT_DPI
-        w = section.layout['dimensions']['width'] / DEFAULT_DPI
-        size_w, size_h, dpi = (w, h, DEFAULT_DPI)
+
+    if WIDTH_POSITION_KEY in section.layout and HEIGHT_POSITION_KEY in section.layout:
+        # We need to get the size in inches.
+        # w & h are the width in grid size in the word - we need to convert them
+        # to inches.
+        # ratio in inches: (width_size_in_inches / 12)
+        #   Width in inches: w * ratio_in_inches
+
+        sizes = {
+            'A4': {
+                'portrait': A4_MM_WIDTH.inches,
+                'landscape': A4_MM_HEIGHT.inches
+            },
+            'A3': {
+                'portrait': A3_MM_WIDTH.inches,
+                'landscape': A3_MM_HEIGHT.inches
+            },
+            'LETTER': {
+                'portrait': LETTER_MM_WIDTH.inches,
+                'landscape': LETTER_MM_HEIGHT.inches
+            }
+        }
+        page_size = sizes['A4'] if not cell_object.paper_size else \
+            sizes[cell_object.paper_size]
+        page_orientation = 'portrait' if not cell_object.orientation else \
+            cell_object.orientation
+
+        width_size_in_inches = page_size[page_orientation]
+        ratio_w = width_size_in_inches / 12
+        w = int(section.layout[WIDTH_POSITION_KEY])
+        size_w = (ratio_w * w)
 
     return size_w, size_h, dpi
 
@@ -237,6 +274,19 @@ def set_axis_font(ax):
 
     for label in ax.get_yticklabels():
         label.set_fontproperties(font)
+
+
+def set_legend_max_count(ax, cell_object: CellObject):
+    g_pos = cell_object.grid_position
+    width_ratio = g_pos['width'] / g_pos['global_cols']
+    axis_count = MAX_AXIS_LABELS
+    if width_ratio <= 0.2:
+        axis_count = MAX_AXIS_LABELS / 4
+    elif width_ratio < 0.6:
+        axis_count = MAX_AXIS_LABELS / 2
+
+    myLocator = mticker.MaxNLocator(axis_count)
+    ax.xaxis.set_major_locator(myLocator)
 
 
 def set_legend_style(legend, options=None):
