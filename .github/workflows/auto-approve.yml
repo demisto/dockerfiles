@@ -6,12 +6,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: (github.actor == 'dependabot-preview[bot]' || github.actor == 'dependabot[bot]') && startsWith(github.event.pull_request.title, 'Bump demisto/')
     steps:
       - name: Dump Github context
+        if: (github.actor == 'dependabot-preview[bot]' || github.actor == 'dependabot[bot]') && startsWith(github.event.pull_request.title, 'Bump demisto/')
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
-      - uses: hmarr/auto-approve-action@v2.0.0        
+      - uses: hmarr/auto-approve-action@v2.0.0
+        if: (github.actor == 'dependabot-preview[bot]' || github.actor == 'dependabot[bot]') && startsWith(github.event.pull_request.title, 'Bump demisto/')
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
