@@ -1,10 +1,10 @@
-name: Auto approve
+name: Auto Approve
 on: 
   pull_request:
     types: [opened, synchronize, reopened]
 
 jobs:
-  build:
+  check:
     runs-on: ubuntu-latest
     steps:
       - name: Dump Github context
