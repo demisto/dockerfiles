@@ -647,17 +647,6 @@ update_configs:
         update_type: all
 
   - package_manager: python
-    directory: /docker/tomd
-    update_schedule: live
-  - package_manager: docker
-    directory: /docker/tomd
-    update_schedule: daily
-    automerged_updates:
-    - match:
-        dependency_name: demisto/*
-        update_type: all
-
-  - package_manager: python
     directory: /docker/winrm
     update_schedule: live
   - package_manager: docker
