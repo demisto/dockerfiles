@@ -649,3 +649,8 @@ update_configs:
     update_schedule: live
   - package_manager: docker
     directory: /docker/dxl
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
