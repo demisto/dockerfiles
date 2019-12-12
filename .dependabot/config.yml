@@ -654,3 +654,7 @@ update_configs:
     - match:
         dependency_name: demisto/*
         update_type: all
+  - package_manager: docker
+    directory: /docker/py-ews
+    update_schedule: daily
+
