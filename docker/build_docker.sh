@@ -102,9 +102,26 @@ function commit_dockerfiles_trust {
     if [[ $(git status --short) ]]; then
         echo "dockerfiles-trust: found modified/new files to commit"
         git status --short
+        git pull
+        echo "starting commit loop..."
         git add .
         git commit -m "`date`: trust update from PR: ${CIRCLE_PULL_REQUEST}"
-        git push
+        COMMIT_DONE=no
+        for i in 1 2 3 4 5; do
+            if git push; then
+                echo "Push done successfully"
+                COMMIT_DONE=yes
+                break;
+            else
+                echo "Push failed. Trying merge and then another..."
+                sleep $(((RANDOM % 10) + 1))
+                git merge
+            fi
+        done
+        if [ "${COMMIT_DONE}" = "no" ]; then
+            echo "Failed committing trust data"
+            exit 5
+        fi
     else
         echo "dockerfiles-trust: no changed files. nothing to commit and push"
     fi
