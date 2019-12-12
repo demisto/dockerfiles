@@ -65,6 +65,9 @@ COPY office365compliancesearchstartpurge.ps1 /usr/local/
 COPY office365compliancesearchcheckpurge.ps1 /usr/local/
 COPY office365removecompliancesearch.ps1 /usr/local/
 
+# Install pip 
+RUN pip install pip==19.3.1
+
 # Install requirements for py-ews
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
