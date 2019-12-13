@@ -1,5 +1,7 @@
-FROM python
+FROM demisto/crypto:1.0.0.4759
 
 COPY requirements.txt .
-RUN pip3 install -r requirements.txt
+RUN apk --update add --no-cache --virtual .build-dependencies python-dev build-base wget \
+  && pip install --no-cache-dir -r requirements.txt \
+  && apk del .build-dependencies
 
