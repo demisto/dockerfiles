@@ -173,18 +173,17 @@ function docker_build {
         cat verify.py | docker run --rm -i ${image_full_name} python '-'
     fi
     docker_trust=0
-    # siging still in testing phase. staring with 2 images only
-    if sign_setup && [[ "$image_full_name" =~ "signed" || "$image_full_name" =~ "/netutils" ]]; then
+    if sign_setup; then
         docker_trust=1
         echo "using DOCKER_TRUST=${docker_trust} DOCKER_CONFIG=${DOCKER_CONFIG}"
     fi
     if docker_login; then
         env DOCKER_CONTENT_TRUST=$docker_trust DOCKER_CONFIG="${DOCKER_CONFIG}"  docker push ${image_full_name}
         echo "Done docker push for: ${image_full_name}"
-        ${DOCKER_SRC_DIR}/post_github_comment.py ${image_full_name}
         if [[ "$docker_trust" == "1" ]]; then
             commit_dockerfiles_trust
         fi
+        ${DOCKER_SRC_DIR}/post_github_comment.py ${image_full_name}        
     else
         echo "Skipping docker push"
         if [ -n "$CI" ]; then
@@ -198,12 +197,12 @@ function docker_build {
             cat << EOF
 =========================
 
-Docker image [$image_full_name] has been saved as an artificat. It is available at the following link: 
-https://${VERSION}-161347705-gh.circle-artifacts.com/0/docker_images/$IMAGENAMESAVE.gz
+Docker image [$image_full_name] has been saved as an artifact. It is available at the following link: 
+https://${REVISION}-161347705-gh.circle-artifacts.com/0/docker_images/$IMAGENAMESAVE.gz
 
 Load it locally into docker by running:
 
-curl "https://${VERSION}-161347705-gh.circle-artifacts.com/0/docker_images/$IMAGENAMESAVE.gz" | gunzip | docker load
+curl "https://${REVISION}-161347705-gh.circle-artifacts.com/0/docker_images/$IMAGENAMESAVE.gz" | gunzip | docker load
 
 =========================
 EOF
