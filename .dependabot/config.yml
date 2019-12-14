@@ -654,11 +654,23 @@ update_configs:
     - match:
         dependency_name: demisto/*
         update_type: all
+
   - package_manager: python
     directory: /docker/taxii
     update_schedule: live
   - package_manager: docker
     directory: /docker/taxii
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/google-cloud-translate
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/google-cloud-translate
     update_schedule: daily
     automerged_updates:
     - match:
