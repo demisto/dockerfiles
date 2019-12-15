@@ -103,9 +103,25 @@ function commit_dockerfiles_trust {
         echo "dockerfiles-trust: found modified/new files to commit"
         git status --short
         git pull
+        echo "starting commit loop..."
         git add .
         git commit -m "`date`: trust update from PR: ${CIRCLE_PULL_REQUEST}"
-        git push
+        COMMIT_DONE=no
+        for i in 1 2 3 4 5; do
+            if git push; then
+                echo "Push done successfully"
+                COMMIT_DONE=yes
+                break;
+            else
+                echo "Push failed. Trying merge and then another..."
+                sleep $(((RANDOM % 10) + 1))
+                git merge
+            fi
+        done
+        if [ "${COMMIT_DONE}" = "no" ]; then
+            echo "Failed committing trust data"
+            exit 5
+        fi
     else
         echo "dockerfiles-trust: no changed files. nothing to commit and push"
     fi
@@ -164,10 +180,10 @@ function docker_build {
     if docker_login; then
         env DOCKER_CONTENT_TRUST=$docker_trust DOCKER_CONFIG="${DOCKER_CONFIG}"  docker push ${image_full_name}
         echo "Done docker push for: ${image_full_name}"
-        ${DOCKER_SRC_DIR}/post_github_comment.py ${image_full_name}
         if [[ "$docker_trust" == "1" ]]; then
             commit_dockerfiles_trust
         fi
+        ${DOCKER_SRC_DIR}/post_github_comment.py ${image_full_name}        
     else
         echo "Skipping docker push"
         if [ -n "$CI" ]; then
@@ -181,12 +197,12 @@ function docker_build {
             cat << EOF
 =========================
 
-Docker image [$image_full_name] has been saved as an artificat. It is available at the following link: 
-https://${VERSION}-161347705-gh.circle-artifacts.com/0/docker_images/$IMAGENAMESAVE.gz
+Docker image [$image_full_name] has been saved as an artifact. It is available at the following link: 
+https://${REVISION}-161347705-gh.circle-artifacts.com/0/docker_images/$IMAGENAMESAVE.gz
 
 Load it locally into docker by running:
 
-curl "https://${VERSION}-161347705-gh.circle-artifacts.com/0/docker_images/$IMAGENAMESAVE.gz" | gunzip | docker load
+curl "https://${REVISION}-161347705-gh.circle-artifacts.com/0/docker_images/$IMAGENAMESAVE.gz" | gunzip | docker load
 
 =========================
 EOF
