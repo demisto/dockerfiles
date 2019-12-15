@@ -83,19 +83,6 @@ update_configs:
         update_type: all
 
   - package_manager: python
-    directory: /docker/content-build-2and3
-    update_schedule: live
-    allowed_updates:
-    - match:
-        update_type: "security"
-  - package_manager: docker
-    directory: /docker/content-build-2and3
-    update_schedule: daily 
-    allowed_updates:
-    - match:
-        update_type: "security"
-
-  - package_manager: python
     directory: /docker/archer
     update_schedule: live
   - package_manager: docker
@@ -640,6 +627,54 @@ update_configs:
 
   - package_manager: docker
     directory: /docker/powershell-cli
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/winrm
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/winrm
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+        
+  - package_manager: python
+    directory: /docker/dxl
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/dxl
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+  - package_manager: python
+    directory: /docker/akamai
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/akamai
+  - package_manager: python
+    directory: /docker/taxii
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/taxii
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+  - package_manager: python
+    directory: /docker/google-cloud-translate
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/google-cloud-translate
+
     update_schedule: daily
     automerged_updates:
     - match:
