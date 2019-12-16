@@ -14,6 +14,8 @@ RUN apk add --no-cache ca-certificates
 
 ENV GPG_KEY C01E1CAD5EA2C4F0B8E3571504C367C218ADD4FF
 ENV PYTHON_VERSION 2.7.16
+RUN apk add --no-cache --virtual libssl-dev
+RUN apk add --no-cache --virtual build-essential libffi-dev python-dev
 
 RUN set -ex \
 	&& apk add --no-cache --virtual .fetch-deps \
