@@ -2,11 +2,12 @@
 FROM demisto/python3:3.7.5.4583
 
 COPY requirements.txt .
+COPY requirements-pre.txt .
 
-RUN apk add --no-cache --virtual .build-deps gcc musl-dev \
- && pip install cython \
- && apk del .build-deps
-RUN apk add --update --no-cache g++ gcc libxslt-dev freetype-dev jpeg-dev zlib-dev tzdata
+RUN apk add --update --no-cache  tzdata libxslt freetype jpeg zlib
+
 RUN apk --update add --no-cache --virtual .build-dependencies python-dev build-base wget git \
+  g++ gcc libxslt-dev freetype-dev jpeg-dev zlib-dev \
+  && pip install --no-cache-dir -r requirements-pre.txt \
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies
