@@ -17,18 +17,20 @@ for d in `find "$DOCKER_SRC_DIR" -maxdepth 1 -mindepth 1 -type d`; do
     echo "Verifying dir: $d"
     name=`basename $d`
     dir=`dirname $d`
-    if [[ ! $(grep -B 1 "/docker/${name}\$" "$DEPENDABOT_CONFIG" | grep "package_manager: docker") ]]; then
-        echo "=============================="
-        echo "Failed verifying docker config for: [$d] in dependabot/.config.yml"
-        echo "To add the config run: ./docker/add_dependabot.sh docker/$name"
-        exit 1
-    fi 
-    if [ -f "$d/Pipfile" -o -f "$d/requirements.txt" ]; then
-        if [[ ! $(grep -B 1 "/docker/${name}\$" "$DEPENDABOT_CONFIG" | grep "package_manager: python") ]]; then
+    if [[ ! $(grep -E '^devonly=true' $d/build.conf) ]]; then # skip devonly images
+        if [[ ! $(grep -B 1 "/docker/${name}\$" "$DEPENDABOT_CONFIG" | grep "package_manager: docker") ]]; then
             echo "=============================="
-            echo "Failed verifying python config for: [$d] in dependabot/.config.yml"
+            echo "Failed verifying docker config for: [$d] in dependabot/.config.yml"
             echo "To add the config run: ./docker/add_dependabot.sh docker/$name"
-            exit 2
+            exit 1
+        fi
+        if [ -f "$d/Pipfile" -o -f "$d/requirements.txt" ]; then
+            if [[ ! $(grep -B 1 "/docker/${name}\$" "$DEPENDABOT_CONFIG" | grep "package_manager: python") ]]; then
+                echo "=============================="
+                echo "Failed verifying python config for: [$d] in dependabot/.config.yml"
+                echo "To add the config run: ./docker/add_dependabot.sh docker/$name"
+                exit 2
+            fi
         fi
     fi
 done
