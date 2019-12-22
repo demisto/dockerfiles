@@ -1,11 +1,15 @@
 import struct
 
-from docx.shared import Pt
+from docx.shared import Inches
 
 from sane_doc_reports import utils
 from sane_doc_reports.domain.Element import Element
-from sane_doc_reports.conf import DEBUG
+from sane_doc_reports.conf import DEBUG, DEFAULT_DPI
 from sane_doc_reports.utils import open_b64_image, has_run
+
+
+def pixels_to_inches(pixels) -> int:
+    return pixels * (1 / DEFAULT_DPI)
 
 
 class ImageElement(Element):
@@ -26,15 +30,17 @@ class ImageElement(Element):
         image = open_b64_image(self.section.contents)
 
         # Some dark magic here to determine the image width (png)
-        w_px, _ = struct.unpack(">LL", image.read(26)[16:24])
-        width_pt = int(w_px) * 72 / 96
+        w_px, h_px = struct.unpack(">LL", image.read(26)[16:24])
+        width_inch = pixels_to_inches(int(w_px))
+        height_inch = pixels_to_inches(int(h_px))
 
         should_shrink = self.section.extra.get('should_shrink', False)
-        should_resize, size_pt = self.cell_object.get_cell_width_resize(
-            width_pt, should_shrink)
 
-        if should_resize:
-            self.cell_object.run.add_picture(image, width=Pt(size_pt))
+        if should_shrink:
+            width_inch *= 0.91  # (the size that was calculated was without-
+            # regards to margins in the doc, let's remove them here)
+            self.cell_object.run.add_picture(image, width=Inches(width_inch),
+                                             height=Inches(height_inch))
         else:
             self.cell_object.run.add_picture(image)
 
