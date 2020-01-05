@@ -113,9 +113,9 @@ function commit_dockerfiles_trust {
                 COMMIT_DONE=yes
                 break;
             else
-                echo "Push failed. Trying merge and then another..."
+                echo "Push failed. Trying pull and then another..."
                 sleep $(((RANDOM % 10) + 1))
-                git merge
+                git pull
             fi
         done
         if [ "${COMMIT_DONE}" = "no" ]; then
