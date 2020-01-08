@@ -115,7 +115,7 @@ function commit_dockerfiles_trust {
             else
                 echo "Push failed. Trying pull and then another..."
                 sleep $(((RANDOM % 10) + 1))
-                git pull
+                git pull --rebase
             fi
         done
         if [ "${COMMIT_DONE}" = "no" ]; then

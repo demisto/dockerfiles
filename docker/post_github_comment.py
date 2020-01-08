@@ -85,7 +85,11 @@ if CIRCLE_PULL_REQUEST will try to get issue id from last commit comment
         docker_info
     )
     print("Going to post comment:\n\n{}".format(message))
-    requests.post(post_url, json={"body": message}, auth=(os.environ['GITHUB_KEY'], 'x-oauth-basic'))
+    res = requests.post(post_url, json={"body": message}, auth=(os.environ['GITHUB_KEY'], 'x-oauth-basic'))
+    try:
+        res.raise_for_status()
+    except Exception as ex:
+        print("Failed comment post: {}".format(ex))    
 
 
 if __name__ == "__main__":
