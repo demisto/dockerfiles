@@ -26,7 +26,7 @@ def post_comment(docker_build_msg, pr_num):
         docker_build_msg +
         "```\n"
     )
-    res = requests.post(post_url, json={"body": message}, auth=(token, 'x-oauth-basic'))
+    res = requests.post(post_url, json={"body": message}, headers={'Authorization': 'Bearer ' + token})
     try:
         res.raise_for_status()
     except Exception as ex:
