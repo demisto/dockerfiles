@@ -23,4 +23,5 @@ jobs:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: |
           pip install pipenv
-          pipenv run "$GITHUB_WORKSPACE/.github/workflow/notify-docker-available/notify.py" -e "$GITHUB_EVENT_PATH"
+          cd "$GITHUB_WORKSPACE/.github/workflow/notify-docker-available"
+          pipenv run ./notify.py -e "$GITHUB_EVENT_PATH"
