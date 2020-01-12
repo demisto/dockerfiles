@@ -195,16 +195,18 @@ function docker_build {
             docker save -o "$IMAGESAVE" ${image_full_name}
             gzip "$IMAGESAVE"
             cat << EOF
-=========================
+-------------------------
 
 Docker image [$image_full_name] has been saved as an artifact. It is available at the following link: 
 https://${REVISION}-161347705-gh.circle-artifacts.com/0/docker_images/$IMAGENAMESAVE.gz
 
 Load it locally into docker by running:
 
+```
 curl "https://${REVISION}-161347705-gh.circle-artifacts.com/0/docker_images/$IMAGENAMESAVE.gz" | gunzip | docker load
+```
 
-=========================
+--------------------------
 EOF
         fi
     fi

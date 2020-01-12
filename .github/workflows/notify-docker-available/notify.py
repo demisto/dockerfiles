@@ -21,10 +21,9 @@ def post_comment(docker_build_msg, pr_num):
     message = (
         "# Docker Image Ready - Dev\n\n" +
         "Docker automatic build at CircleCI has completed. The docker image is available as an artifact of the build.\n\n" +
-        "Follow the output from the build on how to load the image locally for testing:\n" +
-        "```\n" +
+        "Follow the output from the build on how to load the image locally for testing:\n\n" +        
         docker_build_msg +
-        "```\n"
+        "\n\n"
     )
     res = requests.post(post_url, json={"body": message}, headers={'Authorization': 'Bearer ' + token})
     try:
