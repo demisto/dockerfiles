@@ -1,0 +1,12 @@
+name: Docker Available
+on: status
+  
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump Github context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+      
