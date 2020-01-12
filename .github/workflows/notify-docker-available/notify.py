@@ -46,7 +46,7 @@ def check_docker_build(event_file):
     res.raise_for_status()
     build_json = res.json()
     # check that this is a pull request
-    if not build_json.get('pull_requests') and not build_json.get('pull_requests')[0].get('url'):
+    if not build_json.get('pull_requests') or not build_json.get('pull_requests')[0].get('url'):
         print('Not a pull request. Skipping')
         return
     branch = build_json.get('branch')
