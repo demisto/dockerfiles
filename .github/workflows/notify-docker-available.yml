@@ -22,7 +22,9 @@ jobs:
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: |
+          python -m pip install --upgrade pip
           pip install pipenv
           pwd
           cd "$GITHUB_WORKSPACE/.github/workflows/notify-docker-available"
+          pipenv install
           pipenv run ./notify.py -e "$GITHUB_EVENT_PATH"
