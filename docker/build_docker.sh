@@ -202,9 +202,9 @@ https://${REVISION}-161347705-gh.circle-artifacts.com/0/docker_images/$IMAGENAME
 
 Load it locally into docker by running:
 
-```
+\`\`\`
 curl "https://${REVISION}-161347705-gh.circle-artifacts.com/0/docker_images/$IMAGENAMESAVE.gz" | gunzip | docker load
-```
+\`\`\`
 
 --------------------------
 EOF
