@@ -5,8 +5,22 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - name: Dump Github context
-        if: endsWith(github.event.context, 'docker_build') && github.event.state == 'success'
+      - name: Dump Github context        
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
+      - name: Checkout
+        if: endsWith(github.event.context, 'docker_build') && github.event.state == 'success'
+        uses: actions/checkout@v2
+      - name: Setup Python
+        if: endsWith(github.event.context, 'docker_build') && github.event.state == 'success'
+        uses: actions/setup-python@v1
+        with:
+          python-version: '3.7'
+      - name: Run Notify Script
+        if: endsWith(github.event.context, 'docker_build') && github.event.state == 'success'
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: |
+          pip install pipenv
+          pipenv run "$GITHUB_WORKSPACE/.github/workflow/notify-docker-available/notify.py" -e "$GITHUB_EVENT_PATH"
