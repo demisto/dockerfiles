@@ -20,7 +20,7 @@ jobs:
       - name: Run Notify Script
         if: endsWith(github.event.context, 'docker_build') && github.event.state == 'success'
         env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           python -m pip install --upgrade pip
           pip install pipenv

@@ -6,10 +6,31 @@
 import json
 import argparse
 import requests
+import os
 
 
 LINE_BEFORE_MESSAGE = 'Creating artifact of docker image...'
 LINE_AFTER_MESSAGE = 'Skipping docker push for cr'
+
+
+def post_comment(docker_build_msg, pr_num):
+    post_url = "https://api.github.com/repos/demisto/dockerfiles/issues/{}/comments".format(pr_num)
+    token = os.getenv('GITHUB_TOKEN')
+    if not token:
+        raise ValueError("Can't post comment. GITHUB_TOKEN env variable is not set")
+    message = (
+        "# Docker Image Ready - Dev\n\n" +
+        "Docker automatic build at CircleCI has completed. The docker image is available as an artifact of the build.\n\n" +
+        "Follow the output from the build on how to load the image locally for testing:\n" +
+        "```\n" +
+        docker_build_msg +
+        "```\n"
+    )
+    res = requests.post(post_url, json={"body": message}, auth=(token, 'x-oauth-basic'))
+    try:
+        res.raise_for_status()
+    except Exception as ex:
+        print("Failed comment post: {}".format(ex))
 
 
 def check_docker_build(event_file):
@@ -25,16 +46,14 @@ def check_docker_build(event_file):
     res.raise_for_status()
     build_json = res.json()
     # check that this is a pull request
-    pull_url = None
-    if build_json.get('pull_requests') and build_json.get('pull_requests')[0].get('url'):
-        pull_url = build_json.get('pull_requests')[0].get('url')
-    else:
+    if not build_json.get('pull_requests') and not build_json.get('pull_requests')[0].get('url'):
         print('Not a pull request. Skipping')
         return
     branch = build_json.get('branch')
     if not branch or not branch.startswith('pull/'):
         print(f'Skipping branch as it is not an external pull: {branch}')
         return
+    pr_num = branch.split('/')[1]
     # go over steps and find build
     step = None
     for s in build_json['steps']:
@@ -53,6 +72,7 @@ def check_docker_build(event_file):
     end_indx = lines.index(LINE_AFTER_MESSAGE)
     docker_msg = '\n'.join(lines[start_indx:end_indx])
     print(f'Extracted docker message:\n{docker_msg}')
+    post_comment(docker_msg, pr_num)
 
 
 def main():
