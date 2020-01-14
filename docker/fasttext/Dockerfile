@@ -3,7 +3,7 @@ FROM demisto/python-deb:2.7.17.4583
 COPY requirements.txt .
 
 RUN apt-get update && apt-get -t buster-backports install -y --no-install-recommends \
-  libicu \
+  libicu63 \
   zlib1g \
   && rm -rf /var/lib/apt/lists/*
 
