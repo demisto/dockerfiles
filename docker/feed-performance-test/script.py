@@ -19,19 +19,21 @@ def generate_file(filename, generated_type):
         writer = csv.writer(csvfile, delimiter=',',
                             quotechar='"', quoting=csv.QUOTE_MINIMAL)
         generated_set = set()
-        csv_lines = []
         fake = Faker()
         fake.add_provider(internet)
         fake.add_provider(date_time)
-        while len(generated_set) != 450000:
+        soFar = 0
+        total = 850000
+        while len(generated_set) != total:
             indicator, csv_line = generate_indicator(fake, generated_type)
             if indicator in generated_set:
                 continue
             generated_set.add(indicator)
-            csv_lines.append(csv_line)
-
-        for csv_line in csv_lines:
             writer.writerow(csv_line)
+            soFar += 1
+            if (soFar % 10000 == 0):
+                print(f"Finished {soFar} out of {total}")
+
     print("Finished" + filename)
 
 
