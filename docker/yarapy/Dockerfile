@@ -1,6 +1,11 @@
+
 FROM demisto/python3-deb:3.7.5.5428
 
 COPY requirements.txt .
+
+RUN apt-get update && apt-get -t buster-backports install -y --no-install-recommends \
+  yara \
+  && rm -rf /var/lib/apt/lists/*
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
   gcc \
@@ -10,3 +15,4 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   gcc \
   python-dev \
 && rm -rf /var/lib/apt/lists/*
+

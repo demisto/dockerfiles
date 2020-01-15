@@ -1,11 +1,11 @@
 newPRWelcomeComment: |
   Thanks for opening your first pull request. You are awesome!
 
-  Qustions about how we build Docker images? Make sure to checkout our [README](https://github.com/demisto/dockerfiles/blob/master/README.md).
+  Questions about how we build Docker images? Make sure to checkout our [README](https://github.com/demisto/dockerfiles/blob/master/README.md).
 
   **What happens next?**
   * CircleCI will run the build cycle on any new/modified docker images. If the build fails make sure to review the CircleCI logs and try to fix any issues.
-  * Once the build passes CircleCI will create a `development` docker image which can be used for local testing. A comment with the details will be posted to this PR if this is a local branch, otherwise the image will be available as part of the build artifacts.
+  * Once the build passes CircleCI will create a `development` docker image which can be used for local testing. A comment with the details will be posted to this PR.
   * A member of the team will then review the pull request.
   * If all is good and both the build is passing and the pull request has passed review, you will be able to merge the PR.
   * Once merged, CircleCI will run another build and create a `production` ready docker image which will be deployed at Docker Hub under the demisto organization: https://hub.docker.com/u/demisto .  
