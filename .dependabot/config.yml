@@ -655,11 +655,6 @@ update_configs:
         dependency_name: demisto/*
         update_type: all
   - package_manager: python
-    directory: /docker/akamai
-    update_schedule: live
-  - package_manager: docker
-    directory: /docker/akamai
-  - package_manager: python
     directory: /docker/taxii
     update_schedule: live
   - package_manager: docker
@@ -674,7 +669,72 @@ update_configs:
     update_schedule: live
   - package_manager: docker
     directory: /docker/google-cloud-translate
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
 
+  - package_manager: python
+    directory: /docker/akamai
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/akamai
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/jmespath
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/jmespath
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/matplotlib
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/matplotlib
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/sixgill
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/sixgill
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/fasttext
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/fasttext
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+  
+  - package_manager: python
+    directory: /docker/yarapy
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/yarapy
     update_schedule: daily
     automerged_updates:
     - match:

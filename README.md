@@ -88,7 +88,7 @@ DOCKER_ORG=mytest DOCKER_INCLUDE_GREP=/python$ docker/build_docker.sh
 The build script will check for a `build.conf` file in the target image directory and will read from it `name=value` properties. Supported properties:
 
 * **version**: The version to use for tagging. Default: `1.0.0`. Note: that additionally, the CircleCI build number is always appended to the version as a revision (for example: `1.0.0.15519`) to create a unique version per build.
-* **devonly**: If set the image will be pushed only the the `devdemisto` org in docker hub and will not be pushed to `demisto` org. Should be used for images which are for development purposes only (such as the image used in CircleCI to build this project).
+* **devonly**: If set the image will be pushed only to the `devdemisto` org in docker hub and will not be pushed to the `demisto` org. Should be used for images which are for development purposes only (such as the image used in CircleCI to build this project).
 
 ## Base Python Images
 There are 4 base python images which should be used when building a new image which is based upon python:
