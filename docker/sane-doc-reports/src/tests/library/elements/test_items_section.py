@@ -1,4 +1,5 @@
 from docx.table import Table
+from datetime import date
 
 from sane_doc_reports.populate.Report import Report
 from tests import utils
@@ -17,5 +18,6 @@ def test_items_section_in_report():
 
     # Check values
     assert len(d.element.xpath('//w:tbl//w:t[contains(text(), "Bot")]')) == 6
-    assert len(d.element.xpath('//w:tbl//w:t[contains(text(), "2019")]')) == 8
+    assert len(d.element.xpath('//w:tbl//w:t[contains(text(), "2019")]')) == 7
+    assert len(d.element.xpath('//w:tbl//w:t[contains(text(), "'+str(date.today().year)+'")]')) == 1
     assert len(d.element.xpath('//w:tbl//w:t[contains(text(), "week")]')) == 1
