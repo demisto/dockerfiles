@@ -53,4 +53,4 @@ VOLUME [ "/ansible/playbooks" ]
 
 # # Run ansible to configure things
 ENV ANSIBLE_HOST_KEY_CHECKING=False
-ENTRYPOINT [ "ansible-playbook", "-i", "inventory.txt", "playbook.yml" ]
+ENTRYPOINT [ "ansible-playbook", "playbook.yml" ]
