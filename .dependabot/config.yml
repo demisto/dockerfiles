@@ -741,3 +741,14 @@ update_configs:
         dependency_name: demisto/*
         update_type: all
 
+  - package_manager: python
+    directory: /docker/dxl2
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/dxl2
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
