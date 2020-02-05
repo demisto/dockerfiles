@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   python-dev \
 && rm -rf /var/lib/apt/lists/*
 
-# Installing Google Chrome 80.0.3987.87-1 and ChromeDriver 76.0.3809.126
+# Installing Google Chrome 80.0.3987.87-1 and ChromeDriver 80.0.3987.16
 # Goolge chrome download from: https://www.google.com/chrome/?platform=linux
 # Chrome driver download from: https://chromedriver.chromium.org/downloads
 # Make sure to download the proper versions that match.
