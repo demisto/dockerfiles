@@ -7,4 +7,7 @@ RUN  yum -y install oracle-release-el7 && yum -y install oracle-epel-release-el7
      yum -y install oracle-instantclient${release}.${update}-basic oracle-instantclient${release}.${update}-devel oracle-instantclient${release}.${update}-sqlplus oracle-instantclient${release}.${update}-tools &&  python3 -m pip install cx_Oracle && \
      rm -rf /var/cache/yum
 
+RUN ln -s -f /usr/bin/python3 /usr/bin/python && \
+    ln -s -f /usr/bin/pip3 /usr/bin/pip
+
 ENV PATH=$PATH:/usr/lib/oracle/${release}.${update}/client64/bin
