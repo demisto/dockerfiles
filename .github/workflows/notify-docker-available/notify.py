@@ -48,7 +48,7 @@ def post_comment(docker_build_msg, pr_num):
         commnets_url = f'https://api.github.com/repos/demisto/dockerfiles/issues/comments/{replace_comment_id}'
         res = requests.patch(commnets_url, json={"body": message}, headers=headers, verify=VERIFY_SSL)
     else:
-        res = requests.post(commnets_url, json={"body": message}, headers=headers, veify=VERIFY_SSL)
+        res = requests.post(commnets_url, json={"body": message}, headers=headers, verify=VERIFY_SSL)
     res.raise_for_status()
 
 
