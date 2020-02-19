@@ -121,3 +121,6 @@ HTML_ATTR_MARKDOWN_MAP = {'em': 'italic', 'strong': 'bold',
                           'del': 'strikethrough'}
 SHOULD_NEW_LINE = ['hr'] + MD_TYPES_HEADERS
 MD_PAGE_BREAK = '\\pagebreak'
+
+# Misc.
+DOCX_TEMAPLTE_FILE = 'template_old.docx'
