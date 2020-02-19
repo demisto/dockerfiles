@@ -92,6 +92,10 @@ class BarChartElement(Element):
             y_axis = [i for i in range(len(objects))]
             x_axis = [i['data'][0] for i in data]
 
+            # Fix height of bar when only one present
+            if len(objects) == 1:
+                plt.margins(y=2)
+
             rects = plt.barh(y_axis, width=x_axis, align='center',
                              alpha=DEFAULT_BAR_ALPHA,
                              color=colors,
