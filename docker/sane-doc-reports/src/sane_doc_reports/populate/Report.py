@@ -1,6 +1,5 @@
 import os
 
-from docx.enum.table import WD_TABLE_ALIGNMENT
 from docx.enum.text import WD_BREAK
 from pathlib import Path
 from typing import List
@@ -16,7 +15,7 @@ from sane_doc_reports.utils import insert_by_type
 from sane_doc_reports.conf import DEBUG, A4_MM_HEIGHT, A4_MM_WIDTH, \
     TOP_MARGIN_PT, BOTTOM_MARGIN_PT, LEFT_MARGIN_PT, RIGHT_MARGIN_PT, \
     A3_MM_WIDTH, A3_MM_HEIGHT, LETTER_MM_WIDTH, LETTER_MM_HEIGHT, PAPER_A4, \
-    PAPER_A3, PAPER_LETTER
+    PAPER_A3, PAPER_LETTER, DOCX_TEMAPLTE_FILE
 from sane_doc_reports.populate.grid import get_cell, merge_cells
 from docx.enum.style import WD_STYLE_TYPE
 from docx.enum.section import WD_ORIENT
@@ -38,7 +37,7 @@ class Report:
     """
 
     def __init__(self, pages: List[Page], sane_json: SaneJson, options={}):
-        template_path = Path(os.path.dirname(__file__)) / 'template.docx'
+        template_path = Path(os.path.dirname(__file__)) / DOCX_TEMAPLTE_FILE
         with template_path.open('rb') as f:
             self.document = Document(f)
 
