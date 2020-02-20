@@ -7,4 +7,3 @@ RUN apk --update add --no-cache --virtual .build-dependencies python-dev build-b
   && apk add postgresql-dev gcc python3-dev musl-dev \
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies
-
