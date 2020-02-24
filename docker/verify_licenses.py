@@ -64,7 +64,7 @@ def main():
             docker_cmd_arr = ["docker", "run", "--rm",
                               args.docker_image, "pip", "show", name]
             if IS_PY3:
-                pip_show = subprocess.check_output(docker_cmd_arr, text=True)
+                pip_show = subprocess.check_output(docker_cmd_arr, universal_newlines=True)
             else:
                 pip_show = subprocess.check_output(docker_cmd_arr)
             for line in pip_show.splitlines():
