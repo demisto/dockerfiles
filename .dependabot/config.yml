@@ -291,6 +291,10 @@ update_configs:
     directory: /docker/powershell-deb
     update_schedule: daily
 
+  - package_manager: docker
+    directory: /docker/pwsh-remoting
+    update_schedule: daily
+
   - package_manager: python
     directory: /docker/zeep
     update_schedule: live
