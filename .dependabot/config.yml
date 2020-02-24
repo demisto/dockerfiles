@@ -285,7 +285,11 @@ update_configs:
 
   - package_manager: docker
     directory: /docker/powershell
-    update_schedule: daily 
+    update_schedule: daily
+  
+  - package_manager: docker
+    directory: /docker/powershell-deb
+    update_schedule: daily
 
   - package_manager: python
     directory: /docker/zeep
