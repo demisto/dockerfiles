@@ -1,7 +1,6 @@
 # Last modified: Sun, 12 Jan 2020 23:13:58 +0000
 FROM mcr.microsoft.com/powershell:6.2.4-ubuntu-18.04
 
-RUN echo 'deb http://deb.debian.org/debian buster-backports main' >> /etc/apt/sources.list
 
 # Upgrade all packages to latest
 RUN apt-get update && apt-get -y --no-install-recommends upgrade \
