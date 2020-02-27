@@ -6,5 +6,6 @@ COPY requirements.txt .
 RUN apk --update add --no-cache --virtual .build-dependencies python-dev build-base wget git \
   && apk add postgresql-dev gcc python3-dev musl-dev \
   && apk add --no-cache g++ libc-dev unixodbc-dev \
+  && pip install cython==0.28.5 \
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies
