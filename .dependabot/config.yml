@@ -292,6 +292,10 @@ update_configs:
     update_schedule: daily
 
   - package_manager: docker
+    directory: /docker/powershell-ubuntu
+    update_schedule: daily
+
+  - package_manager: docker
     directory: /docker/pwsh-remoting
     update_schedule: daily
 
@@ -804,3 +808,13 @@ update_configs:
         dependency_name: demisto/*
         update_type: all
 
+  - package_manager: python      
+    directory: /docker/tld
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/tld
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
