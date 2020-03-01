@@ -3,7 +3,7 @@ FROM demisto/python3-deb:3.8.1.6121
 
 COPY requirements.txt .
 
-RUN apt-get update && apt-get install g++ \
+RUN apt-get update && apt-get install -y g++ \
 && apt-get install -y --no-install-recommends \
   gcc \
   python-dev \
