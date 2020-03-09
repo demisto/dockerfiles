@@ -113,9 +113,9 @@ function commit_dockerfiles_trust {
                 COMMIT_DONE=yes
                 break;
             else
-                echo "Push failed. Trying merge and then another..."
+                echo "Push failed. Trying pull and then another..."
                 sleep $(((RANDOM % 10) + 1))
-                git merge
+                git pull --rebase
             fi
         done
         if [ "${COMMIT_DONE}" = "no" ]; then
@@ -195,16 +195,18 @@ function docker_build {
             docker save -o "$IMAGESAVE" ${image_full_name}
             gzip "$IMAGESAVE"
             cat << EOF
-=========================
+-------------------------
 
 Docker image [$image_full_name] has been saved as an artifact. It is available at the following link: 
 https://${REVISION}-161347705-gh.circle-artifacts.com/0/docker_images/$IMAGENAMESAVE.gz
 
 Load it locally into docker by running:
 
+\`\`\`
 curl "https://${REVISION}-161347705-gh.circle-artifacts.com/0/docker_images/$IMAGENAMESAVE.gz" | gunzip | docker load
+\`\`\`
 
-=========================
+--------------------------
 EOF
         fi
     fi

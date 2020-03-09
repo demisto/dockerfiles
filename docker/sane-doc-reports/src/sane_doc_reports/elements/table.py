@@ -63,8 +63,7 @@ class TableElement(Element):
             PYDOCX_FONT_COLOR: DEFAULT_TITLE_COLOR,
             PYDOCX_FONT_SIZE: DEFAULT_TITLE_FONT_SIZE,
             PYDOCX_FONT_BOLD: False,
-
-        }
+        },
     }
 
     def insert(self):
@@ -107,7 +106,7 @@ class TableElement(Element):
 
             hdr_cells = table.rows[1].cells
         else:
-            table = self.cell_object.cell.add_table(rows=2,
+            table = self.cell_object.cell.add_table(rows=1,
                                                     cols=len(table_columns))
             hdr_cells = table.rows[0].cells
 

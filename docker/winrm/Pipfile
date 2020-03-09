@@ -6,7 +6,7 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-pywinrm = "*"
+pywinrm = {extras = ["kerberos"],version = "*"}
 
 [requires]
 python_version = "3.7"

@@ -49,7 +49,7 @@ def _font_transformations(json_item: dict) -> dict:
 
 
 def general_json_fixes(json_data: List[dict]) -> List[dict]:
-    """ Fixes general probelms that may arise in the json
+    """ Fixes general problems that may arise in the json
     (not necessarily related to the old format) """
 
     # Fix null values in the col / row positions
@@ -171,6 +171,8 @@ def transform_old_json_format(json_data: List[dict]) -> List[dict]:
         if json_data[i]['type'] == 'table':
             if 'tableColumns' not in json_data[i]['layout']:
                 table_data = json.loads(json_data[i]['data'])
+                if isinstance(table_data, dict):
+                    table_data = [table_data]
                 json_data[i][DATA_KEY] = table_data
                 headers = list(table_data[0].keys())
                 json_data[i][LAYOUT_KEY]['tableColumns'] = headers
