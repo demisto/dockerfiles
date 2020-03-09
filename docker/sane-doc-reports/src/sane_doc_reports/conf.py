@@ -123,4 +123,4 @@ SHOULD_NEW_LINE = ['hr'] + MD_TYPES_HEADERS
 MD_PAGE_BREAK = '\\pagebreak'
 
 # Misc.
-DOCX_TEMAPLTE_FILE = 'template_old.docx'
+DOCX_TEMAPLTE_FILE = 'template.docx'
