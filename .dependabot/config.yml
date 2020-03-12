@@ -832,4 +832,14 @@ update_configs:
   - package_manager: docker
     directory: /docker/sane-pdf-reports
     update_schedule: daily
+  - package_manager: python
+    directory: /docker/bs4
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/bs4
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
 
