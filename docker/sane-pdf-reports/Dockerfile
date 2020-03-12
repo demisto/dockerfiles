@@ -1,11 +1,5 @@
-FROM node:10-slim
+FROM nikolaik/python-nodejs:python3.8-nodejs10
 
-RUN apt-get update -y -q
-RUN apt-get install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
-    libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
-    xz-utils tk-dev libffi-dev liblzma-dev
-RUN wget https://www.python.org/ftp/python/3.6.9/Python-3.6.9.tgz
-RUN tar xvf Python-3.6.9.tgz && cd Python-3.6.9 && ./configure && make && make install
 WORKDIR "/app"
 COPY ./dist ./dist
 COPY ./reportsServer .
