@@ -4,7 +4,6 @@ WORKDIR "/app"
 COPY ./dist ./dist
 COPY ./reportsServer .
 COPY ./reportsServer.js .
-COPY ./sample.json .
 
 SHELL ["/bin/bash", "-c"]
 RUN apt-get update -y -q
