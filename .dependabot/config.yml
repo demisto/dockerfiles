@@ -870,3 +870,11 @@ update_configs:
         dependency_name: demisto/*
         update_type: all
 
+  - package_manager: docker
+    directory: /docker/sane-pdf-reports
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
