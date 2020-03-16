@@ -25,5 +25,5 @@ RUN apt-get update -y -q && \
 RUN npm i puppeteer@1.2.0 && ln -s /app/node_modules/puppeteer/.local-chromium/linux-*/chrome-linux/chrome /usr/bin/chromium-browser
 
 RUN python get_build_artifacts.py --token ***REMOVED*** --project sane-reports --branch master --filter "sane-report$" \
-    && tar -xvf sane-reports
+    && mv sane-report sane-report.tar && tar -xvf sane-report.tar && rm -f sane-report.tar
 
