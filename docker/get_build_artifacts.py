@@ -15,13 +15,10 @@ https://github.com/hellohippo/circleci-artifact-getter
 
 Usage example
 
-To get this artifact:
-sane-report
-
 (Create a build artifact token here: https://circleci.com/gh/demisto/<project>/edit#api)
 
 Use like so:
-python get_build_artifacts.py --token ff03fdb2807ad693d8bc972a4cbf70ff72812d1e --project sane-reports --branch master --filter "sane-report"
+python get_build_artifacts.py --token <token> --project <project name> --branch master --filter "regex"
 
 
 """
