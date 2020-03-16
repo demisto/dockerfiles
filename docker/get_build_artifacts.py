@@ -6,8 +6,6 @@ import re
 import urllib.request
 import urllib.parse
 
-ORGANIZATION = "demisto"
-
 """
 Heavily inspired by:
 https://github.com/hellohippo/circleci-artifact-getter
@@ -24,6 +22,7 @@ python get_build_artifacts.py --token <token> --project <project name> --branch 
 """
 
 API_URL = 'https://circleci.com/api/v1.1/project/github'
+CURRENT_ORGANIZATION = "demisto"
 
 
 def get_args():
@@ -32,6 +31,8 @@ def get_args():
     parser.add_argument("--project", required=True)
     parser.add_argument("--branch", required=True)
     parser.add_argument("--filter", required=True)
+    parser.add_argument("--organization", required=False,
+                        default=CURRENT_ORGANIZATION)
     return vars(parser.parse_args())
 
 
@@ -87,8 +88,9 @@ def main():
     project = args["project"]
     branch = args["branch"]
     filter = args["filter"]
+    org = args["organization"]
 
-    base_url = '{}/{}/{}'.format(API_URL, ORGANIZATION, project)
+    base_url = '{}/{}/{}'.format(API_URL, org, project)
     latest_build = get_latest_build_number(base_url, branch, token)
     logging.info(
         'Latest successful build on {} is #{}'.format(branch,
