@@ -786,6 +786,7 @@ update_configs:
         dependency_name: demisto/*
         update_type: all
 
+  - package_manager: python
     directory: /docker/taxii-server
     update_schedule: live
   - package_manager: docker
