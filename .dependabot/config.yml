@@ -800,6 +800,7 @@ update_configs:
   - package_manager: python
     directory: /docker/py42
     update_schedule: live
+    version_requirement_updates: off  # requested by code42 to pin to specific version of py42
   - package_manager: docker
     directory: /docker/py42
     update_schedule: daily
