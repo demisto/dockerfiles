@@ -21,11 +21,12 @@ python get_build_artifacts.py --token <token> --project <project name> --branch 
 
 API_URL = 'https://circleci.com/api/v1.1/project/github'
 CURRENT_ORGANIZATION = "demisto"
+ENV_TOKEN_KEY = "CIRCLECI_ARTIFACT_TOKEN"
 
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--token", required=True)
+    parser.add_argument("--token", required=False, default="")
     parser.add_argument("--project", required=True)
     parser.add_argument("--branch", required=True)
     parser.add_argument("--filter", required=True)
@@ -83,7 +84,7 @@ def download_artifacts(artifacts, token):
 def main():
     logging.basicConfig(format='%(message)s', level=logging.INFO)
     args = get_args()
-    token = args["token"]
+    token = os.getenv(ENV_TOKEN_KEY, args["token"])
     project = args["project"]
     branch = args["branch"]
     filter = args["filter"]
