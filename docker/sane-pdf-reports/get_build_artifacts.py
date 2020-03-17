@@ -13,7 +13,7 @@ https://github.com/hellohippo/circleci-artifact-getter
 
 Usage example
 
-(Create a build artifact token here: https://circleci.com/gh/demisto/<project>/edit#api)
+(Create a build artifact token here: https://circleci.com/gh/<organization>/<project>/edit#api)
 
 Use like so:
 python get_build_artifacts.py --token <token> --project <project name> --branch master --filter "regex"
