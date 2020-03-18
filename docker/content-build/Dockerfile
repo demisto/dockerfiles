@@ -1,7 +1,7 @@
 FROM circleci/python:3.7.5-buster-node
 
 COPY package.json /
-RUN sudo npm install --loglevel=error -g --save package.json
+RUN sudo npm install --loglevel=error -g @mdx-js/mdx commander fs-extra
 ENV DEMISTO_README_VALIDATION "True"
 
 RUN sudo apt-get update && \
