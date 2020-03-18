@@ -1,4 +1,4 @@
-FROM circleci/python:3.7.5-buster-node
+FROM circleci/python:3.8.1-buster-node
 
 COPY package.json /
 RUN sudo npm install --loglevel=error -g && sudo rm -f package.json
