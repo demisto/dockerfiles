@@ -1,7 +1,7 @@
 FROM circleci/python:3.7.5-buster-node
 
 COPY package.json /
-RUN sudo npm install --loglevel=error -g && sudo rm -f package.json
+RUN sudo npm install --save --loglevel=error -g && sudo rm -f package.json
 ENV DEMISTO_README_VALIDATION "True"
 
 RUN sudo apt-get update && \
