@@ -880,8 +880,15 @@ update_configs:
     update_schedule: live
   - package_manager: docker
     directory: /docker/splunksdk
-    update_schedule: live
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
 
+  - package_manager: python
+    directory: /docker/taxii2
+    update_schedule: live
   - package_manager: docker
     directory: /docker/taxii2
     update_schedule: daily
@@ -889,4 +896,3 @@ update_configs:
     - match:
         dependency_name: demisto/*
         update_type: all
-
