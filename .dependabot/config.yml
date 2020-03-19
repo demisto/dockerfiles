@@ -880,6 +880,10 @@ update_configs:
     update_schedule: live
   - package_manager: docker
     directory: /docker/splunksdk
+    update_schedule: live
+
+  - package_manager: docker
+    directory: /docker/taxii2
     update_schedule: daily
     automerged_updates:
     - match:
