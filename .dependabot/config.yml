@@ -776,6 +776,17 @@ update_configs:
         update_type: all
 
   - package_manager: python
+    directory: /docker/genericsql
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/genericsql
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
     directory: /docker/taxii-server
     update_schedule: live
   - package_manager: docker
@@ -800,6 +811,8 @@ update_configs:
   - package_manager: python
     directory: /docker/py42
     update_schedule: live
+    # requested by code42 to pin to specific version of py42
+    version_requirement_updates: "off"
   - package_manager: docker
     directory: /docker/py42
     update_schedule: daily
@@ -870,3 +883,24 @@ update_configs:
         dependency_name: demisto/*
         update_type: all
 
+  - package_manager: python
+    directory: /docker/splunksdk
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/splunksdk
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/taxii2
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/taxii2
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
