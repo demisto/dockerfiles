@@ -21,7 +21,8 @@ jobs:
             echo "$GITHUB_ACTOR is not listed for auto approve"
             exit 0
           fi
-          if [[ "$PULL_TITLE" =~ "^Bump demisto/.*" ]];then
+          demisto_bump="^Bump demisto/.*"
+          if [[ "$PULL_TITLE" =~ $demisto_bump ]];then
             echo "::set-output name=approved::true";
             exit 0
           fi
