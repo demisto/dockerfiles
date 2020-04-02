@@ -2,8 +2,7 @@ import splunklib.client
 
 try:
     splunklib.client.connect()
-except ConnectionRefusedError as error:
-    if not error.strerror == 'Connection refused':
-        raise error
+except OSError:
+    pass
 else:
     raise Exception('failed')
