@@ -17,7 +17,7 @@ jobs:
           echo "$GITHUB_CONTEXT"
           echo "Actor: $GITHUB_ACTOR"
           echo "Pull title: $PULL_TITLE"
-          if [[ "$GITHUB_ACTOR" != "dependabot-preview[bot]" && "$GITHUB_ACTOR" != 'dependabot[bot]' && "$GITHUB_ACTOR" != 'glicht' ]]; then
+          if [[ "$GITHUB_ACTOR" != "dependabot-preview[bot]" && "$GITHUB_ACTOR" != 'dependabot[bot]' ]]; then
             echo "$GITHUB_ACTOR is not listed for auto approve"
             exit 0
           fi
@@ -42,9 +42,9 @@ jobs:
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
       - uses: mshick/add-pr-comment@v1
-        if: steps.auto_approve_check.outputs.approved == 'true'        
+        if: steps.auto_approve_check.outputs.approved == 'true'
         with:
           message: "@dependabot squash and merge"
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
           allow-repeats: true
-      
+
