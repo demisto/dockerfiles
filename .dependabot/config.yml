@@ -8,6 +8,9 @@ update_configs:
   - package_manager: python
     directory: /docker/pcap-http-extractor
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/pcap-http-extractor
     update_schedule: daily
@@ -19,6 +22,9 @@ update_configs:
   - package_manager: python
     directory: /docker/office-utils
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/office-utils
     update_schedule: daily
@@ -30,6 +36,9 @@ update_configs:
   - package_manager: python
     directory: /docker/docxpy
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/docxpy
     update_schedule: daily
@@ -41,6 +50,9 @@ update_configs:
   - package_manager: python
     directory: /docker/sane-doc-reports
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/sane-doc-reports
     update_schedule: daily
@@ -52,6 +64,9 @@ update_configs:
   - package_manager: python
     directory: /docker/python-deb
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/python-deb
     update_schedule: daily
@@ -63,6 +78,9 @@ update_configs:
   - package_manager: python
     directory: /docker/crypto
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/crypto
     update_schedule: daily
@@ -74,6 +92,9 @@ update_configs:
   - package_manager: python
     directory: /docker/pymisp
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/pymisp
     update_schedule: daily
@@ -85,6 +106,9 @@ update_configs:
   - package_manager: python
     directory: /docker/archer
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/archer
     update_schedule: daily
@@ -96,6 +120,9 @@ update_configs:
   - package_manager: python
     directory: /docker/pykafka
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/pykafka
     update_schedule: daily
@@ -107,6 +134,9 @@ update_configs:
   - package_manager: python
     directory: /docker/blueliv
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/blueliv
     update_schedule: daily
@@ -118,6 +148,9 @@ update_configs:
   - package_manager: python
     directory: /docker/python3
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/python3
     update_schedule: daily
@@ -132,6 +165,9 @@ update_configs:
   - package_manager: python
     directory: /docker/python
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/python
     update_schedule: daily
@@ -143,6 +179,9 @@ update_configs:
   - package_manager: python
     directory: /docker/hashicorp
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/hashicorp
     update_schedule: daily
@@ -154,6 +193,9 @@ update_configs:
   - package_manager: python
     directory: /docker/ldap
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/ldap
     update_schedule: daily
@@ -165,6 +207,9 @@ update_configs:
   - package_manager: python
     directory: /docker/powershell-core
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/powershell-core
     update_schedule: daily
@@ -194,6 +239,9 @@ update_configs:
   - package_manager: python
     directory: /docker/python_pancloud
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/python_pancloud
     update_schedule: daily
@@ -212,6 +260,9 @@ update_configs:
   - package_manager: python
     directory: /docker/bigquery
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/bigquery
     update_schedule: daily
@@ -223,6 +274,9 @@ update_configs:
   - package_manager: python
     directory: /docker/stix2
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/stix2
     update_schedule: daily
@@ -234,6 +288,9 @@ update_configs:
   - package_manager: python
     directory: /docker/snowflake
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/snowflake
     update_schedule: daily
@@ -245,6 +302,9 @@ update_configs:
   - package_manager: python
     directory: /docker/tesseract
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/tesseract
     update_schedule: daily
@@ -256,6 +316,9 @@ update_configs:
   - package_manager: python
     directory: /docker/duoadmin
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/duoadmin
     update_schedule: daily
@@ -267,6 +330,9 @@ update_configs:
   - package_manager: python
     directory: /docker/pymongo
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/pymongo
     update_schedule: daily
@@ -278,6 +344,9 @@ update_configs:
   - package_manager: python
     directory: /docker/iputils
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/iputils
     update_schedule: daily
@@ -305,6 +374,9 @@ update_configs:
   - package_manager: python
     directory: /docker/zeep
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/zeep
     update_schedule: daily
@@ -316,6 +388,9 @@ update_configs:
   - package_manager: python
     directory: /docker/dockerbuild
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
     allowed_updates:
     - match:
         update_type: "security"
@@ -329,6 +404,9 @@ update_configs:
   - package_manager: python
     directory: /docker/faker3
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/faker3
     update_schedule: daily
@@ -340,6 +418,9 @@ update_configs:
   - package_manager: python
     directory: /docker/slack
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/slack
     update_schedule: daily
@@ -351,6 +432,9 @@ update_configs:
   - package_manager: python
     directory: /docker/python3-deb
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/python3-deb
     update_schedule: daily
@@ -358,6 +442,9 @@ update_configs:
   - package_manager: python
     directory: /docker/cloaken
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/cloaken
     update_schedule: daily
@@ -369,6 +456,9 @@ update_configs:
   - package_manager: python
     directory: /docker/boto3py3
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/boto3py3
     update_schedule: daily
@@ -380,6 +470,9 @@ update_configs:
   - package_manager: python
     directory: /docker/vertica
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/vertica
     update_schedule: daily
@@ -391,6 +484,9 @@ update_configs:
   - package_manager: python
     directory: /docker/readpdf
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/readpdf
     update_schedule: daily
@@ -402,6 +498,9 @@ update_configs:
   - package_manager: python
     directory: /docker/google-api
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/google-api
     update_schedule: daily
@@ -413,6 +512,9 @@ update_configs:
   - package_manager: python
     directory: /docker/btfl-soup
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/btfl-soup
     update_schedule: daily
@@ -424,6 +526,9 @@ update_configs:
   - package_manager: python
     directory: /docker/netutils
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/netutils
     update_schedule: daily
@@ -435,6 +540,9 @@ update_configs:
   - package_manager: python
     directory: /docker/uptycs
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/uptycs
     update_schedule: daily
@@ -446,6 +554,9 @@ update_configs:
   - package_manager: python
     directory: /docker/nltk
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/nltk
     update_schedule: daily
@@ -457,6 +568,9 @@ update_configs:
   - package_manager: python
     directory: /docker/teams
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/teams
     update_schedule: daily
@@ -468,6 +582,9 @@ update_configs:
   - package_manager: python
     directory: /docker/pyjwt3
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/pyjwt3
     update_schedule: daily
@@ -479,6 +596,9 @@ update_configs:
   - package_manager: python
     directory: /docker/oauthlib
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/oauthlib
     update_schedule: daily
@@ -490,6 +610,9 @@ update_configs:
   - package_manager: python
     directory: /docker/chromium
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/chromium
     update_schedule: daily
@@ -515,6 +638,9 @@ update_configs:
   - package_manager: python
     directory: /docker/smime-encrypt
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/smime-encrypt
     update_schedule: daily
@@ -525,6 +651,9 @@ update_configs:
   - package_manager: python
     directory: /docker/google-cloud-storage
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/google-cloud-storage
     update_schedule: daily
@@ -536,6 +665,9 @@ update_configs:
   - package_manager: python
     directory: /docker/elasticsearch
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/elasticsearch
     update_schedule: daily
@@ -547,6 +679,9 @@ update_configs:
   - package_manager: python
     directory: /docker/circleci
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/circleci
     update_schedule: daily
@@ -558,6 +693,9 @@ update_configs:
   - package_manager: python
     directory: /docker/m2crypto
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/m2crypto
     update_schedule: daily
@@ -569,6 +707,9 @@ update_configs:
   - package_manager: python
     directory: /docker/nmap
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/nmap
     update_schedule: daily
@@ -580,6 +721,9 @@ update_configs:
   - package_manager: python
     directory: /docker/devo
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/devo
     update_schedule: daily
@@ -591,6 +735,9 @@ update_configs:
   - package_manager: python
     directory: /docker/googleapi-python3
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/googleapi-python3
     update_schedule: daily
@@ -602,6 +749,9 @@ update_configs:
   - package_manager: python
     directory: /docker/google-kms
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/google-kms
     update_schedule: daily
@@ -613,6 +763,9 @@ update_configs:
   - package_manager: python
     directory: /docker/geopy
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/geopy
     update_schedule: daily
@@ -624,6 +777,9 @@ update_configs:
   - package_manager: python
     directory: /docker/google-api-py3
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/google-api-py3
     update_schedule: daily
@@ -635,6 +791,9 @@ update_configs:
   - package_manager: python
     directory: /docker/marketo
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/marketo
     update_schedule: daily
@@ -654,6 +813,9 @@ update_configs:
   - package_manager: python
     directory: /docker/winrm
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/winrm
     update_schedule: daily
@@ -665,6 +827,9 @@ update_configs:
   - package_manager: python
     directory: /docker/dxl
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/dxl
     update_schedule: daily
@@ -675,6 +840,9 @@ update_configs:
   - package_manager: python
     directory: /docker/taxii
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/taxii
     update_schedule: daily
@@ -685,6 +853,9 @@ update_configs:
   - package_manager: python
     directory: /docker/google-cloud-translate
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/google-cloud-translate
     update_schedule: daily
@@ -696,6 +867,9 @@ update_configs:
   - package_manager: python
     directory: /docker/akamai
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/akamai
     update_schedule: daily
@@ -707,6 +881,9 @@ update_configs:
   - package_manager: python
     directory: /docker/jmespath
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/jmespath
     update_schedule: daily
@@ -718,6 +895,9 @@ update_configs:
   - package_manager: python
     directory: /docker/matplotlib
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/matplotlib
     update_schedule: daily
@@ -729,6 +909,9 @@ update_configs:
   - package_manager: python
     directory: /docker/sixgill
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/sixgill
     update_schedule: daily
@@ -740,6 +923,9 @@ update_configs:
   - package_manager: python
     directory: /docker/fasttext
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/fasttext
     update_schedule: daily
@@ -751,6 +937,9 @@ update_configs:
   - package_manager: python
     directory: /docker/yarapy
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/yarapy
     update_schedule: daily
@@ -762,6 +951,9 @@ update_configs:
   - package_manager: python
     directory: /docker/dxl2
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/dxl2
     update_schedule: daily
@@ -773,6 +965,9 @@ update_configs:
   - package_manager: python
     directory: /docker/xlrd-py3
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/xlrd-py3
     update_schedule: daily
@@ -784,6 +979,9 @@ update_configs:
   - package_manager: python
     directory: /docker/genericsql
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/genericsql
     update_schedule: daily
@@ -795,6 +993,9 @@ update_configs:
   - package_manager: python
     directory: /docker/taxii-server
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/taxii-server
     update_schedule: daily
@@ -806,6 +1007,9 @@ update_configs:
   - package_manager: python
     directory: /docker/algorithmia
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/algorithmia
     update_schedule: daily
@@ -817,6 +1021,9 @@ update_configs:
   - package_manager: python
     directory: /docker/py42
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
     # requested by code42 to pin to specific version of py42
     version_requirement_updates: "off"
   - package_manager: docker
@@ -830,6 +1037,9 @@ update_configs:
   - package_manager: python
     directory: /docker/tld
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/tld
     update_schedule: daily
@@ -841,6 +1051,9 @@ update_configs:
   - package_manager: python
     directory: /docker/python_pancloud_v2
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/python_pancloud_v2
     update_schedule: daily
@@ -851,6 +1064,9 @@ update_configs:
   - package_manager: python
     directory: /docker/bs4
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/bs4
     update_schedule: daily
@@ -862,6 +1078,9 @@ update_configs:
   - package_manager: python
     directory: /docker/pandas
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/pandas
     update_schedule: daily
@@ -873,6 +1092,9 @@ update_configs:
   - package_manager: python
     directory: /docker/aiohttp
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/aiohttp
     update_schedule: daily
@@ -892,6 +1114,9 @@ update_configs:
   - package_manager: python
     directory: /docker/splunksdk
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/splunksdk
     update_schedule: daily
@@ -903,6 +1128,9 @@ update_configs:
   - package_manager: python
     directory: /docker/taxii2
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/taxii2
     update_schedule: daily
@@ -913,6 +1141,9 @@ update_configs:
   - package_manager: python
     directory: /docker/zabbix
     update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/zabbix
     update_schedule: daily
