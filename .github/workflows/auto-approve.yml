@@ -7,11 +7,16 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - name: Dump Github context
-        if: (github.actor == 'dependabot-preview[bot]' || github.actor == 'dependabot[bot]') && startsWith(github.event.pull_request.title, 'Bump demisto/')
+      - name: Check auto approve
+        id: auto_approve_check
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
+          GITHUB_ACTOR: ${{ github.actor }}
+          PULL_TITLE: ${{ github.event.pull_request.title }}
+        run: | 
+          echo "$GITHUB_CONTEXT"
+          echo "Actor: $GITHUB_ACTOR"
+          echo "Pull title: $PULL_TITLE"
       - uses: hmarr/auto-approve-action@v2.0.0
         if: (github.actor == 'dependabot-preview[bot]' || github.actor == 'dependabot[bot]') && startsWith(github.event.pull_request.title, 'Bump demisto/')
         with:
