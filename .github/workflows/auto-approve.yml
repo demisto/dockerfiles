@@ -1,5 +1,5 @@
 name: Auto Approve
-on: 
+on:
   pull_request:
     types: [opened, synchronize, reopened]
 
@@ -7,12 +7,44 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - name: Dump Github context
-        if: (github.actor == 'dependabot-preview[bot]' || github.actor == 'dependabot[bot]') && startsWith(github.event.pull_request.title, 'Bump demisto/')
+      - name: Check auto approve
+        id: auto_approve_check
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
+          GITHUB_ACTOR: ${{ github.actor }}
+          PULL_TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          echo "$GITHUB_CONTEXT"
+          echo "Actor: $GITHUB_ACTOR"
+          echo "Pull title: $PULL_TITLE"
+          if [[ "$GITHUB_ACTOR" != "dependabot-preview[bot]" && "$GITHUB_ACTOR" != 'dependabot[bot]' ]]; then
+            echo "$GITHUB_ACTOR is not listed for auto approve"
+            exit 0
+          fi
+          demisto_bump="^Bump demisto/.*"
+          if [[ "$PULL_TITLE" =~ $demisto_bump ]];then
+            echo "::set-output name=approved::true";
+            exit 0
+          fi
+          minor_regex='^Bump .+ from ([[:digit:]]+)\.([[:digit:]]+)\.([[:digit:]]+) to ([[:digit:]]+)\.([[:digit:]]+)\.([[:digit:]]+)'
+          if [[ "$PULL_TITLE" =~  $minor_regex ]]; then
+              if [[ "${BASH_REMATCH[1]}" == "${BASH_REMATCH[4]}" ]]; then
+                  echo "patch/minor version upgrade. approving"
+                  echo "::set-output name=approved::true";
+                  exit 0
+              else
+                  echo "major versions ${BASH_REMATCH[1]} != ${BASH_REMATCH[4]} don't match. not approving"
+              fi
+          fi
+          echo "Pull title [$PULL_TITLE] not approved"
       - uses: hmarr/auto-approve-action@v2.0.0
-        if: (github.actor == 'dependabot-preview[bot]' || github.actor == 'dependabot[bot]') && startsWith(github.event.pull_request.title, 'Bump demisto/')
+        if: steps.auto_approve_check.outputs.approved == 'true'
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
+      - uses: mshick/add-pr-comment@v1
+        if: steps.auto_approve_check.outputs.approved == 'true'
+        with:
+          message: "@dependabot squash and merge"
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          allow-repeats: true
+
