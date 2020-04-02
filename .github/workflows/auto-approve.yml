@@ -41,3 +41,9 @@ jobs:
         if: steps.auto_approve_check.outputs.approved == 'true'
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
+      - uses: mshick/add-pr-comment@v1
+        if: steps.auto_approve_check.outputs.approved == 'true'
+        message: "@dependabot squash and merge"
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+      
