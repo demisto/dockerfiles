@@ -21,11 +21,11 @@ jobs:
             echo "$GITHUB_ACTOR is not listed for auto approve"
             exit 0
           fi
-          if [[ "$TEST" =~ "^Bump demisto/.*" ]];then
+          if [[ "$PULL_TITLE" =~ "^Bump demisto/.*" ]];then
             echo "::set-output name=approved::true";
             exit 0
           fi
-          echo "Pull title $PULL_TITLE not approved"
+          echo "Pull title [$PULL_TITLE] not approved"
       - uses: hmarr/auto-approve-action@v2.0.0
         if: steps.auto_approve_check.outputs.approved == 'true'
         with:
