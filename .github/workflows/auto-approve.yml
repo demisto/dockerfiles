@@ -1,5 +1,5 @@
 name: Auto Approve
-on: 
+on:
   pull_request:
     types: [opened, synchronize, reopened]
 
@@ -13,17 +13,19 @@ jobs:
           GITHUB_CONTEXT: ${{ toJson(github) }}
           GITHUB_ACTOR: ${{ github.actor }}
           PULL_TITLE: ${{ github.event.pull_request.title }}
-        run: | 
+        run: |
           echo "$GITHUB_CONTEXT"
           echo "Actor: $GITHUB_ACTOR"
           echo "Pull title: $PULL_TITLE"
-          if [[ "$GITHUB_ACTOR" != "dependabot-preview[bot]" && "$GITHUB_ACTOR" != 'dependabot[bot]' ]]; then            
+          if [[ "$GITHUB_ACTOR" != "dependabot-preview[bot]" && "$GITHUB_ACTOR" != 'dependabot[bot]' && "$GITHUB_ACTOR" != 'glicht' ]]; then
+            echo "$GITHUB_ACTOR is not listed for auto approve"
             exit 0
           fi
-          if [[ "$TEST" =~ "^Bump demisto/.*" ]];then 
-            echo "::set-output name=approved::true"; 
+          if [[ "$TEST" =~ "^Bump demisto/.*" ]];then
+            echo "::set-output name=approved::true";
             exit 0
           fi
+          echo "Pull title $PULL_TITLE not approved"
       - uses: hmarr/auto-approve-action@v2.0.0
         if: steps.auto_approve_check.outputs.approved == 'true'
         with:
