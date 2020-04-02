@@ -25,6 +25,6 @@ jobs:
             exit 0
           fi
       - uses: hmarr/auto-approve-action@v2.0.0
-        if: steps.auto_approve_check.outputs.approved == "true"
+        if: steps.auto_approve_check.outputs.approved == 'true'
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
