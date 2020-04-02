@@ -17,7 +17,14 @@ jobs:
           echo "$GITHUB_CONTEXT"
           echo "Actor: $GITHUB_ACTOR"
           echo "Pull title: $PULL_TITLE"
+          if [[ "$GITHUB_ACTOR" != "dependabot-preview[bot]" && "$GITHUB_ACTOR" != 'dependabot[bot]' ]]; then            
+            exit 0
+          fi
+          if [[ "$TEST" =~ "^Bump demisto/.*" ]];then 
+            echo "::set-output name=approved::true"; 
+            exit 0
+          fi
       - uses: hmarr/auto-approve-action@v2.0.0
-        if: (github.actor == 'dependabot-preview[bot]' || github.actor == 'dependabot[bot]') && startsWith(github.event.pull_request.title, 'Bump demisto/')
+        if: steps.auto_approve_check.outputs.approved == "true"
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
