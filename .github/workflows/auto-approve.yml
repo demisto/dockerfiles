@@ -28,12 +28,12 @@ jobs:
           fi
           minor_regex='^Bump .+ from ([[:digit:]]+)\.([[:digit:]]+)\.([[:digit:]]+) to ([[:digit:]]+)\.([[:digit:]]+)\.([[:digit:]]+)'
           if [[ "$PULL_TITLE" =~  $minor_regex ]]; then
-              if [[ "${BASH_REMATCH[1]}" == "${BASH_REMATCH[4]}" && "${BASH_REMATCH[2]}" == "${BASH_REMATCH[5]}" ]]; then
-                  echo "patch version upgrade from ${BASH_REMATCH[3]} to ${BASH_REMATCH[6]}. approving"
+              if [[ "${BASH_REMATCH[1]}" == "${BASH_REMATCH[4]}" ]]; then
+                  echo "patch/minor version upgrade. approving"
                   echo "::set-output name=approved::true";
                   exit 0
               else
-                  echo "major/minor versions don't match. not approving"
+                  echo "major versions ${BASH_REMATCH[1]} != ${BASH_REMATCH[4]} don't match. not approving"
               fi
           fi
           echo "Pull title [$PULL_TITLE] not approved"
