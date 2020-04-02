@@ -1,4 +1,4 @@
-import splunklib
+import splunklib.client
 
 try:
     splunklib.client.connect()
