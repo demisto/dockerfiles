@@ -1164,9 +1164,7 @@ update_configs:
     automerged_updates:
     - match:
         dependency_name: demisto/*
-        update_type: all
-
-  - package_manager: python
+        update_type: all  - package_manager: python
     directory: /docker/ippysocks
     update_schedule: live
     automerged_updates:
