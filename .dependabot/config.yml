@@ -1156,26 +1156,27 @@ update_configs:
     directory: /docker/trustar
     update_schedule: live
     automerged_updates:
-      - match:
-          update_type: semver:minor
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/trustar
     update_schedule: daily
     automerged_updates:
-      - match:
-          dependency_name: demisto/*
-          update_type: all
+    - match:
+        dependency_name: demisto/*
+        update_type: all
 
   - package_manager: python
     directory: /docker/ippysocks
     update_schedule: live
     automerged_updates:
-      - match:
-          update_type: semver:minor
+    - match:
+        update_type: semver:minor
   - package_manager: docker
     directory: /docker/ippysocks
     update_schedule: daily
     automerged_updates:
-      - match:
-          dependency_name: demisto/*
-          update_type: all
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
