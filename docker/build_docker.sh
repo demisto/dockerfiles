@@ -242,6 +242,7 @@ if [[ ! $(which pyenv) ]] && [[ -n "${CIRCLECI}" ]]; then
     export PATH="$HOME/.pyenv/bin:$PATH"
     eval "$(pyenv init -)"
     eval "$(pyenv virtualenv-init -)"
+    pyenv shell system $(pyenv versions --bare | grep 3.7)
 fi
 
 echo "default python versions: "
