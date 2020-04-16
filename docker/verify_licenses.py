@@ -158,7 +158,7 @@ def main():
     print("================= Checking Python packages =================")
     check_python_license(args.docker_image, licenses,
                          ignore_packages, known_licenses)
-    print("================= Checking Powershell packages =================")
+    print("================= Checking PowerShell packages =================")
     check_pwsh_license(args.docker_image, licenses,
                        ignore_packages, known_licenses)
     print("SUCCESS: completed checking all licenses for docker image: {}".format(
