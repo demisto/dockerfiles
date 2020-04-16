@@ -31,7 +31,7 @@ The script `docker/build_docker.sh` is used to build all modified docker images.
 * Install pipenv globally using: `pip install pipenv`
 * Install requests globally: `pip install requests`
 
-To get up and running fast with a python image with additional packages use the script: `docker/create_new_docker_image.py`. Usage:
+To get up and running fast with a Python/PowerShell image with additional packages use the script: `docker/create_new_docker_image.py`. Usage:
 ```
 usage: create_new_docker_image.py [-h] [-t {python,powershell}]
                                   [-p {two,three}] [-l {alpine,debian,ubuntu}]
