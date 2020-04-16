@@ -98,10 +98,10 @@ The build script will check for a `build.conf` file in the target image director
 ## Base Python Images
 There are 4 base python images which should be used when building a new image which is based upon python:
 
-* python: Python 2 image based upon alpine
-* python3: Python 3 image based upon alpine
-* python-deb: Python 2 image based upon debian
-* python3-deb: Python 3 image based upon debian
+* [python](https://github.com/demisto/dockerfiles/blob/repository-info/demisto/python/last.md): Python 2 image based upon alpine
+* [python3](https://github.com/demisto/dockerfiles/blob/repository-info/demisto/python3/last.md): Python 3 image based upon alpine
+* [python-deb](https://github.com/demisto/dockerfiles/blob/repository-info/demisto/python-deb/last.md): Python 2 image based upon debian
+* [python3-deb](https://github.com/demisto/dockerfiles/blob/repository-info/demisto/python3-deb/last.md): Python 3 image based upon debian
 
 ### Which image to choose as a base?
 
@@ -129,9 +129,9 @@ The above command will create a directory `docker/pwsh-azure` with all relevant 
 ### Base PowerShell Images
 There are 3 base PowerShell images which should be used when building a new image which is based upon PowerShell:
 
-* [powershell](docker/powershell/Dockerfile): PowerShell image based upon Alpine (default)
-* powershell-deb: PowerShell image based upon Debian
-* powershell-ubuntu: PowerShell image based upon Ubuntu
+* [powershell](https://github.com/demisto/dockerfiles/blob/repository-info/demisto/powershell/last.md): PowerShell image based upon Alpine (default)
+* [powershell-deb](https://github.com/demisto/dockerfiles/blob/repository-info/demisto/powershell-deb/last.md): PowerShell image based upon Debian
+* [powershell-ubuntu](https://github.com/demisto/dockerfiles/blob/repository-info/demisto/powershell-ubuntu/last.md): PowerShell image based upon Ubuntu
 
 We recommend using the default Alpine based image. The Debian and Ubuntu images are provided mainly for cases that there is need to install additional OS packages.
 
