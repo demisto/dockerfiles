@@ -13,4 +13,4 @@ RUN bash -i -c 'pyenv install 3.6.10 && pyenv versions | grep 3.6.10'
 COPY requirements.txt .
 
 RUN pip install --user --no-cache-dir -r requirements.txt
-RUN bash -i -c 'pyenv shell 3.7.6 && pyenv exec pip3 install ---no-cache-dir -r requirements.txt"
+RUN bash -i -c 'pyenv shell 3.7.6 && pyenv exec pip3 install ---no-cache-dir -r requirements.txt'
