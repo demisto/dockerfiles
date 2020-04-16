@@ -129,7 +129,7 @@ The above command will create a directory `docker/pwsh-azure` with all relevant 
 ### Base PowerShell Images
 There are 3 base PowerShell images which should be used when building a new image which is based upon PowerShell:
 
-* powershell: PowerShell image based upon Alpine (default)
+* [powershell](docker/powershell/Dockerfile): PowerShell image based upon Alpine (default)
 * powershell-deb: PowerShell image based upon Debian
 * powershell-ubuntu: PowerShell image based upon Ubuntu
 
