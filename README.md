@@ -52,7 +52,7 @@ optional arguments:
                         Specify python version to use (default: three)
   -l {alpine,debian,ubuntu}, --linux {alpine,debian,ubuntu}
                         Specify linux distro to use (default: alpine)
-  --pkg PKG             Specify a package to install. Can be specified
+  --pkg PKG             Specify a package/module to install. Can be specified
                         multiple times. Each package needs to be specified
                         with --pkg. For example: --pkg google-cloud-storage
                         --pkg oath2client (default: None)
