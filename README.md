@@ -124,7 +124,7 @@ We support building PowerShell Core docker images. To create the Dockerfile for 
 ```
 The above command will create a directory `docker/pwsh-azure` with all relevant files setup for building a PowerShell docker image which imports the Az PowerShell module. You can now build the image locally by following: [Building Locally a Test Build](#building-locally-a-test-build).
 
-**Naming Convention:** To differentiate PowerShell images, name the images with a prefix of either `pwsh` or `powershell`.
+**Naming Convention:** To differentiate PowerShell images, name the images with a prefix of either `pwsh-` or `powershell-`.
 
 ### Base PowerShell Images
 There are 3 base PowerShell images which should be used when building a new image which is based upon PowerShell:
