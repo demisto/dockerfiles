@@ -155,7 +155,7 @@ def main():
         ignore_packages = json.load(f)["packages"]
     with open("{}/known_licenses.json".format(sys.path[0])) as f:
         known_licenses = json.load(f)["packages"]
-    print("================= Checking python packages =================")
+    print("================= Checking Python packages =================")
     check_python_license(args.docker_image, licenses,
                          ignore_packages, known_licenses)
     print("================= Checking Powershell packages =================")
