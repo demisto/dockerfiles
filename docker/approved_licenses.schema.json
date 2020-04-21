@@ -20,6 +20,13 @@
                     "regex": {
                         "type": "string",
                         "description": "python regex to use to detect this license"
+                    },
+                    "additional_urls": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "additional urls pointing to this license. used by pwsh validation"
                     }
                 },
                 "defaultSnippets": [
