@@ -31,31 +31,36 @@ The script `docker/build_docker.sh` is used to build all modified docker images.
 * Install pipenv globally using: `pip install pipenv`
 * Install requests globally: `pip install requests`
 
-To get up and running fast with a python image with additional packages use the script: `docker/create_new_python_image.py`. Usage:
+To get up and running fast with a Python/PowerShell image with additional packages use the script: `docker/create_new_docker_image.py`. Usage:
 ```
-./docker/create_new_python_image.py -h
-usage: create_new_python_image.py [-h] [-p {two,three}] [-l {alpine,debian}]
+usage: create_new_docker_image.py [-h] [-t {python,powershell}]
+                                  [-p {two,three}] [-l {alpine,debian,ubuntu}]
                                   [--pkg PKG]
                                   name
 
-Create a new python based docker image
+Create a new docker image
 
 positional arguments:
-  name                  The image name to use
+  name                  The image name to use without the organization prefix.
+                        For example: ldap3
 
 optional arguments:
   -h, --help            show this help message and exit
+  -t {python,powershell}, --type {python,powershell}
+                        Specify type of image to create (default: python)
   -p {two,three}, --python {two,three}
                         Specify python version to use (default: three)
-  -l {alpine,debian}, --linux {alpine,debian}
+  -l {alpine,debian,ubuntu}, --linux {alpine,debian,ubuntu}
                         Specify linux distro to use (default: alpine)
-  --pkg PKG             Specify a python package to install. Can be specified
-                        multiple times. (default: None)
+  --pkg PKG             Specify a package/module to install. Can be specified
+                        multiple times. Each package needs to be specified
+                        with --pkg. For example: --pkg google-cloud-storage
+                        --pkg oath2client (default: None)
 ```
 
 For example to create a new image named ldap using python 3 and with the python package ldap3 run the following:
 ```
-./docker/create_new_python_image.py -p three --pkg ldap3 ldap
+./docker/create_new_docker_image.py -p three --pkg ldap3 ldap
 ```
 The above command will create a directory `docker/ldap` with all relevant files all setup for building a docker image. You can now build the image locally by following: [Building Locally a Test Build](#building-locally-a-test-build).
 
@@ -93,10 +98,10 @@ The build script will check for a `build.conf` file in the target image director
 ## Base Python Images
 There are 4 base python images which should be used when building a new image which is based upon python:
 
-* python: Python 2 image based upon alpine
-* python3: Python 3 image based upon alpine
-* python-deb: Python 2 image based upon debian
-* python3-deb: Python 3 image based upon debian
+* [python](https://github.com/demisto/dockerfiles/blob/repository-info/demisto/python/last.md): Python 2 image based upon alpine
+* [python3](https://github.com/demisto/dockerfiles/blob/repository-info/demisto/python3/last.md): Python 3 image based upon alpine
+* [python-deb](https://github.com/demisto/dockerfiles/blob/repository-info/demisto/python-deb/last.md): Python 2 image based upon debian
+* [python3-deb](https://github.com/demisto/dockerfiles/blob/repository-info/demisto/python3-deb/last.md): Python 3 image based upon debian
 
 ### Which image to choose as a base?
 
@@ -110,6 +115,25 @@ Simply create a file named: `vefify.py`. It may contain any python code and all 
 cat verify.py | docker run --rm -i <image_name> python '-'
 ```
 Example of docker image with simple `verify.py` script can be seen [here](https://github.com/demisto/dockerfiles/tree/master/docker/m2crypto)
+
+## PowerShell Images
+We support building PowerShell Core docker images. To create the Dockerfile for a PowerShell image use the `docker/create_new_docker_image.py` script with the `-t` or `--type` argument set to: `powershell`. For example:
+
+```
+./docker/create_new_docker_image.py -t powershell --pkg Az pwsh-azure
+```
+The above command will create a directory `docker/pwsh-azure` with all relevant files setup for building a PowerShell docker image which imports the Az PowerShell module. You can now build the image locally by following: [Building Locally a Test Build](#building-locally-a-test-build).
+
+**Naming Convention:** To differentiate PowerShell images, name the images with a prefix of either `pwsh-` or `powershell-`.
+
+### Base PowerShell Images
+There are 3 base PowerShell images which should be used when building a new image which is based upon PowerShell:
+
+* [powershell](https://github.com/demisto/dockerfiles/blob/repository-info/demisto/powershell/last.md): PowerShell image based upon Alpine (default)
+* [powershell-deb](https://github.com/demisto/dockerfiles/blob/repository-info/demisto/powershell-deb/last.md): PowerShell image based upon Debian
+* [powershell-ubuntu](https://github.com/demisto/dockerfiles/blob/repository-info/demisto/powershell-ubuntu/last.md): PowerShell image based upon Ubuntu
+
+We recommend using the default Alpine based image. The Debian and Ubuntu images are provided mainly for cases that there is need to install additional OS packages.
 
 ## Docker Image Deployment
 When you first open a PR, a `development` docker image is built (via CircleCI) under the `devdemisto` docker organization. So for example if your image is named `ldap3` an image with the name `devdemisto/ldap3` will be built. 
