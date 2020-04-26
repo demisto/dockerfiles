@@ -1,4 +1,3 @@
-
 FROM demisto/python3-deb:3.8.2.6981
 
 COPY requirements.txt .
