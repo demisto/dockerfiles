@@ -165,7 +165,13 @@ function docker_build {
     if [[ "$(prop 'devonly')" ]]; then
         echo "Skipping license verification for devonly image"
     else
-        ${DOCKER_SRC_DIR}/verify_licenses.py ${image_full_name}
+        PY3CMD="python3"
+        if command -v python3.7 >/dev/null 2>&1; then
+            PY3CMD="python3.7"
+        elif command -v python3.8 >/dev/null 2>&1; then
+            PY3CMD="python3.8"
+        fi
+        $PY3CMD ${DOCKER_SRC_DIR}/verify_licenses.py ${image_full_name}
     fi
     if [ -f "verify.py" ]; then
         echo "==========================="            
@@ -242,6 +248,7 @@ if [[ ! $(which pyenv) ]] && [[ -n "${CIRCLECI}" ]]; then
     export PATH="$HOME/.pyenv/bin:$PATH"
     eval "$(pyenv init -)"
     eval "$(pyenv virtualenv-init -)"
+    pyenv shell system $(pyenv versions --bare | grep 3.7)
 fi
 
 echo "default python versions: "

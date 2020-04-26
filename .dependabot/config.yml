@@ -1062,6 +1062,17 @@ update_configs:
         dependency_name: demisto/*
         update_type: all
   - package_manager: python
+    directory: /docker/threatconnect-sdk
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/threatconnect-sdk
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
     directory: /docker/bs4
     update_schedule: live
     automerged_updates:
@@ -1174,6 +1185,81 @@ update_configs:
         update_type: semver:minor
   - package_manager: docker
     directory: /docker/ippysocks
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: docker
+    directory: /docker/pwsh-azure
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/emoji
+    update_schedule: live
+  - package_manager: docker
+    directory: /docker/emoji
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/pyotrs
+    update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
+  - package_manager: docker
+    directory: /docker/pyotrs
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/python_zipfile
+    update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
+  - package_manager: docker
+    directory: /docker/python_zipfile
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/netmiko
+    update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
+  - package_manager: docker
+    directory: /docker/netmiko
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/smb
+    update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
+  - package_manager: docker
+    directory: /docker/smb
     update_schedule: daily
     automerged_updates:
     - match:
