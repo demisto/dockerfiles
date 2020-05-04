@@ -3,11 +3,10 @@
 import argparse
 import sys
 import os
-import requests
-import datetime
-import string
 import shutil
 import subprocess
+
+from image_latest_tag import get_latest_tag
 
 DOCKER_PYTHON_ALPINE = '''
 FROM {image}
@@ -40,33 +39,6 @@ FROM {image}
 RUN pwsh -c "Set-PSRepository -Name PSGallery -InstallationPolicy Trusted -ErrorAction Stop"
 RUN pwsh -c "Install-Module -ErrorAction Stop {modules}"
 '''
-
-
-def get_latest_tag(image_name):
-    last_tag = None
-    last_date = None
-    url = "https://registry.hub.docker.com/v2/repositories/{}/tags/?page_size=25".format(image_name)
-    while True:
-        print("Querying docker hub url: {}".format(url))
-        res = requests.get(url)
-        res.raise_for_status()
-        obj = res.json()
-        for result in obj['results']:
-            name = result['name']
-            if len(name) >= 20 and all(c in string.hexdigits for c in name):  # skip git sha revisions
-                continue
-            date = datetime.datetime.strptime(result['last_updated'], "%Y-%m-%dT%H:%M:%S.%fZ")
-            if not last_date or date > last_date:
-                last_date = date
-                last_tag = result['name']
-        if obj['next']:
-            url = obj['next']
-        else:
-            break
-    print("last tag: {}, date: {}".format(last_tag, last_date))
-    if not last_tag:
-        raise Exception('No tag found for image: {}'.format(image_name))
-    return last_tag
 
 
 def create_powershell_image(folder, base_image, args):

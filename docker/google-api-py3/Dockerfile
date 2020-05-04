@@ -1,4 +1,4 @@
-FROM demisto/crypto:1.0.0.7550
+FROM demisto/crypto:1.0.0.7634
 
 COPY requirements.txt .
 
