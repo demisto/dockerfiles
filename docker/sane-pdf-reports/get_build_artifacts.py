@@ -17,6 +17,8 @@ Usage example
 
 Use like so:
 python get_build_artifacts.py --token <token> --project <project name> --branch master --filter "regex"
+
+in sane-pdf-reports just run the docker file again.
 """
 
 API_URL = 'https://circleci.com/api/v1.1/project/github'
