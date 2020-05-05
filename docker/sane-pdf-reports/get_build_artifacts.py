@@ -39,7 +39,7 @@ def get_args():
 def send_request(url):
     headers = {
         'Accept': 'application/json',
-        'Circle-Token': os.getenv(ENV_TOKEN_KEY)
+        'Circle-Token': os.getenv(ENV_TOKEN_KEY, "")
     }
 
     req = urllib.request.Request(url, headers=headers, method="GET")
