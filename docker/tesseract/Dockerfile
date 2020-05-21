@@ -1,5 +1,5 @@
 
-FROM demisto/python3-deb:3.8.2.6981
+FROM demisto/python3-deb:3.8.2.8159
 
 RUN apt-get update && apt-get -t buster-backports install -y --no-install-recommends \
   tesseract-ocr \
