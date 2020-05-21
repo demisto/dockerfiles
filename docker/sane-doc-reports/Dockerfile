@@ -11,6 +11,10 @@ RUN apk --update add --no-cache --virtual .build-dependencies build-base wget gi
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies
 RUN ln -fs /usr/share/zoneinfo/UTC /etc/localtime
+RUN curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash - \
+    sudo apt install -y nodejs \
+    npm install svgexport -g
+
 RUN mkdir sandbox
 COPY src sandbox/ 
 WORKDIR sandbox
