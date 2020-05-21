@@ -1,3 +1,4 @@
+import pathlib
 from os import getenv
 
 # Environment
@@ -124,3 +125,6 @@ MD_PAGE_BREAK = '\\pagebreak'
 
 # Misc.
 DOCX_TEMAPLTE_FILE = 'template.docx'
+RESIZE_PLOT_ITEMS_AMOUNT_THRESHOLD = 10.0
+XSOAR_LOGO_BASE64 = open(pathlib.Path(__file__).parent / './populate/logo.base64', 'r').read()
+

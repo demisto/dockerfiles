@@ -16,3 +16,4 @@ def test_sane_json_no_text_in_data():
 def test_sane_json_json_parse_not_list_table():
     json = _transform('invalid/json_parse_becomes_not_list.json')
     assert isinstance(json[1].json_data[0]['data'], list)
+
