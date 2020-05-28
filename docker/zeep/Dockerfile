@@ -9,6 +9,10 @@ RUN apk --update add --no-cache --virtual .build-dependencies python-dev build-b
   && apk del .build-dependencies
 
 # populate zeep's cache so offline can work too 
+ENV ZEEP_STATIC_CACHE=/zeep/static_cache
 COPY zeep-add-to-cache.py .
-RUN python zeep-add-to-cache.py https://www.w3.org/2005/05/xmlmime \
+RUN mkdir /zeep/static_cache \
+  && chmod 755 /zeep \
+  && chmod 755 /zeep/static_cache \
+  && python zeep-add-to-cache.py https://www.w3.org/2005/05/xmlmime \
   && python zeep-add-to-cache.py http://www.w3.org/2005/05/xmlmime
