@@ -154,11 +154,16 @@ function docker_build {
         echo "Pipfile lock generated requirements.txt: "
         cat requirements.txt
         del_requirements=yes
-    fi        
-    docker build . -t ${image_full_name} \
+    fi
+    tmp_dockerfile=$(mktemp)
+    cp Dockerfile "$tmp_dockerfile"
+    echo "" >> "$tmp_dockerfile"
+    echo "ENV DOCKER_IMAGE=$image_full_name" >> "$tmp_dockerfile"
+    docker build -f "$tmp_dockerfile" . -t ${image_full_name} \
         --label "org.opencontainers.image.authors=Demisto <containers@demisto.com>" \
         --label "org.opencontainers.image.version=${VERSION}" \
         --label "org.opencontainers.image.revision=${CIRCLE_SHA1}"
+    rm "$tmp_dockerfile"
     if [ ${del_requirements} = "yes" ]; then
         rm requirements.txt
     fi
