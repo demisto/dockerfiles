@@ -1,5 +1,5 @@
 
-FROM demisto/python3:3.7.5.4583
+FROM demisto/python3:3.8.3.8715
 
 # COPY requirements.txt .
 
@@ -8,4 +8,6 @@ FROM demisto/python3:3.7.5.4583
 #  && apk del .build-dependencies
 
 RUN apk --update add --no-cache \
-	poppler-utils \
+	poppler-utils
+
+
