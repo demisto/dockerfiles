@@ -157,7 +157,6 @@ function docker_build {
     fi
     tmp_dockerfile=$(mktemp)
     cp Dockerfile "$tmp_dockerfile"
-    echo "Using temp Dockerfile: $tmp_dockerfile"
     echo "" >> "$tmp_dockerfile"
     echo "ENV DOCKER_IMAGE=$image_full_name" >> "$tmp_dockerfile"
     docker build -f "$tmp_dockerfile" . -t ${image_full_name} \

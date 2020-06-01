@@ -1,4 +1,4 @@
 
-FROM demisto/python3:3.8.3.8715
+FROM demisto/python3:3.7.5.4002
 
 RUN apk --update add --no-cache curl
