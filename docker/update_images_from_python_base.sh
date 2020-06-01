@@ -22,3 +22,5 @@ for image in python python3 python-deb python3-deb ; do
     echo "latest tag: $latest_tag. Updating images..."
     grep -l  -E "FROM\\s+${full_image}:" docker/*/Dockerfile | grep -v "$SEPERATE_PR" | grep -v -f $temp_dev | xargs sed -i '' -e "s#${full_image}:.*#${full_image}:${latest_tag}#"
 done
+
+rm $temp_dev
