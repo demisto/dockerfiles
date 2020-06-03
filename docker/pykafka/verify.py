@@ -2,6 +2,7 @@ import lz4.frame as lz4
 import lz4f
 import xxhash
 import snappy
+from pykafka import rdkafka
 
 print("xxhash version: " + xxhash.XXHASH_VERSION)
 
