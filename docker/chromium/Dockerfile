@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Chrome driver download from: https://chromedriver.chromium.org/downloads
 # Make sure to download the proper versions that match.
 # You can check the version of the downloaded chrome by running:
-# docker run --rm -it -v `pwd`:/work -w /work  demisto/python3-deb:3.8.3.8715 dpkg -I docker/chromium/google-chrome-stable_current_amd64.deb | grep -i version 
+# docker run --rm -it -v `pwd`:/work -w /work  demisto/chromium:1.0.0.7857 dpkg -I docker/chromium/google-chrome-stable_current_amd64.deb | grep -i version 
 # IMPORTANT: we use wget to avoid using copy to get a small image. If you update the zip files you must update the download links to the proper commit hash
 RUN wget -q https://github.com/demisto/dockerfiles/raw/77664ef86c080c09ebee7ec27af6d71aa455092c/docker/chromium/chromedriver_linux64.zip && \
 wget -q https://github.com/demisto/dockerfiles/raw/77664ef86c080c09ebee7ec27af6d71aa455092c/docker/chromium/google-chrome-stable_current_amd64.deb && \
