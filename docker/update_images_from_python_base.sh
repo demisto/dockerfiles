@@ -8,7 +8,7 @@ set -e
 #######################################
 
 ## Images which should be updated in a seperate PR (grep regex)
-SEPERATE_PR="/chromium/|/pcap-http-extractor/|/office-utils/|/snowflake/|/zeep/|/faker3/"
+SEPERATE_PR="/pcap-http-extractor/|/office-utils/|/snowflake/|/faker3/"
 
 # dev only images to ignore
 temp_dev=$(mktemp)
