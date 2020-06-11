@@ -1,3 +1,3 @@
-FROM demisto/powershell-ubuntu:6.2.4.6258
+FROM demisto/powershell-ubuntu:7.0.1.9103
 
 RUN apt-get update && apt-get install -y --no-install-recommends openssh-client
