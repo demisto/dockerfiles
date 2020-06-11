@@ -1024,6 +1024,8 @@ update_configs:
     automerged_updates:
     - match:
         update_type: semver:minor
+    # requested by code42 to pin to specific version of py42
+    version_requirement_updates: "off"
   - package_manager: docker
     directory: /docker/py42
     update_schedule: daily
