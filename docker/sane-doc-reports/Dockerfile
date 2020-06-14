@@ -1,21 +1,34 @@
 
-FROM demisto/python3:3.7.5.4328
+FROM demisto/python3-deb:3.8.2.6981
 
-COPY requirements.txt .
+WORKDIR "/app"
 
-RUN apk add --no-cache --virtual .build-deps gcc musl-dev \
- && pip install cython \
- && apk del .build-deps
-RUN apk add --update --no-cache g++ gcc libxslt-dev freetype-dev jpeg-dev zlib-dev tzdata
-RUN apk --update add --no-cache --virtual .build-dependencies build-base wget git \
-  && pip install --no-cache-dir -r requirements.txt \
-  && apk del .build-dependencies
-RUN ln -fs /usr/share/zoneinfo/UTC /etc/localtime
-RUN curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash - \
-    sudo apt install -y nodejs \
-    npm install svgexport -g
+SHELL ["/bin/bash", "-c"]
+RUN apt-get update -y -q && \
+    apt-get install -y -q sudo
+RUN adduser --disabled-password --gecos '' docker && \
+    adduser docker sudo && \
+    echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-RUN mkdir sandbox
-COPY src sandbox/ 
+USER docker
+RUN sudo apt-get install -y nodejs npm gconf-service \
+    libasound2 libatk1.0-0 libatk-bridge2.0-0 \
+    libc6 libcairo2 libcups2 libdbus-1-3 \
+    libexpat1 libfontconfig1 libgcc1 \
+    libgconf-2-4 libgdk-pixbuf2.0-0 \
+    libglib2.0-0 libgtk-3-0 libnspr4 \
+    libpango-1.0-0 libpangocairo-1.0-0 \
+    libstdc++6 libx11-6 libx11-xcb1 libxcb1 \
+    libxcomposite1 libxcursor1 libxdamage1 \
+    libxext6 libxfixes3 libxi6 libxrandr2 \
+    libxrender1 libxss1 libxtst6 \
+    ca-certificates fonts-liberation \
+    libappindicator1 libnss3 lsb-release \
+    xdg-utils
+
+RUN sudo npm install svgexport -g --unsafe-perm=true
+RUN sudo mkdir sandbox && sudo chown docker:docker sandbox
+COPY src sandbox/
 WORKDIR sandbox
-RUN pip install -e .
+COPY requirements.txt .
+RUN pip install -r requirements.txt && pip install -e .
