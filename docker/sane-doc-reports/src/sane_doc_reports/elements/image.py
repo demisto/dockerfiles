@@ -24,13 +24,16 @@ class ImageElement(Element):
             return
 
         if self.section.contents.startswith('http://') or \
-           self.section.contents.startswith('https://'):
+                self.section.contents.startswith('https://'):
             self.section.type = MD_TYPE_IMAGE
             self.section.extra['src'] = self.section.contents
             md_image.invoke(self.cell_object, self.section)
             return
 
         image = None
+        width_inch = None
+        height_inch = None
+
         should_shrink = False
         if self.section.contents.startswith('data:image/svg+xml;base64'):
             image = fix_svg_to_png(self.section.contents)
@@ -47,10 +50,19 @@ class ImageElement(Element):
         if should_shrink:
             width_inch *= 0.91  # (the size that was calculated was without-
             # regards to margins in the doc, let's remove them here)
-            self.cell_object.run.add_picture(image, width=Inches(width_inch),
-                                             height=Inches(height_inch))
-        else:
-            self.cell_object.run.add_picture(image)
+
+        if self.section.extra.get('max_size', False):
+            max_size = self.section.extra.get('max_size', {})
+            max_width = max_size.get('width', None)
+            max_height = max_size.get('height', None)
+            width_inch = min(width_inch, max_width)
+            height_inch = min(height_inch, max_height)
+
+        width_inch = Inches(width_inch) if width_inch else None
+        height_inch = Inches(height_inch) if width_inch else None
+
+        self.cell_object.run.add_picture(image, width=width_inch,
+                                         height=height_inch)
 
 
 def invoke(cell_object, section):

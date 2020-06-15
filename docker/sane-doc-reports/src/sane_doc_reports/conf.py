@@ -127,4 +127,6 @@ MD_PAGE_BREAK = '\\pagebreak'
 DOCX_TEMAPLTE_FILE = 'template.docx'
 RESIZE_PLOT_ITEMS_AMOUNT_THRESHOLD = 10.0
 XSOAR_LOGO_BASE64 = open(pathlib.Path(__file__).parent / './populate/logo.base64', 'r').read()
+MAX_CUSTOMER_LOGO_HEIGHT_INCH = 1.5
+MAX_CUSTOMER_LOGO_WIDTH_INCH = 2
 

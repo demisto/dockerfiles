@@ -150,7 +150,8 @@ def example_all():
         example_duration,
         example_line_chart,
         example_unimplemented,
-        example_items_section
+        example_items_section,
+        example_header_logo
     ]
     for out_index, fun in enumerate(examples):
         out_file_name = f'example_{out_index}.docx'
