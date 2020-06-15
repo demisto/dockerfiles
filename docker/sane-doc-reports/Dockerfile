@@ -1,5 +1,5 @@
 
-FROM demisto/python3-deb:3.8.2.6981
+FROM demisto/python3:3.8.3.8715
 
 WORKDIR "/app"
 
