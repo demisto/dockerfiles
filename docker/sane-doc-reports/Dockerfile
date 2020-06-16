@@ -8,7 +8,7 @@ RUN update-ca-certificates
 RUN apt update -yq && apt upgrade -y && apt autoremove -yq \
     && apt install -y nodejs npm
 
-RUN npm install svgexport@0.4.0 -g --unsafe-perm=true
+RUN npm install svgexport@0.4.0 -g
 RUN mkdir sandbox
 COPY src sandbox/
 WORKDIR sandbox
