@@ -1,21 +1,24 @@
 import os
 
-from docx.enum.text import WD_BREAK
+from docx.enum.table import WD_TABLE_ALIGNMENT
+from docx.enum.text import WD_BREAK, WD_PARAGRAPH_ALIGNMENT
 from pathlib import Path
 from typing import List
 
 from docx import Document
-from docx.shared import Pt
+from docx.shared import Pt, Inches
 
 from sane_doc_reports.domain.CellObject import CellObject
 from sane_doc_reports.domain.Page import Page
 from sane_doc_reports.domain.Section import Section
 from sane_doc_reports.domain import SaneJson
+from sane_doc_reports.elements import image
 from sane_doc_reports.utils import insert_by_type
 from sane_doc_reports.conf import DEBUG, A4_MM_HEIGHT, A4_MM_WIDTH, \
     TOP_MARGIN_PT, BOTTOM_MARGIN_PT, LEFT_MARGIN_PT, RIGHT_MARGIN_PT, \
     A3_MM_WIDTH, A3_MM_HEIGHT, LETTER_MM_WIDTH, LETTER_MM_HEIGHT, PAPER_A4, \
-    PAPER_A3, PAPER_LETTER, DOCX_TEMAPLTE_FILE
+    PAPER_A3, PAPER_LETTER, DOCX_TEMAPLTE_FILE, XSOAR_LOGO_BASE64, \
+    MAX_CUSTOMER_LOGO_WIDTH_INCH, MAX_CUSTOMER_LOGO_HEIGHT_INCH
 from sane_doc_reports.populate.grid import get_cell, merge_cells
 from docx.enum.style import WD_STYLE_TYPE
 from docx.enum.section import WD_ORIENT
@@ -54,6 +57,9 @@ class Report:
         self.page_height = A4_MM_HEIGHT
 
     def populate_report(self) -> None:
+        if not self.options.get('disableHeaders', False):
+            self.add_header_logos()
+
         paper_size = self.options.get('paper_size', 'A4')
         self.change_page_size(paper_size)
         self._decrease_layout_margins()
@@ -152,3 +158,38 @@ class Report:
             section.bottom_margin = Pt(BOTTOM_MARGIN_PT)
             section.left_margin = Pt(LEFT_MARGIN_PT)
             section.right_margin = Pt(RIGHT_MARGIN_PT)
+
+    def add_header_logos(self):
+        # Find the headers
+        section = self.document.sections[0]
+        section.header_distance = Pt(0)
+        header = section.header
+        table = header.add_table(rows=1, cols=2, width=Inches(24))
+        table.alignment = WD_TABLE_ALIGNMENT.CENTER
+        table.autofit = True
+
+        left_cell = table.cell(0, 0)
+        right_cell = table.cell(0, 1)
+
+        # Add the left cell to the header
+        left_image = CellObject(left_cell)
+        left_cell.paragraphs[-1].alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+        left_cell.vertical_alignment = 1
+
+        # Add the right cell to the header
+        right_image = CellObject(right_cell)
+        right_cell.paragraphs[-1].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+        right_cell.vertical_alignment = 1
+
+        # Add the main logo
+        left_logo_b64 = self.options.get('demistoLogo', XSOAR_LOGO_BASE64)
+        s = Section('image', left_logo_b64, {}, {})
+        image.invoke(left_image, s)
+
+        # Add the customer logo
+        right_logo_b64 = self.options.get('customerLogo', False)
+        if right_logo_b64:
+            s = Section('image', right_logo_b64, {}, {
+                'max_size': {'height': MAX_CUSTOMER_LOGO_HEIGHT_INCH, # max size in inches
+                             'width': MAX_CUSTOMER_LOGO_WIDTH_INCH}})
+            image.invoke(right_image, s)

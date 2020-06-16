@@ -1,4 +1,5 @@
 from sane_doc_reports import main
+from sane_doc_reports.conf import XSOAR_LOGO_BASE64
 from tests.utils import get_mock
 
 
@@ -50,7 +51,7 @@ def example_markdown_md_button(out_file_name='example.docx'):
 
 
 def example_markdown_paged(out_file_name='example.docx'):
-    main.run(get_mock('elements/markdown_paged2.json', ret_dict=False),
+    main.run(get_mock('elements/markdown_paged.json', ret_dict=False),
              out_file_name)
 
 
@@ -110,6 +111,23 @@ def example_items_section(out_file_name='example.docx'):
              out_file_name)
 
 
+def example_image_remote(out_file_name='example.docx'):
+    main.run(get_mock('elements/image-remote.json', ret_dict=False),
+             out_file_name)
+
+
+def example_image_svg(out_file_name='example.docx'):
+    main.run(get_mock('elements/image-svg.json', ret_dict=False), out_file_name)
+
+
+def example_header_logo(out_file_name='example.docx'):
+    main.run(get_mock('grid_checks/fullgrid.json', ret_dict=False),
+             out_file_name, options={
+            'customerLogo': XSOAR_LOGO_BASE64,
+            'demistoLogo': XSOAR_LOGO_BASE64
+        })
+
+
 def example():
     main.run(get_mock('example.json', ret_dict=False), 'example.docx')
 
@@ -132,7 +150,8 @@ def example_all():
         example_duration,
         example_line_chart,
         example_unimplemented,
-        example_items_section
+        example_items_section,
+        example_header_logo
     ]
     for out_index, fun in enumerate(examples):
         out_file_name = f'example_{out_index}.docx'
