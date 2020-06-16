@@ -17,6 +17,9 @@ Usage example
 
 Use like so:
 python get_build_artifacts.py --token <token> --project <project name> --branch master --filter "regex"
+
+in sane-pdf-reports just run the docker file again.
+For docker update of sane-pdf-reports, just create an empty PR.
 """
 
 API_URL = 'https://circleci.com/api/v1.1/project/github'
@@ -26,7 +29,6 @@ ENV_TOKEN_KEY = "CIRCLECI_ARTIFACT_TOKEN"
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--token", required=False, default="")
     parser.add_argument("--project", required=True)
     parser.add_argument("--branch", required=True)
     parser.add_argument("--filter", required=True)
@@ -35,11 +37,12 @@ def get_args():
     return vars(parser.parse_args())
 
 
-def send_request(url, params):
-    headers = {'Accept': 'application/json'}
+def send_request(url):
+    headers = {
+        'Accept': 'application/json',
+        'Circle-Token': os.getenv(ENV_TOKEN_KEY, "")
+    }
 
-    params = urllib.parse.urlencode(params)
-    url += f"?{params}"
     req = urllib.request.Request(url, headers=headers, method="GET")
     response = urllib.request.urlopen(req)
     if response.getcode() == 200:
@@ -49,19 +52,10 @@ def send_request(url, params):
             'Received code {}: {}'.format(response.getcode(), response.read()))
 
 
-def get_latest_build_number(base_url, branch, token):
-    logging.info('Getting latest successful build on {}'.format(branch))
-    params = {'circle-token': token, 'limit': 1, 'filter': 'successful'}
-    url = '{}/tree/{}'.format(base_url, branch)
-    latest_build = send_request(url, params)
-    latest_build_json = json.loads(latest_build)
-    return latest_build_json[0]['build_num']
-
-
-def get_artifacts(base_url, build_number, artifact_filter, token):
-    params = {'circle-token': token}
-    url = '{}/{}/artifacts'.format(base_url, build_number)
-    artifacts = send_request(url, params)
+def get_artifacts(base_url, branch, artifact_filter):
+    url = '{}/latest/artifacts?branch={}'.format(base_url, branch)
+    logging.info(f"URL={url}")
+    artifacts = send_request(url)
     result = []
     for artifact in json.loads(artifacts):
         # If matches then return it
@@ -70,12 +64,11 @@ def get_artifacts(base_url, build_number, artifact_filter, token):
     return result
 
 
-def download_artifacts(artifacts, token):
+def download_artifacts(artifacts):
     logging.info('Downloading artifacts files ...')
-    params = {'circle-token': token}
 
     for url in artifacts:
-        rsp = send_request(url, params)
+        rsp = send_request(url)
         with open(os.path.basename(url), "wb") as f:
             f.write(rsp)
             logging.info('Wrote {}'.format(f.name))
@@ -84,19 +77,16 @@ def download_artifacts(artifacts, token):
 def main():
     logging.basicConfig(format='%(message)s', level=logging.INFO)
     args = get_args()
-    token = os.getenv(ENV_TOKEN_KEY, args["token"])
     project = args["project"]
     branch = args["branch"]
     filter = args["filter"]
     org = args["organization"]
 
     base_url = '{}/{}/{}'.format(API_URL, org, project)
-    latest_build = get_latest_build_number(base_url, branch, token)
-    logging.info(
-        'Latest successful build on {} is #{}'.format(branch,
-                                                      latest_build))
-    artifacts = get_artifacts(base_url, latest_build, filter, token)
-    download_artifacts(artifacts, token)
+
+    artifacts = get_artifacts(base_url, branch, filter)
+    logging.info(f"Artifacts: {artifacts}")
+    download_artifacts(artifacts)
     logging.info('Done downloading artifacts!')
 
 
