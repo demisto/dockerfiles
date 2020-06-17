@@ -73,6 +73,9 @@ def general_json_fixes(json_data: List[dict]) -> List[dict]:
         if json_data[i]['type'] == 'itemsSection':
             json_data[i]['type'] = 'items_section'
             continue
+        if json_data[i]['type'] == 'logo':
+            json_data[i]['type'] = 'image'
+            continue
 
     return json_data
 
@@ -92,8 +95,6 @@ def transform_old_json_format(json_data: List[dict]) -> List[dict]:
     # Remove unnecessary first elements (logo/side image)
     # We need to do this before we calculate the rowPos
     if json_data[0]['type'] == 'image':
-        del json_data[0]
-    if json_data[0]['type'] == 'logo':
         del json_data[0]
     if json_data[0]['type'] == 'logo':
         del json_data[0]
