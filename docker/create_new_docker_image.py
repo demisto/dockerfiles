@@ -37,7 +37,7 @@ DOCKER_POWERSHELL = '''
 FROM {image}
 
 RUN pwsh -c "Set-PSRepository -Name PSGallery -InstallationPolicy Trusted -ErrorAction Stop"
-RUN pwsh -c "Install-Module -ErrorAction Stop {modules}"
+RUN pwsh -c "Install-Module -ErrorAction Stop -Scope AllUsers {modules}"
 '''
 
 
