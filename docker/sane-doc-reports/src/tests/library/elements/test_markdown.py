@@ -65,26 +65,26 @@ def test_markdown():
     assert len(d.element.xpath('//w:br')) == 0
 
 
-def test_markdown_paged():
-    report = Report(*_transform('elements/markdown_paged.json'))
+def test_markdown_paged_not_breaking():
+    report = Report(*_transform('elements/markdown_paged_not_working.json'))
     report.populate_report()
 
     d = report.document
 
-    # Find 6 headings
-    assert len(d.element.xpath("//w:t[contains(text(), 'Heading')]")) == 2
+    # Find 1 headings
+    assert len(d.element.xpath("//w:t[contains(text(), 'Heading')]")) == 1
 
     # Page break (none because it is the first and only element)
     assert len(d.element.xpath('//w:br')) == 0
 
 
-def test_markdown_paged():
-    report = Report(*_transform('elements/markdown_paged2.json'))
+def test_markdown_paged2():
+    report = Report(*_transform('elements/markdown_paged.json'))
     report.populate_report()
 
     d = report.document
 
-    # Find 6 headings
+    # Find 2 headings
     assert len(d.element.xpath("//w:t[contains(text(), 'Heading')]")) == 2
 
     # Page break

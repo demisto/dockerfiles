@@ -1,3 +1,3 @@
-from py42.sdk import SDK
+import py42.sdk
 
 print("Imported py42 successfully")
