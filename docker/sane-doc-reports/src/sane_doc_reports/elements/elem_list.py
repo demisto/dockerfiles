@@ -13,6 +13,9 @@ class ElemListWrapper(Wrapper):
         # if isinstance(self.section.contents, list):
         section_list = self.section.contents
 
+        if section_list == "":
+            return
+
         if not isinstance(section_list, list):
             raise ValueError('Elem list does not have valid contents ' +
                              '(must be a list)')
