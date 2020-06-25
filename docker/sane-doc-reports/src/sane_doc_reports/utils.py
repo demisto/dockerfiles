@@ -51,9 +51,11 @@ def fix_svg_to_png(contents):
         out.write(tmp_image.read())
 
     out_path = '/tmp/_out.png'
-    out = subprocess.run(['svgexport', tmp_path, out_path],
+    out = subprocess.run(['svgexport', tmp_path, out_path], stdout=subprocess.DEVNULL,
                          stderr=subprocess.STDOUT, check=True)
-    print("[Sane-doc-reports] Svg conversion output: ", out)
+
+    if DEBUG:
+        print("[Sane-doc-reports] Svg conversion output: ", out)
 
     outf = BytesIO()
     with open(out_path, 'rb') as of:
