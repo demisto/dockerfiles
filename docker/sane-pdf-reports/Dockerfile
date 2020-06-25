@@ -20,7 +20,7 @@ RUN apt-get update -y -q && \
     libxrender1 libxss1 libxtst6 \
     ca-certificates fonts-liberation \
     libappindicator1 libnss3 lsb-release \
-    xdg-utils wget \
+    xdg-utils wget locales\
     && rm -rf /var/lib/apt/lists/*
 RUN npm i puppeteer@1.2.0 && ln -s /app/node_modules/puppeteer/.local-chromium/linux-*/chrome-linux/chrome /usr/bin/chromium-browser
 
