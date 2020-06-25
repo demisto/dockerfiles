@@ -20,7 +20,7 @@ class ImageElement(Element):
             print("Adding image...")
 
         # Fix empty images
-        if self.section.contents == '':
+        if self.section.contents == '' or self.section.contents == []:
             return
 
         if self.section.contents.startswith('http://') or \
