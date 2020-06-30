@@ -2,7 +2,7 @@ import arrow
 import pytest
 from arrow.parser import ParserError
 
-from sane_doc_reports.utils import get_formatted_date
+from sane_doc_reports.utils import get_formatted_date, has_anomalies
 
 
 def test_get_formatted_date():
@@ -45,3 +45,19 @@ def test_get_formatted_date_invalid():
     with pytest.raises(ParserError):
         get_formatted_date('wowowowow', default_date_format)
 
+
+def test_has_anomalies():
+    no_anoms = [1, 1, 1, 1, 1]
+    assert has_anomalies(no_anoms) is False
+    no_anoms = [1, 2, 1, 2, 1]
+    assert has_anomalies(no_anoms) is False
+
+    almost_anoms = [1, 10, 1, 2, 1]
+    assert has_anomalies(almost_anoms) is False
+
+    yes_anoms = [1, 11, 1, 2, 1]
+    assert has_anomalies(yes_anoms) is True
+    yes_anoms = [1, 200, 1, 2, 1]
+    assert has_anomalies(yes_anoms) is True
+    yes_anoms = [1, 200, 100, 200, 1]
+    assert has_anomalies(yes_anoms) is True
