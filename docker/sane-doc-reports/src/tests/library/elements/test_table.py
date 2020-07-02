@@ -67,3 +67,16 @@ def test_table_string_in_report():
 
     # Check that it has the right amount of rows
     assert len(d.element.xpath('//w:tbl//w:tbl//w:t')) == 6 # 6 cells
+
+
+def test_table_empty_in_report():
+    report = Report(*_transform('elements/table_empty.json'))
+    report.populate_report()
+    d = report.document
+    table = next(utils.iter_block_items(d))
+    assert isinstance(table, Table)
+
+    assert len(d.element.xpath('//w:tbl//w:tbl')) == 1
+
+    # Check that it has the right amount of rows
+    assert len(d.element.xpath('//w:tbl//w:tbl//w:tr')) == 2
