@@ -79,6 +79,12 @@ def general_json_fixes(json_data: List[dict]) -> List[dict]:
         if json_data[i]['type'] == 'table':
             if 'tableColumns' not in json_data[i]['layout'] and isinstance(
                     json_data[i]['data'], str):
+                if json_data[i]['data'] == "":
+                    empty_notification = json_data[i].get("emptyNotification",
+                                                          "")
+                    title = json_data[i].get("title", "")
+                    json_data[i][
+                        'data'] = f'[{{"{title}":"{empty_notification}"}}]'
                 table_data = json.loads(json_data[i]['data'])
                 if isinstance(table_data, dict):
                     table_data = [table_data]
@@ -86,7 +92,6 @@ def general_json_fixes(json_data: List[dict]) -> List[dict]:
                 headers = list(table_data[0].keys())
                 json_data[i][LAYOUT_KEY]['tableColumns'] = headers
                 continue
-
 
     return json_data
 
@@ -114,7 +119,7 @@ def remove_first_logos(json_data: List[dict]) -> List[dict]:
         if len(json_data) == 0:
             return []
         if len(json_data) > (i - del_index) and \
-                json_data[i-del_index]['type'] == 'logo':
+                json_data[i - del_index]['type'] == 'logo':
             del json_data[i - del_index]
             # we removed one to it is used to decrease the next time.
             del_index += 1
@@ -207,6 +212,13 @@ def transform_old_json_format(json_data: List[dict]) -> List[dict]:
         if json_data[i]['type'] == 'table':
             if 'tableColumns' not in json_data[i]['layout'] and isinstance(
                     json_data[i]['data'], str):
+                if json_data[i]['data'] == "":
+                    empty_notification = json_data[i].get("emptyNotification",
+                                                          "")
+                    title = json_data[i].get("title", "")
+                    json_data[i][
+                        'data'] = f'[{{"{title}":"{empty_notification}"}}]'
+
                 table_data = json.loads(json_data[i]['data'])
                 if isinstance(table_data, dict):
                     table_data = [table_data]
