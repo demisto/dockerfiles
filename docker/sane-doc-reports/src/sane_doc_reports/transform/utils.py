@@ -81,9 +81,10 @@ def general_json_fixes(json_data: List[dict]) -> List[dict]:
                     json_data[i]['data'], str):
                 if json_data[i]['data'] == "":
                     empty_notification = json_data[i].get("emptyNotification",
-                                                          "No results found")
-                    title = json_data[i].get("title", empty_notification)
-                    json_data[i]['data'] = f'[{{"{title}":""}}]'
+                                                          "")
+                    title = json_data[i].get("title", "")
+                    json_data[i][
+                        'data'] = f'[{{"{title}":"{empty_notification}"}}]'
                 table_data = json.loads(json_data[i]['data'])
                 if isinstance(table_data, dict):
                     table_data = [table_data]
@@ -213,9 +214,11 @@ def transform_old_json_format(json_data: List[dict]) -> List[dict]:
                     json_data[i]['data'], str):
                 if json_data[i]['data'] == "":
                     empty_notification = json_data[i].get("emptyNotification",
-                                                          "No results found")
-                    title = json_data[i].get("title", empty_notification)
-                    json_data[i]['data'] = f'[{{"{title}":""}}]'
+                                                          "")
+                    title = json_data[i].get("title", "")
+                    json_data[i][
+                        'data'] = f'[{{"{title}":"{empty_notification}"}}]'
+
                 table_data = json.loads(json_data[i]['data'])
                 if isinstance(table_data, dict):
                     table_data = [table_data]
