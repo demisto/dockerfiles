@@ -15,3 +15,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN apt-get update && apt-get install -y --no-install-recommends \
   tshark \
 && rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  libmagic1 \
+&& rm -rf /var/lib/apt/lists/*
