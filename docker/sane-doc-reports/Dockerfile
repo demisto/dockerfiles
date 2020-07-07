@@ -1,16 +1,25 @@
-
 FROM demisto/python3-deb:3.8.3.9325
 WORKDIR "/app"
 
 SHELL ["/bin/bash", "-c"]
+RUN apt-get update -y -q && \
+    apt-get install -y -q nodejs npm gconf-service \
+    libasound2 libatk1.0-0 libatk-bridge2.0-0 \
+    libc6 libcairo2 libcups2 libdbus-1-3 \
+    libexpat1 libfontconfig1 libgcc1 \
+    libgconf-2-4 libgdk-pixbuf2.0-0 \
+    libglib2.0-0 libgtk-3-0 libnspr4 \
+    libpango-1.0-0 libpangocairo-1.0-0 \
+    libstdc++6 libx11-6 libx11-xcb1 libxcb1 \
+    libxcomposite1 libxcursor1 libxdamage1 \
+    libxext6 libxfixes3 libxi6 libxrandr2 \
+    libxrender1 libxss1 libxtst6 \
+    ca-certificates fonts-liberation \
+    libappindicator1 libnss3 lsb-release \
+    xdg-utils git \
+    && rm -rf /var/lib/apt/lists/* \
+    && npm install -g https://github.com/shakiba/svgexport#4c144c589050c039cbfc83a37d8e6d1f6f35bd27 --unsafe-perm=true
 
-RUN update-ca-certificates
-RUN apt update -yq && apt upgrade -y && apt autoremove -yq \
-    && apt install -y nodejs npm
-
-RUN npm install svgexport@0.4.0 -g --unsafe-perm=true
-RUN mkdir sandbox
-COPY src sandbox/
-WORKDIR sandbox
+COPY src .
 COPY requirements.txt .
 RUN pip install -r requirements.txt && pip install -e .

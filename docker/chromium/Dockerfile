@@ -8,6 +8,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   libxss1 \
   libappindicator1 \
   poppler-utils \
+  fonts-noto-cjk \
+  fonts-noto-core \
 && pip3 install --no-cache-dir -r requirements.txt \
 && apt-get purge -y --auto-remove \
   python-dev \
