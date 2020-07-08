@@ -5,7 +5,8 @@ COPY requirements.txt .
 
 RUN apk --update add --no-cache libxml2 \
   libxslt \
-  tshark
+  tshark \
+  libmagic
 
 RUN apk --update add --no-cache --virtual .build-dependencies python-dev build-base wget git \
   libxml2-dev \
