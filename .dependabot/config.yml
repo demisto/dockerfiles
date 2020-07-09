@@ -1409,3 +1409,9 @@ update_configs:
     directory: /docker/python3-alpineedge-pcapminer
     update_schedule: daily
 
+  - package_manager: python
+    directory: /docker/python3-alpineedge-pcapminer
+    update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
