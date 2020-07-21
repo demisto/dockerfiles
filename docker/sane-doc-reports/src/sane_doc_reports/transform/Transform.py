@@ -16,7 +16,6 @@ class Transform:
         with open(sane_json_path, 'r') as f:
             self.json_data = json.load(f)
 
-
         # Remove the logos
         self.json_data = remove_first_logos(self.json_data)
 
