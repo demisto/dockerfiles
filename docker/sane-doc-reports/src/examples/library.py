@@ -159,7 +159,7 @@ def example_all():
 
 
 def run():
-    example()
+    example_number_and_trend()
 
 
 if __name__ == '__main__':

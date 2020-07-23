@@ -56,8 +56,10 @@ class SaneJson:
         for index, json_section in enumerate(report_json_sorted):
             current_page.add_section(json_section)
 
-            if _is_page_separator(json_section) or \
-                    _is_markdown_page_separator(json_section):
+            is_pagebreak = _is_page_separator(json_section) or \
+                           _is_markdown_page_separator(json_section)
+
+            if is_pagebreak:
                 # TODO: There may be an edge case where the row and col are
                 #  the same, I'm not sure if it will ever happen though.
                 sane_pages.append(current_page)

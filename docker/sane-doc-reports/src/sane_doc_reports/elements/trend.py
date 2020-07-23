@@ -45,13 +45,18 @@ class TrendElement(Element):
 
         change = (current_sum * 100) / previous_sum
         if change < 0:
-            direction = '⏷'  # Down arrow
+            direction = '▼'  # Down arrow
         elif change == 0:
             direction = '= '
         else:
-            direction = '⏶'  # Up arrow
+            direction = '▲'  # Up arrow
 
-        change = "{0:.2f}".format(change)
+        if change > 999.0:
+            change = '> 999'
+        elif change < -999.0:
+            change = '< -999'
+        else:
+            change = "{0:.2f}".format(change)
         value_percent = f'{direction}{change}%'
         inner_cell = table.cell(0, 2)
         style_cell(inner_cell)
