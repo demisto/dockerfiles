@@ -13,4 +13,8 @@ RUN apk --update add --no-cache --virtual .build-dependencies python-dev build-b
 RUN python -m nltk.downloader punkt -d /usr/share/nltk_data
 
 
-COPY ./glove_top_20k.p /var/glove_top_20k.p
+COPY ./glove_50_top_20k.p /var/glove_50_top_20k.p
+
+COPY ./glove_100_top_20k.p /var/glove_100_top_20k.p
+
+COPY ./fasttext_top_20k.p /var/fasttext_top_20k.p
