@@ -18,3 +18,5 @@ COPY ./glove_50_top_20k.p /var/glove_50_top_20k.p
 COPY ./glove_100_top_20k.p /var/glove_100_top_20k.p
 
 COPY ./fasttext_top_20k.p /var/fasttext_top_20k.p
+
+COPY ./domain_to_rank.p /var/domain_to_rank.p
