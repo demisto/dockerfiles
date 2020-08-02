@@ -20,3 +20,7 @@ COPY ./glove_100_top_20k.p /var/glove_100_top_20k.p
 COPY ./fasttext_top_20k.p /var/fasttext_top_20k.p
 
 COPY ./domain_to_rank.p /var/domain_to_rank.p
+
+COPY ./word_to_ngram.p /var/word_to_ngram.p
+
+COPY ./word_to_regex.p /var/word_to_regex.p
