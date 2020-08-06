@@ -11,9 +11,9 @@ RUN apk --update add --no-cache --virtual .build-dependencies python-dev build-b
         gcc \
         python py-pip  \
         gfortran \
-        musl-dev \
+        musl-dev openblas-dev\
   && apk add --no-cache libstdc++  \
-  && apk add --no-cache openblas-dev  \
+  && apk add --no-cache  openblas libgomp \
   && apk add --no-cache bash  \
   && ln -s /usr/include/locale.h /usr/include/xlocale.h \
   && pip3 install --no-cache-dir -r requirements.txt \
