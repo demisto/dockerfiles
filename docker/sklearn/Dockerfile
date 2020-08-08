@@ -5,11 +5,7 @@ COPY requirements.txt .
 RUN apk --update add --no-cache --virtual .build-dependencies python-dev build-base wget git g++ python3-dev\
         openssh curl ca-certificates openssl less htop \
 		make  rsync \
-        libpng-dev freetype-dev libexecinfo-dev libgomp lapack-dev \
-		libgcc libquadmath musl  \
-		libgfortran \
-        gcc \
-        python py-pip  \
+        libpng-dev freetype-dev libexecinfo-dev lapack-dev \
         gfortran \
         musl-dev openblas-dev\
   && apk add --no-cache libstdc++  \
