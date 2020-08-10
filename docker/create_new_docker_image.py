@@ -5,6 +5,7 @@ import sys
 import os
 import shutil
 import subprocess
+import re
 
 from image_latest_tag import get_latest_tag
 
@@ -13,7 +14,7 @@ FROM {image}
 
 COPY requirements.txt .
 
-RUN apk --update add --no-cache --virtual .build-dependencies python-dev build-base wget git \\
+RUN apk --update add --no-cache --virtual .build-dependencies python{python_ver}-dev build-base wget git \\
   && pip install --no-cache-dir -r requirements.txt \\
   && apk del .build-dependencies
 '''
@@ -25,11 +26,11 @@ COPY requirements.txt .
 
 RUN apt-get update && apt-get install -y --no-install-recommends \\
   gcc \\
-  python-dev \\
+  python{python_ver}-dev \\
 && pip install --no-cache-dir -r requirements.txt \\
 && apt-get purge -y --auto-remove \\
   gcc \\
-  python-dev \\
+  python{python_ver}-dev \\
 && rm -rf /var/lib/apt/lists/*
 '''
 
@@ -50,13 +51,14 @@ def create_powershell_image(folder, base_image, args):
 def create_python_image(folder, base_image, args):
     docker_template = DOCKER_PYTHON_ALPINE if args.linux == 'alpine' else DOCKER_PYTHON_DEBIAN
     docker_file = open(folder + "/Dockerfile", "w+")
-    docker_file.write(docker_template.format(image=base_image))
+    python_ver = "2" if args.python == "two" else "3"
+    docker_file.write(docker_template.format(image=base_image, python_ver=python_ver))
     docker_file.close()
     # copy gitignore from python image
     shutil.copy(sys.path[0] + "/python/.gitignore", folder)
     print("Initializing pipenv...")
     print('========================================')
-    pipenv_param = "--two" if args.python == "two" else "--three"
+    pipenv_param = "--two" if args.python == "two" else "--three"    
     my_env = os.environ.copy()
     my_env['PIPENV_MAX_DEPTH'] = '1'
     subprocess.call(["pipenv", pipenv_param], cwd=folder, env=my_env)
@@ -77,6 +79,12 @@ LINUX_DIST_TO_SUFFIX = {
 }
 
 
+def kebab_case_type(arg_value):
+    if not re.match(r'^([a-z][a-z0-9]*)(-[a-z0-9]+)*$', arg_value):
+        raise argparse.ArgumentTypeError('must follow kebab-case convention. See: https://wiki.c2.com/?KebabCase')
+    return arg_value
+
+
 def main():
     parser = argparse.ArgumentParser(description='Create a new docker image',
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
@@ -88,7 +96,8 @@ def main():
                         choices=['alpine', 'debian', 'ubuntu'], default='alpine')
     parser.add_argument('--pkg', action='append', help='Specify a package to install. Can be specified multiple times. ' +
                         'Each package needs to be specified with --pkg. For example: --pkg google-cloud-storage --pkg oath2client')
-    parser.add_argument("name", help="The image name to use without the organization prefix. For example: ldap3")
+    parser.add_argument("name", type=kebab_case_type,
+                        help="The image name to use without the organization prefix. For example: ldap3. We use kebab-case naming convention.")
 
     args = parser.parse_args()
 
