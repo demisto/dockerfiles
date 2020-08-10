@@ -3,7 +3,7 @@
 # Make sure to include in your Pipfile: cryptography, cffi. So these dependencies
 # will be managed by dependabot and upto date.
 # See teams image for an example.
-FROM demisto/python3:3.8.3.8715
+FROM demisto/python3:3.8.5.10455
 
 COPY requirements.txt .
 
