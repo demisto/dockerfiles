@@ -52,7 +52,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   g++ \
   libc-dev \
   libffi-dev \
-  python3-dev \
+  python-dev \
   unixodbc-dev \
 && pip install --no-cache-dir -r requirements.txt \
 && apt-get purge -y --auto-remove \
@@ -60,6 +60,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   g++ \
   libc-dev \
   libffi-dev \
-  python3-dev \
+  python-dev \
   unixodbc-dev \
 && rm -rf /var/lib/apt/lists/*
