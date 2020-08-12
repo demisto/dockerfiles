@@ -1,9 +1,9 @@
 
-FROM demisto/python3:3.8.3.9324
+FROM demisto/python3:3.8.5.10455
 
 COPY requirements.txt .
 
-RUN apk --update add --no-cache --virtual .build-dependencies python-dev build-base wget git g++ python3-dev\
+RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git g++ python3-dev\
   && apk add --no-cache libstdc++  \
   && ln -s /usr/include/locale.h /usr/include/xlocale.h \
   && pip3 install --no-cache-dir -r requirements.txt \
