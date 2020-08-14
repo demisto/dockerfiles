@@ -1024,8 +1024,6 @@ update_configs:
     automerged_updates:
     - match:
         update_type: semver:minor
-    # requested by code42 to pin to specific version of py42
-    version_requirement_updates: "off"
   - package_manager: docker
     directory: /docker/py42
     update_schedule: daily
@@ -1348,3 +1346,187 @@ update_configs:
     - match:
         dependency_name: demisto/*
         update_type: all
+
+  - package_manager: docker
+    directory: /docker/pwsh-infocyte
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/pcap-miner
+    update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
+  - package_manager: docker
+    directory: /docker/pcap-miner
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/threatconnect-tcex
+    update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
+  - package_manager: docker
+    directory: /docker/threatconnect-tcex
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: docker
+    directory: /docker/pwsh-ata
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/gql
+    update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
+  - package_manager: docker
+    directory: /docker/gql
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/smartsheet
+    update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
+  - package_manager: docker
+    directory: /docker/smartsheet
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/pycef
+    update_schedule: live
+    automerged_updates:
+      - match:
+          update_type: semver:minor
+  - package_manager: docker
+    directory: /docker/pycef
+    update_schedule: daily
+    automerged_updates:
+      - match:
+          dependency_name: demisto/*
+          update_type: all
+
+  - package_manager: python
+    directory: /docker/ntlm
+    update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
+  - package_manager: docker
+    directory: /docker/ntlm
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/fetch-data
+    update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
+  - package_manager: docker
+    directory: /docker/fetch-data
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/unzip
+    update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
+  - package_manager: docker
+    directory: /docker/unzip
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+  - package_manager: python
+    directory: /docker/imap
+    update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
+  - package_manager: docker
+    directory: /docker/imap
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/sklearn
+    update_schedule: live
+    automerged_updates:
+      - match:
+          update_type: semver:minor
+  - package_manager: docker
+    directory: /docker/sklearn
+    update_schedule: daily
+    automerged_updates:
+      - match:
+          dependency_name: demisto/*
+          update_type: all
+
+  - package_manager: python
+    directory: /docker/opencti
+    update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
+  - package_manager: docker
+    directory: /docker/opencti
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/axonius
+    update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
+  - package_manager: docker
+    directory: /docker/axonius
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+

@@ -21,15 +21,27 @@ def test_number_and_trend_in_report():
         assert len(table.rows) == 4
 
     # Check that there is indeed a table within a table
-    assert len(d.element.xpath('//w:tbl//w:tbl')) == 3
+    assert len(d.element.xpath('//w:tbl//w:tbl')) == 5
 
     # Check that it has the right amount of rows
-    assert len(d.element.xpath('//w:tbl//w:tbl//w:t')) == 8
+    assert len(d.element.xpath('//w:tbl//w:tbl//w:t')) == 14
 
     # Check that there is an extra sign
     assert len(
-        d.element.xpath("//w:tbl//w:tbl//w:t[contains(text(),'%')]")) == 3
+        d.element.xpath("//w:tbl//w:tbl//w:t[contains(text(),'%')]")) == 5
 
-    # Check that precentage is correct
+    # Check that there is an extra sign
+    assert len(
+        d.element.xpath("//w:tbl//w:tbl//w:t[contains(text(),'▲')]")) == 3
+
+    # Check that there is an extra sign
+    assert len(
+        d.element.xpath("//w:tbl//w:tbl//w:t[contains(text(),'▼')]")) == 1
+
+    # Check that percentage is correct
     assert len(
         d.element.xpath("//w:tbl//w:tbl//w:t[contains(text(),'100.25%')]")) == 1
+
+    # Check that percentage is correct
+    assert len(
+        d.element.xpath("//w:tbl//w:tbl//w:t[contains(text(),'> 999%')]")) == 1

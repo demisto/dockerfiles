@@ -1,13 +1,13 @@
 
-FROM demisto/python-deb:2.7.17.6981
+FROM demisto/python-deb:2.7.18.10627
 
 COPY requirements.txt .
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
   gcc \
-  python-dev \
+  python2-dev \
 && pip install --no-cache-dir -r requirements.txt \
 && apt-get purge -y --auto-remove \
   gcc \
-  python-dev \
+  python2-dev \
 && rm -rf /var/lib/apt/lists/*

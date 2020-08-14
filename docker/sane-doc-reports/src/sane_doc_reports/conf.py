@@ -1,3 +1,4 @@
+import pathlib
 from os import getenv
 
 # Environment
@@ -73,7 +74,7 @@ DEFAULT_DURATION_FONT_SIZE = 15
 DEFAULT_DURATION_TITLE = 'Duration'
 DURATION_DAYS_LABEL = '\nDAYS'
 DURATION_HOURS_LABEL = '\nHOURS'
-DURATION_MINUTES_LABEL = '\nMINUTESS'
+DURATION_MINUTES_LABEL = '\nMIN'
 MAX_AXIS_LABELS = 32
 
 TREND_MAIN_NUMBER_FONT_SIZE = 16
@@ -101,6 +102,7 @@ PYDOCX_TEXT_ALIGN = 'textAlign'
 PYDOCX_BACKGROUND_COLOR = 'backgroundColor'
 
 # Markdown section types constants
+MD_EMPTY = '<span> </span>'
 MD_TYPE_DIV = 'div'
 MD_TYPE_CODE = 'code'
 MD_TYPE_QUOTE = 'blockquote'
@@ -115,7 +117,16 @@ MD_TYPE_IMAGE = 'img'
 MD_TYPE_HORIZONTAL_LINE = 'hr'
 MD_TYPE_TABLE = 'table'
 HTML_REDUNDANT_COLLAPSIBLE = ['p']
-HTML_NOT_WRAPABLES = ['span', 'li', 'ul', 'ol', 'code', 'blockquote']
+MD_ETC_WRAPPERS = [MD_TYPE_TEXT, MD_TYPE_INLINE_TEXT, 'pre'] + MD_TYPES_HEADERS
+HTML_NOT_WRAPABLES = ['span', 'li', 'ul', 'ol', 'code', 'blockquote', 'br']
+PRE_TAG_MATCH = {
+    'b': 'strong',
+    'i': 'em',
+    'br': 'span'
+}
+PRE_CONTENTS_MATCH = {
+    'br': '\n'
+}
 HTML_ATTRIBUTES = ['em', 'strong', 'del']
 HTML_ATTR_MARKDOWN_MAP = {'em': 'italic', 'strong': 'bold',
                           'del': 'strikethrough'}
@@ -124,3 +135,9 @@ MD_PAGE_BREAK = '\\pagebreak'
 
 # Misc.
 DOCX_TEMAPLTE_FILE = 'template.docx'
+RESIZE_PLOT_ITEMS_AMOUNT_THRESHOLD = 10.0
+XSOAR_LOGO_BASE64 = open(
+    pathlib.Path(__file__).parent / './populate/logo.base64', 'r').read()
+MAX_CUSTOMER_LOGO_HEIGHT_INCH = 1.5
+MAX_CUSTOMER_LOGO_WIDTH_INCH = 2
+LOGO_INDEX_RANGE = 10  # how far to check for logo types (removal) in the json

@@ -25,7 +25,7 @@ import sane_doc_reports
 1) Install the mypy addon for your IDE
 2) Dev:
 ```sh
-$ pipenv install --dev
+$ pipenv install --dev # can also try: for dev env (`pipenv install --dev -e .`)
 $ pipenv shell
 $ pytest # For testing
 $ pytest --cov=sane_doc_reports # For coverage

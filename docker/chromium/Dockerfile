@@ -1,25 +1,29 @@
-FROM demisto/python3-deb:3.8.2.6981
+FROM demisto/python3-deb:3.8.5.10453
 
 COPY requirements.txt .
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-  python-dev \
+  python3-dev \
   wget \
   libxss1 \
   libappindicator1 \
   poppler-utils \
+  fonts-noto-cjk \
+  fonts-noto-core \
 && pip3 install --no-cache-dir -r requirements.txt \
 && apt-get purge -y --auto-remove \
-  python-dev \
+  python3-dev \
 && rm -rf /var/lib/apt/lists/*
 
-# Installing Google Chrome 80.0.3987.87-1 and ChromeDriver 80.0.3987.16
+# Installing Google Chrome 83.0.4103.97-1 and ChromeDriver 83.0.4103.39
 # Goolge chrome download from: https://www.google.com/chrome/?platform=linux
 # Chrome driver download from: https://chromedriver.chromium.org/downloads
 # Make sure to download the proper versions that match.
+# You can check the version of the downloaded chrome by running:
+# docker run --rm -it -v `pwd`:/work -w /work  demisto/chromium:1.0.0.7857 dpkg -I docker/chromium/google-chrome-stable_current_amd64.deb | grep -i version 
 # IMPORTANT: we use wget to avoid using copy to get a small image. If you update the zip files you must update the download links to the proper commit hash
-RUN wget -q https://github.com/demisto/dockerfiles/raw/f4918f4996661cee8d420c887934a938f4a5ed6f/docker/chromium/chromedriver_linux64.zip && \
-wget -q https://github.com/demisto/dockerfiles/raw/f4918f4996661cee8d420c887934a938f4a5ed6f/docker/chromium/google-chrome-stable_current_amd64.deb && \
+RUN wget -q https://github.com/demisto/dockerfiles/raw/77664ef86c080c09ebee7ec27af6d71aa455092c/docker/chromium/chromedriver_linux64.zip && \
+wget -q https://github.com/demisto/dockerfiles/raw/77664ef86c080c09ebee7ec27af6d71aa455092c/docker/chromium/google-chrome-stable_current_amd64.deb && \
 apt-get update && apt install -y --no-install-recommends \
    ./google-chrome-stable_current_amd64.deb \
    unzip \

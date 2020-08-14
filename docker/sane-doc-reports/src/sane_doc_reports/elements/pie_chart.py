@@ -7,7 +7,7 @@ from sane_doc_reports.conf import DEBUG, DEFAULT_FONT_COLOR, \
 
 from sane_doc_reports.elements import image
 from sane_doc_reports.utils import set_legend_style, \
-    get_chart_font, set_axis_font
+    get_chart_font, set_axis_font, has_anomalies
 from sane_doc_reports.styles.colors import get_colors
 from sane_doc_reports import utils
 from sane_doc_reports.domain.Element import Element
@@ -26,13 +26,19 @@ class PieChartElement(Element):
     def insert(self):
         if DEBUG:
             print('Adding pie chart: ...')
-        size_w, size_h, dpi = utils.convert_plt_size(self.section,
-                                                     self.cell_object)
-        fig, ax = plt.subplots(figsize=(size_w, size_h), dpi=dpi,
-                               subplot_kw=dict(aspect="equal"))
 
         data = [int(i['data'][0]) for i in self.section.contents]
+        if len(data) == 0:
+            return
+
         objects = [i['name'] for i in self.section.contents]
+
+        has_anoms = has_anomalies(data)
+        size_w, size_h, dpi = utils.convert_plt_size(self.section,
+                                                     self.cell_object,
+                                                     has_anomalies=has_anoms)
+        fig, ax = plt.subplots(figsize=(size_w, size_h), dpi=dpi,
+                               subplot_kw=dict(aspect="equal"))
 
         # Fix the unassigned key:
         objects = [i if i != "" else "Unassigned" for i in objects]
