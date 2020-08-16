@@ -137,8 +137,9 @@ def check_python_license(docker_image: str, licenses: dict, ignore_packages: dic
                             verify=False
                         ).json()
                         license_name = repo_license.get('license', {}).get('name')
-                        print("{}: found license from GitHub API: {}".format(name, license_name))
-                        found_licenses.append(license_name)
+                        if license_name:
+                            print("{}: found license from GitHub API: {}".format(name, license_name))
+                            found_licenses.append(license_name)
                     else:
                         print("{}: found license from pip show: {}".format(name, line))
                         found_licenses.append(line)
