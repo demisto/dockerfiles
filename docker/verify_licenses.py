@@ -134,12 +134,11 @@ def check_python_license(docker_image: str, licenses: dict, ignore_packages: dic
                         repo_license = req_session.get(
                             "https://api.github.com/repos/{}/license".format(owner_and_repo),
                             headers={"Accept": "application/vnd.github.v3+json"},
-                            verify=False
+                            verify=True
                         ).json()
-                        license_name = repo_license.get('license', {}).get('name')
-                        if license_name:
-                            print("{}: found license from GitHub API: {}".format(name, license_name))
-                            found_licenses.append(license_name)
+                        license_name = repo_license.get('license', {}).get('name', 'NOT_FOUND_IN_GITHUB')
+                        print("{}: found license from GitHub API: {}".format(name, license_name))
+                        found_licenses.append(license_name)
                     else:
                         print("{}: found license from pip show: {}".format(name, line))
                         found_licenses.append(line)
