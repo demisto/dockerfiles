@@ -123,10 +123,25 @@ def check_python_license(docker_image: str, licenses: dict, ignore_packages: dic
                               docker_image, "pip", "show", name]
             pip_show = subprocess.check_output(
                 docker_cmd_arr, universal_newlines=True)
+            homepage = ''
             for line in pip_show.splitlines():
+                if line.startswith("Home-page:"):
+                    homepage = line.split(' ')[1].strip()
                 if line.startswith("License:"):
-                    print("{}: found license from pip show: {}".format(name, line))
-                    found_licenses.append(line)
+                    if 'UNKNOWN' in line:
+                        print("Got UNKNOWN license from pip show, trying to query package GitHub homepage {} to get license details.".format(homepage))
+                        owner_and_repo = homepage.split('https://github.com/')[1]
+                        repo_license = req_session.get(
+                            "https://api.github.com/repos/{}/license".format(owner_and_repo),
+                            headers={"Accept": "application/vnd.github.v3+json"},
+                            verify=False
+                        ).json()
+                        license_name = repo_license.get('license', {}).get('name')
+                        print("{}: found license from GitHub API: {}".format(name, license_name))
+                        found_licenses.append(license_name)
+                    else:
+                        print("{}: found license from pip show: {}".format(name, line))
+                        found_licenses.append(line)
         for found_lic in found_licenses:
             found = False
             for lic in licenses:
