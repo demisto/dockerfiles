@@ -14,3 +14,5 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
   && ln -s /usr/include/locale.h /usr/include/xlocale.h \
   && pip3 install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies
+
+RUN [ "python", "-c", "import nltk; nltk.download('wordnet')" ]
