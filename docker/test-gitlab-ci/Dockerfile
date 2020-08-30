@@ -3,8 +3,9 @@ FROM ubuntu:14.04
 RUN apt-get update && apt-get upgrade -y
 
 RUN apt-get install -y --no-install-recommends gcc wget curl make \
-    libreadline-dev libsqlite3-dev libbz2-dev \
-    libssl-dev rsync
+    libreadline-dev libsqlite3-dev libbz2-dev software-properties-common \
+    libssl-dev rsync unzip git wget  curl jq zip psmisc \
+    aptitude build-essential rpm makeself
 
 RUN wget -k https://www.python.org/ftp/python/2.7.12/Python-2.7.12.tgz && \
     tar -zxvf Python-2.7.12.tgz && cd Python-2.7.12 && ./configure && make -j && make install && \
