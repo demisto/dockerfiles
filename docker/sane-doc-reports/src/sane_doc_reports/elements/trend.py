@@ -40,10 +40,11 @@ class TrendElement(Element):
         # Add the trend number
         previous_sum = self.section.contents['prevSum']
         # Fix for the percentages
+        divider = previous_sum
         if previous_sum == 0:
-            previous_sum = 1
+            divider = 1
 
-        change = (current_sum * 100) / previous_sum
+        change = ((current_sum - previous_sum) * 100) / divider
         if change < 0:
             direction = '▼'  # Down arrow
         elif change == 0:
