@@ -1,5 +1,5 @@
 
-FROM demisto/python3-deb:3.8.3.9325
+FROM demisto/python3-deb:3.8.5.10844
 
 COPY requirements.txt .
 COPY odbcinst.ini /etc/odbcinst.ini
@@ -52,7 +52,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   g++ \
   libc-dev \
   libffi-dev \
-  python-dev \
+  python3-dev \
   unixodbc-dev \
 && pip install --no-cache-dir -r requirements.txt \
 && apt-get purge -y --auto-remove \
@@ -60,6 +60,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   g++ \
   libc-dev \
   libffi-dev \
-  python-dev \
+  python3-dev \
   unixodbc-dev \
 && rm -rf /var/lib/apt/lists/*

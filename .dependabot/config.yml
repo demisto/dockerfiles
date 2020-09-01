@@ -1423,12 +1423,26 @@ update_configs:
     directory: /docker/pycef
     update_schedule: live
     automerged_updates:
-    - match:
-        update_type: semver:minor
+      - match:
+          update_type: semver:minor
   - package_manager: docker
     directory: /docker/pycef
     update_schedule: daily
     automerged_updates:
+      - match:
+          dependency_name: demisto/*
+          update_type: all
+
+  - package_manager: python
+    directory: /docker/ntlm
+    update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
+  - package_manager: docker
+    directory: /docker/ntlm
+    update_schedule: daily
+    automerged_updates:
     - match:
         dependency_name: demisto/*
         update_type: all
@@ -1448,13 +1462,82 @@ update_configs:
         update_type: all
 
   - package_manager: python
-    directory: /docker/libreoffice
+    directory: /docker/unzip
     update_schedule: live
     automerged_updates:
     - match:
         update_type: semver:minor
   - package_manager: docker
-    directory: /docker/libreoffice
+    directory: /docker/unzip
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+  - package_manager: python
+    directory: /docker/imap
+    update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
+  - package_manager: docker
+    directory: /docker/imap
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/sklearn
+    update_schedule: live
+    automerged_updates:
+      - match:
+          update_type: semver:minor
+  - package_manager: docker
+    directory: /docker/sklearn
+    update_schedule: daily
+    automerged_updates:
+      - match:
+          dependency_name: demisto/*
+          update_type: all
+
+  - package_manager: python
+    directory: /docker/opencti
+    update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
+  - package_manager: docker
+    directory: /docker/opencti
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/axonius
+    update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
+  - package_manager: docker
+    directory: /docker/axonius
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/lacework
+    update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
+  - package_manager: docker
+    directory: /docker/lacework
     update_schedule: daily
     automerged_updates:
     - match:
