@@ -18,10 +18,10 @@ RUN curl -fsSL -O https://download.docker.com/linux/static/stable/x86_64/docker-
     rm -rf docker-19.03.9.tgz docker
 
 RUN groupadd circleci && groupadd docker \
-  && useradd --shell /bin/bash --create-home circleci \
-  && usermod -ag circleci && usermod -aG docker \
-  && echo 'circleci ALL=NOPASSWD: ALL' >> /etc/sudoers.d/50-circleci
+  && useradd --shell /bin/bash --create-home ubuntu \
+  && usermod -aG circleci ubuntu && usermod -aG docker ubuntu \
+  && echo 'ubuntu ALL=NOPASSWD: ALL' >> /etc/sudoers.d/50-ubuntu
 
-USER circleci
+USER ubuntu
 
 CMD /bin/bash
