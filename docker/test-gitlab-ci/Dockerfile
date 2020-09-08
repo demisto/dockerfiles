@@ -25,7 +25,7 @@ RUN groupadd circleci && groupadd docker \
 RUN git clone https://github.com/rbenv/ruby-build.git && \
   PREFIX=/usr/local ./ruby-build/install.sh && \
   ruby-build -v 2.4.1 /usr/local && \
-  gem install bundler -v 2.4.1 --no-ri --no-rdoc && bundle install
+  gem install bundler -v 2.5.2.3 --no-ri --no-rdoc && bundle install
 
 USER ubuntu
 
