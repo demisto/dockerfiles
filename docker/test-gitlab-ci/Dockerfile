@@ -5,7 +5,7 @@ RUN apt-get update && apt-get upgrade -y
 RUN apt-get install -y --no-install-recommends gcc wget curl make \
     libreadline-dev libsqlite3-dev libbz2-dev software-properties-common \
     libssl-dev rsync unzip git wget  curl jq zip psmisc \
-    aptitude build-essential rpm makeself ruby
+    aptitude build-essential rpm makeself
 
 RUN wget -k https://www.python.org/ftp/python/2.7.12/Python-2.7.12.tgz && \
     tar -zxvf Python-2.7.12.tgz && cd Python-2.7.12 && ./configure && make -j && make install && \
@@ -21,6 +21,11 @@ RUN groupadd circleci && groupadd docker \
   && useradd --shell /bin/bash --create-home ubuntu \
   && usermod -aG circleci ubuntu && usermod -aG docker ubuntu \
   && echo 'ubuntu ALL=NOPASSWD: ALL' >> /etc/sudoers.d/50-ubuntu
+
+RUN git clone https://github.com/rbenv/ruby-build.git && \
+  PREFIX=/usr/local ./ruby-build/install.sh && \
+  ruby-build -v 2.4.1 /usr/local && \
+  gem install bundler -v 2.4.1 --no-ri --no-rdoc && bundle install
 
 USER ubuntu
 
