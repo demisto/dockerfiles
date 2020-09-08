@@ -22,10 +22,13 @@ RUN groupadd circleci && groupadd docker \
   && usermod -aG circleci ubuntu && usermod -aG docker ubuntu \
   && echo 'ubuntu ALL=NOPASSWD: ALL' >> /etc/sudoers.d/50-ubuntu
 
-RUN git clone https://github.com/rbenv/ruby-build.git && \
-  PREFIX=/usr/local ./ruby-build/install.sh && \
-  ruby-build -v 2.4.1 /usr/local && \
-  gem install bundler --no-ri --no-rdoc && bundle install
+RUN \
+  apt-get update && apt-get install -y --no-install-recommends --no-install-suggests curl bzip2 build-essential libssl-dev libreadline-dev zlib1g-dev && \
+  rm -rf /var/lib/apt/lists/* && \
+  curl -L https://github.com/sstephenson/ruby-build/archive/v20180329.tar.gz | tar -zxvf - -C /tmp/ && \
+  cd /tmp/ruby-build-* && ./install.sh && cd / && \
+  ruby-build -v 2.5.1 /usr/local && rm -rfv /tmp/ruby-build-* && \
+  gem install bundler --no-rdoc --no-ri
 
 USER ubuntu
 
