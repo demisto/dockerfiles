@@ -31,7 +31,7 @@ RUN \
   gem install bundler --no-rdoc --no-ri
 
 RUN \
-  rm -rf $GOROOT && \
+  export GOROOT=/usr/local/go && export PATH=$PATH:$GOROOT/bin && \
   export GO_VERSION="1.13" && \
   curl -o go.tar.gz https://storage.googleapis.com/golang/go${GO_VERSION}.linux-amd64.tar.gz && \
   tar -C /usr/local -xzf go.tar.gz
