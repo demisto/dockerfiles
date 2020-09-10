@@ -30,6 +30,11 @@ RUN \
   ruby-build -v 2.5.1 /usr/local && rm -rfv /tmp/ruby-build-* && \
   gem install bundler --no-rdoc --no-ri
 
+RUN \
+  export GO_VERSION="1.13" && \
+  curl -o go.tar.gz https://storage.googleapis.com/golang/go${GO_VERSION}.linux-amd64.tar.gz && \
+  tar -C /usr/local -xzf go.tar.gz
+
 USER ubuntu
 
 CMD /bin/bash
