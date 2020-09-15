@@ -37,8 +37,8 @@ RUN \
 
 RUN \
   wget -q https://github.com/google/protobuf/releases/download/v3.6.1/protoc-3.6.1-linux-x86_64.zip && \
-  sudo unzip protoc-${PROTOBUF_VERSION}-linux-x86_64.zip -d /usr/local && \
-  rm protoc-${PROTOBUF_VERSION}-linux-x86_64.zip
+  sudo unzip protoc-3.6.1-linux-x86_64.zip -d /usr/local && \
+  rm protoc-3.6.1-linux-x86_64.zip
 
 USER ubuntu
 
