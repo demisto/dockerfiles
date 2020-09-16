@@ -30,6 +30,8 @@ RUN \
   ruby-build -v 2.5.1 /usr/local && rm -rfv /tmp/ruby-build-* && \
   gem install bundler --no-rdoc --no-ri
 
+RUN pip install boto3
+
 USER ubuntu
 
 CMD /bin/bash
