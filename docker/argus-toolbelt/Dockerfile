@@ -1,5 +1,9 @@
 
+<<<<<<< HEAD
 FROM demisto/python3:3.8.6.12176
+=======
+FROM demisto/python3:3.8.5.10845
+>>>>>>> 332562da (create argus-toolbelt docker image)
 
 COPY requirements.txt .
 
