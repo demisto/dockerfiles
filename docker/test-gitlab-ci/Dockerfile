@@ -2,11 +2,13 @@ FROM ubuntu:14.04
 
 RUN apt-get update && apt-get upgrade -y
 
-RUN apt-get install -y --no-install-recommends gcc wget curl make \
+RUN apt-get install -y --no-install-recommends --no-install-suggests gcc wget curl make \
     libreadline-dev libsqlite3-dev libbz2-dev software-properties-common \
     libssl-dev rsync unzip git wget  curl jq zip psmisc \
     aptitude build-essential rpm makeself apt-transport-https \
-    ca-certificates gnupg
+    ca-certificates gnupg bzip2 openssh-client libxml2-dev \
+    libxslt1-dev libxslt-dev zlib1g-dev libxmlsec1 xmlsec1 \
+    libxml2-dev libxmlsec1-dev libxmlsec1-openssl
 
 RUN wget -k https://www.python.org/ftp/python/2.7.12/Python-2.7.12.tgz && \
     tar -zxvf Python-2.7.12.tgz && cd Python-2.7.12 && ./configure && make -j && make install && \
@@ -23,13 +25,22 @@ RUN groupadd circleci && groupadd docker \
   && usermod -aG circleci ubuntu && usermod -aG docker ubuntu \
   && echo 'ubuntu ALL=NOPASSWD: ALL' >> /etc/sudoers.d/50-ubuntu
 
+RUN wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add - && \
+    add-apt-repository "deb https://artifacts.elastic.co/packages/7.x/apt stable main" && \
+    apt-get update
+
 RUN \
-  apt-get update && apt-get install -y --no-install-recommends --no-install-suggests curl bzip2 build-essential libssl-dev libreadline-dev zlib1g-dev && \
   rm -rf /var/lib/apt/lists/* && \
   curl -L https://github.com/sstephenson/ruby-build/archive/v20180329.tar.gz | tar -zxvf - -C /tmp/ && \
   cd /tmp/ruby-build-* && ./install.sh && cd / && \
   ruby-build -v 2.5.1 /usr/local && rm -rfv /tmp/ruby-build-* && \
   gem install bundler --no-rdoc --no-ri
+
+RUN \
+  pip install --upgrade pip && \
+  pip install stix --upgrade && \
+  apt-get install -y chromium-browser && \
+  apt-get -y install openjdk-11-jre --force-yes
 
 RUN \
   export GOROOT=/usr/local/go && export PATH=$PATH:$GOROOT/bin && \
