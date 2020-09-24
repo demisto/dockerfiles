@@ -39,7 +39,7 @@ RUN \
 RUN \
   pip install --upgrade pip && \
   pip install stix --upgrade && \
-  apt-get install -y chromium-browser && \
+  apt-get update && apt-get install -y chromium-browser && \
   apt-get -y install openjdk-11-jre --force-yes
 
 RUN \
