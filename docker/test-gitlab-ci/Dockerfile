@@ -40,7 +40,7 @@ RUN \
   pip install --upgrade pip && \
   pip install stix --upgrade && \
   apt-get update && apt-get install -y chromium-browser && \
-  sudo apt-get -y install openjdk-11-jre --force-yes
+  add-apt-repository ppa:openjdk-r/ppa && apt-get update && apt-get -y install openjdk-11-jre --force-yes
 
 RUN \
   export GOROOT=/usr/local/go && export PATH=$PATH:$GOROOT/bin && \
