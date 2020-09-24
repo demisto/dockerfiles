@@ -8,7 +8,7 @@ RUN apt-get install -y --no-install-recommends --no-install-suggests gcc wget cu
     aptitude build-essential rpm makeself apt-transport-https \
     ca-certificates gnupg bzip2 openssh-client libxml2-dev \
     libxslt1-dev libxslt-dev zlib1g-dev libxmlsec1 xmlsec1 \
-    libxml2-dev libxmlsec1-dev libxmlsec1-openssl openjdk-11-jre
+    libxml2-dev libxmlsec1-dev libxmlsec1-openssl
 
 RUN wget -k https://www.python.org/ftp/python/2.7.12/Python-2.7.12.tgz && \
     tar -zxvf Python-2.7.12.tgz && cd Python-2.7.12 && ./configure && make -j && make install && \
@@ -40,6 +40,7 @@ RUN \
   pip install --upgrade pip && \
   pip install stix --upgrade && \
   apt-get update && apt-get install -y chromium-browser && \
+  sudo apt-get -y install openjdk-11-jre --force-yes
 
 RUN \
   export GOROOT=/usr/local/go && export PATH=$PATH:$GOROOT/bin && \
