@@ -1531,6 +1531,48 @@ update_configs:
         update_type: all
 
   - package_manager: python
+    directory: /docker/lacework
+    update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
+  - package_manager: docker
+    directory: /docker/lacework
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/argus-toolbelt
+    update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
+  - package_manager: docker
+    directory: /docker/argus-toolbelt
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/ssl-analyze
+    update_schedule: live
+    automerged_updates:
+      - match:
+          update_type: semver:minor
+  - package_manager: docker
+    directory: /docker/ssl-analyze
+    update_schedule: daily
+    automerged_updates:
+      - match:
+          dependency_name: demisto/*
+          update_type: all
+
+  - package_manager: python
     directory: /docker/xslxwriter
     update_schedule: live
     automerged_updates:

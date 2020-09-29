@@ -40,7 +40,7 @@ def test_number_and_trend_in_report():
 
     # Check that percentage is correct
     assert len(
-        d.element.xpath("//w:tbl//w:tbl//w:t[contains(text(),'100.25%')]")) == 1
+        d.element.xpath("//w:tbl//w:tbl//w:t[contains(text(),'0.25%')]")) == 1
 
     # Check that percentage is correct
     assert len(
