@@ -40,7 +40,8 @@ RUN \
   pip install --upgrade pip && \
   pip install stix --upgrade && pip install boto3 && \
   apt-get update && apt-get install -y chromium-browser && \
-  add-apt-repository ppa:openjdk-r/ppa && apt-get update && apt-get -y install openjdk-11-jre --force-yes
+  add-apt-repository ppa:openjdk-r/ppa && apt-get update && apt-get -y install openjdk-11-jre --force-yes && \
+  add-apt-repository --remove ppa:openjdk-r/ppa
 
 RUN \
   export GOROOT=/usr/local/go && export PATH=$PATH:$GOROOT/bin && \
