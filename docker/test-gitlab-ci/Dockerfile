@@ -52,6 +52,12 @@ RUN \
   sudo unzip protoc-3.6.1-linux-x86_64.zip -d /usr/local && \
   rm protoc-3.6.1-linux-x86_64.zip
 
+RUN \
+  echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | \
+  tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && \
+  curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - && \
+  apt-get update && sudo apt-get install -y --force-yes google-cloud-sdk
+
 USER ubuntu
 
 CMD /bin/bash
