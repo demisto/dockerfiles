@@ -38,7 +38,7 @@ RUN \
 
 RUN \
   pip install --upgrade pip && \
-  pip install stix --upgrade && pip install boto3 \
+  pip install stix --upgrade && pip install boto3 && \
   apt-get update && apt-get install -y chromium-browser && \
   add-apt-repository ppa:openjdk-r/ppa && apt-get update && apt-get -y install openjdk-11-jre --force-yes
 
@@ -55,8 +55,8 @@ RUN \
 RUN \
   echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | \
   tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && \
-  curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - && \
-  apt-get update && sudo apt-get install -y --force-yes google-cloud-sdk
+  curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - && \
+  apt-get update && apt-get install -y --force-yes google-cloud-sdk
 
 USER ubuntu
 
