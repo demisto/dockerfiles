@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y    python3-dev g++
 
 #RUN pip3 install spacy
 #RUN pip3 install --trusted-host github.com https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.1.0/en_core_web_sm-2.1.0.tar.gz
-#RUN pip3 install --no-cache-dir -r requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
 
 
 
