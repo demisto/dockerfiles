@@ -12,22 +12,22 @@ from image_latest_tag import get_latest_tag
 DOCKER_PYTHON_ALPINE = '''
 FROM {image}
 
-COPY requirements.txt .
+COPY requirements1.txt .
 
 RUN apk --update add --no-cache --virtual .build-dependencies python{python_ver}-dev build-base wget git \\
-  && pip install --no-cache-dir -r requirements.txt \\
+  && pip install --no-cache-dir -r requirements1.txt \\
   && apk del .build-dependencies
 '''
 
 DOCKER_PYTHON_DEBIAN = '''
 FROM {image}
 
-COPY requirements.txt .
+COPY requirements1.txt .
 
 RUN apt-get update && apt-get install -y --no-install-recommends \\
   gcc \\
   python{python_ver}-dev \\
-&& pip install --no-cache-dir -r requirements.txt \\
+&& pip install --no-cache-dir -r requirements1.txt \\
 && apt-get purge -y --auto-remove \\
   gcc \\
   python{python_ver}-dev \\

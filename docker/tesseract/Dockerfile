@@ -29,12 +29,12 @@ RUN apt-get update && apt-get -t buster-backports install -y --no-install-recomm
   && rm -rf /var/lib/apt/lists/*
 
 # Python packages not needed
-# COPY requirements.txt .
+# COPY requirements1.txt .
 
 # RUN apt-get update && apt-get install -y --no-install-recommends \
 #   gcc \
 #   python3-dev \
-# && pip install --no-cache-dir -r requirements.txt \
+# && pip install --no-cache-dir -r requirements1.txt \
 # && apt-get purge -y --auto-remove \
 #   gcc \
 #   python3-dev \
