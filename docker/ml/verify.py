@@ -1,7 +1,7 @@
 import tensorflow
 import keras
 import fasttext
-import scikit-learn
+import sklearn
 import numpy
 import pandas
 import nltk
