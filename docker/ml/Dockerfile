@@ -6,4 +6,5 @@ RUN apt-get update && apt-get install -y  python3-dev g++\
 && apt-get purge -y --auto-remove \
   g++ \
   python3-dev \
+&& rm -rf /var/lib/apt/lists/*
 
