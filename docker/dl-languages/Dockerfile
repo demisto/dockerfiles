@@ -1,4 +1,4 @@
-FROM demisto/dl:1.4
+FROM demisto/ml:1.0.0.12177
 
 RUN pip install --trusted-host github.com https://github.com/explosion/spacy-models/releases/download/fr_core_news_sm-2.1.0/fr_core_news_sm-2.1.0.tar.gz --default-timeout=100
 
