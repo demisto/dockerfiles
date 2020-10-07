@@ -1,5 +1,5 @@
-# Last modified: Wed, 22 Jul 2020 08:27:22 +0000
-FROM python:3.8.5-slim-buster
+# Last modified: Wed, 07 Oct 2020 14:31:12 +0000
+FROM python:3.8.6-slim-buster
 
 RUN echo 'deb http://deb.debian.org/debian buster-backports main' >> /etc/apt/sources.list
 
