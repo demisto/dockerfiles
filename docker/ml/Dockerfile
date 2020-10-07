@@ -7,4 +7,5 @@ RUN apt-get update && apt-get install -y --no-install-recommends python3-dev g++
   g++ \
   python3-dev \
 && rm -rf /var/lib/apt/lists/*
+RUN python -m spacy download en_core_web_sm
 
