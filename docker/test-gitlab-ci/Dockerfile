@@ -8,7 +8,7 @@ RUN apt-get install -y --no-install-recommends --no-install-suggests gcc wget cu
     aptitude build-essential rpm makeself apt-transport-https \
     ca-certificates gnupg bzip2 openssh-client libxml2-dev \
     libxslt1-dev libxslt-dev zlib1g-dev libxmlsec1 xmlsec1 \
-    libxml2-dev libxmlsec1-dev libxmlsec1-openssl
+    libxml2-dev libxmlsec1-dev libxmlsec1-openssl pcregrep
 
 RUN wget -k https://www.python.org/ftp/python/2.7.12/Python-2.7.12.tgz && \
     tar -zxvf Python-2.7.12.tgz && cd Python-2.7.12 && ./configure && make -j && make install && \
