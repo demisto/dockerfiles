@@ -1,5 +1,5 @@
 # Last modified: Wed, 07 Oct 2020 14:31:12 +0000
-FROM python:3.8.6-slim-buster
+FROM python:3.9.0-slim-buster
 
 RUN echo 'deb http://deb.debian.org/debian buster-backports main' >> /etc/apt/sources.list
 
