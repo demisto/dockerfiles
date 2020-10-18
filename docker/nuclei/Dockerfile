@@ -1,0 +1,16 @@
+FROM projectdiscovery/nuclei as builder
+
+FROM demisto/python3:3.8.6.12176
+
+COPY requirements.txt .
+
+RUN mkdir /app
+
+RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git \
+  && git clone https://github.com/projectdiscovery/nuclei-templates.git /app/nuclei-templates \
+  && pip install --no-cache-dir -r requirements.txt \
+  && apk del .build-dependencies
+
+COPY --from=builder /app /app
+
+WORKDIR /app
