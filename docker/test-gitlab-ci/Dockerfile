@@ -60,6 +60,7 @@ RUN \
   apt-get update && apt-get install -y --force-yes google-cloud-sdk
 
 RUN \
+  apt-get install -y --force-yes dnsutils && \
   export GOROOT=/usr/local/go && export PATH=$PATH:$GOROOT/bin && \
   go get github.com/stretchr/testify/assert && \
   go get github.com/davecgh/go-spew/spew && \
