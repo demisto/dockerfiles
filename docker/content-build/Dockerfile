@@ -42,6 +42,7 @@ RUN sudo chmod a+wrx $PYENV_ROOT
 RUN pyenv install $PYTHON2_VERSION
 RUN pyenv install $PYTHON3_VERSION
 RUN pyenv global $PYTHON3_VERSION $PYTHON2_VERSION
+RUN pip3 install virtualenv
 
 # n install - Node.js manager (https://github.com/tj/n)
 ENV N_PREFIX=/opt/n \
