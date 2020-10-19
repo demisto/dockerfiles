@@ -41,7 +41,7 @@ RUN sudo git clone --single-branch --depth 1 https://github.com/pyenv/pyenv.git 
 RUN sudo chmod a+wrx $PYENV_ROOT
 RUN pyenv install $PYTHON2_VERSION
 RUN pyenv install $PYTHON3_VERSION
-RUN pyenv global $PYTHON3_VERSION $PYTHON2_VERSION
+RUN pyenv global $PYTHON2_VERSION $PYTHON3_VERSION
 RUN pip3 install virtualenv
 
 # n install - Node.js manager (https://github.com/tj/n)
