@@ -1,16 +1,57 @@
-FROM circleci/python:3.7.5-buster-node
+FROM cimg/base:2020.01
 
-RUN sudo apt-get update && \
-  sudo apt-get install -y --no-install-recommends python-dev libxml2-dev libxslt1-dev zlib1g-dev python-setuptools jq \
-  make build-essential libssl-dev libbz2-dev \
-  libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
-  xz-utils tk-dev libffi-dev liblzma-dev python-openssl \
-  python3 python3-dev
+# Global interperters
+ENV PYTHON3_VERSION=3.8.5 \
+    PYTHON2_VERSION=2.7.18 \
+    NODE_VERSION=14.4.0
+
+# Install base packages
+RUN sudo apt-get update
+RUN sudo apt-get install -y --no-install-recommends \
+        build-essential \
+        ca-certificates \
+        curl \
+        git \
+        libbz2-dev \
+        libffi-dev \
+        libncurses5-dev \
+        libncursesw5-dev \
+        libreadline-dev \
+        libsqlite3-dev \
+        libssl1.0-dev \
+        liblzma-dev \
+        # libssl-dev \
+        llvm \
+        make \
+        netbase \
+        pkg-config \
+        tk-dev \
+        wget \
+        xz-utils \
+        zlib1g-dev
+
+# Install Pyenv (https://github.com/pyenv/pyenv)
+ENV LANG="C.UTF-8" \
+    LC_ALL="C.UTF-8" \
+    PATH="/opt/pyenv/shims:/opt/pyenv/bin:$PATH" \
+    PYENV_ROOT="/opt/pyenv" \
+    PYENV_SHELL="bash"
+RUN sudo rm -rf /var/lib/apt/lists/* /tmp/*
+RUN sudo git clone --single-branch --depth 1 https://github.com/pyenv/pyenv.git $PYENV_ROOT
+RUN sudo chmod a+wrx $PYENV_ROOT
+RUN pyenv install $PYTHON2_VERSION
+RUN pyenv install $PYTHON3_VERSION
+RUN pyenv global $PYTHON3_VERSION $PYTHON2_VERSION
+
+# n install - Node.js manager (https://github.com/tj/n)
+ENV N_PREFIX=/opt/n \
+    PATH=$N_PREFIX/bin:$PATH
+RUN sudo git clone --single-branch --depth 1 https://github.com/tj/n.git $N_PREFIX
+RUN cd $N_PREFIX && sudo make install
+RUN sudo n $NODE_VERSION
 
 # install gcloud see: https://cloud.google.com/sdk/docs/downloads-apt-get
-RUN sudo apt-get update && sudo apt-get install apt-transport-https ca-certificates gnupg \
-  && echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list \
-  && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - \
-  && sudo apt-get update && sudo apt-get install google-cloud-sdk \
-  && gcloud --version \
-  && gsutil --version  
+RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+RUN sudo apt-get update
+RUN sudo apt-get install -y google-cloud-sdk
