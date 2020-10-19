@@ -59,6 +59,23 @@ RUN \
   curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - && \
   apt-get update && apt-get install -y --force-yes google-cloud-sdk
 
+RUN \
+  cd /tmp && \
+  go get github.com/stretchr/testify/assert && \
+  go get github.com/davecgh/go-spew/spew && \
+  go get github.com/pmezard/go-difflib/difflib && \
+  go get gopkg.in/sourcemap.v1 && \
+  go get github.com/google/go-github/github && \
+  go get github.com/demisto/thirdPartyLicenseCollector && \
+  go get github.com/axw/gocov/gocov && \
+  go get github.com/mattn/goveralls && \
+  go get -u github.com/bxcodec/faker && \
+  go get -u golang.org/x/lint/golint && \
+  go get -u golang.org/x/tools/cmd/goimports && \
+  go get -u github.com/golang/protobuf/protoc-gen-go && \
+  go get github.com/mitchellh/go-ps && \
+  cd -
+
 USER ubuntu
 
 CMD /bin/bash
