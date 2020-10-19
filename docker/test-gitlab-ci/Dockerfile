@@ -60,6 +60,7 @@ RUN \
   apt-get update && apt-get install -y --force-yes google-cloud-sdk
 
 RUN \
+  export GOROOT=/usr/local/go && export PATH=$PATH:$GOROOT/bin && \
   cd /tmp && \
   go get github.com/stretchr/testify/assert && \
   go get github.com/davecgh/go-spew/spew && \
