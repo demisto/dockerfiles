@@ -61,21 +61,19 @@ RUN \
 
 RUN \
   export GOROOT=/usr/local/go && export PATH=$PATH:$GOROOT/bin && \
-  cd /tmp && \
-  go mod download github.com/stretchr/testify/assert && \
-  go mod download github.com/davecgh/go-spew/spew && \
-  go mod download github.com/pmezard/go-difflib/difflib && \
-  go mod download gopkg.in/sourcemap.v1 && \
-  go mod download github.com/google/go-github/github && \
-  go mod download github.com/demisto/thirdPartyLicenseCollector && \
-  go mod download github.com/axw/gocov/gocov && \
-  go mod download github.com/mattn/goveralls && \
-  go mod download github.com/bxcodec/faker && \
-  go mod download golang.org/x/lint/golint && \
-  go mod download golang.org/x/tools/cmd/goimports && \
-  go mod download github.com/golang/protobuf/protoc-gen-go && \
-  go mod download github.com/mitchellh/go-ps && \
-  cd -
+  go get github.com/stretchr/testify/assert && \
+  go get github.com/davecgh/go-spew/spew && \
+  go get github.com/pmezard/go-difflib/difflib && \
+  go get gopkg.in/sourcemap.v1 && \
+  go get github.com/google/go-github/github && \
+  go get github.com/demisto/thirdPartyLicenseCollector && \
+  go get github.com/axw/gocov/gocov && \
+  go get github.com/mattn/goveralls && \
+  go get -u github.com/bxcodec/faker && \
+  go get -u golang.org/x/lint/golint && \
+  go get -u golang.org/x/tools/cmd/goimports && \
+  go get -u github.com/golang/protobuf/protoc-gen-go && \
+  go get github.com/mitchellh/go-ps
 
 USER ubuntu
 
