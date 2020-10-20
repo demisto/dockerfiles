@@ -5,7 +5,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends python3-dev g++
 && pip install --no-cache-dir -r requirements.txt \
 && apt-get purge -y --auto-remove \
   g++ \
-  python3-dev \
-&& rm -rf /var/lib/apt/lists/*
+  python3-dev
+COPY demisto_ml-0.2.tar.gz .
+RUN pip install demisto_ml-0.2.tar.gz
+RUN rm -rf /var/lib/apt/lists/*
 RUN python -m spacy download en_core_web_sm
+
 
