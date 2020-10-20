@@ -1,4 +1,4 @@
-FROM circleci/python:3.7.5-buster-node
+FROM circleci/python:3.8.5-buster-node
 
 RUN sudo apt-get update && \
   sudo apt-get install -y --no-install-recommends python-dev libxml2-dev libxslt1-dev zlib1g-dev python-setuptools jq \
