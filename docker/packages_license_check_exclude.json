@@ -4,9 +4,16 @@
         "docutils": {
             "docker_images": [
                 "snowflake",
-                "boto3py3"
+                "boto3py3",
+                "ansible-runner"
             ],
             "notes": "botocore imports the package only for dev use. See: https://github.com/boto/botocore/issues/900"
+        },
+        "ansible": {
+            "docker_images": [
+                "ansible-runner"
+            ],
+            "notes": "Used only for executing ansible as a utlility via cmd interface"
         }        
     }
 }
