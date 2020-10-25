@@ -1665,13 +1665,13 @@ update_configs:
         update_type: all
 
   - package_manager: python
-    directory: /docker/cylance-protect-v2
+    directory: /docker/pyjwt
     update_schedule: live
     automerged_updates:
     - match:
         update_type: semver:minor
   - package_manager: docker
-    directory: /docker/cylance-protect-v2
+    directory: /docker/pyjwt
     update_schedule: daily
     automerged_updates:
     - match:
