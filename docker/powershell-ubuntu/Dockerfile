@@ -8,3 +8,5 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 
 RUN groupadd --gid 4000 demisto \
   && useradd --uid 4000 --gid demisto --shell /bin/bash --create-home demisto
+
+RUN pwsh -c "Set-PSRepository -Name PSGallery -InstallationPolicy Trusted"
