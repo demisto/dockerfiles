@@ -26,8 +26,10 @@ RUN apt-get update -y -q && \
     fonts-unfonts-core \
     fonts-noto-cjk \
     fonts-noto-core \
+    libgbm-dev \
     && rm -rf /var/lib/apt/lists/*
-RUN npm i puppeteer@1.2.0 && ln -s /app/node_modules/puppeteer/.local-chromium/linux-*/chrome-linux/chrome /usr/bin/chromium-browser
+
+RUN npm i puppeteer@5.3.1 && ln -s /app/node_modules/puppeteer/.local-chromium/linux-*/chrome-linux/chrome /usr/bin/chromium-browser
 
 RUN python get_build_artifacts.py --project sane-reports --branch master --filter "sane-report$" \
     && mv sane-report sane-report.tar && tar -xvf sane-report.tar && rm -f sane-report.tar
