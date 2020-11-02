@@ -26,6 +26,7 @@ RUN apt-get update -y -q && \
     fonts-unfonts-core \
     fonts-noto-cjk \
     fonts-noto-core \
+    libgbm-dev \
     && rm -rf /var/lib/apt/lists/*
 RUN npm i puppeteer@5.3.1 && ln -s /app/node_modules/puppeteer/.local-chromium/linux-*/chrome-linux/chrome /usr/bin/chromium-browser
 
