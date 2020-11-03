@@ -34,3 +34,5 @@ RUN npm i puppeteer@5.3.1 && ln -s /app/node_modules/puppeteer/.local-chromium/l
 RUN python get_build_artifacts.py --project sane-reports --branch master --filter "sane-report$" \
     && mv sane-report sane-report.tar && tar -xvf sane-report.tar && rm -f sane-report.tar
 
+# Update permissions and ownership on /app dir
+RUN chown -R :demisto /app/dist && chmod 775 /app/dist
