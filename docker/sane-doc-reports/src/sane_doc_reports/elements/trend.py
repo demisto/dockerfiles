@@ -29,11 +29,13 @@ class TrendElement(Element):
             print("Adding trend...")
 
         table = self.cell_object.cell.add_table(rows=2, cols=4)
+        # add background color
+        background_color = self.section.layout.get('style', {}).get('backgroundColor', '')[1:]
 
         # Add the main number
         current_sum = self.section.contents['currSum']
         inner_cell = table.cell(0, 1)
-        style_cell(inner_cell)
+        style_cell(inner_cell, color_hex=background_color)
         main_number = CellObject(inner_cell)
         insert_text(main_number, str(current_sum), self.style['main'])
 
@@ -60,13 +62,13 @@ class TrendElement(Element):
             change = "{0:.2f}".format(change)
         value_percent = f'{direction}{change}%'
         inner_cell = table.cell(0, 2)
-        style_cell(inner_cell)
+        style_cell(inner_cell, color_hex=background_color)
         trend_number = CellObject(inner_cell)
         insert_text(trend_number, value_percent, self.style['trend'])
 
         # Add the title
         third_cell = table.cell(1, 1)
-        style_cell(third_cell)
+        style_cell(third_cell, color_hex=background_color)
         table.cell(1, 2).merge(third_cell)
         title = CellObject(third_cell)
         insert_text(title, str(self.section.extra['title']),
