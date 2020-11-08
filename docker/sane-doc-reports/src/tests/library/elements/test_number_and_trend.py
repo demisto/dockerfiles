@@ -27,8 +27,16 @@ def test_number_and_trend_in_report():
     assert len(d.element.xpath('//w:tbl//w:tbl//w:t')) == 14
 
     # Check that there is an extra sign
-    assert len(
-        d.element.xpath("//w:tbl//w:tbl//w:t[contains(text(),'%')]")) == 5
+    assert len(d.element.xpath("//w:tbl//w:tbl//w:t[contains(text(),'%')]")) == 5
+
+    # Check the widget background
+    assert len(d.element.xpath('//w:shd[@w:fill="FAC100"]')) == 6
+
+    # Check the widget background
+    assert len(d.element.xpath('//w:shd[@w:fill="00CD33"]')) == 1
+
+    # Check the widget background
+    assert len(d.element.xpath('//w:shd[@w:fill=""]')) == 6
 
     # Check that there is an extra sign
     assert len(
