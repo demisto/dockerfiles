@@ -16,6 +16,4 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   python3-dev \
   linux-libc-dev \
   libc6-dev \
-  sshpass \
-  openssh-client \
 && rm -rf /var/lib/apt/lists/*
