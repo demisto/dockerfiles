@@ -12,6 +12,7 @@ import spacy
 nlp = spacy.load('en_core_web_sm', disable=['tagger', 'parser', 'ner', 'textcat'])
 doc = nlp('tokenize this sentence')
 import demisto_ml
+import catboost
 
 
 print('All package imported succesfully')
