@@ -7,5 +7,10 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies
 
-RUN apk add --no-cache git
-RUN apk add --no-cache openssh
+RUN apk add --no-cache git \
+  && apk add --no-cache openssh \
+  && eval `ssh-agent -s` \
+  && mkdir ~/.ssh \
+  && echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config \
+  && chmod go-w ~ \
+  && chmod 700 ~/.ssh \
