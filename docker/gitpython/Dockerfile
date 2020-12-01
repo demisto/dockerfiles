@@ -8,3 +8,4 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
   && apk del .build-dependencies
 
 RUN apk add --no-cache git
+RUN apk add --no-cache openssh
