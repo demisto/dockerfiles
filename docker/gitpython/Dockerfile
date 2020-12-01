@@ -11,6 +11,4 @@ RUN apk add --no-cache git \
   && apk add --no-cache openssh \
   && eval `ssh-agent -s` \
   && mkdir ~/.ssh \
-  && echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config \
-  && chmod go-w ~ \
-  && chmod 700 ~/.ssh \
+  && echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config
