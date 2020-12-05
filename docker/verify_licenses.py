@@ -70,7 +70,7 @@ def check_pwsh_license(docker_image: str, licenses: dict, ignore_packages: dict,
         res.raise_for_status()
         lic_line = res.text.splitlines()[0]
         for lic in licenses:
-            if re.search(lic["regex"], lic_line):
+            if re.search(lic["regex"], lic_line, re.IGNORECASE):
                 print(f'{name}: found license: [{lic["name"]}] matches license first line: "{lic_line}"')
                 found_license = True
                 break
@@ -145,7 +145,7 @@ def check_python_license(docker_image: str, licenses: dict, ignore_packages: dic
         for found_lic in found_licenses:
             found = False
             for lic in licenses:
-                if re.search(lic["regex"], found_lic):
+                if re.search(lic["regex"], found_lic, re.IGNORECASE):
                     print("{}: found license: {} matches license: {}".format(
                         name, found_lic, lic["name"]))
                     found = True
