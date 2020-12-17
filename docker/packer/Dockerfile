@@ -1,4 +1,4 @@
-FROM demisto/python3-deb:3.8.6.13363
+FROM demisto/python3-deb:3.8.6.14507
 
 RUN apt-get update
 
