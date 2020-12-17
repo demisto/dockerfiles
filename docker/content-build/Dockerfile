@@ -7,6 +7,10 @@ RUN sudo apt-get update && \
   xz-utils tk-dev libffi-dev liblzma-dev python-openssl \
   python3 python3-dev
 
+# Installing build requirements
+COPY requirements.txt .
+RUN sudo pip3 install -r requirements.txt
+
 # Change virtualenv version to old version - Bug with link 2 python versions
 RUN sudo pip3 uninstall -y virtualenv && sudo pip3 install virtualenv==16.7.7
 
