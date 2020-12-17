@@ -5,7 +5,7 @@ RUN sudo apt-get update && \
   make build-essential libssl-dev libbz2-dev \
   libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
   xz-utils tk-dev libffi-dev liblzma-dev python-openssl \
-  python3 python3-dev
+  python3 python3-dev && sudo pip3 install --no-cache-dir -r requirements.txt
 
 # Change virtualenv version to old version - Bug with link 2 python versions
 RUN sudo pip3 uninstall -y virtualenv && sudo pip3 install virtualenv==16.7.7
@@ -16,4 +16,4 @@ RUN sudo apt-get update && sudo apt-get install apt-transport-https ca-certifica
   && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - \
   && sudo apt-get update && sudo apt-get install google-cloud-sdk \
   && gcloud --version \
-  && gsutil --version  
+  && gsutil --version
