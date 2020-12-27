@@ -1796,3 +1796,45 @@ update_configs:
         dependency_name: demisto/*
         update_type: all
 
+  - package_manager: python
+    directory: /docker/greynoise
+    update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
+  - package_manager: docker
+    directory: /docker/greynoise
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/ami-management
+    update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
+  - package_manager: docker
+    directory: /docker/ami-management
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/google-cloud-securitycenter
+    update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
+  - package_manager: docker
+    directory: /docker/google-cloud-securitycenter
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+        
