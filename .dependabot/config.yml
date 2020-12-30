@@ -1837,4 +1837,7 @@ update_configs:
     - match:
         dependency_name: demisto/*
         update_type: all
-        
+  - package_manager: docker
+    directory: /docker/powershell-alpine-7-1-0
+    update_schedule: daily
+
