@@ -22,7 +22,7 @@ RUN mkdir -p /opt/oracle && \
   rm instantclient-basiclite-linux.x64-19.6.0.0.0dbru.zip && \
   echo /opt/oracle/instantclient_19_6 > /etc/ld.so.conf.d/oracle-instantclient.conf && \
   ldconfig
-  
+
 # install freetds
 RUN apt-get update && apt-get install -y --no-install-recommends \
   build-essential \
@@ -45,6 +45,19 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 && rm freetds-1.1.39.tar.gz \
 && rm -rf freetds-1.1.39
 
+# Install the Microsoft ODBC driver for SQL Server (Linux)
+RUN apt-get update \
+&& apt-get install -y --allow-downgrades gpgv=2.2.12-1+deb10u1 gnupg2 curl apt-utils \
+&& curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
+&& curl https://packages.microsoft.com/config/debian/10/prod.list > /etc/apt/sources.list.d/mssql-release.list \
+&& apt-get update \
+&& ACCEPT_EULA=Y apt-get install msodbcsql17 \
+&& ACCEPT_EULA=Y apt-get install mssql-tools \
+&& echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile \
+&& echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc \
+&& /bin/bash -c "source ~/.bashrc" \
+&& apt-get install -y unixodbc-dev libgssapi-krb5-2 \
+&& cat /etc/odbcinst.ini
 
 # install python packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
