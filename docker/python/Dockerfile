@@ -2,7 +2,7 @@
 # NOTE: THIS DOCKERFILE IS BASED UPON: https://raw.githubusercontent.com/docker-library/python/f1e613f48eb4fc88748b36787f5ed74c14914636/2.7/alpine3.11/Dockerfile
 # We only change to use the latest Alpine version. 
 
-# Last modified: Mon, 10 Aug 2020 13:43:42 +0000
+# Last modified: Thu, 31 Dec 2020 10:16:37 +0000
 FROM alpine:3.12
 
 # ensure local python is preferred over distribution python
