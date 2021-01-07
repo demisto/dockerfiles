@@ -15,4 +15,4 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
   && pip3 install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies
 
-RUN python -c "import nltk; nltk.download('wordnet'); nltk.download('stopwords')"
+RUN python -c "import nltk; nltk.download('wordnet'); nltk.download('stopwords'); nltk.download('punkt')"
