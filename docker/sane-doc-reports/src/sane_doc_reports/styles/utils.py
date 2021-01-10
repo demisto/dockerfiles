@@ -100,8 +100,8 @@ def insert_text_style(section: Section) -> Section:
     return _attach_all_styles(section, base_style)
 
 
-def style_cell(cell: _Cell, margins={}):
-    insert_cell_background(cell)
+def style_cell(cell: _Cell, margins={}, color_hex=''):
+    insert_cell_background(cell, color_hex)
     set_cell_margins(cell, margins)
     add_border(cell)
 

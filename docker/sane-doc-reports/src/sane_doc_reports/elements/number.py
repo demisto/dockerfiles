@@ -29,9 +29,12 @@ class NumberElement(Element):
         if DEBUG:
             table.style = 'Table Grid'
 
+        # add background color
+        background_color = self.section.layout.get('style', {}).get('backgroundColor', '')[1:]
+
         # Add the main number
         inner_cell = table.cell(0, 0)
-        style_cell(inner_cell)
+        style_cell(inner_cell, color_hex=background_color)
         main_number = CellObject(inner_cell)
 
         sign = self.section.layout.get('sign', '')
