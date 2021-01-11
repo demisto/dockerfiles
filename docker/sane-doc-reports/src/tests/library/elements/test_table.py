@@ -19,6 +19,12 @@ def test_table_in_report():
     # Check that it has the right amount of rows
     assert len(d.element.xpath('//w:tbl//w:tbl//w:t')) == 22  # avatar is hidden
 
+def test_table_in_report_with_missing_header():
+    report = Report(*_transform('elements/table_missing_header.json'))
+    report.populate_report()
+    d = report.document
+
+    assert len(d.element.xpath('//w:t')) == 31
 
 def test_table_in_report_widget():
     report = Report(*_transform('elements/table_widget.json'))

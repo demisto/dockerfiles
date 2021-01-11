@@ -12,7 +12,8 @@ from sane_doc_reports.utils import get_chart_font
 
 
 def fix_order(ordered, readable_headers) -> list:
-    """ Return the readable headers by the order given """
+    """ Return the readable headers by the order given.
+    In some cases the readable values are suppose to be table headers   """
     readable_headers_values = readable_headers.values()
     temp_readable = {
         **{i[0].lower() + i[1:]: i for i in readable_headers_values},
@@ -23,7 +24,11 @@ def fix_order(ordered, readable_headers) -> list:
     inv_fix = {i: i for i in readable_headers_values}
     temp_readable = {**temp_readable, **inv_fix}
 
-    # New format fix
+    # adding missing keys from readable headers
+    diff = {k: v for k, v in readable_headers.items() if k not in temp_readable}
+    temp_readable = {**temp_readable, **diff}
+
+    # In case dict in ordered - takes the string value
     if any([isinstance(i, dict) for i in ordered]):
         ret = []
         for k in ordered:

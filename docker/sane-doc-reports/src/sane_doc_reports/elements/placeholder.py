@@ -14,12 +14,13 @@ class PlaceHolderElement(Element):
             print('Adding placeholder...')
 
         self.section.type = 'markdown'
+        style = self.section.get_style()
         if isinstance(self.section.contents, str):
             self.section.contents = markdown_to_section_list(
-                self.section.contents)
+                self.section.contents, style)
         else:
             self.section.contents = markdown_to_section_list(
-                self.section.contents['text'])
+                self.section.contents['text'], style)
         markdown.invoke(self.cell_object, self.section)
 
 

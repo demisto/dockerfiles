@@ -1,13 +1,13 @@
-FROM demisto/python3-deb:3.8.3.9325
+FROM demisto/python3-deb:3.9.1.14969
 
 COPY requirements.txt .
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
   gcc \
-  python-dev \
+  python3-dev \
   git \
 && pip install --no-cache-dir -r requirements.txt \
 && apt-get purge -y --auto-remove \
   gcc \
-  python-dev \
+  python3-dev \
 && rm -rf /var/lib/apt/lists/*

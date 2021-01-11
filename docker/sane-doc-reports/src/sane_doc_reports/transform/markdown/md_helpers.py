@@ -5,7 +5,8 @@ from typing import List, Union
 import mistune
 from pyquery import PyQuery
 
-from sane_doc_reports.conf import HTML_NOT_WRAPABLES, DEBUG
+from sane_doc_reports.conf import HTML_NOT_WRAPABLES, DEBUG, MD_EMPTY, \
+    PRE_TAG_MATCH, PRE_CONTENTS_MATCH
 from sane_doc_reports.domain.Section import Section
 
 
@@ -57,9 +58,11 @@ def markdown_convert(markdown_string) -> str:
 def markdown_to_html(markdown_string: str) -> str:
     """ Convert markdown string to html string """
     if markdown_string is None:
-        return '<span> </span>'
+        return MD_EMPTY
     if not isinstance(markdown_string, str):
         raise ValueError('Called markdown_to_html without a markdown string.')
+    if markdown_string.strip() == "":
+        return MD_EMPTY
     html = markdown_convert(markdown_string)
     html = html.replace('\n', '')  # mistune adds unnecessary newlines
     return html
@@ -170,12 +173,16 @@ def build_dict_from_sane_json(elem: PyQuery, already_wrapped=False) -> dict:
     if 'href' in elem[0].attrib:
         extra['href'] = elem.attr('href')
 
-    return {'type': list(elem)[0].tag, 'attrs': [], 'layout': {},
+    tag_type = list(elem)[0].tag
+    tag_type_mapped = PRE_TAG_MATCH.get(tag_type, tag_type)
+    contents = PRE_CONTENTS_MATCH.get(tag_type, contents)
+
+    return {'type': tag_type_mapped, 'attrs': [], 'layout': {},
             'contents': contents,
             'extra': extra}
 
 
-def collapse_attrs(section_list: List[Union[Section, dict]]) -> list:
+def collapse_attrs(section_list: List[Union[Section, dict]]) -> List[Section]:
     """ Collapse all of the sections
     (moving em as attributes or removing redundant elements like <p>) """
     from sane_doc_reports.transform.markdown.MarkdownSection import \
@@ -194,7 +201,17 @@ def collapse_attrs(section_list: List[Union[Section, dict]]) -> list:
     return ret
 
 
-def markdown_to_section_list(markdown_string) -> List[Section]:
+def add_style_recursively(markdown_elements: List[Section], style={}):
+    if not markdown_elements:
+        return
+    for markdown_element in markdown_elements:
+        markdown_element.add_style(style, is_new=True)
+        if isinstance(markdown_element.contents, list):
+            add_style_recursively(markdown_element.contents, style)
+
+
+def markdown_to_section_list(markdown_string: Union[str, Section],
+                             style={}) -> List[Section]:
     """ Convert markdown to HTML->Python list,
         This will be a readable list of dicts containing:
             - Type: type of html element
@@ -218,6 +235,10 @@ def markdown_to_section_list(markdown_string) -> List[Section]:
     html_list = list(
         map(build_dict_from_sane_json, [c for c in list(etree_root)]))
     collapsed = collapse_attrs(html_list)
+
+    # Add the missing styles (when creating the html tags no styles are added)
+    if style:
+        add_style_recursively(collapsed, style)
 
     if DEBUG:
         print("markdown_to_section list: ",

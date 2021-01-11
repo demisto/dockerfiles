@@ -42,7 +42,8 @@ Create a new docker image
 
 positional arguments:
   name                  The image name to use without the organization prefix.
-                        For example: ldap3
+                        For example: ldap3. We use kebab-case naming
+                        convention.
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -63,6 +64,8 @@ For example to create a new image named ldap using python 3 and with the python 
 ./docker/create_new_docker_image.py -p three --pkg ldap3 ldap
 ```
 The above command will create a directory `docker/ldap` with all relevant files all setup for building a docker image. You can now build the image locally by following: [Building Locally a Test Build](#building-locally-a-test-build).
+
+**Note:** for image names we use [kebab-case](https://wiki.c2.com/?KebabCase) naming convention.
 
 ## Building Locally a Test Build
 It is possible to run a local build to verify that the build process is working. Requirements:
@@ -106,6 +109,8 @@ There are 4 base python images which should be used when building a new image wh
 ### Which image to choose as a base?
 
 If you are using pure python dependencies then choose the alpine image with the proper python version which fits your needs (two or three). The alpine based images are smaller and recommended for use. If you require installing binaries or pre-compiled binary python dependencies ([manylinux](https://github.com/pypa/manylinux)), you are probably best choosing the debian based images. See the following link: https://github.com/docker-library/docs/issues/904 .
+
+If you are using the python [cryptography](https://pypi.org/project/cryptography/) package we recommend using [demisto/crypto](https://github.com/demisto/dockerfiles/blob/repository-info/demisto/crypto/last.md) as a base image. This base image takes care of properly installing the `cryptography` package. There is no need to include in the Pipenv file the `cryptography` package when using this image as a base.
 
 ## Adding a `verify.py` script
 As part of the build we support running a `verify.py` script in the created image. This allows you to add logic which tests and checks that the docker image built is matching what you expect. 
