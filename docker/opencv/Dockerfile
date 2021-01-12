@@ -12,4 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 && apt-get purge -y --auto-remove \
   gcc \
   python-dev \
+&& cd yolo-coco \
+&& cat yolov3.weights.aa yolov3.weights.ab yolov3.weights.ac yolov3.weights.ad yolov3.weights.ae > yolov3.weights \
 && rm -rf /var/lib/apt/lists/*
+
