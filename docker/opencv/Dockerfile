@@ -2,6 +2,7 @@
 FROM demisto/python3-deb:3.9.1.14969
 
 COPY requirements.txt .
+COPY yolo-coco /yolo-coco
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
   gcc \
