@@ -1181,34 +1181,6 @@ update_configs:
         update_type: all
 
   - package_manager: python
-    directory: /docker/dateutil
-    update_schedule: live
-    automerged_updates:
-    - match:
-        update_type: semver:minor
-  - package_manager: docker
-    directory: /docker/dateutil
-    update_schedule: daily
-    automerged_updates:
-    - match:
-        dependency_name: demisto/*
-        update_type: all
-
-  - package_manager: python
-    directory: /docker/loco-loco
-    update_schedule: live
-    automerged_updates:
-    - match:
-        update_type: semver:minor
-  - package_manager: docker
-    directory: /docker/loco-loco
-    update_schedule: daily
-    automerged_updates:
-    - match:
-        dependency_name: demisto/*
-        update_type: all
-
-  - package_manager: python
     directory: /docker/opencv
     update_schedule: live
     automerged_updates:
@@ -1222,17 +1194,4 @@ update_configs:
         dependency_name: demisto/*
         update_type: all
 
-  - package_manager: python
-    directory: /docker/opencv
-    update_schedule: live
-    automerged_updates:
-    - match:
-        update_type: semver:minor
-  - package_manager: docker
-    directory: /docker/opencv
-    update_schedule: daily
-    automerged_updates:
-    - match:
-        dependency_name: demisto/*
-        update_type: all
 
