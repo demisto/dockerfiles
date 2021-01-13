@@ -5,7 +5,7 @@ from typing import List
 from sane_doc_reports.conf import LAYOUT_KEY, ROW_POSITION_KEY, \
     COL_POSITION_KEY, HEIGHT_POSITION_KEY, WIDTH_POSITION_KEY, DATA_KEY, \
     OLD_JSON_FORMAT_GRID_MAX, BASE_FONT_SIZE, DEFAULT_COLORED_CELL_COLOR, \
-    PYDOCX_BACKGROUND_COLOR
+    PYDOCX_BACKGROUND_COLOR, LOGO_INDEX_RANGE
 from sane_doc_reports.domain.Section import sane_to_section
 from sane_doc_reports.transform.markdown.md_helpers import \
     markdown_to_section_list
@@ -58,7 +58,7 @@ def general_json_fixes(json_data: List[dict]) -> List[dict]:
             json_data[i][LAYOUT_KEY][ROW_POSITION_KEY] = 0
         if not json_data[i][LAYOUT_KEY][COL_POSITION_KEY]:
             json_data[i][LAYOUT_KEY][COL_POSITION_KEY] = 0
-        if not json_data[i][DATA_KEY]:
+        if not json_data[i][DATA_KEY] and not isinstance(json_data[i][DATA_KEY], int):
             json_data[i][DATA_KEY] = []
         if json_data[i]['type'] in ['markdown', 'text', 'header'] \
                 and ('text' not in json_data[i][DATA_KEY] or isinstance(
@@ -73,6 +73,56 @@ def general_json_fixes(json_data: List[dict]) -> List[dict]:
         if json_data[i]['type'] == 'itemsSection':
             json_data[i]['type'] = 'items_section'
             continue
+        if json_data[i]['type'] == 'logo':
+            json_data[i]['type'] = 'image'
+            continue
+        if json_data[i]['type'] == 'table':
+            if 'tableColumns' not in json_data[i]['layout'] and isinstance(
+                    json_data[i]['data'], str):
+                if json_data[i]['data'] == "":
+                    empty_notification = json_data[i].get("emptyNotification",
+                                                          "")
+                    title = json_data[i].get("title", "")
+                    json_data[i][
+                        'data'] = f'[{{"{title}":"{empty_notification}"}}]'
+                table_data = json.loads(json_data[i]['data'])
+                if isinstance(table_data, dict):
+                    table_data = [table_data]
+                json_data[i][DATA_KEY] = table_data
+                headers = list(table_data[0].keys())
+                json_data[i][LAYOUT_KEY]['tableColumns'] = headers
+                continue
+
+    return json_data
+
+
+def remove_first_logos(json_data: List[dict]) -> List[dict]:
+    """ Removes the first images (usually the logo that the pdf uses)
+        The logos are sent via the options (sane_doc_reports/main.py:5)
+        So there is no need for them to appear twice.
+    """
+
+    if isinstance(json_data, str):
+        return []
+
+    if len(json_data) == 0:
+        return []
+
+    # Remove the green arrow present
+    del_index = 0
+
+    # We pass though LOGO_INDEX_RANGE elements, and try to remove all of the
+    # logo types we encounter. It is capped by LOGO_INDEX_RANGE because the
+    # logo type usually appears in the start of the document,
+    # no need to go though all of it.
+    for i in range(LOGO_INDEX_RANGE):
+        if len(json_data) == 0:
+            return []
+        if len(json_data) > (i - del_index) and \
+                json_data[i - del_index]['type'] == 'logo':
+            del json_data[i - del_index]
+            # we removed one to it is used to decrease the next time.
+            del_index += 1
 
     return json_data
 
@@ -88,15 +138,6 @@ def transform_old_json_format(json_data: List[dict]) -> List[dict]:
     # Fix the first element
     json_data[0][LAYOUT_KEY][ROW_POSITION_KEY] = 0
     json_data[0][LAYOUT_KEY][COL_POSITION_KEY] = 0
-
-    # Remove unnecessary first elements (logo/side image)
-    # We need to do this before we calculate the rowPos
-    if json_data[0]['type'] == 'image':
-        del json_data[0]
-    if json_data[0]['type'] == 'logo':
-        del json_data[0]
-    if json_data[0]['type'] == 'logo':
-        del json_data[0]
 
     # Normalize the rowPos
     json_data.sort(key=lambda item: item[LAYOUT_KEY][ROW_POSITION_KEY])
@@ -169,7 +210,15 @@ def transform_old_json_format(json_data: List[dict]) -> List[dict]:
                 json_data[i]['title'] = ''
 
         if json_data[i]['type'] == 'table':
-            if 'tableColumns' not in json_data[i]['layout']:
+            if 'tableColumns' not in json_data[i]['layout'] and isinstance(
+                    json_data[i]['data'], str):
+                if json_data[i]['data'] == "":
+                    empty_notification = json_data[i].get("emptyNotification",
+                                                          "")
+                    title = json_data[i].get("title", "")
+                    json_data[i][
+                        'data'] = f'[{{"{title}":"{empty_notification}"}}]'
+
                 table_data = json.loads(json_data[i]['data'])
                 if isinstance(table_data, dict):
                     table_data = [table_data]

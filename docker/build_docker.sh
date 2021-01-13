@@ -68,8 +68,8 @@ function cr_login {
         docker login -u "${CR_USER}" -p "${CR_PASSWORD}" ${cr_url}
     fi
     if [ $? -ne 0 ]; then
-        echo "Failed docker login for user: ${CR_USER}"
-        return 2; 
+        echo "Failed docker login to CR repo"
+        exit 3; 
     fi
     CR_LOGIN_DONE=yes
     return 0;
@@ -154,18 +154,29 @@ function docker_build {
         echo "Pipfile lock generated requirements.txt: "
         cat requirements.txt
         del_requirements=yes
-    fi        
-    docker build . -t ${image_full_name} \
+    fi
+    tmp_dockerfile=$(mktemp)
+    cp Dockerfile "$tmp_dockerfile"
+    echo "" >> "$tmp_dockerfile"
+    echo "ENV DOCKER_IMAGE=$image_full_name" >> "$tmp_dockerfile"
+    docker build -f "$tmp_dockerfile" . -t ${image_full_name} \
         --label "org.opencontainers.image.authors=Demisto <containers@demisto.com>" \
         --label "org.opencontainers.image.version=${VERSION}" \
         --label "org.opencontainers.image.revision=${CIRCLE_SHA1}"
+    rm "$tmp_dockerfile"
     if [ ${del_requirements} = "yes" ]; then
         rm requirements.txt
     fi
     if [[ "$(prop 'devonly')" ]]; then
         echo "Skipping license verification for devonly image"
     else
-        ${DOCKER_SRC_DIR}/verify_licenses.py ${image_full_name}
+        PY3CMD="python3"
+        if command -v python3.7 >/dev/null 2>&1; then
+            PY3CMD="python3.7"
+        elif command -v python3.8 >/dev/null 2>&1; then
+            PY3CMD="python3.8"
+        fi
+        $PY3CMD ${DOCKER_SRC_DIR}/verify_licenses.py ${image_full_name}
     fi
     if [ -f "verify.py" ]; then
         echo "==========================="            
@@ -203,7 +214,7 @@ https://${REVISION}-161347705-gh.circle-artifacts.com/0/docker_images/$IMAGENAME
 Load it locally into docker by running:
 
 \`\`\`
-curl "https://${REVISION}-161347705-gh.circle-artifacts.com/0/docker_images/$IMAGENAMESAVE.gz" | gunzip | docker load
+curl -L "https://${REVISION}-161347705-gh.circle-artifacts.com/0/docker_images/$IMAGENAMESAVE.gz" | gunzip | docker load
 \`\`\`
 
 --------------------------
@@ -242,6 +253,7 @@ if [[ ! $(which pyenv) ]] && [[ -n "${CIRCLECI}" ]]; then
     export PATH="$HOME/.pyenv/bin:$PATH"
     eval "$(pyenv init -)"
     eval "$(pyenv virtualenv-init -)"
+    pyenv shell system $(pyenv versions --bare | grep 3.7)
 fi
 
 echo "default python versions: "
@@ -272,21 +284,23 @@ if [ "$CIRCLE_BRANCH" == "master" ]; then
         DIFF_COMPARE=$(echo "$CIRCLE_COMPARE_URL" | sed 's:^.*/compare/::g')    
         if [ -z "${DIFF_COMPARE}" ]; then
             echo "Failed: extracting diff compare from CIRCLE_COMPARE_URL: ${CIRCLE_COMPARE_URL}"
-            exit 1
+            exit 2
         fi
     fi
     DOCKER_ORG=demisto
 fi
 
 echo "DOCKER_ORG: ${DOCKER_ORG}, DIFF_COMPARE: [${DIFF_COMPARE}], SCRIPT_DIR: [${SCRIPT_DIR}], CIRCLE_BRANCH: ${CIRCLE_BRANCH}, PWD: [${CURRENT_DIR}]"
-
+total=$(find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | wc -l)
+count=0
 for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | sort`; do
     if [[ ${DIFF_COMPARE} = "ALL" ]] || [[ $(git diff --name-status $DIFF_COMPARE -- ${docker_dir}) ]]; then
         if [ -n "${DOCKER_INCLUDE_GREP}" ] && [ -z "$(echo ${docker_dir} | grep -E ${DOCKER_INCLUDE_GREP})" ]; then
             [[ -z "$1" ]] && echo "Skipping dir: '${docker_dir}' as not included in grep expression DOCKER_INCLUDE_GREP: '${DOCKER_INCLUDE_GREP}'"
             continue
         fi
-        echo "=============== `date`: Starting docker build in dir: ${docker_dir} ==============="
+        count=$((count+1))
+        echo "=============== `date`: Starting docker build in dir: ${docker_dir} ($count of $total) ==============="
         docker_build ${docker_dir}
         cd ${CURRENT_DIR}
         echo ">>>>>>>>>>>>>>> `date`: Done docker build <<<<<<<<<<<<<"

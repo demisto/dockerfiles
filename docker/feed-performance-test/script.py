@@ -23,7 +23,7 @@ def generate_file(filename, generated_type):
         fake.add_provider(internet)
         fake.add_provider(date_time)
         soFar = 0
-        total = 850000
+        total = 2000000
         while len(generated_set) != total:
             indicator, csv_line = generate_indicator(fake, generated_type)
             if indicator in generated_set:

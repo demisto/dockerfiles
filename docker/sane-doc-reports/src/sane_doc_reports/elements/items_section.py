@@ -33,6 +33,9 @@ class ItemsSectionWrapper(Wrapper):
         # Handle called from another wrapper.
         items = self.section.contents
 
+        if items == "":
+            return
+
         if not isinstance(items, list):
             raise ValueError('ItemsSection does not have valid contents ' +
                              '(must be a list)')

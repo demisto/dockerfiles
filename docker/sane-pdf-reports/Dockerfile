@@ -1,4 +1,4 @@
-FROM demisto/python3-deb:3.8.2.6981
+FROM demisto/python3-deb:3.9.1.14969
 
 WORKDIR "/app"
 
@@ -20,10 +20,20 @@ RUN apt-get update -y -q && \
     libxrender1 libxss1 libxtst6 \
     ca-certificates fonts-liberation \
     libappindicator1 libnss3 lsb-release \
-    xdg-utils wget \
-    && rm -rf /var/lib/apt/lists/*
-RUN npm i puppeteer@1.2.0 && ln -s /app/node_modules/puppeteer/.local-chromium/linux-*/chrome-linux/chrome /usr/bin/chromium-browser
+    xdg-utils wget locales \
+    fonts-arphic-ukai fonts-arphic-uming \
+    fonts-ipafont-mincho fonts-ipafont-gothic \
+    fonts-unfonts-core \
+    fonts-noto-cjk \
+    fonts-noto-core \
+    libgbm-dev \
+    && rm -rf /var/lib/apt/lists/* \
+    && npm i npm@latest -g
+
+RUN npm i puppeteer@5.3.1 && ln -s /app/node_modules/puppeteer/.local-chromium/linux-*/chrome-linux/chrome /usr/bin/chromium-browser
 
 RUN python get_build_artifacts.py --project sane-reports --branch master --filter "sane-report$" \
     && mv sane-report sane-report.tar && tar -xvf sane-report.tar && rm -f sane-report.tar
 
+# Update permissions and ownership on /app dir
+RUN chown -R root:demisto /app/ && chmod 775 /app/ && chmod 775 /app/dist
