@@ -1,5 +1,5 @@
 
-FROM demisto/btfl-soup:1.0.1.9249
+FROM demisto/btfl-soup:1.0.1.15406
 
 COPY requirements.txt .
 
