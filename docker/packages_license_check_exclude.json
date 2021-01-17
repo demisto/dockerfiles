@@ -1,5 +1,5 @@
 {
-    "description": "Document specifies packages which can be exluded from license verification. As our code doesn't actually link to them. If no docker_images are provided the package is ignored for all images",    
+    "description": "Document specifies packages which can be exluded from license verification. As our code doesn't actually link to them. If no docker_images are provided the package is ignored for all images",
     "packages": {
         "docutils": {
             "docker_images": [
@@ -13,13 +13,19 @@
             "docker_images": [
                 "ansible-runner"
             ],
-            "notes": "Used only for executing ansible as a utlility via cmd interface"
+            "notes": "Used only for executing ansible as a utility via cmd interface"
         },
         "ansible-base": {
             "docker_images": [
                 "ansible-runner"
             ],
-            "notes": "Used only for executing ansible as a utlility via cmd interface"
-        }        
+            "notes": "Used only for executing ansible as a utility via cmd interface"
+        },
+        "pylint": {
+            "docker_images": [
+                "xsoar-tools"
+            ],
+            "notes": "Used only for executing lint as a utility via cmd interface"
+        }
     }
 }
