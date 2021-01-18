@@ -1851,6 +1851,20 @@ update_configs:
     - match:
         dependency_name: demisto/*
         update_type: all
+  - package_manager: python
+    directory: /docker/xsoar-tools
+    update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
+  - package_manager: docker
+    directory: /docker/xsoar-tools
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
 
   - package_manager: python
     directory: /docker/opencv
@@ -1873,6 +1887,20 @@ update_configs:
         update_type: semver:minor
   - package_manager: docker
     directory: /docker/pyjarm
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/paho-mqtt
+    update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
+  - package_manager: docker
+    directory: /docker/paho-mqtt
     update_schedule: daily
     automerged_updates:
     - match:
