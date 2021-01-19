@@ -10,5 +10,7 @@ COPY demisto_ml-0.2.tar.gz .
 RUN pip install demisto_ml-0.2.tar.gz
 RUN rm -rf /var/lib/apt/lists/*
 RUN python -m spacy download en_core_web_sm
+RUN pip install xgboost
+
 
 
