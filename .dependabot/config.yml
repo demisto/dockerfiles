@@ -1664,6 +1664,10 @@ update_configs:
         dependency_name: demisto/*
         update_type: all
 
+  - package_manager: docker
+    directory: /docker/pwsh-exchange
+    update_schedule: daily
+
   - package_manager: python
     directory: /docker/ansible-runner
     update_schedule: live
