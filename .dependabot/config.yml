@@ -1405,3 +1405,7 @@ update_configs:
         dependency_name: demisto/*
         update_type: all
 
+  - package_manager: docker
+    directory: /docker/powershell-exov2
+    update_schedule: daily
+
