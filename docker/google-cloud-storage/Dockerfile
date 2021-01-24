@@ -1,9 +1,9 @@
 
-FROM demisto/python3:3.8.3.8715
+FROM demisto/python3:3.8.6.12176
 
 COPY requirements.txt .
 
-RUN apk --update add --no-cache --virtual .build-dependencies python-dev build-base wget git linux-headers \
+RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git linux-headers \
   && apk --update add --no-cache libstdc++ \
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies
