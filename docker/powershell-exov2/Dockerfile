@@ -10,5 +10,5 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 RUN groupadd --gid 4000 demisto \
   && useradd --uid 4000 --gid demisto --shell /bin/bash --create-home demisto
 
-RUN Install-Module -Name ExchangeOnlineManagement -RequiredVersion 2.0.3
-RUN Install-Module -Name SelfSignedCertificate
+RUN pwsh -Command Install-Module -Name ExchangeOnlineManagement -RequiredVersion 2.0.3 -Force
+RUN pwsh -Command Install-Module -Name SelfSignedCertificate -Force
