@@ -1,5 +1,5 @@
 # Last modified: Wed, 30 September 2020 16:01:26 +0000
-FROM mcr.microsoft.com/powershell:6.2.4-ubuntu-18.04
+FROM mcr.microsoft.com/powershell:7.0.3-ubuntu-18.04
 
 RUN apt update && apt install netbase -y
 # Upgrade all packages to latest
