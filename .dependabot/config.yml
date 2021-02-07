@@ -1955,13 +1955,13 @@ update_configs:
         update_type: all
         
   - package_manager: python
-    directory: /docker/opencti-v2
+    directory: /docker/opencti-v4.1.2
     update_schedule: live
     automerged_updates:
     - match:
         update_type: semver:minor  
   - package_manager: docker
-    directory: /docker/opencti-v2
+    directory: /docker/opencti-v4.1.2
     update_schedule: daily
     automerged_updates:
     - match:
