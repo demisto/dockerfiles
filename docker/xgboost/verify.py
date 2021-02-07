@@ -5,5 +5,6 @@ import pandas
 import dill
 import xgboost
 import hdbscan
+import matplotlib
 
 print('All package imported succesfully')
