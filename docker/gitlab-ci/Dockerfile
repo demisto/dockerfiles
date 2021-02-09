@@ -45,7 +45,7 @@ RUN \
 
 RUN \
   export GOROOT=/usr/local/go && export PATH=$PATH:$GOROOT/bin && \
-  curl -o go.tar.gz https://storage.googleapis.com/golang/go1.13.linux-amd64.tar.gz && \
+  curl -o go.tar.gz https://storage.googleapis.com/golang/go1.15.linux-amd64.tar.gz && \
   tar -C /usr/local -xzf go.tar.gz
 
 RUN \
