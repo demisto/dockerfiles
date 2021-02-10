@@ -1,5 +1,7 @@
 import sqlalchemy
+import psycopg2
 import pyodbc
+import psycopg2
 import cx_Oracle
 
 assert 'FreeTDS' in pyodbc.drivers()
