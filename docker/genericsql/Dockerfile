@@ -71,3 +71,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   python3-dev \
   unixodbc-dev \
 && rm -rf /var/lib/apt/lists/*
+
+# Handling the issue described here https://github.com/mkleehammer/pyodbc/issues/610#issuecomment-534920201 by using TLS v1
+RUN sed -i -e 's/MinProtocol = TLSv1.2/MinProtocol = TLSv1.0/' -e 's/CipherString = DEFAULT@SECLEVEL=2/CipherString = DEFAULT@SECLEVEL=1/' /etc/ssl/openssl.cnf
