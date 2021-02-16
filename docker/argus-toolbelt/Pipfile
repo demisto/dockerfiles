@@ -1,12 +1,12 @@
 [[source]]
-name = "pypi"
 url = "https://pypi.org/simple"
 verify_ssl = true
+name = "pypi"
+
+[packages]
+argus-api = "*"
 
 [dev-packages]
 
-[packages]
-argus-api = ">=2.0.0,<3.0.0"
-
 [requires]
-python_version = "3.8"
+python_version = "3.6"
