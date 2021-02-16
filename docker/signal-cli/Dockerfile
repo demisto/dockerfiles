@@ -12,7 +12,8 @@ ENV SIGNAL_CLI_VERSION=0.7.4
 
 RUN wget https://github.com/AsamK/signal-cli/releases/download/v"${SIGNAL_CLI_VERSION}"/signal-cli-"${SIGNAL_CLI_VERSION}".tar.gz \
   && tar xf signal-cli-"${SIGNAL_CLI_VERSION}".tar.gz -C /opt \
-  && ln -sf /opt/signal-cli-"${SIGNAL_CLI_VERSION}"/bin/signal-cli /usr/local/bin/
+  && ln -sf /opt/signal-cli-"${SIGNAL_CLI_VERSION}"/bin/signal-cli /usr/local/bin/ \
+  && rm signal-cli-"${SIGNAL_CLI_VERSION}".tar.gz
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
   gcc \
