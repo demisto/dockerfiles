@@ -1514,7 +1514,7 @@ update_configs:
     automerged_updates:
     - match:
         dependency_name: demisto/*
-        update_type: all
+        update_type: semver:minor
 
   - package_manager: python
     directory: /docker/axonius
