@@ -11,13 +11,15 @@
         },
         "ansible": {
             "docker_images": [
-                "ansible-runner"
+                "ansible-runner",
+                "tidy"
             ],
             "notes": "Used only for executing ansible as a utility via cmd interface"
         },
         "ansible-base": {
             "docker_images": [
-                "ansible-runner"
+                "ansible-runner",
+                "tidy"
             ],
             "notes": "Used only for executing ansible as a utility via cmd interface"
         },
