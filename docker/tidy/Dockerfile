@@ -1,16 +1,13 @@
 
-FROM demisto/python3-deb:3.9.1.15758
+FROM demisto/crypto:1.0.0.16776
 
 COPY requirements.txt .
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
-  gcc \
-  python3-dev \
-  sshpass \
-&& pip install --no-cache-dir -r requirements.txt \
-&& apt-get purge -y --auto-remove \
-  gcc \
-  python3-dev \
-&& rm -rf /var/lib/apt/lists/*
-
 COPY ansible /home/demisto/ansible
+
+RUN apk --update add --no-cache libressl-dev musl-dev libffi-dev openssl-dev build-base sudo python3 openssl \
+     ca-certificates sshpass openssh-client rsync \
+    && pip install --no-cache-dir -r requirements.txt
+RUN ansible-galaxy install -c geerlingguy.homebrew
+RUN ansible-galaxy install -c ctorgalson.oh-my-zsh,v2.2.2
+RUN ansible-galaxy install -c pddg.anyenv
+RUN ansible-galaxy install elliotweiser.osx-command-line-tools --force
