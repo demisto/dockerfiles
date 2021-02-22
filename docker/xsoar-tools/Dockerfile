@@ -8,11 +8,6 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
   && apk add --no-cache libstdc++  \
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies \
-  && cd /home/demisto \
-  && mkdir content \
-  && cd content \
-  && git init \
-  && git remote add origin https://github.com/demisto/content.git \
-  && git sparse-checkout init --cone \
-  && git sparse-checkout set Packs/Base/Scripts/CommonServerPython Packs/Base/Scripts/CommonServerPowerShell \
-  && git pull origin master
+  && wget -P /home/demisto https://raw.githubusercontent.com/demisto/content/master/Packs/Base/Scripts/CommonServerPython/CommonServerPython.py \
+  && wget -P /home/demisto https://raw.githubusercontent.com/demisto/content/master/Packs/Base/Scripts/CommonServerPowerShell/CommonServerPowerShell.ps1 \
+  && wget -P /home/demisto https://raw.githubusercontent.com/demisto/content/master/tox.ini
