@@ -1,23 +1,30 @@
 {
     "description": "Document specifies packages which can be exluded from license verification. As our code doesn't actually link to them. If no docker_images are provided the package is ignored for all images",
     "packages": {
+        "jinja2-ansible-filters": {
+            "docker_images": ["tidy"],
+            "notes": "Used only for executing ansible as a utility via cmd interface"
+        },
         "docutils": {
             "docker_images": [
                 "snowflake",
                 "boto3py3",
-                "ansible-runner"
+                "ansible-runner",
+                "tidy"
             ],
             "notes": "botocore imports the package only for dev use. See: https://github.com/boto/botocore/issues/900"
         },
         "ansible": {
             "docker_images": [
-                "ansible-runner"
+                "ansible-runner",
+                "tidy"
             ],
             "notes": "Used only for executing ansible as a utility via cmd interface"
         },
         "ansible-base": {
             "docker_images": [
-                "ansible-runner"
+                "ansible-runner",
+                "tidy"
             ],
             "notes": "Used only for executing ansible as a utility via cmd interface"
         },
