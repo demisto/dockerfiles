@@ -13,9 +13,4 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
   && wget -P /home/demisto https://raw.githubusercontent.com/demisto/content/master/tox.ini \
   && wget -P /home/demisto https://raw.githubusercontent.com/demisto/content/master/Tests/demistomock/demistomock.py \
   && wget -P /home/demisto https://raw.githubusercontent.com/demisto/content/master/Tests/demistomock/demistomock.ps1 \
-  && wget -P /home/demisto https://raw.githubusercontent.com/demisto/content/master/Tests/scripts/dev_envs/pytest/conftest.py \
-  && cd /home/demisto \
-  && mkdir content \
-  && cd content \
-  && git init \
-  && git remote add origin https://github.com/demisto/content.git
+  && wget -P /home/demisto https://raw.githubusercontent.com/demisto/content/master/Tests/scripts/dev_envs/pytest/conftest.py
