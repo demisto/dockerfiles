@@ -10,4 +10,6 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
   && apk del .build-dependencies \
   && wget -P /home/demisto https://raw.githubusercontent.com/demisto/content/master/Packs/Base/Scripts/CommonServerPython/CommonServerPython.py \
   && wget -P /home/demisto https://raw.githubusercontent.com/demisto/content/master/Packs/Base/Scripts/CommonServerPowerShell/CommonServerPowerShell.ps1 \
-  && wget -P /home/demisto https://raw.githubusercontent.com/demisto/content/master/tox.ini
+  && wget -P /home/demisto https://raw.githubusercontent.com/demisto/content/master/tox.ini \
+  && wget -P /home/demisto https://raw.githubusercontent.com/demisto/content/master/Tests/demistomock/demistomock.py \
+  && wget -P /home/demisto https://raw.githubusercontent.com/demisto/content/master/Tests/demistomock/demistomock.ps1
