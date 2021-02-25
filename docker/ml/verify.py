@@ -14,7 +14,6 @@ doc = nlp('tokenize this sentence')
 import demisto_ml
 import catboost
 import eli5
-import xgboost
 
 
 print('All package imported succesfully')
