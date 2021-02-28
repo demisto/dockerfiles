@@ -1,4 +1,4 @@
-FROM demisto/python3-deb:3.8.6.14507
+FROM demisto/python3-deb:3.9.1.15758
 
 COPY requirements.txt .
 RUN apt-get update && apt-get install -y --no-install-recommends python3-dev g++\
