@@ -5,4 +5,4 @@ RUN pwsh -c "Set-PSRepository -Name PSGallery -InstallationPolicy Trusted -Error
 RUN pwsh -c "Install-Module -ErrorAction Stop -Scope AllUsers -Name ExchangeOnlineManagement -RequiredVersion 2.0.4-Preview4 -AllowPrerelease -Force"
 RUN pwsh -c "Install-Module -Name SelfSignedCertificate -AllowPrerelease -Force"
 RUN pwsh -c "Install-Module MicrosoftTeams -Force"
-RUN pwsh -c "￿Import-Module MicrosoftTeams -Force"
+RUN pwsh -c "Import-Module MicrosoftTeams -Force"
