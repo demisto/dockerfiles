@@ -6,7 +6,7 @@ FROM demisto/crypto:1.0.0.16776
 RUN apk --update add sudo
 
 # Adding python run time..
-RUN apk --update add python3 openssl ca-certificates rust
+RUN apk --update add python3 openssl ca-certificates
 RUN apk --update add --virtual build-dependencies python3-dev libffi-dev openssl-dev build-base
 RUN pip3 install --upgrade pip cffi
 
