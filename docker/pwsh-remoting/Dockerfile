@@ -1,4 +1,4 @@
-FROM demisto/powershell-ubuntu:7.0.3.12001
+FROM demisto/powershell-ubuntu:7.1.1.16151
 
 RUN mkdir /root/.ssh
 #Supressing the interactive host verification prompt
