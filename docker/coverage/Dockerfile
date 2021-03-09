@@ -1,5 +1,5 @@
 
-FROM demisto/python3:3.9.2.17246
+FROM demisto/xml-feed:1.0.0.16907
 
 COPY requirements.txt .
 
