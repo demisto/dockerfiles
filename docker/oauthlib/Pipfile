@@ -7,7 +7,7 @@ verify_ssl = true
 
 [packages]
 requests-oauthlib = "*"
-pyjwt = "*"
+oauthlib = {extras = ["signedtoken"], version = "*"}
 
 [requires]
 python_version = "3.7"
