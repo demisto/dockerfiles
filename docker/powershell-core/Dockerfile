@@ -1,7 +1,6 @@
 # Last modified: Wed, 10 Jun 2020 22:06:26 +0000
 FROM mcr.microsoft.com/powershell:7.1.3-alpine-3.12-20210316
 
-COPY requirements.txt .
 # taken from here: https://git.alpinelinux.org/aports/tree/community/python2/cve-2021-3177.patch
 COPY cve-2021-3177.patch .
 
@@ -164,8 +163,10 @@ RUN set -ex; \
 
 # END Docker file from: https://raw.githubusercontent.com/docker-library/python/f1e613f48eb4fc88748b36787f5ed74c14914636/2.7/alpine3.11/Dockerfile
 
-COPY localtime /etc/localtime
+RUN rm cve-2021-3177.patch
 
+COPY localtime /etc/localtime
+COPY requirements.txt .
 
 RUN apk --update add --no-cache --virtual .build-dependencies python2-dev build-base wget \
   && pip install --no-cache-dir -r requirements.txt \
@@ -174,4 +175,4 @@ RUN apk --update add --no-cache --virtual .build-dependencies python2-dev build-
 RUN addgroup -g 4000 demisto \
   && adduser -u 4000 -G demisto -D demisto -s /bin/sh 
 
-CMD ["python"]
+CMD ["python2"]
