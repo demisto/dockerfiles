@@ -2,6 +2,8 @@
 FROM mcr.microsoft.com/powershell:7.1.3-alpine-3.12-20210316
 
 COPY requirements.txt .
+# taken from here: https://git.alpinelinux.org/aports/tree/community/python2/cve-2021-3177.patch
+COPY cve-2021-3177.patch .
 
 # ensure local python is preferred over distribution python
 ENV PATH /usr/local/bin:$PATH
@@ -25,6 +27,7 @@ RUN set -ex \
 		gnupg \
 		tar \
 		xz \
+		patch \
 	\
 	&& wget -O python.tar.xz "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz" \
 	&& wget -O python.tar.xz.asc "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz.asc" \
@@ -36,6 +39,7 @@ RUN set -ex \
 	&& mkdir -p /usr/src/python \
 	&& tar -xJC /usr/src/python --strip-components=1 -f python.tar.xz \
 	&& rm python.tar.xz \
+	&& patch -d /usr/src/python -p1 < cve-2021-3177.patch \
 	\
 	&& apk add --no-cache --virtual .build-deps  \
 		bzip2-dev \
@@ -157,8 +161,6 @@ RUN set -ex; \
 			\( -type f -a \( -name '*.pyc' -o -name '*.pyo' \) \) \
 		\) -exec rm -rf '{}' +; \
 	rm -f get-pip.py
-
-CMD ["python2"]
 
 # END Docker file from: https://raw.githubusercontent.com/docker-library/python/f1e613f48eb4fc88748b36787f5ed74c14914636/2.7/alpine3.11/Dockerfile
 
