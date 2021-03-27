@@ -20,6 +20,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 		netbase \
 	&& rm -rf /var/lib/apt/lists/*
 
+# taken from here: https://salsa.debian.org/cpython-team/python2/-/blob/master/debian/patches/CVE-2021-3177.diff
+COPY CVE-2021-3177.patch .
+
 ENV GPG_KEY C01E1CAD5EA2C4F0B8E3571504C367C218ADD4FF
 ENV PYTHON_VERSION 2.7.18
 
@@ -55,6 +58,7 @@ RUN set -ex \
 	&& mkdir -p /usr/src/python \
 	&& tar -xJC /usr/src/python --strip-components=1 -f python.tar.xz \
 	&& rm python.tar.xz \
+	&& patch -d /usr/src/python -p1 < CVE-2021-3177.patch \
 	\
 	&& cd /usr/src/python \
 	&& gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" \
@@ -180,6 +184,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 RUN apt-get update && apt-get -t buster-backports -y --no-install-recommends upgrade \
 && rm -rf /var/lib/apt/lists/*
 
+RUN rm CVE-2021-3177.patch
 COPY requirements.txt .
 
 #Install tools for building binary deps (will be reomved later on)
