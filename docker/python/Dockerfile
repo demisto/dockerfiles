@@ -2,7 +2,7 @@
 # NOTE: THIS DOCKERFILE IS BASED UPON: https://raw.githubusercontent.com/docker-library/python/f1e613f48eb4fc88748b36787f5ed74c14914636/2.7/alpine3.11/Dockerfile
 # We only change to use the latest Alpine version. 
 
-# Last modified: Thu, 04 Mar 2021 18:06:15 +0000
+# Last modified: Fri, 26 Mar 2021 16:21:13 +0000
 FROM alpine:3.13
 
 # ensure local python is preferred over distribution python
@@ -18,6 +18,9 @@ ENV PYTHONIOENCODING UTF-8
 # other runtime dependencies for Python are installed later
 RUN apk add --no-cache ca-certificates
 
+# taken from here: https://git.alpinelinux.org/aports/tree/community/python2/cve-2021-3177.patch
+COPY cve-2021-3177.patch .
+
 ENV GPG_KEY C01E1CAD5EA2C4F0B8E3571504C367C218ADD4FF
 ENV PYTHON_VERSION 2.7.18
 
@@ -26,6 +29,7 @@ RUN set -ex \
 		gnupg \
 		tar \
 		xz \
+		patch \
 	\
 	&& wget -O python.tar.xz "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz" \
 	&& wget -O python.tar.xz.asc "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz.asc" \
@@ -35,8 +39,9 @@ RUN set -ex \
 	&& { command -v gpgconf > /dev/null && gpgconf --kill all || :; } \
 	&& rm -rf "$GNUPGHOME" python.tar.xz.asc \
 	&& mkdir -p /usr/src/python \
-	&& tar -xJC /usr/src/python --strip-components=1 -f python.tar.xz \
+	&& tar -xJC /usr/src/python --strip-components=1 -f python.tar.xz \	
 	&& rm python.tar.xz \
+	&& patch -d /usr/src/python -p1 < cve-2021-3177.patch \
 	\
 	&& apk add --no-cache --virtual .build-deps  \
 		bzip2-dev \
@@ -166,6 +171,7 @@ CMD ["python2"]
 # Upgrade all packages to latest
 RUN apk --update --no-cache upgrade
 
+RUN rm cve-2021-3177.patch
 COPY requirements.txt .
 
 COPY localtime /etc/localtime
