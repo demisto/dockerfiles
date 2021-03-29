@@ -8,7 +8,7 @@ set -e
 #######################################
 
 ## Images which should be updated in a seperate PR (grep regex)
-SEPERATE_PR="/pcap-http-extractor/|/office-utils/|/snowflake/|/faker3/|/ml/"
+SEPERATE_PR="/pcap-http-extractor/|/office-utils/|/snowflake/|/faker3/|/ml/|/taxii-server/"
 
 if [[ -z "$1" ]] || [[ "$1" == -* ]]; then    
     echo "Usage: ${BASH_SOURCE} <python_version (2 or 3)>"
