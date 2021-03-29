@@ -1,5 +1,4 @@
-FROM demisto/python3-deb:3.7.5.5428
-
+FROM demisto/python3-deb:3.8.6.14507
 COPY requirements.txt .
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
