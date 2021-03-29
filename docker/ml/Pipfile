@@ -1,16 +1,13 @@
 [[source]]
-name = "pypi"
 url = "https://pypi.org/simple"
 verify_ssl = true
-
-[dev-packages]
+name = "pypi"
 
 [packages]
-tensorflow = "*"
 keras = "*"
 fasttext = "*"
-scikit-learn = "*"
 numpy = "*"
+scikit-learn = "*"
 pandas = "*"
 nltk = "*"
 lime = "*"
@@ -21,6 +18,10 @@ fsspec = "*"
 dill = "*"
 catboost = "*"
 eli5 = "*"
+torch = "*"
+cloudpickle = "*"
+
+[dev-packages]
 
 [requires]
-python_version = "3.7"
+python_version = "3.8"
