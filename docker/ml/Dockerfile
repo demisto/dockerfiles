@@ -8,10 +8,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 && pip install --no-cache-dir -r requirements.txt \
 && apt-get purge -y --auto-remove \
   gcc \
-  python3-dev gfortran wget git g++ pkg-config libhdf5-dev \
-&& rm -rf /var/lib/apt/lists/*
+  python3-dev gfortran wget git g++ pkg-config libhdf5-dev
 COPY demisto_ml-0.2.tar.gz .
 RUN pip install demisto_ml-0.2.tar.gz
+RUN rm -rf /var/lib/apt/lists/*
 RUN python -m spacy download en_core_web_sm
 RUN python -c "import nltk; nltk.download('wordnet'); nltk.download('stopwords'); nltk.download('punkt')"
 COPY encrypted_model.b ./var
