@@ -68,8 +68,8 @@ function cr_login {
         docker login -u "${CR_USER}" -p "${CR_PASSWORD}" ${cr_url}
     fi
     if [ $? -ne 0 ]; then
-        echo "Failed docker login for user: ${CR_USER}"
-        return 2; 
+        echo "Failed docker login to CR repo"
+        exit 3; 
     fi
     CR_LOGIN_DONE=yes
     return 0;
@@ -284,7 +284,7 @@ if [ "$CIRCLE_BRANCH" == "master" ]; then
         DIFF_COMPARE=$(echo "$CIRCLE_COMPARE_URL" | sed 's:^.*/compare/::g')    
         if [ -z "${DIFF_COMPARE}" ]; then
             echo "Failed: extracting diff compare from CIRCLE_COMPARE_URL: ${CIRCLE_COMPARE_URL}"
-            exit 1
+            exit 2
         fi
     fi
     DOCKER_ORG=demisto

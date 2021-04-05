@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 
 import argparse
-import requests
-import subprocess
 import json
-import re
-import sys
 import os
+import re
+import subprocess
+import sys
+
+import requests
+import urllib3
 
 if(sys.version_info[0] < 3 or sys.version_info[1] < 6):
     print("This script requires python version 3.6 and above. Please make sure to run with the proper version. Aborting...")
@@ -16,7 +18,7 @@ req_session = requests.Session()
 
 if os.getenv('TRUST_ANY_CERT'):
     req_session.verify = False
-    requests.packages.urllib3.disable_warnings()
+    urllib3.disable_warnings()
 
 
 def is_pkg_ignored(name: str, docker_image: str, ignore_packages: dict):
@@ -47,8 +49,12 @@ def check_pwsh_license(docker_image: str, licenses: dict, ignore_packages: dict,
     if not isinstance(pwsh_modules, list):
         pwsh_modules = [pwsh_modules]
     for m in pwsh_modules:
-        license_uri = m.get('LicenseUri')
         name = m.get("Name")
+        if name in known_licenses:
+            lic = known_licenses[name]
+            print(f'{name}: has a known license. license uri: {lic["url"]} approved as license: {lic["license"]}')
+            continue
+        license_uri = m.get('LicenseUri')
         if not license_uri:
             print(f'{name} has no license URI (default MIT applies)')
             continue
