@@ -1,11 +1,11 @@
 FROM demisto/python3-deb:3.8.6.14507
+
 COPY requirements.txt .
 
 RUN apt-get update \
 && apt-get install -y --no-install-recommends \
   gcc \
   python3-dev gfortran wget git g++ pkg-config libhdf5-dev \
-&& ln -s /usr/include/locale.h /usr/include/xlocale.h \
 && pip install --no-cache-dir -r requirements.txt \
 && apt-get purge -y --auto-remove gcc \
   python3-dev gfortran wget git g++ pkg-config libhdf5-dev
