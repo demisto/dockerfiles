@@ -1,5 +1,4 @@
-import tensorflow
-import keras
+import torch.nn as nn
 import fasttext
 import sklearn
 import numpy
