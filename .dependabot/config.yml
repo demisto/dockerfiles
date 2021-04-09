@@ -2057,16 +2057,29 @@ update_configs:
         update_type: all
 
   - package_manager: python
-    directory: /docker/solarwinds-orionsdk
+    directory: /docker/carbon-black-cloud
     update_schedule: live
     automerged_updates:
     - match:
         update_type: semver:minor
   - package_manager: docker
-    directory: /docker/solarwinds-orionsdk
+    directory: /docker/carbon-black-cloud
     update_schedule: daily
     automerged_updates:
     - match:
         dependency_name: demisto/*
         update_type: all
 
+  - package_manager: python
+    directory: /docker/minio
+    update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
+  - package_manager: docker
+    directory: /docker/minio
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
