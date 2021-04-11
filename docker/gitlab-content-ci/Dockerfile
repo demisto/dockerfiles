@@ -4,7 +4,7 @@ RUN apt-get update
 
 RUN apt-get install -y curl jq unzip openssh-client gcc libffi-dev libssl-dev git npm zip netcat wget
 
-RUN npm npm@6.14.6 -g n
+RUN npm install npm@6.14.6 -g n
 
 RUN n v12.18.4 && PATH="$PATH"
 
