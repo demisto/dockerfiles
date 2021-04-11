@@ -2,7 +2,7 @@ FROM demisto/python3-deb:3.9.1.14969
 
 RUN apt-get update
 
-RUN apt-get install -y curl jq unzip openssh-client gcc libffi-dev libssl-dev git npm zip netcat
+RUN apt-get install -y curl jq unzip openssh-client gcc libffi-dev libssl-dev git npm zip netcat wget
 
 COPY requirements.txt .
 
