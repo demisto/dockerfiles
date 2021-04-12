@@ -1,5 +1,64 @@
 ---
-- name: osx-command-line-tools
+- name: demisto-web-client
   hosts: all
-  roles:
-    - role: demisto-web-client
+  tasks:
+    - name: Get all certificates from Mac key chain
+      become: yes
+      shell:
+        cmd: security export -t certs -o /etc/ssl/certs/all_ca.pem
+
+    - name: Export PANW known trustes CAs
+      become: yes
+      shell:
+        cmd: sudo security export -t certs -o /etc/ssl/certs/panw.pem
+
+    - name: Change ssl ownership and n ownership
+      become: yes
+      file:
+        path: "{{ item }}"
+        owner: "{{ ansible_env.USER }}"
+      with_items:
+        - /usr/local/bin
+        - /usr/local/lib
+        - /usr/local/include
+        - /usr/local/share
+        - /etc/ssl/certs/all_ca.pem
+        - /etc/ssl/certs/panw.pem
+
+    - name: Cofigure certificate for node usage
+      blockinfile:
+        path: "{{ item }}"
+        block: export NODE_EXTRA_CA_CERTS=/etc/ssl/certs/panw.pem
+        marker: "# Node js configuration"
+      with_items:
+        - ~/.zshrc
+        - ~/.bash_profile
+
+    - name: Cofigure certificate for node usage
+      blockinfile:
+        path: "{{ item }}"
+        block: export NODE_EXTRA_CA_CERTS=/etc/ssl/certs/all_ca.pem
+        marker: "# Node js configuration"
+      with_items:
+        - ~/.zshrc
+        - ~/.bash_profile
+
+    - name: Install global modules - Webclient and Demiso-sdk related (README.md validation)
+      shell:
+        cmd: . ~/.bash_profile && cd ~/dev/demisto/web-client && npm install -g webpack
+
+    - name: Delete old installed local modules and cache
+      shell:
+        cmd: . ~/.bash_profile && cd ~/dev/demisto/web-client && rm -rf node_modules && rm -f package-lock.json
+
+    - name: Install local modules
+      shell:
+        cmd: . ~/.bash_profile && cd ~/dev/demisto/web-client && npm install
+
+    - name: Install local modules
+      shell:
+        cmd: . ~/.bash_profile && cd ~/dev/demisto/web-client && npm install fsevents
+
+    - name: Build web-client
+      shell:
+        cmd: . ~/.bash_profile && cd ~/dev/demisto/web-client && npm run build

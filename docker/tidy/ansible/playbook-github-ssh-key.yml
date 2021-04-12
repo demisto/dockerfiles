@@ -24,7 +24,10 @@
         block: |
           Host *
             AddKeysToAgent yes
-            IdentityFile ~/.ssh/id_rsa_ansibl
+            IdentityFile ~/.ssh/id_rsa_ansible
+          Host github.com
+            StrictHostKeyChecking no
+            UserKnownHostsFile=/dev/null
 
     - name: Evaluating the authentication agent & adding the key...
       shell: eval "$(ssh-agent -s)" && ssh-add -K ~/.ssh/id_rsa_ansible
@@ -58,14 +61,21 @@
         method: get
         validate_certs: no
         headers:
-          Authorization: "token {{ github_access_token }}"
+          Authorization: "token {{ access_token }}"
       register: github_keys
 
     - name: get remote public key file contents
       command: "cat ~/.ssh/id_rsa_ansible.pub"
       register: key
 
+    - debug:
+        var: key
+
+    - debug:
+        var: key.stdout
+
     - name: Post github key with api access
+      become: yes
       uri:
         url: https://api.github.com/user/keys
         method: post
@@ -77,5 +87,5 @@
         body_format: json
         status_code: [200,201]
         headers:
-          Authorization: "token {{ github_access_token }}"
+          Authorization: "token {{ access_token }}"
 
