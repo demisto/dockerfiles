@@ -71,9 +71,6 @@
     - debug:
         var: key
 
-    - debug:
-        var: key.stdout
-
     - name: Post github key with api access
       become: yes
       uri:
