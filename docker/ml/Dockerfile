@@ -22,6 +22,6 @@ USER ml
 RUN python -m spacy download en_core_web_sm
 RUN python -c "import nltk; nltk.download('stopwords', download_dir='/ml/nltk_data'); nltk.download('punkt',download_dir='/ml/nltk_data')"
 ENV NLTK_DATA='/ml/nltk_data'
-ENV MPLCONFIGDIR='ml/matplotlib'
+ENV MPLCONFIGDIR='/ml/matplotlib'
 COPY encrypted_model.b /ml
 COPY oob_evaluation.txt /ml
