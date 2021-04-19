@@ -1,6 +1,6 @@
 {
     "description": "Document specifies packages which can be exluded from license verification. As our code doesn't actually link to them. If no docker_images are provided the package is ignored for all images",
-    "packages": {
+   "packages": {
         "jinja2-ansible-filters": {
             "docker_images": ["tidy"],
             "notes": "Used only for executing ansible as a utility via cmd interface"
@@ -27,6 +27,18 @@
                 "tidy"
             ],
             "notes": "Used only for executing ansible as a utility via cmd interface"
+        },
+        "pcodedmp": {
+            "docker_images": [
+                "pymisp"
+            ],
+            "notes": "Used for enabling EmailObject in misp package"
+        },
+        "extract-msg": {
+            "docker_images": [
+                "pymisp"
+            ],
+            "notes": "Used for enabling EmailObject in misp package"
         },
         "pylint": {
             "docker_images": [
