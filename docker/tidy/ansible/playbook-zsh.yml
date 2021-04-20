@@ -2,6 +2,11 @@
 - name: zsh
   hosts: all
   tasks:
+    - name: Install Oh my zsh
+      shell: curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sh
+      args:
+        creates: ~/.oh-my-zsh
+
     - name: Install auto suggestions and syntax high-lighting
       git:
         repo: "https://github.com/zsh-users/{{ item }}.git"
@@ -16,10 +21,14 @@
         dest: ~/.oh-my-zsh/themes/powerlevel10k
         force: yes
 
+    - name: Set zsh as default shell
+      become: yes
+      command: "chsh -s /usr/local/bin/zsh {{ ansible_env.USER }}"
+
   roles:
     - role: ctorgalson.oh-my-zsh
       vars:
-        omz_install_zsh: true
+        omz_install_zsh: false
         omz_zsh_theme: "powerlevel10k/powerlevel10k"
         omz_user:
           name: "{{ ansible_env.USER }}"

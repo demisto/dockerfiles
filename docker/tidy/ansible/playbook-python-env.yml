@@ -24,6 +24,7 @@
       pip:
         requirements: ~/dev/demisto/content/dev-requirements-py3.txt
         executable: ~/.anyenv/envs/pyenv/shims/pip3
+        extra_args: --user
 
     - name: Add hooks running precommit
       lineinfile:

@@ -3,7 +3,30 @@
   hosts: all
   roles:
     - role: geerlingguy.homebrew
-      vars:
-        homebrew_cask_apps: "{{ homebrew_cask_apps }}"
-        homebrew_installed_packages: "{{ homebrew_installed_packages }}"
-        homebrew_taps: "{{ homebrew_taps }}"
+#      vars:
+#        homebrew_cask_apps: "{{ homebrew_cask_apps }}"
+#        homebrew_installed_packages: "{{ homebrew_installed_packages }}"
+#        homebrew_taps: "{{ homebrew_taps }}"
+
+  tasks:
+    - name: Install hombrew packages
+      community.general.homebrew:
+        name: "{{ item }}"
+        state: present
+        install_options: force
+      loop:
+        "{{ homebrew_installed_packages }}"
+
+    - name: Install cask
+      community.general.homebrew_cask:
+        name: "{{ item }}"
+        state: present
+        install_options: force
+      loop:
+        "{{ homebrew_cask_apps }}"
+
+    - name: Tap a Homebrew repository, state present
+      community.general.homebrew_tap:
+        name: "{{ item }}"
+      loop:
+        "{{ homebrew_taps }}"

@@ -1,9 +1,10 @@
 ################################################ General ################################################
-export GOENV_ROOT=$HOME/.goenv
-export GOPATH=$HOME/dev/go
-export PATH=$GOENV_ROOT/bin:$GOPATH/bin:$PATH
-export GOENV_DISABLE_GOPATH=1
+export GOENV_ROOT="$HOME/.anyenv/envs/goenv"
+export PATH="$GOENV_ROOT/bin:$PATH"
 eval "$(goenv init -)"
+export PATH="$GOROOT/bin:$PATH"
+export PATH="$PATH:$GOPATH/bin"
+export $GOPATH=$HOME/dev/go
 
 ################################################ Content ################################################
 export CONTENT=$HOME/dev/demisto/content
