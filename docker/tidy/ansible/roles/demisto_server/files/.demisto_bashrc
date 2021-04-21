@@ -25,8 +25,8 @@ alias clear-debug='rm -rf $SERVER/debug'
 alias copy-one-time='cp $SERVER/conf/testdata/onetimeconf.json $SERVER/ && chmod +rw $SERVER/onetimeconf.json'
 alias compile-server='cd $SERVER && go mod tidy -v && go install -mod=vendor && go install -mod=vendor'
 
-start_clean_server="$HOME/dev/go/src/github.com/demisto/server/start_clean_server.sh"
-start_server="$GOPATH/bin/server -public ~/dev/demisto/web-client/dist -conf conf_for_systemtests_elasticsearch -insecure -loglevel debug -stdout"
+start-clean-server="$HOME/dev/go/src/github.com/demisto/server/start-clean-server.sh"
+start-server="$GOPATH/bin/server -public ~/dev/demisto/web-client/dist -conf conf_for_systemtests_elasticsearch -insecure -loglevel debug -stdout"
 
 # BoltDB
 alias app-bolt="$GOPATH/bin/server -conf $SERVER/conf_for_systemtests -public $CLIENT_FOLDER/dist/ -insecure -stdout -loglevel=info"
