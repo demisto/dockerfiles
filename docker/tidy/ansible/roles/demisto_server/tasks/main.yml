@@ -13,21 +13,6 @@
     - ~/.zshrc
     - ~/.bash_profile
 
-- name: Add goenv to init conf
-  blockinfile:
-    path: "{{ item }}"
-    marker: "# Goenv conf"
-    block: |
-      export GOENV_ROOT="$HOME/.anyenv/envs/goenv"
-      export PATH="$GOENV_ROOT/bin:$PATH"
-      eval "$(goenv init -)"
-      export PATH="$GOROOT/bin:$PATH"
-      export PATH="$PATH:$GOPATH/bin"
-      export $GOPATH=$HOME/dev/go
-  loop:
-    - "~/.bash_profile"
-    - "~/.zshrc"
-
 - name: Generate dynamic go code
   shell:
     cmd: . ~/.bash_profile && cd ~/dev/go/src/github.com/demisto/server && {{ item }}

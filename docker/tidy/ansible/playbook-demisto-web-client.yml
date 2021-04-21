@@ -34,15 +34,6 @@
         - ~/.zshrc
         - ~/.bash_profile
 
-    - name: Cofigure certificate for node usage
-      blockinfile:
-        path: "{{ item }}"
-        block: export NODE_EXTRA_CA_CERTS=/etc/ssl/certs/all_ca.pem
-        marker: "# Node js configuration"
-      with_items:
-        - ~/.zshrc
-        - ~/.bash_profile
-
     - name: Install global modules - Webclient and Demiso-sdk related (README.md validation)
       shell:
         cmd: . ~/.bash_profile && cd ~/dev/demisto/web-client && npm install -g webpack

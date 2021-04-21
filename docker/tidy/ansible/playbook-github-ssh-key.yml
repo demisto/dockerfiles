@@ -28,6 +28,13 @@
           Host github.com
             StrictHostKeyChecking no
             UserKnownHostsFile=/dev/null
+          Host 10.0.*
+            StrictHostKeyChecking no
+            ProxyJump content-build@content-build-lb.demisto.works
+          Host content-build-lb.demisto.works
+            IdentityFile ~/.ssh/oregon-ci.pem
+            UserKnownHostsFile /dev/null
+            StrictHostKeyChecking no
 
     - name: Evaluating the authentication agent & adding the key...
       shell: eval "$(ssh-agent -s)" && ssh-add -K ~/.ssh/id_rsa_ansible

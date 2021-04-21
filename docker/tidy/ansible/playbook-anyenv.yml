@@ -10,10 +10,6 @@
         update: yes
         force: yes
 
-    - name: Create .bash_profile
-      shell:
-        cmd: touch ~/.bash_profile
-
     - name: add init to ~/.zshrc and ~/.bash_profile
       blockinfile:
         path: "{{ item }}"
@@ -25,6 +21,7 @@
       loop:
         - "~/.zshrc"
         - "~/.bash_profile"
+
     - name: Sourcing
       shell: source ~/.bash_profile
 
