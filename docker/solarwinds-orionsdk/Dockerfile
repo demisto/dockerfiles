@@ -1,11 +1,8 @@
 
-FROM demisto/crypto:1.0.0.19032
+FROM demisto/python3:3.9.2.17957
 
 COPY requirements.txt .
 
-RUN apk --update add --no-cache libffi openssl
-
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git \
-  libffi-dev openssl-dev \
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies
