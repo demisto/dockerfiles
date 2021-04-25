@@ -5,6 +5,7 @@ import warnings
 from collections import deque
 from multiprocessing import Process
 
+import lxml
 import dateparser
 import exchangelib
 from cStringIO import StringIO
