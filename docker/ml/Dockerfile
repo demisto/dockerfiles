@@ -4,11 +4,11 @@ COPY requirements.txt .
 
 RUN apt-get update \
 && apt-get install -y --no-install-recommends \
-  gcc \
+  gcc cmake\
   python3-dev gfortran wget git g++ pkg-config libhdf5-dev \
 && pip install --no-cache-dir -r requirements.txt \
 && apt-get purge -y --auto-remove gcc \
-  python3-dev gfortran wget git g++ pkg-config libhdf5-dev
+  python3-dev cmake gfortran wget git g++ pkg-config libhdf5-dev
 COPY demisto_ml-0.2.tar.gz .
 RUN pip install demisto_ml-0.2.tar.gz
 RUN rm -rf /var/lib/apt/lists/*
