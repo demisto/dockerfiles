@@ -1,5 +1,4 @@
 
-
 FROM demisto/powershell-ubuntu:7.1.1.16151
 # ensure local python is preferred over distribution python
 ENV PATH /usr/local/bin:$PATH
@@ -9,6 +8,9 @@ ENV PATH /usr/local/bin:$PATH
 ENV LANG C.UTF-8
 # https://github.com/docker-library/python/issues/147
 ENV PYTHONIOENCODING UTF-8
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=US
 
 # runtime dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -137,7 +139,7 @@ RUN set -ex; \
 	apt-get update; \
 	apt-get install -y --no-install-recommends wget; \
 	\
-	wget -O get-pip.py "$PYTHON_GET_PIP_URL"; \
+	wget -O get-pip.py "$PYTHON_GET_PIP_URL" --no-check-certificate; \
 	echo "$PYTHON_GET_PIP_SHA256 *get-pip.py" | sha256sum --check --strict -; \
 	\
 	apt-mark auto '.*' > /dev/null; \
