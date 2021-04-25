@@ -9,9 +9,6 @@ ENV LANG C.UTF-8
 # https://github.com/docker-library/python/issues/147
 ENV PYTHONIOENCODING UTF-8
 
-ENV DEBIAN_FRONTEND=noninteractive
-ENV TZ=US
-
 # runtime dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
 		ca-certificates \
@@ -26,7 +23,7 @@ ENV PYTHON_VERSION 2.7.18
 RUN set -ex \
 	\
 	&& savedAptMark="$(apt-mark showmanual)" \
-	&& apt-get update && apt-get install -y --no-install-recommends \
+	&& apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
 		dpkg-dev \
 		gcc \
 		libbz2-dev \
@@ -48,6 +45,7 @@ RUN set -ex \
 	&& wget -O python.tar.xz "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz" \
 	&& wget -O python.tar.xz.asc "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz.asc" \
 	&& export GNUPGHOME="$(mktemp -d)" \
+	&& echo "disable-ipv6" >> ${GNUPGHOME}/dirmngr.conf \
 	&& gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys "$GPG_KEY" \
 	&& gpg --batch --verify python.tar.xz.asc python.tar.xz \
 	&& { command -v gpgconf > /dev/null && gpgconf --kill all || :; } \
@@ -139,7 +137,7 @@ RUN set -ex; \
 	apt-get update; \
 	apt-get install -y --no-install-recommends wget; \
 	\
-	wget -O get-pip.py "$PYTHON_GET_PIP_URL" --no-check-certificate; \
+	wget -O get-pip.py "$PYTHON_GET_PIP_URL"; \
 	echo "$PYTHON_GET_PIP_SHA256 *get-pip.py" | sha256sum --check --strict -; \
 	\
 	apt-mark auto '.*' > /dev/null; \
@@ -166,8 +164,6 @@ CMD ["python2"]
 
 # END Docker file fromhttps://raw.githubusercontent.com/docker-library/python/f1e613f48eb4fc88748b36787f5ed74c14914636/2.7/buster/slim/Dockerfile
 
-RUN echo 'deb http://deb.debian.org/debian buster-backports main' >> /etc/apt/sources.list
-
 # Basic linux utilities
 RUN apt-get update && apt-get install -y --no-install-recommends \
   procps \
@@ -177,32 +173,34 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 && rm -rf /var/lib/apt/lists/*
 
-# Upgrade using backports
-RUN apt-get update && apt-get -t buster-backports -y --no-install-recommends upgrade \
-&& rm -rf /var/lib/apt/lists/*
-
 RUN rm CVE-2021-3177.diff
 COPY requirements.txt .
 
 #Install tools for building binary deps (will be reomved later on)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
-    python2 - dev \
-    build - base \
+    python-dev \
+    build-essential \
     wget \
     git \
     libxml2 \
-    libxslt \
+    libxslt1.1 \
+	libkrb5-3 \
     libffi-dev \
     libxml2-dev \
     libxslt-dev \
-    openssl-dev \
-    krb5-dev \
+    libssl-dev \
+    libkrb5-dev \
 && pip install --no-cache-dir -r requirements.txt \
 && apt-get purge -y --auto-remove \
   gcc \
-  python2-dev \
+  python-dev \
+  build-essential \
+  git \
+  wget \
+  libffi-dev \
+  libxml2-dev \
+  libssl-dev \
+  libkrb5-dev \
 && rm -rf /var/lib/apt/lists/*
 
-RUN groupadd --gid 4000 demisto \
-  && useradd --uid 4000 --gid demisto --shell /bin/bash --create-home demisto
