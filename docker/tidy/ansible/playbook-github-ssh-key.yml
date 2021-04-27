@@ -35,12 +35,7 @@
             StrictHostKeyChecking no
 
     - name: Evaluating the authentication agent & adding the key...
-      shell:
-        cmd: "{{ item }}"
-      with_items:
-        - eval "$(ssh-agent -s)"
-        - ssh-add -K ~/.ssh/id_rsa_ansible
-        - ssh-add -l -E sha256
+      shell: eval "$(ssh-agent -s)" && ssh-add -K ~/.ssh/id_rsa_ansible && ssh-add -l -E sha256
 
     - name: Auto accept rsa key fingerprint from command line
       blockinfile:
