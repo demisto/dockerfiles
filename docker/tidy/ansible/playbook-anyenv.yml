@@ -2,6 +2,14 @@
 - name: anyenv
   hosts: all
   pre_tasks:
+    - name: Clone anyenv
+      git:
+        accept_hostkey: yes
+        repo: https://github.com/anyenv/anyenv
+        dest: ~/.anyenv
+        update: yes
+        force: yes
+
     - name: add init to ~/.zshrc and ~/.bash_profile
       blockinfile:
         path: "{{ item }}"
@@ -13,6 +21,7 @@
       loop:
         - "~/.zshrc"
         - "~/.bash_profile"
+
     - name: Sourcing
       shell: source ~/.bash_profile
 
