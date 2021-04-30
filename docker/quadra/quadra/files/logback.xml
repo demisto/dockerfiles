@@ -1,0 +1,45 @@
+<configuration>
+
+    <appender name="Console"
+              class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                %black(%d{HH:mm:ss.SSS}) [%highlight(%-5level)] %yellow(%c{5}): %msg%n%throwable
+            </Pattern>
+        </layout>
+    </appender>
+
+    <property name="TL_AUDIT_LOG" value="logs/tl_audit_log.log"/>
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${TL_AUDIT_LOG}</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>logs/archived/tl_audit_log.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <!-- each archived file, size max 10MB -->
+            <maxFileSize>10MB</maxFileSize>
+            <!-- total size of all archive files, if total size > 20GB, it will delete old archived file -->
+            <totalSizeCap>20GB</totalSizeCap>
+            <!-- 60 days to keep -->
+            <maxHistory>60</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d %p %c{1.} [%t] %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- LOG everything at INFO level -->
+    <root level="info">
+        <appender-ref ref="Console" />
+    </root>
+
+    <!-- LOG "com.baeldung*" at TRACE level -->
+    <logger name="com.titaniamlabs" level="trace" additivity="false">
+        <appender-ref ref="Console" />
+    </logger>
+
+    <logger name="titaniam.plugin.audit.event.index" level="info" additivity="false">
+        <appender-ref ref="FILE"/>
+    </logger>
+
+</configuration>
