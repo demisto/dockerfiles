@@ -1,5 +1,9 @@
 # Docker Compose file Reference (https://docs.docker.com/compose/compose-file/)
-
+# 
+# Set MYSQL_DATABASE, MYSQL_USER, and MYSQL_PASSWORD environment variables in
+# .env file, place in the same directory where docker-compose.yml is located and
+# run docker-compose up -d 
+#
 version: '3.7'
 
 # Define services
@@ -16,9 +20,9 @@ services:
     depends_on:
       - db # this service depends on db. Start db first.
     environment: # Pass environment variables to the service
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/titaniam
-      SPRING_DATASOURCE_USERNAME: titaniam
-      SPRING_DATASOURCE_PASSWORD: titaniam    
+      SPRING_DATASOURCE_URL: "jdbc:mysql://db:3306/${MYSQL_DATABASE}"
+      SPRING_DATASOURCE_USERNAME: "${MYSQL_USER}"
+      SPRING_DATASOURCE_PASSWORD: "${MYSQL_PASSWORD}"    
     networks: # Networks to join (Services on the same network can communicate with each other using their name)
       - quadra-db
        
@@ -29,10 +33,10 @@ services:
       - "3306:3306"
     restart: always    
     environment:
-      MYSQL_DATABASE: titaniam
-      MYSQL_USER: titaniam
-      MYSQL_PASSWORD: titaniam  
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_RANDOM_ROOT_PASSWORD: "true"
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
     volumes:
       - db-data:/var/lib/mysql
     networks:

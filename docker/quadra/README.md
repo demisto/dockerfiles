@@ -14,7 +14,16 @@ Prerequsites
 
 Launch
 
-Version of Panther service is configured in .env file. Execute:
+Version of Panther service is configured in .env file. 
+Add to the .env file following variables:
+
+MYSQL_DATABASE=add_db_name_here
+MYSQL_USER=add_username_here
+MYSQL_PASSWORD=add_password_here
+
+Replace each value with real database name, user name, and password.
+
+Execute:
 
 docker-compose up -d
 
