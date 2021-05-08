@@ -1,0 +1,18 @@
+---
+- name: Run shell command
+  hosts: all
+  tasks:
+    - name: Run command
+      shell:
+        cmd: |
+          {{ command }}
+        chdir: "{{ dir }}"
+      register: output
+      async: 7200
+      poll: 60
+
+    - debug:
+        msg: Output "{{ output.stdout_lines}}"
+
+
+
