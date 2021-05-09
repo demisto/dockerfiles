@@ -10,5 +10,6 @@ RUN apt-get update \
 && cd Multicore-TSNE \
 && pip install . \
 && python setup.py install \
+&& rm -r ../Multicore-TSNE \
 && apt-get purge -y --auto-remove \
   python3-dev gfortran wget git gcc  g++  pkg-config libhdf5-dev
