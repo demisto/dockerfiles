@@ -3,8 +3,11 @@
 ## Status
 Ready/In Progress/In Hold (Reason for hold)
 
+## Related Content Pull Request
+Related PR: link to the issue
+
 ## Related Issues
-related: link to the issue
+Related: link to the issue
 
 ## Description
 A few sentences describing the overall goals of the pull request's commits.
