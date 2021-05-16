@@ -24,10 +24,18 @@
         block: |
           Host *
             AddKeysToAgent yes
-            IdentityFile ~/.ssh/id_rsa_ansibl
+            UseKeychain yes
+            IdentityFile ~/.ssh/id_rsa_ansible
+          Host 10.0.*
+            StrictHostKeyChecking no
+            ProxyJump content-build@content-build-lb.demisto.works
+          Host content-build-lb.demisto.works
+            IdentityFile ~/.ssh/oregon-ci.pem
+            UserKnownHostsFile /dev/null
+            StrictHostKeyChecking no
 
     - name: Evaluating the authentication agent & adding the key...
-      shell: eval "$(ssh-agent -s)" && ssh-add -K ~/.ssh/id_rsa_ansible
+      shell: eval "$(ssh-agent -s)" && ssh-add -K ~/.ssh/id_rsa_ansible && ssh-add -l -E sha256
 
     - name: Auto accept rsa key fingerprint from command line
       blockinfile:
@@ -58,14 +66,18 @@
         method: get
         validate_certs: no
         headers:
-          Authorization: "token {{ github_access_token }}"
+          Authorization: "token {{ access_token }}"
       register: github_keys
 
     - name: get remote public key file contents
       command: "cat ~/.ssh/id_rsa_ansible.pub"
       register: key
 
+    - debug:
+        var: key
+
     - name: Post github key with api access
+      become: yes
       uri:
         url: https://api.github.com/user/keys
         method: post
@@ -77,5 +89,5 @@
         body_format: json
         status_code: [200,201]
         headers:
-          Authorization: "token {{ github_access_token }}"
+          Authorization: "token {{ access_token }}"
 

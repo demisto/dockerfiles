@@ -21,31 +21,8 @@ jobs:
       - store_artifacts:
           path: artifacts
           destination: docker_images
-  update_repo_info:
-    docker:
-      - image: devdemisto/dockerbuild:1.0.0.56
-    steps:
-      - checkout
-      - setup_remote_docker
-      - add_ssh_keys:
-          fingerprints:
-            - b1:6a:a6:66:d3:20:c5:eb:0d:00:5a:17:04:3b:89:47
-      - run:
-          name: Update Docker Repo Info
-          command: |
-            ./docker/update-repository-info.sh
 workflows:
   version: 2
   full_build:
     jobs:
       - docker_build
-  repo_inf:
-    jobs:
-      - update_repo_info
-    triggers:
-      - schedule:
-          cron: "0 1 * * *"
-          filters:
-            branches:
-              only:
-                - master

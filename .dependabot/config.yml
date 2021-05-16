@@ -2083,14 +2083,85 @@ update_configs:
     - match:
         dependency_name: demisto/*
         update_type: all
+
   - package_manager: python
-    directory: /docker/flask-nginx
+    directory: /docker/polyswarm
     update_schedule: live
     automerged_updates:
     - match:
         update_type: semver:minor
   - package_manager: docker
-    directory: /docker/flask-nginx
+    directory: /docker/polyswarm
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/solarwinds-orionsdk
+    update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
+  - package_manager: docker
+    directory: /docker/solarwinds-orionsdk
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+  - package_manager: python
+    directory: /docker/mlclustering
+    update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
+  - package_manager: docker
+    directory: /docker/mlclustering
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/stix
+    update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
+  - package_manager: docker
+    directory: /docker/stix
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+  - package_manager: python
+    directory: /docker/sendgrid
+    update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
+  - package_manager: docker
+    directory: /docker/sendgrid
+    update_schedule: daily
+    automerged_updates:
+    - match:
+        dependency_name: demisto/*
+        update_type: all
+
+
+  - package_manager: python
+    directory: /docker/py-ews
+    update_schedule: live
+    automerged_updates:
+    - match:
+        update_type: semver:minor
+  - package_manager: docker
+    directory: /docker/py-ews
     update_schedule: daily
     automerged_updates:
     - match:
