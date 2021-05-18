@@ -14,7 +14,7 @@ In order to conntribute, we will need all contributors to sign a contributor lic
 When opening a new pull request, a bot will evaluate whether you have signed the CLA. If required, the bot will comment on the pull request, including a link to accept the agreement. The CLA document is also available for review as a [PDF](https://github.com/demisto/content/blob/master/docs/cla.pdf).
 Visit our [Frequently Asked Questions](https://xsoar.pan.dev/docs/concepts/faq#cla-is-pending-even-though-i-signed-the-agreement) article for CLA related issues.
 
-After opening your docker pull request, and in order for the reviewer to understand the context, make sure to attach the corresponding pull request form the [Conntent](https://github.com/demisto/content) repo where this docker image will be used.
+After opening your docker pull request, and in order for the reviewer to understand the context, make sure to link to the corresponding pull request from the [Content](https://github.com/demisto/content) repo where this docker image will be used.
 ## Getting Started
 Each docker image is managed in its own directory. The directory should be named the same as the image name (without the organization prefix). If needed, we prefer using a dash (`-`) as a separator in the name. All image directories are located under the `docker` dir.
 
