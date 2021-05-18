@@ -4,7 +4,7 @@
 Ready/In Progress/In Hold (Reason for hold)
 
 ## Related Content Pull Request
-Related PR: link to the issue
+Related PR: link to the PR at demisto/content
 
 ## Related Issues
 Related: link to the issue
