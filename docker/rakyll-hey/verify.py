@@ -1,11 +1,13 @@
-from subprocess import PIPE, Popen
+import subprocess
 from io import StringIO
 import pandas as pd
 
-p = Popen(['hey'], stdout=PIPE, stderr=PIPE, universal_newlines=True)
-output, err = p.communicate()
-if err or ' -n  Number of requests to run.' not in output:
-    raise RuntimeError('hey was not installed properly')
+try:
+    output = subprocess.check_output('hey', stderr=subprocess.PIPE, text=True)
+except subprocess.CalledProcessError as e:
+    # hey returns -1 error when called with no URL
+    if ' -n  Number of requests to run.' not in e.stderr:
+        raise RuntimeError('hey was not installed properly')
 
 test_col1_name = 'test-col1'
 test_col2_name = 'test-col2'

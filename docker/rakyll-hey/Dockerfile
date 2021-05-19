@@ -2,6 +2,7 @@
 FROM demisto/python3-deb:3.9.5.20070
 
 COPY requirements.txt .
+# downloaded from https://packages.debian.org/sid/amd64/hey/download
 COPY hey_0.1.4_amd64.deb .
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
