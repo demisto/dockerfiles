@@ -1,5 +1,5 @@
 
-FROM demisto/powershell:7.0.1.9103
+FROM demisto/powershell:7.1.3.20270
 
 RUN pwsh -c "Set-PSRepository -Name PSGallery -InstallationPolicy Trusted -ErrorAction Stop"
 RUN pwsh -c "Install-Module -ErrorAction Stop -Scope AllUsers Advanced-Threat-Analytics"

@@ -1,0 +1,62 @@
+################################################ General ################################################
+export GOENV_ROOT=$HOME/.anyenv/env/goenv
+export GOPATH=$HOME/dev/go
+export GOROOT=~/.anyenv/envs/goenv/versions/1.16.0
+export PATH=$GOENV_ROOT/bin:$GOPATH/bin:$PATH
+export GOENV_DISABLE_GOPATH=1
+eval "$(goenv init -)"
+
+alias demisto="cd $HOME/dev/demisto"
+
+################################################ Content ################################################
+export CONTENT=$HOME/dev/demisto/content
+export PYTHONPATH="${CONTENT}:${PYTHONPATH}"
+
+################################################ Client ################################################
+export CLIENT=$HOME/dev/demisto/web-client
+alias client-build='cd $CLIENT_FOLDER && npm run build-light'
+alias client-start='cd $CLIENT_FOLDER && npm start light'
+
+################################################ Server ################################################
+export SERVER=$GOPATH/src/github.com/demisto/server
+
+# General
+alias clear-debug='rm -rf $SERVER/debug'
+alias copy-one-time='cp $SERVER/conf/testdata/onetimeconf.json $SERVER/ && chmod +rw $SERVER/onetimeconf.json'
+alias compile-server='cd $SERVER && go mod tidy -v && go install -mod=vendor && go install -mod=vendor'
+
+alias start-clean-server="$HOME/dev/go/src/github.com/demisto/server/start-clean-server.sh"
+alias start-server="$GOPATH/bin/server -public ~/dev/demisto/web-client/dist -conf conf_for_systemtests_elasticsearch -insecure -loglevel debug -stdout"
+
+# BoltDB
+alias app-bolt="$GOPATH/bin/server -conf $SERVER/conf_for_systemtests -public $CLIENT_FOLDER/dist/ -insecure -stdout -loglevel=info"
+alias app-bolt-compile="compile-server && $GOPATH/bin/server -conf $SERVER/conf_for_systemtests -public $CLIENT_FOLDER/dist/ -insecure -stdout -loglevel=info"
+alias app-bolt-clean="cd $SERVER && $SERVER/start-clean-server.sh --conf=$SERVER/conf_for_systemtests -es=false"
+alias app-bolt-clean-compile="compile-server && $SERVER/start-clean-server.sh --conf=$SERVER/conf_for_systemtests -es=false"
+
+# Elasticsearch
+alias app-elastic="$GOPATH/bin/server -public ~/dev/demisto/web-client/dist -conf conf_for_systemtests -insecure -loglevel debug -stdout"
+alias app-elastic-compile="compile-server && $GOPATH/bin/server -conf $SERVER/conf_for_systemtests_elasticsearch -public $CLIENT_FOLDER/dist/ -insecure -stdout -loglevel=info"
+alias app-elastic-clean="cd $SERVER && $SERVER/start-clean-server.sh --conf=$SERVER/conf_for_systemtests_elasticsearch"
+alias app-elastic-clean-compile="compile-server && $SERVER/start-clean-server.sh --conf=$SERVER/conf_for_systemtests_elasticsearch"
+
+# 2 apps - elasticsearch
+alias app1-clean="cd $SERVER && $SERVER/start-clean-server.sh --conf=$SERVER/configs/dev/elastic/conf_dev_elastic_app1"
+alias app1-clean-compile="compile-server && $SERVER/start-clean-server.sh --conf=$SERVER/configs/dev/elastic/conf_dev_elastic_app1"
+alias app1="$GOPATH/bin/server -conf $SERVER/configs/dev/elastic/conf_dev_elastic_app1 -public $CLIENT_FOLDER/dist/ -insecure -stdout -loglevel=info"
+alias app1-compile="compile-server && $GOPATH/bin/server -conf $SERVER/configs/dev/elastic/conf_dev_elastic_app1 -public $CLIENT_FOLDER/dist/ -insecure -stdout -loglevel=info"
+alias app2="$GOPATH/bin/server -conf $SERVER/configs/dev/elastic/conf_dev_elastic_app2 -public $CLIENT_FOLDER/dist/ -insecure -stdout -loglevel=info"
+
+################################################ Content-test-conf ################################################
+export CONTENT_TEST_CONF=$HOME/dev/demisto/content-test-conf
+
+################################################ Docker files ################################################
+export DOCKER_FILES=$HOME/dev/demisto/dockerfiles
+
+################################################ Demisto-SDK ################################################
+export DEMISTO_SDK=$HOME/dev/demisto/demisto-sdk
+export DEMISTO_BASE_URL=http://127.0.0.1:8080
+export DEMISTO_API_KEY=XXXXXXXXXXXXXXXXXXXXXXXXX
+export DEMISTO_USERNAME=admin
+export DEMISTO_PASSWORD=admin
+
