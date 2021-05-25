@@ -155,15 +155,15 @@ function docker_build {
         cat requirements.txt
         del_requirements=yes
     fi
-    tmp_dockerfile=$(mktemp)
-    cp Dockerfile "$tmp_dockerfile"
-    echo "" >> "$tmp_dockerfile"
-    echo "ENV DOCKER_IMAGE=$image_full_name" >> "$tmp_dockerfile"
-    docker build -f "$tmp_dockerfile" . -t ${image_full_name} \
+    tmp_dir=$(mktemp -d)
+    cp Dockerfile "$tmp_dir/Dockerfile"
+    echo "" >> "$tmp_dir/Dockerfile"
+    echo "ENV DOCKER_IMAGE=$image_full_name" >> "$tmp_dir/Dockerfile"
+    docker build -f "$tmp_dir/Dockerfile" . -t ${image_full_name} \
         --label "org.opencontainers.image.authors=Demisto <containers@demisto.com>" \
         --label "org.opencontainers.image.version=${VERSION}" \
         --label "org.opencontainers.image.revision=${CIRCLE_SHA1}"
-    rm "$tmp_dockerfile"
+    rm -rf "$tmp_dir"
     if [ ${del_requirements} = "yes" ]; then
         rm requirements.txt
     fi
