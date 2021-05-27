@@ -4,8 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-carbon-black-cloud-sdk = "*"
-cbapi = "*"
+carbon-black-cloud-sdk = {git = "https://github.com/carbonblack/carbon-black-cloud-sdk-python.git", ref = "develop"}
 
 [dev-packages]
 
