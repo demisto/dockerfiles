@@ -21,6 +21,6 @@ RUN apt-get update -y -q && \
     && npm install -g https://github.com/shakiba/svgexport#4c144c589050c039cbfc83a37d8e6d1f6f35bd27 --unsafe-perm=true
 
 RUN git clone https://github.com/demisto/sane-doc-reports.git src \
-    && cd src && rm -rf .git .circleci
+    && cd src && rm -rf .git .circleci && cd -
 COPY requirements.txt .
-RUN pip install -r requirements.txt && pip install -e .
+RUN pip install --no-cache-dir -r requirements.txt && pip install -e .
