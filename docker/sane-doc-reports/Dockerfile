@@ -24,3 +24,4 @@ RUN git clone https://github.com/demisto/sane-doc-reports.git src \
     && cd src && rm -rf .git .circleci && cd -
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt && pip install -e .
+
