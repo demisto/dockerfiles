@@ -21,5 +21,6 @@ RUN apt-get update -y -q && \
     && npm install -g https://github.com/shakiba/svgexport#4c144c589050c039cbfc83a37d8e6d1f6f35bd27 --unsafe-perm=true
 
 RUN pip install pipenv
-RUN pipenv install  --system --deploy --ignore-pipfile 'git+https://github.com/demisto/sane-doc-reports.git@master#egg=sane-doc-reports'
+RUN git clone https://github.com/demisto/sane-doc-reports.git
+RUN pipenv install  --system --deploy --ignore-pipfile -e ./sane-doc-reports
 RUN pipenv shell
