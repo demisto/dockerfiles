@@ -20,7 +20,6 @@ RUN apt-get update -y -q && \
     && rm -rf /var/lib/apt/lists/* \
     && npm install -g https://github.com/shakiba/svgexport#4c144c589050c039cbfc83a37d8e6d1f6f35bd27 --unsafe-perm=true
 
-RUN git clone https://github.com/demisto/sane-doc-reports.git src \
-    && rm -rf ./src/.git ./src/.circleci
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt && pip install -e src
+RUN pip install --no-cache-dir -r requirements.txt && pip install pipenv
+RUN pipenv install  -e 'git+https://github.com/demisto/sane-doc-reports.git@master#egg=sane-doc-reports'
