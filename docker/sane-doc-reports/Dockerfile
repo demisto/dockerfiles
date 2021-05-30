@@ -22,5 +22,5 @@ RUN apt-get update -y -q && \
 
 RUN pip install pipenv
 RUN git clone https://github.com/demisto/sane-doc-reports.git && cd sane-doc-reports && ls -la
-RUN pipenv install --system --deploy --ignore-pipfile
+RUN pipenv install --dev -e .
 RUN pipenv shell
