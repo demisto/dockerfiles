@@ -24,4 +24,4 @@ RUN pip install pipenv
 RUN git clone https://github.com/demisto/sane-doc-reports.git
 COPY requirements.txt .
 RUN pip install -r requirements.txt
-RUN RUN pip install -e sane-doc-reports
+RUN pip install -e sane-doc-reports
