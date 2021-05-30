@@ -22,4 +22,5 @@ RUN apt-get update -y -q && \
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt && pip install pipenv
-RUN pipenv install  -e 'git+https://github.com/demisto/sane-doc-reports.git@master#egg=sane-doc-reports'
+RUN pipenv install  -e 'git+https://github.com/demisto/sane-doc-reports.git@master#egg=sane-doc-reports' && \
+    pipenv shell
