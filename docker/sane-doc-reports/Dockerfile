@@ -17,11 +17,17 @@ RUN apt-get update -y -q && \
     ca-certificates fonts-liberation \
     libappindicator1 libnss3 lsb-release \
     xdg-utils git \
-    && rm -rf /var/lib/apt/lists/* \
-    && npm install -g https://github.com/shakiba/svgexport#4c144c589050c039cbfc83a37d8e6d1f6f35bd27 --unsafe-perm=true
+    && rm -rf /var/lib/apt/lists/*
 
-RUN pip install pipenv
-RUN git clone https://github.com/demisto/sane-doc-reports.git
+RUN npm install -g https://github.com/shakiba/svgexport#4c144c589050c039cbfc83a37d8e6d1f6f35bd27 --unsafe-perm=true
+
 COPY requirements.txt .
-RUN pip install -r requirements.txt
-RUN pip install -e sane-doc-reports
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  gcc \
+  python3-dev \ 
+&& pip install --no-cache-dir -r requirements.txt \
+&& apt-get purge -y --auto-remove \
+  gcc \
+  python3-dev \
+&& rm -rf /var/lib/apt/lists/*
