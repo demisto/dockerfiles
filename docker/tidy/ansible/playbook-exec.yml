@@ -8,6 +8,8 @@
           {{ command }}
         chdir: "{{ dir }}"
       register: output
+      async: 7200
+      poll: 60
 
     - debug:
         msg: Output "{{ output.stdout_lines}}"

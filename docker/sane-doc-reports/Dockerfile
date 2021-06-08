@@ -1,4 +1,4 @@
-FROM demisto/python3-deb:3.9.4.18682
+FROM demisto/python3-deb:3.9.5.20958
 WORKDIR "/app"
 
 SHELL ["/bin/bash", "-c"]
@@ -17,9 +17,17 @@ RUN apt-get update -y -q && \
     ca-certificates fonts-liberation \
     libappindicator1 libnss3 lsb-release \
     xdg-utils git \
-    && rm -rf /var/lib/apt/lists/* \
-    && npm install -g https://github.com/shakiba/svgexport#4c144c589050c039cbfc83a37d8e6d1f6f35bd27 --unsafe-perm=true
+    && rm -rf /var/lib/apt/lists/*
 
-COPY src .
+RUN npm install -g https://github.com/shakiba/svgexport#4c144c589050c039cbfc83a37d8e6d1f6f35bd27 --unsafe-perm=true
+
 COPY requirements.txt .
-RUN pip install -r requirements.txt && pip install -e .
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  gcc \
+  python3-dev \ 
+&& pip install --no-cache-dir -r requirements.txt \
+&& apt-get purge -y --auto-remove \
+  gcc \
+  python3-dev \
+&& rm -rf /var/lib/apt/lists/*

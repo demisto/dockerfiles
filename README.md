@@ -4,17 +4,17 @@
 
 This repository's `master` branch tracks images pushed to the official Demisto Docker Hub organization at: https://hub.docker.com/u/demisto/. Other branches` images are pushed to [devdemisto](https://hub.docker.com/u/devdemisto).
 
-**Note:** We generate nightly information about packages and os dependencies used in each of Demisto's docker images. Checkout the `repository-info` branch [README](https://github.com/demisto/dockerfiles/blob/repository-info/README.md) for a full listing.
+**Note:** We generate nightly information about packages and os dependencies used in each of Demisto's docker images. Checkout the `dockerfiles-info` project [README](https://github.com/demisto/dockerfiles-info/blob/master/README.md) for a full listing.
 
 ## Contributing
 Contributions are welcome and appreciated. To contribute follow the [Getting Started](#getting-started) section and submit a PR. 
 
-Before merging any PRs, we need all contributors to sign a contributor license agreement. By signing a contributor license agreement, we ensure that the community is free to use your contributions.
+In order to conntribute, we will need all contributors to sign a contributor license agreement. By signing a contributor license agreement, we ensure that the community is free to use your contributions.
 
-When you open a new pull request, a bot will evaluate whether you have signed the CLA. If required, the bot will comment on the pull request, including a link to accept the agreement. The CLA document is also available for review as a [PDF](https://github.com/demisto/content/blob/master/docs/cla.pdf).
+When opening a new pull request, a bot will evaluate whether you have signed the CLA. If required, the bot will comment on the pull request, including a link to accept the agreement. The CLA document is also available for review as a [PDF](https://github.com/demisto/content/blob/master/docs/cla.pdf).
+Visit our [Frequently Asked Questions](https://xsoar.pan.dev/docs/concepts/faq#cla-is-pending-even-though-i-signed-the-agreement) article for CLA related issues.
 
-If the `license/cla` status check remains on *Pending*, even though all contributors have accepted the CLA, you can recheck the CLA status by visiting the following link (replace **[PRID]** with the ID of your PR): https://cla-assistant.io/check/demisto/dockerfiles?pullRequest=[PRID] .
-
+After opening your docker pull request, and in order for the reviewer to understand the context, make sure to link to the corresponding pull request from the [Content](https://github.com/demisto/content) repo where this docker image will be used.
 ## Getting Started
 Each docker image is managed in its own directory. The directory should be named the same as the image name (without the organization prefix). If needed, we prefer using a dash (`-`) as a separator in the name. All image directories are located under the `docker` dir.
 
