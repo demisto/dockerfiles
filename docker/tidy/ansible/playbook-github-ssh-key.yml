@@ -91,3 +91,6 @@
         headers:
           Authorization: "token {{ access_token }}"
 
+    - name: Append GitHub to the list of authorized hosts
+      shell: ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+
