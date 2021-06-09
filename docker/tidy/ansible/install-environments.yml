@@ -1,0 +1,16 @@
+---
+- name: install-environments
+  hosts: all
+  tasks:
+    - name: Install {{ env }} versions
+      shell: {{ env }} install {{ item }} -s
+      args:
+        executable: /bin/bash
+      loop: "{{ versions }}"
+
+    - name: "{{ env }} global versions"
+      shell: {{ env }} global {{ item }}
+      args:
+        executable: /bin/bash
+      loop: "{{ global_versions }}"
+

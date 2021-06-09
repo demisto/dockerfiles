@@ -4,12 +4,6 @@
   args:
     creates: ~/.oh-my-zsh
 
-- name: Install powerlevel10k
-  git:
-    repo: https://github.com/romkatv/powerlevel10k.git
-    dest: ~/.oh-my-zsh/themes/powerlevel10k
-    force: yes
-
 - name: Delete old ~/.zshrc
   file:
     path: ~/.zshrc
@@ -31,6 +25,7 @@
   with_items:
     - .zshrc
     - .bash_profile
+    - .zprofile
 
 - name: Set zsh as default shell
   become: yes

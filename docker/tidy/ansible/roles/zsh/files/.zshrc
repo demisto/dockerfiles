@@ -1,16 +1,16 @@
 ################################## ZSH configuration #####################################################
 export ZSH="$HOME/.oh-my-zsh"
-ZSH_THEME="powerlevel10k/powerlevel10k"
-plugins=(git pip docker virtualenv zsh-autosuggestions zsh-syntax-highlighting)
+ZSH_THEME="robbyrussell"
+plugins=(git pip docker pipenv zsh-autosuggestions zsh-syntax-highlighting, pyenv)
 source $ZSH/oh-my-zsh.sh
 
 ################################## Homebrew packages path ################################################
 export PATH=/usr/local/bin:$PATH
 
-################################## Pyenv configuration ####################################################
-export PATH=$HOME/.anyenv/env/pyenv/shims:$PATH
-# eval "$(pyenv init -)"
-# eval "$(pyenv virtualenv-init -)"
+################################## Envs configuration ####################################################
+eval "$(pyenv init -)"
+eval "$(goenv init -)"
+eval "$(nodenv init -)"
 
 ################################## Pipenv configuration ####################################################
 export LC_ALL=en_US.UTF-8
@@ -35,12 +35,4 @@ code () {
     VSCODE_CWD="$PWD"
     open -n -b "com.microsoft.VSCode" --args $* 
 }
-
-################################## GO ######################################################
-export GOENV_ROOT=$HOME/.anyenv/env/goenv
-export GOPATH=$HOME/dev/go
-export GOROOT=~/.anyenv/envs/goenv/versions/1.16.0
-export PATH=$GOENV_ROOT/bin:$GOPATH/bin:$PATH
-export GOENV_DISABLE_GOPATH=1
-eval "$(goenv init -)"
 

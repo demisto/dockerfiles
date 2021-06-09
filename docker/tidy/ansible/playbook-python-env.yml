@@ -2,29 +2,10 @@
 - name: python-env
   hosts: all
   tasks:
-    - name: Install virtualenv
-      pip:
-        name: virtualenv
-        executable: ~/.anyenv/envs/pyenv/shims/pip2
-
     - name: Delete exsiting venv
       file:
         path: "~/dev/demisto/content/venv"
         state: absent
-
-    - name: Create python2 virtualenv for hooks
-      shell: . ~/.bash_profile && virtualenv -p python2 ~/dev/demisto/content/venv
-
-    - name: Install requirements in virtualenv
-      pip:
-        requirements: ~/dev/demisto/content/dev-requirements-py2.txt
-        virtualenv: ~/dev/demisto/content/venv
-
-    - name: Install requirements python3 in site-packages
-      pip:
-        requirements: ~/dev/demisto/content/dev-requirements-py3.txt
-        executable: ~/.anyenv/envs/pyenv/shims/pip3
-        extra_args: --user
 
     - name: Add hooks running precommit
       lineinfile:
@@ -43,5 +24,5 @@
     - name: Install tox for demisto-sdk development
       pip:
         name: tox
-        executable: ~/.anyenv/envs/pyenv/shims/pip3
+        executable: ~/.pyenv/shims/pip3
         extra_args: --user
