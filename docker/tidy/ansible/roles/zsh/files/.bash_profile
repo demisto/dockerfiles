@@ -4,7 +4,12 @@ export LANG=en_US.UTF-8
 export PATH=/usr/local/bin:$PATH
 
 ################################## Envs configuration ####################################################
+export GOENV_ROOT="$HOME/.goenv"
+export PATH="$GOENV_ROOT/bin:$PATH"
 eval "$(goenv init -)"
+export PATH="$GOROOT/bin:$PATH"
+export PATH="$PATH:$GOPATH/bin"
+
 eval "$(pyenv init -)"
 eval "$(nodenv init -)"
 
