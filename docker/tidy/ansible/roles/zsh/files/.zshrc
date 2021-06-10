@@ -1,21 +1,27 @@
 ################################## ZSH configuration #####################################################
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="robbyrussell"
-plugins=(git pip docker pipenv zsh-autosuggestions zsh-syntax-highlighting, pyenv)
+plugins=(git pip docker pipenv pyenv zsh-autosuggestions zsh-syntax-highlighting)
 source $ZSH/oh-my-zsh.sh
 
 ################################## Homebrew packages path ################################################
 export PATH=/usr/local/bin:$PATH
 
-################################## Envs configuration ####################################################
-eval "$(pyenv init -)"
+################################## GO configuration ####################################################
+export GOENV_ROOT="$HOME/.goenv"
+export PATH="$GOENV_ROOT/bin:$PATH"
 eval "$(goenv init -)"
-eval "$(nodenv init -)"
+export PATH="$GOROOT/bin:$PATH"
+export PATH="$PATH:$GOPATH/bin"
+
+################################## Pyenv configuration ####################################################
+export PATH=$HOME/.pyenv/shims:$PATH
+eval "$(pyenv init -)"
 
 ################################## Pipenv configuration ####################################################
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
-export PIPENV_PYTHON=$HOME/.anyenv/env/pyenv/shims/python
+export PIPENV_PYTHON=$HOME/.pyenv/shims/python
 
 ################################## Demisto configuration ##################################################
 # source ~/.demisto_bashrc

@@ -3,9 +3,16 @@ export LANG=en_US.UTF-8
 ################################## Homebrew packages path ################################################
 export PATH=/usr/local/bin:$PATH
 
-################################## Pyenv configuration ####################################################
-eval "$(pyenv init -)"
+################################## GO configuration ####################################################
+export GOENV_ROOT="$HOME/.goenv"
+export PATH="$GOENV_ROOT/bin:$PATH"
 eval "$(goenv init -)"
+export PATH="$GOROOT/bin:$PATH"
+export PATH="$PATH:$GOPATH/bin"
+
+################################## Pyenv configuration ####################################################
+export PATH=$HOME/.pyenv/shims:$PATH
+eval "$(pyenv init -)"
 
 ################################## Demisto configuration ##################################################
 # source ~/.demisto_bashrc
