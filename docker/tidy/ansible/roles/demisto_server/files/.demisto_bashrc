@@ -1,16 +1,8 @@
 ################################################ General ################################################
-export GOENV_ROOT=$HOME/.anyenv/env/goenv
-export GOPATH=$HOME/dev/go
-export GOROOT=~/.anyenv/envs/goenv/versions/1.16.0
-export PATH=$GOENV_ROOT/bin:$GOPATH/bin:$PATH
-export GOENV_DISABLE_GOPATH=1
-eval "$(goenv init -)"
-
 alias demisto="cd $HOME/dev/demisto"
 
 ################################################ Content ################################################
 export CONTENT=$HOME/dev/demisto/content
-export PYTHONPATH="${CONTENT}:${PYTHONPATH}"
 
 ################################################ Client ################################################
 export CLIENT=$HOME/dev/demisto/web-client
@@ -18,7 +10,7 @@ alias client-build='cd $CLIENT_FOLDER && npm run build-light'
 alias client-start='cd $CLIENT_FOLDER && npm start light'
 
 ################################################ Server ################################################
-export SERVER=$GOPATH/src/github.com/demisto/server
+export SERVER=$HOME/dev/go/src/github.com/demisto/server
 
 # General
 alias clear-debug='rm -rf $SERVER/debug'

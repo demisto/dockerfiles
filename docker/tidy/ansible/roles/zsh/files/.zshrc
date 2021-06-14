@@ -1,21 +1,26 @@
 ################################## ZSH configuration #####################################################
 export ZSH="$HOME/.oh-my-zsh"
-ZSH_THEME="powerlevel10k/powerlevel10k"
-plugins=(git pip docker virtualenv zsh-autosuggestions zsh-syntax-highlighting)
+ZSH_THEME="robbyrussell"
+plugins=(git pip docker pipenv pyenv zsh-autosuggestions zsh-syntax-highlighting)
 source $ZSH/oh-my-zsh.sh
 
 ################################## Homebrew packages path ################################################
 export PATH=/usr/local/bin:$PATH
 
-################################## Pyenv configuration ####################################################
-export PATH=$HOME/.anyenv/env/pyenv/shims:$PATH
-# eval "$(pyenv init -)"
-# eval "$(pyenv virtualenv-init -)"
+################################## Envs configuration ####################################################
+export GOENV_ROOT="$HOME/.goenv"
+export PATH="$GOENV_ROOT/bin:$PATH"
+eval "$(goenv init -)"
+export PATH="$GOROOT/bin:$PATH"
+export PATH="$PATH:$GOPATH/bin"
+
+eval "$(pyenv init -)"
+eval "$(nodenv init -)"
 
 ################################## Pipenv configuration ####################################################
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
-export PIPENV_PYTHON=$HOME/.anyenv/env/pyenv/shims/python
+export PIPENV_PYTHON=$HOME/.pyenv/shims/python
 
 ################################## Demisto configuration ##################################################
 # source ~/.demisto_bashrc
@@ -35,12 +40,4 @@ code () {
     VSCODE_CWD="$PWD"
     open -n -b "com.microsoft.VSCode" --args $* 
 }
-
-################################## GO ######################################################
-export GOENV_ROOT=$HOME/.anyenv/env/goenv
-export GOPATH=$HOME/dev/go
-export GOROOT=~/.anyenv/envs/goenv/versions/1.16.0
-export PATH=$GOENV_ROOT/bin:$GOPATH/bin:$PATH
-export GOENV_DISABLE_GOPATH=1
-eval "$(goenv init -)"
 
