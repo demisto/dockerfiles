@@ -1,25 +1,32 @@
 [[source]]
-name = "pypi"
 url = "https://pypi.org/simple"
 verify_ssl = true
-
-[dev-packages]
-pytest = "*"
-pytest-clarity = "*"
-pytest-cov = "*"
+name = "pypi"
 
 [packages]
-click = "*"
-python-docx = "*"
-webcolors = "*"
+arrow = "*"
+certifi = "*"
+chardet = "*"
+cssselect = "*"
 fastjsonschema = "*"
+idna = "*"
+kiwisolver = "*"
+lxml = "*"
 matplotlib = "*"
+mistune = "*"
+numpy = "*"
+pyparsing = "*"
 pyquery = "*"
-mistune = "==0.8.4"
+python-dateutil = "*"
+python-docx = "*"
 requests = "*"
+six = "*"
+urllib3 = "*"
+Cycler = "*"
+Pillow = "*"
+sane-doc-reports = {editable = true, ref = "master", git = "https://github.com/demisto/sane-doc-reports.git"}
+
+[dev-packages]
 
 [requires]
-python_version = "3.8"
-
-[pipenv]
-allow_prereleases = true
+python_version = "3.9"
