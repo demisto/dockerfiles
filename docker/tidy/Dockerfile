@@ -14,4 +14,3 @@ RUN apk --update add --no-cache openssl ca-certificates sshpass openssh-client r
 RUN ansible-galaxy install -c elliotweiser.osx-command-line-tools
 RUN ansible-galaxy install -c geerlingguy.homebrew
 RUN ansible-galaxy install -c ctorgalson.oh-my-zsh,v2.2.2
-RUN ansible-galaxy install -c pddg.anyenv

@@ -1,4 +1,4 @@
-FROM demisto/powershell:7.1.3.20270
+FROM demisto/powershell:7.1.3.20923
 
 SHELL [ "pwsh", "-command" ]
 

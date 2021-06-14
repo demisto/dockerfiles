@@ -1,5 +1,5 @@
 # Last modified: Wed, 10 Jun 2020 22:06:26 +0000
-FROM mcr.microsoft.com/powershell:7.1.3-alpine-3.12-20210414
+FROM mcr.microsoft.com/powershell:7.1.3-alpine-3.12-20210603
 
 # taken from here: https://git.alpinelinux.org/aports/tree/community/python2/cve-2021-3177.patch
 COPY cve-2021-3177.patch .
