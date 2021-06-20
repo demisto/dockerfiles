@@ -1,5 +1,4 @@
 import subprocess
-from io import StringIO
 
 try:
     output = subprocess.check_output('hey', stderr=subprocess.PIPE, text=True)
