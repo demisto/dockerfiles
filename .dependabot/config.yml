@@ -2197,13 +2197,13 @@ update_configs:
         update_type: all
 
   - package_manager: python
-    directory: /docker/feed-html-parser
+    directory: /docker/feed-parser-html
     update_schedule: live
     automerged_updates:
     - match:
         update_type: semver:minor
   - package_manager: docker
-    directory: /docker/feed-html-parser
+    directory: /docker/feed-parser-html
     update_schedule: daily
     automerged_updates:
     - match:
