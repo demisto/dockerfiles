@@ -1,3 +1,8 @@
+FROM alpine:3.12.3 as files-src
+COPY ./distilledbert-base-uncased /distilledbert-base-uncased
+RUN cat /distilledbert-base-uncased/aa.onnx /distilledbert-base-uncased/ab.onnx /distilledbert-base-uncased/ac.onnx /distilledbert-base-uncased/ad.onnx > /distilbert-base-uncased.onnx
+RUN rm -r /distilledbert-base-uncased
+
 
 FROM demisto/python3-deb:3.9.5.21272
 
@@ -23,12 +28,9 @@ COPY ./domain_to_rank.p /ml/domain_to_rank.p
 COPY ./word_to_ngram.p /ml/word_to_ngram.p
 COPY ./word_to_regex.p /ml/word_to_regex.p
 
-COPY ./distilledbert-base-uncased /ml/distilledbert-base-uncased
-RUN cat /ml/distilledbert-base-uncased/aa.onnx /ml/distilledbert-base-uncased/ab.onnx /ml/distilledbert-base-uncased/ac.onnx /ml/distilledbert-base-uncased/ad.onnx > /ml/distilbert-base-uncased.onnx
-RUN rm -r /ml/distilledbert-base-uncased
+COPY --from=files-src /distilbert-base-uncased.onnx /ml/distilbert-base-uncased.onnx
 
 COPY ./distilled_bert_base_uncased_tokenizer.zip /ml/distilled_bert_base_uncased_tokenizer.zip
-
 RUN apt-get install unzip && unzip /ml/distilled_bert_base_uncased_tokenizer.zip -d /ml && rm /ml/distilled_bert_base_uncased_tokenizer.zip
 
 RUN chown -R demisto:demisto /ml && chmod -R 775 /ml
