@@ -1,12 +1,20 @@
 FROM alpine:3.12.3 as files-src
+RUN mkdir /ml
+COPY ./glove_50_top_20k.p /ml/glove_50_top_20k.p
+COPY ./glove_100_top_20k.p /ml/glove_100_top_20k.p
+COPY ./fasttext_top_20k.p /ml/fasttext_top_20k.p
+COPY ./domain_to_rank.p /ml/domain_to_rank.p
+COPY ./word_to_ngram.p /ml/word_to_ngram.p
+COPY ./word_to_regex.p /ml/word_to_regex.p
+
 COPY ./distilledbert-base-uncased /distilledbert-base-uncased
-RUN cat /distilledbert-base-uncased/aa.onnx /distilledbert-base-uncased/ab.onnx /distilledbert-base-uncased/ac.onnx /distilledbert-base-uncased/ad.onnx > /distilbert-base-uncased.onnx
+RUN cat /distilledbert-base-uncased/aa.onnx /distilledbert-base-uncased/ab.onnx /distilledbert-base-uncased/ac.onnx /distilledbert-base-uncased/ad.onnx > /ml/distilbert-base-uncased.onnx
 RUN rm -r /distilledbert-base-uncased
 
 COPY ./distilled_bert_base_uncased_tokenizer.zip /distilled_bert_base_uncased_tokenizer.zip
-RUN unzip /distilled_bert_base_uncased_tokenizer.zip -d / \
-&& rm /distilled_bert_base_uncased_tokenizer.zip
-
+RUN unzip /distilled_bert_base_uncased_tokenizer.zip -d /ml \
+  && rm /distilled_bert_base_uncased_tokenizer.zip \
+  && chmod -R 775 /ml
 
 FROM demisto/python3-deb:3.9.5.21272
 
@@ -22,18 +30,8 @@ RUN apt-get update \
   build-essential python3-pip
 
 RUN mkdir /ml
-RUN python -c "import nltk; nltk.download('stopwords', download_dir='/ml/nltk_data'); nltk.download('punkt',download_dir='/ml/nltk_data')"
+RUN python -c "import nltk; nltk.download('stopwords', download_dir='/ml/nltk_data'); nltk.download('punkt',download_dir='/ml/nltk_data')" \
+  && chown -R demisto:demisto /ml && chmod -R 775 /ml
 ENV NLTK_DATA='/ml/nltk_data'
 
-COPY ./glove_50_top_20k.p /ml/glove_50_top_20k.p
-COPY ./glove_100_top_20k.p /ml/glove_100_top_20k.p
-COPY ./fasttext_top_20k.p /ml/fasttext_top_20k.p
-COPY ./domain_to_rank.p /ml/domain_to_rank.p
-COPY ./word_to_ngram.p /ml/word_to_ngram.p
-COPY ./word_to_regex.p /ml/word_to_regex.p
-
-COPY --from=files-src /distilbert-base-uncased.onnx /ml/distilbert-base-uncased.onnx
-COPY --from=files-src /distilbert-base-uncased_tokenizer /ml/distilbert-base-uncased_tokenizer
-
-
-RUN chown -R demisto:demisto /ml && chmod -R 775 /ml
+COPY --from=files-src --chown=demisto:demisto /ml /ml
