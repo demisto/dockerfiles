@@ -20,7 +20,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Based on instructions at: https://tecadmin.net/setup-selenium-with-chromedriver-on-debian/
 # To update the chorome and chromedriver versions first check the latest available
 # To see available versions of chrome you can run: 
-#     docker run --rm -it demisto/python3-deb:3.9.5.20070 bash -c 'apt-get update && apt-cache policy google-chrome-stable'
+#     docker run --rm -it devdemisto/chromium:1.0.0.22085 bash -c 'apt-get update && apt-cache policy google-chrome-stable'
 #
 # To see available chromedriver go to https://chromedriver.storage.googleapis.com/ and search for the major version
 # of chrome(for  example 91.0).
@@ -34,9 +34,8 @@ RUN apt-get update && apt-get -t buster-backports install -y --no-install-recomm
   gnupg1 \
   libgtk-3-0 \
   libu2f-udev \
-  udev
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
+  udev \
+&& apt-get update && apt-get install -y --no-install-recommends \
   curl \
   unzip \
 && curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
@@ -50,4 +49,5 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   unzip \
 && apt-get -y update && apt-get install -y google-chrome-stable=${CHROME_VERSION} \
 && google-chrome --version \
-&& chromedriver --version
+&& chromedriver --version \
+&& rm -rf /var/lib/apt/lists/*
