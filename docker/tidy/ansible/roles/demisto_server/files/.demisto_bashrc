@@ -47,6 +47,10 @@ export DOCKER_FILES=$HOME/dev/demisto/dockerfiles
 
 ################################################ Demisto-SDK ################################################
 export DEMISTO_SDK=$HOME/dev/demisto/demisto-sdk
+
+# Uncomment this line to load the xsoar-linters plugins to the python environment.
+# export PYTHONPATH="$DEMISTO_SDK/demisto_sdk/commands/lint/resources/pylint_plugins/:$PYTHONPATH"
+
 export DEMISTO_BASE_URL=http://127.0.0.1:8080
 export DEMISTO_API_KEY=XXXXXXXXXXXXXXXXXXXXXXXXX
 export DEMISTO_USERNAME=admin
