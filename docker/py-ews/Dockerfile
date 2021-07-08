@@ -1,5 +1,6 @@
 
-FROM devdemisto/powershell-ubuntu-18.04:7.1.3.22346
+FROM devdemisto/powershell-ubuntu:7.1.3.22304
+
 # ensure local python is preferred over distribution python
 ENV PATH /usr/local/bin:$PATH
 
@@ -204,3 +205,5 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   libkrb5-dev \
 && rm -rf /var/lib/apt/lists/*
 
+RUN sed -i s/DEFAULT@SECLEVEL=2/DEFAULT@SECLEVEL=1/g /etc/ssl/openssl.cnf \
+  && sed -i s/TLSv1.2/TLSv1/g /etc/ssl/openssl.cnf
