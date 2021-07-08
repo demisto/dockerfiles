@@ -1,5 +1,5 @@
 
-FROM demisto/powershell-ubuntu:7.1.3.22304
+FROM devdemisto/powershell-ubuntu-18.04:7.1.3.22346
 # ensure local python is preferred over distribution python
 ENV PATH /usr/local/bin:$PATH
 
