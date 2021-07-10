@@ -204,3 +204,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   libkrb5-dev \
 && rm -rf /var/lib/apt/lists/*
 
+# Handling the issue described here https://askubuntu.com/questions/1233186/ubuntu-20-04-how-to-set-lower-ssl-security-level 
+# by using TLS v1 to support old exchange servers
+RUN echo 'openssl_conf = default_conf' | cat - /etc/ssl/openssl.cnf > temp-ssl.cnf \
+&& mv temp-ssl.cnf /etc/ssl/openssl.cnf \
+&& echo " \
+[default_conf] \
+ssl_conf = ssl_sect \
+\
+[ssl_sect] \
+system_default = system_default_sect \
+\
+[system_default_sect] \
+MinProtocol = TLSv1 \
+CipherString = DEFAULT@SECLEVEL=1 \
+" >> /etc/ssl/openssl.cnf
