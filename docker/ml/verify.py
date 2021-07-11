@@ -13,6 +13,7 @@ doc = nlp('tokenize this sentence')
 import demisto_ml
 import catboost
 import eli5
+from langdetect import detect
 
 
 print('All package imported succesfully')
