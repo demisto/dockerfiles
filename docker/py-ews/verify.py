@@ -30,3 +30,9 @@ from exchangelib.version import (EXCHANGE_2007, EXCHANGE_2010,
                                  EXCHANGE_2016)
 from future import utils as future_utils
 from requests.exceptions import ConnectionError
+
+# verify that we support dh 1024
+import requests
+requests.packages.urllib3.disable_warnings()
+res = requests.get('https://dh1024.badssl.com/', verify=False)
+res.raise_for_status()
