@@ -174,6 +174,12 @@ function docker_build {
             echo "Found modified files. Failing the build!!"
             echo "git diff -- . output:"
             echo "$DIFF_OUT"
+            if [[ $DIFF_OUT == *"Pipfile.lock"* ]]; then
+                echo "Seems that Pipfile.lock was modified by the build. Make sure you updated and committed the Pipfile.lock file."
+                echo "To resolve this run: 'pipenv lock --keep-outdated'"
+                echo "Or if you want to update dependencies run without '--keep-outdated'"
+                echo "Then commit the Pipfile.lock file."
+            fi
             return 1
         fi
     fi
