@@ -202,7 +202,7 @@ function docker_build {
     if [ -f "verify.ps1" ]; then
         echo "==========================="            
         echo "Verifying docker image by running the pwsh script verify.ps1 within the docker image"
-        cat verify.py | docker run --rm -i ${image_full_name} pwsh '-'
+        cat verify.ps1 | docker run --rm -i ${image_full_name} pwsh -c '-'
     fi
     docker_trust=0
     if sign_setup; then
