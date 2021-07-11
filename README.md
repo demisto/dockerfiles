@@ -140,6 +140,14 @@ There are 3 base PowerShell images which should be used when building a new imag
 
 We recommend using the default Alpine based image. The Debian and Ubuntu images are provided mainly for cases that there is need to install additional OS packages.
 
+### Adding a `verify.ps1` script
+Similar to the the `verify.py` script for Python images, you can add a `verify.ps1` script to test and check the image you created. 
+
+Once the docker image is built, if the script is present it will be run within the image using the following command:
+```bash
+cat verify.ps1 | docker run --rm -i <image_name> pwsh -c '-'
+```
+
 ## Docker Image Deployment
 When you first open a PR, a `development` docker image is built (via CircleCI) under the `devdemisto` docker organization. So for example if your image is named `ldap3` an image with the name `devdemisto/ldap3` will be built. 
 

@@ -167,6 +167,22 @@ function docker_build {
     if [ ${del_requirements} = "yes" ]; then
         rm requirements.txt
     fi
+    if [ -n "$CI" ]; then
+        echo "Checking that source files were not modified by build..."
+        DIFF_OUT=$(git diff -- .)
+        if [[ -n "$DIFF_OUT" ]]; then
+            echo "Found modified files. Failing the build!!"
+            echo "git diff -- . output:"
+            echo "$DIFF_OUT"
+            if [[ $DIFF_OUT == *"Pipfile.lock"* ]]; then
+                echo "Seems that Pipfile.lock was modified by the build. Make sure you updated and committed the Pipfile.lock file."
+                echo "To resolve this run: 'pipenv lock --keep-outdated'"
+                echo "Or if you want to update dependencies run without '--keep-outdated'"
+                echo "Then commit the Pipfile.lock file."
+            fi
+            return 1
+        fi
+    fi
     if [[ "$(prop 'devonly')" ]]; then
         echo "Skipping license verification for devonly image"
     else
@@ -182,6 +198,11 @@ function docker_build {
         echo "==========================="            
         echo "Verifying docker image by running the python script verify.py within the docker image"
         cat verify.py | docker run --rm -i ${image_full_name} python '-'
+    fi
+    if [ -f "verify.ps1" ]; then
+        echo "==========================="            
+        echo "Verifying docker image by running the pwsh script verify.ps1 within the docker image"
+        cat verify.ps1 | docker run --rm -i ${image_full_name} pwsh -c '-'
     fi
     docker_trust=0
     if sign_setup; then
