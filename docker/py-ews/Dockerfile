@@ -208,14 +208,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # by using TLS v1 to support old exchange servers
 RUN echo 'openssl_conf = default_conf' | cat - /etc/ssl/openssl.cnf > temp-ssl.cnf \
 && mv temp-ssl.cnf /etc/ssl/openssl.cnf \
-&& echo " 
-[default_conf] 
-ssl_conf = ssl_sect 
-
-[ssl_sect] 
-system_default = system_default_sect 
-
-[system_default_sect] 
-MinProtocol = TLSv1 
-CipherString = DEFAULT@SECLEVEL=1 
+&& echo "\n\
+[default_conf]\n\ 
+ssl_conf = ssl_sect\n\ 
+\n\
+[ssl_sect]\n\
+system_default = system_default_sect\n\
+\n\
+[system_default_sect]\n\
+MinProtocol = TLSv1\n\
+CipherString = DEFAULT@SECLEVEL=1\n\
 " >> /etc/ssl/openssl.cnf
