@@ -167,7 +167,7 @@ function docker_build {
     if [ ${del_requirements} = "yes" ]; then
         rm requirements.txt
     fi
-    if [ -n "$CI" ];
+    if [ -n "$CI" ]; then
         echo "Checking that source files were not modified by build..."
         DIFF_OUT=$(git diff -- .)
         if [[ -n "$DIFF_OUT" ]]; then
