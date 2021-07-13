@@ -3,7 +3,7 @@
 # We only change to use the latest Alpine version. 
 
 # Last modified: Sun, 06 Jun 2021 08:43:49 +0000
-FROM alpine:3.13
+FROM alpine:3.14.0
 
 # ensure local python is preferred over distribution python
 ENV PATH /usr/local/bin:$PATH
