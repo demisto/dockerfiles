@@ -12,6 +12,7 @@ RUN apt-get update \
   gcc \
   python3-dev gfortran wget git g++ pkg-config libhdf5-dev \
 && pip install --no-cache-dir -r requirements.txt \
+&& pip install torch==1.9.0+cpu -f https://download.pytorch.org/whl/torch_stable.html\
 && apt-get purge -y --auto-remove gcc \
   python3-dev gfortran wget git g++ pkg-config libhdf5-dev
 COPY demisto_ml-0.2.tar.gz .
