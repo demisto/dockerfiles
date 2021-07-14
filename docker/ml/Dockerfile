@@ -3,7 +3,7 @@ RUN mkdir /ml
 COPY ./encrypted_model.b /ml/encrypted_model.b
 RUN chmod -R 775 /ml
 
-FROM demisto/python3-deb:3.9.5.21272
+FROM demisto/python3-deb:3.9.5.22659
 
 COPY requirements.txt .
 
