@@ -285,6 +285,10 @@ if [[ $(which pyenv) ]]; then
     pyenv versions
 fi
 
+echo "=========== docker info =============="
+docker info
+echo "========================="
+
 if [[ -n "$1" ]]; then
     if [[ ! -d  "${SCRIPT_DIR}/$1" ]]; then
         echo "Image: [$1] specified as command line parameter but directory not found: [${SCRIPT_DIR}/$1]"
