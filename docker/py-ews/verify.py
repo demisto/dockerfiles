@@ -38,5 +38,4 @@ res = requests.get('https://dh1024.badssl.com/', verify=False)
 res.raise_for_status()
 
 # verify dateaparser works. We had a case that it failed with timezone issues
-import dasteparser
 dateparser.parse("10 minutes")
