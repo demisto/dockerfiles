@@ -202,7 +202,8 @@ function docker_build {
     if [ -f "verify.ps1" ]; then
         echo "==========================="            
         echo "Verifying docker image by running the pwsh script verify.ps1 within the docker image"
-        cat verify.ps1 | docker run --rm -i ${image_full_name} pwsh -c '-'
+        # use "tee" as powershell doesn't fail on throw when run with -c
+        cat verify.ps1 | docker run --rm -i ${image_full_name} sh -c 'tee > verify.ps1; pwsh verify.ps1'
     fi
     docker_trust=0
     if sign_setup; then
