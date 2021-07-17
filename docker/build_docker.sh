@@ -180,6 +180,7 @@ function docker_build {
                 echo "Or if you want to update dependencies run without '--keep-outdated'"
                 echo "Then commit the Pipfile.lock file."
             fi
+            echo "FAILED: $image_name"
             return 1
         fi
     fi
