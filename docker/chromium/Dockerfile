@@ -1,4 +1,4 @@
-FROM demisto/python3-deb:3.9.5.21272
+FROM demisto/python3-deb:3.9.6.22912
 
 COPY requirements.txt .
 
@@ -26,7 +26,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # of chrome(for  example 91.0).
 
 # Then replace the versions in the env vars
-ENV CHROME_VERSION=91.0.4472.114-1
+# Note we use only the first 3 versions. The build number we leave as *
+ENV CHROME_VERSION=91.0.4472.*
 ENV CHROMEDRIVER_VERSION=91.0.4472.101
 
 # Deps needed by google-chrome

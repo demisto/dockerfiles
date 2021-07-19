@@ -1,0 +1,1 @@
+../powershell/verify.ps1

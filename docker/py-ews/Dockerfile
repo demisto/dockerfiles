@@ -1,5 +1,5 @@
 
-FROM demisto/powershell-ubuntu:7.1.1.16151
+FROM demisto/powershell-ubuntu:7.1.3.22925
 # ensure local python is preferred over distribution python
 ENV PATH /usr/local/bin:$PATH
 
@@ -46,7 +46,7 @@ RUN set -ex \
 	&& wget -O python.tar.xz.asc "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz.asc" \
 	&& export GNUPGHOME="$(mktemp -d)" \
 	&& echo "disable-ipv6" >> ${GNUPGHOME}/dirmngr.conf \
-	&& gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys "$GPG_KEY" \
+	&& gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "$GPG_KEY" \
 	&& gpg --batch --verify python.tar.xz.asc python.tar.xz \
 	&& { command -v gpgconf > /dev/null && gpgconf --kill all || :; } \
 	&& rm -rf "$GNUPGHOME" python.tar.xz.asc \
@@ -204,3 +204,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   libkrb5-dev \
 && rm -rf /var/lib/apt/lists/*
 
+# Handling the issue described here https://askubuntu.com/questions/1233186/ubuntu-20-04-how-to-set-lower-ssl-security-level 
+# by using TLS v1 to support old exchange servers
+RUN echo 'openssl_conf = default_conf' | cat - /etc/ssl/openssl.cnf > temp-ssl.cnf \
+&& mv temp-ssl.cnf /etc/ssl/openssl.cnf \
+&& echo "\n\
+[default_conf]\n\ 
+ssl_conf = ssl_sect\n\ 
+\n\
+[ssl_sect]\n\
+system_default = system_default_sect\n\
+\n\
+[system_default_sect]\n\
+MinProtocol = TLSv1\n\
+CipherString = DEFAULT@SECLEVEL=1\n\
+" >> /etc/ssl/openssl.cnf
