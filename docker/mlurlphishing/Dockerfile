@@ -13,9 +13,3 @@ python-dev \
   python-dev \
   libxrender-dev \
 && rm -rf /var/lib/apt/lists/*
-
-
-
-
-
-
