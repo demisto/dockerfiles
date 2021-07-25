@@ -1,5 +1,5 @@
 
-FROM demisto/crypto:1.0.0.19032
+FROM demisto/crypto:1.0.0.23151
 
 
 # Installing sudo to emulate normal OS behavior...
