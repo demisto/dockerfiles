@@ -8,9 +8,10 @@ RUN apk --update add nginx && \
   mkdir -p /var/lib/nginx/tmp/cache && \
   mkdir -p /etc/nginx/ssl && \
   chmod -R 755 /var/lib/nginx && \
+  mkdir -p /etc/nginx/conf.d && \
+  mkdir -p /etc/nginx/ssl && \
   chown -R nginx:demisto /var/log/nginx /run/nginx /var/lib/nginx/tmp /etc/nginx/conf.d /etc/nginx/ssl && \
-  chmod -R 775 /var/log/nginx /run/nginx /var/lib/nginx/tmp /etc/nginx/conf.d /etc/nginx/ssl && \
-  mv /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf.example
+  chmod -R 775 /var/log/nginx /run/nginx /var/lib/nginx/tmp /etc/nginx/conf.d /etc/nginx/ssl 
 
 COPY nginx.conf /etc/nginx/.
 
