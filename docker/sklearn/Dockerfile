@@ -15,4 +15,8 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
   && pip3 install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies
 
-RUN python -c "import nltk; nltk.download('wordnet'); nltk.download('stopwords'); nltk.download('punkt')"
+RUN mkdir /ml
+RUN python -c "import nltk; nltk.download('wordnet', download_dir='/ml/nltk_data'); nltk.download('stopwords', download_dir='/ml/nltk_data'); nltk.download('punkt', download_dir='/ml/nltk_data')"
+
+ENV NLTK_DATA='/ml/nltk_data'
+RUN chown -R demisto:demisto /ml && chmod -R 775 /ml
