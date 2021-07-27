@@ -10,7 +10,7 @@ class Pipfile:
 
 # ========== Hardening Manifest ==========
 
-RESOURCE_REGEX = r'^Added .+ from (https.+)#sha256=(.+) \(from -r requirements.txt'
+RESOURCE_REGEX = r'Added .+ from (https.+)#sha256=(.+) to build tracker'
 DOCKERFILE_BASE_IMAGE_TAG_REGEX = r'FROM [^:]+:(.+)'
 
 DEMISTO_REGISTRY_ROOT = 'opensource/palo-alto-networks/demisto'

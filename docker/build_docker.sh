@@ -153,7 +153,7 @@ function docker_build {
         PIPENV_YES=yes pipenv lock -r > requirements.txt
         echo "Pipfile lock generated requirements.txt: "
         cat requirements.txt
-        del_requirements=yes
+        # del_requirements=yes
     fi
     tmp_dir=$(mktemp -d)
     cp Dockerfile "$tmp_dir/Dockerfile"
