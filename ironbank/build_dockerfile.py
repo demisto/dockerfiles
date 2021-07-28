@@ -9,11 +9,10 @@ from ironbank.constants import DockerfileMetadata, DockerfileSections
 
 class DockerfileIronBank:
     
-    def __init__(self, docker_image_dir, output_path, docker_packages_metadata_path):
+    def __init__(self, docker_image_dir, output_path):
         self.docker_image_dir = docker_image_dir
         self.docker_image_name = os.path.basename(self.docker_image_dir)
         self.output_path = output_path
-        self.docker_packages_metadata_path = docker_packages_metadata_path
         self.base_images_repo = BaseImagesStore()
 
     def build(self):
@@ -28,7 +27,7 @@ class DockerfileIronBank:
             f.write(DockerfileSections.COPY_REQS_TXT)
             f.write(DockerfileSections.FILE_BLANK_LINE)
             f.write(DockerfileSections.DNF_UPDATE_BASIC_PY.format(self.base_images_repo.get_inventory()[baseImage][1]))
-            f.wgit rite(DockerfileSections.FILE_BLANK_LINE)
+            f.write(DockerfileSections.FILE_BLANK_LINE)
             f.write(DockerfileSections.FOOTER)
             f.close()
     
@@ -42,8 +41,6 @@ def args_handler():
                         required=True)
     parser.add_argument('--output_path', help='Full path of folder to output the hardening_manifest.yaml file',
                         required=True)
-    parser.add_argument('--docker_packages_metadata_path', help='Full path of the docker_packages_metadata.txt file',
-                        required=True)
     return parser.parse_args()
 
 
@@ -54,7 +51,7 @@ def main():
     docker_packages_metadata_path = args.docker_packages_metadata_path
 
     print("Converting docker {1} to {2} ",)
-    dockerfile_ironbank = DockerfileIronBank(docker_image_dir, output_path, docker_packages_metadata_path)
+    dockerfile_ironbank = DockerfileIronBank(docker_image_dir, output_path)
     dockerfile_ironbank.build()
     dockerfile_ironbank.dump()
 
