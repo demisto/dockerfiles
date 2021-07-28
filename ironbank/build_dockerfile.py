@@ -28,7 +28,7 @@ class DockerfileIronBank:
             f.write(DockerfileSections.COPY_REQS_TXT)
             f.write(DockerfileSections.FILE_BLANK_LINE)
             f.write(DockerfileSections.DNF_UPDATE_BASIC_PY.format(self.base_images_repo.get_inventory()[baseImage][1]))
-            f.write(DockerfileSections.FILE_BLANK_LINE)
+            f.wgit rite(DockerfileSections.FILE_BLANK_LINE)
             f.write(DockerfileSections.FOOTER)
             f.close()
     
