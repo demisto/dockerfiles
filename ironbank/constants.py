@@ -7,6 +7,8 @@ class Pipfile:
     DEFAULT = 'default'
     PYTHON_VERSION = 'python_version'
 
+class DockerfileMetadata:
+    FILENAME = 'Dockerfile'
 
 # ========== Hardening Manifest ==========
 
@@ -66,3 +68,23 @@ class HardeningManifestMaintainer:
     NAME = 'name'
     USERNAME = 'username'
     CHT_MEMBER = 'cht_member'
+
+
+# ========== Dockerfile IronBank ==========
+
+class DockerfileSections:
+    HEADER = '''ARG BASE_REGISTRY=registry1.dso.mil \n\
+ARG BASE_IMAGE={0} \n\
+ARG BASE_TAG={1} \n\
+FROM ${{BASE_REGISTRY}}/${{BASE_IMAGE}}:${{BASE_TAG}}\n'''
+
+    COPY_REQS_TXT = "COPY requirments.txt .\n"
+
+    DNF_UPDATE_BASIC_PY = "RUN dnf install -y --nodocs python{}-dev build-base wget git && \\ \n \
+    pip install --no-cache-dir -r requirements.txt &&  \\ \n \
+    dnf clean all && \\ \n \
+    rm -rf /var/cache/dnf \n"
+
+    FOOTER = "HEALTHCHECK NONE \n"
+    
+    FILE_BLANK_LINE = "\n\n"
