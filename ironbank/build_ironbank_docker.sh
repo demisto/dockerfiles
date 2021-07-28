@@ -80,7 +80,7 @@ function build_hardening_manifest {
   fi
 }
 
-function build_dockerfile_ironbank {
+function build_dockerfile {
   OUTPUT_PATH=ironbank/$(basename $1)
   if [[ ! -d $OUTPUT_PATH ]]; then
     mkdir $OUTPUT_PATH
@@ -91,7 +91,7 @@ function build_dockerfile_ironbank {
 # $1: docker image dir (~/../docker/$IMAGE_NAME)
 function build_ironbank_docker {
   build_hardening_manifest $1
-  build_dockerfile_ironbak $1
+  build_dockerfile $1
 }
 
 total=$(grep -E ironbank=true ./docker/*/build.conf | wc -l)
