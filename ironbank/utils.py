@@ -13,7 +13,8 @@ class BaseImagesStore:
     def __init__(self):
         self.base_images = {
             "demisto/python": ("ironbank/opensource/palo-alto-networks/demisto/python", "2"),
-            "demisto/python3":("ironbank/opensource/palo-alto-networks/demisto/python3", "3")
+            "demisto/python3":("ironbank/opensource/palo-alto-networks/demisto/python3", "3"),
+            "demisto/python3-deb": ("ironbank/opensource/palo-alto-networks/demisto/python3", "3")
         }
 
     def add_base(self, baseDockerHub, baseIronbank):
