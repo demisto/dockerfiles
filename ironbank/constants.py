@@ -73,17 +73,17 @@ class HardeningManifestMaintainer:
 # ========== Dockerfile IronBank ==========
 
 class DockerfileSections:
-    HEADER = '''ARG BASE_REGISTRY=registry1.dso.mil \
-ARG BASE_IMAGE={0} \
-ARG BASE_TAG={1} \
+    HEADER = '''ARG BASE_REGISTRY=registry1.dso.mil 
+ARG BASE_IMAGE={0} 
+ARG BASE_TAG={1} 
 FROM ${{BASE_REGISTRY}}/${{BASE_IMAGE}}:${{BASE_TAG}}'''
 
     COPY_REQS_TXT = 'COPY requirments.txt .'
 
-    DNF_UPDATE_BASIC_PY = '''RUN dnf install -y --nodocs python{}-dev build-base wget git && \\  \
-    pip install --no-cache-dir -r requirements.txt &&  \\  \
-    dnf clean all && \\ \n \
-    rm -rf /var/cache/dnf \n'''
+    DNF_UPDATE_BASIC_PY = '''RUN dnf install -y --nodocs python{}-dev build-base wget git && \\  
+    pip install --no-cache-dir -r requirements.txt &&  \\  
+    dnf clean all && \\ 
+    rm -rf /var/cache/dnf '''
 
     FOOTER = 'HEALTHCHECK NONE '
     

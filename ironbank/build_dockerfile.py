@@ -48,7 +48,7 @@ def main():
     args = args_handler()
     docker_image_dir = args.docker_image_dir
     output_path = args.output_path
-    docker_packages_metadata_path = args.docker_packages_metadata_path
+
 
     print("Converting docker {1} to {2} ",)
     dockerfile_ironbank = DockerfileIronBank(docker_image_dir, output_path)
