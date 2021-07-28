@@ -1,12 +1,16 @@
+#!/usr/bin/env python3
+
 import argparse
 import re
 import os
+import logging
 from ruamel.yaml import YAML
 
 from ironbank.constants import HardeningManifestLabels, HardeningManifestResource, HardeningManifestMaintainer, \
     HardeningManifestYaml, HardeningManifestArgs, RESOURCE_REGEX, DEMISTO_REGISTRY_ROOT, DEMISTO_CONTAINERS_MAIL, \
-    PANW, DEFAULT_USER, Pipfile
+    PANW, DEFAULT_USER, Pipfile, DOCKERFILE, DOCKERFILE_BASE_IMAGE_TAG_REGEX
 from ironbank.utils import get_pipfile_lock_data
+from ironbank.get_docker_image_python_version import get_docker_image_python_version
 from docker.image_latest_tag import get_latest_tag
 
 
@@ -33,7 +37,7 @@ class HardeningManifest:
     def __init__(self, docker_image_dir, output_path, docker_packages_metadata_path):
         self.docker_image_dir = docker_image_dir
         self.docker_image_name = os.path.basename(self.docker_image_dir)
-        self.output_path = output_path
+        self.output_path = os.path.join(output_path, 'hardening_manifest.yaml')
         self.docker_packages_metadata_path = docker_packages_metadata_path
         self.name = ''
         self.labels = {}
@@ -45,41 +49,53 @@ class HardeningManifest:
         self.yaml_dict = {}
         self.pipfile_lock_data = {}
         self.python_version = ''
+        self.ryaml = YAML()
+        self.ryaml.preserve_quotes = True
+        if os.path.exists(self.output_path):
+            with open(self.output_path, 'r') as yf:
+                self.old_yaml_dict = self.ryaml.load(yf)
+        else:
+            self.old_yaml_dict = {}
 
     def handle_name(self):
         self.name = os.path.join(DEMISTO_REGISTRY_ROOT, self.docker_image_name)
 
     def handle_labels(self):
+        image_version = float(self.old_yaml_dict.get('labels', {}).get(HardeningManifestLabels.VERSION, 0)) + 0.1  # bump image version with 0.1
         self.labels = {
             HardeningManifestLabels.TITLE: HardeningManifestLabels.BASE_TITLE.format(self.docker_image_name),
             HardeningManifestLabels.DESCRIPTION: HardeningManifestLabels.BASE_DESCRIPTION.format(self.docker_image_name),
             HardeningManifestLabels.LICENSES: ' ',
             HardeningManifestLabels.URL: ' ',
             HardeningManifestLabels.VENDOR: HardeningManifestLabels.DEMISTO,
-            HardeningManifestLabels.VERSION: '0.1',
+            HardeningManifestLabels.VERSION: str(image_version),
             HardeningManifestLabels.KEYWORDS: ', '.join(list(self.pipfile_lock_data[Pipfile.DEFAULT].keys())),
             HardeningManifestLabels.TYPE: HardeningManifestLabels.OPEN_SOURCE,
             HardeningManifestLabels.NAME: f'{HardeningManifestLabels.BASE_NAME}-{self.docker_image_name}'
         }
 
     def handle_tags(self):
-        # TODO: change to retrieve from registry1
+        # latest tag in list's first place
         self.tags = [get_latest_tag(os.path.join('demisto', self.docker_image_name))]
+        self.tags += self.old_yaml_dict.get('tags', [])
 
     def handle_args(self):
         self.pipfile_lock_data = get_pipfile_lock_data(os.path.join(self.docker_image_dir, Pipfile.LOCK_NAME))
-        self.python_version = 'python3' if '3' in self.pipfile_lock_data[Pipfile.META][Pipfile.REQUIRES][Pipfile.PYTHON_VERSION] else 'python'
+        self.python_version = get_docker_image_python_version(self.docker_image_dir, self.pipfile_lock_data)
 
-        # TODO: change to retrieve from registry1
-        self.args = {
-            HardeningManifestArgs.BASE_IMAGE: os.path.join(DEMISTO_REGISTRY_ROOT, self.python_version),
-            HardeningManifestArgs.BASE_TAG: get_latest_tag(os.path.join('demisto', self.python_version))
-        }
+        self.args[HardeningManifestArgs.BASE_IMAGE] = os.path.join(DEMISTO_REGISTRY_ROOT, self.python_version)
+        with open(os.path.join(self.docker_image_dir, DOCKERFILE), 'r') as f:
+            dockerfile = f.read()
+            self.args[HardeningManifestArgs.BASE_TAG] = re.findall(DOCKERFILE_BASE_IMAGE_TAG_REGEX, dockerfile)[0]
 
     def handle_resources(self):
         raw_resources = [r.strip(' \n') for r in open(self.docker_packages_metadata_path, 'r').readlines()]
         for raw_resource in raw_resources:
-            match = re.findall(RESOURCE_REGEX, raw_resource)[0]
+            try:
+                match = re.findall(RESOURCE_REGEX, raw_resource)[0]
+            except IndexError as e:
+                logging.debug(f'Failed to parse raw resource: {raw_resource}, Additional info {str(e)}')
+                continue
             url, value = match[0], match[1]
             filename = os.path.basename(url)
             self.resources.append(Resource(url, filename, value))
@@ -107,10 +123,8 @@ class HardeningManifest:
             }]
         }
 
-        ryaml = YAML()
-        ryaml.preserve_quotes = True
         with open(self.output_path, 'w') as yf:
-            ryaml.dump(self.yaml_dict, yf)
+            self.ryaml.dump(self.yaml_dict, yf)
 
 
 def args_handler():

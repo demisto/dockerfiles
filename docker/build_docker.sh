@@ -153,7 +153,7 @@ function docker_build {
         PIPENV_YES=yes pipenv lock -r > requirements.txt
         echo "Pipfile lock generated requirements.txt: "
         cat requirements.txt
-        del_requirements=yes
+        # del_requirements=yes
     fi
     tmp_dir=$(mktemp -d)
     cp Dockerfile "$tmp_dir/Dockerfile"
@@ -318,6 +318,17 @@ if [ "$CIRCLE_BRANCH" == "master" ]; then
 fi
 
 echo "DOCKER_ORG: ${DOCKER_ORG}, DIFF_COMPARE: [${DIFF_COMPARE}], SCRIPT_DIR: [${SCRIPT_DIR}], CIRCLE_BRANCH: ${CIRCLE_BRANCH}, PWD: [${CURRENT_DIR}]"
+
+# echo to bash env to be used in future steps
+CIRCLE_ARTIFACTS="artifacts"
+if [[ ! -d $CIRCLE_ARTIFACTS ]]; then
+  mkdir $CIRCLE_ARTIFACTS
+fi
+echo $DIFF_COMPARE > $CIRCLE_ARTIFACTS/diff_compare.txt
+echo $SCRIPT_DIR > $CIRCLE_ARTIFACTS/script_dir.txt
+echo $CURRENT_DIR > $CIRCLE_ARTIFACTS/current_dir.txt
+echo $DOCKER_INCLUDE_GREP > $CIRCLE_ARTIFACTS/docker_include_grep.txt
+
 total=$(find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | wc -l)
 count=0
 for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | sort`; do
