@@ -18,7 +18,6 @@ class DockerfileIronBank:
     def build(self):
         src_dockerfile_content = get_dockerfile_content(os.path.join(self.docker_image_dir, DockerfileMetadata.FILENAME))
         src_dockerfile_parser = DockerfileParser(os.path.join(self.docker_image_dir, DockerfileMetadata.FILENAME))
-        #src_dockerfile_parser.content(os.path.join(self.docker_image_dir, DockerfileMetadata.FILENAME))
         dst_dockerfile = os.path.join(self.output_path, DockerfileMetadata.FILENAME)
         base_image, base_tag = src_dockerfile_parser.baseimage.split(":")
         print(f"Converting {os.path.join(self.docker_image_dir, DockerfileMetadata.FILENAME)} into {dst_dockerfile}")
