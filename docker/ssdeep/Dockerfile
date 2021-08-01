@@ -1,10 +1,12 @@
-FROM demisto/crypto:1.0.0.23151
+
+FROM demisto/python3-deb:3.9.6.22912
 
 COPY requirements.txt .
 
-# Crypto  needs the latest pip
-RUN pip3 install --no-cache-dir --upgrade pip
-
-RUN apk --update add --no-cache --virtual \
-  libfuzzy-dev \
-  && pip install --no-cache-dir -r requirements.txt
+RUN apt-get update && apt-get install \
+    build-essential \
+    libffi-dev python3 python3-dev python3-pip automake autoconf libtool libfuzzy-dev \
+    -y \
+    && pip install --no-cache-dir -r requirements.txt \
+    && apt-get purge -y --auto-remove \
+    && rm -rf /var/lib/apt/lists/*
