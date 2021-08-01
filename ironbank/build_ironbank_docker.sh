@@ -74,12 +74,14 @@ function build_hardening_manifest {
     REQUIREMENTS="$(cat $1/requirements.txt | tr "\n" " ")" # replace newline with whitespace
     docker run -it $DOCKER_IMAGE /bin/sh -c "cd ~;pip download -v --no-deps --no-cache-dir --log /tmp/pip.log $REQUIREMENTS;cat /tmp/pip.log | grep Added;exit" >> $DOCKER_PACKAGES_METADATA_PATH
     python ./ironbank/build_hardening_manifest.py --docker_image_dir $1 --output_path $OUTPUT_PATH --docker_packages_metadata_path $DOCKER_PACKAGES_METADATA_PATH
+    rm -f $DOCKER_PACKAGES_METADATA_PATH
   else
     echo "Could not login to $REGISTRYONE_URL, aborting..."
     return 1;
   fi
 }
 
+# $1: docker image dir (~/../docker/$IMAGE_NAME)
 function build_dockerfile {
   OUTPUT_PATH=ironbank/$(basename $1)
   if [[ ! -d $OUTPUT_PATH ]]; then
@@ -89,9 +91,23 @@ function build_dockerfile {
 }
 
 # $1: docker image dir (~/../docker/$IMAGE_NAME)
+function commit_ironbank_image_to_dockerfiles_repo {
+  IRONBANK_DOCKER_IMAGE_NAME=$(basename $1)
+  git add ironbank/$IRONBANK_DOCKER_IMAGE_NAME/*
+  git status
+  git config user.email "containers@demisto.com"
+  git config user.name "dc-builder"
+  # Adding "[ci skip]" to commit message to skip endless build triggers. See: https://circleci.com/docs/2.0/skip-build/#skipping-a-build
+  git commit -m "Ironbank $IRONBANK_DOCKER_IMAGE_NAME image [ci skip]"
+  git log -2 --oneline
+  git push --set-upstream origin $CIRCLE_BRANCH -v
+}
+
+# $1: docker image dir (~/../docker/$IMAGE_NAME)
 function build_ironbank_docker {
   build_hardening_manifest $1
   build_dockerfile $1
+  commit_ironbank_image_to_dockerfiles_repo $1
 }
 
 total=$(grep -E ironbank=true ./docker/*/build.conf | wc -l)
