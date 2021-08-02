@@ -72,14 +72,16 @@ function build_hardening_manifest {
     docker pull $DOCKER_IMAGE
     DOCKER_PACKAGES_METADATA_PATH="$OUTPUT_PATH/docker_packages_metadata.txt"
     REQUIREMENTS="$(cat $1/requirements.txt | tr "\n" " ")" # replace newline with whitespace
-    docker run -it $DOCKER_IMAGE /bin/sh -c "cd ~;pip download -v --no-deps --no-cache-dir --log /tmp/pip.log $REQUIREMENTS;cat /tmp/pip.log | grep Added;exit" >> $DOCKER_PACKAGES_METADATA_PATH
+    docker run -it $DOCKER_IMAGE /bin/sh -c "cd ~;pip install -v --no-deps --no-cache-dir --log /tmp/pip.log $REQUIREMENTS;cat /tmp/pip.log | grep Added;exit" >> $DOCKER_PACKAGES_METADATA_PATH
     python ./ironbank/build_hardening_manifest.py --docker_image_dir $1 --output_path $OUTPUT_PATH --docker_packages_metadata_path $DOCKER_PACKAGES_METADATA_PATH
+    rm -f $DOCKER_PACKAGES_METADATA_PATH
   else
     echo "Could not login to $REGISTRYONE_URL, aborting..."
     return 1;
   fi
 }
 
+# $1: docker image dir (~/../docker/$IMAGE_NAME)
 function build_dockerfile {
   OUTPUT_PATH=ironbank/$(basename $1)
   if [[ ! -d $OUTPUT_PATH ]]; then
@@ -89,9 +91,24 @@ function build_dockerfile {
 }
 
 # $1: docker image dir (~/../docker/$IMAGE_NAME)
+function upload_image_to_artifacts {
+  IMAGE_NAME=$(basename $1)
+  TARGET_PATH="$CIRCLE_ARTIFACTS/$IMAGE_NAME"
+  SOURCE_PATH="ironbank/$IMAGE_NAME"
+  cp -r $SOURCE_PATH $TARGET_PATH
+}
+
+# $1: docker image dir (~/../docker/$IMAGE_NAME)
+function commit_ironbank_image_to_repo_one {
+  return 0;
+}
+
+# $1: docker image dir (~/../docker/$IMAGE_NAME)
 function build_ironbank_docker {
   build_hardening_manifest $1
   build_dockerfile $1
+  upload_image_to_artifacts $1
+  commit_ironbank_image_to_repo_one $1
 }
 
 total=$(grep -E ironbank=true ./docker/*/build.conf | wc -l)

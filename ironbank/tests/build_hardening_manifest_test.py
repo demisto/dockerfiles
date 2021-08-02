@@ -86,7 +86,7 @@ def test_integration():
             'org.opencontainers.image.title': 'Demisto Automation - netmiko image',
             'org.opencontainers.image.description': 'netmiko image with the required dependencies',
             'org.opencontainers.image.licenses': ' ', 'org.opencontainers.image.url': ' ',
-            'org.opencontainers.image.vendor': 'demisto', 'org.opencontainers.image.version': '0.1',
+            'org.opencontainers.image.vendor': 'demisto', 'org.opencontainers.image.version': '1.0',
             'mil.dso.ironbank.image.keywords': 'bcrypt, cffi, cryptography, future, netmiko, ntc-templates, paramiko, pycparser, pynacl, pyserial, scp, six, tenacity, textfsm',
             'mil.dso.ironbank.image.type': 'opensource', 'mil.dso.ironbank.product.name': 'panw-demisto-netmiko'},
                                             'resources': [

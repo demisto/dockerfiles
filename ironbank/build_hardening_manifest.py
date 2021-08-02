@@ -51,24 +51,18 @@ class HardeningManifest:
         self.python_version = ''
         self.ryaml = YAML()
         self.ryaml.preserve_quotes = True
-        if os.path.exists(self.output_path):
-            with open(self.output_path, 'r') as yf:
-                self.old_yaml_dict = self.ryaml.load(yf)
-        else:
-            self.old_yaml_dict = {}
 
     def handle_name(self):
         self.name = os.path.join(DEMISTO_REGISTRY_ROOT, self.docker_image_name)
 
     def handle_labels(self):
-        image_version = float(self.old_yaml_dict.get('labels', {}).get(HardeningManifestLabels.VERSION, 0)) + 0.1  # bump image version with 0.1
         self.labels = {
             HardeningManifestLabels.TITLE: HardeningManifestLabels.BASE_TITLE.format(self.docker_image_name),
             HardeningManifestLabels.DESCRIPTION: HardeningManifestLabels.BASE_DESCRIPTION.format(self.docker_image_name),
             HardeningManifestLabels.LICENSES: ' ',
             HardeningManifestLabels.URL: ' ',
             HardeningManifestLabels.VENDOR: HardeningManifestLabels.DEMISTO,
-            HardeningManifestLabels.VERSION: str(image_version),
+            HardeningManifestLabels.VERSION: '1.0',
             HardeningManifestLabels.KEYWORDS: ', '.join(list(self.pipfile_lock_data[Pipfile.DEFAULT].keys())),
             HardeningManifestLabels.TYPE: HardeningManifestLabels.OPEN_SOURCE,
             HardeningManifestLabels.NAME: f'{HardeningManifestLabels.BASE_NAME}-{self.docker_image_name}'
@@ -77,7 +71,6 @@ class HardeningManifest:
     def handle_tags(self):
         # latest tag in list's first place
         self.tags = [get_latest_tag(os.path.join('demisto', self.docker_image_name))]
-        self.tags += self.old_yaml_dict.get('tags', [])
 
     def handle_args(self):
         self.pipfile_lock_data = get_pipfile_lock_data(os.path.join(self.docker_image_dir, Pipfile.LOCK_NAME))
