@@ -104,8 +104,7 @@ function commit_ironbank_image_to_repo_one {
     echo "running on master, pushing to registry1"
     IMAGE_NAME=$(basename $1)
     cd ..
-#    git clone https://repo1.dso.mil/dsop/opensource/palo-alto-networks/demisto/$IMAGE_NAME.git
-    git clone ssh://git@repo1.dso.mil/dsop/opensource/palo-alto-networks/demisto/$IMAGE_NAME.git
+    git clone https://repo1.dso.mil/dsop/opensource/palo-alto-networks/demisto/$IMAGE_NAME.git
     cd $IMAGE_NAME
     git branch
     git checkout development
@@ -117,9 +116,7 @@ function commit_ironbank_image_to_repo_one {
     git config user.name "XSOAR-Bot"
     git add -A
     git commit -m "Ironbank auto-generated $IMAGE_NAME image"
-#    git remote set-url origin git@repo1.dso.mil:dsop/opensource/palo-alto-networks/demisto/$IMAGE_NAME.git
-    git remote -v
-    git push --set-upstream origin $NEW_BRANCH_NAME -v
+#    git push --set-upstream origin $NEW_BRANCH_NAME -v
     cd $CURRENT_DIR
   else
     echo "running on $CIRCLE_BRANCH, not pushing to registry1"
@@ -148,7 +145,15 @@ for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | so
           count=$((count+1))
           echo "=============== `date`: Starting ironbank docker build in dir: ${docker_dir} ($count of $total) ==============="
           build_ironbank_docker ${docker_dir}
+          IMAGE_NAME=$(basename ${docker_dir})
+          if [[ -n "${GENERATES_IMAGES}" ]]; then
+            GENERATES_IMAGES="$GENERATES_IMAGES,$IMAGE_NAME"
+          else
+            GENERATES_IMAGES=$IMAGE_NAME
+          fi
           echo ">>>>>>>>>>>>>>> `date`: Done ironbank docker build in dir: ${docker_dir} ($count of $total) <<<<<<<<<<<<<"
         fi
     fi
 done
+
+python ./ironbank/post_ironbank_github_comment.py --docker_image_dirs $GENERATES_IMAGES 
