@@ -100,14 +100,16 @@ function upload_image_to_artifacts {
 
 # $1: docker image dir (~/../docker/$IMAGE_NAME)
 function commit_ironbank_image_to_repo_one {
+  # TODO: change to master on deploy (or use dev)
   if [[ $CIRCLE_BRANCH != 'master' ]]; then
     echo "running on master, pushing to registry1"
     IMAGE_NAME=$(basename $1)
     cd ..
-    git clone https://repo1.dso.mil/dsop/opensource/palo-alto-networks/demisto/$IMAGE_NAME.git
+    git clone https://$REGISTRYONE_USER:$REGISTRYONE_ACCESS_TOKEN@repo1.dso.mil/dsop/opensource/palo-alto-networks/demisto/$IMAGE_NAME.git
     cd $IMAGE_NAME
     git branch
     git checkout development
+    # TODO: change to per branch
     NEW_BRANCH_NAME="$IMAGE_NAME-$CIRCLE_BRANCH-$CIRCLE_BUILD_NUM"
     git checkout -b $NEW_BRANCH_NAME
     cp -r $CURRENT_DIR/ironbank/$IMAGE_NAME/* .
@@ -116,7 +118,7 @@ function commit_ironbank_image_to_repo_one {
     git config user.name "XSOAR-Bot"
     git add -A
     git commit -m "Ironbank auto-generated $IMAGE_NAME image"
-#    git push --set-upstream origin $NEW_BRANCH_NAME -v
+    git push --set-upstream origin $NEW_BRANCH_NAME
     cd $CURRENT_DIR
   else
     echo "running on $CIRCLE_BRANCH, not pushing to registry1"
@@ -156,4 +158,5 @@ for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | so
     fi
 done
 
+# TODO: think how to infer the exact build url
 python ./ironbank/post_ironbank_github_comment.py --docker_image_dirs $GENERATES_IMAGES 
