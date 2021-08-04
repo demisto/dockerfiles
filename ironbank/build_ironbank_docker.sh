@@ -107,11 +107,11 @@ function commit_ironbank_image_to_repo_one {
     cd ..
     git clone https://$REGISTRYONE_USER:$REGISTRYONE_ACCESS_TOKEN@repo1.dso.mil/dsop/opensource/palo-alto-networks/demisto/$IMAGE_NAME.git
     cd $IMAGE_NAME
+    git fetch --all
     git branch
     git checkout development
-    # TODO: change to per branch
-    NEW_BRANCH_NAME="$IMAGE_NAME-$CIRCLE_BRANCH-$CIRCLE_BUILD_NUM"
-    git checkout -b $NEW_BRANCH_NAME
+    NEW_BRANCH_NAME="$IMAGE_NAME-$CIRCLE_BRANCE"
+    git checkout -B $NEW_BRANCH_NAME
     cp -r $CURRENT_DIR/ironbank/$IMAGE_NAME/* .
     cp -r $CURRENT_DIR/docker/$IMAGE_NAME/requirements.txt .
     git config user.email "containers@demisto.com"
