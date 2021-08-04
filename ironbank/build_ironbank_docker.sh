@@ -125,6 +125,7 @@ function commit_ironbank_image_to_repo_one {
   git branch
   git checkout development
   git checkout -B $NEW_BRANCH_NAME
+  git pull
   cp -r $CURRENT_DIR/ironbank/$IMAGE_NAME/* .
   cp -r $CURRENT_DIR/docker/$IMAGE_NAME/requirements.txt .
   git config user.email "containers@demisto.com"
