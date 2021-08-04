@@ -100,7 +100,29 @@ function upload_image_to_artifacts {
 
 # $1: docker image dir (~/../docker/$IMAGE_NAME)
 function commit_ironbank_image_to_repo_one {
-  return 0;
+  # TODO: change to master on deploy (or use dev)
+  if [[ $CIRCLE_BRANCH != 'master' ]]; then
+    echo "running on master, pushing to registry1"
+    IMAGE_NAME=$(basename $1)
+    cd ..
+    git clone https://$REGISTRYONE_USER:$REGISTRYONE_ACCESS_TOKEN@repo1.dso.mil/dsop/opensource/palo-alto-networks/demisto/$IMAGE_NAME.git
+    cd $IMAGE_NAME
+    git branch
+    git checkout development
+    # TODO: change to per branch
+    NEW_BRANCH_NAME="$IMAGE_NAME-$CIRCLE_BRANCH-$CIRCLE_BUILD_NUM"
+    git checkout -b $NEW_BRANCH_NAME
+    cp -r $CURRENT_DIR/ironbank/$IMAGE_NAME/* .
+    cp -r $CURRENT_DIR/docker/$IMAGE_NAME/requirements.txt .
+    git config user.email "containers@demisto.com"
+    git config user.name "XSOAR-Bot"
+    git add -A
+    git commit -m "Ironbank auto-generated $IMAGE_NAME image"
+    git push --set-upstream origin $NEW_BRANCH_NAME
+    cd $CURRENT_DIR
+  else
+    echo "running on $CIRCLE_BRANCH, not pushing to registry1"
+  fi
 }
 
 # $1: docker image dir (~/../docker/$IMAGE_NAME)
@@ -120,13 +142,21 @@ for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | so
             continue
         fi
         cd ${docker_dir}
-#        if [ -n "$(echo ${SIMPLE_IMAGES} | grep $(basename ${docker_dir}))" ]; then
         if [[ "$(prop 'ironbank' 'false')" == 'true' ]]; then
           cd ${CURRENT_DIR}
           count=$((count+1))
           echo "=============== `date`: Starting ironbank docker build in dir: ${docker_dir} ($count of $total) ==============="
           build_ironbank_docker ${docker_dir}
+          IMAGE_NAME=$(basename ${docker_dir})
+          if [[ -n "${GENERATES_IMAGES}" ]]; then
+            GENERATES_IMAGES="$GENERATES_IMAGES,$IMAGE_NAME"
+          else
+            GENERATES_IMAGES=$IMAGE_NAME
+          fi
           echo ">>>>>>>>>>>>>>> `date`: Done ironbank docker build in dir: ${docker_dir} ($count of $total) <<<<<<<<<<<<<"
         fi
     fi
 done
+
+# TODO: think how to infer the exact build url
+python ./ironbank/post_ironbank_github_comment.py --docker_image_dirs $GENERATES_IMAGES 
