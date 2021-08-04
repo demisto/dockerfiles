@@ -91,6 +91,12 @@ function build_dockerfile {
 }
 
 # $1: docker image dir (~/../docker/$IMAGE_NAME)
+function build_license {
+  IMAGE_NAME=$(basename $1)
+  cp LICENSE ironbank/$IMAGE_NAME
+}
+
+# $1: docker image dir (~/../docker/$IMAGE_NAME)
 function upload_image_to_artifacts {
   IMAGE_NAME=$(basename $1)
   TARGET_PATH="$CIRCLE_ARTIFACTS/$IMAGE_NAME"
@@ -127,6 +133,7 @@ function commit_ironbank_image_to_repo_one {
 function build_ironbank_docker {
   build_hardening_manifest $1
   build_dockerfile $1
+  build_license $1
   upload_image_to_artifacts $1
   commit_ironbank_image_to_repo_one $1
 }
