@@ -100,29 +100,27 @@ function upload_image_to_artifacts {
 
 # $1: docker image dir (~/../docker/$IMAGE_NAME)
 function commit_ironbank_image_to_repo_one {
-  # TODO: change to master on deploy (or use dev)
+  IMAGE_NAME=$(basename $1)
+  NEW_BRANCH_NAME="$IMAGE_NAME-$CIRCLE_BRANCH"
   if [[ $CIRCLE_BRANCH != 'master' ]]; then
-    echo "running on master, pushing to registry1"
-    IMAGE_NAME=$(basename $1)
-    cd ..
-    git clone https://$REGISTRYONE_USER:$REGISTRYONE_ACCESS_TOKEN@repo1.dso.mil/dsop/opensource/palo-alto-networks/demisto/$IMAGE_NAME.git
-    cd $IMAGE_NAME
-    git fetch --all
-    git branch
-    git checkout development
-    NEW_BRANCH_NAME="$IMAGE_NAME-$CIRCLE_BRANCE"
-    git checkout -B $NEW_BRANCH_NAME
-    cp -r $CURRENT_DIR/ironbank/$IMAGE_NAME/* .
-    cp -r $CURRENT_DIR/docker/$IMAGE_NAME/requirements.txt .
-    git config user.email "containers@demisto.com"
-    git config user.name "XSOAR-Bot"
-    git add -A
-    git commit -m "Ironbank auto-generated $IMAGE_NAME image"
-    git push --set-upstream origin $NEW_BRANCH_NAME
-    cd $CURRENT_DIR
-  else
-    echo "running on $CIRCLE_BRANCH, not pushing to registry1"
+    echo "not running on master, working on a dev branch"
+    NEW_BRANCH_NAME="dev-$NEW_BRANCH_NAME"
   fi
+  cd ..
+  git clone https://$REGISTRYONE_USER:$REGISTRYONE_ACCESS_TOKEN@repo1.dso.mil/dsop/opensource/palo-alto-networks/demisto/$IMAGE_NAME.git
+  cd $IMAGE_NAME
+  git fetch --all
+  git branch
+  git checkout development
+  git checkout -B $NEW_BRANCH_NAME
+  cp -r $CURRENT_DIR/ironbank/$IMAGE_NAME/* .
+  cp -r $CURRENT_DIR/docker/$IMAGE_NAME/requirements.txt .
+  git config user.email "containers@demisto.com"
+  git config user.name "dc-builder"
+  git add -A
+  git commit -m "Ironbank auto-generated $IMAGE_NAME image"
+  git push --set-upstream origin $NEW_BRANCH_NAME
+  cd $CURRENT_DIR
 }
 
 # $1: docker image dir (~/../docker/$IMAGE_NAME)
