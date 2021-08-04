@@ -97,6 +97,12 @@ function build_license {
 }
 
 # $1: docker image dir (~/../docker/$IMAGE_NAME)
+function build_readme {
+  IMAGE_NAME=$(basename $1)
+  echo "Palo Alto Networks - Demisto XSOAR - $IMAGE_NAME image with the required dependencies" > ironbank/$IMAGE_NAME/README.md
+}
+
+# $1: docker image dir (~/../docker/$IMAGE_NAME)
 function upload_image_to_artifacts {
   IMAGE_NAME=$(basename $1)
   TARGET_PATH="$CIRCLE_ARTIFACTS/$IMAGE_NAME"
@@ -134,6 +140,7 @@ function build_ironbank_docker {
   build_hardening_manifest $1
   build_dockerfile $1
   build_license $1
+  build_readme $1
   upload_image_to_artifacts $1
   commit_ironbank_image_to_repo_one $1
 }
