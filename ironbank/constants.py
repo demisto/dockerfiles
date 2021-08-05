@@ -80,7 +80,9 @@ FROM ${{BASE_REGISTRY}}/${{BASE_IMAGE}}:${{BASE_TAG}}'''
 
     DOCKER_ENV = 'ENV DOCKER_IMAGE=\'${{BASE_REGISTRY}}/${{BASE_IMAGE}}:${{BASE_TAG}}\''
 
-    COPY_REQS_TXT = 'COPY requirements.txt .'
+    COPY_REQS_TXT = '''RUN mkdir -p /opt/python/repo 
+COPY *.whl *.zip *.tar.gz /opt/python/repo/
+COPY requirements.txt /opt/python/repo/'''
 
     USER_ROOT = 'USER root'
 
