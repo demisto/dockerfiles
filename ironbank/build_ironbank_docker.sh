@@ -124,7 +124,9 @@ function commit_ironbank_image_to_repo_one {
   git fetch --all
   git branch
   git checkout development
-  git checkout -B $NEW_BRANCH_NAME origin/$NEW_BRANCH_NAME || git branch --set-upstream-to=origin/$NEW_BRANCH_NAME $NEW_BRANCH_NAME || git checkout -B $NEW_BRANCH_NAME
+  #git checkout -B $NEW_BRANCH_NAME origin/$NEW_BRANCH_NAME || git branch --set-upstream-to=origin/$NEW_BRANCH_NAME $NEW_BRANCH_NAME || git checkout -B $NEW_BRANCH_NAME
+  git checkout -B $NEW_BRANCH_NAME
+  git branch --set-upstream-to=origin/$NEW_BRANCH_NAME $NEW_BRANCH_NAME
   git pull
   cp -r $CURRENT_DIR/ironbank/$IMAGE_NAME/* .
   cp -r $CURRENT_DIR/docker/$IMAGE_NAME/requirements.txt .
