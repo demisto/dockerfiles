@@ -64,17 +64,16 @@ function build_hardening_manifest {
       mkdir $OUTPUT_PATH
     fi
     BASE_IMAGE=`python ./ironbank/get_docker_image_python_version.py --docker_image_dir $1`
+    TAG="3.9.5.21272"
     if [[ "$BASE_IMAGE" == "python" ]]; then
-      echo "In the meantime not working with python 2. docker image: $1"
-      return 0;
+      TAG="2.7.18.20958"
     fi
-    DOCKER_IMAGE="$REGISTRYONE_URL/ironbank/opensource/palo-alto-networks/demisto/$BASE_IMAGE:3.9.5.21272"
+    DOCKER_IMAGE="$REGISTRYONE_URL/ironbank/opensource/palo-alto-networks/demisto/$BASE_IMAGE:$TAG"
     docker pull $DOCKER_IMAGE
     DOCKER_PACKAGES_METADATA_PATH="$OUTPUT_PATH/docker_packages_metadata.txt"
     REQUIREMENTS="$(cat $1/requirements.txt | tr "\n" " ")" # replace newline with whitespace
-    docker run -it $DOCKER_IMAGE /bin/sh -c "cd ~;pip install -v --no-deps --no-cache-dir --log /tmp/pip.log $REQUIREMENTS;cat /tmp/pip.log | grep Added;exit" >> $DOCKER_PACKAGES_METADATA_PATH
+    docker run -it $DOCKER_IMAGE /bin/sh -c "cd ~;pip install -v --no-deps --no-cache-dir --log /tmp/pip.log $REQUIREMENTS;cat /tmp/pip.log;exit" | grep Added >> $DOCKER_PACKAGES_METADATA_PATH
     python ./ironbank/build_hardening_manifest.py --docker_image_dir $1 --output_path $OUTPUT_PATH --docker_packages_metadata_path $DOCKER_PACKAGES_METADATA_PATH
-    rm -f $DOCKER_PACKAGES_METADATA_PATH
   else
     echo "Could not login to $REGISTRYONE_URL, aborting..."
     return 1;
@@ -91,44 +90,62 @@ function build_dockerfile {
 }
 
 # $1: docker image dir (~/../docker/$IMAGE_NAME)
+function build_license {
+  IMAGE_NAME=$(basename $1)
+  cp LICENSE ironbank/$IMAGE_NAME
+}
+
+# $1: docker image dir (~/../docker/$IMAGE_NAME)
+function build_readme {
+  IMAGE_NAME=$(basename $1)
+  echo "Palo Alto Networks - Demisto XSOAR - $IMAGE_NAME image with the required dependencies" > ironbank/$IMAGE_NAME/README.md
+}
+
+# $1: docker image dir (~/../docker/$IMAGE_NAME)
 function upload_image_to_artifacts {
   IMAGE_NAME=$(basename $1)
   TARGET_PATH="$CIRCLE_ARTIFACTS/$IMAGE_NAME"
   SOURCE_PATH="ironbank/$IMAGE_NAME"
   cp -r $SOURCE_PATH $TARGET_PATH
+  rm $SOURCE_PATH/docker_packages_metadata.txt
 }
 
 # $1: docker image dir (~/../docker/$IMAGE_NAME)
 function commit_ironbank_image_to_repo_one {
-  # TODO: change to master on deploy (or use dev)
+  IMAGE_NAME=$(basename $1)
+  NEW_BRANCH_NAME="$IMAGE_NAME-$CIRCLE_BRANCH"
   if [[ $CIRCLE_BRANCH != 'master' ]]; then
-    echo "running on master, pushing to registry1"
-    IMAGE_NAME=$(basename $1)
-    cd ..
-    git clone https://$REGISTRYONE_USER:$REGISTRYONE_ACCESS_TOKEN@repo1.dso.mil/dsop/opensource/palo-alto-networks/demisto/$IMAGE_NAME.git
-    cd $IMAGE_NAME
-    git branch
-    git checkout development
-    # TODO: change to per branch
-    NEW_BRANCH_NAME="$IMAGE_NAME-$CIRCLE_BRANCH-$CIRCLE_BUILD_NUM"
-    git checkout -b $NEW_BRANCH_NAME
-    cp -r $CURRENT_DIR/ironbank/$IMAGE_NAME/* .
-    cp -r $CURRENT_DIR/docker/$IMAGE_NAME/requirements.txt .
-    git config user.email "containers@demisto.com"
-    git config user.name "XSOAR-Bot"
+    echo "not running on master, working on a dev branch"
+    NEW_BRANCH_NAME="dev-$NEW_BRANCH_NAME"
+  fi
+  cd ..
+  git clone https://$REGISTRYONE_USER:$REGISTRYONE_ACCESS_TOKEN@repo1.dso.mil/dsop/opensource/palo-alto-networks/demisto/$IMAGE_NAME.git
+  cd $IMAGE_NAME
+  git fetch --all
+  git branch
+  git checkout development
+  git checkout -B $NEW_BRANCH_NAME origin/$NEW_BRANCH_NAME || git checkout -B $NEW_BRANCH_NAME
+  git pull
+  cp -r $CURRENT_DIR/ironbank/$IMAGE_NAME/* .
+  cp -r $CURRENT_DIR/docker/$IMAGE_NAME/requirements.txt .
+  git config user.email "containers@demisto.com"
+  git config user.name "dc-builder"
+  if [[ $(git diff --exit-code) ]]; then
     git add -A
     git commit -m "Ironbank auto-generated $IMAGE_NAME image"
     git push --set-upstream origin $NEW_BRANCH_NAME
-    cd $CURRENT_DIR
   else
-    echo "running on $CIRCLE_BRANCH, not pushing to registry1"
+    echo "nothing to commit"
   fi
+  cd $CURRENT_DIR
 }
 
 # $1: docker image dir (~/../docker/$IMAGE_NAME)
 function build_ironbank_docker {
   build_hardening_manifest $1
   build_dockerfile $1
+  build_license $1
+  build_readme $1
   upload_image_to_artifacts $1
   commit_ironbank_image_to_repo_one $1
 }

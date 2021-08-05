@@ -21,6 +21,13 @@ class Resource:
         self.filename = filename
         self.value = value
 
+    def __eq__(self, other):
+        return all([
+            self.url == other.url,
+            self.filename == other.filename,
+            self.value == other.value
+        ])
+
     def dump(self):
         return {
             HardeningManifestResource.FILENAME: self.filename,
@@ -91,7 +98,9 @@ class HardeningManifest:
                 continue
             url, value = match[0], match[1]
             filename = os.path.basename(url)
-            self.resources.append(Resource(url, filename, value))
+            resource = Resource(url, filename, value)
+            if resource not in self.resources:  # avoid duplicates
+                self.resources.append(resource)
 
     def build(self):
         self.handle_name()

@@ -80,13 +80,16 @@ FROM ${{BASE_REGISTRY}}/${{BASE_IMAGE}}:${{BASE_TAG}}'''
 
     DOCKER_ENV = 'ENV DOCKER_IMAGE=\'${{BASE_REGISTRY}}/${{BASE_IMAGE}}:${{BASE_TAG}}\''
 
+
     COPY_REQS_TXT = '''RUN mkdir -p /opt/python/repo 
 COPY *.whl *.zip *.tar.gz /opt/python/repo/
 COPY requirements.txt /opt/python/repo/'''
 
+
     USER_ROOT = 'USER root'
 
     DNF_UPDATE_BASIC_PY = '''RUN dnf install -y --nodocs python{0}-devel gcc gcc-c++ make wget git && \\  
+    cd /opt/python/repo/ && \\
     pip install --no-cache-dir -r requirements.txt &&  \\ 
     dnf remove -y python{0}-devel gcc gcc-c++ make wget git && \\
     dnf clean all && \\ 
