@@ -72,7 +72,7 @@ function build_hardening_manifest {
     docker pull $DOCKER_IMAGE
     DOCKER_PACKAGES_METADATA_PATH="$OUTPUT_PATH/docker_packages_metadata.txt"
     REQUIREMENTS="$(cat $1/requirements.txt | tr "\n" " ")" # replace newline with whitespace
-    docker run -it $DOCKER_IMAGE /bin/sh -c "cd ~;pip cache purge;pip install -v --no-deps --no-cache-dir --log /tmp/pip.log $REQUIREMENTS;cat /tmp/pip.log;exit" | grep Added >> $DOCKER_PACKAGES_METADATA_PATH
+    docker run -it $DOCKER_IMAGE /bin/sh -c "cd ~;pip remove -y -r /$REQUIREMENTS;pip cache purge;pip install -v --no-deps --no-cache-dir --log /tmp/pip.log -r /$REQUIREMENTS;cat /tmp/pip.log;exit" | grep Added >> $DOCKER_PACKAGES_METADATA_PATH
     python ./ironbank/build_hardening_manifest.py --docker_image_dir $1 --output_path $OUTPUT_PATH --docker_packages_metadata_path $DOCKER_PACKAGES_METADATA_PATH
   else
     echo "Could not login to $REGISTRYONE_URL, aborting..."
