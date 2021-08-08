@@ -125,8 +125,13 @@ function commit_ironbank_image_to_repo_one {
   git fetch --all
   git branch
   git checkout development
-  git checkout -B $NEW_BRANCH_NAME origin/$NEW_BRANCH_NAME || git checkout -B $NEW_BRANCH_NAME
-  git pull
+  if [[ -z $(git checkout -B $NEW_BRANCH_NAME --track origin/$NEW_BRANCH_NAME) ]]; then
+    echo "branch $NEW_BRANCH_NAME was not found at origin, creating new branch..."
+    git checkout -B $NEW_BRANCH_NAME
+  else
+    echo "branch $NEW_BRANCH_NAME exists at origin, pulling..."
+    git pull
+  fi
   cp -r $CURRENT_DIR/ironbank/$IMAGE_NAME/* .
   cp $CURRENT_DIR/docker/$IMAGE_NAME/requirements.txt .
   git config user.email "containers@demisto.com"
