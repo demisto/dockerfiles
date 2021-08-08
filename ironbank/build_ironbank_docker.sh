@@ -138,7 +138,7 @@ function commit_ironbank_image_to_repo_one {
   git config user.name "dc-builder"
   if [[ $(git diff --exit-code) ]]; then
     git add -A
-    git commit -m "Ironbank auto-generated $IMAGE_NAME image"
+    git commit -m "Ironbank auto-generated $IMAGE_NAME image - $CIRCLE_BUILD_NUM"
     git push --set-upstream origin $NEW_BRANCH_NAME
   else
     echo "nothing to commit"
