@@ -64,15 +64,15 @@ function build_hardening_manifest {
       mkdir $OUTPUT_PATH
     fi
     BASE_IMAGE=`python ./ironbank/get_docker_image_python_version.py --docker_image_dir $1`
-    TAG="3.9.5.21272"
+    TAG="3.9.6.22912"
     if [[ "$BASE_IMAGE" == "python" ]]; then
       TAG="2.7.18.20958"
     fi
     DOCKER_IMAGE="$REGISTRYONE_URL/ironbank/opensource/palo-alto-networks/demisto/$BASE_IMAGE:$TAG"
     docker pull $DOCKER_IMAGE
     DOCKER_PACKAGES_METADATA_PATH="$OUTPUT_PATH/docker_packages_metadata.txt"
-    REQUIREMENTS="$(cat $1/requirements.txt | tr "\n" " ")" # replace newline with whitespace
-    docker run -it $DOCKER_IMAGE /bin/sh -c "cd ~;pip remove -y $REQUIREMENTS;pip cache purge;pip install -v --no-deps --no-cache-dir --log /tmp/pip.log $REQUIREMENTS;cat /tmp/pip.log;exit" | grep Added >> $DOCKER_PACKAGES_METADATA_PATH
+    REQUIREMENTS="$(cat $1/requirements.txt)"
+    docker run -it $DOCKER_IMAGE /bin/sh -c "cd ~;touch /requirements.txt;echo \"$REQUIREMENTS\" > /requirements.txt;pip uninstall -y -r /requirements.txt;pip cache purge;pip install -v --no-deps --no-cache-dir --log /tmp/pip.log -r /requirements.txt;cat /tmp/pip.log;exit" | grep Added >> $DOCKER_PACKAGES_METADATA_PATH
     python ./ironbank/build_hardening_manifest.py --docker_image_dir $1 --output_path $OUTPUT_PATH --docker_packages_metadata_path $DOCKER_PACKAGES_METADATA_PATH
   else
     echo "Could not login to $REGISTRYONE_URL, aborting..."
@@ -107,6 +107,7 @@ function upload_image_to_artifacts {
   TARGET_PATH="$CIRCLE_ARTIFACTS/$IMAGE_NAME"
   SOURCE_PATH="ironbank/$IMAGE_NAME"
   cp -r $SOURCE_PATH $TARGET_PATH
+  cp $CURRENT_DIR/docker/$IMAGE_NAME/requirements.txt $TARGET_PATH
   rm $SOURCE_PATH/docker_packages_metadata.txt
 }
 
@@ -124,12 +125,10 @@ function commit_ironbank_image_to_repo_one {
   git fetch --all
   git branch
   git checkout development
-  #git checkout -B $NEW_BRANCH_NAME origin/$NEW_BRANCH_NAME || git branch --set-upstream-to=origin/$NEW_BRANCH_NAME $NEW_BRANCH_NAME || git checkout -B $NEW_BRANCH_NAME
-  git checkout -B $NEW_BRANCH_NAME
-  #git branch --set-upstream-to=origin/$NEW_BRANCH_NAME $NEW_BRANCH_NAME
-  #git pull
+  git checkout -B $NEW_BRANCH_NAME origin/$NEW_BRANCH_NAME || git checkout -B $NEW_BRANCH_NAME
+  git pull
   cp -r $CURRENT_DIR/ironbank/$IMAGE_NAME/* .
-  cp -r $CURRENT_DIR/docker/$IMAGE_NAME/requirements.txt .
+  cp $CURRENT_DIR/docker/$IMAGE_NAME/requirements.txt .
   git config user.email "containers@demisto.com"
   git config user.name "dc-builder"
   if [[ $(git diff --exit-code) ]]; then
@@ -177,5 +176,5 @@ for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | so
     fi
 done
 
-# TODO: think how to infer the exact build url
+# TODO: think how to infer the exact repo1 build url
 python ./ironbank/post_ironbank_github_comment.py --docker_image_dirs $GENERATES_IMAGES 
