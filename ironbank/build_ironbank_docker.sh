@@ -116,7 +116,7 @@ function upload_image_to_artifacts {
 # $1: docker image dir (~/../docker/$IMAGE_NAME)
 function commit_ironbank_image_to_repo_one {
   IMAGE_NAME=$(basename $1)
-  NEW_BRANCH_NAME="$IMAGE_NAME-$CIRCLE_BRANCH"
+  NEW_BRANCH_NAME=$CIRCLE_BRANCH
   if [[ $CIRCLE_BRANCH != 'master' ]]; then
     echo "not running on master, working on a dev branch"
     NEW_BRANCH_NAME="dev-$NEW_BRANCH_NAME"
