@@ -146,6 +146,10 @@ function commit_ironbank_image_to_repo_one {
     echo "nothing to commit"
   fi
   cd $CURRENT_DIR
+  if [[ $CIRCLE_BRANCH == 'master' ]]; then
+    echo "Opening a Merge Request to Repo1"
+    python ./ironbank/open_merge_request.py --access_token $REGISTRYONE_ACCESS_TOKEN --repository $IMAGE_NAME --source_branch $NEW_BRANCH_NAME --target_branch "development" --title "$IMAGE_NAME - $CIRCLE_BRANCH/$CIRCLE_BUILD_NUM"
+  fi    
 }
 
 # $1: docker image dir (~/../docker/$IMAGE_NAME)
