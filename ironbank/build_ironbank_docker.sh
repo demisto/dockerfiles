@@ -153,6 +153,7 @@ function commit_ironbank_image_to_repo_one {
   cd $CURRENT_DIR
   if [[ $CIRCLE_BRANCH == 'master' ]]; then
     echo "Opening a Merge Request to Repo1"
+    # TODO: post merge requests
     python ./ironbank/open_merge_request.py --access_token $REGISTRYONE_ACCESS_TOKEN --repository $IMAGE_NAME --source_branch $NEW_BRANCH_NAME --target_branch "development" --title "$IMAGE_NAME - $CIRCLE_BRANCH/$CIRCLE_BUILD_NUM"
   fi    
 }
@@ -192,5 +193,8 @@ for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | so
     fi
 done
 
-# TODO: think how to infer the exact repo1 build url
-python ./ironbank/post_ironbank_github_comment.py --docker_image_dirs $GENERATES_IMAGES 
+if [[ -n $GENERATES_IMAGES  ]]; then
+  # TODO: think how to infer the exact repo1 build url
+  # TODO: think of in case we are on master branch
+  python ./ironbank/post_ironbank_github_comment.py --docker_image_dirs $GENERATES_IMAGES
+fi 
