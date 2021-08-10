@@ -65,14 +65,16 @@ function build_hardening_manifest {
     fi
     BASE_IMAGE=`python ./ironbank/get_docker_image_python_version.py --docker_image_dir $1`
     TAG="3.9.6.22912"
+    PYTHON_VERSION="3"
     if [[ "$BASE_IMAGE" == "python" ]]; then
       TAG="2.7.18.20958"
+      PYTHON_VERSION="2"
     fi
     DOCKER_IMAGE="$REGISTRYONE_URL/ironbank/opensource/palo-alto-networks/demisto/$BASE_IMAGE:$TAG"
     docker pull $DOCKER_IMAGE
     DOCKER_PACKAGES_METADATA_PATH="$OUTPUT_PATH/docker_packages_metadata.txt"
     REQUIREMENTS="$(cat $1/requirements.txt)"
-    docker run -it $DOCKER_IMAGE /bin/sh -c "cd ~;touch /requirements.txt;echo \"$REQUIREMENTS\" > /requirements.txt;pip uninstall -y -r /requirements.txt;pip cache purge;pip install -v --no-deps --no-cache-dir --log /tmp/pip.log -r /requirements.txt;cat /tmp/pip.log;exit" | grep Added >> $DOCKER_PACKAGES_METADATA_PATH
+    docker run -it $DOCKER_IMAGE /bin/sh -c "cd ~;dnf install -y --nodocs python$PYTHON_VERSION-devel gcc gcc-c++ make wget git;touch /requirements.txt;echo \"$REQUIREMENTS\" > /requirements.txt;pip uninstall -y -r /requirements.txt;pip cache purge;pip install -v --no-deps --no-cache-dir --log /tmp/pip.log -r /requirements.txt;cat /tmp/pip.log;exit" | grep Added >> $DOCKER_PACKAGES_METADATA_PATH
     python ./ironbank/build_hardening_manifest.py --docker_image_dir $1 --output_path $OUTPUT_PATH --docker_packages_metadata_path $DOCKER_PACKAGES_METADATA_PATH
   else
     echo "Could not login to $REGISTRYONE_URL, aborting..."
@@ -114,7 +116,7 @@ function upload_image_to_artifacts {
 # $1: docker image dir (~/../docker/$IMAGE_NAME)
 function commit_ironbank_image_to_repo_one {
   IMAGE_NAME=$(basename $1)
-  NEW_BRANCH_NAME="$IMAGE_NAME-$CIRCLE_BRANCH"
+  NEW_BRANCH_NAME=$CIRCLE_BRANCH
   if [[ $CIRCLE_BRANCH != 'master' ]]; then
     echo "not running on master, working on a dev branch"
     NEW_BRANCH_NAME="dev-$NEW_BRANCH_NAME"
@@ -144,6 +146,10 @@ function commit_ironbank_image_to_repo_one {
     echo "nothing to commit"
   fi
   cd $CURRENT_DIR
+  if [[ $CIRCLE_BRANCH == 'master' ]]; then
+    echo "Opening a Merge Request to Repo1"
+    python ./ironbank/open_merge_request.py --access_token $REGISTRYONE_ACCESS_TOKEN --repository $IMAGE_NAME --source_branch $NEW_BRANCH_NAME --target_branch "development" --title "$IMAGE_NAME - $CIRCLE_BRANCH/$CIRCLE_BUILD_NUM"
+  fi    
 }
 
 # $1: docker image dir (~/../docker/$IMAGE_NAME)
