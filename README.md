@@ -65,7 +65,7 @@ For example to create a new image named ldap using python 3 and with the python 
 ```
 The above command will create a directory `docker/ldap` with all relevant files all setup for building a docker image. You can now build the image locally by following: [Building Locally a Test Build](#building-locally-a-test-build).
 
-**Note:** for image names we use [kebab-case](https://wiki.c2.com/?KebabCase) naming convention.
+**Note:** for image names we use [kebab-case](https://www.theserverside.com/definition/Kebab-case) naming convention.
 
 ## Building Locally a Test Build
 It is possible to run a local build to verify that the build process is working. Requirements:
