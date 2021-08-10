@@ -88,7 +88,12 @@ function build_dockerfile {
   if [[ ! -d $OUTPUT_PATH ]]; then
     mkdir $OUTPUT_PATH
   fi
-  python ./ironbank/build_dockerfile.py --docker_image_dir $1 --output_path $OUTPUT_PATH
+  if [[ -f $1/Dockerfile.ironbank ]]; then
+    # if we have a special Dockerfile for ironbank, copy it instead of generating
+    cp $1/Dockerfile.ironbank $OUTPUT_PATH/Dockerfile
+  else
+    python ./ironbank/build_dockerfile.py --docker_image_dir $1 --output_path $OUTPUT_PATH
+  fi
 }
 
 # $1: docker image dir (~/../docker/$IMAGE_NAME)
