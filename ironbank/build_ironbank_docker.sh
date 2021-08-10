@@ -124,7 +124,12 @@ function commit_ironbank_image_to_repo_one {
   NEW_BRANCH_NAME=$CIRCLE_BRANCH
   if [[ $CIRCLE_BRANCH != 'master' ]]; then
     echo "not running on master, working on a dev branch"
-    NEW_BRANCH_NAME="dev-$NEW_BRANCH_NAME"
+    NEW_BRANCH_NAME="dev-$CIRCLE_BRANCH"
+  else
+    echo "running on master, repo1 branch is <LATEST_TAG>-feature-branch to avoid conflicting with master"
+    DOCKERHUB_IMAGE="demisto/$IMAGE_NAME"
+    LATEST_DOCKERHUB_IMAGE_TAG=$(./docker/image_latest_tag.py $DOCKERHUB_IMAGE)
+    NEW_BRANCH_NAME="$LATEST_DOCKERHUB_IMAGE_TAG-feature-branch"
   fi
   cd ..
   git clone https://$REGISTRYONE_USER:$REGISTRYONE_ACCESS_TOKEN@repo1.dso.mil/dsop/opensource/palo-alto-networks/demisto/$IMAGE_NAME.git
@@ -153,8 +158,8 @@ function commit_ironbank_image_to_repo_one {
   cd $CURRENT_DIR
   if [[ $CIRCLE_BRANCH == 'master' ]]; then
     echo "Opening a Merge Request to Repo1"
-    # TODO: post merge requests
     python ./ironbank/open_merge_request.py --access_token $REGISTRYONE_ACCESS_TOKEN --repository $IMAGE_NAME --source_branch $NEW_BRANCH_NAME --target_branch "development" --title "$IMAGE_NAME - $CIRCLE_BRANCH/$CIRCLE_BUILD_NUM"
+    # TODO: open an issue in iron bank (?)
   fi    
 }
 
@@ -166,6 +171,7 @@ function build_ironbank_docker {
   build_readme $1
   upload_image_to_artifacts $1
   commit_ironbank_image_to_repo_one $1
+  # TODO: open a dockerfiles "Repo1 MR" issue and post there the merge request (?)
 }
 
 total=$(grep -E ironbank=true ./docker/*/build.conf | wc -l)
@@ -193,8 +199,8 @@ for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | so
     fi
 done
 
-if [[ -n $GENERATES_IMAGES  ]]; then
+if [[ -n $GENERATES_IMAGES  ]] && [[ $CIRCLE_BRANCH != "master" ]]; then
+  # we are not posting on master branch as PR is closed, will post to the dockerfiles "Repo1 MR" opened issue instead
   # TODO: think how to infer the exact repo1 build url
-  # TODO: think of in case we are on master branch
   python ./ironbank/post_ironbank_github_comment.py --docker_image_dirs $GENERATES_IMAGES
 fi 
