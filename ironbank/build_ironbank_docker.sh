@@ -201,10 +201,7 @@ for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | so
 done
 
 if [[ -n $GENERATES_IMAGES  ]] && [[ $CIRCLE_BRANCH != "master" ]]; then
-  # we are not posting on master branch as PR is clo
-  
-  
-  , will post to the dockerfiles "Repo1 MR" opened issue instead
+  # we are not posting on master branch as PR is close, will post to the dockerfiles "Repo1 MR" opened issue instead
   # TODO: think how to infer the exact repo1 build url
   python ./ironbank/post_ironbank_github_comment.py --docker_image_dirs $GENERATES_IMAGES
 fi 
