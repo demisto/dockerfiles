@@ -2,12 +2,13 @@ import argparse
 import os
 from dockerfile_parse import DockerfileParser
 
-from ironbank.utils import get_dockerfile_content, BaseImagesStore
+from ironbank.utils import get_dockerfile_content, BaseImagesStore, get_base_image_from_dockerfile, \
+    get_last_image_tag_ironbank
 
 from ironbank.constants import DockerfileMetadata, DockerfileSections
 
 
-class DockerfileIronBank:
+class DockerfileIronbank:
 
     def __init__(self, docker_image_dir, output_path):
         self.docker_image_dir = docker_image_dir
@@ -16,24 +17,28 @@ class DockerfileIronBank:
         self.base_images_repo = BaseImagesStore()
 
     def build(self):
-        src_dockerfile_content = get_dockerfile_content(os.path.join(self.docker_image_dir, DockerfileMetadata.FILENAME))
-        src_dockerfile_parser = DockerfileParser(os.path.join(self.docker_image_dir, DockerfileMetadata.FILENAME))
+        src_dockerfile = os.path.join(self.docker_image_dir, DockerfileMetadata.FILENAME)
         dst_dockerfile = os.path.join(self.output_path, DockerfileMetadata.FILENAME)
-        base_image, base_tag = src_dockerfile_parser.baseimage.split(":")
+        base_image, base_image_tag = get_base_image_from_dockerfile(src_dockerfile)
+        ironbank_base_image = self.base_images_repo.get_inventory()[base_image][0]
+        ironbank_base_image_tag = get_last_image_tag_ironbank(ironbank_base_image)
         print(f"Converting {os.path.join(self.docker_image_dir, DockerfileMetadata.FILENAME)} into {dst_dockerfile}")
-        with open(dst_dockerfile, "w") as f:
-            f.write(DockerfileSections.HEADER.format(self.base_images_repo.get_inventory()[base_image][0], base_tag))
-            f.write(DockerfileSections.FILE_BLANK_LINE)
-            f.write(DockerfileSections.COPY_REQS_TXT)
-            f.write(DockerfileSections.FILE_BLANK_LINE)
-            f.write(DockerfileSections.USER_ROOT)
-            f.write(DockerfileSections.FILE_BLANK_LINE)
-            f.write(DockerfileSections.DNF_UPDATE_BASIC_PY.format(self.base_images_repo.get_inventory()[base_image][1]))
-            f.write(DockerfileSections.FILE_BLANK_LINE)
-            f.write(DockerfileSections.DOCKER_ENV)
-            f.write(DockerfileSections.FILE_BLANK_LINE)
-            f.write(DockerfileSections.FOOTER)
-            f.close()
+        print(f"Docker Hub base image tag is {0} vs. Ironbank base image tag {2}".
+              format(base_image_tag + ":" + base_image_tag, ironbank_base_image + ":" + ironbank_base_image_tag))
+
+        with open(dst_dockerfile, "w") as fp:
+            fp.write(DockerfileSections.HEADER.format(ironbank_base_image, ironbank_base_image_tag))
+            fp.write(DockerfileSections.FILE_BLANK_LINE)
+            fp.write(DockerfileSections.COPY_REQS_TXT)
+            fp.write(DockerfileSections.FILE_BLANK_LINE)
+            fp.write(DockerfileSections.USER_ROOT)
+            fp.write(DockerfileSections.FILE_BLANK_LINE)
+            fp.write(DockerfileSections.DNF_UPDATE_BASIC_PY.format(self.base_images_repo.get_inventory()[base_image][1]))
+            fp.write(DockerfileSections.FILE_BLANK_LINE)
+            fp.write(DockerfileSections.DOCKER_ENV)
+            fp.write(DockerfileSections.FILE_BLANK_LINE)
+            fp.write(DockerfileSections.FOOTER)
+            fp.close()
 
     def dump(self):
         return
@@ -56,7 +61,7 @@ def main():
     output_path = args.output_path
 
     print("Converting docker {0} to {1} ".format(docker_image_dir, output_path))
-    dockerfile_ironbank = DockerfileIronBank(docker_image_dir, output_path)
+    dockerfile_ironbank = DockerfileIronbank(docker_image_dir, output_path)
     dockerfile_ironbank.build()
     dockerfile_ironbank.dump()
 

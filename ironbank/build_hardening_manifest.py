@@ -9,7 +9,7 @@ from ruamel.yaml import YAML
 from ironbank.constants import HardeningManifestLabels, HardeningManifestResource, HardeningManifestMaintainer, \
     HardeningManifestYaml, HardeningManifestArgs, RESOURCE_REGEX, DEMISTO_REGISTRY_ROOT, DEMISTO_CONTAINERS_MAIL, \
     PANW, DEFAULT_USER, Pipfile, DOCKERFILE, DOCKERFILE_BASE_IMAGE_TAG_REGEX
-from ironbank.utils import get_pipfile_lock_data
+from ironbank.utils import get_pipfile_lock_data, get_last_image_tag_ironbank
 from ironbank.get_docker_image_python_version import get_docker_image_python_version
 from docker.image_latest_tag import get_latest_tag
 

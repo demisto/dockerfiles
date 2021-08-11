@@ -1,3 +1,4 @@
+import os
 from tempfile import mkdtemp
 
 from ironbank.build_hardening_manifest import HardeningManifest
@@ -74,6 +75,7 @@ def test_resource_handling():
 
 
 def test_integration():
+    print(os.getcwd())
     temp_dir = mkdtemp()
     hardening_manifest = HardeningManifest('ironbank/tests/test_data/netmiko', temp_dir, 'ironbank/tests/test_data/docker_packages_metadata.txt')
     hardening_manifest.build()
