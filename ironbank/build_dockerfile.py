@@ -1,8 +1,7 @@
 import argparse
 import os
-from dockerfile_parse import DockerfileParser
 
-from ironbank.utils import get_dockerfile_content, BaseImagesStore, get_base_image_from_dockerfile, \
+from ironbank.utils import BaseImagesStore, get_base_image_from_dockerfile, \
     get_last_image_tag_ironbank
 
 from ironbank.constants import DockerfileMetadata, DockerfileSections

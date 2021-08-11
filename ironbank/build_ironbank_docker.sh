@@ -63,14 +63,14 @@ function build_hardening_manifest {
     if [[ ! -d $OUTPUT_PATH ]]; then
       mkdir $OUTPUT_PATH
     fi
-    BASE_IMAGE=`python ./ironbank/get_docker_image_python_version.py --docker_image_dir $1`
-    TAG="3.9.6.22912"
-    PYTHON_VERSION="3"
-    if [[ "$BASE_IMAGE" == "python" ]]; then
-      TAG="2.7.18.20958"
-      PYTHON_VERSION="2"
+    BASE_IMAGE_NAME_AND_TAG=`python ./ironbank/get_ironbank_base_image_name_and_tag.py --docker_image_dir $1`
+    echo "Base image name and tag: $BASE_IMAGE_NAME_AND_TAG"
+    PYTHON_VERSION="2"
+    if [[ -n $(echo $BASE_IMAGE_NAME_AND_TAG | grep 'python3') ]]; then
+      PYTHON_VERSION="3"
     fi
-    DOCKER_IMAGE="$REGISTRYONE_URL/ironbank/opensource/palo-alto-networks/demisto/$BASE_IMAGE:$TAG"
+    DOCKER_IMAGE="$REGISTRYONE_URL/$BASE_IMAGE_NAME_AND_TAG"
+    echo "Docker image is $DOCKER_IMAGE"
     docker pull $DOCKER_IMAGE
     DOCKER_PACKAGES_METADATA_PATH="$OUTPUT_PATH/docker_packages_metadata.txt"
     REQUIREMENTS="$(cat $1/requirements.txt)"
@@ -146,8 +146,7 @@ function commit_ironbank_image_to_repo_one {
   fi
   cp -r $CURRENT_DIR/ironbank/$IMAGE_NAME/* .
   cp $CURRENT_DIR/docker/$IMAGE_NAME/requirements.txt .
-  #remove -i line form requirements.txt
-  sed '/^-i/d' ./requirements.txt > ./requirements.txt
+  sed -i -e '/^-i/d' requirements.txt # remove -i from requirements file
   git config user.email "containers@demisto.com"
   git config user.name "dc-builder"
   if [[ $(git diff --exit-code) ]]; then
@@ -202,7 +201,10 @@ for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | so
 done
 
 if [[ -n $GENERATES_IMAGES  ]] && [[ $CIRCLE_BRANCH != "master" ]]; then
-  # we are not posting on master branch as PR is closed, will post to the dockerfiles "Repo1 MR" opened issue instead
+  # we are not posting on master branch as PR is clo
+  
+  
+  , will post to the dockerfiles "Repo1 MR" opened issue instead
   # TODO: think how to infer the exact repo1 build url
   python ./ironbank/post_ironbank_github_comment.py --docker_image_dirs $GENERATES_IMAGES
 fi 

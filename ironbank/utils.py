@@ -13,16 +13,10 @@ def get_pipfile_lock_data(pipfile_lock_path):
         return json.load(f)
 
 
-def get_dockerfile_content(docker_file_path):
-    with open(docker_file_path, 'r') as fp:
-        return fp.read()
-
-
 def get_last_image_tag_ironbank(image_name):
     base_image_basename = os.path.basename(image_name)
     url = "https://repo1.dso.mil/dsop/opensource/palo-alto-networks/demisto/{0}/-/raw/master/hardening_manifest.yaml".\
         format(base_image_basename)
-    print(url)
     req_session = requests.Session()
     req_session.verify = False
     urllib3.disable_warnings()
