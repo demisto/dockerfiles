@@ -8,9 +8,8 @@ from ruamel.yaml import YAML
 
 from ironbank.constants import HardeningManifestLabels, HardeningManifestResource, HardeningManifestMaintainer, \
     HardeningManifestYaml, HardeningManifestArgs, RESOURCE_REGEX, DEMISTO_REGISTRY_ROOT, DEMISTO_CONTAINERS_MAIL, \
-    PANW, DEFAULT_USER, Pipfile
-from ironbank.utils import get_pipfile_lock_data, get_last_image_tag_ironbank
-from ironbank.get_docker_image_python_version import get_docker_image_python_version
+    PANW, DEFAULT_USER, Pipfile, DockerfileMetadata
+from ironbank.utils import get_pipfile_lock_data, get_last_image_tag_ironbank, get_base_image_from_dockerfile, BaseImagesStore
 from docker.image_latest_tag import get_latest_tag
 
 
@@ -55,14 +54,16 @@ class HardeningManifest:
         self.api_version = 'v1'
         self.yaml_dict = {}
         self.pipfile_lock_data = {}
-        self.python_version = ''
+        self.base_image = ''
         self.ryaml = YAML()
         self.ryaml.preserve_quotes = True
+        self.base_images_repo = BaseImagesStore()
 
     def handle_name(self):
         self.name = os.path.join(DEMISTO_REGISTRY_ROOT, self.docker_image_name)
 
     def handle_labels(self):
+        self.pipfile_lock_data = get_pipfile_lock_data(os.path.join(self.docker_image_dir, Pipfile.LOCK_NAME))
         self.labels = {
             HardeningManifestLabels.TITLE: HardeningManifestLabels.BASE_TITLE.format(self.docker_image_name),
             HardeningManifestLabels.DESCRIPTION: HardeningManifestLabels.BASE_DESCRIPTION.format(self.docker_image_name),
@@ -80,11 +81,10 @@ class HardeningManifest:
         self.tags = [get_latest_tag(os.path.join('demisto', self.docker_image_name))]
 
     def handle_args(self):
-        self.pipfile_lock_data = get_pipfile_lock_data(os.path.join(self.docker_image_dir, Pipfile.LOCK_NAME))
-        self.python_version = get_docker_image_python_version(self.docker_image_dir, self.pipfile_lock_data)
-
-        self.args[HardeningManifestArgs.BASE_IMAGE] = os.path.join(DEMISTO_REGISTRY_ROOT, self.python_version)
-        self.args[HardeningManifestArgs.BASE_TAG] = get_last_image_tag_ironbank(self.python_version)
+        dockerfile_base_image, _ = get_base_image_from_dockerfile(os.path.join(self.docker_image_dir, DockerfileMetadata.FILENAME))
+        self.base_image = self.base_images_repo.get_inventory()[dockerfile_base_image][0]
+        self.args[HardeningManifestArgs.BASE_IMAGE] = self.base_image.replace('ironbank/', '')
+        self.args[HardeningManifestArgs.BASE_TAG] = get_last_image_tag_ironbank(self.base_image)
 
     def handle_resources(self):
         raw_resources = [r.strip(' \n') for r in open(self.docker_packages_metadata_path, 'r').readlines()]
