@@ -16,6 +16,7 @@ RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git && \
         dnf remove -y python3-devel gcc gcc-c++ make wget git && \
         dnf clean all && \
         rm -rf /var/cache/dnf
+        rm -rf ./pip-pkgs
 
 ENV DOCKER_IMAGE='${{BASE_REGISTRY}}/${{BASE_IMAGE}}:${{BASE_TAG}}'
 

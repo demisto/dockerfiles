@@ -89,7 +89,8 @@ FROM ${{BASE_REGISTRY}}/${{BASE_IMAGE}}:${{BASE_TAG}}'''
         pip install --no-cache-dir --no-index --find-links ./pip-pkgs/ -r requirements.txt &&  \\ 
         dnf remove -y python{0}-devel gcc gcc-c++ make wget git && \\
         dnf clean all && \\ 
-        rm -rf /var/cache/dnf'''
+        rm -rf /var/cache/dnf && \\
+        rm -rf ./pip-pkgs'''
 
     FOOTER = 'HEALTHCHECK NONE '
     
