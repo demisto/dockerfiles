@@ -146,6 +146,8 @@ function commit_ironbank_image_to_repo_one {
   fi
   cp -r $CURRENT_DIR/ironbank/$IMAGE_NAME/* .
   cp $CURRENT_DIR/docker/$IMAGE_NAME/requirements.txt .
+  #remove -i line form requirements.txt
+  sed '/^-i/d' ./requirements.txt > ./requirements.txt
   git config user.email "containers@demisto.com"
   git config user.name "dc-builder"
   if [[ $(git diff --exit-code) ]]; then
