@@ -79,10 +79,14 @@ FROM ${{BASE_REGISTRY}}/${{BASE_IMAGE}}:${{BASE_TAG}}'''
 
     COPY_REQS_TXT = 'COPY requirements.txt .'
 
+    MAKE_PIP_PKGS_DIR = 'RUN mkdir ./pip-pkgs'
+
+    COPY_EVERYTHING_TO_PIP_PKGS = 'COPY *.* ./pip-pkgs/'
+
     USER_ROOT = 'USER root'
 
     DNF_UPDATE_BASIC_PY = '''RUN dnf install -y --nodocs python{0}-devel gcc gcc-c++ make wget git && \\  
-        pip install --no-cache-dir --no-index --find-links ./ -r requirements.txt &&  \\ 
+        pip install --no-cache-dir --no-index --find-links ./pip-pkgs/ -r requirements.txt &&  \\ 
         dnf remove -y python{0}-devel gcc gcc-c++ make wget git && \\
         dnf clean all && \\ 
         rm -rf /var/cache/dnf'''

@@ -5,10 +5,14 @@ FROM ${BASE_REGISTRY}/${BASE_IMAGE}:${BASE_TAG}
 
 COPY requirements.txt .
 
+RUN mkdir ./pip-pkgs
+
+COPY *.* ./pip-pkgs/
+
 USER root
 
 RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git && \
-        pip install --no-cache-dir --no-index --find-links ./ -r requirements.txt &&  \
+        pip install --no-cache-dir --no-index --find-links ./pip-pkgs/ -r requirements.txt &&  \
         dnf remove -y python3-devel gcc gcc-c++ make wget git && \
         dnf clean all && \
         rm -rf /var/cache/dnf
