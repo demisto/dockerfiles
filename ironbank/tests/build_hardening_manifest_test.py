@@ -3,6 +3,7 @@ from tempfile import mkdtemp
 
 from ironbank.build_hardening_manifest import HardeningManifest
 from docker.image_latest_tag import get_latest_tag
+from ironbank.utils import get_last_image_tag_ironbank
 
 
 def test_resource_handling():
@@ -81,10 +82,11 @@ def test_integration():
     hardening_manifest.build()
     hardening_manifest.dump()
     latest_tag = get_latest_tag('demisto/netmiko')
+    latest_ironbank_tag = get_last_image_tag_ironbank('python3')
     assert hardening_manifest.yaml_dict == {'apiVersion': 'v1', 'name': 'opensource/palo-alto-networks/demisto/netmiko',
                                             'tags': [f'{latest_tag}'],
                                             'args': {'BASE_IMAGE': 'opensource/palo-alto-networks/demisto/python3',
-                                                     'BASE_TAG': '3.9.5.21272'}, 'labels': {
+                                                     'BASE_TAG': f'{latest_ironbank_tag}'}, 'labels': {
             'org.opencontainers.image.title': 'Demisto Automation - netmiko image',
             'org.opencontainers.image.description': 'netmiko image with the required dependencies',
             'org.opencontainers.image.licenses': ' ', 'org.opencontainers.image.url': ' ',

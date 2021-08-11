@@ -19,10 +19,8 @@ def get_dockerfile_content(docker_file_path):
 
 
 def get_last_image_tag_ironbank(image_name):
-    user_name = os.getenv('REGISTRYONE_USER')
-    user_token = os.getenv('REGISTRYONE_ACCESS_TOKEN')
     base_image_basename = os.path.basename(image_name)
-    url = "https://" + user_name + ":" + user_token + "@repo1.dso.mil/dsop/opensource/palo-alto-networks/demisto/{0}/-/raw/master/hardening_manifest.yaml".\
+    url = "https://repo1.dso.mil/dsop/opensource/palo-alto-networks/demisto/{0}/-/raw/master/hardening_manifest.yaml".\
         format(base_image_basename)
     print(url)
     req_session = requests.Session()

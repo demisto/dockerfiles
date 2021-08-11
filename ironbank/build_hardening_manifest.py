@@ -8,7 +8,7 @@ from ruamel.yaml import YAML
 
 from ironbank.constants import HardeningManifestLabels, HardeningManifestResource, HardeningManifestMaintainer, \
     HardeningManifestYaml, HardeningManifestArgs, RESOURCE_REGEX, DEMISTO_REGISTRY_ROOT, DEMISTO_CONTAINERS_MAIL, \
-    PANW, DEFAULT_USER, Pipfile, DOCKERFILE, DOCKERFILE_BASE_IMAGE_TAG_REGEX
+    PANW, DEFAULT_USER, Pipfile
 from ironbank.utils import get_pipfile_lock_data, get_last_image_tag_ironbank
 from ironbank.get_docker_image_python_version import get_docker_image_python_version
 from docker.image_latest_tag import get_latest_tag
@@ -84,9 +84,7 @@ class HardeningManifest:
         self.python_version = get_docker_image_python_version(self.docker_image_dir, self.pipfile_lock_data)
 
         self.args[HardeningManifestArgs.BASE_IMAGE] = os.path.join(DEMISTO_REGISTRY_ROOT, self.python_version)
-        with open(os.path.join(self.docker_image_dir, DOCKERFILE), 'r') as f:
-            dockerfile = f.read()
-            self.args[HardeningManifestArgs.BASE_TAG] = re.findall(DOCKERFILE_BASE_IMAGE_TAG_REGEX, dockerfile)[0]
+        self.args[HardeningManifestArgs.BASE_TAG] = get_last_image_tag_ironbank(self.python_version)
 
     def handle_resources(self):
         raw_resources = [r.strip(' \n') for r in open(self.docker_packages_metadata_path, 'r').readlines()]
