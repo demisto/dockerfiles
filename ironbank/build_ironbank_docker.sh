@@ -128,7 +128,7 @@ function commit_ironbank_image_to_repo_one {
   else
     echo "running on master, repo1 branch is <LATEST_TAG>-feature-branch to avoid conflicting with master"
     DOCKERHUB_IMAGE="demisto/$IMAGE_NAME"
-    LATEST_DOCKERHUB_IMAGE_TAG=$(./docker/image_latest_tag.py $DOCKERHUB_IMAGE)
+    LATEST_DOCKERHUB_IMAGE_TAG=$(./docker/image_latest_tag.py $DOCKERHUB_IMAGE) # TODO: maybe check for dev image in regular branches
     NEW_BRANCH_NAME="$LATEST_DOCKERHUB_IMAGE_TAG-feature-branch"
   fi
   cd ..
@@ -151,7 +151,7 @@ function commit_ironbank_image_to_repo_one {
   git config user.name "dc-builder"
   if [[ $(git diff --exit-code) ]]; then
     git add -A
-    git commit -m "Ironbank auto-generated $IMAGE_NAME image - $CIRCLE_BUILD_NUM"
+    git commit -m "Ironbank generated $IMAGE_NAME image - DF build num: $CIRCLE_BUILD_NUM, DF PR: $CIRCLE_PULL_REQUEST"
     git push --set-upstream origin $NEW_BRANCH_NAME
     IMAGE_COMMIT_MAP+=($IMAGE_NAME=$(git rev-parse HEAD))
     cd $CURRENT_DIR
