@@ -7,7 +7,7 @@ import os
 import re
 
 
-def post_comment(image_names):
+def post_comment(image_commit_map):
     if not os.environ.get('GITHUB_KEY'):
         print("No github key set. Will not post a message!")
         return
@@ -31,9 +31,13 @@ def post_comment(image_names):
     if commit:
         message += f" - Commit: {commit}"
     message += "\n\n"
-    for image_name in image_names:
-        url = f"https://repo1.dso.mil/dsop/opensource/palo-alto-networks/demisto/{image_name}/-/pipelines"
-        message += f"- {image_name}: [{url}]({url})\n"
+    for item in image_commit_map:
+        image_name, commit_sha = item.split('=')
+        params = {'sha': commit_sha}
+        url = f'https://repo1.dso.mil/api/v4/projects/dsop%2Fopensource%2Fpalo-alto-networks%2Fdemisto%2F{image_name}/pipelines'
+        commit_pipeline = requests.get(url=url, params=params).json()[0]
+        pipeline_url = commit_pipeline.get('web_url', '')
+        message += f"- {image_name}: [{pipeline_url}]({pipeline_url})\n"
     print("Going to post comment:\n\n{}".format(message))
     res = requests.post(post_url, json={"body": message}, auth=(os.environ['GITHUB_KEY'], 'x-oauth-basic'))
     try:
@@ -48,15 +52,14 @@ def args_handler():
     CIRCLE_PULL_REQUEST: pull request url to use to get the pull id. Such as: https://github.com/demisto/dockerfiles/pull/9
     if CIRCLE_PULL_REQUEST will try to get issue id from last commit comment"""
     parser = argparse.ArgumentParser(description=desc)
-    parser.add_argument('--docker_image_dirs', help='The path to the docker image dirs in the dockerfiles project',
-                        required=True)
+    parser.add_argument('--image_commit_map', help='The image commit map', required=True)
     return parser.parse_args()
 
 
 def main():
     args = args_handler()
-    docker_image_dirs = args.docker_image_dirs
-    post_comment([os.path.basename(docker_image_dir) for docker_image_dir in docker_image_dirs.split(',')])
+    image_commit_map = args.image_commit_map
+    post_comment(image_commit_map.split(' '))
 
 
 if __name__ == "__main__":
