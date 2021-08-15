@@ -153,15 +153,16 @@ function commit_ironbank_image_to_repo_one {
     git add -A
     git commit -m "Ironbank auto-generated $IMAGE_NAME image - $CIRCLE_BUILD_NUM"
     git push --set-upstream origin $NEW_BRANCH_NAME
+    IMAGE_COMMIT_MAP+=($IMAGE_NAME=$(git rev-parse HEAD))
+    cd $CURRENT_DIR
+    if [[ $CIRCLE_BRANCH == 'master' ]]; then
+      echo "Opening a Merge Request to Repo1"
+      python ./ironbank/open_merge_request.py --access_token $REGISTRYONE_ACCESS_TOKEN --repository $IMAGE_NAME --source_branch $NEW_BRANCH_NAME --target_branch "development" --title "$IMAGE_NAME - $CIRCLE_BRANCH/$CIRCLE_BUILD_NUM"
+    fi    
   else
     echo "nothing to commit"
+    cd $CURRENT_DIR
   fi
-  cd $CURRENT_DIR
-  if [[ $CIRCLE_BRANCH == 'master' ]]; then
-    echo "Opening a Merge Request to Repo1"
-    python ./ironbank/open_merge_request.py --access_token $REGISTRYONE_ACCESS_TOKEN --repository $IMAGE_NAME --source_branch $NEW_BRANCH_NAME --target_branch "development" --title "$IMAGE_NAME - $CIRCLE_BRANCH/$CIRCLE_BUILD_NUM"
-    # TODO: open an issue in iron bank (?)
-  fi    
 }
 
 # $1: docker image dir (~/../docker/$IMAGE_NAME)
@@ -172,7 +173,6 @@ function build_ironbank_docker {
   build_readme $1
   upload_image_to_artifacts $1
   commit_ironbank_image_to_repo_one $1
-  # TODO: open a dockerfiles "Repo1 MR" issue and post there the merge request (?)
 }
 
 total=$(grep -E ironbank=true ./docker/*/build.conf | wc -l)
@@ -189,19 +189,13 @@ for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | so
           count=$((count+1))
           echo "=============== `date`: Starting ironbank docker build in dir: ${docker_dir} ($count of $total) ==============="
           build_ironbank_docker ${docker_dir}
-          IMAGE_NAME=$(basename ${docker_dir})
-          if [[ -n "${GENERATES_IMAGES}" ]]; then
-            GENERATES_IMAGES="$GENERATES_IMAGES,$IMAGE_NAME"
-          else
-            GENERATES_IMAGES=$IMAGE_NAME
-          fi
           echo ">>>>>>>>>>>>>>> `date`: Done ironbank docker build in dir: ${docker_dir} ($count of $total) <<<<<<<<<<<<<"
         fi
     fi
 done
 
-if [[ -n $GENERATES_IMAGES  ]] && [[ $CIRCLE_BRANCH != "master" ]]; then
+if [[ -n "${IMAGE_COMMIT_MAP}" ]] && [[ $CIRCLE_BRANCH != "master" ]]; then
   # we are not posting on master branch as PR is close, will post to the dockerfiles "Repo1 MR" opened issue instead
-  # TODO: think how to infer the exact repo1 build url
-  python ./ironbank/post_ironbank_github_comment.py --docker_image_dirs $GENERATES_IMAGES
+  echo "IMAGE_COMMIT_MAP: ${IMAGE_COMMIT_MAP}"
+  python ./ironbank/post_ironbank_github_comment.py --image_commit_map "${IMAGE_COMMIT_MAP}"
 fi 
