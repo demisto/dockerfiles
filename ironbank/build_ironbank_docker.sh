@@ -8,6 +8,7 @@ DIFF_COMPARE=$(cat "$CIRCLE_ARTIFACTS/diff_compare.txt")
 SCRIPT_DIR=$(cat "$CIRCLE_ARTIFACTS/script_dir.txt")
 CURRENT_DIR=$(cat "$CIRCLE_ARTIFACTS/current_dir.txt")
 DOCKER_INCLUDE_GREP=$(cat "$CIRCLE_ARTIFACTS/docker_include_grep.txt")
+IMAGE_COMMIT_MAP=()
 
 echo "DIFF_COMPARE: [${DIFF_COMPARE}], SCRIPT_DIR: [${SCRIPT_DIR}], CIRCLE_BRANCH: ${CIRCLE_BRANCH}, PWD: [${CURRENT_DIR}], DOCKER_INCLUDE_GREP: [${DOCKER_INCLUDE_GREP}]"
 
@@ -196,6 +197,7 @@ done
 
 if [[ -n "${IMAGE_COMMIT_MAP}" ]] && [[ $CIRCLE_BRANCH != "master" ]]; then
   # we are not posting on master branch as PR is close, will post to the dockerfiles "Repo1 MR" opened issue instead
-  echo "IMAGE_COMMIT_MAP: ${IMAGE_COMMIT_MAP}"
-  python ./ironbank/post_ironbank_github_comment.py --image_commit_map "${IMAGE_COMMIT_MAP}"
+  echo "IMAGE_COMMIT_MAP: ${IMAGE_COMMIT_MAP[@]}"
+  IMAGE_COMMIT="${IMAGE_COMMIT_MAP[@]}"
+  python ./ironbank/post_ironbank_github_comment.py --image_commit_map "$IMAGE_COMMIT" 
 fi 
