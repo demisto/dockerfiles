@@ -58,8 +58,9 @@ def args_handler():
 
 def main():
     args = args_handler()
-    image_commit_map = args.image_commit_map
-    post_comment(image_commit_map.split(' '))
+    image_commit_map = args.image_commit_map.split(' ')
+    print(image_commit_map)
+    post_comment(image_commit_map)
 
 
 if __name__ == "__main__":
