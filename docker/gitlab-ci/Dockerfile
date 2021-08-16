@@ -47,6 +47,9 @@ RUN \
   export GOROOT=/usr/local/go && export PATH=$PATH:$GOROOT/bin && \
   curl -o go.tar.gz https://storage.googleapis.com/golang/go1.16.linux-amd64.tar.gz && \
   tar -C /usr/local -xzf go.tar.gz
+  
+RUN \
+  curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.37.1
 
 RUN \
   wget -q https://github.com/google/protobuf/releases/download/v3.6.1/protoc-3.6.1-linux-x86_64.zip && \
