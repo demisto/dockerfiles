@@ -62,7 +62,7 @@ class HardeningManifest:
     def handle_name(self):
         self.name = os.path.join(DEMISTO_REGISTRY_ROOT, self.docker_image_name)
 
-    def handle_labels(self):
+      def handle_labels(self):
         self.pipfile_lock_data = get_pipfile_lock_data(os.path.join(self.docker_image_dir, Pipfile.LOCK_NAME))
         self.labels = {
             HardeningManifestLabels.TITLE: HardeningManifestLabels.BASE_TITLE.format(self.docker_image_name),
