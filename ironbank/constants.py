@@ -89,7 +89,7 @@ FROM ${{BASE_REGISTRY}}/${{BASE_IMAGE}}:${{BASE_TAG}}'''
 
     DNF_UPDATE_BASIC_PY = '''RUN dnf install -y --nodocs python{0}-devel gcc gcc-c++ make wget git && \\  
         pip install --no-cache-dir --no-index --find-links ./pip-pkgs/ -r requirements.txt &&  \\ 
-        dnf remove -y python{0}-devel gcc gcc-c++ make wget git && \\
+        dnf remove -y python{0}-devel gcc gcc-c++ make wget git platform-python-pip && \\
         dnf clean all && \\ 
         rm -rf /var/cache/dnf && \\
         rm -rf ./pip-pkgs'''
