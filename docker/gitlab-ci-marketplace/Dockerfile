@@ -17,8 +17,7 @@ RUN curl -fsSL -O https://download.docker.com/linux/static/stable/x86_64/docker-
 
 RUN groupadd circleci && groupadd docker \
   && useradd --shell /bin/bash --create-home ubuntu \
-  && usermod -aG circleci ubuntu && usermod -aG docker ubuntu \
-  && echo 'ubuntu ALL=NOPASSWD: ALL' >> /etc/sudoers.d/50-ubuntu
+  && usermod -aG circleci ubuntu && usermod -aG docker ubuntu
 
 RUN wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add - && \
     add-apt-repository "deb https://artifacts.elastic.co/packages/7.x/apt stable main" && \
