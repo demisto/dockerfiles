@@ -10,10 +10,25 @@ jobs:
       - run:
           name: Validate Dependabot Config
           command: ./docker/verify_dependabot.sh
-      - setup_remote_docker
+      - setup_remote_docker:
+          version: 20.10.6
       - add_ssh_keys:
           fingerprints:
             - 46:c2:72:91:9d:0e:2d:3c:93:d6:6c:12:31:df:8e:db
+      - run:
+          name: Run Ironabnk Unit Tests
+          command: |
+            if [[ ! $(which pyenv) ]] && [[ -n "${CIRCLECI}" ]]; then 
+                echo "pyenv not found. setting up necessary env for pyenv on circle ci";\
+                export PATH="$HOME/.pyenv/bin:$PATH"
+                eval "$(pyenv init -)"
+            fi
+
+            pyenv versions
+            pyenv local 3.9.0
+            pip install pipenv==2021.5.29
+            pipenv install --dev
+            pipenv run pytest ironbank -v
       - run:
           name: Build Docker Images
           command: |
@@ -21,31 +36,15 @@ jobs:
       - store_artifacts:
           path: artifacts
           destination: docker_images
-  update_repo_info:
-    docker:
-      - image: devdemisto/dockerbuild:1.0.0.56
-    steps:
-      - checkout
-      - setup_remote_docker
-      - add_ssh_keys:
-          fingerprints:
-            - b1:6a:a6:66:d3:20:c5:eb:0d:00:5a:17:04:3b:89:47
       - run:
-          name: Update Docker Repo Info
+          name: Build Ironbank Docker Images
           command: |
-            ./docker/update-repository-info.sh
+            pipenv run ./ironbank/build_ironbank_docker.sh --python 3.9
+      - store_artifacts:
+          path: artifacts
+          destination: ironbank_docker_images
 workflows:
   version: 2
   full_build:
     jobs:
       - docker_build
-  repo_inf:
-    jobs:
-      - update_repo_info
-    triggers:
-      - schedule:
-          cron: "0 1 * * *"
-          filters:
-            branches:
-              only:
-                - master

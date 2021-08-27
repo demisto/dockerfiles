@@ -2,7 +2,7 @@
 # NOTE: THIS DOCKERFILE IS BASED ON: https://raw.githubusercontent.com/docker-library/python/f1e613f48eb4fc88748b36787f5ed74c14914636/2.7/buster/slim/Dockerfile
 # We only change to use the latest debian version. 
 
-# Last modified: Mon, 10 Aug 2020 13:43:32 +0000
+# Last modified: Wed, 14 Jul 2021 14:07:23 +0000
 FROM debian:buster-slim
 
 # ensure local python is preferred over distribution python
@@ -19,6 +19,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 		ca-certificates \
 		netbase \
 	&& rm -rf /var/lib/apt/lists/*
+
+# taken from here: https://salsa.debian.org/cpython-team/python2/-/blob/master/debian/patches/CVE-2021-3177.diff
+COPY CVE-2021-3177.diff .
 
 ENV GPG_KEY C01E1CAD5EA2C4F0B8E3571504C367C218ADD4FF
 ENV PYTHON_VERSION 2.7.18
@@ -48,13 +51,14 @@ RUN set -ex \
 	&& wget -O python.tar.xz "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz" \
 	&& wget -O python.tar.xz.asc "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz.asc" \
 	&& export GNUPGHOME="$(mktemp -d)" \
-	&& gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys "$GPG_KEY" \
+	&& gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "$GPG_KEY" \
 	&& gpg --batch --verify python.tar.xz.asc python.tar.xz \
 	&& { command -v gpgconf > /dev/null && gpgconf --kill all || :; } \
 	&& rm -rf "$GNUPGHOME" python.tar.xz.asc \
 	&& mkdir -p /usr/src/python \
 	&& tar -xJC /usr/src/python --strip-components=1 -f python.tar.xz \
 	&& rm python.tar.xz \
+	&& patch -d /usr/src/python -p1 < CVE-2021-3177.diff \
 	\
 	&& cd /usr/src/python \
 	&& gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" \
@@ -180,6 +184,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 RUN apt-get update && apt-get -t buster-backports -y --no-install-recommends upgrade \
 && rm -rf /var/lib/apt/lists/*
 
+RUN rm CVE-2021-3177.diff
 COPY requirements.txt .
 
 #Install tools for building binary deps (will be reomved later on)
@@ -189,7 +194,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 && pip install --no-cache-dir -r requirements.txt \
 && apt-get purge -y --auto-remove \
   gcc \
-  python-dev \
+  python2-dev \
 && rm -rf /var/lib/apt/lists/*
 
 RUN groupadd --gid 4000 demisto \

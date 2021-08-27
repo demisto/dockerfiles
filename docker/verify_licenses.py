@@ -1,22 +1,24 @@
 #!/usr/bin/env python3
 
 import argparse
-import requests
-import subprocess
 import json
-import re
-import sys
 import os
+import re
+import subprocess
+import sys
 
-if(sys.version_info[0] < 3 or sys.version_info[1] < 6):
-    print("This script requires python version 3.6 and above. Please make sure to run with the proper version. Aborting...")
+import requests
+import urllib3
+
+if(sys.version_info[0] < 3 or sys.version_info[1] < 7):
+    print("This script requires python version 3.7 and above. Please make sure to run with the proper version. Aborting...")
     sys.exit(1)
 
 req_session = requests.Session()
 
 if os.getenv('TRUST_ANY_CERT'):
     req_session.verify = False
-    requests.packages.urllib3.disable_warnings()
+    urllib3.disable_warnings()
 
 
 def is_pkg_ignored(name: str, docker_image: str, ignore_packages: dict):
@@ -47,8 +49,12 @@ def check_pwsh_license(docker_image: str, licenses: dict, ignore_packages: dict,
     if not isinstance(pwsh_modules, list):
         pwsh_modules = [pwsh_modules]
     for m in pwsh_modules:
-        license_uri = m.get('LicenseUri')
         name = m.get("Name")
+        if name in known_licenses:
+            lic = known_licenses[name]
+            print(f'{name}: has a known license. license uri: {lic["url"]} approved as license: {lic["license"]}')
+            continue
+        license_uri = m.get('LicenseUri')
         if not license_uri:
             print(f'{name} has no license URI (default MIT applies)')
             continue
@@ -76,7 +82,7 @@ def check_pwsh_license(docker_image: str, licenses: dict, ignore_packages: dict,
                 break
         if not found_license:
             msg = f'{name} (author: {m.get("Author")}): no approved license found for uri: {license_uri}'
-            print("FAILURE: {}".format(msg))
+            print("FAILURE: {} {}".format(docker_image, msg))
             raise Exception(msg)
 
 
@@ -153,7 +159,7 @@ def check_python_license(docker_image: str, licenses: dict, ignore_packages: dic
             if not found:
                 msg = "{}: no approved license found for license: {}".format(
                     name, found_lic)
-                print("FAILURE: {}".format(msg))
+                print("FAILURE: {} {}".format(docker_image, msg))
                 raise Exception(msg)
 
 
@@ -170,10 +176,10 @@ def main():
         ignore_packages = json.load(f)["packages"]
     with open("{}/known_licenses.json".format(sys.path[0])) as f:
         known_licenses = json.load(f)["packages"]
-    print("================= Checking Python packages =================")
+    print(f"================= Checking Python packages: {args.docker_image} =================")
     check_python_license(args.docker_image, licenses,
                          ignore_packages, known_licenses)
-    print("================= Checking PowerShell packages =================")
+    print(f"================= Checking PowerShell packages: {args.docker_image} =================")
     check_pwsh_license(args.docker_image, licenses,
                        ignore_packages, known_licenses)
     print("SUCCESS: completed checking all licenses for docker image: {}".format(

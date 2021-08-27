@@ -20,6 +20,7 @@ python get_build_artifacts.py --token <token> --project <project name> --branch 
 
 in sane-pdf-reports just run the docker file again.
 For docker update of sane-pdf-reports,just create an empty PR.
+https://github.com/demisto/server/wiki/Push-sane-pdf-report-to-production
 """
 
 API_URL = 'https://circleci.com/api/v1.1/project/github'

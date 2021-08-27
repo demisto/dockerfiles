@@ -1,5 +1,5 @@
-# Last modified: Wed, 10 Jun 2020 22:06:26 +0000
-FROM mcr.microsoft.com/powershell:7.0.1-debian-stretch-slim
+# Last modified: Fri, 16 Jul 2021 10:59:19 +0000
+FROM mcr.microsoft.com/powershell:7.1.3-debian-buster-slim-20210616
 
 RUN echo 'deb http://deb.debian.org/debian buster-backports main' >> /etc/apt/sources.list
 

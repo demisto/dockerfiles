@@ -1,0 +1,27 @@
+- name: Copy .demisto_bashrc to home directory
+  copy:
+    force: yes
+    src: .demisto_bashrc
+    dest: ~/
+
+- name: Uncomment source .demisto_bashrc
+  replace:
+    path: "{{ item }}"
+    regexp: '^# (.*demisto_bashrc.*)'
+    replace: '\1'
+  with_items:
+    - ~/.zshrc
+    - ~/.bash_profile
+
+- name: Generate dynamic go code
+  shell:
+    cmd: . ~/.bash_profile && cd ~/dev/go/src/github.com/demisto/server && {{ item }}
+  with_items:
+    - rm -rf .git/hooks/* && cp -r .hooks/* .git/hooks
+    - go mod tidy -v
+    - go mod vendor -v
+    - go get github.com/golang/protobuf/protoc-gen-go@v1.4.3
+    - go generate ./repoDB/remoteRepo/transport/grpc
+    - go generate ./repoDB/remoteRepo/transport/grpc
+    - go run cmd/contentpacks/download-core-content-packs.go
+    - go install -mod=vendor
