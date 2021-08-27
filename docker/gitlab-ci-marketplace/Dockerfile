@@ -10,11 +10,6 @@ RUN apt-get install -y --no-install-recommends --no-install-suggests gcc wget cu
     libxslt1-dev libxslt-dev zlib1g-dev libxmlsec1 xmlsec1 \
     libxml2-dev libxmlsec1-dev libxmlsec1-openssl pcregrep
 
-RUN wget -k https://www.python.org/ftp/python/2.7.12/Python-2.7.12.tgz && \
-    tar -zxvf Python-2.7.12.tgz && cd Python-2.7.12 && ./configure && make -j && make install && \
-    curl -k https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
-    python get-pip.py pip==20.2.2
-
 RUN curl -fsSL -O https://download.docker.com/linux/static/stable/x86_64/docker-19.03.9.tgz && \
     tar xf docker-19.03.9.tgz && \
     mv docker/* /usr/bin/ && \
