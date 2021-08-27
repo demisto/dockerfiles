@@ -19,33 +19,10 @@ RUN groupadd circleci && groupadd docker \
   && useradd --shell /bin/bash --create-home ubuntu \
   && usermod -aG circleci ubuntu && usermod -aG docker ubuntu
 
-RUN wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add - && \
-    add-apt-repository "deb https://artifacts.elastic.co/packages/7.x/apt stable main" && \
-    apt-get update
-
-RUN \
-  rm -rf /var/lib/apt/lists/* && \
-  curl -L https://github.com/sstephenson/ruby-build/archive/v20180329.tar.gz | tar -zxvf - -C /tmp/ && \
-  cd /tmp/ruby-build-* && ./install.sh && cd / && \
-  ruby-build -v 2.5.1 /usr/local && rm -rfv /tmp/ruby-build-* && \
-  gem install bundler --no-rdoc --no-ri
-
-RUN \
-  pip install --upgrade pip && \
-  pip install stix --upgrade && pip install boto3 && \
-  apt-get update && apt-get install -y chromium-browser && \
-  add-apt-repository ppa:openjdk-r/ppa && apt-get update && apt-get -y install openjdk-11-jre --force-yes && \
-  add-apt-repository --remove ppa:openjdk-r/ppa
-
 RUN \
   export GOROOT=/usr/local/go && export PATH=$PATH:$GOROOT/bin && \
   curl -o go.tar.gz https://storage.googleapis.com/golang/go1.13.linux-amd64.tar.gz && \
   tar -C /usr/local -xzf go.tar.gz
-
-RUN \
-  wget -q https://github.com/google/protobuf/releases/download/v3.6.1/protoc-3.6.1-linux-x86_64.zip && \
-  sudo unzip protoc-3.6.1-linux-x86_64.zip -d /usr/local && \
-  rm protoc-3.6.1-linux-x86_64.zip
 
 RUN \
   echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | \
