@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-import sys
-
 import pyjq
 
 golden_data = {"param_name": "PKG_TAG_NAME", "param_type": None}
@@ -17,7 +15,4 @@ data = dict(
 
 d = pyjq.first('.parameters[] | {"param_name": .name, "param_type":.type}', data)
 
-try:
-    assert d == golden_data
-except AssertionError:
-    sys.exit(1)
+assert d == golden_data
