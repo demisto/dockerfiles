@@ -1,4 +1,4 @@
-FROM demisto/python3-deb:3.9.6.22912
+FROM demisto/python3-deb:3.9.6.24019
 
 COPY requirements.txt .
 
@@ -20,15 +20,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Based on instructions at: https://tecadmin.net/setup-selenium-with-chromedriver-on-debian/
 # To update the chorome and chromedriver versions first check the latest available
 # To see available versions of chrome you can run: 
-#     docker run --rm -it devdemisto/chromium:1.0.0.22085 bash -c 'apt-get update && apt-cache policy google-chrome-stable'
+#     docker run --rm -it demisto/chromium:1.0.0.23161  bash -c 'apt-get update && apt-cache policy google-chrome-stable'
 #
 # To see available chromedriver go to https://chromedriver.storage.googleapis.com/ and search for the major version
 # of chrome(for  example 91.0).
 
 # Then replace the versions in the env vars
 # Note we use only the first 3 versions. The build number we leave as *
-ENV CHROME_VERSION=91.0.4472.*
-ENV CHROMEDRIVER_VERSION=91.0.4472.101
+ENV CHROME_VERSION=92.0.4515.*
+ENV CHROMEDRIVER_VERSION=92.0.4515.107
 
 # Deps needed by google-chrome
 RUN apt-get update && apt-get -t buster-backports install -y --no-install-recommends \
