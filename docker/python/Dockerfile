@@ -139,10 +139,10 @@ RUN set -ex \
 	&& python2 --version
 
 # if this is called "PIP_VERSION", pip explodes with "ValueError: invalid truth value '<VERSION>'"
-ENV PYTHON_PIP_VERSION 21.2.3
+ENV PYTHON_PIP_VERSION 20.3.4
 # https://github.com/pypa/get-pip
-ENV PYTHON_GET_PIP_URL https://github.com/pypa/get-pip/raw/c20b0cfd643cd4a19246ccf204e2997af70f6b21/public/get-pip.py
-ENV PYTHON_GET_PIP_SHA256 fa6f3fb93cce234cd4e8dd2beb54a51ab9c247653b52855a48dd44e6b21ff28b
+ENV PYTHON_GET_PIP_URL https://github.com/pypa/get-pip/raw/831b5dd0bec03caf24aa6d736a28dc2ba80f91cc/public/2.7/get-pip.py
+ENV PYTHON_GET_PIP_SHA256 40ee07eac6674b8d60fce2bbabc148cf0e2f1408c167683f110fd608b8d6f416
 
 RUN set -ex; \
 	\
