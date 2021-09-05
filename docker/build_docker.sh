@@ -153,7 +153,7 @@ function docker_build {
         PIPENV_YES=yes pipenv lock -r > requirements.txt
         echo "Pipfile lock generated requirements.txt: "
         cat requirements.txt
-        del_requirements=yes
+        # del_requirements=yes
     fi
     tmp_dir=$(mktemp -d)
     cp Dockerfile "$tmp_dir/Dockerfile"
@@ -180,6 +180,7 @@ function docker_build {
                 echo "Or if you want to update dependencies run without '--keep-outdated'"
                 echo "Then commit the Pipfile.lock file."
             fi
+            echo "FAILED: $image_name"
             return 1
         fi
     fi
@@ -202,7 +203,8 @@ function docker_build {
     if [ -f "verify.ps1" ]; then
         echo "==========================="            
         echo "Verifying docker image by running the pwsh script verify.ps1 within the docker image"
-        cat verify.ps1 | docker run --rm -i ${image_full_name} pwsh -c '-'
+        # use "tee" as powershell doesn't fail on throw when run with -c
+        cat verify.ps1 | docker run --rm -i ${image_full_name} sh -c 'tee > verify.ps1; pwsh verify.ps1'
     fi
     docker_trust=0
     if sign_setup; then
@@ -285,6 +287,10 @@ if [[ $(which pyenv) ]]; then
     pyenv versions
 fi
 
+echo "=========== docker info =============="
+docker info
+echo "========================="
+
 if [[ -n "$1" ]]; then
     if [[ ! -d  "${SCRIPT_DIR}/$1" ]]; then
         echo "Image: [$1] specified as command line parameter but directory not found: [${SCRIPT_DIR}/$1]"
@@ -312,6 +318,17 @@ if [ "$CIRCLE_BRANCH" == "master" ]; then
 fi
 
 echo "DOCKER_ORG: ${DOCKER_ORG}, DIFF_COMPARE: [${DIFF_COMPARE}], SCRIPT_DIR: [${SCRIPT_DIR}], CIRCLE_BRANCH: ${CIRCLE_BRANCH}, PWD: [${CURRENT_DIR}]"
+
+# echo to bash env to be used in future steps
+CIRCLE_ARTIFACTS="artifacts"
+if [[ ! -d $CIRCLE_ARTIFACTS ]]; then
+  mkdir $CIRCLE_ARTIFACTS
+fi
+echo $DIFF_COMPARE > $CIRCLE_ARTIFACTS/diff_compare.txt
+echo $SCRIPT_DIR > $CIRCLE_ARTIFACTS/script_dir.txt
+echo $CURRENT_DIR > $CIRCLE_ARTIFACTS/current_dir.txt
+echo $DOCKER_INCLUDE_GREP > $CIRCLE_ARTIFACTS/docker_include_grep.txt
+
 total=$(find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | wc -l)
 count=0
 for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | sort`; do
