@@ -1,18 +1,21 @@
-FROM ubuntu:21.10
+FROM ubuntu:14.04
 
-RUN apt-get update && apt-get upgrade -y
+ENV CLOUDSDK_PYTHON=/usr/bin/python
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-key update && apt-get update && apt-get upgrade -y
 
 RUN apt-get install -y --no-install-recommends --no-install-suggests gcc wget curl make \
     libreadline-dev libsqlite3-dev libbz2-dev software-properties-common \
     libssl-dev rsync unzip git wget  curl jq zip psmisc \
     aptitude build-essential rpm makeself apt-transport-https \
     ca-certificates gnupg bzip2 openssh-client libxml2-dev \
-    libxslt1-dev libxslt-dev zlib1g-dev libxmlsec1 xmlsec1 \
-    libxml2-dev libxmlsec1-dev libxmlsec1-openssl pcregrep postgresql-client \
+    libxslt1-dev libxslt-dev zlib1g-dev libxmlsec1 xmlsec1 sudo \
+    libxml2-dev libxmlsec1-dev libxmlsec1-openssl pcregrep postgresql-client
 
 RUN wget -k https://www.python.org/ftp/python/2.7.12/Python-2.7.12.tgz && \
     tar -zxvf Python-2.7.12.tgz && cd Python-2.7.12 && ./configure && make -j && make install && \
-    curl -k https://bootstrap.pypa.io/2.7/get-pip.py -o get-pip.py && \
+    curl -k https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py && \
     python get-pip.py pip==20.2.2
 
 RUN curl -fsSL -O https://download.docker.com/linux/static/stable/x86_64/docker-19.03.9.tgz && \
@@ -61,8 +64,11 @@ RUN \
   apt-get update && apt-get install -y --force-yes google-cloud-sdk
 
 RUN \
-  curl -fsSL https://deb.nodesource.com/setup_12.x | sudo -E bash - && \
-  apt-get install -y --force-yes dnsutils nodejs
+  apt-get install -y --force-yes dnsutils
+
+RUN \
+  curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash && \
+  echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV && source $BASH_ENV
 
 USER ubuntu
 
