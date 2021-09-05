@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM ubuntu:21.10
 
 RUN apt-get update && apt-get upgrade -y
 
@@ -8,7 +8,7 @@ RUN apt-get install -y --no-install-recommends --no-install-suggests gcc wget cu
     aptitude build-essential rpm makeself apt-transport-https \
     ca-certificates gnupg bzip2 openssh-client libxml2-dev \
     libxslt1-dev libxslt-dev zlib1g-dev libxmlsec1 xmlsec1 \
-    libxml2-dev libxmlsec1-dev libxmlsec1-openssl pcregrep
+    libxml2-dev libxmlsec1-dev libxmlsec1-openssl pcregrep postgresql-client \
 
 RUN wget -k https://www.python.org/ftp/python/2.7.12/Python-2.7.12.tgz && \
     tar -zxvf Python-2.7.12.tgz && cd Python-2.7.12 && ./configure && make -j && make install && \
@@ -46,7 +46,8 @@ RUN \
 RUN \
   export GOROOT=/usr/local/go && export PATH=$PATH:$GOROOT/bin && \
   curl -o go.tar.gz https://storage.googleapis.com/golang/go1.16.linux-amd64.tar.gz && \
-  tar -C /usr/local -xzf go.tar.gz
+  tar -C /usr/local -xzf go.tar.gz && \
+  curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $GOROOT/bin v1.40.1
 
 RUN \
   wget -q https://github.com/google/protobuf/releases/download/v3.6.1/protoc-3.6.1-linux-x86_64.zip && \
@@ -60,7 +61,8 @@ RUN \
   apt-get update && apt-get install -y --force-yes google-cloud-sdk
 
 RUN \
-  apt-get install -y --force-yes dnsutils
+  curl -fsSL https://deb.nodesource.com/setup_12.x | sudo -E bash - && \
+  apt-get install -y --force-yes dnsutils nodejs
 
 USER ubuntu
 
