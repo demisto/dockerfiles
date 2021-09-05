@@ -2,7 +2,7 @@
 # NOTE: THIS DOCKERFILE IS BASED ON: https://raw.githubusercontent.com/docker-library/python/f1e613f48eb4fc88748b36787f5ed74c14914636/2.7/buster/slim/Dockerfile
 # We only change to use the latest debian version. 
 
-# Last modified: Sun, 29 Aug 2021 13:16:52 +0000
+# Last modified: Wed, 01 Sep 2021 17:54:01 +0000
 FROM debian:buster-slim
 
 # ensure local python is preferred over distribution python
@@ -131,10 +131,10 @@ RUN set -ex \
 	&& python2 --version
 
 # if this is called "PIP_VERSION", pip explodes with "ValueError: invalid truth value '<VERSION>'"
-ENV PYTHON_PIP_VERSION 20.0.2
+ENV PYTHON_PIP_VERSION 20.3.4
 # https://github.com/pypa/get-pip
-ENV PYTHON_GET_PIP_URL https://github.com/pypa/get-pip/raw/d59197a3c169cef378a22428a3fa99d33e080a5d/get-pip.py
-ENV PYTHON_GET_PIP_SHA256 421ac1d44c0cf9730a088e337867d974b91bdce4ea2636099275071878cc189e
+ENV PYTHON_GET_PIP_URL https://github.com/pypa/get-pip/raw/831b5dd0bec03caf24aa6d736a28dc2ba80f91cc/public/2.7/get-pip.py
+ENV PYTHON_GET_PIP_SHA256 40ee07eac6674b8d60fce2bbabc148cf0e2f1408c167683f110fd608b8d6f416
 
 RUN set -ex; \
 	\
