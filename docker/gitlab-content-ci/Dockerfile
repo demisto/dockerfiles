@@ -2,24 +2,22 @@ FROM demisto/python3-deb:3.9.1.14969
 
 RUN apt-get update
 
-RUN apt-get install -y curl jq unzip openssh-client gcc libffi-dev libssl-dev git npm zip netcat wget
-
-RUN npm install npm@6.14.6 -g n
+RUN apt-get install -y curl jq unzip openssh-client gcc libffi-dev libssl-dev git zip netcat wget
 
 # Currently sh is linked to dash, linking it to /bin/bash instead
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
-# Installing nvm and node.js
-RUN NODE_VERSION="12.18.4" \
+# Installing nvm, npm and node.js
+RUN export NODE_VERSION="12.18.4" \
     && curl https://raw.githubusercontent.com/creationix/nvm/v0.38.0/install.sh | bash \
     && [ -s "$NVM_DIR/nvm.sh" ] \
     && . $NVM_DIR/nvm.sh \
     && nvm install $NODE_VERSION \
     && nvm alias default $NODE_VERSION \
     && nvm use default \
-    && NVM_DIR="$NVM_DIR" \
-    && NODE_PATH="$NVM_DIR/v$NODE_VERSION/lib/node_modules" \
-    && PATH="$NVM_DIR/v$NODE_VERSION/bin:$PATH"
+    && export NVM_DIR="$NVM_DIR" \
+    && export NODE_PATH="$NVM_DIR/v$NODE_VERSION/lib/node_modules" \
+    && export PATH="$NVM_DIR/v$NODE_VERSION/bin:$PATH"
 
 COPY requirements.txt .
 
