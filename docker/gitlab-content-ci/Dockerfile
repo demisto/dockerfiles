@@ -11,7 +11,7 @@ RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 ENV NODE_VERSION 12.18.4
 ENV NVM_DIR /usr/local/nvm
 RUN \
-    && curl https://raw.githubusercontent.com/creationix/nvm/v0.38.0/install.sh | bash \
+    curl https://raw.githubusercontent.com/creationix/nvm/v0.38.0/install.sh | bash \
     && . $NVM_DIR/nvm.sh \
     && nvm install $NODE_VERSION \
     && nvm alias default $NODE_VERSION \
