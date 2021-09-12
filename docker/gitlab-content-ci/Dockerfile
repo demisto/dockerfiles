@@ -6,7 +6,20 @@ RUN apt-get install -y curl jq unzip openssh-client gcc libffi-dev libssl-dev gi
 
 RUN npm install npm@6.14.6 -g n
 
-RUN n v12.18.4 && PATH="$PATH"
+# Currently sh is linked to dash, linking it to /bin/bash instead
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+
+# Installing nvm and node.js
+RUN NODE_VERSION="12.18.4" \
+    && curl https://raw.githubusercontent.com/creationix/nvm/v0.38.0/install.sh | bash \
+    && [ -s "$NVM_DIR/nvm.sh" ] \
+    && . $NVM_DIR/nvm.sh \
+    && nvm install $NODE_VERSION \
+    && nvm alias default $NODE_VERSION \
+    && nvm use default \
+    && NVM_DIR="$NVM_DIR" \
+    && NODE_PATH="$NVM_DIR/v$NODE_VERSION/lib/node_modules" \
+    && PATH="$NVM_DIR/v$NODE_VERSION/bin:$PATH"
 
 COPY requirements.txt .
 
@@ -21,13 +34,4 @@ RUN  apt-get update -y \
   && gcloud --version \
   && gsutil --version
 
-# Currently sh is linked to dash, linking it to /bin/bash instead
-RUN rm /bin/sh && ln -s /bin/bash /bin/sh
-
-# Installing nvm for the private build
-RUN \
-    curl https://raw.githubusercontent.com/creationix/nvm/v0.38.0/install.sh | bash \
-    && [ -s "$NVM_DIR/nvm.sh" ] \
-    && . $NVM_DIR/nvm.sh \
-    && NVM_DIR="$NVM_DIR"
 
