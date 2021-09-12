@@ -8,7 +8,6 @@ RUN apt-get install -y curl jq unzip openssh-client gcc libffi-dev libssl-dev gi
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
 # Installing nvm, npm and node.js
-ENV NVM_DIR $HOME/.nvm
 ENV NODE_VERSION 12.18.4
 RUN \
     curl https://raw.githubusercontent.com/creationix/nvm/v0.38.0/install.sh | bash \
