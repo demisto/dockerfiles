@@ -24,5 +24,8 @@ RUN  apt-get update -y \
 # Currently sh is linked to dash, linking it to /bin/bash instead
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
-# Creating a user with home directory that matces the home directory of github actions, and give the user sudo access
-#RUN groupadd --gid 1000 github && mkdir -p /github/ && useradd -m -d /github/home --uid 1000 --gid root --shell /bin/bash github
+# Installing nvm for the private build
+RUN \
+    curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash && \
+    echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV && source $BASH_ENV
+
