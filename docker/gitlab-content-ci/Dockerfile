@@ -12,6 +12,11 @@ ENV NVM_DIR $HOME/.nvm
 ENV NODE_VERSION 12.18.4
 RUN \
     curl https://raw.githubusercontent.com/creationix/nvm/v0.38.0/install.sh | bash \
+    && echo $NVM_DIR \
+    && echo $NODE_VERSION \
+    && export NVM_DIR="$HOME/.nvm" \
+    && export NODE_VERSION="12.18.4" \
+    && echo $NVM_DIR \
     && . $NVM_DIR/nvm.sh \
     && nvm install $NODE_VERSION \
     && nvm alias default $NODE_VERSION \
