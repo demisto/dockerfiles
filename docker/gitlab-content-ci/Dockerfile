@@ -26,6 +26,8 @@ RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
 # Installing nvm for the private build
 RUN \
-    curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash && \
-    echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV && source $BASH_ENV
+    curl https://raw.githubusercontent.com/creationix/nvm/v0.38.0/install.sh | bash \
+    && [ -s "$NVM_DIR/nvm.sh" ] \
+    && . $NVM_DIR/nvm.sh \
+    && NVM_DIR="$NVM_DIR"
 
