@@ -2,7 +2,7 @@ FROM demisto/python3-deb:3.9.1.14969
 
 RUN apt-get update
 
-RUN apt-get install -y curl jq unzip openssh-client gcc libffi-dev libssl-dev git zip netcat wget
+RUN apt-get install -y curl jq unzip openssh-client gcc libffi-dev libssl-dev git zip netcat wget python2 python-pip
 
 # Currently sh is linked to dash, linking it to /bin/bash instead
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
@@ -18,6 +18,7 @@ RUN \
     && nvm alias default $NODE_VERSION \
     && nvm use default
 
+ENV NVM_DIR $HOME/.nvm
 ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
 ENV PATH $NVM_DIR/v$NODE_VERSION/bin:$PATH
 
