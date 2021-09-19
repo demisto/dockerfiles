@@ -10,7 +10,7 @@ RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 # Installing nvm, npm and node.js
 ENV NODE_VERSION 12.18.4
 RUN \
-    curl https://raw.githubusercontent.com/creationix/nvm/v0.38.0/install.sh | bash \
+    curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash \
     && export NVM_DIR="/root/.nvm" \
     && export NODE_VERSION="12.18.4" \
     && . $NVM_DIR/nvm.sh \
@@ -26,7 +26,7 @@ COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Instaling the gsutil
+# Installing the gsutil
 RUN  apt-get update -y \
   && apt-get install apt-transport-https ca-certificates gnupg=2.2.12-1+deb10u1 gpgv=2.2.12-1+deb10u1 -y --allow-downgrades\
   && echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" |  tee -a /etc/apt/sources.list.d/google-cloud-sdk.list \
