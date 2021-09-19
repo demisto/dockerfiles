@@ -4,10 +4,10 @@ RUN apt-get update
 
 RUN apt-get install -y curl jq unzip openssh-client gcc libffi-dev libssl-dev git zip netcat wget python2 python-pip
 
-# Currently sh is linked to dash, linking it to /bin/bash instead
+# Currently sh is linked to dash, linking it to /bin/bash instead.
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
-# Installing nvm, npm and node.js
+# Installing nvm, npm and node.js.
 ENV NODE_VERSION 12.18.4
 RUN \
     curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash \
@@ -25,7 +25,7 @@ COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Installing the gsutil
+# Installing the gsutil.
 RUN  apt-get update -y \
   && apt-get install apt-transport-https ca-certificates gnupg=2.2.12-1+deb10u1 gpgv=2.2.12-1+deb10u1 -y --allow-downgrades\
   && echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" |  tee -a /etc/apt/sources.list.d/google-cloud-sdk.list \
