@@ -12,7 +12,7 @@ try:
     # Will fail but we want to be sure we don't fail on loading the driver
     cx_Oracle.connect()
 except Exception as ex:
-    assert 'TNS:net service name is incorrectly specified' in str(ex)
+    assert 'ORA-12162' in str(ex)
 
 
 # freetds test

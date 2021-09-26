@@ -1,0 +1,2 @@
+## Note
+This image contains both `python` and `pwsh`. It is a legacy image for Python integrations that require running `pwsh`. Starting from Server version 5.5 `pwsh` is supported as a native integration and should be used instead of this image. See: https://xsoar.pan.dev/docs/integrations/powershell-code 

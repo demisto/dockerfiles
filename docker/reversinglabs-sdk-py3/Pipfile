@@ -1,0 +1,13 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+reversinglabs-sdk-py3 = "*"
+python-rl-threat-hunting = {editable = true, ref = "7630e9582c3a81e7b1947508e6ab305544dd53aa", git = "https://github.com/reversinglabs/threat_hunting_library.git"}
+
+[dev-packages]
+
+[requires]
+python_version = "3.9"
