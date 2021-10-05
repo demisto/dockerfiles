@@ -10,19 +10,19 @@ RUN apt-get update -y \
     && apt-get install -y curl jq unzip openssh-client gcc libffi-dev libssl-dev git zip netcat wget python2 python-pip \
     # Currently sh is linked to dash, linking it to /bin/bash instead.
     && rm /bin/sh && ln -s /bin/bash /bin/sh \
+    # Install requirements
+    && pip install --no-cache-dir -r requirements.txt \
     # Installing nvm, npm and node.js.
     && curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash \
     && . $NVM_DIR/nvm.sh \
     && nvm install $NODE_VERSION \
     && nvm alias default $NODE_VERSION \
     && nvm use default \
-    # Install requirements
-    && pip install --no-cache-dir -r requirements.txt \
     # Installing the gsutil.
     && apt-get install apt-transport-https ca-certificates gnupg=2.2.12-1+deb10u1 gpgv=2.2.12-1+deb10u1 -y --allow-downgrades\
     && echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" |  tee -a /etc/apt/sources.list.d/google-cloud-sdk.list \
     && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - \
-    && apt-get install google-cloud-sdk -y\
+    && apt-get update &&  apt-get install google-cloud-sdk -y\
     && gcloud --version \
     && gsutil --version \
     # Installing goenv
