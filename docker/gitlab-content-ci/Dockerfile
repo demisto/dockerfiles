@@ -6,10 +6,11 @@ ENV NODE_VERSION 12.18.4
 ENV NVM_DIR /root/.nvm
 ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 
+# Currently sh is linked to dash, linking it to /bin/bash instead.
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+
 RUN apt-get update -y \
     && apt-get install -y curl jq unzip openssh-client gcc libffi-dev libssl-dev git zip netcat wget python2 python-pip \
-    # Currently sh is linked to dash, linking it to /bin/bash instead.
-    && rm /bin/sh && ln -s /bin/bash /bin/sh \
     # Install requirements
     && pip install --no-cache-dir -r requirements.txt \
     # Installing nvm, npm and node.js.
