@@ -10,5 +10,4 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 && apt-get purge -y --auto-remove \
   gcc \
   python2-dev \
-&& rm -rf /var/lib/apt/lists/*
-cd
+&& rm -rf /var/lib/apt/lists/*  
