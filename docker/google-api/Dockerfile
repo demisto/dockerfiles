@@ -11,3 +11,4 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   gcc \
   python2-dev \
 && rm -rf /var/lib/apt/lists/*
+cd
