@@ -6,12 +6,12 @@ RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-instal
   && echo 'eval "$(pyenv init -)"' >> ~/.bashrc \
   && echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.bashrc
 
-RUN wget --no-check-certificate http://www.openssl.org/source/openssl-1.1.1l.tar.gz \
-  && tar -xvzf openssl-1.1.1l.tar.gz \
+RUN sudo wget --no-check-certificate http://www.openssl.org/source/openssl-1.1.1l.tar.gz \
+  && sudo tar -xvzf openssl-1.1.1l.tar.gz \
   && cd openssl-1.1.1l \
-  && ./config --prefix=/usr/local/openssl --openssldir=/usr/local/openssl \
-  && make \
-  && make install \
+  && sudo ./config --prefix=/usr/local/openssl --openssldir=/usr/local/openssl \
+  && sudo make \
+  && sudo make install \
   && /usr/local/openssl/bin/openssl version
 
 RUN bash -i -c 'pyenv install 3.7.6 && pyenv versions | grep 3.7.6'
