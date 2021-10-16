@@ -4,16 +4,16 @@ FROM circleci/python:2.7.17-stretch
 RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
   && echo 'export PATH="/home/circleci/.pyenv/bin:$PATH"' >> ~/.bashrc \
   && echo 'eval "$(pyenv init -)"' >> ~/.bashrc \
-  && echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.bashrc \
-  && echo 'export LD_LIBRARY_PATH=/usr/local/lib' >> ~/.bashrc \
-  && echo 'export CPPFLAGS=-I/usr/lib/ssl/include' >> ~/.bashrc \
-  && echo 'export LDFLAGS=-L/usr/lib/ssl/lib' >> ~/.bashrc
+  && echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.bashrc
 
-RUN cat ~/.bashrc
-RUN env
-RUN bash -i -c 'env'
+RUN wget http://www.openssl.org/source/openssl-1.1.1l.tar.gz \
+  && tar -xvzf openssl-1.1.1l.tar.gz \
+  && cd openssl-1.1.1l \
+  && ./config --prefix=/usr/local/openssl --openssldir=/usr/local/openssl \
+  && make \
+  && make install \
+  && /usr/local/openssl/bin/openssl version
 
-RUN bash -i -c 'pyenv update'
 RUN bash -i -c 'pyenv install 3.7.6 && pyenv versions | grep 3.7.6'
 RUN bash -i -c 'pyenv install 3.8.1 && pyenv versions | grep 3.8.1'
 RUN bash -i -c 'pyenv install 3.6.10 && pyenv versions | grep 3.6.10'
