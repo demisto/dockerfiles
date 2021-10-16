@@ -4,7 +4,8 @@ FROM circleci/python:2.7.17-stretch
 RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
   && echo 'export PATH="/home/circleci/.pyenv/bin:$PATH"' >> ~/.bashrc \
   && echo 'eval "$(pyenv init -)"' >> ~/.bashrc \
-  && echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.bashrc
+  && echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.bashrc \
+  && echo 'export LD_LIBRARY_PATH=/usr/local/lib' >> ~/.bashrc
 
 RUN bash -i -c 'pyenv install 3.7.6 && pyenv versions | grep 3.7.6'
 RUN bash -i -c 'pyenv install 3.8.1 && pyenv versions | grep 3.8.1'
