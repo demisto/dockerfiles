@@ -10,6 +10,7 @@ RUN bash -i -c 'pyenv install 3.7.6 && pyenv versions | grep 3.7.6'
 RUN bash -i -c 'pyenv install 3.8.1 && pyenv versions | grep 3.8.1'
 RUN bash -i -c 'pyenv install 3.6.10 && pyenv versions | grep 3.6.10'
 RUN bash -i -c 'pyenv install 3.9.0 && pyenv versions | grep 3.9.0'
+RUN bash -i -c 'pyenv install 3.10.0 && pyenv versions | grep 3.10.0'
 
 COPY requirements.txt .
 
