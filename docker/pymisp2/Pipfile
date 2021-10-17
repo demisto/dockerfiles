@@ -4,10 +4,10 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-cryptography = "==v0.1"
+pydeep = "*"
 pymisp = {version = "*", extras = ["email"]}
 
 [dev-packages]
 
 [requires]
-python_version = "3.9"
+python_version = "3.8"
