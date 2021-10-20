@@ -87,18 +87,19 @@ class HardeningManifest:
         self.args[HardeningManifestArgs.BASE_TAG] = get_last_image_tag_ironbank(self.base_image)
 
     def handle_resources(self):
-        raw_resources = [r.strip(' \n') for r in open(self.docker_packages_metadata_path, 'r').readlines()]
-        for raw_resource in raw_resources:
-            try:
-                match = re.findall(RESOURCE_REGEX, raw_resource)[0]
-            except IndexError as e:
-                logging.debug(f'Failed to parse raw resource: {raw_resource}, Additional info {str(e)}')
-                continue
-            url, value = match[0], match[1]
-            filename = os.path.basename(url)
-            resource = Resource(url, filename, value)
-            if resource not in self.resources:  # avoid duplicates
-                self.resources.append(resource)
+        if os.path.exists(self.docker_packages_metadata_path):
+            raw_resources = [r.strip(' \n') for r in open(self.docker_packages_metadata_path, 'r').readlines()]
+            for raw_resource in raw_resources:
+                try:
+                    match = re.findall(RESOURCE_REGEX, raw_resource)[0]
+                except IndexError as e:
+                    logging.debug(f'Failed to parse raw resource: {raw_resource}, Additional info {str(e)}')
+                    continue
+                url, value = match[0], match[1]
+                filename = os.path.basename(url)
+                resource = Resource(url, filename, value)
+                if resource not in self.resources:  # avoid duplicates
+                    self.resources.append(resource)
 
     def build(self):
         self.handle_name()
