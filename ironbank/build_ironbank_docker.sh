@@ -118,7 +118,7 @@ function upload_image_to_artifacts {
   SOURCE_PATH="ironbank/$IMAGE_NAME"
   cp -r $SOURCE_PATH $TARGET_PATH
   cp $CURRENT_DIR/docker/$IMAGE_NAME/requirements.txt $TARGET_PATH
-  rm $SOURCE_PATH/docker_packages_metadata.txt
+#  rm $SOURCE_PATH/docker_packages_metadata.txt
 }
 
 # $1: docker image dir (~/../docker/$IMAGE_NAME)
