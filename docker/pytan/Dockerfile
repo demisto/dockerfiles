@@ -6,5 +6,5 @@ RUN apk --update add --no-cache --virtual .build-dependencies python2-dev build-
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies \
 
-COPY 2.2.2.zip
+COPY 2.2.2.zip .
 RUN unzip 2.2.2.zip
