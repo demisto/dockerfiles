@@ -35,16 +35,7 @@ def post_comment(image_commit_map):
         image_name, commit_sha = item.split('=')
         params = {'sha': commit_sha}
         url = f'https://repo1.dso.mil/api/v4/projects/dsop%2Fopensource%2Fpalo-alto-networks%2Fdemisto%2F{image_name}/pipelines'
-        try:
-            print(f'Executing request to {url}')
-            res = requests.get(url=url, params=params, verify=True)
-            print(f'status code:{res.status_code}')
-            print(f'content:{res.content}')
-        except Exception as ex:
-            print(ex)
-            raise
-
-        commit_pipeline = res.json()[0]
+        commit_pipeline = requests.get(url=url, params=params).json()[0]
         pipeline_url = commit_pipeline.get('web_url', '')
         message += f"- {image_name}: [{pipeline_url}]({pipeline_url})\n"
     print("Going to post comment:\n\n{}".format(message))
