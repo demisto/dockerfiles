@@ -34,10 +34,28 @@ def post_comment(image_commit_map):
     for item in image_commit_map:
         image_name, commit_sha = item.split('=')
         params = {'sha': commit_sha}
-        url = f'https://repo1.dso.mil/api/v4/projects/dsop%2Fopensource%2Fpalo-alto-networks%2Fdemisto%2F{image_name}/pipelines'
-        commit_pipeline = requests.get(url=url, params=params).json()[0]
-        pipeline_url = commit_pipeline.get('web_url', '')
-        message += f"- {image_name}: [{pipeline_url}]({pipeline_url})\n"
+
+        message = ''
+        import time
+        for x in range(5):
+            print(f'######### attempt number: {x}')
+            url = f'https://repo1.dso.mil/api/v4/projects/dsop%2Fopensource%2Fpalo-alto-networks%2Fdemisto%2F{image_name}/pipelines'
+            print(f'attempt to enter {url}')
+            try:
+                res = requests.get(url=url, params=params)
+            except Exception as e:
+                print(res.status_code)
+                print(e)
+
+            commit_pipeline = res.json()
+            print(f'commit_pipeline: {commit_pipeline}')
+            if commit_pipeline:
+                pipeline_url = commit_pipeline[0].get('web_url', '')
+                message += f"- {image_name}: [{pipeline_url}]({pipeline_url})\n"
+                break
+
+            time.sleep(1)
+
     print("Going to post comment:\n\n{}".format(message))
     res = requests.post(post_url, json={"body": message}, auth=(os.environ['GITHUB_KEY'], 'x-oauth-basic'))
     try:
