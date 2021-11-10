@@ -44,13 +44,14 @@ def post_comment(image_commit_map):
         for counter in range(get_pipelines_attemption):
             url = f'https://repo1.dso.mil/api/v4/projects/dsop%2Fopensource%2Fpalo-alto-networks%2Fdemisto%2F{image_name}/pipelines'
             print(f'Attempt #{counter + 1} to get pipeline from {url}')
+            commit_pipeline = ''
             try:
                 res = requests.get(url=url, params=params)
+                commit_pipeline = res.json()
+                print(f'commit_pipeline: {commit_pipeline}')
             except Exception as ex:
                 print(f'Failed to get pipelines from repo1.dso.mil: {ex}')
 
-            commit_pipeline = res.json()
-            print(f'commit_pipeline: {commit_pipeline}')
             if commit_pipeline:
                 pipeline_url = commit_pipeline[0].get('web_url', '')
                 message += f"- {image_name}: [{pipeline_url}]({pipeline_url})\n"
