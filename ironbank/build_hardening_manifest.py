@@ -87,6 +87,10 @@ class HardeningManifest:
         self.args[HardeningManifestArgs.BASE_TAG] = get_last_image_tag_ironbank(self.base_image)
 
     def handle_resources(self):
+        if not os.path.exists(self.docker_packages_metadata_path):
+            print(f'The file {self.docker_packages_metadata_path} is not exists,'
+                  f'hardening_manifest.yaml file will created with no resources')
+            return
         raw_resources = [r.strip(' \n') for r in open(self.docker_packages_metadata_path, 'r').readlines()]
         for raw_resource in raw_resources:
             try:
