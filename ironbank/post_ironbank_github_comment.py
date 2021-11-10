@@ -8,6 +8,8 @@ import re
 
 
 def post_comment(image_commit_map):
+    get_pipelines_attemption = 10
+
     if not os.environ.get('GITHUB_KEY'):
         print("No github key set. Will not post a message!")
         return
@@ -36,16 +38,16 @@ def post_comment(image_commit_map):
         params = {'sha': commit_sha}
 
         message = ''
-        import time
-        for x in range(5):
-            print(f'######### attempt number: {x}')
+
+        # We need to more than one try to get the pipeline results because When we commit ironbank image to repo one,
+        # it takes approximately one or two second to gets the pipeline
+        for counter in range(get_pipelines_attemption):
             url = f'https://repo1.dso.mil/api/v4/projects/dsop%2Fopensource%2Fpalo-alto-networks%2Fdemisto%2F{image_name}/pipelines'
-            print(f'attempt to enter {url}')
+            print(f'Attempt #{counter + 1} to get pipeline from {url}')
             try:
                 res = requests.get(url=url, params=params)
-            except Exception as e:
-                print(res.status_code)
-                print(e)
+            except Exception as ex:
+                print(f'Failed to get pipelines from repo1.dso.mil: {ex}')
 
             commit_pipeline = res.json()
             print(f'commit_pipeline: {commit_pipeline}')
@@ -53,8 +55,6 @@ def post_comment(image_commit_map):
                 pipeline_url = commit_pipeline[0].get('web_url', '')
                 message += f"- {image_name}: [{pipeline_url}]({pipeline_url})\n"
                 break
-
-            time.sleep(1)
 
     print("Going to post comment:\n\n{}".format(message))
     res = requests.post(post_url, json={"body": message}, auth=(os.environ['GITHUB_KEY'], 'x-oauth-basic'))
