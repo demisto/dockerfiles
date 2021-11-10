@@ -40,7 +40,7 @@ def post_comment(image_commit_map):
         message = ''
 
         # We need to more than one try to get the pipeline results because When we commit ironbank image to repo one,
-        # it takes approximately one or two second to gets the pipeline
+        # it takes approximately one or two seconds to gets the pipeline
         for counter in range(get_pipelines_attemption):
             url = f'https://repo1.dso.mil/api/v4/projects/dsop%2Fopensource%2Fpalo-alto-networks%2Fdemisto%2F{image_name}/pipelines'
             print(f'Attempt #{counter + 1} to get pipeline from {url}')
