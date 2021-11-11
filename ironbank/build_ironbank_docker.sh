@@ -95,6 +95,16 @@ function build_hardening_manifest {
 # $1: docker image dir (~/../docker/$IMAGE_NAME)
 function build_dockerfile {
   OUTPUT_PATH=ironbank/$(basename $1)
+  REQUIREMENTS="$OUTPUT_PATH/docker_packages_metadata.txt"
+
+  REQUIREMENTS_EXISTS=false
+  if [[ -f $REQUIREMENTS ]] && [[ -s $REQUIREMENTS ]]; then
+      REQUIREMENTS_EXISTS=true
+  fi
+
+  echo $REQUIREMENTS
+  echo $REQUIREMENTS_EXISTS
+
   if [[ ! -d $OUTPUT_PATH ]]; then
     mkdir $OUTPUT_PATH
   fi
