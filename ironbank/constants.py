@@ -17,7 +17,7 @@ RESOURCE_REGEX = r'Added .+ from (https.+)#sha256=(.+) \(from -r /requirements.t
 DEMISTO_REGISTRY_ROOT = 'opensource/palo-alto-networks/demisto'
 DEMISTO_CONTAINERS_MAIL = 'containers@demisto.com'
 PANW = 'Palo Alto Networks'
-DEFAULT_USER = 'gfreund'
+DEFAULT_USER = 'wghammashi'
 
 
 class HardeningManifestArgs:
