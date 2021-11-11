@@ -91,8 +91,8 @@ def test_integration():
             'org.opencontainers.image.description': 'netmiko image with the required dependencies',
             'org.opencontainers.image.licenses': ' ', 'org.opencontainers.image.url': ' ',
             'org.opencontainers.image.vendor': 'demisto', 'org.opencontainers.image.version': '1.0',
-            'mil.dso.ironbank.image.keywords': 'bcrypt, cffi, cryptography, future, netmiko, ntc-templates, paramiko, pycparser, pynacl, pyserial, scp, six, tenacity, textfsm',
-            'mil.dso.ironbank.image.type': 'opensource', 'mil.dso.ironbank.product.name': 'panw-demisto-netmiko'},
+            'mil.dso.ironbank.image.type': 'opensource', 'mil.dso.ironbank.product.name': 'panw-demisto-netmiko',
+            'mil.dso.ironbank.image.keywords': 'bcrypt, cffi, cryptography, future, netmiko, ntc-templates, paramiko, pycparser, pynacl, pyserial, scp, six, tenacity, textfsm'},
                                             'resources': [
                                                 {'filename': 'bcrypt-3.2.0-cp36-abi3-manylinux2010_x86_64.whl',
                                                  'url': 'https://files.pythonhosted.org/packages/26/70/6d218afbe4c73538053c1016dd631e8f25fffc10cd01f5c272d7acf3c03d/bcrypt-3.2.0-cp36-abi3-manylinux2010_x86_64.whl',
