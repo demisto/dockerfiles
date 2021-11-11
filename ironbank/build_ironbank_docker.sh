@@ -97,13 +97,13 @@ function build_dockerfile {
   OUTPUT_PATH=ironbank/$(basename $1)
   REQUIREMENTS="$OUTPUT_PATH/docker_packages_metadata.txt"
 
-  REQUIREMENTS_EXISTS=false
-  if [[ -f $REQUIREMENTS ]] && [[ -s $REQUIREMENTS ]]; then
-      REQUIREMENTS_EXISTS=true
+
+  if [[ ! -f $REQUIREMENTS ]] && [[ ! -f $1/Dockerfile.ironbank ]]; then
+    echo "docker_packages_metadata.txt is missing in this docker, please create Dockerfile.ironbank, aborting..."
+    return 1;
   fi
 
-  echo $REQUIREMENTS
-  echo $REQUIREMENTS_EXISTS
+
 
   if [[ ! -d $OUTPUT_PATH ]]; then
     mkdir $OUTPUT_PATH
