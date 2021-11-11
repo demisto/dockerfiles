@@ -152,5 +152,5 @@ def test_integration():
                                                                 'value': '0aef3f9cad3d03905915fd62bff358c42b7dc35c863ff2cb0b5324c2b746cc24'}}],
                                             'maintainers': [
                                                 {'email': 'containers@demisto.com', 'name': 'Palo Alto Networks',
-                                                 'username': 'gfreund', 'cht_member': False}]}
+                                                 'username': 'wghammashi', 'cht_member': False}]}
     assert True
