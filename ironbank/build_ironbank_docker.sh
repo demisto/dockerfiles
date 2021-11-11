@@ -95,6 +95,14 @@ function build_hardening_manifest {
 # $1: docker image dir (~/../docker/$IMAGE_NAME)
 function build_dockerfile {
   OUTPUT_PATH=ironbank/$(basename $1)
+  REQUIREMENTS="$OUTPUT_PATH/docker_packages_metadata.txt"
+
+  if [[ ! -f $REQUIREMENTS ]] && [[ ! -f $1/Dockerfile.ironbank ]]; then
+    echo "docker_packages_metadata.txt is missing in this docker, please create Dockerfile.ironbank, aborting..."
+    return 1;
+  fi
+
+
   if [[ ! -d $OUTPUT_PATH ]]; then
     mkdir $OUTPUT_PATH
   fi
@@ -125,7 +133,10 @@ function upload_image_to_artifacts {
   SOURCE_PATH="ironbank/$IMAGE_NAME"
   cp -r $SOURCE_PATH $TARGET_PATH
   cp $CURRENT_DIR/docker/$IMAGE_NAME/requirements.txt $TARGET_PATH
-  rm $SOURCE_PATH/docker_packages_metadata.txt
+  if [[ -f $SOURCE_PATH/docker_packages_metadata.txt ]]; then
+    rm $SOURCE_PATH/docker_packages_metadata.txt
+  fi
+
 }
 
 # $1: docker image dir (~/../docker/$IMAGE_NAME)
