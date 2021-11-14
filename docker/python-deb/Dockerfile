@@ -3,7 +3,7 @@
 # We only change to use the latest debian version. 
 
 # Last modified: Wed, 01 Sep 2021 17:54:01 +0000
-FROM debian:buster-slim
+FROM debian:bullseye-slim
 
 # ensure local python is preferred over distribution python
 ENV PATH /usr/local/bin:$PATH
@@ -169,7 +169,7 @@ CMD ["python2"]
 
 # END Docker file fromhttps://raw.githubusercontent.com/docker-library/python/f1e613f48eb4fc88748b36787f5ed74c14914636/2.7/buster/slim/Dockerfile
 
-RUN echo 'deb http://deb.debian.org/debian buster-backports main' >> /etc/apt/sources.list
+RUN echo 'deb http://deb.debian.org/debian bullseye-backports main' >> /etc/apt/sources.list
 
 # Basic linux utilities
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -181,7 +181,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 && rm -rf /var/lib/apt/lists/*
 
 # Upgrade using backports
-RUN apt-get update && apt-get -t buster-backports -y --no-install-recommends upgrade \
+RUN apt-get update && apt-get -t bullseye-backports -y --no-install-recommends upgrade \
 && rm -rf /var/lib/apt/lists/*
 
 RUN rm CVE-2021-3177.diff
