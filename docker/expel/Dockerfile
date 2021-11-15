@@ -1,3 +1,3 @@
 FROM python:3
 
-RUN pip3 install pyexclient
+RUN pip install pyexclient
