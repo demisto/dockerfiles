@@ -1,5 +1,5 @@
-# Last modified: Fri, 26 Mar 2021 16:21:13 +0000
-FROM python:3.9.4-alpine3.13
+# Last modified: Wed, 01 Sep 2021 10:56:04 +0000
+FROM python:3.9.8-alpine3.14
 
 # Upgrade all packages to latest
 RUN apk --update --no-cache upgrade

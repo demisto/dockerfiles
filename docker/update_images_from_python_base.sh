@@ -35,7 +35,7 @@ echo "Starting update of python $1 images using the following base images: $BASE
 temp_dev=$(mktemp)
 grep -l  "devonly=true" docker/*/build.conf | xargs -n 1 dirname > $temp_dev
 
-MAX_IMAGES=25
+MAX_IMAGES=30
 
 for image in `echo $BASE_IMAGES` ; do
     full_image="demisto/$image"    

@@ -9,12 +9,12 @@ This repository's `master` branch tracks images pushed to the official Demisto D
 ## Contributing
 Contributions are welcome and appreciated. To contribute follow the [Getting Started](#getting-started) section and submit a PR. 
 
-Before merging any PRs, we need all contributors to sign a contributor license agreement. By signing a contributor license agreement, we ensure that the community is free to use your contributions.
+In order to conntribute, we will need all contributors to sign a contributor license agreement. By signing a contributor license agreement, we ensure that the community is free to use your contributions.
 
-When you open a new pull request, a bot will evaluate whether you have signed the CLA. If required, the bot will comment on the pull request, including a link to accept the agreement. The CLA document is also available for review as a [PDF](https://github.com/demisto/content/blob/master/docs/cla.pdf).
+When opening a new pull request, a bot will evaluate whether you have signed the CLA. If required, the bot will comment on the pull request, including a link to accept the agreement. The CLA document is also available for review as a [PDF](https://github.com/demisto/content/blob/master/docs/cla.pdf).
+Visit our [Frequently Asked Questions](https://xsoar.pan.dev/docs/concepts/faq#cla-is-pending-even-though-i-signed-the-agreement) article for CLA related issues.
 
-If the `license/cla` status check remains on *Pending*, even though all contributors have accepted the CLA, you can recheck the CLA status by visiting the following link (replace **[PRID]** with the ID of your PR): https://cla-assistant.io/check/demisto/dockerfiles?pullRequest=[PRID] .
-
+After opening your docker pull request, and in order for the reviewer to understand the context, make sure to link to the corresponding pull request from the [Content](https://github.com/demisto/content) repo where this docker image will be used.
 ## Getting Started
 Each docker image is managed in its own directory. The directory should be named the same as the image name (without the organization prefix). If needed, we prefer using a dash (`-`) as a separator in the name. All image directories are located under the `docker` dir.
 
@@ -65,7 +65,7 @@ For example to create a new image named ldap using python 3 and with the python 
 ```
 The above command will create a directory `docker/ldap` with all relevant files all setup for building a docker image. You can now build the image locally by following: [Building Locally a Test Build](#building-locally-a-test-build).
 
-**Note:** for image names we use [kebab-case](https://wiki.c2.com/?KebabCase) naming convention.
+**Note:** for image names we use [kebab-case](https://www.theserverside.com/definition/Kebab-case) naming convention.
 
 ## Building Locally a Test Build
 It is possible to run a local build to verify that the build process is working. Requirements:
@@ -139,6 +139,14 @@ There are 3 base PowerShell images which should be used when building a new imag
 * [powershell-ubuntu](https://github.com/demisto/dockerfiles/blob/repository-info/demisto/powershell-ubuntu/last.md): PowerShell image based upon Ubuntu
 
 We recommend using the default Alpine based image. The Debian and Ubuntu images are provided mainly for cases that there is need to install additional OS packages.
+
+### Adding a `verify.ps1` script
+Similar to the the `verify.py` script for Python images, you can add a `verify.ps1` script to test and check the image you created. 
+
+Once the docker image is built, if the script is present it will be run within the image using the following command:
+```bash
+cat verify.ps1 | docker run --rm -i <image_name> pwsh -c '-'
+```
 
 ## Docker Image Deployment
 When you first open a PR, a `development` docker image is built (via CircleCI) under the `devdemisto` docker organization. So for example if your image is named `ldap3` an image with the name `devdemisto/ldap3` will be built. 

@@ -1,6 +1,6 @@
 
-FROM demisto/powershell:7.1.1.16151
+FROM demisto/powershell:7.1.3.22925
 
 RUN pwsh -c "Set-PSRepository -Name PSGallery -InstallationPolicy Trusted -ErrorAction Stop"
-RUN pwsh -c "Install-Module -ErrorAction Stop Az"
+RUN pwsh -c "Install-Module -ErrorAction Stop Az -Scope AllUsers"
 

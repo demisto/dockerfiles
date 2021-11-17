@@ -1,0 +1,31 @@
+---
+- name: install-environments
+  hosts: all
+  tasks:
+    - name: Creates Goenv directory
+      file:
+        path: ~/.goenv
+        state: directory
+      run_once: true
+
+    - name: Clone goenv repo to ~/.goenv/goenv
+      git:
+        accept_hostkey: yes
+        repo: https://github.com/syndbg/goenv.git
+        dest: ~/.goenv
+        update: yes
+        force: yes
+      run_once: true
+
+    - name: "Install {{ env }} versions"
+      shell: "source ~/.zprofile && source ~/.zshrc && {{ env }} install {{ item }} -s"
+      args:
+        executable: /bin/bash
+      loop: "{{ versions }}"
+
+    - name: "{{ env }} global versions"
+      shell: "source ~/.zprofile && source ~/.zshrc && {{ env }} global {{ item }}"
+      args:
+        executable: /bin/bash
+      loop: "{{ global_versions }}"
+

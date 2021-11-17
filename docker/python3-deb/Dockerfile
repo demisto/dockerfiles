@@ -1,7 +1,7 @@
-# Last modified: Fri, 26 Mar 2021 16:21:13 +0000
-FROM python:3.9.4-slim-buster
+# Last modified: Wed, 01 Sep 2021 10:56:04 +0000
+FROM python:3.9.8-slim-bullseye
 
-RUN echo 'deb http://deb.debian.org/debian buster-backports main' >> /etc/apt/sources.list
+RUN echo 'deb http://deb.debian.org/debian bullseye-backports main' >> /etc/apt/sources.list
 
 # Basic linux utilities
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -13,7 +13,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 && rm -rf /var/lib/apt/lists/*
 
 # Upgrade using backports
-RUN apt-get update && apt-get -t buster-backports -y --no-install-recommends upgrade \
+RUN apt-get update && apt-get -t bullseye-backports -y --no-install-recommends upgrade \
 && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
