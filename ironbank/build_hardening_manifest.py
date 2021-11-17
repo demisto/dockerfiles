@@ -75,11 +75,12 @@ class HardeningManifest:
             HardeningManifestLabels.NAME: f'{HardeningManifestLabels.BASE_NAME}-{self.docker_image_name}'
         }
 
-        image_keywords = ' '
-        if self.resources:
-            image_keywords = ', '.join(list(self.pipfile_lock_data[Pipfile.DEFAULT].keys()))
+        pip_file_lock_data_keys = list(self.pipfile_lock_data[Pipfile.DEFAULT].keys())
 
-        self.labels[HardeningManifestLabels.KEYWORDS] = image_keywords
+        if pip_file_lock_data_keys:
+            self.labels[HardeningManifestLabels.KEYWORDS] = ', '.join(pip_file_lock_data_keys)
+        else:
+            self.labels[HardeningManifestLabels.KEYWORDS] = ' '
 
     def handle_tags(self):
         # latest tag in list's first place
