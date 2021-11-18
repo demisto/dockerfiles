@@ -83,6 +83,8 @@ def main():
     docker_image_dir = args.docker_image_dir
     output_path = args.output_path
     requirements_file_exists = args.requirements_file_exists
+    print(f'requirements_file_exists = {requirements_file_exists}')
+    requirements_file_exists = False
 
     print("Converting docker {0} to {1} ".format(docker_image_dir, output_path))
     dockerfile_ironbank = DockerfileIronbank(docker_image_dir, output_path, requirements_file_exists)

@@ -192,8 +192,8 @@ function build_ironbank_docker {
   build_dockerfile $1
   build_license $1
   build_readme $1
-  upload_image_to_artifacts $1
-  commit_ironbank_image_to_repo_one $1
+#  upload_image_to_artifacts $1
+#  commit_ironbank_image_to_repo_one $1
 }
 
 total=$(grep -E ironbank=true ./docker/*/build.conf | wc -l)
