@@ -10,7 +10,7 @@ from docker.image_latest_tag import get_latest_tag
 
 class DockerfileIronbank:
 
-    def __init__(self, docker_image_dir, output_path):
+    def __init__(self, docker_image_dir, output_path, requirements_file_exists):
         self.docker_image_dir = docker_image_dir
         self.docker_image_name = os.path.basename(self.docker_image_dir)
         self.output_path = output_path
@@ -18,7 +18,7 @@ class DockerfileIronbank:
         self.dockerhub_image_uri = os.path.join('demisto', self.docker_image_name)
         self.ironbank_image_uri = os.path.join(DEMISTO_REGISTRY_ROOT, self.docker_image_name)
         self.image_tag = ''
-
+        self.requirements_file_exists = requirements_file_exists
 
     def build(self):
         src_dockerfile = os.path.join(self.docker_image_dir, DockerfileMetadata.FILENAME)
@@ -31,6 +31,9 @@ class DockerfileIronbank:
               format(base_image_tag + ":" + base_image_tag, ironbank_base_image + ":" + ironbank_base_image_tag))
         self.image_tag = get_latest_tag(self.dockerhub_image_uri)
 
+        if not self.requirements_file_exists:
+            print('prepare to create Dockerfile.ironbank')
+            dst_dockerfile = os.path.join(self.output_path, 'Dockerfile', 'Dockerfile.ironbank')
 
         with open(dst_dockerfile, "w") as fp:
             fp.write(DockerfileSections.HEADER.format(ironbank_base_image, ironbank_base_image_tag))
@@ -43,7 +46,11 @@ class DockerfileIronbank:
             fp.write(DockerfileSections.FILE_BLANK_LINE)
             fp.write(DockerfileSections.USER_ROOT)
             fp.write(DockerfileSections.FILE_BLANK_LINE)
-            fp.write(DockerfileSections.DNF_UPDATE_BASIC_PY.format(self.base_images_repo.get_inventory()[base_image][1]))
+
+            if not self.requirements_file_exists:
+                fp.write(DockerfileSections.DNF_UPDATE_BASIC_PY.format(
+                    self.base_images_repo.get_inventory()[base_image][1]))
+
             fp.write(DockerfileSections.FILE_BLANK_LINE)
             fp.write(DockerfileSections.DOCKER_ENV_ORIGINAL.format(self.dockerhub_image_uri, self.image_tag))
             fp.write(DockerfileSections.FILE_BLANK_LINE)
@@ -51,6 +58,8 @@ class DockerfileIronbank:
             fp.write(DockerfileSections.FILE_BLANK_LINE)
             fp.write(DockerfileSections.FOOTER)
             fp.close()
+
+            print(f'{dst_dockerfile} created successfully')
 
     def dump(self):
         return
@@ -64,6 +73,8 @@ def args_handler():
                         required=True)
     parser.add_argument('--output_path', help='Full path of folder to output the hardening_manifest.yaml file',
                         required=True)
+    parser.add_argument('--requirements_file_exists', help='Wether requirements.txt file exists for this docker or not',
+                        required=True)
     return parser.parse_args()
 
 
@@ -71,9 +82,10 @@ def main():
     args = args_handler()
     docker_image_dir = args.docker_image_dir
     output_path = args.output_path
+    requirements_file_exists = args.requirements_file_exists
 
     print("Converting docker {0} to {1} ".format(docker_image_dir, output_path))
-    dockerfile_ironbank = DockerfileIronbank(docker_image_dir, output_path)
+    dockerfile_ironbank = DockerfileIronbank(docker_image_dir, output_path, requirements_file_exists)
     dockerfile_ironbank.build()
     dockerfile_ironbank.dump()
 

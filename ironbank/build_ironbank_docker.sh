@@ -97,11 +97,6 @@ function build_dockerfile {
   OUTPUT_PATH=ironbank/$(basename $1)
   REQUIREMENTS="$OUTPUT_PATH/docker_packages_metadata.txt"
 
-  if [[ ! -f $REQUIREMENTS ]] && [[ ! -f $1/Dockerfile.ironbank ]]; then
-    echo "docker_packages_metadata.txt is missing in this docker, please create Dockerfile.ironbank, aborting..."
-    return 1;
-  fi
-
 
   if [[ ! -d $OUTPUT_PATH ]]; then
     mkdir $OUTPUT_PATH
@@ -110,7 +105,12 @@ function build_dockerfile {
     # if we have a special Dockerfile for ironbank, copy it instead of generating
     cp $1/Dockerfile.ironbank $OUTPUT_PATH/Dockerfile
   else
-    python ./ironbank/build_dockerfile.py --docker_image_dir $1 --output_path $OUTPUT_PATH
+    python ./ironbank/build_dockerfile.py --docker_image_dir $1 --output_path $OUTPUT_PATH --requirements_file_exists False
+  fi
+
+  if [[ ! -f $REQUIREMENTS ]] && [[ ! -f $1/Dockerfile.ironbank ]]; then
+    echo "docker_packages_metadata.txt is missing in this docker, please create Dockerfile.ironbank, aborting..."
+    return 1;
   fi
 }
 
