@@ -10,7 +10,7 @@ from docker.image_latest_tag import get_latest_tag
 
 class DockerfileIronbank:
 
-    def __init__(self, docker_image_dir, output_path, requirements_file_exists):
+    def __init__(self, docker_image_dir, output_path, requirements_file_exists=True):
         self.docker_image_dir = docker_image_dir
         self.docker_image_name = os.path.basename(self.docker_image_dir)
         self.output_path = output_path
@@ -35,7 +35,7 @@ class DockerfileIronbank:
             print('prepare to create Dockerfile.ironbank')
             dst_dockerfile = os.path.join(self.output_path, 'Dockerfile', 'Dockerfile.ironbank')
 
-        with open(dst_dockerfile, "w") as fp:
+        with open(dst_dockerfile, "w+") as fp:
             fp.write(DockerfileSections.HEADER.format(ironbank_base_image, ironbank_base_image_tag))
             fp.write(DockerfileSections.FILE_BLANK_LINE)
             fp.write(DockerfileSections.COPY_REQS_TXT)
@@ -61,6 +61,12 @@ class DockerfileIronbank:
 
             print(f'{dst_dockerfile} created successfully')
 
+        with open(dst_dockerfile, "r") as fp:
+            content = fp.read()
+            fp.close()
+            print(f'{dst_dockerfile} content is:\n\n\n\n')
+            print(content)
+
     def dump(self):
         return
 
@@ -74,7 +80,7 @@ def args_handler():
     parser.add_argument('--output_path', help='Full path of folder to output the hardening_manifest.yaml file',
                         required=True)
     parser.add_argument('--requirements_file_exists', help='Wether requirements.txt file exists for this docker or not',
-                        required=True)
+                        choices=['true', 'false'], default='false')
     return parser.parse_args()
 
 
@@ -82,9 +88,8 @@ def main():
     args = args_handler()
     docker_image_dir = args.docker_image_dir
     output_path = args.output_path
-    requirements_file_exists = args.requirements_file_exists
+    requirements_file_exists = args.requirements_file_exists == 'true'
     print(f'requirements_file_exists = {requirements_file_exists}')
-    requirements_file_exists = False
 
     print("Converting docker {0} to {1} ".format(docker_image_dir, output_path))
     dockerfile_ironbank = DockerfileIronbank(docker_image_dir, output_path, requirements_file_exists)

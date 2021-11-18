@@ -159,6 +159,12 @@ function docker_build {
     cp Dockerfile "$tmp_dir/Dockerfile"
     echo "" >> "$tmp_dir/Dockerfile"
     echo "ENV DOCKER_IMAGE=$image_full_name" >> "$tmp_dir/Dockerfile"
+
+#    if dockerfile.ironbank exists:
+#         replace DOCKER_IMAGE= with the image full name
+#         same for ENV DOCKER_IMAGE_IRONBANK
+
+
     docker build -f "$tmp_dir/Dockerfile" . -t ${image_full_name} \
         --label "org.opencontainers.image.authors=Demisto <containers@demisto.com>" \
         --label "org.opencontainers.image.version=${VERSION}" \
