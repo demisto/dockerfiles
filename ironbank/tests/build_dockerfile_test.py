@@ -9,7 +9,7 @@ def test_build():
     dst_dir = 'ironbank/tests/test_data/netmiko/ironbank'
     if not os.path.exists(dst_dir):
         os.makedirs(dst_dir)
-    obj = DockerfileIronbank(src_dir, dst_dir)
+    obj = DockerfileIronbank(src_dir, dst_dir, True)
     obj.build()
     output_file = os.path.join(dst_dir, DockerfileMetadata.FILENAME)
     expected_result_file = os.path.join(src_dir, DockerfileMetadata.FILENAME + ".ironbank")
