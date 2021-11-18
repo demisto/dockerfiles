@@ -33,10 +33,11 @@ class DockerfileIronbank:
 
         if not self.requirements_file_exists:
             print('prepare to create Dockerfile.ironbank')
-            dst_dockerfile = os.path.join(self.output_path, 'Dockerfile', 'Dockerfile.ironbank')
-            open(dst_dockerfile, 'a').close()
+            dst_dockerfolder = os.path.join(self.output_path, 'Dockerfile')
+            dst_dockerfile = os.path.join(dst_dockerfolder, 'Dockerfile.ironbank')
+            os.mkdir(dst_dockerfolder)
 
-        with open(dst_dockerfile, "w") as fp:
+        with open(dst_dockerfile, "w+") as fp:
             fp.write(DockerfileSections.HEADER.format(ironbank_base_image, ironbank_base_image_tag))
             fp.write(DockerfileSections.FILE_BLANK_LINE)
             fp.write(DockerfileSections.COPY_REQS_TXT)
