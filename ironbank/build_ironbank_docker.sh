@@ -110,6 +110,7 @@ function build_dockerfile {
 
   if [[ ! -f $REQUIREMENTS ]] && [[ ! -f $1/Dockerfile.ironbank ]]; then
     echo "docker_packages_metadata.txt is missing in this docker, please create Dockerfile.ironbank, aborting..."
+    echo $1
     return 1;
   fi
 }
