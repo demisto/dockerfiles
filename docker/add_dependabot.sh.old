@@ -26,7 +26,7 @@ SCRIPT_DIR=$(dirname ${BASH_SOURCE})
 DEPNDABOT_CONF="${SCRIPT_DIR}/../.dependabot/config.yml"
 MODIFIED=0
 
-if [[ $(grep -B 1 -E "directory: /$1"'$' .dependabot/config.yml.deprecated | grep 'package_manager: python') ]]; then
+if [[ $(grep -B 1 -E "directory: /$1"'$' .dependabot/config.yml | grep 'package_manager: python') ]]; then
     echo "[$1]: Not adding python dependency config as it seems to exist"
 else
     if [[ ! -f  "$1/Pipfile" ]]; then
@@ -44,7 +44,7 @@ EOM
     fi
 fi
 
-if [[ $(grep -B 1 -E "directory: /$1"'$' .dependabot/config.yml.deprecated | grep 'package_manager: docker') ]]; then
+if [[ $(grep -B 1 -E "directory: /$1"'$' .dependabot/config.yml | grep 'package_manager: docker') ]]; then
     echo "[$1]: Not adding docker dependency config as it seems to exist"
 else
     AUTO_MERGE=""

@@ -3,7 +3,7 @@
 # exit on errors
 set -e
 
-# Verify that all docker images are properly configured in dependabot config.yml.deprecated file
+# Verify that all docker images are properly configured in .github/dependabot.yml file
 
 CURRENT_DIR=`pwd`
 SCRIPT_DIR=$(dirname ${BASH_SOURCE})
