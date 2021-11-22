@@ -26,7 +26,7 @@ SCRIPT_DIR=$(dirname ${BASH_SOURCE})
 DEPNDABOT_CONF="${SCRIPT_DIR}/../.github/dependabot.yml"
 MODIFIED=0
 
-if [[ $(grep -B 1 -E "directory: /$1"'$' .github/dependabot.yml | grep 'package_ecosystem: pip') ]]; then
+if [[ $(grep -B 1 -E "directory: /$1"'$' .github/dependabot.yml | grep 'package-ecosystem: pip') ]]; then
     echo "[$1]: Not adding python dependency config as it seems to exist"
 else
     if [[ ! -f  "$1/Pipfile" ]]; then
