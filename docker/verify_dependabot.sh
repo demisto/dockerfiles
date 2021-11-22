@@ -19,7 +19,7 @@ for d in `find "$DOCKER_SRC_DIR" -maxdepth 1 -mindepth 1 -type d`; do
     dir=`dirname $d`
     if [[ ! $(grep -E '^devonly=true' $d/build.conf) ]]; then # skip devonly images
         if [ -f "$d/Pipfile" -o -f "$d/requirements.txt" ]; then
-            if [[ ! $(grep -A 1 "/docker/${name}\$" "$DEPENDABOT_CONFIG" | grep "package-ecosystem: pip") ]]; then
+            if [[ ! $(grep -B 1 "/docker/${name}\$" "$DEPENDABOT_CONFIG" | grep "package-ecosystem: pip") ]]; then
                 echo "=============================="
                 echo "Failed verifying python config for: [$d] in .github/dependabot.yml"
                 echo "To add the config run: ./docker/add_dependabot.sh docker/$name"
