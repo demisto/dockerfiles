@@ -104,6 +104,9 @@ function build_dockerfile {
   if [[ -f $1/Dockerfile.ironbank ]]; then
     # if we have a special Dockerfile for ironbank, copy it instead of generating
     cp $1/Dockerfile.ironbank $OUTPUT_PATH/Dockerfile
+  # if requirements.txt exists execute build_dockerfile with requirements_file_exists=truw
+  elif [[ -f $REQUIREMENTS ]]; then
+    python ./ironbank/build_dockerfile.py --docker_image_dir $1 --output_path $OUTPUT_PATH --requirements_file_exists true
   else
     python ./ironbank/build_dockerfile.py --docker_image_dir $1 --output_path $OUTPUT_PATH --requirements_file_exists false
   fi
