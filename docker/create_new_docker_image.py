@@ -125,7 +125,7 @@ def main():
         create_python_image(folder, base_image_last, args)
     else:
         create_powershell_image(folder, base_image_last, args)
-    print('Adding: {} to .dependabot/config.yml ...'.format(folder))
+    print('Adding: {} to .github/dependabot.yml ...'.format(folder))
     subprocess.check_call([sys.path[0] + "/add_dependabot.sh", "docker/" + args.name])
     print('========================================')
     print("Done creating image files in folder: " + folder)
