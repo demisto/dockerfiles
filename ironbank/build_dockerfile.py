@@ -64,12 +64,6 @@ class DockerfileIronbank:
 
             print(f'{dst_dockerfile} created successfully')
 
-        with open(dst_dockerfile, "r") as fp:
-            content = fp.read()
-            fp.close()
-            print(f'{dst_dockerfile} content is:\n\n\n\n')
-            print(content)
-
     def dump(self):
         return
 
@@ -92,7 +86,6 @@ def main():
     docker_image_dir = args.docker_image_dir
     output_path = args.output_path
     requirements_file_exists = args.requirements_file_exists == 'true'
-    print(f'requirements_file_exists = {requirements_file_exists}')
 
     print("Converting docker {0} to {1} ".format(docker_image_dir, output_path))
     dockerfile_ironbank = DockerfileIronbank(docker_image_dir, output_path, requirements_file_exists)

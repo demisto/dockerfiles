@@ -113,7 +113,6 @@ function build_dockerfile {
 
   if [[ ! -f $REQUIREMENTS ]] && [[ ! -f $1/Dockerfile.ironbank ]]; then
     echo "docker_packages_metadata.txt is missing in this docker, please create Dockerfile.ironbank, aborting..."
-    echo $1
     return 1;
   fi
 }
@@ -196,8 +195,8 @@ function build_ironbank_docker {
   build_dockerfile $1
   build_license $1
   build_readme $1
-#  upload_image_to_artifacts $1
-#  commit_ironbank_image_to_repo_one $1
+  upload_image_to_artifacts $1
+  commit_ironbank_image_to_repo_one $1
 }
 
 total=$(grep -E ironbank=true ./docker/*/build.conf | wc -l)
