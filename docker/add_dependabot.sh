@@ -36,7 +36,8 @@ MODIFIED=1
 cat >> $DEPNDABOT_CONF <<- EOM
   - package-ecosystem: pip
     directory: /$1
-    schedule: interval: daily
+    schedule:
+     interval: daily
 EOM
     fi
 fi
