@@ -8,6 +8,8 @@ import re
 
 
 def post_comment(image_commit_map):
+    get_pipelines_attemption = 10
+
     if not os.environ.get('GITHUB_KEY'):
         print("No github key set. Will not post a message!")
         return
@@ -34,19 +36,27 @@ def post_comment(image_commit_map):
     for item in image_commit_map:
         image_name, commit_sha = item.split('=')
         params = {'sha': commit_sha}
-        url = f'https://repo1.dso.mil/api/v4/projects/dsop%2Fopensource%2Fpalo-alto-networks%2Fdemisto%2F{image_name}/pipelines'
-        try:
-            print(f'Executing request to {url}')
-            res = requests.get(url=url, params=params, verify=False)
-            print(f'status code:{res.status_code}')
-            print(f'content:{res.content}')
-        except Exception as ex:
-            print(ex)
-            raise
 
-        commit_pipeline = res.json()[0]
-        pipeline_url = commit_pipeline.get('web_url', '')
-        message += f"- {image_name}: [{pipeline_url}]({pipeline_url})\n"
+        message = ''
+
+        # We need to more than one try to get the pipeline results because When we commit ironbank image to repo one,
+        # it takes approximately one or two seconds to gets the pipeline
+        for counter in range(get_pipelines_attemption):
+            url = f'https://repo1.dso.mil/api/v4/projects/dsop%2Fopensource%2Fpalo-alto-networks%2Fdemisto%2F{image_name}/pipelines'
+            print(f'Attempt #{counter + 1} to get pipeline from {url}')
+            commit_pipeline = ''
+            try:
+                res = requests.get(url=url, params=params)
+                commit_pipeline = res.json()
+                print(f'commit_pipeline: {commit_pipeline}')
+            except Exception as ex:
+                print(f'Failed to get pipelines from repo1.dso.mil: {ex}')
+
+            if commit_pipeline:
+                pipeline_url = commit_pipeline[0].get('web_url', '')
+                message += f"- {image_name}: [{pipeline_url}]({pipeline_url})\n"
+                break
+
     print("Going to post comment:\n\n{}".format(message))
     res = requests.post(post_url, json={"body": message}, auth=(os.environ['GITHUB_KEY'], 'x-oauth-basic'))
     try:
