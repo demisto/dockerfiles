@@ -37,7 +37,7 @@ jobs:
               fi
           fi
           echo "Pull title [$PULL_TITLE] not approved"
-      - uses: hmarr/auto-approve-action@v2.0.0
+      - uses: hmarr/auto-approve-action@v2.1.0
         if: steps.auto_approve_check.outputs.approved == 'true'
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
