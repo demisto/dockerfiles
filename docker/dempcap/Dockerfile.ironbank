@@ -1,6 +1,6 @@
 ARG BASE_REGISTRY=registry1.dso.mil
 ARG BASE_IMAGE=ironbank/opensource/palo-alto-networks/demisto/python
-ARG BASE_TAG=2.7.18.20958
+ARG BASE_TAG=2.7.18.24066
 FROM ${BASE_REGISTRY}/${BASE_IMAGE}:${BASE_TAG}
 
 COPY requirements.txt .
@@ -18,12 +18,14 @@ RUN dnf install -y --nodocs python2-devel gcc gcc-c++ make wget git && \
         rm -rf /var/cache/dnf && \
         rm -rf ./pip-pkgs
 
-ENV DOCKER_IMAGE='demisto/dempcap:1.0.0.23135'
+ENV DOCKER_IMAGE='demisto/dempcap:1.0.0.24033'
 
-ENV DOCKER_IMAGE_IRONBANK='opensource/palo-alto-networks/demisto/dempcap:1.0.0.23135'
+ENV DOCKER_IMAGE_IRONBANK='opensource/palo-alto-networks/demisto/dempcap:1.0.0.24033'
 
 # Copy the pcapminey directory contents into the container at /app
-ADD pcapminey /app/pcapminey
+COPY pcapminey /app/pcapminey
+
+RUN df --local -P | awk '{if (NR!=1) print $6}' | xargs -I '{}' find '{}' -xdev -type d ( -perm -0002 -a ! -perm -1000 ) 2>/dev/null | xargs chmod a+t
 
 HEALTHCHECK NONE
 
