@@ -1,5 +1,11 @@
 version: 2
 updates:
+    # this one is for pr limits
+  - package-ecosystem: pip
+    directory: /
+    schedule:
+     interval: daily
+    open-pull-requests-limit: 200
   - package-ecosystem: pip
     directory: /docker/pcap-http-extractor
     schedule:
