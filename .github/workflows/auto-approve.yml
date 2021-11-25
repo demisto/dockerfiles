@@ -21,19 +21,19 @@ jobs:
             echo "$GITHUB_ACTOR is not listed for auto approve"
             exit 0
           fi
-          demisto_bump='^(build\(deps\): )?[B|b]ump demisto/.*'
+          demisto_bump="^build\(deps(-dev)*\): bump demisto/.*"
           if [[ "$PULL_TITLE" =~ $demisto_bump ]];then
             echo "::set-output name=approved::true";
             exit 0
           fi
-          minor_regex='^build\(deps(-dev)*\): bump .+ from (\d{1,2})\.(\d{1,2})\.(\d{1,2}) to (\d{1,2})\.(\d{1,2})\.(\d{1,2})'
+          minor_regex="^build\(deps(-dev)*\): bump .+ from ([[:digit:]]+)\.([[:digit:]]+)\.([[:digit:]]+) to ([[:digit:]]+)\.([[:digit:]]+)\.([[:digit:]]+)"
           if [[ "$PULL_TITLE" =~  $minor_regex ]]; then
               if [[ "${BASH_REMATCH[2]}" == "${BASH_REMATCH[5]}" && "${BASH_REMATCH[3]}" == "${BASH_REMATCH[6]}" ]]; then
                   echo "patch/minor version upgrade. approving"
                   echo "::set-output name=approved::true";
                   exit 0
               else
-                  echo "major versions ${BASH_REMATCH[2]} != ${BASH_REMATCH[5]} don't match. not approving"
+                  echo "This is major version, not approving"
               fi
           fi
           echo "Pull title [$PULL_TITLE] not approved"
