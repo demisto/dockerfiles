@@ -29,7 +29,7 @@ RUN apt-get update -y -q && \
     fonts-noto-core \
     libgbm-dev \
     && rm -rf /var/lib/apt/lists/* \
-    && npm i npm@latest -g
+    && npm i npm@8.1.3 -g
 
 RUN npm i puppeteer@5.3.1 && ln -s /app/node_modules/puppeteer/.local-chromium/linux-*/chrome-linux/chrome /usr/bin/chromium-browser
 
