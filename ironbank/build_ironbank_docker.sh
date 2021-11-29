@@ -109,11 +109,7 @@ function build_dockerfile {
     python ./ironbank/build_dockerfile.py --docker_image_dir $1 --output_path $OUTPUT_PATH --requirements_file_exists true
   else
     python ./ironbank/build_dockerfile.py --docker_image_dir $1 --output_path $OUTPUT_PATH --requirements_file_exists false
-  fi
-
-  if [[ ! -f $REQUIREMENTS ]] && [[ ! -f $1/Dockerfile.ironbank ]]; then
-    echo "docker_packages_metadata.txt is missing in this docker, please create Dockerfile.ironbank, aborting..."
-    return 1;
+    cp $1/Dockerfile.ironbank $OUTPUT_PATH/Dockerfile
   fi
 }
 

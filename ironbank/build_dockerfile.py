@@ -4,7 +4,7 @@ import os
 from ironbank.utils import BaseImagesStore, get_base_image_from_dockerfile, \
     get_last_image_tag_ironbank
 
-from ironbank.constants import DockerfileMetadata, DockerfileSections, DEMISTO_REGISTRY_ROOT
+from ironbank.constants import DockerfileMetadata, DockerfileSections, DEMISTO_REGISTRY_ROOT, IRONBAK_DOCKER_FILE_NAME
 from docker.image_latest_tag import get_latest_tag
 
 
@@ -32,8 +32,8 @@ class DockerfileIronbank:
         self.image_tag = get_latest_tag(self.dockerhub_image_uri)
 
         if not self.requirements_file_exists:
-            print('prepare to create Dockerfile.ironbank')
-            dst_dockerfile = os.path.join(self.docker_image_dir, 'Dockerfile.ironbank')
+            print(f'requirements.txt is missing - prepare to create {IRONBAK_DOCKER_FILE_NAME}')
+            dst_dockerfile = os.path.join(self.docker_image_dir, IRONBAK_DOCKER_FILE_NAME)
 
         with open(dst_dockerfile, "w+") as fp:
             fp.write(DockerfileSections.HEADER.format(ironbank_base_image, ironbank_base_image_tag))
