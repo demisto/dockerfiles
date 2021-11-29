@@ -105,7 +105,7 @@ function build_dockerfile {
   fi
   if [[ -f $1/Dockerfile.ironbank ]]; then
     # if we have a special Dockerfile for ironbank, copy it instead of generating
-    echo "$OUTPUT_PATH/Dockerfile was found and will use to build the docker"
+    echo "$1/Dockerfile.ironbank was found and will use to build the docker"
     cp $1/Dockerfile.ironbank $OUTPUT_PATH/Dockerfile
   # if requirements.txt exists execute build_dockerfile with requirements_file_exists=truw
   elif [[ -f $DOCKER_PACKAGE_METADATA ]]; then
