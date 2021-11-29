@@ -78,6 +78,7 @@ function build_hardening_manifest {
 
     # Run the base image docker container only when requirements.txt exists
     if [[ $REQUIREMENTS ]]; then
+      echo $REQUIREMENTS
       echo "Prepare to Run the image docker container"
       docker run -it $DOCKER_IMAGE /bin/sh -c "cd ~;dnf install -y --nodocs python$PYTHON_VERSION-devel gcc gcc-c++ make wget git;touch /requirements.txt;echo \"$REQUIREMENTS\" > /requirements.txt;pip uninstall -y -r /requirements.txt;pip cache purge;pip install -v --no-deps --no-cache-dir --log /tmp/pip.log -r /requirements.txt;cat /tmp/pip.log;exit" | grep Added >> $DOCKER_PACKAGES_METADATA_PATH
     else
