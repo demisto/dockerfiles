@@ -76,6 +76,9 @@ function build_hardening_manifest {
     DOCKER_PACKAGES_METADATA_PATH="$OUTPUT_PATH/docker_packages_metadata.txt"
     REQUIREMENTS="$(cat $1/requirements.txt)"
 
+    # trim the string output
+    REQUIREMENTS="${REQUIREMENTS#"${REQUIREMENTS%%[![:space:]]*}"}"
+
     # Run the base image docker container only when requirements.txt exists
     if [[ ! $REQUIREMENTS ]] || [[ $REQUIREMENTS = "-i https://pypi.org/simple" ]]; then
       echo "Skip docker run - requirements.txt file is missing"
@@ -95,8 +98,7 @@ function build_hardening_manifest {
 # $1: docker image dir (~/../docker/$IMAGE_NAME)
 function build_dockerfile {
   OUTPUT_PATH=ironbank/$(basename $1)
-  REQUIREMENTS="$OUTPUT_PATH/docker_packages_metadata.txt"
-
+  DOCKER_PACKAGE_METADATA="$OUTPUT_PATH/docker_packages_metadata.txt"
 
   if [[ ! -d $OUTPUT_PATH ]]; then
     mkdir $OUTPUT_PATH
@@ -105,7 +107,7 @@ function build_dockerfile {
     # if we have a special Dockerfile for ironbank, copy it instead of generating
     cp $1/Dockerfile.ironbank $OUTPUT_PATH/Dockerfile
   # if requirements.txt exists execute build_dockerfile with requirements_file_exists=truw
-  elif [[ -f $REQUIREMENTS ]]; then
+  elif [[ -f $DOCKER_PACKAGE_METADATA ]]; then
     python ./ironbank/build_dockerfile.py --docker_image_dir $1 --output_path $OUTPUT_PATH --requirements_file_exists true
   else
     python ./ironbank/build_dockerfile.py --docker_image_dir $1 --output_path $OUTPUT_PATH --requirements_file_exists false
