@@ -5,6 +5,10 @@ FROM ${BASE_REGISTRY}/${BASE_IMAGE}:${BASE_TAG}
 
 USER root
 
+RUN dnf install -y --nodocs iputils && \
+        dnf clean all && \
+        rm -rf /var/cache/dnf
+
 ENV DOCKER_IMAGE='demisto/iputils:1.0.0.24092'
 
 ENV DOCKER_IMAGE_IRONBANK='opensource/palo-alto-networks/demisto/iputils:1.0.0.24092'
