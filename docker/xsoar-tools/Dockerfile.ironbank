@@ -16,7 +16,13 @@ RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git libstdc++ &&
         dnf remove -y python3-devel gcc gcc-c++ make wget git platform-python-pip libstdc++ && \
         dnf clean all && \
         rm -rf /var/cache/dnf && \
-        rm -rf ./pip-pkgs
+        rm -rf ./pip-pkgs && \
+        cp ./pip-pkgs/CommonServerPython.py /home/demisto && \
+        cp ./pip-pkgs/CommonServerPowerShell.py /home/demisto && \
+        cp ./pip-pkgs/tox.ini /home/demisto && \
+        cp ./pip-pkgs/demistomock.py /home/demisto && \
+        cp ./pip-pkgs/demistomock.ps1 /home/demisto && \
+        cp ./pip-pkgs/conftest.py /home/demisto
 
 ENV DOCKER_IMAGE='demisto/xsoar-tools:1.0.1.24037'
 
