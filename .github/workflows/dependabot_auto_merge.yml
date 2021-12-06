@@ -14,10 +14,12 @@ jobs:
         id: metadata
         uses: dependabot/fetch-metadata@v1.1.1
         with:
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
-      - name: Enable auto-merge for Dependabot PRs
+          github-token: "${{ secrets.GITHUB_TOKEN }}"}
+      - name: Approve and auto-merge for Dependabot PRs
         if: ${{contains(steps.metadata.outputs.dependency-names, 'demisto/*') || steps.metadata.outputs.update-type == 'version-update:semver:patch' || steps.metadata.outputs.update-type == 'version-update:semver:minor'}}
-        run: gh pr merge --auto --merge "$PR_URL"
         env:
           PR_URL: ${{github.event.pull_request.html_url}}
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        run: |
+          gh pr review --approve "$PR_URL"
+          gh pr merge --auto --merge "$PR_URL"
