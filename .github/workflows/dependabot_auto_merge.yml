@@ -23,4 +23,4 @@ jobs:
         run: |
           echo "Aprovving and merging"
           gh pr review --approve "$PR_URL"
-          gh pr merge --auto --merge "$PR_URL"
+          gh pr merge --auto --squash "$PR_URL"
