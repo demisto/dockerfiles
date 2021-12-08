@@ -71,10 +71,16 @@ class HardeningManifest:
             HardeningManifestLabels.URL: ' ',
             HardeningManifestLabels.VENDOR: HardeningManifestLabels.DEMISTO,
             HardeningManifestLabels.VERSION: '1.0',
-            HardeningManifestLabels.KEYWORDS: ', '.join(list(self.pipfile_lock_data[Pipfile.DEFAULT].keys())),
             HardeningManifestLabels.TYPE: HardeningManifestLabels.OPEN_SOURCE,
             HardeningManifestLabels.NAME: f'{HardeningManifestLabels.BASE_NAME}-{self.docker_image_name}'
         }
+
+        pip_file_lock_data_keys = list(self.pipfile_lock_data[Pipfile.DEFAULT].keys())
+
+        if pip_file_lock_data_keys:
+            self.labels[HardeningManifestLabels.KEYWORDS] = ', '.join(pip_file_lock_data_keys)
+        else:
+            self.labels[HardeningManifestLabels.KEYWORDS] = ' '
 
     def handle_tags(self):
         # latest tag in list's first place
@@ -87,6 +93,10 @@ class HardeningManifest:
         self.args[HardeningManifestArgs.BASE_TAG] = get_last_image_tag_ironbank(self.base_image)
 
     def handle_resources(self):
+        if not os.path.exists(self.docker_packages_metadata_path):
+            print(f'The file {self.docker_packages_metadata_path} is not exists,'
+                  f'hardening_manifest.yaml file will created with no resources')
+            return
         raw_resources = [r.strip(' \n') for r in open(self.docker_packages_metadata_path, 'r').readlines()]
         for raw_resource in raw_resources:
             try:
@@ -114,7 +124,6 @@ class HardeningManifest:
             HardeningManifestYaml.TAGS: self.tags,
             HardeningManifestYaml.ARGS: self.args,
             HardeningManifestYaml.LABELS: self.labels,
-            HardeningManifestYaml.RESOURCES: [resource.dump() for resource in self.resources],
             HardeningManifestYaml.MAINTAINERS: [{
                 HardeningManifestMaintainer.EMAIL: DEMISTO_CONTAINERS_MAIL,
                 HardeningManifestMaintainer.NAME: PANW,
@@ -122,6 +131,9 @@ class HardeningManifest:
                 HardeningManifestMaintainer.CHT_MEMBER: False
             }]
         }
+
+        if self.resources:
+            self.yaml_dict[HardeningManifestYaml.RESOURCES] = [resource.dump() for resource in self.resources]
 
         with open(self.output_path, 'w') as yf:
             self.ryaml.dump(self.yaml_dict, yf)

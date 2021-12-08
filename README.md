@@ -197,7 +197,7 @@ PIPENV_KEEP_OUTDATED=true ./docker/install_common_python_dep.sh dateparser
 ```
 
 ### Automatic updates via Dependabot
-We use [dependabot](https://dependabot.com/) for automated dependency updates. When a new image is added to the repository there is need to add the proper config to [.dependabot/config.yml](.dependabot/config.yml). If you used the `./docker/create_new_python_image.py` to create the docker image, then this config will be added automatically by the script. Otherwise, you will need to add the proper dependabot config. The build will fail without this config. You can add the dependabot config by running the script:
+We use [dependabot](https://docs.github.com/en/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically) for automated dependency updates. When a new image is added to the repository there is need to add the proper config to [.github/dependabot.yml](.github/dependabot.yml). If you used the `./docker/create_new_python_image.py` to create the docker image, then this config will be added automatically by the script. Otherwise, you will need to add the proper dependabot config. The build will fail without this config. You can add the dependabot config by running the script:
 ```
 ./docker/add_dependabot.sh <folder path to new docker image>
 ```
