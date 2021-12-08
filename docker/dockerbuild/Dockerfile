@@ -6,6 +6,7 @@ RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-instal
   && echo 'eval "$(pyenv init -)"' >> ~/.bashrc \
   && echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.bashrc
 
+RUN bash -i -c 'pyenv install 2.7.18 && pyenv versions | grep 2.7.18'
 RUN bash -i -c 'pyenv install 3.7.6 && pyenv versions | grep 3.7.6'
 RUN bash -i -c 'pyenv install 3.8.1 && pyenv versions | grep 3.8.1'
 RUN bash -i -c 'pyenv install 3.6.10 && pyenv versions | grep 3.6.10'
