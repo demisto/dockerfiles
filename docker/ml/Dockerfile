@@ -21,8 +21,13 @@ RUN rm -rf /var/lib/apt/lists/*
 RUN python -m spacy download en_core_web_sm
 RUN mkdir /ml
 RUN python -c "import nltk; nltk.download('stopwords', download_dir='/ml/nltk_data'); nltk.download('punkt',download_dir='/ml/nltk_data')"
+RUN mkdir /usr/local/share/nltk_data \
+  && chmod 755 /usr/local/share/nltk_data \
+  && python -m nltk.downloader -d /usr/local/share/nltk_data punkt
 ENV NLTK_DATA='/ml/nltk_data'
 ENV MPLCONFIGDIR='/ml/matplotlib'
 COPY oob_evaluation.txt /ml
 RUN chown -R demisto:demisto /ml && chmod -R 775 /ml
 COPY --from=files-src --chown=demisto:demisto /ml /ml
+RUN python -m spacy download fr_core_news_sm
+RUN python -m spacy download de_core_news_sm
