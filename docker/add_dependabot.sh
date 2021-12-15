@@ -44,16 +44,18 @@ cat >> $DEPNDABOT_CONF <<- EOM
       - docker
       - dependencies
     open-pull-requests-limit: 400
-
 EOM
     fi
 fi
 
-if [[ $(grep -B 1 -E "directory: /$1"'$' .dependabot/config.yml | grep 'package_manager: docker') ]]; then
+if [[ $(grep -B 1 -E "directory: /$1"'$' .github/dependabot.yml | grep 'package-ecosystem: docker') ]]; then
     echo "[$1]: Not adding docker dependency config as it seems to exist"
 else
-    MODIFIED=1
-cat >> $DEPNDABOT_CONF <<- EOM
+    if [[ -z $(grep -E '^FROM\s+demisto/' $1/Dockerfile) ]]; then
+        echo "[$1}: Not adding python dependency config as it is not docker"
+    else
+        MODIFIED=1
+        cat >> $DEPNDABOT_CONF <<- EOM
   - package-ecosystem: docker
     directory: /$1
     schedule:
@@ -65,6 +67,7 @@ cat >> $DEPNDABOT_CONF <<- EOM
       - dependencies
     open-pull-requests-limit: 400
 EOM
+    fi
 fi
 
 

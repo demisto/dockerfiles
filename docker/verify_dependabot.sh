@@ -20,7 +20,7 @@ for d in `find "$DOCKER_SRC_DIR" -maxdepth 1 -mindepth 1 -type d`; do
     if [[ ! $(grep -E '^devonly=true' $d/build.conf) ]]; then # skip devonly images
         if [[ ! $(grep -B 1 "/docker/${name}\$" "$DEPENDABOT_CONFIG" | grep "package-ecosystem: docker") ]]; then
             echo "=============================="
-            echo "Failed verifying docker config for: [$d] in dependabot/.config.yml"
+            echo "Failed verifying docker config for: [$d] in .github/dependabot.yml"
             echo "To add the config run: ./docker/add_dependabot.sh docker/$name"
             exit 1
         fi
