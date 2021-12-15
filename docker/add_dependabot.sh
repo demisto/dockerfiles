@@ -38,8 +38,33 @@ cat >> $DEPNDABOT_CONF <<- EOM
     directory: /$1
     schedule:
      interval: daily
+    reviewers:
+      - wissamg
+    labels:
+      - docker
+      - dependencies
+    open-pull-requests-limit: 400
+
 EOM
     fi
+fi
+
+if [[ $(grep -B 1 -E "directory: /$1"'$' .dependabot/config.yml | grep 'package_manager: docker') ]]; then
+    echo "[$1]: Not adding docker dependency config as it seems to exist"
+else
+    MODIFIED=1
+cat >> $DEPNDABOT_CONF <<- EOM
+  - package-ecosystem: docker
+    directory: /$1
+    schedule:
+     interval: daily
+    reviewers:
+      - wissamg
+    labels:
+      - docker
+      - dependencies
+    open-pull-requests-limit: 400
+EOM
 fi
 
 
