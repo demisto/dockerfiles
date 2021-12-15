@@ -13,7 +13,7 @@ USER root
 
 RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git \
         rust cargo \
-        libffi-dev openssl-dev \
+        libffi-devel openssl-devel \
         && pip install --no-cache-dir --no-index --find-links ./pip-pkgs/ -r requirements.txt &&  \
         dnf remove -y python3-devel gcc gcc-c++ make wget git && \
         dnf clean all && \
