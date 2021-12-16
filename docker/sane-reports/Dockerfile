@@ -45,3 +45,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Update permissions and ownership on /app dir
 RUN chown -R root:demisto /app/ && chmod 775 /app/ && chmod 775 /app/dist
 
+RUN apt-get purge -y --auto-remove \
+      gcc \
+      python3-dev \
+    && rm -rf /var/lib/apt/lists/*
