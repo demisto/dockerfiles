@@ -72,6 +72,8 @@ def main():
     # set the result file name
     res_file = str(Path(p.parent, f"{p.stem}_FILLED{p.suffix}"))
 
+    print(f'Processing the file {input_file}...\n')
+
     workbook = load_workbook(filename=input_file)
 
     for sheet in workbook.worksheets:
