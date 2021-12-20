@@ -42,6 +42,8 @@ def find_indexes(sheet, justification_col_name):
 
 
 def fill_justifications(sheet, justifications, trigger_id_index, justification_index):
+    warnings = set()
+
     for row in range(1, sheet.max_row + 1):
         justification_cell = sheet.cell(row=row, column=justification_index)
 
@@ -51,8 +53,11 @@ def fill_justifications(sheet, justifications, trigger_id_index, justification_i
             if justifications.get(trigger_id_value):
                 justification_cell.value = justifications[trigger_id_value]
             else:
-                print(f'{WARNING_STYLE}Warning: No justification found for {trigger_id_value}'
-                      f' in the sheet: {sheet.title}{END_COLOR}')
+                warnings.add(f'No justification found for {trigger_id_value} in the sheet: {sheet.title}')
+
+    # print all the warnings
+    for warn in warnings:
+        print(f'{WARNING_STYLE}Warning: {warn}{END_COLOR}')
 
 
 def main():
