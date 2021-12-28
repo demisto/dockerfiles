@@ -1,7 +1,7 @@
 import argparse
 from pathlib import Path
 from openpyxl import load_workbook
-from justifications_mapping import SHEET_JUSTIFICATIONS_MAPPERS
+from justifications_mapping import SHEET_JUSTIFICATIONS_MAPPERS, JUSTIFICATIONS
 
 MAX_OFFSET_RETRIES = 3
 WARNING_STYLE = '\033[93m'
@@ -41,7 +41,7 @@ def find_indexes(sheet, justification_col_name):
     return justification_id_index, justification_index
 
 
-def fill_justifications(sheet, justifications, trigger_id_index, justification_index):
+def fill_justifications(sheet, trigger_id_index, justification_index):
     warnings = set()
 
     for row in range(1, sheet.max_row + 1):
@@ -50,8 +50,8 @@ def fill_justifications(sheet, justifications, trigger_id_index, justification_i
         # if the justification column background is yellow, fill it with the value from the mapper.
         if justification_cell.fill.bgColor.index in SHEET_YELLOW_COLORS:
             trigger_id_value = sheet.cell(row=row, column=trigger_id_index).value
-            if justifications.get(trigger_id_value):
-                justification_cell.value = justifications[trigger_id_value]
+            if JUSTIFICATIONS.get(trigger_id_value):
+                justification_cell.value = JUSTIFICATIONS[trigger_id_value]
             else:
                 warnings.add(f'No justification found for {trigger_id_value} in the sheet: {sheet.title}')
 
@@ -88,9 +88,8 @@ def main():
             if not justification_id_index or not justification_index:
                 raise Exception(f'Failed to find the column "{justification_col_name}" in the sheet: {sheet.title}')
 
-            justifications = mapper['justifications']
             # fill the justifications in current sheet
-            fill_justifications(sheet, justifications, justification_id_index, justification_index)
+            fill_justifications(sheet, justification_id_index, justification_index)
 
     # save the file
     workbook.save(res_file)
