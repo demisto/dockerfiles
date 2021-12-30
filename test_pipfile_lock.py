@@ -30,12 +30,10 @@ class DockerFileValidator:
 
         errors = []
         if prohibited_but_exist:
-            prohibited_message = ",".join(prohibited_but_exist)
-            errors.append(f'The following files are not allowed: {prohibited_message}')
+            errors.append(f'The following files are not allowed: ' + ",".join(prohibited_but_exist))
 
         if required_but_missing:
-            required_message = ",".join(required_but_missing)
-            errors.append(f'The following files are required: {required_message}')
+            errors.append(f'The following files are required: ' + ",".join(required_but_missing))
 
         if errors:
             raise ValueError("\n".join(errors))
