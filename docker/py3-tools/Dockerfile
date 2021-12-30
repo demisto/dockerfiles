@@ -4,19 +4,22 @@ FROM demisto/python3:3.9.9.25564
 COPY requirements.txt .
 
 
-RUN pip3 install --no-cache-dir --upgrade pip \
-&& apk --update add --no-cache \
-    iputils \
-    openssh-client \
-    p7zip unrar \
-    libffi \
-&& apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git \
-     libffi-dev openssl-dev \
-     libxml2-dev libxslt-dev \
+RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git \
   && pip install --no-cache-dir -r requirements.txt \
-  && apk del .build-dependencies \
-&& mkdir /var/opt/etl && wget -O /var/opt/etl/etl2pcap.py https://raw.githubusercontent.com/aaptel/etl2pcap/45c1a843078c757a0e5e49b30c89c77221ae9afc/etl2pcap.py
+  && apk del .build-dependencies
 
+
+# Base: 67mb
+# cloudshare, intezer, emoji, exifread, stomp.py, geopy, dns-python, 72mb
+# algorithmia, asana, feed-parser-html, imap, pyjarm, python_zipfile 81mb
+# paho-mqtt, python3-arrow, vertica, sendgrid, circleci, archer  85mb
+# tweepy, tld, feed-parser, langdetect, gql, minio, ldap, pymongo 100mb
+
+# Bad:
+# containes dockerfile changes: etl2pcap,
+# staic version and conflict: gql vs graphql (removed)
+# has verify: marketo, pyotrs, dxl
+#------
 
 # Contains:
 # cloudshare, etl2pcap, intezer, emoji, exifread, stomp.py, geopy
