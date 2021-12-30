@@ -14,9 +14,11 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
 # algorithmia, asana, feed-parser-html, imap, pyjarm, python_zipfile 81mb
 # paho-mqtt, python3-arrow, vertica, sendgrid, circleci, archer  85mb
 # tweepy, tld, feed-parser, langdetect, gql, minio, ldap, pymongo 100mb
+# cyjax, zabbix, jmespath, xlrd-py3, elasticsearch, aiohttp, stix2 120mb
+
 
 # Bad:
-# containes dockerfile changes: etl2pcap,
+# containes dockerfile changes: etl2pcap, pycef,
 # staic version and conflict: gql vs graphql (removed)
 # has verify: marketo, pyotrs, dxl
 #------
