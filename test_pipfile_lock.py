@@ -24,7 +24,7 @@ class DockerFileValidator:
 
     @staticmethod
     def _validate_files():
-        files = tuple(Path().glob('*'))
+        files = tuple(file.name for file in Path().glob('*'))
         prohibited_but_exist = PROHIBITED_FILES.intersection(files)
         required_but_missing = REQUIRED_FILES.difference(files)
 
