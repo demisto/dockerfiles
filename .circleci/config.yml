@@ -9,7 +9,7 @@ jobs:
           command: python -m jsonschema -i docker/approved_licenses.json docker/approved_licenses.schema.json
       - run:
           name: Validate pipfile and pipfile.lock
-          command: python -m test_pipfile_lock.py
+          command: python3 -m test_pipfile_lock.py
       - run:
           name: Validate Dependabot Config
           command: ./docker/verify_dependabot.sh
