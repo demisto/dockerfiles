@@ -18,7 +18,7 @@ DEMISTO_REGISTRY_ROOT = 'opensource/palo-alto-networks/demisto'
 DEMISTO_CONTAINERS_MAIL = 'containers@demisto.com'
 PANW = 'Palo Alto Networks'
 DEFAULT_USER = 'wghammashi'
-
+IRONBAK_DOCKER_FILE_NAME = 'Dockerfile.ironbank'
 
 class HardeningManifestArgs:
     BASE_IMAGE = 'BASE_IMAGE'
