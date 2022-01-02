@@ -10,7 +10,7 @@ REQUIRED_FILES = {'Dockerfile'}
 
 
 class DockerFileValidator:
-    def __init__(self, path: str = ''):
+    def __init__(self, path= ''):
         self.path = Path(path)
         os.chdir(self.path)  # for debug purposes # todo remove
         self.project = Project()
