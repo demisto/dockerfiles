@@ -23,10 +23,10 @@ if [[ ! -d  "$1" ]]; then
 fi
 
 SCRIPT_DIR=$(dirname ${BASH_SOURCE})
-DEPNDABOT_CONF="${SCRIPT_DIR}/../.dependabot/config.yml"
+DEPNDABOT_CONF="${SCRIPT_DIR}/../.github/dependabot.yml"
 MODIFIED=0
 
-if [[ $(grep -B 1 -E "directory: /$1"'$' .dependabot/config.yml | grep 'package_manager: python') ]]; then
+if [[ $(grep -B 1 -E "directory: /$1"'$' .github/dependabot.yml | grep 'package-ecosystem: pip') ]]; then
     echo "[$1]: Not adding python dependency config as it seems to exist"
 else
     if [[ ! -f  "$1/Pipfile" ]]; then
@@ -34,38 +34,14 @@ else
     else
 MODIFIED=1
 cat >> $DEPNDABOT_CONF <<- EOM
-  - package_manager: python
+  - package-ecosystem: pip
     directory: /$1
-    update_schedule: live
-    automerged_updates:
-    - match:
-        update_type: semver:minor
+    schedule:
+     interval: daily
 EOM
     fi
 fi
 
-if [[ $(grep -B 1 -E "directory: /$1"'$' .dependabot/config.yml | grep 'package_manager: docker') ]]; then
-    echo "[$1]: Not adding docker dependency config as it seems to exist"
-else
-    AUTO_MERGE=""
-    if [[ $(grep -E '^FROM\s+demisto/' $1/Dockerfile) ]]; then
-AUTO_MERGE=$(cat <<-EOM
-
-    automerged_updates:
-    - match:
-        dependency_name: demisto/*
-        update_type: all
-EOM
-)
-    fi
-    MODIFIED=1
-cat >> $DEPNDABOT_CONF <<- EOM
-  - package_manager: docker
-    directory: /$1
-    update_schedule: daily$AUTO_MERGE
-
-EOM
-fi
 
 if [[ $MODIFIED -eq 1 ]]; then
     echo "[$1]: Done adding dependabot configuration"

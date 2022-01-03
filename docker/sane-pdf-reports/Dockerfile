@@ -1,4 +1,4 @@
-# Last modified: Wednesday, 11 Aug 2021
+# Last modified: Thu, 23 Dec 2021 11:32:12 +0200
 FROM demisto/python3-deb:3.9.6.22912
 
 WORKDIR "/app"
@@ -29,7 +29,7 @@ RUN apt-get update -y -q && \
     fonts-noto-core \
     libgbm-dev \
     && rm -rf /var/lib/apt/lists/* \
-    && npm i npm@latest -g
+    && npm i npm@8.1.3 -g
 
 RUN npm i puppeteer@5.3.1 && ln -s /app/node_modules/puppeteer/.local-chromium/linux-*/chrome-linux/chrome /usr/bin/chromium-browser
 
