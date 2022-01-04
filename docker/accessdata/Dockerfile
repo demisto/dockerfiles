@@ -3,5 +3,3 @@ FROM demisto/python3:3.9.8.24399
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git \
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies
-
-RUN pip install https://github.com/AccessDataOps/FTK-API-SDK/archive/refs/tags/v0.7.3.zip
