@@ -1,0 +1,22 @@
+ARG BASE_REGISTRY=registry1.dso.mil
+ARG BASE_IMAGE=ironbank/opensource/palo-alto-networks/demisto/python3
+ARG BASE_TAG=3.9.7.24076
+FROM ${BASE_REGISTRY}/${BASE_IMAGE}:${BASE_TAG}
+
+USER root
+
+COPY linux_signing_key.pub /tmp
+COPY RPM-GPG-KEY-CentOS-Official /tmp
+COPY google-chrome-stable-96.0.4664.110-1.x86_64.rpm /tmp
+COPY desktop-file-utils-0.23-8.el8.x86_64.rpm /tmp
+COPY liberation-fonts-2.00.3-7.el8.noarch.rpm /tmp
+COPY liberation-sans-fonts-2.00.3-7.el8.noarch.rpm /tmp
+COPY liberation-serif-fonts-2.00.3-7.el8.noarch.rpm /tmp
+COPY mesa-vulkan-drivers-21.1.5-1.el8.x86_64.rpm /tmp
+COPY vulkan-loader-1.2.189.0-1.el8.x86_64.rpm /tmp
+COPY xdg-utils-1.1.2-5.el8.noarch.rpm /tmp
+COPY dejavu-sans-mono-fonts-2.35-7.el8.noarch.rpm /tmp
+
+RUN cd /tmp && rpm --import /tmp/linux_signing_key.pub && rpm --import /tmp/RPM-GPG-KEY-CentOS-Official && dnf upgrade -y --nodocs && dnf -y install --nogpgcheck /tmp/google-chrome-stable-96.0.4664.110-1.x86_64.rpm /tmp/desktop-file-utils-0.23-8.el8.x86_64.rpm /tmp/liberation-fonts-2.00.3-7.el8.noarch.rpm \
+/tmp/liberation-sans-fonts-2.00.3-7.el8.noarch.rpm /tmp/liberation-serif-fonts-2.00.3-7.el8.noarch.rpm /tmp/mesa-vulkan-drivers-21.1.5-1.el8.x86_64.rpm \
+/tmp/vulkan-loader-1.2.189.0-1.el8.x86_64.rpm /tmp/xdg-utils-1.1.2-5.el8.noarch.rpm /tmp/dejavu-sans-mono-fonts-2.35-7.el8.noarch.rpm && dnf clean all
