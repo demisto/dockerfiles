@@ -24,7 +24,7 @@ jobs:
                   pyenv versions
                   pyenv local 3.9.0
                   pip install pipenv==2021.5.29
-                  pipenv run test_pipfile_lock.py docker/accessdata
+                  pipenv run ./test_pipfile_lock.py docker/accessdata
       - run:
           name: Run Ironabnk Unit Tests
           command: |
