@@ -38,6 +38,8 @@ JUSTIFICATIONS = {
       'CVE-2019-9543': 'The XSOAR software does not show or display any image on the screen from the pdf file, The only use for the PDF reader is to extract information from PDF files.',
       'CVE-2019-11026': 'The XSOAR software does not show or display the text as defined in the pdf file, The only use for the PDF reader is to extract information from PDF files.',
       'CVE-2020-35492': 'The XSOAR software does not shows or display the pdf on the screen, The only use for the PDF reader is to extract information from PDF files.',
+      'CVE-2020-1712': 'The XSOAR software does not rely on systemd, the only use for systemd is for the operation system itself, the XSOAR software is not installing any packge in realtime that use systemd so there is no concern for this vulnerability.',
+      'CVE-2019-20386': 'The XSOAR software does not rely on systemd, the only use for systemd is for the operation system itself, the XSOAR software is not installing any packge in realtime that use systemd so there is no concern for this vulnerability.'
                 }
 
 
