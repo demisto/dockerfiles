@@ -1,4 +1,4 @@
-# Last modified: Wed, 08 Dec 2021 14:21:56 +0000
+# Last modified: Thu, 06 Jan 2022 11:44:29 +0000
 FROM python:3.10.1-alpine3.15
 
 # Upgrade all packages to latest
