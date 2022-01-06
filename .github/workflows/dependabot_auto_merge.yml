@@ -21,6 +21,6 @@ jobs:
           PR_URL: ${{github.event.pull_request.html_url}}
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         run: |
-          echo "Aprovving and merging"
+          echo "Approving and merging"
           gh pr review --approve "$PR_URL"
           gh pr merge --auto --squash "$PR_URL"
