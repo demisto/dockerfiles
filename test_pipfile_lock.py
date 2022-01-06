@@ -1,5 +1,7 @@
 import re
+import sys
 from pathlib import Path
+from typing import Union
 
 from pipenv.project import Project
 from yaml import safe_load
@@ -13,11 +15,11 @@ REQUIRED_FILES = {DOCKERFILE, BUILD_CONF}
 
 
 class DockerFileValidator:
-    def __init__(self, path: Path = Path()):
-        if not path.parent.name == 'docker':
-            raise RuntimeError(f"called to run on {path}, which is not directly under the `docker` folder")
+    def __init__(self, path: Union[str, Path] = Path()):
+        self.path = Path(path).absolute()
 
-        self.path = path.absolute()
+        if not self.path.parent.name == 'docker':
+            raise RuntimeError(f"called to run on {path}, which is not directly under the `docker` folder")
 
         self.project = Project()
         self.docker_file = self.path / Path(DOCKERFILE)
@@ -92,8 +94,10 @@ class DockerFileValidator:
 
 
 def main():
-    validator = DockerFileValidator()
+    folder = sys.argv[1]
+    validator = DockerFileValidator(Path(folder))
     validator.validate()  # raises on error
+    print(folder, 'PASS')
 
 
 if __name__ == '__main__':
