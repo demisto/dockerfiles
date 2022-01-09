@@ -12,6 +12,7 @@ COPY *.* ./pip-pkgs/
 USER root
 
 RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git libstdc++ && \
+        pip install -v --no-cache-dir --no-index --find-links ./pip-pkgs/ ./pip-pkgs/setuptools_scm-6.3.2-py3-none-any.whl && \
         pip install -v --no-cache-dir --no-index --find-links ./pip-pkgs/ -r requirements.txt &&  \
         dnf remove -y python3-devel gcc gcc-c++ make wget git platform-python-pip libstdc++ && \
         dnf clean all && \
