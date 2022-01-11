@@ -39,10 +39,15 @@ JUSTIFICATIONS = {
       'CVE-2019-11026': 'The XSOAR software does not show or display the text as defined in the pdf file, The only use for the PDF reader is to extract information from PDF files.',
       'CVE-2020-35492': 'The XSOAR software does not shows or display the pdf on the screen, The only use for the PDF reader is to extract information from PDF files.',
       'CVE-2020-1712': 'The XSOAR software does not rely on systemd, the only use for systemd is for the operation system itself, the XSOAR software is not installing any packge in realtime that use systemd so there is no concern for this vulnerability.',
-      'CVE-2019-20386': 'The XSOAR software does not rely on systemd, the only use for systemd is for the operation system itself, the XSOAR software is not installing any packge in realtime that use systemd so there is no concern for this vulnerability.'
+      'CVE-2019-20386': 'The XSOAR software does not rely on systemd, the only use for systemd is for the operation system itself, the XSOAR software is not installing any packge in realtime that use systemd so there is no concern for this vulnerability.',
+      'CCE-86233-4': 'The XSOAR software uses this image for simply function to preview html content, the software does not manage any user or add any user to this platform. also the docker images are not presistant running so they get refreshed often.The XSOAR software uses this image for simply function to preview html content, the software does not manage any user or add any user to this platform. also the docker images are not presistant running so they get refreshed often.',
+      'CVE-2020-27748': 'XSOAR Software does not rendering email or maintain email files or email messages using this commponent.',
+      'CVE-2019-5068': 'XSOAR Software does not use this docker to browse or exploring web pages or ftp site the only use for this docker is to render html content.',
+      'CCE-85987-6': 'The XSOAR software uses this image for a simple function to preview html content, the software does not manage or add any user to this platform excpet the demisto user which is uised to manage the software and it does not has shell login capabilities. also the docker images are not presistant running so they get refreshed often so there is not no concern from save password.'
                 }
 
 
 SHEET_JUSTIFICATIONS_MAPPERS = {'Anchore Compliance Results': {'column_name': 'trigger_id'},
                                 'Twistlock Vulnerability Results': {'column_name': 'id'},
-                                'Anchore CVE Results': {'column_name': 'cve'}}
+                                'Anchore CVE Results': {'column_name': 'cve'},
+                                'OpenSCAP - DISA Compliance': {'column_name': 'identifiers'}}
