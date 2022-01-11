@@ -67,7 +67,7 @@ if CIRCLE_PULL_REQUEST will try to get issue id from last commit comment
 {{ end }}- Environment:{{ range .Config.Env }}{{ "\\n" }}  - `{{ . }}`{{ end }}
 - Labels:{{ range $key, $value := .ContainerConfig.Labels }}{{ "\\n" }}  - `{{ $key }}:{{ $value }}`{{ end }}
 '''
-    docker_info = subprocess.check_output(["docker", "inspect", "-f", inspect_format, args.docker_image])
+    docker_info = subprocess.check_output(["docker", "inspect", "-f", inspect_format, args.docker_image]).decode()
     base_name = args.docker_image.split(':')[0]
     mode = "Dev"
     if base_name.startswith('demisto/'):
