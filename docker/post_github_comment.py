@@ -50,7 +50,7 @@ if CIRCLE_PULL_REQUEST will try to get issue id from last commit comment
         post_url = os.environ['CIRCLE_PULL_REQUEST'].replace('github.com', 'api.github.com/repos').replace('pull', 'issues') + "/comments"
     else:
         # try to get from comment
-        last_comment = subprocess.check_output(["git", "log", "-1", "--pretty=%B"])
+        last_comment = subprocess.check_output(["git", "log", "-1", "--pretty=%B"]).decode()
         m = re.search(r"#(\d+)", last_comment, re.MULTILINE)
         if not m:
             print("No issue id found in last commit comment. Ignoring: \n------\n{}\n-------".format(last_comment))
