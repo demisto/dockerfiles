@@ -20,16 +20,11 @@ jobs:
                 export PATH="$HOME/.pyenv/bin:$PATH"
                 eval "$(pyenv init -)"
             fi
-
+            cd dockerfiles
             pyenv versions
             pyenv local 3.9.0
             pip install pipenv==2021.5.29
             pipenv install --dev
-      - run:
-          name: print version name
-          command: |
-            echo "$(python --version)"
-            echo "$(pwd)"
       - run:
           name: Validate Images and Dependabot
           command: python test_pipfile_all.py
