@@ -9,7 +9,7 @@ jobs:
           command: python -m jsonschema -i docker/approved_licenses.json docker/approved_licenses.schema.json
       - run:
           name: Validate Images and Dependabot
-          command: piepnv run python -m test_pipfile_all.py
+          command: pipenv run python -m test_pipfile_all.py
       - setup_remote_docker:
           version: 20.10.6
       - add_ssh_keys:
