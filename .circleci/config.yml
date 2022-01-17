@@ -30,7 +30,7 @@ jobs:
           command: pipenv run python -m test_pipfile_all.py
       - run:
           name: Run Ironabnk Unit Tests
-            pipenv run pytest ironbank -v
+          command: pipenv run pytest ironbank -v
       - run:
           name: Build Docker Images
           command: |
