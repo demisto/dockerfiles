@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Union
 
 from pipenv.project import Project
-from yaml import safe_load
+from ruamel.yaml import safe_load
 
 REQUIREMENTS_TXT = 'requirements.txt'
 BUILD_CONF = 'build.conf'
