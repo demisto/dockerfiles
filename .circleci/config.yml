@@ -27,7 +27,9 @@ jobs:
             pipenv install --dev
       - run:
           name: print version name
-          command: echo python --version
+          command: |
+          echo "$(python --version)"
+          echo "$(pwd)"
       - run:
           name: Validate Images and Dependabot
           command: python test_pipfile_all.py
