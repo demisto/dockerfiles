@@ -29,6 +29,7 @@ class DockerFileValidator:
 
     def validate(self):
         if not self._is_python_image():
+            print(f'skipping {self.path.name}')
             return # todo print/return/raise?
 
         self._validate_files()
