@@ -27,10 +27,10 @@ jobs:
             pipenv install --dev
       - run:
           name: Validate Images and Dependabot
-          command: pipenv run python -m test_pipfile_all.py
+          command: python -m python -m test_pipfile_all.py
       - run:
           name: Run Ironabnk Unit Tests
-          command: pipenv run pytest ironbank -v
+          command: python -m pytest ironbank -v
       - run:
           name: Build Docker Images
           command: |
