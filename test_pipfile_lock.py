@@ -1,10 +1,9 @@
 import re
 import sys
 from pathlib import Path
-from typing import Union
-
 from pipenv.project import Project
 from ruamel.yaml import safe_load
+from typing import Union
 
 REQUIREMENTS_TXT = 'requirements.txt'
 BUILD_CONF = 'build.conf'
@@ -46,10 +45,11 @@ class DockerFileValidator:
         dependabot_configured_directories = {update['directory']
                                              for update in dependabot_config['updates']
                                              if update.get('package-ecosystem') == 'pip'}
+        full_relative_path = f"/docker/{self.path.name}"
 
-        if f'/docker/{self.path.name}' not in dependabot_configured_directories:
-            raise ValueError("\n".join((f"/docker/{self.path.name} is not configured on dependabot.",
-                                        "To add the config run: ./docker/add_dependabot.sh docker/")))
+        if full_relative_path not in dependabot_configured_directories:
+            raise ValueError("\n".join((f"{full_relative_path} is not configured on dependabot.",
+                                        f"To add the config run: ./docker/add_dependabot.sh {full_relative_path}")))
 
     def _validate_dockerfile_pip_install(self):
         dockerfile = self.docker_file.read_text() \
