@@ -13,35 +13,20 @@ jobs:
           fingerprints:
             - 46:c2:72:91:9d:0e:2d:3c:93:d6:6c:12:31:df:8e:db
       - run:
-          name: Setup pyenv
-          command: |
-            if [[ ! $(which pyenv) ]] && [[ -n "${CIRCLECI}" ]]; then
-                echo "pyenv not found. setting up necessary env for pyenv on circle ci";\
-                export PATH="$HOME/.pyenv/bin:$PATH"
-                eval "$(pyenv init -)"
-            fi
-            ls
-            pyenv versions
-            pyenv local 3.9.0
-            pip install pipenv==2021.5.29
-            pipenv install --dev
-      - run:
           name: Validate Images and Dependabot
-          command: python test_pipfile_all.py
+          command: python -m test_pipfile_all.py
       - run:
           name: Run Ironabnk Unit Tests
-          command: python pytest ironbank -v
+          command: python -m pytest ironbank -v
       - run:
           name: Build Docker Images
-          command: |
-            ./docker/build_docker.sh
+          command: ./docker/build_docker.sh
       - store_artifacts:
           path: artifacts
           destination: docker_images
       - run:
           name: Build Ironbank Docker Images
-          command: |
-            python ./ironbank/build_ironbank_docker.sh --python 3.9
+          command: python -m ./ironbank/build_ironbank_docker.sh --python 3.9
       - store_artifacts:
           path: artifacts
           destination: ironbank_docker_images
