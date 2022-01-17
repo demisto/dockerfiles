@@ -7,27 +7,26 @@ jobs:
       - run:
           name: Validate Approved Licenses File
           command: python -m jsonschema -i docker/approved_licenses.json docker/approved_licenses.schema.json
+      - run:
+          name: Validate Dependabot Config
+          command: ./docker/verify_dependabot.sh
       - setup_remote_docker:
           version: 20.10.6
       - add_ssh_keys:
           fingerprints:
             - 46:c2:72:91:9d:0e:2d:3c:93:d6:6c:12:31:df:8e:db
       - run:
-          name: Validate pipfile and pipfile.lock
-          command: |
-            if [[ ! $(which pyenv) ]] && [[ -n "${CIRCLECI}" ]]; then
-                      echo "pyenv not found. setting up necessary env for pyenv on circle ci";\
-                      export PATH="$HOME/.pyenv/bin:$PATH"
-                      eval "$(pyenv init -)"
-                  fi
-
-                  pyenv versions
-                  pyenv local 3.9.0
-                  pip install pipenv==2021.5.29
-                  pipenv run ./test_pipfile_lock.py docker/accessdata
-      - run:
           name: Run Ironabnk Unit Tests
           command: |
+            if [[ ! $(which pyenv) ]] && [[ -n "${CIRCLECI}" ]]; then 
+                echo "pyenv not found. setting up necessary env for pyenv on circle ci";\
+                export PATH="$HOME/.pyenv/bin:$PATH"
+                eval "$(pyenv init -)"
+            fi
+
+            pyenv versions
+            pyenv local 3.9.0
+            pip install pipenv==2021.5.29
             pipenv install --dev
             pipenv run pytest ironbank -v
       - run:
