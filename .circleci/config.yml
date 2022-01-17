@@ -20,7 +20,7 @@ jobs:
                 export PATH="$HOME/.pyenv/bin:$PATH"
                 eval "$(pyenv init -)"
             fi
-            cd dockerfiles
+            ls
             pyenv versions
             pyenv local 3.9.0
             pip install pipenv==2021.5.29
