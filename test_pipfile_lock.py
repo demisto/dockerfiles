@@ -8,6 +8,8 @@ from typing import Union
 REQUIREMENTS_TXT = 'requirements.txt'
 BUILD_CONF = 'build.conf'
 DOCKERFILE = 'Dockerfile'
+PIPFILE = "Pipfile"
+PIPFILE_LOCK = "Pipfile"
 
 PROHIBITED_FILES = {REQUIREMENTS_TXT}
 REQUIRED_FILES = {DOCKERFILE, BUILD_CONF}
@@ -20,16 +22,23 @@ class DockerFileValidator:
         if not self.path.parent.name == 'docker':
             raise RuntimeError(f"called to run on {path}, which is not directly under the `docker` folder")
 
+        self.files = tuple(file.name for file in self.path.glob('*'))
         self.project = Project()
         self.docker_file = self.path / Path(DOCKERFILE)
         self.build_conf = self.path / Path(BUILD_CONF)
 
     def validate(self):
+        if not self._is_python_image():
+            return # todo print/return/raise?
+
         self._validate_files()
         self._validate_dependabot()
         self._validate_pipfile_lock()
         self._validate_dockerfile_pip_install()
         # todo precommit
+
+    def _is_python_image(self):
+        return {PIPFILE, PIPFILE_LOCK, REQUIREMENTS_TXT}.intersection(self.files)
 
     def _validate_dependabot(self):
         if any(line.startswith('devonly=true')
@@ -78,9 +87,8 @@ class DockerFileValidator:
                              "Please run `pipenv lock` to update the Pipfile.lock")
 
     def _validate_files(self):
-        files = tuple(file.name for file in self.path.glob('*'))
-        prohibited_but_exist = PROHIBITED_FILES.intersection(files)
-        required_but_missing = REQUIRED_FILES.difference(files)
+        prohibited_but_exist = PROHIBITED_FILES.intersection(self.files)
+        required_but_missing = REQUIRED_FILES.difference(self.files)
 
         errors = []
         if prohibited_but_exist:
