@@ -27,10 +27,10 @@ jobs:
             pipenv install --dev
       - run:
           name: Validate Images and Dependabot
-          command: python -m python -m test_pipfile_all.py
+          command: python test_pipfile_all.py
       - run:
           name: Run Ironabnk Unit Tests
-          command: python -m pytest ironbank -v
+          command: python pytest ironbank -v
       - run:
           name: Build Docker Images
           command: |
@@ -41,7 +41,7 @@ jobs:
       - run:
           name: Build Ironbank Docker Images
           command: |
-            pipenv run ./ironbank/build_ironbank_docker.sh --python 3.9
+            python ./ironbank/build_ironbank_docker.sh --python 3.9
       - store_artifacts:
           path: artifacts
           destination: ironbank_docker_images
