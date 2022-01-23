@@ -1,4 +1,4 @@
-# Last modified: Thu, 06 Jan 2022 11:44:29 +0000
+# Last modified: Sun, 23 Jan 2022 10:42:29 +0000
 FROM python:3.10.1-slim-bullseye
 
 RUN echo 'deb http://deb.debian.org/debian bullseye-backports main' >> /etc/apt/sources.list
