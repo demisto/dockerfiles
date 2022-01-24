@@ -43,7 +43,12 @@ JUSTIFICATIONS = {
       'CCE-86233-4': 'The XSOAR software does not manage or add any user to the docker except the demisto user which is used to manage the docker image also it does not has shell login capabilities. One more important thing the docker images are not persistent running so they get refreshed often so there is not no concern from save password.',
       'CVE-2020-27748': 'XSOAR Software does not rendering email or maintain email files or email messages using this commponent.',
       'CVE-2019-5068': 'XSOAR Software does not use this docker to browse or exploring web pages or ftp site the only use for this docker is to render html content.',
-      'CCE-85987-6': 'The XSOAR software does not manage or add any user to the docker except the demisto user which is used to manage the docker image also it does not has shell login capabilities. One more important thing the docker images are not persistent running so they get refreshed often so there is not no concern from save password.'
+      'CCE-85987-6': 'The XSOAR software does not manage or add any user to the docker except the demisto user which is used to manage the docker image also it does not has shell login capabilities. One more important thing the docker images are not persistent running so they get refreshed often so there is not no concern from save password.',
+      'CVE-2018-20839': 'The XSOAR software uses dockers with VT support disabled.',
+      'CVE-2021-3997': 'The XSOAR software uses the image only once, which mean the XSOAR does not rebooting the system, also our images are based on UBI 8.5 which is more secured for this vulnerability.',
+      'CVE-2021-3672': 'The way XSOAR software uses the c-ares is in direct, The XSOAR software uses this docker to parse pcap files, usually pcap files have the resolved ips stored in the traffic packets.',
+      'CVE-2021-43818': 'The XSOAR software uses the lxml module only to parse xml content.',
+      'GHSA-55x5-fj6c-h6m8': 'The XSOAR software uses the lxml module only to parse xml content.'
                 }
 
 
