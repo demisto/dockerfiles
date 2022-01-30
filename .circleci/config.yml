@@ -14,7 +14,7 @@ jobs:
             - 46:c2:72:91:9d:0e:2d:3c:93:d6:6c:12:31:df:8e:db
       - run:
           name: Validate Images and Dependabot
-          command: python -m test_pipfile_all.py
+          command: python -m test_pipfile_all
       - run:
           name: Run Ironabnk Unit Tests
           command: python -m pytest ironbank -v
