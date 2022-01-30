@@ -1,8 +1,8 @@
 
-FROM demisto/python3:3.9.6.22912
+FROM demisto/python3:3.10.1.25933
 
 COPY requirements.txt .
 
-RUN pip install --upgrade pip && apk add gcc && apk add linux-headers && apk add libc-dev && apk add libffi-dev\
-  && apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git\
-  && pip install --no-cache-dir -r requirements.txt && apk del .build-dependencies
+RUN pip install --upgrade pip \
+  && apk --update add --no-cache --virtual .build-dependencies python3-dev gcc linux-headers libc-dev libffi-dev\
+  build-base wget git && pip install --no-cache-dir -r requirements.txt && apk del .build-dependencies
