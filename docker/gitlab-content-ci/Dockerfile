@@ -10,7 +10,7 @@ ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
 RUN apt-get update -y \
-    && apt-get install -y curl jq unzip openssh-client gcc libffi-dev libssl-dev git zip netcat wget python2 python-pip software-properties-common \
+    && apt-get install -y curl jq unzip openssh-client gcc libffi-dev libssl-dev git zip netcat wget python2 python3-pip software-properties-common \
     # Install requirements
     && pip install --no-cache-dir -r requirements.txt \
     # Installing nvm, npm and node.js
