@@ -37,7 +37,7 @@ RUN apt-get update -y \
     && echo 'export PATH="$GOROOT/bin:$PATH"' >> ~/.bashrc \
     && echo 'export PATH="$PATH:$GOPATH/bin"' >> ~/.bashrc \
     && source ~/.bashrc \
-    && goenv install 1.13.8 
-    # && goenv global 1.13.8 \
-    # && source ~/.bashrc \
-    # && curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.40.1
+    && goenv install 1.13.8 \
+    && goenv global 1.13.8 \
+    && source ~/.bashrc \
+    && curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.40.1
