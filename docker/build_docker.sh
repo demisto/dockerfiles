@@ -217,7 +217,15 @@ function docker_build {
         if [[ "$docker_trust" == "1" ]]; then
             commit_dockerfiles_trust
         fi
-        ${DOCKER_SRC_DIR}/post_github_comment.py ${image_full_name}        
+        if ! ${DOCKER_SRC_DIR}/post_github_comment.py ${image_full_name}; then 
+            echo "Failed post_github_comment.py. Will stop build only if not on master"
+            if [ "$CIRCLE_BRANCH" == "master" ]; then
+                echo "Continuing as we are on master branch..."
+            else
+                echo "failing build!!"
+                exit 5
+            fi
+        fi
     else
         echo "Skipping docker push"
         if [ -n "$CI" ]; then
