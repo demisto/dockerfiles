@@ -80,10 +80,8 @@ function build_hardening_manifest {
     REQUIREMENTS="${REQUIREMENTS#"${REQUIREMENTS%%[![:space:]]*}"}"
 
     # Run the base image docker container only when requirements.txt exists
-    echo "========"
-    echo $REQUIREMENTS
-    if [[ ! $REQUIREMENTS ]] || [[ $REQUIREMENTS = "-i https://pypi.org/simple" ]]; then
-      echo "Skip docker run - requirements.txt file is missing"
+    if [[ ! $REQUIREMENTS ]] || [[ $REQUIREMENTS = "-i https://pypi.org/simple" ]] || [[ $REQUIREMENTS = "$(cat empty_requirements.txt)" ]]; then
+      echo "Skip docker run - requirements.txt file is missing or empty"
     else
       echo "Prepare to Run the image docker container"
       docker run -it $DOCKER_IMAGE /bin/sh -c "cd ~;dnf install -y --nodocs python$PYTHON_VERSION-devel gcc gcc-c++ make wget git;touch /requirements.txt;echo \"$REQUIREMENTS\" > /requirements.txt;pip uninstall -y -r /requirements.txt;pip cache purge;pip install -v --no-deps --no-cache-dir --log /tmp/pip.log -r /requirements.txt;cat /tmp/pip.log;exit" | grep Added >> $DOCKER_PACKAGES_METADATA_PATH
