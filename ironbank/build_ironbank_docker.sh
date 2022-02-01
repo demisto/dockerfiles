@@ -80,6 +80,8 @@ function build_hardening_manifest {
     REQUIREMENTS="${REQUIREMENTS#"${REQUIREMENTS%%[![:space:]]*}"}"
 
     # Run the base image docker container only when requirements.txt exists
+    echo "========"
+    echo $REQUIREMENTS
     if [[ ! $REQUIREMENTS ]] || [[ $REQUIREMENTS = "-i https://pypi.org/simple" ]]; then
       echo "Skip docker run - requirements.txt file is missing"
     else
