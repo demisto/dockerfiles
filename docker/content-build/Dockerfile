@@ -1,4 +1,4 @@
-FROM circleci/python:3.8.5-buster-node
+FROM circleci/python:3.10.1-buster-node
 
 RUN sudo apt-get update && \
   sudo apt-get install -y --no-install-recommends python-dev libxml2-dev libxslt1-dev zlib1g-dev python-setuptools jq \
@@ -7,8 +7,7 @@ RUN sudo apt-get update && \
   xz-utils tk-dev libffi-dev liblzma-dev python-openssl \
   python3 python3-dev
 
-# Change virtualenv version to old version - Bug with link 2 python versions
-RUN sudo pip3 uninstall -y virtualenv && sudo pip3 install virtualenv==16.7.7
+RUN sudo pip3 uninstall -y virtualenv && sudo pip3 install virtualenv==20.13.0
 
 # install gcloud see: https://cloud.google.com/sdk/docs/downloads-apt-get
 RUN sudo apt-get update && sudo apt-get install apt-transport-https ca-certificates gnupg \
