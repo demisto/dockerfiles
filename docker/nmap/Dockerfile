@@ -1,6 +1,10 @@
 
 FROM demisto/python3:3.9.6.22912
 
+RUN mkdir /opt/security-team-scripts
+
+COPY security-team-scripts /opt/security-team-scripts
+
 COPY requirements.txt .
 
 RUN apk --update add --no-cache nmap nmap-scripts
