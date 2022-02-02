@@ -2,7 +2,7 @@ FROM demisto/python3-deb:3.9.1.14969
 
 COPY requirements.txt .
 
-ENV NODE_VERSION 12.18.4
+ENV NODE_VERSION 14.14.0
 ENV NVM_DIR /root/.nvm
 ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 
