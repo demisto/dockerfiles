@@ -696,7 +696,7 @@ updates:
   - package-ecosystem: pip
     directory: /docker/syslog
     schedule:
-     interval: daily
+      interval: daily
   - package-ecosystem: pip
     directory: /docker/accessdata
     schedule:
@@ -705,3 +705,15 @@ updates:
     directory: /docker/python-phash
     schedule:
      interval: daily
+  - package-ecosystem: pip
+    directory: /docker/mlurlphishing
+    schedule:
+      interval: daily
+  - package-ecosystem: pip
+    directory: /docker/py3-tools
+    schedule:
+      interval: daily
+  - package-ecosystem: pip
+    directory: /docker/parse-emails
+    schedule:
+      interval: daily
