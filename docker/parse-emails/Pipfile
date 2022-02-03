@@ -1,12 +1,12 @@
 [[source]]
-name = "pypi"
 url = "https://pypi.org/simple"
 verify_ssl = true
+name = "pypi"
+
+[packages]
+parse-emails = "*"
 
 [dev-packages]
 
-[packages]
-gql = "==3.0.0"
-
 [requires]
-python_version = "3.8"
+python_version = "3.10"
