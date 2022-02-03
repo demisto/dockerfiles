@@ -23,6 +23,8 @@ RUN npm install -g https://github.com/shakiba/svgexport#4c144c589050c039cbfc83a3
 
 COPY requirements.txt .
 
+
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
   gcc \
   python3-dev \ 
