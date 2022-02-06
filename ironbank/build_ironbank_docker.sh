@@ -75,7 +75,7 @@ function build_hardening_manifest {
     docker pull $DOCKER_IMAGE
     DOCKER_PACKAGES_METADATA_PATH="$OUTPUT_PATH/docker_packages_metadata.txt"
 
-    if [[ ! -f  "$1/requirements.txt" ]]; then
+    if [[ -f  "$1/requirements.txt" ]]; then
       REQUIREMENTS="$(cat $1/requirements.txt)"
 
       # trim the string output
