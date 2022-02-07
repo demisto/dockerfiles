@@ -1,7 +1,7 @@
 
 FROM demisto/python3:3.9.6.22912
 
-RUN mkdir /opt/security-team-scripts
+RUN mkdir /opt/scripts
 
 COPY scripts /opt/scripts
 
