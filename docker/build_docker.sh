@@ -150,7 +150,7 @@ function docker_build {
             return 1
         fi
         pipenv --rm || echo "Proceeding. It is ok that no virtualenv is available to remove"
-        PIPENV_YES=yes pipenv lock -r > requirements.txt
+        PIPENV_YES=yes pipenv lock -r --no-header> requirements.txt
         echo "Pipfile lock generated requirements.txt: "
         cat requirements.txt
         # del_requirements=yes
@@ -217,7 +217,15 @@ function docker_build {
         if [[ "$docker_trust" == "1" ]]; then
             commit_dockerfiles_trust
         fi
-        ${DOCKER_SRC_DIR}/post_github_comment.py ${image_full_name}        
+        if ! ${DOCKER_SRC_DIR}/post_github_comment.py ${image_full_name}; then 
+            echo "Failed post_github_comment.py. Will stop build only if not on master"
+            if [ "$CIRCLE_BRANCH" == "master" ]; then
+                echo "Continuing as we are on master branch..."
+            else
+                echo "failing build!!"
+                exit 5
+            fi
+        fi
     else
         echo "Skipping docker push"
         if [ -n "$CI" ]; then
