@@ -74,8 +74,23 @@ function build_hardening_manifest {
     echo "Docker image is $DOCKER_IMAGE"
     docker pull $DOCKER_IMAGE
     DOCKER_PACKAGES_METADATA_PATH="$OUTPUT_PATH/docker_packages_metadata.txt"
-    REQUIREMENTS="$(cat $1/requirements.txt)"
-    docker run -it $DOCKER_IMAGE /bin/sh -c "cd ~;dnf install -y --nodocs python$PYTHON_VERSION-devel gcc gcc-c++ make wget git;touch /requirements.txt;echo \"$REQUIREMENTS\" > /requirements.txt;pip uninstall -y -r /requirements.txt;pip cache purge;pip install -v --no-deps --no-cache-dir --log /tmp/pip.log -r /requirements.txt;cat /tmp/pip.log;exit" | grep Added >> $DOCKER_PACKAGES_METADATA_PATH
+
+    if [[ -f  "$1/requirements.txt" ]]; then
+      REQUIREMENTS="$(cat $1/requirements.txt)"
+
+      # trim the string output
+      REQUIREMENTS="${REQUIREMENTS#"${REQUIREMENTS%%[![:space:]]*}"}"
+    fi
+
+    # Run the base image docker container only when requirements.txt exists
+    if [[ ! $REQUIREMENTS ]] || [[ $REQUIREMENTS = "-i https://pypi.org/simple" ]]; then
+      echo "Skip docker run - requirements.txt file is missing"
+    else
+      echo "Prepare to Run the image docker container"
+      docker run -it $DOCKER_IMAGE /bin/sh -c "cd ~;dnf install -y --nodocs python$PYTHON_VERSION-devel gcc gcc-c++ make wget git;touch /requirements.txt;echo \"$REQUIREMENTS\" > /requirements.txt;pip uninstall -y -r /requirements.txt;pip cache purge;pip install -v --no-deps --no-cache-dir --log /tmp/pip.log -r /requirements.txt;cat /tmp/pip.log;exit" | grep Added >> $DOCKER_PACKAGES_METADATA_PATH
+    fi
+
+    echo "Prepare to build hardening_manifest.yaml"
     python ./ironbank/build_hardening_manifest.py --docker_image_dir $1 --output_path $OUTPUT_PATH --docker_packages_metadata_path $DOCKER_PACKAGES_METADATA_PATH
   else
     echo "Could not login to $REGISTRYONE_URL, aborting..."
@@ -86,14 +101,21 @@ function build_hardening_manifest {
 # $1: docker image dir (~/../docker/$IMAGE_NAME)
 function build_dockerfile {
   OUTPUT_PATH=ironbank/$(basename $1)
+  DOCKER_PACKAGE_METADATA="$OUTPUT_PATH/docker_packages_metadata.txt"
+
   if [[ ! -d $OUTPUT_PATH ]]; then
     mkdir $OUTPUT_PATH
   fi
   if [[ -f $1/Dockerfile.ironbank ]]; then
     # if we have a special Dockerfile for ironbank, copy it instead of generating
+    echo "$1/Dockerfile.ironbank was found and will use to build the docker"
     cp $1/Dockerfile.ironbank $OUTPUT_PATH/Dockerfile
+  # if requirements.txt exists execute build_dockerfile with requirements_file_exists=truw
+  elif [[ -f $DOCKER_PACKAGE_METADATA ]]; then
+    python ./ironbank/build_dockerfile.py --docker_image_dir $1 --output_path $OUTPUT_PATH --requirements_file_exists true
   else
-    python ./ironbank/build_dockerfile.py --docker_image_dir $1 --output_path $OUTPUT_PATH
+    python ./ironbank/build_dockerfile.py --docker_image_dir $1 --output_path $OUTPUT_PATH --requirements_file_exists false
+    cp $1/Dockerfile.ironbank $OUTPUT_PATH/Dockerfile
   fi
 }
 
@@ -116,7 +138,10 @@ function upload_image_to_artifacts {
   SOURCE_PATH="ironbank/$IMAGE_NAME"
   cp -r $SOURCE_PATH $TARGET_PATH
   cp $CURRENT_DIR/docker/$IMAGE_NAME/requirements.txt $TARGET_PATH
-  rm $SOURCE_PATH/docker_packages_metadata.txt
+  if [[ -f $SOURCE_PATH/docker_packages_metadata.txt ]]; then
+    rm $SOURCE_PATH/docker_packages_metadata.txt
+  fi
+
 }
 
 # $1: docker image dir (~/../docker/$IMAGE_NAME)
