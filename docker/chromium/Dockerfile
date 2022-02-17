@@ -1,5 +1,5 @@
 # Last modified: Sat, 30 Oct 2021 15:07:45 +0000
-FROM demisto/python3-deb:3.10.1.26244
+FROM demisto/python3-deb:3.9.9.25782
 
 COPY requirements.txt .
 
@@ -7,11 +7,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   python3-dev \
   wget \
   libxss1 \
-  libappindicator1 \
   poppler-utils \
   fonts-noto-cjk \
   fonts-noto-core \
   zlib1g-dev \
+&& wget http://http.us.debian.org/debian/pool/main/liba/libappindicator/libappindicator1_0.4.92-7_amd64.deb -O /tmp/libappindicator1_0.4.92-7_amd64.deb \
+&& apt-get install -y  /tmp/libappindicator1_0.4.92-7_amd64.deb \
 && pip3 install --no-cache-dir -r requirements.txt \
 && apt-get purge -y --auto-remove \
   python3-dev \
