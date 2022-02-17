@@ -21,7 +21,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 && rm -rf /var/lib/apt/lists/*
 
 # Based on instructions at: https://tecadmin.net/setup-selenium-with-chromedriver-on-debian/
-# Will install the latest version available fromd the chrome repo.
+# Will install the latest version available from the chrome repo.
 # To see available chromedriver go to https://chromedriver.storage.googleapis.com/ and search for the major version
 # of chrome(for  example 91.0).
 
