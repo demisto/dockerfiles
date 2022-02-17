@@ -12,7 +12,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   fonts-noto-core \
   zlib1g-dev \
 && wget http://http.us.debian.org/debian/pool/main/liba/libappindicator/libappindicator1_0.4.92-7_amd64.deb -O /tmp/libappindicator1_0.4.92-7_amd64.deb \
-&& apt-get install -y  /tmp/libappindicator1_0.4.92-7_amd64.deb \
+&& wget http://http.us.debian.org/debian/pool/main/libi/libindicator/libindicator7_0.5.0-4_amd64.deb -O /tmp/libindicator7_0.5.0-4_amd64.deb \
+&& apt-get install -y  /tmp/libindicator7_0.5.0-4_amd64.deb /tmp/libappindicator1_0.4.92-7_amd64.deb \
 && pip3 install --no-cache-dir -r requirements.txt \
 && apt-get purge -y --auto-remove \
   python3-dev \
