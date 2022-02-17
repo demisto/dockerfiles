@@ -1,5 +1,5 @@
 # Last modified: Sat, 30 Oct 2021 15:07:45 +0000
-FROM demisto/python3-deb:3.9.7.24076
+FROM demisto/python3-deb:3.10.1.26244
 
 COPY requirements.txt .
 
@@ -19,7 +19,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 && rm -rf /var/lib/apt/lists/*
 
 # Based on instructions at: https://tecadmin.net/setup-selenium-with-chromedriver-on-debian/
-# Will install the latest version available from the chrome repo.
+# Will install the latest version available fromd the chrome repo.
 # To see available chromedriver go to https://chromedriver.storage.googleapis.com/ and search for the major version
 # of chrome(for  example 91.0).
 
