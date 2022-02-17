@@ -13,8 +13,12 @@ Such a repository may be generated using the following [template](https://github
 ## Mounts
 
 Demisto-sdk uses volume mounts, to run on local content repository.
-Please note that there's a performance issue with mount on MacOS and Windows.
-You can solve the performance issue by running on Linux/Windows WSL2 or by cloning your repository to the `/content` directory inside the container.
+Please note that mounting on MacOS and Windows may cause slowness. 
+
+To ensure the best performance, please either:
+- Use a linux machine
+- Use [Windows WSL2](https://docs.microsoft.com/en-us/windows/wsl/install) 
+- Clone your content repository to the `/content` directory inside the container.
 
 ## Examples
 
