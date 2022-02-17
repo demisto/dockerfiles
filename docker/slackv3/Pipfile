@@ -4,10 +4,16 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-slack-sdk = {version = "*", extras = ["optional"]}
+"ruamel.yaml" = "*"
+requests = "*"
+dockerfile_parse = "*"
+pyyaml = "*"
+regex = "*"
+slack-sdk = {extras = ["optional"], version = "*"}
 aiohttp = "*"
 
 [dev-packages]
+pytest = "*"
 
 [requires]
-python_version = "3.8"
+python_version = "3.9"
