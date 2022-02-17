@@ -12,7 +12,7 @@ Such a repository may be generated using the following [template](https://github
 
 ## Mounts
 
-We use volume mount in our environment to run on local content repository.
+Demisto-sdk uses volume mounts, to run on local content repository.
 Please note that there's a performance issue with mount on MacOS and Windows.
 You can solve the performance issue by running on Linux/Windows WSL2 or by cloning your repository to the `/content` directory inside the container.
 
