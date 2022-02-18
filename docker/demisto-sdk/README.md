@@ -29,7 +29,7 @@ Some commands such as `demisto-sdk upload` and `demisto-sdk run` need the follow
     The URL of the XSOAR server to communicate with
 - DEMISTO_API_KEY  
     API Key (Can be generated from XSOAR -> Settings -> API Key)
-- DEMISTO_VERIFY_SSL (Default: true)
+- DEMISTO_VERIFY_SSL (Default: true)  
     Whether to verify SSL certificates.
 
 To pass those variables, you should add the following option:
@@ -62,7 +62,10 @@ docker run --env-file .env <rest of the command>
 for more information about the validate command, please refer to its [documentation](https://github.com/demisto/demisto-sdk/blob/master/demisto_sdk/commands/validate/README.md) on the [demisto-sdk repo](https://github.com/demisto/demisto-sdk).
 
 ```sh
-docker run -it --rm --mount type=bind,source="$(pwd)",target=/content demisto/demisto-sdk:<tag> demisto-sdk validate -i Packs/ipinfo/Integrations/ipinfo_v2
+docker run -it --rm \
+--mount type=bind,source="$(pwd)",target=/content \
+demisto/demisto-sdk:<tag> \
+demisto-sdk validate -i Packs/ipinfo/Integrations/ipinfo_v2
 ```
 
 #### Breaking down command arguments
@@ -85,12 +88,15 @@ docker run -it --rm --mount type=bind,source="$(pwd)",target=/content demisto/de
 To run the `lint` command, connect the docker daemon (docker inside a docker), as lint itself is uses docker containers.
 
 ```sh
-docker run -it --rm --mount type=bind,source="$(pwd)",target=/content --mount source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind demisto/demisto-sdk <demisto-sdk-command>
+docker run -it --rm \
+--mount type=bind,source="$(pwd)",target=/content \
+--mount source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind \ 
+demisto/demisto-sdk <demisto-sdk-command>
 ```
 
 #### Binding the Docker Daemon
 
 To achieve Docker In Docker behavior. We want to bind the Docker Daemon with the following option:
 
-- --mount source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind  
+- `--mount source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind`  
     Mounts the docker daemon container to use docker commands from within a docker container.
