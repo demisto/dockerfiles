@@ -25,11 +25,11 @@ To ensure the best performance, please either:
 
 Some commands such as `demisto-sdk upload` and `demisto-sdk run` need the following environment variables to communicate with your XSOAR Server:
 
-- DEMISTO_BASE_URL  
+- `DEMISTO_BASE_URL`  
     The URL of the XSOAR server to communicate with
-- DEMISTO_API_KEY  
+- `DEMISTO_API_KEY`  
     API Key (Can be generated from XSOAR -> Settings -> API Key)
-- DEMISTO_VERIFY_SSL (Default: true)  
+- `DEMISTO_VERIFY_SSL` (Default: true)  
     Whether to verify SSL certificates.
 
 To pass those variables, you should add the following option:
@@ -53,6 +53,13 @@ Command:
 docker run --env-file .env <rest of the command>
 ```
 
+## Docker In Docker (Docker Daemon Binding)
+
+To achieve Docker In Docker behavior. We want to bind the Docker Daemon with the following option:
+
+- `--mount source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind`  
+    Mounts the docker daemon container to use docker commands from within a docker container.
+
 ## Examples
 
 (All examples use Cortex XSOAR's official [content repository](https://github.com/demisto/content)).
@@ -70,17 +77,17 @@ demisto-sdk validate -i Packs/ipinfo/Integrations/ipinfo_v2
 
 #### Breaking down command arguments
 
-- docker run  
+- `docker run`  
     Creates a container (if one does not exist) and runs the following command inside it
-- -it  
-    Keep the stdin open and tty
-- --rm  
+- `-it`  
+    Keep the stdin open and connects tty
+- `--rm`  
     Removes the docker container when done (ommit this part to re-use the container in the future)
-- --mount type=bind,source="$(pwd)",target=/content  
+- `--mount type=bind,source="$(pwd)",target=/content`  
     Connects the pwd (assuming you're in content) to the container's content directory
-- demisto/demisto-sdk:\<tag> (Replace the tag with locked version, can be found at the [Docker Hub](https://hub.docker.com/r/demisto/demisto-sdk))  
+- `demisto/demisto-sdk:\<tag>` (Replace the tag with locked version, can be found at the [Docker Hub](https://hub.docker.com/r/demisto/demisto-sdk))  
     The docker image name  
-- demisto-sdk validate -i Packs/ipinfo/Integrations/ipinfo_v2
+- `demisto-sdk validate -i Packs/ipinfo/Integrations/ipinfo_v2`
     The demisto-sdk command to be run inside the container
 
 ### Lint command
@@ -93,10 +100,3 @@ docker run -it --rm \
 --mount source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind \ 
 demisto/demisto-sdk <demisto-sdk-command>
 ```
-
-#### Binding the Docker Daemon
-
-To achieve Docker In Docker behavior. We want to bind the Docker Daemon with the following option:
-
-- `--mount source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind`  
-    Mounts the docker daemon container to use docker commands from within a docker container.
