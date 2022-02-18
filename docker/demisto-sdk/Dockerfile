@@ -24,7 +24,7 @@ WORKDIR /content
 
 # Environment variables for demisto-sdk upload/download/run etc...
 ENV DEMISTO_BASE_URL="https://127.0.0.1:8443"
-ENV DEMISTO_API_KEY="XXXXXXXXXXX"
+ENV DEMISTO_API_KEY="XXXXXXXXXXXXXXX"
 ENV DEMISTO_VERIFY_SSL=true
 
 # Default demisto-sdk help
