@@ -17,7 +17,7 @@ echo "==============================\n\n"
 DOCKER_ZIP_DIR="$(dirname "${DOCKER_ZIP}")" ; FILE="$(basename "${DOCKER_ZIP}")"
 
 echo "=============== Extract $FILE file ==============="
-unzip_output=`unzip $DOCKER_ZIP -d $DOCKER_ZIP_DIR`
+unzip_output=`unzip "$DOCKER_ZIP" -d $DOCKER_ZIP_DIR`
 unzip_output=`echo $unzip_output | tail -1`
 tar_file=`echo $unzip_output | sed 's/.*inflating: //' | xargs`
 
