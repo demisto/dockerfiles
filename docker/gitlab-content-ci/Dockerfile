@@ -9,6 +9,7 @@ ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 # Currently sh is linked to dash, linking it to /bin/bash instead.
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
+
 RUN apt-get update -y \
     && apt-get install -y curl jq unzip openssh-client gcc libffi-dev libssl-dev git zip netcat wget python2 python-pip software-properties-common \
     # Install requirements
@@ -40,5 +41,9 @@ RUN apt-get update -y \
     && goenv install 1.13.8 \
     && goenv global 1.13.8 \
     && source ~/.bashrc \
-    && curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.40.1 \
-    && sudo update-ca-certificates
+    && curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.40.1
+
+ADD https://docker.art.code.pan.run/artifactory/generic-ep/certs/internal-ca.crt /usr/local/share/ca-certificates/internal-ca.crt
+ADD https://docker.art.code.pan.run/artifactory/generic-ep/certs/domain-ca.crt /usr/local/share/ca-certificates/domain-ca.crt
+
+RUN update-ca-certificates
