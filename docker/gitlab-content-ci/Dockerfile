@@ -40,5 +40,5 @@ RUN apt-get update -y \
     && goenv install 1.13.8 \
     && goenv global 1.13.8 \
     && source ~/.bashrc \
-    && curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.40.1
+    && curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.40.1 \
     && sudo update-ca-certificates
