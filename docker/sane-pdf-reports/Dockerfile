@@ -33,7 +33,7 @@ RUN apt-get update -y -q && \
 
 RUN npm i puppeteer@5.3.1 && ln -s /app/node_modules/puppeteer/.local-chromium/linux-*/chrome-linux/chrome /usr/bin/chromium-browser
 
-RUN python get_build_artifacts.py --project sane-reports --branch configure-max-text-length --filter "sane-report$" \
+RUN python get_build_artifacts.py --project sane-reports --branch configure-max-text-length-v2 --filter "sane-report$" \
     && mv sane-report sane-report.tar && tar -xvf sane-report.tar && rm -f sane-report.tar
 
 # Update permissions and ownership on /app dir
