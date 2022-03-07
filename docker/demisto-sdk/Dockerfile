@@ -38,11 +38,11 @@ ADD https://raw.githubusercontent.com/demisto/demisto-sdk/master/package-lock.js
 COPY requirements.txt .
 RUN npm ci && python3 -m pip install --no-cache-dir -r requirements.txt && rm requirements.txt
 
-ADD https://raw.githubusercontent.com/demisto/content/master/dev-requirements-py2.txt /content/dev-requirements-py2.txt
-RUN virtualenv -p python2 venv && venv/bin/pip2 install -r /content/dev-requirements-py2.txt && rm dev-requirements-py2.txt
-
 ADD https://raw.githubusercontent.com/demisto/content/master/dev-requirements-py3.txt /content/dev-requirements-py3.txt
 RUN virtualenv --system-site-packages -p python3 venv && venv/bin/pip3 install -r dev-requirements-py3.txt -U --upgrade-strategy only-if-needed && rm dev-requirements-py3.txt
+
+ADD https://raw.githubusercontent.com/demisto/content/master/dev-requirements-py2.txt /content/dev-requirements-py2.txt
+RUN virtualenv -p python2 venv && venv/bin/pip2 install -r /content/dev-requirements-py2.txt && rm dev-requirements-py2.txt
 
 # Set python2 as default python
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python2 0
