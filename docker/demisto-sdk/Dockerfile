@@ -1,19 +1,30 @@
-FROM demisto/python3-deb:3.10.1.26244
+FROM demisto/python3-deb:3.10.1.26968
 
-RUN apt-get update && apt install git gcc nodejs npm -y && rm -rf /var/lib/apt/lists/*
+USER root
+
+RUN apt-get update && apt-get install \
+    git \ 
+    gcc \
+    nodejs \
+    npm \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release \
+    python2 \
+    -y
+
+
+# Docker cli tools installation
+RUN curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian \
+    $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null \
+    && apt-get update && apt-get install docker-ce-cli -y 
 
 # Install node modules for readme validation in demisto-sdk validate
 WORKDIR /content
 COPY package*.json ./
 RUN npm ci
-
-# Do no run on root
-USER demisto
-WORKDIR /home/demisto
-
-# Add pip installs to path with demisto user
-ENV PYTHONPATH "${PYTHONPATH}:/home/demisto/.local/bin"
-ENV PATH "${PATH}:/home/demisto/.local/bin"
 
 # Install requirements
 COPY requirements.txt .
@@ -22,10 +33,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Work in content folder
 WORKDIR /content
 
-# Environment variables for demisto-sdk upload/download/run etc...
-ENV DEMISTO_BASE_URL="https://127.0.0.1:8443"
-ENV DEMISTO_API_KEY="XXXXXXXXXXXXXXX"
-ENV DEMISTO_VERIFY_SSL=true
+# Cleanup
+RUN apt-get autoremove -y \
+    && apt-get purge gcc -y \
+    && apt-get clean -y \
+    && rm -rf /var/lib/apt/lists/*
 
 # Default demisto-sdk help
 CMD ["demisto-sdk", "--help"]

@@ -19,7 +19,6 @@ To ensure the best performance, please either:
 
 - Use a Linux machine
 - Use [Windows WSL2](https://docs.microsoft.com/en-us/windows/wsl/install)
-- Clone your content repository to the `/content` directory inside the container.
 
 ## Environment Variable
 
