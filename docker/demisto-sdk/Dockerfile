@@ -45,7 +45,7 @@ ADD https://raw.githubusercontent.com/demisto/content/master/dev-requirements-py
 RUN virtualenv --system-site-packages -p python3 venv && venv/bin/pip3 install -r dev-requirements-py3.txt -U --upgrade-strategy only-if-needed && rm dev-requirements-py3.txt
 
 # Set python2 as default python
-RUN echo "alias python='/usr/bin/python2'" >> $HOME/.bashrc
+RUN update-alternatives --install /usr/bin/python2 python /usr/bin/python
 
 # apt-get Cleanup
 RUN apt-get autoremove -y \
