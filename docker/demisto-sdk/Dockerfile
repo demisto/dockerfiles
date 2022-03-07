@@ -1,5 +1,7 @@
 FROM demisto/python3-deb:3.10.1.26968
 
+SHELL ["/bin/bash", "-c"]
+
 USER root
 
 ADD panw-cert.pem /usr/local/share/ca-certificates
@@ -29,20 +31,27 @@ RUN curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /
 WORKDIR /content
 
 # Install node modules for readme validation in demisto-sdk validate
-COPY package*.json ./
+ADD https://raw.githubusercontent.com/demisto/demisto-sdk/master/package.json .
+ADD https://raw.githubusercontent.com/demisto/demisto-sdk/master/package-lock.json .
 
 # Python requirements
 COPY requirements.txt .
 RUN npm ci && python3 -m pip install --no-cache-dir -r requirements.txt && rm requirements.txt
+
+ADD https://raw.githubusercontent.com/demisto/content/master/dev-requirements-py2.txt /content/dev-requirements-py2.txt
+RUN virtualenv -p python2 venv && venv/bin/pip2 install -r /content/dev-requirements-py2.txt && rm dev-requirements-py2.txt
+
+ADD https://raw.githubusercontent.com/demisto/content/master/dev-requirements-py3.txt /content/dev-requirements-py3.txt
+RUN virtualenv --system-site-packages -p python3 venv && venv/bin/pip3 install -r dev-requirements-py3.txt -U --upgrade-strategy only-if-needed && rm dev-requirements-py3.txt
+
+# Set python2 as default python
+RUN echo "alias python='/usr/bin/python2'" >> $HOME/.bashrc
 
 # apt-get Cleanup
 RUN apt-get autoremove -y \
     && apt-get purge gcc -y \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
-
-ADD https://raw.githubusercontent.com/demisto/content/master/dev-requirements-py2.txt /content/dev-requirements-py2.txt
-RUN virtualenv -p python2 venv && rm dev-requirements-py2.txt
-
+    
 # Default demisto-sdk help
 CMD ["demisto-sdk", "--help"]
