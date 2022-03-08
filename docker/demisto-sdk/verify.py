@@ -8,4 +8,4 @@ assert '3' in python_version, f'No python3 in "python3" command {python_version=
 # python_version = python_version.decode().strip('\n')
 # assert '2.7' in python_version, f'No python2 in "python" command. {python_version=}'
 
-assert subprocess.Popen(['demisto-sdk', '--version']).wait() != 0, 'Could not run demisto-sdk'
+# assert subprocess.Popen(['demisto-sdk', '--version']).wait() != 0, 'Could not run demisto-sdk'
