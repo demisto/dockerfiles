@@ -43,7 +43,7 @@ if [ "$1" == "-u" ] || [ "$1" == "--update" ]; then
     exit 0
 fi
 
-if [ ! "$FORCE_SETUP" ]; then
+if [ ! "$FORCE_SETUP" = "yes" ]; then
 
     if [ ! "$PWD" == "$(git rev-parse --show-toplevel)" ]; then
         cat >&2 <<__EOF__
