@@ -41,14 +41,16 @@ RUN npm ci && python3 -m pip install --no-cache-dir -r requirements.txt && rm re
 ADD https://raw.githubusercontent.com/demisto/content/master/dev-requirements-py3.txt /content/
 ADD https://raw.githubusercontent.com/demisto/content/master/dev-requirements-py2.txt /content/
 ADD bootstrap /content/bootstrap
-RUN chmod +x bootstrap && NO_HOOKS=true SETUP_PY2=true FORCE_SETUP=true NO_NPM=true ./bootstrap && rm bootstrap
-
+RUN chmod +x bootstrap && NO_HOOKS=1 SETUP_PY2=yes FORCE_SETUP=yes NO_NPM=true ./bootstrap && rm bootstrap
 
 # apt-get Cleanup
 RUN apt-get autoremove -y \
     && apt-get purge gcc -y \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
-    
+
+# Enable venv
+RUN "source venv/bin/activate"
+
 # Default demisto-sdk help
 CMD ["demisto-sdk", "--help"]
