@@ -38,8 +38,8 @@ ADD https://raw.githubusercontent.com/demisto/demisto-sdk/master/package-lock.js
 COPY requirements.txt .
 RUN npm ci && python3 -m pip install --no-cache-dir -r requirements.txt && rm requirements.txt
 
-ADD https://raw.githubusercontent.com/demisto/content/master/dev-requirements-py3.txt /content/
-ADD https://raw.githubusercontent.com/demisto/content/master/dev-requirements-py2.txt /content/
+ADD https://raw.githubusercontent.com/demisto/content/master/dev-requirements-py3.txt dev-requirements-py3.txt
+ADD https://raw.githubusercontent.com/demisto/content/master/dev-requirements-py2.txt dev-requirements-py2.txt
 ADD bootstrap /content/bootstrap
 RUN chmod +x bootstrap && NO_HOOKS=1 SETUP_PY2=yes FORCE_SETUP=yes NO_NPM=true ./bootstrap && rm bootstrap
 
