@@ -35,8 +35,9 @@ ADD https://raw.githubusercontent.com/demisto/demisto-sdk/master/package.json .
 ADD https://raw.githubusercontent.com/demisto/demisto-sdk/master/package-lock.json .
 
 # Python requirements
-COPY requirements.txt .
-RUN npm ci && python3 -m pip install --no-cache-dir -r requirements.txt && rm requirements.txt
+# COPY requirements.txt .
+RUN npm ci 
+# && python3 -m pip install --no-cache-dir -r requirements.txt && rm requirements.txt
 
 ADD https://raw.githubusercontent.com/demisto/content/master/dev-requirements-py3.txt dev-requirements-py3.txt
 ADD https://raw.githubusercontent.com/demisto/content/master/dev-requirements-py2.txt dev-requirements-py2.txt
