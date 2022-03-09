@@ -125,8 +125,10 @@ else
         echo "export PIPENV_IGNORE_VIRTUALENVS=1" >> venv/bin/activate
         echo "Done setting up python virtual env. Installing dependencies..."
         if [ "$SETUP_PY2" == "yes" ]; then
+            venv/bin/pip2 install wheel
             venv/bin/pip2 install -r dev-requirements-py2.txt
         fi
+        venv/bin/pip3 install wheel
         venv/bin/pip3 install -r dev-requirements-py3.txt -U --upgrade-strategy only-if-needed
         if [ "$INCLUDE_PY2_NOTE" == "yes" ]; then
             echo "=========================="

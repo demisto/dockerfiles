@@ -26,7 +26,6 @@ RUN curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /
 
 WORKDIR /content
 
-# RUN git config --global http.sslVerify false
 
 # Install node modules for readme validation in demisto-sdk validate
 ADD https://raw.githubusercontent.com/demisto/demisto-sdk/master/package.json /content/
