@@ -29,11 +29,11 @@ if [ "$1" == "-u" ] || [ "$1" == "--update" ]; then
     fi
     if [ -f "venv/bin/pip2" ]; then
         echo "Updating python 2 dependencies ..."
-        venv/bin/pip2 install -r dev-requirements-py2.txt
+        python2 venv/bin/pip2 install -r dev-requirements-py2.txt
     fi
     if [ -f "venv/bin/pip3" ]; then
         echo "Updating python 3 dependencies ..."
-        venv/bin/pip3 install -r dev-requirements-py3.txt -U --upgrade-strategy only-if-needed
+        python3 venv/bin/pip3 install -r dev-requirements-py3.txt -U --upgrade-strategy only-if-needed
     fi
     if [ -d "node_modules" ]; then
         echo "Updating node modules"
@@ -91,7 +91,7 @@ else
                 INCLUDE_PY2_NOTE=yes
             fi
         fi
-        
+
         PY3CMD="python3"
         if command -v python3.10 >/dev/null 2>&1; then
             PY3CMD="python3.10"
@@ -106,7 +106,7 @@ else
             echo "ERROR: python3 is missing. Please make sure you have Python 3 installed on your system" 1>&2
             exit 1
         fi
-        echo "Using python 3 command: $(command -v $PY3CMD)"
+        echo "Using python 3 command: `command -v $PY3CMD`"
         if ! $PY3CMD -c 'import sys;assert sys.version_info.major == 3 and sys.version_info.minor >= 7, "python version check failed for: {}".format(sys.version_info)'; then
             echo "ERROR: python 3.7 or above version validation failed. Please make sure you have Python 3.7 (and above) installed on your system" 1>&2
             exit 1
@@ -117,7 +117,7 @@ else
                 exit 1
             fi
         fi
-        virtualenv --system-site-packages -p $PY3CMD venv
+        $PY3CMD -m venv --system-site-packages  venv
         if [ "$SETUP_PY2" == "yes" ]; then
             virtualenv -p python2 venv
         fi
@@ -125,10 +125,8 @@ else
         echo "export PIPENV_IGNORE_VIRTUALENVS=1" >> venv/bin/activate
         echo "Done setting up python virtual env. Installing dependencies..."
         if [ "$SETUP_PY2" == "yes" ]; then
-            echo "Installing python2 requirements: venv/bin/pip2 install -r dev-requirements-py2.txt"
             venv/bin/pip2 install -r dev-requirements-py2.txt
         fi
-        echo "Installing python 2 requirements: venv/bin/pip3 install -r dev-requirements-py3.txt -U --upgrade-strategy only-if-needed"
         venv/bin/pip3 install -r dev-requirements-py3.txt -U --upgrade-strategy only-if-needed
         if [ "$INCLUDE_PY2_NOTE" == "yes" ]; then
             echo "=========================="
@@ -144,7 +142,6 @@ else
         echo "If you want to re-install: 'rm -r ${PWD}/venv' and then run this script again."
     fi
 fi
-
 echo "======================="
 
 if [ -n "$CI" ]; then
