@@ -34,20 +34,19 @@ ADD https://raw.githubusercontent.com/demisto/demisto-sdk/master/package-lock.js
 # Python requirements
 COPY requirements.txt .
 RUN npm ci && python3 -m pip install --no-cache-dir -r requirements.txt && rm requirements.txt
+RUN git config --global http.sslVerify false
 
 ADD https://raw.githubusercontent.com/demisto/content/master/dev-requirements-py3.txt /content/dev-requirements-py3.txt
 ADD https://raw.githubusercontent.com/demisto/content/master/dev-requirements-py2.txt /content/dev-requirements-py2.txt
+
 ADD bootstrap /content/bootstrap
-RUN NO_HOOKS=1 SETUP_PY2=yes FORCE_SETUP=yes NO_NPM=true ./bootstrap && rm bootstrap
+RUN NO_HOOKS=1 SETUP_PY2=yes FORCE_SETUP=yes NO_NPM=true ./bootstrap && rm bootstrap && source venv/bin/activate
 
 # apt-get Cleanup
 RUN apt-get autoremove -y \
     && apt-get purge gcc -y \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
-
-# Enable venv
-RUN "source venv/bin/activate"
 
 # Default demisto-sdk help
 CMD ["demisto-sdk", "--help"]
