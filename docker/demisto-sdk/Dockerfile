@@ -42,6 +42,8 @@ ADD https://raw.githubusercontent.com/demisto/content/master/dev-requirements-py
 ADD bootstrap /content/bootstrap
 RUN NO_HOOKS=1 SETUP_PY2=yes FORCE_SETUP=yes NO_NPM=true ./bootstrap && rm bootstrap && source venv/bin/activate
 
+ENV PATH="/content/venv/bin:$PATH"
+
 # apt-get Cleanup
 RUN apt-get autoremove -y \
     && apt-get purge gcc -y \
