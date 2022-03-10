@@ -696,7 +696,7 @@ updates:
   - package-ecosystem: pip
     directory: /docker/syslog
     schedule:
-     interval: daily
+      interval: daily
   - package-ecosystem: pip
     directory: /docker/accessdata
     schedule:
@@ -716,4 +716,8 @@ updates:
   - package-ecosystem: pip
     directory: /docker/pan-os-python
     schedule:
-     interval: daily
+      interval: daily
+  - package-ecosystem: pip
+    directory: /docker/parse-emails
+    schedule:
+      interval: daily
