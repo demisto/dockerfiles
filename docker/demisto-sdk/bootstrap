@@ -22,6 +22,13 @@ EOF
 exit 0
 fi
 
+VIRTUALENV_VERSION=$(virtualenv --version)
+if [[ $VIRTUALENV_VERSION != *16.7.* && "$SETUP_PY2" == "yes" ]]; then
+    echo "ERROR: You are using virtualenv version ${VIRTUALENV_VERSION}, Please install virtualenv version 16.7.7:
+    pip3 uninstall virtualenv && pip3 install virtualenv==16.7.7"
+    exit 1
+fi
+
 if [ "$1" == "-u" ] || [ "$1" == "--update" ]; then
     if [ ! -f "venv/bin/pip2" ] && [ ! -f "venv/bin/pip3" ]; then
         echo "ERROR: It seems that venv hasn't been setup. Run $0 to fully setup the venv without the [$1] option."
@@ -106,7 +113,7 @@ else
             echo "ERROR: python3 is missing. Please make sure you have Python 3 installed on your system" 1>&2
             exit 1
         fi
-        echo "Using python 3 command: `command -v $PY3CMD`"
+        echo "Using python 3 command: $(command -v $PY3CMD)"
         if ! $PY3CMD -c 'import sys;assert sys.version_info.major == 3 and sys.version_info.minor >= 7, "python version check failed for: {}".format(sys.version_info)'; then
             echo "ERROR: python 3.7 or above version validation failed. Please make sure you have Python 3.7 (and above) installed on your system" 1>&2
             exit 1
@@ -125,10 +132,8 @@ else
         echo "export PIPENV_IGNORE_VIRTUALENVS=1" >> venv/bin/activate
         echo "Done setting up python virtual env. Installing dependencies..."
         if [ "$SETUP_PY2" == "yes" ]; then
-            venv/bin/pip2 install wheel
             venv/bin/pip2 install -r dev-requirements-py2.txt
         fi
-        venv/bin/pip3 install wheel
         venv/bin/pip3 install -r dev-requirements-py3.txt -U --upgrade-strategy only-if-needed
         if [ "$INCLUDE_PY2_NOTE" == "yes" ]; then
             echo "=========================="
