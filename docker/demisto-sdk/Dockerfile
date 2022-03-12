@@ -41,7 +41,8 @@ ADD https://raw.githubusercontent.com/demisto/content/master/dev-requirements-py
 RUN virtualenv -p python2 venv \
     && venv/bin/pip2 install -r dev-requirements-py2.txt \
     && python3 -m venv --system-site-packages venv \
-    && venv/bin/pip3 install -r dev-requirements-py3.txt -U --upgrade-strategy only-if-needed
+    && venv/bin/pip3 install -r dev-requirements-py3.txt -U --upgrade-strategy only-if-needed \
+    && rm /content/dev-requirements-py2.txt /content/dev-requirements-py3.txt -y
 
 
 ENV PATH="/content/venv/bin:$PATH"
