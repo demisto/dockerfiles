@@ -36,7 +36,7 @@ if [ "$1" == "-u" ] || [ "$1" == "--update" ]; then
     fi
     if [ -f "venv/bin/pip2" ]; then
         echo "Updating python 2 dependencies ..."
-        python2 venv/bin/pip2 install -r dev-requirements-py2.txt
+        venv/bin/pip2 install -r dev-requirements-py2.txt
     fi
     if [ -f "venv/bin/pip3" ]; then
         echo "Updating python 3 dependencies ..."
@@ -132,7 +132,8 @@ else
         echo "export PIPENV_IGNORE_VIRTUALENVS=1" >> venv/bin/activate
         echo "Done setting up python virtual env. Installing dependencies..."
         if [ "$SETUP_PY2" == "yes" ]; then
-            python2 venv/bin/pip2 install -r dev-requirements-py2.txt
+            venv/bin/pip2 -V
+            venv/bin/pip2 install -r dev-requirements-py2.txt
         fi
         python3 venv/bin/pip3 install -r dev-requirements-py3.txt -U --upgrade-strategy only-if-needed
         if [ "$INCLUDE_PY2_NOTE" == "yes" ]; then

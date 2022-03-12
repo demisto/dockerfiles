@@ -38,8 +38,11 @@ RUN npm ci && python3 -m pip install --no-cache-dir -r requirements.txt && rm re
 ADD https://raw.githubusercontent.com/demisto/content/master/dev-requirements-py3.txt /content/dev-requirements-py3.txt
 ADD https://raw.githubusercontent.com/demisto/content/master/dev-requirements-py2.txt /content/dev-requirements-py2.txt
 
-ADD bootstrap /content/bootstrap
-RUN NO_HOOKS=1 SETUP_PY2=yes FORCE_SETUP=yes NO_NPM=true ./bootstrap && rm bootstrap && source venv/bin/activate
+RUN virtualenv -p python2 venv \
+    && venv/bin/pip2 install -r dev-requirements-py2.txt \
+    && python3 -m venv --system-site-packages venv \
+    && venv/bin/pip3 install -r dev-requirements-py3.txt -U --upgrade-strategy only-if-needed
+
 
 ENV PATH="/content/venv/bin:$PATH"
 
