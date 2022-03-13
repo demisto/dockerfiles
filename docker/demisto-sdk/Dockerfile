@@ -35,6 +35,7 @@ ADD https://raw.githubusercontent.com/demisto/demisto-sdk/master/package-lock.js
 ADD requirements.txt .
 RUN npm ci && python3 -m pip install --no-cache-dir -r requirements.txt && rm requirements.txt
 
+# Install content dev-dependencies. Create virtual envs for python2 and python3
 ADD https://raw.githubusercontent.com/demisto/content/master/dev-requirements-py3.txt /content/dev-requirements-py3.txt
 ADD https://raw.githubusercontent.com/demisto/content/master/dev-requirements-py2.txt /content/dev-requirements-py2.txt
 
@@ -42,8 +43,7 @@ RUN virtualenv -p python2 venv \
     && venv/bin/pip2 install -r dev-requirements-py2.txt \
     && python3 -m venv --system-site-packages venv \
     && venv/bin/pip3 install -r dev-requirements-py3.txt -U --upgrade-strategy only-if-needed \
-    && rm /content/dev-requirements-py2.txt /content/dev-requirements-py3.txt -y
-
+    && rm /content/dev-requirements-py2.txt /content/dev-requirements-py3.txt
 
 ENV PATH="/content/venv/bin:$PATH"
 
