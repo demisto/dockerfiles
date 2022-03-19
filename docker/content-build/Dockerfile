@@ -8,7 +8,7 @@ RUN sudo apt-get update && \
   python3 python3-dev
 
 # Change virtualenv version to old version - Bug with link 2 python versions
-RUN pip uninstall -y virtualenv && sudo pip install virtualenv==16.7.7
+RUN pip uninstall -y virtualenv && pip install virtualenv==16.7.7
 
 # install gcloud see: https://cloud.google.com/sdk/docs/downloads-apt-get
 RUN sudo apt-get update && sudo apt-get install apt-transport-https ca-certificates gnupg \
