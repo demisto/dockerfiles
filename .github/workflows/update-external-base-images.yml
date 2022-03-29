@@ -1,0 +1,32 @@
+name: Update external base images
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update-docker-files:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+        with:
+          ssh-key: "${{ secrets.ACTION_KEY }}"
+      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+      - name: Setup Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: '3.9'
+      - name: run
+        run: |
+            git config --global user.email ""
+            git config --global user.name "auto dockerfiles update"
+            echo "==== $(date): Starting pipenv setup... ===="
+            python -m pip install --upgrade pip
+            pip install pipenv
+            pipenv install
+            echo "==== Finished ===="
+            pipenv run python ./utils/auto_dockerfile_update/update_dockerfiles.py
+            echo "Done!"
+
+
+
