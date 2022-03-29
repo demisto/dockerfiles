@@ -1,4 +1,4 @@
-FROM cimg/python:3.8.5-node
+FROM cimg/python:3.10.1-node
 
 RUN sudo apt-get update && \
   sudo apt-get install -y --no-install-recommends python-dev libxml2-dev libxslt1-dev zlib1g-dev python-setuptools jq \
