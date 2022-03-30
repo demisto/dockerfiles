@@ -1,7 +1,7 @@
-# Last modified: Fri, 26 Mar 2021 16:21:13 +0000
-FROM python:3.9.2-slim-buster
+# Last modified: Sun, 23 Jan 2022 10:42:29 +0000
+FROM python:3.10.4-slim-bullseye
 
-RUN echo 'deb http://deb.debian.org/debian buster-backports main' >> /etc/apt/sources.list
+RUN echo 'deb http://deb.debian.org/debian bullseye-backports main' >> /etc/apt/sources.list
 
 # Basic linux utilities
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -13,7 +13,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 && rm -rf /var/lib/apt/lists/*
 
 # Upgrade using backports
-RUN apt-get update && apt-get -t buster-backports -y --no-install-recommends upgrade \
+RUN apt-get update && apt-get -t bullseye-backports -y --no-install-recommends upgrade \
 && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
@@ -21,11 +21,11 @@ COPY requirements.txt .
 #Install tools for building binary deps (will be reomved later on)
 RUN apt-get update && apt-get install -y --no-install-recommends \
   gcc \
-  python-dev \ 
+  python3-dev \ 
 && pip install --no-cache-dir -r requirements.txt \
 && apt-get purge -y --auto-remove \
   gcc \
-  python-dev \
+  python3-dev \
 && rm -rf /var/lib/apt/lists/*
 
 RUN groupadd --gid 4000 demisto \

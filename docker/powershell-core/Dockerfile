@@ -1,5 +1,5 @@
-# Last modified: Wed, 10 Jun 2020 22:06:26 +0000
-FROM mcr.microsoft.com/powershell:7.1.3-alpine-3.12-20210316
+# Last modified: Sun, 29 Aug 2021 16:25:44 +0000
+FROM mcr.microsoft.com/powershell:7.2.1-alpine-3.14-20211215
 
 # taken from here: https://git.alpinelinux.org/aports/tree/community/python2/cve-2021-3177.patch
 COPY cve-2021-3177.patch .
@@ -31,7 +31,7 @@ RUN set -ex \
 	&& wget -O python.tar.xz "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz" \
 	&& wget -O python.tar.xz.asc "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz.asc" \
 	&& export GNUPGHOME="$(mktemp -d)" \
-	&& gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys "$GPG_KEY" \
+	&& gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "$GPG_KEY" \
 	&& gpg --batch --verify python.tar.xz.asc python.tar.xz \
 	&& { command -v gpgconf > /dev/null && gpgconf --kill all || :; } \
 	&& rm -rf "$GNUPGHOME" python.tar.xz.asc \

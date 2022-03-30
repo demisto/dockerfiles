@@ -150,22 +150,39 @@ function docker_build {
             return 1
         fi
         pipenv --rm || echo "Proceeding. It is ok that no virtualenv is available to remove"
-        PIPENV_YES=yes pipenv lock -r > requirements.txt
+        PIPENV_YES=yes pipenv lock -r --no-header> requirements.txt
         echo "Pipfile lock generated requirements.txt: "
         cat requirements.txt
-        del_requirements=yes
+        # del_requirements=yes
     fi
-    tmp_dockerfile=$(mktemp)
-    cp Dockerfile "$tmp_dockerfile"
-    echo "" >> "$tmp_dockerfile"
-    echo "ENV DOCKER_IMAGE=$image_full_name" >> "$tmp_dockerfile"
-    docker build -f "$tmp_dockerfile" . -t ${image_full_name} \
+    tmp_dir=$(mktemp -d)
+    cp Dockerfile "$tmp_dir/Dockerfile"
+    echo "" >> "$tmp_dir/Dockerfile"
+    echo "ENV DOCKER_IMAGE=$image_full_name" >> "$tmp_dir/Dockerfile"
+    docker build -f "$tmp_dir/Dockerfile" . -t ${image_full_name} \
         --label "org.opencontainers.image.authors=Demisto <containers@demisto.com>" \
         --label "org.opencontainers.image.version=${VERSION}" \
         --label "org.opencontainers.image.revision=${CIRCLE_SHA1}"
-    rm "$tmp_dockerfile"
+    rm -rf "$tmp_dir"
     if [ ${del_requirements} = "yes" ]; then
         rm requirements.txt
+    fi
+    if [ -n "$CI" ]; then
+        echo "Checking that source files were not modified by build..."
+        DIFF_OUT=$(git diff -- .)
+        if [[ -n "$DIFF_OUT" ]]; then
+            echo "Found modified files. Failing the build!!"
+            echo "git diff -- . output:"
+            echo "$DIFF_OUT"
+            if [[ $DIFF_OUT == *"Pipfile.lock"* ]]; then
+                echo "Seems that Pipfile.lock was modified by the build. Make sure you updated and committed the Pipfile.lock file."
+                echo "To resolve this run: 'pipenv lock --keep-outdated'"
+                echo "Or if you want to update dependencies run without '--keep-outdated'"
+                echo "Then commit the Pipfile.lock file."
+            fi
+            echo "FAILED: $image_name"
+            return 1
+        fi
     fi
     if [[ "$(prop 'devonly')" ]]; then
         echo "Skipping license verification for devonly image"
@@ -183,6 +200,12 @@ function docker_build {
         echo "Verifying docker image by running the python script verify.py within the docker image"
         cat verify.py | docker run --rm -i ${image_full_name} python '-'
     fi
+    if [ -f "verify.ps1" ]; then
+        echo "==========================="            
+        echo "Verifying docker image by running the pwsh script verify.ps1 within the docker image"
+        # use "tee" as powershell doesn't fail on throw when run with -c
+        cat verify.ps1 | docker run --rm -i ${image_full_name} sh -c 'tee > verify.ps1; pwsh verify.ps1'
+    fi
     docker_trust=0
     if sign_setup; then
         docker_trust=1
@@ -194,7 +217,15 @@ function docker_build {
         if [[ "$docker_trust" == "1" ]]; then
             commit_dockerfiles_trust
         fi
-        ${DOCKER_SRC_DIR}/post_github_comment.py ${image_full_name}        
+        if ! ${DOCKER_SRC_DIR}/post_github_comment.py ${image_full_name}; then 
+            echo "Failed post_github_comment.py. Will stop build only if not on master"
+            if [ "$CIRCLE_BRANCH" == "master" ]; then
+                echo "Continuing as we are on master branch..."
+            else
+                echo "failing build!!"
+                exit 5
+            fi
+        fi
     else
         echo "Skipping docker push"
         if [ -n "$CI" ]; then
@@ -264,6 +295,10 @@ if [[ $(which pyenv) ]]; then
     pyenv versions
 fi
 
+echo "=========== docker info =============="
+docker info
+echo "========================="
+
 if [[ -n "$1" ]]; then
     if [[ ! -d  "${SCRIPT_DIR}/$1" ]]; then
         echo "Image: [$1] specified as command line parameter but directory not found: [${SCRIPT_DIR}/$1]"
@@ -291,6 +326,17 @@ if [ "$CIRCLE_BRANCH" == "master" ]; then
 fi
 
 echo "DOCKER_ORG: ${DOCKER_ORG}, DIFF_COMPARE: [${DIFF_COMPARE}], SCRIPT_DIR: [${SCRIPT_DIR}], CIRCLE_BRANCH: ${CIRCLE_BRANCH}, PWD: [${CURRENT_DIR}]"
+
+# echo to bash env to be used in future steps
+CIRCLE_ARTIFACTS="artifacts"
+if [[ ! -d $CIRCLE_ARTIFACTS ]]; then
+  mkdir $CIRCLE_ARTIFACTS
+fi
+echo $DIFF_COMPARE > $CIRCLE_ARTIFACTS/diff_compare.txt
+echo $SCRIPT_DIR > $CIRCLE_ARTIFACTS/script_dir.txt
+echo $CURRENT_DIR > $CIRCLE_ARTIFACTS/current_dir.txt
+echo $DOCKER_INCLUDE_GREP > $CIRCLE_ARTIFACTS/docker_include_grep.txt
+
 total=$(find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | wc -l)
 count=0
 for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | sort`; do

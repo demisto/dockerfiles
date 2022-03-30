@@ -10,8 +10,8 @@ import sys
 import requests
 import urllib3
 
-if(sys.version_info[0] < 3 or sys.version_info[1] < 6):
-    print("This script requires python version 3.6 and above. Please make sure to run with the proper version. Aborting...")
+if(sys.version_info[0] < 3 or sys.version_info[1] < 7):
+    print("This script requires python version 3.7 and above. Please make sure to run with the proper version. Aborting...")
     sys.exit(1)
 
 req_session = requests.Session()
@@ -82,7 +82,7 @@ def check_pwsh_license(docker_image: str, licenses: dict, ignore_packages: dict,
                 break
         if not found_license:
             msg = f'{name} (author: {m.get("Author")}): no approved license found for uri: {license_uri}'
-            print("FAILURE: {}".format(msg))
+            print("FAILURE: {} {}".format(docker_image, msg))
             raise Exception(msg)
 
 
@@ -159,7 +159,7 @@ def check_python_license(docker_image: str, licenses: dict, ignore_packages: dic
             if not found:
                 msg = "{}: no approved license found for license: {}".format(
                     name, found_lic)
-                print("FAILURE: {}".format(msg))
+                print("FAILURE: {} {}".format(docker_image, msg))
                 raise Exception(msg)
 
 
@@ -176,10 +176,10 @@ def main():
         ignore_packages = json.load(f)["packages"]
     with open("{}/known_licenses.json".format(sys.path[0])) as f:
         known_licenses = json.load(f)["packages"]
-    print("================= Checking Python packages =================")
+    print(f"================= Checking Python packages: {args.docker_image} =================")
     check_python_license(args.docker_image, licenses,
                          ignore_packages, known_licenses)
-    print("================= Checking PowerShell packages =================")
+    print(f"================= Checking PowerShell packages: {args.docker_image} =================")
     check_pwsh_license(args.docker_image, licenses,
                        ignore_packages, known_licenses)
     print("SUCCESS: completed checking all licenses for docker image: {}".format(

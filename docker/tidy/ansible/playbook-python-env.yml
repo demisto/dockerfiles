@@ -1,0 +1,28 @@
+---
+- name: python-env
+  hosts: all
+  tasks:
+    - name: Delete exsiting venv
+      file:
+        path: "~/dev/demisto/content/venv"
+        state: absent
+
+    - name: Add hooks running precommit
+      lineinfile:
+        path: ~/.zshrc
+        state: present
+        line: export CONTENT_PRECOMMIT_RUN_DEV_TASKS=1
+
+    - name: Uncomment demisto-sdk auto-complete
+      replace:
+        path: "{{ item }}"
+        regexp: '^# (.*_DEMISTO_SDK_COMPLETE.*)'
+        replace: '\1'
+      with_items:
+        - ~/.zshrc
+
+    - name: Install tox for demisto-sdk development
+      pip:
+        name: tox
+        executable: ~/.pyenv/shims/pip3
+        extra_args: --user
