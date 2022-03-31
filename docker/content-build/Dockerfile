@@ -1,11 +1,10 @@
 FROM cimg/python:3.10.1-node
 
 RUN sudo apt-get update && \
-  sudo apt-get install -y --no-install-recommends python-dev libxml2-dev libxslt1-dev zlib1g-dev python-setuptools jq \
+  sudo apt-get install -y --no-install-recommends libxml2-dev libxslt1-dev zlib1g-dev jq \
   make build-essential libssl-dev libbz2-dev \
   libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
-  xz-utils tk-dev libffi-dev liblzma-dev python-openssl \
-  python3 python3-dev
+  xz-utils tk-dev libffi-dev liblzma-dev python-openssl
 
 # Change virtualenv version to old version - Bug with link 2 python versions
 RUN pip uninstall -y virtualenv && pip install virtualenv==16.7.7
