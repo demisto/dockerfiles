@@ -1,5 +1,7 @@
 jobs:
   docker_build:
+    environment:
+      BUILDER: builder
     docker:
       - image: devdemisto/dockerbuild:1.0.0.25778
     steps:
@@ -29,6 +31,9 @@ jobs:
             pip install pipenv==2021.5.29
             pipenv install --dev
             pipenv run pytest ironbank -v
+      - run:
+          name: Configure buildx builder
+          command: docker buildx create --name $(BUILDER) --use
       - run:
           name: Build Docker Images
           command: |

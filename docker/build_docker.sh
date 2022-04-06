@@ -159,7 +159,10 @@ function docker_build {
     cp Dockerfile "$tmp_dir/Dockerfile"
     echo "" >> "$tmp_dir/Dockerfile"
     echo "ENV DOCKER_IMAGE=$image_full_name" >> "$tmp_dir/Dockerfile"
-    docker build -f "$tmp_dir/Dockerfile" . -t ${image_full_name} \
+    platforms=$(prop linux/amd64,linux/arm64)
+    docker buildx build \
+        -f "$tmp_dir/Dockerfile" . -t "$image_full_name" \
+        --platform "$platforms" --load \
         --label "org.opencontainers.image.authors=Demisto <containers@demisto.com>" \
         --label "org.opencontainers.image.version=${VERSION}" \
         --label "org.opencontainers.image.revision=${CIRCLE_SHA1}"
