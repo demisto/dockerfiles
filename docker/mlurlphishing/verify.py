@@ -6,3 +6,4 @@ import cv2 as cv
 import tldextract
 import dill
 import catboost
+from PIL import Image

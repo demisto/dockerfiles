@@ -1,4 +1,4 @@
-FROM demisto/python3-deb:3.9.1.14969
+FROM demisto/python3-deb:3.10.1.26244
 
 COPY requirements.txt .
 
@@ -10,7 +10,7 @@ ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
 RUN apt-get update -y \
-    && apt-get install -y curl jq unzip openssh-client gcc libffi-dev libssl-dev git zip netcat wget python2 python-pip software-properties-common \
+    && apt-get install -y curl jq unzip openssh-client gcc libffi-dev libssl-dev git zip netcat wget python2 python3-pip software-properties-common \
     # Install requirements
     && pip install --no-cache-dir -r requirements.txt \
     # Installing nvm, npm and node.js
@@ -20,7 +20,7 @@ RUN apt-get update -y \
     && nvm alias default $NODE_VERSION \
     && nvm use default \
     # Installing the gsutil and docker cli
-    && apt-get install apt-transport-https ca-certificates gnupg=2.2.12-1+deb10u1 gpgv=2.2.12-1+deb10u1 -y --allow-downgrades\
+    && apt-get install apt-transport-https ca-certificates gnupg gpgv -y --allow-downgrades\
     && echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" |  tee -a /etc/apt/sources.list.d/google-cloud-sdk.list \
     && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - \
     && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
