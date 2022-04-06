@@ -16,22 +16,11 @@ jobs:
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
       - name: Approve and auto-merge for Dependabot PRs
-        if: ${{contains(steps.metadata.outputs.dependency-names, 'demisto/*') || steps.metadata.outputs.update-type == 'version-update:semver-patch' || steps.metadata.outputs.update-type == 'version-update:semver-minor' || steps.metadata.outputs.update-type == null}}
+        if: ${{contains(steps.metadata.outputs.dependency-names, 'demisto/*') || steps.metadata.outputs.update-type == 'version-update:semver-patch' || steps.metadata.outputs.update-type == 'version-update:semver-minor'}}
         env:
           PR_URL: ${{github.event.pull_request.html_url}}
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          PULL_TITLE: ${{ github.event.pull_request.title }}
         run: |
-          if [[ -z steps.metadata.outputs.update-type ]]; then
-            minor_regex="^build\(deps(-dev)*\): bump .+ from ([[:digit:]]+)\.([[:digit:]]+)\.([[:digit:]]+) to ([[:digit:]]+)\.([[:digit:]]+)\.([[:digit:]]+)"
-            if [[ "$PULL_TITLE" =~  $minor_regex ]]; then
-              if [[ "${BASH_REMATCH[2]}" != "${BASH_REMATCH[5]}" ]]; then
-                echo "Major version update. Doesn't approving and merging"
-                exit 0
-              fi
-            fi
-          fi
-
-          echo "Approving and merging"
+          echo "Aprovving and merging"
           gh pr review --approve "$PR_URL"
           gh pr merge --auto --squash "$PR_URL"
