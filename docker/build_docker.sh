@@ -160,6 +160,10 @@ function docker_build {
     echo "" >> "$tmp_dir/Dockerfile"
     echo "ENV DOCKER_IMAGE=$image_full_name" >> "$tmp_dir/Dockerfile"
     platforms=$(prop linux/amd64,linux/arm64)
+    if ! echo "$platforms" | grep -q "linux/amd64" ; then
+        echo "You set platforms to $platforms, but platform linux/amd64 not found in the file"
+        exit 1
+    fi
     docker buildx build \
         -f "$tmp_dir/Dockerfile" . -t "$image_full_name" \
         --platform "$platforms" --load \
