@@ -21,4 +21,6 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
 
 
 # this line is for saving cache of the list of the tld
+RUN mkdir /.cache
+RUN chmod 755 /.cache
 RUN python -c "import tldextract; tldextract.extract('com')"
