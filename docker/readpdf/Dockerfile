@@ -7,7 +7,8 @@ RUN apk update && apk add --no-cache ttf-dejavu  libstdc++ openjpeg-tools fontco
   fontconfig-dev libjpeg-turbo-dev boost-dev openjpeg-dev cairo libjpeg freetype-dev &&\
   wget https://poppler.freedesktop.org/poppler-22.04.0.tar.xz -O /tmp/p.tar.xz && \
   tar -xvf /tmp/p.tar.xz -C /tmp && \
-  pushd /tmp/poppler-22.04.0 && \
+  export CURR_DIR=`pwd` && \
+  cd /tmp/poppler-22.04.0 && \
   mkdir build && cd build && \
   cmake -DCMAKE_BUILD_TYPE=Release   \
         -DCMAKE_INSTALL_PREFIX=/usr  \
@@ -17,5 +18,5 @@ RUN apk update && apk add --no-cache ttf-dejavu  libstdc++ openjpeg-tools fontco
         .. && \
   make && \
   make install && make clean && \
-  popd && pip install -r requirements.txt && \
+  cd $CURR_DIR && pip install -r requirements.txt && \
   apk del .build-dependencies 
