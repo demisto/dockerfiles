@@ -15,4 +15,5 @@ RUN apk update && apk add --no-cache ttf-dejavu  libstdc++ openjpeg-tools fontco
         .. && \
   make && \
   make install && make clean && \
+  pip install -r requirements.txt && \
   apk del .build-dependencies 
