@@ -16,9 +16,5 @@ RUN apk --update add nginx && \
 COPY nginx.conf /etc/nginx/.
 
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git libffi-dev \
-  && pip install -r requirements.txt \
+  && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies
-
-
-# this line is for saving cache of the list of the tld
-RUN python -c "import tldextract; tldextract.extract('com')"
