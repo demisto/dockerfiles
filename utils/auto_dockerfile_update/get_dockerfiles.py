@@ -80,7 +80,7 @@ def get_docker_files(base_path="docker/", devonly=False, external=False,
     Returns:
         list of relevant files: [{'name','path,'content','base_image}]
     """
-    dockerfiles_paths = glob(f"{base_path}/**/Dockerfile")
+    dockerfiles_paths = glob(f"{base_path}/**/Dockerfile", recursive=True))
     files_list = []
 
     for path in dockerfiles_paths:

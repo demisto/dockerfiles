@@ -61,7 +61,7 @@ def get_all_tags_general(repo: str, image_name: str) -> List[Dict]:
     while True:
         res = get_dockerhub_tags_list(repo=repo, image_name=image_name, full_url=next_url)
         if not res:
-            print(f"{repo} - {image_name} - {next_url} - issue")
+            print(f"Error receiving {repo} - {image_name} tags from this URL: - {next_url} ")
             break
         curr_tags_list = res.get('results', [])
         tags_list += curr_tags_list

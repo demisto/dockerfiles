@@ -82,7 +82,7 @@ def update_external_base_dockerfiles(git_repo: Repo) -> None:
             latest_tag_name = latest_tag
             latest_tag_last_updated = ""
         else:
-            raise TypeError("latest_tag should be str or dict")
+            raise TypeError("latest_tag should be str or dict, received {typeof(latest_tag)}: {latest_tag}")
 
         if is_docker_file_outdated(file, latest_tag_name, latest_tag_last_updated):
             original_branch = git_repo.active_branch
