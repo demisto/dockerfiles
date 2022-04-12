@@ -32,7 +32,7 @@ def parse_base_image(full_base_image_name: str) -> (str, str, str):
         full_base_image_name (str): Full image name e.x. 'demisto/python3-deb:3.9.6.22912'
 
     Returns:
-        (repo, image_name, tags)
+        (repo, image_name, tag)
     """
 
     if '/' not in full_base_image_name:
@@ -41,8 +41,8 @@ def parse_base_image(full_base_image_name: str) -> (str, str, str):
     else:
         repository, full_image_name = full_base_image_name.split("/")
 
-    image_name, tags = full_image_name.split(":")
-    return repository, image_name, tags
+    image_name, tag = full_image_name.split(":")
+    return repository, image_name, tag
 
 
 def is_dev_only(dockerfile_path=str) -> bool:
@@ -67,8 +67,7 @@ def is_dev_only(dockerfile_path=str) -> bool:
     return False
 
 
-def get_docker_files(base_path="docker/", devonly=False, external=False,
-                     internal=False) -> List[Dict]:
+def get_docker_files(base_path="docker/", devonly=False, external=False, internal=False) -> List[Dict]:
     """
     Get all the relevant dockerfiles from the repository.
     Args:
@@ -80,7 +79,7 @@ def get_docker_files(base_path="docker/", devonly=False, external=False,
     Returns:
         list of relevant files: [{'name','path,'content','base_image}]
     """
-    dockerfiles_paths = glob(f"{base_path}/**/Dockerfile", recursive=True))
+    dockerfiles_paths = glob(f"{base_path}/**/Dockerfile", recursive=True)
     files_list = []
 
     for path in dockerfiles_paths:
@@ -100,12 +99,12 @@ def get_docker_files(base_path="docker/", devonly=False, external=False,
             base_image = base_image.replace("FROM ", "")
             is_internal = re.search(INTERNAL_BASE_IMAGES, base_image)
             if (is_internal and internal) or (not is_internal and external):
-                repo, image_name, tags = parse_base_image(base_image)
+                repo, image_name, tag = parse_base_image(base_image)
                 last_modified = get_last_modified(docker_file_content)
                 curr_dockerfile = {"path": path,
                                    "repo": repo,
                                    "image_name": image_name,
-                                   "tags": tags,
+                                   "tag": tag,
                                    "last_modified": last_modified,
                                    "content": docker_file_content}
 

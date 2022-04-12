@@ -15,7 +15,7 @@ jobs:
       with:
         source_branch: ""                                                         # If blank, default: triggered branch
         destination_branch: ""                                                    # If blank, default: master
-        pr_title: "update Dockerfile - ${{ github.ref }}"                         # Title of pull request
-        pr_body: "This is automated PR to update dockerfiles base images"
+        pr_title: "build(dockerfiles) update Dockerfile - ${{ github.ref_name }}" # Title of pull request
+        pr_body: "This is automated PR to update dockerfiles base images.\n${{ github.ref_name }}"
         pr_assignee: "itay-ye"                                                    # Comma-separated list (no spaces)
         github_token: ${{ secrets.GITHUB_TOKEN }}

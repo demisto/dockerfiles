@@ -21,7 +21,7 @@ def is_docker_file_outdated(dockerfile: Dict, latest_tag: str, last_updated: str
         True if the latest tag is newer or the latest tag is the same but new updates
     """
 
-    current_tag = dockerfile['tags']
+    current_tag = dockerfile['tag']
     current_tag_version = parse_versions(current_tag)
     latest_tag_version = parse_versions(latest_tag)
     if current_tag_version < latest_tag_version:
@@ -44,7 +44,7 @@ def update_dockerfile(dockerfile: Dict, latest_tag: str) -> None:
         None
     """
 
-    old_base_image = f"{dockerfile['image_name']}:{dockerfile['tags']}"
+    old_base_image = f"{dockerfile['image_name']}:{dockerfile['tag']}"
     new_base_image = f"{dockerfile['image_name']}:{latest_tag}"
     old_dockerfile = dockerfile['content']
     new_dockerfile = old_dockerfile.replace(old_base_image, new_base_image)
@@ -74,7 +74,7 @@ def update_external_base_dockerfiles(git_repo: Repo) -> None:
     """
     docker_files = get_docker_files(external=True)
     for file in docker_files:
-        latest_tag = get_latest_tag(file['repo'], file['image_name'], file['tags'])
+        latest_tag = get_latest_tag(file['repo'], file['image_name'], file['tag'])
         if isinstance(latest_tag, dict):
             latest_tag_name = latest_tag['name']
             latest_tag_last_updated = latest_tag['last_updated']
@@ -85,26 +85,8 @@ def update_external_base_dockerfiles(git_repo: Repo) -> None:
             raise TypeError("latest_tag should be str or dict, received {typeof(latest_tag)}: {latest_tag}")
 
         if is_docker_file_outdated(file, latest_tag_name, latest_tag_last_updated):
-            original_branch = git_repo.active_branch
-            branch_name = fr"autoupdate/Update_{file['repo']}_{file['image_name']}_from_{file['tags']}_to_{latest_tag_name}"
-            print(f"Creating new branch: {branch_name}")
-            if branch_name in git_repo.git.branch("--all"):
-                print("Branch already exits.")
-                continue
-            try:
-                branch = git_repo.create_head(branch_name)
-                branch.checkout()
-
-                update_dockerfile(file, latest_tag_name)
-
-                git_repo.git.add("*")
-                git_repo.git.commit(m=f"Update from {file['tags']} to {latest_tag_name}")
-                git_repo.git.push('--set-upstream', 'origin', branch)
-
-            except GitCommandError as e:
-                print(e)
-            finally:
-                original_branch.checkout()
+            branch_name = fr"autoupdate/Update_{file['repo']}_{file['image_name']}_from_{file['tag']}_to_{latest_tag_name}"
+            update_and_push_dockerfiles(git_repo, branch_name, [file], latest_tag_name)
             print(f"Updated {file['path']}")
 
 
@@ -149,25 +131,42 @@ def update_internal_base_dockerfile(git_repo: Repo) -> None:
         outdated_files = [file for file in dependency_list if
                           is_docker_file_outdated(file, latest_tag_name, latest_tag_last_updated)]
         for index, batch_slice in enumerate(batch(outdated_files, 25)):
-            original_branch = git_repo.active_branch
             branch_name = fr"autoupdate/{base_image}_{index}"
-            if branch_name in git_repo.git.branch("--all"):
-                continue
-            try:
-                branch = git_repo.create_head(branch_name)
-                branch.checkout()
+            update_and_push_dockerfiles(git_repo, branch_name, batch_slice, latest_tag_name)
 
-                for file in batch_slice:
-                    update_dockerfile(file, latest_tag_name)
 
-                git_repo.git.add("*")
-                git_repo.git.commit(m=f"Update  dependent images of {base_image} {index}")
-                git_repo.git.push('--set-upstream', 'origin', branch)
-            except GitCommandError as e:
-                print(f"Error creating {branch_name}")
-                print(e)
-            finally:
-                original_branch.checkout()
+def update_and_push_dockerfiles(git_repo: Repo, branch_name: str, files: List[Dict], latest_tag_name: str) -> None:
+    """
+    Update the dockerfiles and push the updated files to a new branch.
+    Args:
+        git_repo (Repo): Current repository
+        branch_name (str): The new branch name.
+        files (List[Dict]): list of dockerfiles dict.
+        latest_tag_name (str): latest tag string.
+
+    Returns:
+
+    """
+    print(f"Creating new branch: {branch_name}")
+    original_branch = git_repo.active_branch
+    if branch_name in git_repo.git.branch("--all"):
+        print("Branch already exits.")
+        return
+    try:
+        branch = git_repo.create_head(branch_name)
+        branch.checkout()
+
+        for file in files:
+            update_dockerfile(file, latest_tag_name)
+
+        git_repo.git.add("*")
+        git_repo.git.commit(m=f"Update Dockerfiles")
+        git_repo.git.push('--set-upstream', 'origin', branch)
+    except GitCommandError as e:
+        print(f"Error creating {branch_name}")
+        print(e)
+    finally:
+        original_branch.checkout()
 
 
 def main():
