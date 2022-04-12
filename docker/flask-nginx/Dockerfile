@@ -20,3 +20,4 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
   && apk del .build-dependencies
 
 RUN chmod 777 -R /home/demisto
+RUN python -c "import tldextract; tldextractor = tldextract.TLDExtract(cache_dir='/home/demisto'); tldextractor('com')"
