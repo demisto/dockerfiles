@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM docker.art.code.pan.run/build-tools--image-ubuntu:18.04.ep1
 
 RUN apt-get update && apt-get upgrade -y
 
