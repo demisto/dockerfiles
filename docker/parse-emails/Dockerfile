@@ -18,6 +18,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   gcc \
   g++ \
   libemail-outlook-message-perl \ 
+  libemail-address-perl \
 && pip3 install --no-cache-dir -r requirements.txt \
 && apt-get purge -y --auto-remove \
   python3-dev \
