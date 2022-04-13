@@ -14,8 +14,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   python3-dev \
   wget \
   git \
+  make \
+  gcc \
+  g++ \
   libemail-outlook-message-perl \ 
 && pip3 install --no-cache-dir -r requirements.txt \
 && apt-get purge -y --auto-remove \
   python3-dev \
+  make \
+  gcc \
+  g++ \
 && rm -rf /var/lib/apt/lists/*
