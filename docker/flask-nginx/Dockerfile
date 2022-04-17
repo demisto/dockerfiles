@@ -19,6 +19,6 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies
 
-ENV TLDEXTRACT_CACHE="/var/cache/tldextract.cache"
+ENV TLDEXTRACT_CACHE="/tmp/tldextract.cache"
 
 RUN tldextract --update
