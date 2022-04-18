@@ -128,7 +128,7 @@ def parse_versions(full_image_name: Union[str, Dict], key='name') -> List[Tuple[
     return result_list
 
 
-def get_latest_tag_from_list(current_version: str, tags_list: List, key: str = None) -> Union[Dict, str]:
+def get_latest_tag_from_list(current_version: str, tags_list: List, key: str = "name") -> Dict:
     """
     Get the latest relevant tag in list.
     Relevant tags - for each version in the tag the lowest version section is different
@@ -143,10 +143,7 @@ def get_latest_tag_from_list(current_version: str, tags_list: List, key: str = N
     """
     if current_version:
         current_version_regex = re.compile(get_version_regex(current_version))
-        if key:
-            tags_list = [element for element in tags_list if re.search(current_version_regex, element.get(key, ""))]
-        else:
-            tags_list = [element for element in tags_list if re.search(current_version_regex, element)]
+        tags_list = [element for element in tags_list if re.search(current_version_regex, element.get(key, ""))]
 
     latest_tag = max(tags_list, key=parse_versions)
 
@@ -169,10 +166,8 @@ def get_latest_tag(repo: str, image_name: str, tag: str) -> Union[Dict, str]:
 
     """
     if repo == "mcr.microsoft.com":
-        tags_list = get_powershell_tags()['tags']
-        key = ""
+        tags_list = [{'name': tag} for tag in get_powershell_tags()['tags']]
     else:
         tags_list = get_all_tags_general(repo, image_name)
-        key = 'name'
 
-    return get_latest_tag_from_list(tag, tags_list, key)
+    return get_latest_tag_from_list(tag, tags_list)

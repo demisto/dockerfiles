@@ -75,14 +75,8 @@ def update_external_base_dockerfiles(git_repo: Repo) -> None:
     docker_files = get_docker_files(external=True)
     for file in docker_files:
         latest_tag = get_latest_tag(file['repo'], file['image_name'], file['tag'])
-        if isinstance(latest_tag, dict):
-            latest_tag_name = latest_tag['name']
-            latest_tag_last_updated = latest_tag['last_updated']
-        elif isinstance(latest_tag, str):
-            latest_tag_name = latest_tag
-            latest_tag_last_updated = ""
-        else:
-            raise TypeError("latest_tag should be str or dict, received {typeof(latest_tag)}: {latest_tag}")
+        latest_tag_name = latest_tag['name']
+        latest_tag_last_updated = latest_tag.get('last_updated', '')
 
         if is_docker_file_outdated(file, latest_tag_name, latest_tag_last_updated):
             branch_name = fr"autoupdate/Update_{file['repo']}_{file['image_name']}_from_{file['tag']}_to_{latest_tag_name}"
