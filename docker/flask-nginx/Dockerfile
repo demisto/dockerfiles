@@ -3,6 +3,8 @@ FROM demisto/crypto:1.0.0.23151
 
 COPY requirements.txt .
 
+ENV TLDEXTRACT_CACHE="/tldextractcahce"
+
 RUN apk --update add nginx && \
   mkdir -p /run/nginx && \
   mkdir -p /var/lib/nginx/tmp/cache && \
@@ -15,6 +17,8 @@ RUN apk --update add nginx && \
 
 COPY nginx.conf /etc/nginx/.
 
-RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git \
+RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git libffi-dev \
   && pip install --no-cache-dir -r requirements.txt \
-  && apk del .build-dependencies
+  && apk del .build-dependencies \
+  && tldextract --update \
+  && chmod -R 777 $TLDEXTRACT_CACHE
