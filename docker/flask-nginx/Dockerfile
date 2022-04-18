@@ -22,6 +22,3 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
   && apk del .build-dependencies \
   && mkdir $TLDEXTRACT_CACHE \
   && chmod -R 777 $TLDEXTRACT_CACHE
-
-
-RUN tldextract --update
