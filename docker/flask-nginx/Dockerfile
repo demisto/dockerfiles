@@ -17,8 +17,12 @@ COPY nginx.conf /etc/nginx/.
 
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git libffi-dev \
   && pip install --no-cache-dir -r requirements.txt \
-  && apk del .build-dependencies
+  && apk del .build-dependencies \
+  && mkdir /tldextractcache \
+  && chmod 777 /tldextractcache
 
-ENV TLDEXTRACT_CACHE="/tmp/tldextract.cache"
+
+ENV TLDEXTRACT_CACHE="/tldextractcache"
+
 
 RUN tldextract --update
