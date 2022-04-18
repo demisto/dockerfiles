@@ -19,7 +19,7 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies \
   && mkdir /tldextractcache \
-  && chmod 777 /tldextractcache
+  && chmod -R 777 /tldextractcache
 
 
 ENV TLDEXTRACT_CACHE="/tldextractcache"
