@@ -30,10 +30,11 @@ function prop {
 
 DOCKER_LOGIN_DONE=${DOCKER_LOGIN_DONE:-no}
 function docker_login {
+    return 0;
     if [ "${DOCKER_LOGIN_DONE}" = "yes" ]; then
         return 0;
     fi
-    if [ -z "${DOCKERHUB_USER}" ]; then
+    if [ -z "${DOCKERHUB_USER}" ]; then  # TODO: restore
         echo "DOCKERHUB_USER not set. Not logging in to docker hub"
         return 1;
     fi
@@ -159,18 +160,17 @@ function docker_build {
     cp Dockerfile "$tmp_dir/Dockerfile"
     echo "" >> "$tmp_dir/Dockerfile"
     echo "ENV DOCKER_IMAGE=$image_full_name" >> "$tmp_dir/Dockerfile"
-    platforms=$(prop linux/amd64,linux/arm64)
+    platforms=$(prop 'platforms' 'linux/amd64,linux/arm64')
     if ! echo "$platforms" | grep -q "linux/amd64" ; then
         echo "You set platforms to $platforms, but platform linux/amd64 not found in the file"
         exit 1
     fi
     docker buildx build \
         -f "$tmp_dir/Dockerfile" . -t "$image_full_name" \
-        --platform "$platforms" --load \
+        --platform "linux/amd64" --load \
         --label "org.opencontainers.image.authors=Demisto <containers@demisto.com>" \
         --label "org.opencontainers.image.version=${VERSION}" \
         --label "org.opencontainers.image.revision=${CIRCLE_SHA1}"
-    rm -rf "$tmp_dir"
     if [ ${del_requirements} = "yes" ]; then
         rm requirements.txt
     fi
@@ -219,7 +219,20 @@ function docker_build {
         echo "using DOCKER_TRUST=${docker_trust} DOCKER_CONFIG=${DOCKER_CONFIG}"
     fi
     if docker_login; then
-        env DOCKER_CONTENT_TRUST=$docker_trust DOCKER_CONFIG="${DOCKER_CONFIG}"  docker push ${image_full_name}
+        echo "before command"
+        if ! env DOCKER_CONTENT_TRUST=$docker_trust DOCKER_CONFIG="${DOCKER_CONFIG}" \
+            docker buildx build \
+                -f "$tmp_dir/Dockerfile" . -t "$image_full_name" \
+                --platform "$platforms" --push \
+                --label "org.opencontainers.image.authors=Demisto <containers@demisto.com>" \
+                --label "org.opencontainers.image.version=${VERSION}" \
+                --label "org.opencontainers.image.revision=${CIRCLE_SHA1})"; then
+            printf "Could not build the docker image on %s." "$platforms"
+            printf "Try to build on linux/amd64 only by changing the build.conf platforms to linux/amd64 only"
+            rm -rf "$tmp_dir"
+            exit 1
+        fi
+        rm -rf "$tmp_dir"
         echo "Done docker push for: ${image_full_name}"
         if [[ "$docker_trust" == "1" ]]; then
             commit_dockerfiles_trust
