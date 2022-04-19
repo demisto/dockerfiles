@@ -13,3 +13,10 @@ print("all is good managed to parse: {}".format(d))
 from ctypes import *
 print(c_double.from_param(1e300))
 print("all is good cve-2021-3177 is patched")
+
+import pydantic
+class Sample(pydantic.BaseModel):
+    name: str
+
+sample = Sample(name='name')
+print('pydantic is installed and running')
