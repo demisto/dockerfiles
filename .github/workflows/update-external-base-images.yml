@@ -13,7 +13,7 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v2
         with:
-          ssh-key: "${{ secrets.ACTION_KEY }}"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
       - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
       - name: Setup Python
         uses: actions/setup-python@v1
