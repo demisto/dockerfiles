@@ -1,4 +1,4 @@
-FROM alpine:3.12.3 as files-src
+FROM alpine:3.12.12 as files-src
 COPY weights /yolo-coco
 RUN cd yolo-coco \
   && cat yolov3.weights.aa yolov3.weights.ab yolov3.weights.ac yolov3.weights.ad yolov3.weights.ae > yolov3.weights
