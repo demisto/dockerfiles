@@ -1,0 +1,21 @@
+name: Create update dockerfiles PR
+
+on:
+  push:
+    branches:
+    - "autoupdate/**"                                                            # Support wildcard matching
+
+jobs:
+  pull-request:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: pull-request
+      uses: repo-sync/pull-request@v2
+      with:
+        source_branch: ""                                                         # If blank, default: triggered branch
+        destination_branch: ""                                                    # If blank, default: master
+        pr_title: "build(dockerfiles) update Dockerfile - ${{ github.ref_name }}" # Title of pull request
+        pr_body: "This is automated PR to update dockerfiles base images.\n${{ github.ref_name }}"
+        pr_assignee: "itay-ye"                                                    # Comma-separated list (no spaces)
+        github_token: ${{ secrets.GITHUB_TOKEN }}
