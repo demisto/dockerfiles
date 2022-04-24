@@ -50,7 +50,7 @@ jobs:
         source_branch: "${{ matrix.branches }}"
         destination_branch: ""                                                    # If blank, default: master
         pr_title: "build(dockerfiles) update Dockerfile - ${{ matrix.branches }}" # Title of pull request
-        pr_body: "This is automated PR to update dockerfiles base images"
+        pr_body: "This is automated PR to update dockerfiles base images\n${{ matrix.branches }}"
         pr_assignee: "itay-ye"                                                    # Comma-separated list (no spaces)
 
 
