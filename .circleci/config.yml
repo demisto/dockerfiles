@@ -2,6 +2,7 @@ jobs:
   docker_build:
     environment:
       BUILDER: builder
+      DOCKER_CLI_EXPERIMENTAL: enabled
     docker:
       - image: devdemisto/dockerbuild:1.0.0.25778
     steps:
