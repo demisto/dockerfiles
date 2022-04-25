@@ -13,7 +13,7 @@ jobs:
           name: Validate Dependabot Config
           command: ./docker/verify_dependabot.sh
       - setup_remote_docker:
-          version: 20.10.6
+          version: 20.10.12
       - add_ssh_keys:
           fingerprints:
             - 46:c2:72:91:9d:0e:2d:3c:93:d6:6c:12:31:df:8e:db
