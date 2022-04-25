@@ -7,12 +7,6 @@ jobs:
       - image: devdemisto/dockerbuild:1.0.0.25778
     steps:
       - checkout
-      - run: |
-          ssh remote-docker \<<EOF
-            sudo bash -c 'echo "{\"experimental\": true}" > /etc/docker/daemon.json'
-            sudo systemctl restart docker
-            sudo docker info
-          EOF
       - run:
           name: Validate Approved Licenses File
           command: python -m jsonschema -i docker/approved_licenses.json docker/approved_licenses.schema.json
