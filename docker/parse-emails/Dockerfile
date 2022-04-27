@@ -7,5 +7,5 @@ RUN apk --update add --no-cache libmagic
 
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base libffi-dev openssl-dev wget git \
   && pip install --no-cache-dir -r requirements.txt \
-  && pip uninstall pcodedmp \
+  && pip list | awk -F' ' {'print $1'} | sed 1,2d | xargs -I ARGS sh -c '{ pip show ARGS | grep "License: GPL" && pip uninstall -q -y ARGS; }'ß \
   && apk del .build-dependencies
