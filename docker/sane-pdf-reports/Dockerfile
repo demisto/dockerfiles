@@ -31,6 +31,7 @@ RUN apt-get update -y -q && \
     && rm -rf /var/lib/apt/lists/* \
     && npm i npm@8.1.3 -g
 
+
 RUN npm i puppeteer@5.3.1 && ln -s /app/node_modules/puppeteer/.local-chromium/linux-*/chrome-linux/chrome /usr/bin/chromium-browser
 
 RUN python get_build_artifacts.py --project sane-reports --branch master --filter "sane-report$" \
