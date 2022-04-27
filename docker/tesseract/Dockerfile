@@ -8,8 +8,8 @@ make autoconf automake libtool libpng-dev libjpeg-dev libtiff5-dev zlib1g-dev li
 libjpeg-dev libtiff5-dev zlib1g-dev libleptonica-dev libicu-dev libpango1.0-dev \
 && rm -rf /var/lib/apt/lists/* \
 && git clone https://github.com/zdenop/tessdata_downloader.git \
-&& cd tessdata_downloader && \
-for lang in  ara chi_sim chi_sim_vert chi_tra chi_tra_virt deu fra heb ita jpn jpn_vert pol por rus spa swe tur ; \
+&& cd tessdata_downloader \
+&& for lang in  ara chi_sim chi_sim_vert chi_tra chi_tra_virt deu fra heb ita jpn jpn_vert pol por rus spa swe tur ; \
 do python tessdata_downloader.py -o /usr/local/share/tessdata/ -l $lang; done \ 
 && rm -rf /build \
 && tesseract --version --list-langs
