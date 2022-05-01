@@ -33,7 +33,7 @@ jobs:
           name: Build Docker Images
           command: |
             ./docker/build_docker.sh
-          no_output_timeout: 20m
+          no_output_timeout: 60m
       - store_artifacts:
           path: artifacts
           destination: docker_images
