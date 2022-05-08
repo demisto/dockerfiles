@@ -27,7 +27,7 @@ for p in `grep -l -E 'FROM\s+demisto/crypto' docker/*/Dockerfile`; do
         cd $(dirname $p)
         pwd
         echo "updating pipenv ..."
-	pipenv --rm || echo "ok that pipenv --rm failed as there could be there there is no env"
+	pipenv --rm || echo "ok that pipenv --rm failed as there could be there is no env"
         pipenv update
     )
 done
