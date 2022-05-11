@@ -1,4 +1,4 @@
-FROM demisto/python3-deb:3.10.1.26244
+FROM demisto/python3-deb:3.10.4.29329
 
 COPY requirements.txt .
 
@@ -29,6 +29,7 @@ RUN apt-get update  && apt-get upgrade -y \
     && gcloud --version \
     && gsutil --version \
     && docker --version \
+    && ! kubectl version --output yaml \
     # Installing goenv
     && git clone https://github.com/syndbg/goenv.git ~/.goenv \
     && echo 'export GOENV_ROOT="$HOME/.goenv"' >> ~/.bashrc \
