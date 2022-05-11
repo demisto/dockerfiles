@@ -29,7 +29,6 @@ RUN apt-get update  && apt-get upgrade -y \
     && gcloud --version \
     && gsutil --version \
     && docker --version \
-    && kubectl version --output yaml \
     # Installing goenv
     && git clone https://github.com/syndbg/goenv.git ~/.goenv \
     && echo 'export GOENV_ROOT="$HOME/.goenv"' >> ~/.bashrc \
