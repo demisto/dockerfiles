@@ -2,7 +2,7 @@
 FROM mcr.microsoft.com/powershell:7.2-ubuntu-22.04
 
 # For the `no supported WSMan client library was found` error when using Ubuntu 20+
-RUN apt upgrade && apt-get update -y
+RUN apt autoremove && apt autoclean -y && apt update && apt-get update -y
 RUN sh -c "yes | pwsh -Command 'Install-Module -Name PSWSMan'"
 RUN pwsh -Command 'Install-WSMan'
 
