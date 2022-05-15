@@ -1,4 +1,4 @@
-FROM demisto/python3-deb:3.10.1.26244
+FROM demisto/python3-deb:3.10.4.29329
 
 COPY requirements.txt .
 
@@ -9,7 +9,7 @@ ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 # Currently sh is linked to dash, linking it to /bin/bash instead.
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
-RUN apt-get update -y \
+RUN apt-get update  && apt-get upgrade -y \
     && apt-get install -y curl jq unzip openssh-client gcc libffi-dev libssl-dev git zip netcat wget python2 python3-pip software-properties-common \
     # Install requirements
     && pip install --no-cache-dir -r requirements.txt \
@@ -25,10 +25,11 @@ RUN apt-get update -y \
     && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - \
     && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
     && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" \
-    && apt-get update &&  apt-get install google-cloud-sdk docker-ce-cli -y \
+    && apt-get update &&  apt-get install google-cloud-sdk docker-ce-cli kubectl -y \
     && gcloud --version \
     && gsutil --version \
     && docker --version \
+    && ! kubectl version --output yaml \
     # Installing goenv
     && git clone https://github.com/syndbg/goenv.git ~/.goenv \
     && echo 'export GOENV_ROOT="$HOME/.goenv"' >> ~/.bashrc \
