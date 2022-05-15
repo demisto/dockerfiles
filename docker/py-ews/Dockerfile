@@ -10,7 +10,7 @@ ENV LANG C.UTF-8
 ENV PYTHONIOENCODING UTF-8
 
 # runtime dependencies
-RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y --no-install-recommends \
 		ca-certificates \
 		netbase \
 	&& rm -rf /var/lib/apt/lists/*
