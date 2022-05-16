@@ -50,4 +50,4 @@ RUN apt-get update && apt-get -t bullseye-backports install -y --no-install-reco
   curl \
   unzip \
 && rm -rf /var/lib/apt/lists/*
-ENV DISPLAY ‘:1’
+ENV DISPLAY ':1'
