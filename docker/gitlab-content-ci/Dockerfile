@@ -16,7 +16,7 @@ RUN apt-get update  && apt-get upgrade -y \
     && apt-get install -y curl jq unzip openssh-client gcc libffi-dev libssl-dev git zip netcat python2 wget python3-pip software-properties-common \
     # Install requirements
     && pip install --no-cache-dir -r requirements.txt \
-    && pip install poetry
+    && pip install poetry \
     && python2 get-pip.py \
     && python2 -m pip install -r dev-requirements-py2.txt \
     # Installing nvm, npm and node.js
