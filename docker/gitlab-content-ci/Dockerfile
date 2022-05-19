@@ -6,9 +6,6 @@ ENV NODE_VERSION 14.14.0
 ENV NVM_DIR /root/.nvm
 ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 
-ADD https://bootstrap.pypa.io/pip/2.7/get-pip.py get-pip.py
-ADD https://raw.githubusercontent.com/demisto/content/master/dev-requirements-py2.txt dev-requirements-py2.txt
-
 # Currently sh is linked to dash, linking it to /bin/bash instead.
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
@@ -16,9 +13,6 @@ RUN apt-get update  && apt-get upgrade -y \
     && apt-get install -y curl jq unzip openssh-client gcc libffi-dev libssl-dev git zip netcat python2 wget python3-pip software-properties-common \
     # Install requirements
     && pip install --no-cache-dir -r requirements.txt \
-    && pip install poetry \
-    && python2 get-pip.py \
-    && python2 -m pip install -r dev-requirements-py2.txt \
     # Installing nvm, npm and node.js
     && curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash \
     && . $NVM_DIR/nvm.sh \
