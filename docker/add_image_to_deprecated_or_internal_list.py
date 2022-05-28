@@ -37,6 +37,10 @@ def add_image_to_deprecated_list(image_name :str, reason :str, file_path :str, v
             else:
                 image_list = []
 
+            if not reason or len(reason) <= 0:
+                print ("reason field for the entry is empty")
+                return error.reason_empty
+
             if(any (image_name in image["image_name"] for image in image_list)):
                 fp.close()
                 if verbose:
@@ -100,16 +104,12 @@ def handle_args():
     args = parser.parse_args()
     return args
 
-
 def main():
     args = handle_args()
     image_name = args.name
     reason = args.reason
     file_path = args.file_path
     verbose = args.verbose == 'true'
-    if not reason or len(reason) <= 0:
-        print ("reason field for the entry is empty")
-        return error.reason_empty
     return_value = add_image_to_deprecated_list(image_name, reason, file_path, verbose)
     return return_value
 
