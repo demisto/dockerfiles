@@ -139,10 +139,35 @@ function docker_build {
         echo "== skipping image [${image_name}] as it is marked devonly =="
         return 0
     fi
+    
     VERSION=$(prop 'version' '1.0.0')    
     VERSION="${VERSION}.${REVISION}"
     echo "${image_name}: using version: ${VERSION}"
     image_full_name="${DOCKER_ORG}/${image_name}:${VERSION}"
+
+    if [[ "$(prop 'deprecated')" ]]; then
+        echo "${DOCKER_ORG}/${image_name} image is deprected, checking whethear the image is listed in the deprecated list or not"
+        reason=$(prop 'deprecated_reason')
+        
+        if ! ${PY3CMD} "${DOCKER_SRC_DIR}"/add_image_to_deprecated_or_internal_list.py "${DOCKER_ORG}"/"${image_name}" "${reason}" "${DOCKER_SRC_DIR}"/deprecated_images.json; then
+            echo "failed while handling deprected image"
+            return 1
+        else
+            echo "deprectaed no need to build"
+            return 0
+        fi
+    fi
+
+    if [[ "$(prop 'internalonly')" ]]; then
+        echo "${DOCKER_ORG}/${image_name} image is for intenal use only, checking whethear if the image is listed in the intelal list"
+        reason=$(prop 'internalonly_reason')
+        
+        if ! ${PY3CMD} "${DOCKER_SRC_DIR}"/add_image_to_deprecated_or_internal_list.py "${DOCKER_ORG}"/"${image_name}" "${reason}" "${DOCKER_SRC_DIR}"/internal_images.json; then
+            echo "failed while handling for internal use only image"
+            return 1        
+        fi
+    fi
+
     del_requirements=no
     if [ -f "Pipfile" -a ! -f "requirements.txt" ]; then
         if [ ! -f "Pipfile.lock" ]; then
@@ -184,6 +209,7 @@ function docker_build {
             return 1
         fi
     fi
+    
     if [[ "$(prop 'devonly')" ]]; then
         echo "Skipping license verification for devonly image"
     else
