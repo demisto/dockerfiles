@@ -19,7 +19,7 @@ class error(Enum):
 
 
 def add_image_to_deprecated_list(image_name :str, reason :str, file_path :str, verbose=False):
-    """ adding gioving docker image to the deprecation list. make sure no duplictation etc....
+    """ adding giving docker image to the deprecation list. make sure no duplictation etc....
 
     Args:
         image_name: The docker image name.
@@ -67,7 +67,7 @@ def add_image_to_deprecated_list(image_name :str, reason :str, file_path :str, v
         
         except FileExistsError as exp:
             print(f"{file_path}: is not exists make sure you are running from the the root folder of the dockerfiles repo (i.e.: /home/developer_name/dev/dockerfiles" \
-                "or make sure you are running the tools wiht fule file path to the file.")
+                "or make sure you are running the tools wiht full file path to the file.")
             if verbose:
                 print(f"Exception: {exp}")
             return error.file_not_exists
