@@ -62,7 +62,7 @@ def add_image_to_deprecated_list(image_name :str, reason :str, file_path :str, v
             return error.entry_was_added
         
         except FileExistsError as exp:
-            print(f"{file_path}: is not exists make sure you are running from the the root folder of the dockerfiles repo (i.e.: /home/developer_name/dev/dockerfiles" \
+            print(f"{file_path}: does not exists. make sure you are running from the the root folder of the dockerfiles repo (i.e.: /home/developer_name/dev/dockerfiles" \
                 "or make sure you are running the tools wiht full file path to the file.")
             if verbose:
                 print(f"Exception: {exp}")
