@@ -158,16 +158,6 @@ function docker_build {
         fi
     fi
 
-    if [[ "$(prop 'internalonly')" ]]; then
-        echo "${DOCKER_ORG}/${image_name} image is for intenal use only, checking whethear if the image is listed in the intelal list"
-        reason=$(prop 'internalonly_reason')
-        
-        if ! ${PY3CMD} "${DOCKER_SRC_DIR}"/add_image_to_deprecated_or_internal_list.py "${DOCKER_ORG}"/"${image_name}" "${reason}" "${DOCKER_SRC_DIR}"/internal_images.json; then
-            echo "failed while handling for internal use only image"
-            return 1        
-        fi
-    fi
-
     del_requirements=no
     if [ -f "Pipfile" -a ! -f "requirements.txt" ]; then
         if [ ! -f "Pipfile.lock" ]; then
