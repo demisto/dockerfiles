@@ -43,11 +43,7 @@ def add_image_to_deprecated_list(image_name :str, reason :str, file_path :str, v
 
             if(any (image_name in image["image_name"] for image in image_list)):
                 fp.close()
-                if verbose:
-                    image = [image for image in image_list if image_name in image['image_name']]
-                    print(image)
-                print(f"{image_name} already exists in the list {file_path}")
-                fp.close()
+                print(f"{image_name} already exists in the list {file_path}")                
                 return error.entry_exists
             
             fp.seek(0)
