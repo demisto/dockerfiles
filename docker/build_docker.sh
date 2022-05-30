@@ -154,7 +154,6 @@ function docker_build {
             return 1
         else
             echo "deprectaed no need to build"
-            return 0
         fi
     fi
 
@@ -174,6 +173,13 @@ function docker_build {
     cp Dockerfile "$tmp_dir/Dockerfile"
     echo "" >> "$tmp_dir/Dockerfile"
     echo "ENV DOCKER_IMAGE=$image_full_name" >> "$tmp_dir/Dockerfile"
+    
+    if [[ "$(prop 'deprecated')" ]]; then
+        echo "DEPRECATED_IMAGE=true" >> "$tmp_dir/Dockerfile"
+        reason=$(prop 'deprecated_reason')
+        echo "DEPRECATED_REASON=$reason"
+    fi
+
     docker build -f "$tmp_dir/Dockerfile" . -t ${image_full_name} \
         --label "org.opencontainers.image.authors=Demisto <containers@demisto.com>" \
         --label "org.opencontainers.image.version=${VERSION}" \

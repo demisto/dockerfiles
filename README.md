@@ -97,6 +97,8 @@ The build script will check for a `build.conf` file in the target image director
 
 * **version**: The version to use for tagging. Default: `1.0.0`. Note: that additionally, the CircleCI build number is always appended to the version as a revision (for example: `1.0.0.15519`) to create a unique version per build.
 * **devonly**: If set the image will be pushed only to the `devdemisto` org in docker hub and will not be pushed to the `demisto` org. Should be used for images which are for development purposes only (such as the image used in CircleCI to build this project).
+* **deprecated**: If set the image will be listed as deprecated in the deprecated_images.json file and the image will be forbidden form using in the integrations/automations.
+* **deprecated-reason**: Free text that explain the deprecation reason.
 
 ## Base Python Images
 There are 4 base python images which should be used when building a new image which is based upon python:
@@ -205,3 +207,24 @@ For example:
 ```
 ./docker/add_dependabot.sh docker/nmap
 ```
+
+### How to mark image as deprecated
+
+To mark an image as deprecated please follow the following steps:
+
+* 1- Add the following tow keys to the build.conf of the image.
+
+  * deprecated=true
+  * deprecated_reason="free text"
+
+  (i.e.:
+  version=1.0.0
+  deprecated=true
+  deprecated_reason="the image was merged into py3-tools")
+
+* 2- Build the docker by running the docker/build_docker.sh
+  * (i.e. /home/users/dockerfiles$ docker/build_docker.sh emoji)
+  By running the build script the image information will be added to the deprecated_images.json and 2 new environment variables will be introduced in the docker :
+  * DEPRECATED=true
+  * DEPRECATED_REASON="the same text as deprecated_reason key from the build.conf file"
+* 3- commit all chnaged files including the deprecated_image.json and create a new PR
