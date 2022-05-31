@@ -42,7 +42,7 @@ def add_image_to_deprecated_list(image_name :str, reason :str, file_path :str, v
                 print ("reason field for the entry is empty")
                 return error.empty_reason
 
-            if(any (image_name in image["image_name"] for image in image_list)):
+            if(any (image_name is image["image_name"] for image in image_list)):
                 fp.close()
                 print(f"{image_name} already exists in the list {file_path}")                
                 return error.entry_exists

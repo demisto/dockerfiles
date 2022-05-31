@@ -131,7 +131,8 @@ function commit_dockerfiles_trust {
 # build docker. 
 # Param $1: docker dir with all relevant files
 function docker_build {
-    DOCKER_ORG=${DOCKER_ORG:-devdemisto}    
+    DOCKER_ORG=${DOCKER_ORG:-devdemisto}
+    DOCKER_ORG_DEMISTO=demisto
     image_name=$(basename $1)
     echo "Starting build for dir: $1, image: ${image_name}, pwd: $(pwd)"
     cd $1        
@@ -148,7 +149,7 @@ function docker_build {
     if [[ "$(prop 'deprecated')" ]]; then
         echo "${DOCKER_ORG}/${image_name} image is deprected, checking whether the image is listed in the deprecated list or not"
         reason=$(prop 'deprecated_reason')        
-        ${PY3CMD} "${DOCKER_SRC_DIR}"/add_image_to_deprecated_or_internal_list.py "${DOCKER_ORG}"/"${image_name}" "${reason}" "${DOCKER_SRC_DIR}"/deprecated_images.json
+        ${PY3CMD} "${DOCKER_SRC_DIR}"/add_image_to_deprecated_or_internal_list.py "${DOCKER_ORG_DEMISTO}"/"${image_name}" "${reason}" "${DOCKER_SRC_DIR}"/deprecated_images.json
     fi
 
     del_requirements=no
