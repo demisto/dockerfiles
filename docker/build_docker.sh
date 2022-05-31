@@ -146,15 +146,9 @@ function docker_build {
     image_full_name="${DOCKER_ORG}/${image_name}:${VERSION}"
 
     if [[ "$(prop 'deprecated')" ]]; then
-        echo "${DOCKER_ORG}/${image_name} image is deprected, checking whethear the image is listed in the deprecated list or not"
-        reason=$(prop 'deprecated_reason')
-        
-        if ! ${PY3CMD} "${DOCKER_SRC_DIR}"/add_image_to_deprecated_or_internal_list.py "${DOCKER_ORG}"/"${image_name}" "${reason}" "${DOCKER_SRC_DIR}"/deprecated_images.json; then
-            echo "failed while handling deprected image"
-            return 1
-        else
-            echo "deprectaed no need to build"
-        fi
+        echo "${DOCKER_ORG}/${image_name} image is deprected, checking whether the image is listed in the deprecated list or not"
+        reason=$(prop 'deprecated_reason')        
+        ${PY3CMD} "${DOCKER_SRC_DIR}"/add_image_to_deprecated_or_internal_list.py "${DOCKER_ORG}"/"${image_name}" "${reason}" "${DOCKER_SRC_DIR}"/deprecated_images.json
     fi
 
     del_requirements=no
@@ -175,9 +169,9 @@ function docker_build {
     echo "ENV DOCKER_IMAGE=$image_full_name" >> "$tmp_dir/Dockerfile"
     
     if [[ "$(prop 'deprecated')" ]]; then
-        echo "DEPRECATED_IMAGE=true" >> "$tmp_dir/Dockerfile"
+        echo "ENV DEPRECATED_IMAGE=true" >> "$tmp_dir/Dockerfile"
         reason=$(prop 'deprecated_reason')
-        echo "DEPRECATED_REASON=$reason"
+        echo "ENV DEPRECATED_REASON=$reason" >> "$tmp_dir/Dockerfile"
     fi
 
     docker build -f "$tmp_dir/Dockerfile" . -t ${image_full_name} \

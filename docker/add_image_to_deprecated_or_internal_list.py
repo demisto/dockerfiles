@@ -1,21 +1,22 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import os
+import sys
 import argparse
 from datetime import datetime, timezone
-from enum import unique, Enum
+from enum import IntEnum
 import json
 from json import JSONDecodeError
 
-@unique
-class error(Enum):
-    entry_was_added = 0    
-    entry_exists = 1
-    reason_empty = 2
-    file_not_exists = 3
-    error_reading_file = 4
-    bad_json_file = 5
-    general_error = 6
+
+class error(IntEnum):
+    entry_was_added = 0 
+    entry_exists = 0
+    empty_reason = 1
+    file_not_exists = 2
+    error_reading_file = 3
+    bad_json_file = 4
+    general_error = 5
 
 
 def add_image_to_deprecated_list(image_name :str, reason :str, file_path :str, verbose=False):
@@ -39,7 +40,7 @@ def add_image_to_deprecated_list(image_name :str, reason :str, file_path :str, v
 
             if not reason or len(reason) <= 0:
                 print ("reason field for the entry is empty")
-                return error.reason_empty
+                return error.empty_reason
 
             if(any (image_name in image["image_name"] for image in image_list)):
                 fp.close()
@@ -107,7 +108,8 @@ def main():
     file_path = args.file_path
     verbose = args.verbose == 'true'
     return_value = add_image_to_deprecated_list(image_name, reason, file_path, verbose)
-    return return_value
+    print(return_value, int(return_value))
+    sys.exit(int(return_value))
 
 if __name__ == "__main__":
     main()
