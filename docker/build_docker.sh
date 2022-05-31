@@ -147,7 +147,7 @@ function docker_build {
     image_full_name="${DOCKER_ORG}/${image_name}:${VERSION}"
 
     if [[ "$(prop 'deprecated')" ]]; then
-        echo "${DOCKER_ORG}/${image_name} image is deprected, checking whether the image is listed in the deprecated list or not"
+        echo "${DOCKER_ORG_DEMISTO}/${image_name} image is deprected, checking whether the image is listed in the deprecated list or not"
         reason=$(prop 'deprecated_reason')        
         ${PY3CMD} "${DOCKER_SRC_DIR}"/add_image_to_deprecated_or_internal_list.py "${DOCKER_ORG_DEMISTO}"/"${image_name}" "${reason}" "${DOCKER_SRC_DIR}"/deprecated_images.json
     fi
@@ -164,6 +164,7 @@ function docker_build {
         cat requirements.txt
         # del_requirements=yes
     fi
+
     tmp_dir=$(mktemp -d)
     cp Dockerfile "$tmp_dir/Dockerfile"
     echo "" >> "$tmp_dir/Dockerfile"
@@ -172,9 +173,9 @@ function docker_build {
     if [[ "$(prop 'deprecated')" ]]; then
         echo "ENV DEPRECATED_IMAGE=true" >> "$tmp_dir/Dockerfile"
         reason=$(prop 'deprecated_reason')
-        echo "ENV DEPRECATED_REASON=$reason" >> "$tmp_dir/Dockerfile"
+        echo "ENV DEPRECATED_REASON=\"$reason\"" >> "$tmp_dir/Dockerfile"
     fi
-
+    
     docker build -f "$tmp_dir/Dockerfile" . -t ${image_full_name} \
         --label "org.opencontainers.image.authors=Demisto <containers@demisto.com>" \
         --label "org.opencontainers.image.version=${VERSION}" \
