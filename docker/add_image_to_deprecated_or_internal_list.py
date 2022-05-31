@@ -54,7 +54,7 @@ def add_image_to_deprecated_list(image_name :str, reason :str, file_path :str, v
                 "reason" : f"{reason}", 
                 "created_time_utc" : f"{addition_time_str}" 
             }))
-            image_list_string = json.dumps(image_list)
+            image_list_string = json.dumps(image_list, indent=4)
             if verbose:
                 print(image_list_string)
             fp.write(image_list_string)
