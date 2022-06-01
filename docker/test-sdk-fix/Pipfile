@@ -1,0 +1,11 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+demisto-sdk = {git = "https://github.com/demisto/demisto-sdk.git", editable = true, ref = "9ddd62d74b25c23db28b298cd09225cf7e965848"}
+[dev-packages]
+
+[requires]
+python_version = "3.10"
