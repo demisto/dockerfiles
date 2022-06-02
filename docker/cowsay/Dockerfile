@@ -9,6 +9,13 @@ COPY localtime /etc/localtime
 RUN apk --update add --no-cache cowsay --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing
 
 RUN addgroup -g 4000 demisto \
-    && adduser -u 4000 -G demisto -D demisto -s /bin/sh 
+    && adduser -u 4000 -G demisto -D demisto -s /bin/sh
 
-CMD ["cowsay"]
+COPY cowcow /bin/cowcow
+RUN ["chmod", "+x", "/bin/cowcow"]
+
+RUN cd /usr/share/cows
+
+ENTRYPOINT ["/bin/cowcow"]
+
+CMD = ["shalom"]
