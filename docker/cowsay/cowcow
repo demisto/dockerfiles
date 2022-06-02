@@ -1,2 +1,2 @@
 #!/bin/sh
-cowsay -f "$(ls /usr/share/cows | shuf | head -1)" $1
+cowsay -f "$(ls /usr/share/cows | egrep cow$ | shuf | head -1)" $1
