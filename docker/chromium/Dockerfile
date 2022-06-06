@@ -50,4 +50,4 @@ RUN apt-get update && apt-get -t bullseye-backports install -y --no-install-reco
   unzip \
 && rm -rf /var/lib/apt/lists/*
 
-ENV CHROME_EXE="/opt/google/chrome/chrome"
+ENV CHROME_EXE="/opt/google/chrome/google-chrome"
