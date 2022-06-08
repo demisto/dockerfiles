@@ -13,4 +13,5 @@ RUN sudo apt-get update && sudo apt-get install apt-transport-https ca-certifica
   && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - \
   && sudo apt-get update && sudo apt-get install google-cloud-sdk \
   && gcloud --version \
-  && gsutil --version  
+  && gsutil --version  \
+  && poetry --version
