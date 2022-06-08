@@ -24,6 +24,7 @@ RUN apt-get update  && apt-get upgrade -y \
     && apt-get update &&  apt-get install google-cloud-sdk docker-ce-cli kubectl -y \
     # Install poetry
     && curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python - \
+    && source $HOME/.poetry/env \
     && gcloud --version \
     && gsutil --version \
     && docker --version \
