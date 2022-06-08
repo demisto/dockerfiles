@@ -24,7 +24,7 @@ RUN apt-get update  && apt-get upgrade -y \
     && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" \
     && apt-get update &&  apt-get install google-cloud-sdk docker-ce-cli kubectl -y \
     && curl -sSL https://install.python-poetry.org | python3 - \
-    && export PATH="/root/.local/bin:$PATH >> ~/.bashrc" \
+    && export PATH="$HOME/.local/bin:$PATH >> ~/.bashrc" \
     # Installing goenv
     && git clone https://github.com/syndbg/goenv.git ~/.goenv \
     && echo 'export GOENV_ROOT="$HOME/.goenv"' >> ~/.bashrc \
@@ -42,3 +42,4 @@ RUN apt-get update  && apt-get upgrade -y \
     && docker --version \
     && poetry --version \
     && ! kubectl version --output yaml \
+
