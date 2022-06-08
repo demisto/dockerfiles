@@ -23,7 +23,7 @@ RUN apt-get update  && apt-get upgrade -y \
     && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" \
     && apt-get update &&  apt-get install google-cloud-sdk docker-ce-cli kubectl -y \
     # Install poetry
-    && curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python - \
+    && curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python - | python3 - \
     && gcloud --version \
     && gsutil --version \
     && docker --version \
