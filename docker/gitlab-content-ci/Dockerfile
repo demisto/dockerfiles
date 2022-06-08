@@ -25,6 +25,7 @@ RUN apt-get update  && apt-get upgrade -y \
     && apt-get update &&  apt-get install google-cloud-sdk docker-ce-cli kubectl -y \
     && curl -sSL https://install.python-poetry.org | python3 - \
     && export PATH="/root/.local/bin:$PATH >> ~/.bashrc" \
+    && source ~/.bashrc \
     && gcloud --version \
     && gsutil --version \
     && docker --version \
