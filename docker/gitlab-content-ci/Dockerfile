@@ -7,6 +7,7 @@ ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 # Currently sh is linked to dash, linking it to /bin/bash instead.
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
+
 RUN apt-get update  && apt-get upgrade -y \
     && apt-get install -y curl jq unzip openssh-client gcc libffi-dev libssl-dev git zip cowsay netcat wget python2 python3-pip software-properties-common \
     # Installing nvm, npm and node.js
@@ -22,9 +23,7 @@ RUN apt-get update  && apt-get upgrade -y \
     && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
     && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" \
     && apt-get update &&  apt-get install google-cloud-sdk docker-ce-cli kubectl -y \
-    # Install poetry
-    && curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python - \
-    && source $HOME/.poetry/env \
+    && curl -sSL https://install.python-poetry.org | python3 - \
     && gcloud --version \
     && gsutil --version \
     && docker --version \
@@ -42,3 +41,6 @@ RUN apt-get update  && apt-get upgrade -y \
     && goenv global 1.13.8 \
     && source ~/.bashrc \
     && curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.40.1
+
+RUN  curl -sSL https://install.python-poetry.org | python3 - \
+    && poetry --version
