@@ -25,12 +25,6 @@ RUN apt-get update  && apt-get upgrade -y \
     && apt-get update &&  apt-get install google-cloud-sdk docker-ce-cli kubectl -y \
     && curl -sSL https://install.python-poetry.org | python3 - \
     && export PATH="/root/.local/bin:$PATH >> ~/.bashrc" \
-    && source ~/.bashrc \
-    && gcloud --version \
-    && gsutil --version \
-    && docker --version \
-    && poetry --version \
-    && ! kubectl version --output yaml \
     # Installing goenv
     && git clone https://github.com/syndbg/goenv.git ~/.goenv \
     && echo 'export GOENV_ROOT="$HOME/.goenv"' >> ~/.bashrc \
@@ -42,4 +36,9 @@ RUN apt-get update  && apt-get upgrade -y \
     && goenv install 1.13.8 \
     && goenv global 1.13.8 \
     && source ~/.bashrc \
-    && curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.40.1
+    && curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.40.1 \
+    && gcloud --version \
+    && gsutil --version \
+    && docker --version \
+    && poetry --version \
+    && ! kubectl version --output yaml \
