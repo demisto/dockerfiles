@@ -26,3 +26,7 @@ from exchangelib import IMPERSONATION, DELEGATE, Account, Credentials, \
     Version, Folder, HTMLBody, Body, Build, ItemAttachment
 from exchangelib.version import EXCHANGE_2007, EXCHANGE_2010, EXCHANGE_2010_SP2, EXCHANGE_2013, EXCHANGE_2016
 from exchangelib.protocol import BaseProtocol, NoVerifyHTTPAdapter
+import tzlocal
+
+test = tzlocal.get_localzone()
+print('all is good, `get_localzone() -> {}` is working'.format(test))
