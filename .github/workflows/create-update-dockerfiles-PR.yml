@@ -1,0 +1,56 @@
+name: Create update dockerfiles PR
+
+on:
+  workflow_run:
+    workflows: [Update external base images, Update internal base images]
+    types: completed
+  workflow_dispatch:
+
+jobs:
+  # ------------------------
+  get_branches:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    outputs:
+      branches: ${{ steps.generate-matrix.outputs.branches }}
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - name: Generate Matrix
+        id: generate-matrix
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git fetch
+          branches=$(git branch -r | grep autoupdate/)
+          matrix="[ "
+          for branch in $(echo $branches); do
+            exists=`gh pr list --state open -H ${branch#origin/}`
+            if [ -z $exists ]; then
+              matrix="${matrix} \"${branch#origin/}\","
+            fi
+          done
+          matrix="${matrix%?}"
+          SERVICES="${matrix} ]"
+          echo ::set-output name=branches::${SERVICES}
+
+  pull-request:
+    runs-on: ubuntu-latest
+    needs:
+      - get_branches
+    strategy:
+      matrix:
+        branches: ${{ fromJSON(needs.get_branches.outputs.branches) }}
+    steps:
+    - uses: actions/checkout@v2
+    - name: pull-request
+      uses: repo-sync/pull-request@v2
+      with:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        source_branch: "${{ matrix.branches }}"
+        destination_branch: ""                                                    # If blank, default: master
+        pr_title: "build(dockerfiles) update Dockerfile - ${{ matrix.branches }}" # Title of pull request
+        pr_body: "This is automated PR to update dockerfiles base images\n${{ matrix.branches }}"
+        pr_assignee: "itay-ye"                                                    # Comma-separated list (no spaces)
+
+
