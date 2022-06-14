@@ -41,6 +41,12 @@
                 "demisto-sdk"
             ],
             "notes": "Used only for executing lint as a utility via cmd interface"
+        },
+        "readline": {
+            "docker_images": [
+                "sonic_slackv3"
+            ],
+            "notes": "Imported, but not actually used as this docker image contains a rewritten readline module"
         }
     }
 }
