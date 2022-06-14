@@ -1,16 +1,13 @@
 
-FROM pypy:3
-
-# Upgrade all packages to latest
-RUN apk --update --no-cache upgrade
+FROM condaforge/miniforge-pypy3
 
 COPY requirements.txt .
 
-COPY localtime /etc/localtime
-
-RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget \
-  && pip install --no-cache-dir -r requirements.txt \
-  && apk del .build-dependencies
-
-RUN addgroup -g 4000 demisto \
-  && adduser -u 4000 -G demisto -D demisto -s /bin/sh
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  gcc \
+  miniforge-pypy3 \
+&& pip install --no-cache-dir -r requirements.txt \
+&& apt-get purge -y --auto-remove \
+  gcc \
+  miniforge-pypy3 \
+&& rm -rf /var/lib/apt/lists/*
