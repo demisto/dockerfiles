@@ -1,5 +1,5 @@
 
-FROM condaforge/miniforge-pypy3
+FROM pypy:3.9-slim-buster
 
 COPY requirements.txt .
 
