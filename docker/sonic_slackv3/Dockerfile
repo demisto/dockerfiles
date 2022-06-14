@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 && apt-get purge -y --auto-remove \
   gcc \
   libffi-dev \
-  curl\
+  curl \
 && rm -rf /var/lib/apt/lists/*
 
 # Get Rust
