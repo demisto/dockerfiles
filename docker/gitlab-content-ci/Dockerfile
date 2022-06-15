@@ -1,16 +1,16 @@
-FROM demisto/python3-deb:3.9.1.14969
+FROM demisto/python3-deb:3.10.4.29329
 
 COPY requirements.txt .
 
-ENV NODE_VERSION 12.18.4
+ENV NODE_VERSION 14.14.0
 ENV NVM_DIR /root/.nvm
 ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 
 # Currently sh is linked to dash, linking it to /bin/bash instead.
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
-RUN apt-get update -y \
-    && apt-get install -y curl jq unzip openssh-client gcc libffi-dev libssl-dev git zip netcat wget python2 python-pip software-properties-common \
+RUN apt-get update  && apt-get upgrade -y \
+    && apt-get install -y curl jq unzip openssh-client gcc libffi-dev libssl-dev git zip cowsay netcat wget python2 python3-pip software-properties-common \
     # Install requirements
     && pip install --no-cache-dir -r requirements.txt \
     # Installing nvm, npm and node.js
@@ -20,15 +20,16 @@ RUN apt-get update -y \
     && nvm alias default $NODE_VERSION \
     && nvm use default \
     # Installing the gsutil and docker cli
-    && apt-get install apt-transport-https ca-certificates gnupg=2.2.12-1+deb10u1 gpgv=2.2.12-1+deb10u1 -y --allow-downgrades\
+    && apt-get install apt-transport-https ca-certificates gnupg gpgv -y --allow-downgrades\
     && echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" |  tee -a /etc/apt/sources.list.d/google-cloud-sdk.list \
     && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - \
     && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
     && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" \
-    && apt-get update &&  apt-get install google-cloud-sdk docker-ce-cli -y \
+    && apt-get update &&  apt-get install google-cloud-sdk docker-ce-cli kubectl -y \
     && gcloud --version \
     && gsutil --version \
     && docker --version \
+    && ! kubectl version --output yaml \
     # Installing goenv
     && git clone https://github.com/syndbg/goenv.git ~/.goenv \
     && echo 'export GOENV_ROOT="$HOME/.goenv"' >> ~/.bashrc \

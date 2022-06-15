@@ -1,7 +1,7 @@
 jobs:
   docker_build:
     docker:
-      - image: devdemisto/dockerbuild:1.0.0.14172
+      - image: devdemisto/dockerbuild:1.0.0.25778
     steps:
       - checkout
       - run:
@@ -33,6 +33,7 @@ jobs:
           name: Build Docker Images
           command: |
             ./docker/build_docker.sh
+          no_output_timeout: 60m
       - store_artifacts:
           path: artifacts
           destination: docker_images
