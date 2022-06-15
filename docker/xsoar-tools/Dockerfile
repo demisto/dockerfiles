@@ -7,7 +7,7 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
   && apk add --no-cache git  \
   && apk add --no-cache libstdc++  \
   && apk add --no-cache --upgrade grep  \
-  && echo '<<<' && cat requirements.txt \ && echo '<<<' \
+  && cat requirements.txt \
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies \
   && wget -P /home/demisto https://raw.githubusercontent.com/demisto/content/master/Packs/Base/Scripts/CommonServerPython/CommonServerPython.py \
