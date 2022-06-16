@@ -1,9 +1,9 @@
 
-FROM demisto/python3:3.10.4.28442
+FROM demisto/python3:3.9.6.22912
 
 COPY requirements.txt .
 
-RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base libffi-dev openssl-dev wget \
+RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget \
   && apk add --no-cache git  \
   && apk add --no-cache libstdc++  \
   && apk add --no-cache --upgrade grep  \
