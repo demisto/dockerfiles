@@ -162,7 +162,7 @@ function docker_build {
         pipenv install
         PIPENV_YES=yes pipenv run pip freeze > requirements.txt
         echo "Pipfile lock generated requirements.txt: "
-        echo "##########################################"
+        echo "############ REQUIREMENTS.TXT ###########"
         cat requirements.txt
         echo "##########################################"
         [ ! -f requirements.txt ] && echo "requirements.txt does not exist!" && return 1
