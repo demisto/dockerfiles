@@ -165,7 +165,7 @@ function docker_build {
         echo "############ REQUIREMENTS.TXT ###########"
         cat requirements.txt
         echo "##########################################"
-        [ ! -f requirements.txt ] && echo "requirements.txt does not exist!" && return 1
+        [ ! -f requirements.txt ] && echo "WARNING: requirements.txt does not exist, this is ok if python usage is not intended."
         [ ! -s requirements.txt ] && echo "WARNING: requirements.txt is empty"
         # del_requirements=yes
     fi
