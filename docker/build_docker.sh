@@ -159,9 +159,14 @@ function docker_build {
             return 1
         fi
         pipenv --rm || echo "Proceeding. It is ok that no virtualenv is available to remove"
-        PIPENV_YES=yes pipenv lock -r --no-header> requirements.txt
+        pipenv install --deploy # fails if lock is outdated
+        PIPENV_YES=yes pipenv run pip freeze > requirements.txt
         echo "Pipfile lock generated requirements.txt: "
+        echo "############ REQUIREMENTS.TXT ###########"
         cat requirements.txt
+        echo "##########################################"
+        [ ! -f requirements.txt ] && echo "WARNING: requirements.txt does not exist, this is ok if python usage is not intended."
+        [ ! -s requirements.txt ] && echo "WARNING: requirements.txt is empty"
         # del_requirements=yes
     fi
 
