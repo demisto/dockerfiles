@@ -10,6 +10,11 @@ RUN apt-get update && apt-get install \
     curl \
     gnupg \
     lsb-release \
+    make \
+    build-essential \
+    libssl-dev zlib1g-dev libbz2-dev \
+    libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
+    xz-utils tk-dev libffi-dev liblzma-dev zsh \
     -y 
 
 # Docker cli tools installation
@@ -19,16 +24,15 @@ RUN curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /
     && apt-get update && apt-get install docker-ce-cli -y
 
 
-WORKDIR /content
-
 
 # Install node modules for readme validation in demisto-sdk validate
-ADD https://raw.githubusercontent.com/demisto/demisto-sdk/master/package.json /content/
-ADD https://raw.githubusercontent.com/demisto/demisto-sdk/master/package-lock.json /content/
+ADD https://raw.githubusercontent.com/demisto/demisto-sdk/master/package.json .
+ADD https://raw.githubusercontent.com/demisto/demisto-sdk/master/package-lock.json .
 
 # Python requirements
 ADD requirements.txt .
-RUN npm ci && python3 -m pip install --no-cache-dir -r requirements.txt && rm requirements.txt
+RUN npm ci && python3 -m pip install --no-cache-dir -r requirements.txt && rm requirements.txt \
+    && poetry config virtualenvs.in-project true
 
 # apt-get Cleanup
 RUN apt-get autoremove -y \
