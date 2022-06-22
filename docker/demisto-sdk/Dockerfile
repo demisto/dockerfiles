@@ -15,7 +15,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     libssl-dev zlib1g-dev libbz2-dev \
     libreadline-dev libsqlite3-dev wget llvm libncurses5-dev libncursesw5-dev \
     xz-utils tk-dev libffi-dev liblzma-dev zsh \
-    rust cargo libffi-dev openssl-dev \
+    libffi-dev openssl-dev \
     python3-dev gfortran g++ pkg-config libhdf5-dev \
     -y 
 
