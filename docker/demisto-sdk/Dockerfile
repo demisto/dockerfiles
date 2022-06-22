@@ -36,7 +36,7 @@ ADD https://raw.githubusercontent.com/demisto/demisto-sdk/master/package-lock.js
 
 # Python requirements
 ADD requirements.txt .
-RUN npm i -g && python3 -m pip install --no-cache-dir -r requirements.txt && rm requirements.txt
+RUN npm install -g && python3 -m pip install --no-cache-dir -r requirements.txt && rm requirements.txt
 
 # install zsh and pyenv
 RUN cd ~ \
