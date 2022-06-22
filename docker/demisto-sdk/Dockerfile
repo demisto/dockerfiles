@@ -52,11 +52,6 @@ RUN git clone https://github.com/pyenv/pyenv.git ~/.pyenv \
     && echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc \
     && echo 'eval "$(pyenv init -)"' >> ~/.zshrc
 
-# apt-get Cleanup
-RUN apt-get autoremove -y \
-    && apt-get purge gcc -y \
-    && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/*
 
 # Default demisto-sdk help
 CMD ["demisto-sdk", "--help"]
