@@ -1,7 +1,7 @@
 FROM demisto/python3-deb:3.10.4.30603
 
 # All content dependencies preinstalled
-RUN apt-get update && apt-get install \
+RUN apt-get update && -get -y --no-install-recommends upgrade && apt-get install \
     git \ 
     gcc \
     nodejs \
