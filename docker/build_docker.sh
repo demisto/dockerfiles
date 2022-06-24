@@ -161,7 +161,6 @@ function docker_build {
         pipenv --rm || echo "Proceeding. It is ok that no virtualenv is available to remove"
         pipenv install --deploy # fails if lock is outdated
         PIPENV_YES=yes pipenv run pip freeze > requirements.txt
-        pipenv --rm || echo "Proceeding. It is ok that no virtualenv is available to remove"
 
         echo "Pipfile lock generated requirements.txt: "
         echo "############ REQUIREMENTS.TXT ###########"
