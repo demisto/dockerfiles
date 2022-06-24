@@ -39,12 +39,13 @@ ADD requirements.txt .
 
 # install poetry reqs
 RUN python3 -m pip install --no-cache-dir -r requirements.txt \
-    && git clone https://github.com/demisto/content.git \
+    && git clone --depth 1 https://github.com/demisto/content.git \
     && cd content \
     && poetry --version \
     && demisto-sdk --version \
     && poetry install \
-    && npm ci 
+    && npm ci \
+    && rm -rf /content
 
 ENV POETRY_VENV_PATH $(poetry env info -p)
 # install zsh and pyenv
