@@ -22,7 +22,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     apt-transport-https \
     gpgv \
     -y \
-    # Docker cli, gsutil, gcloud, powershell tools installation
+    # Docker cli, gsutil, gcloud, powershell, poetry tools installation
     && echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" |  tee -a /etc/apt/sources.list.d/google-cloud-sdk.list \
     && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - \
     && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
@@ -63,7 +63,7 @@ RUN git clone https://github.com/pyenv/pyenv.git ~/.pyenv \
     && echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc \
     && echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc \
     && echo 'eval "$(pyenv init -)"' >> ~/.zshrc \
-    && mkdir $ZSH_CUSTOM/plugins/poetry \
+    && mkdir $HOME/.oh-my-zsh/custom/plugins/poetry \
     && poetry completions zsh > $ZSH_CUSTOM/plugins/poetry/_poetry
 
 
