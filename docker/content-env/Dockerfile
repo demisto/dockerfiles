@@ -44,10 +44,11 @@ RUN python3 -m pip install --no-cache-dir -r requirements.txt \
     && poetry --version \
     && demisto-sdk --version \
     && poetry install \
+    && POETRY_VENV_PATH=$(poetry env info -p) \
     && npm ci \
     && rm -rf /content
 
-ENV POETRY_VENV_PATH $(poetry env info -p)
+ENV POETRY_VENV_PATH $POETRY_VENV_PATH
 # install zsh and pyenv
 RUN cd ~ \
     && sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.2/zsh-in-docker.sh)" -- \
