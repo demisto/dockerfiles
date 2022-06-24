@@ -58,12 +58,19 @@ RUN cd ~ \
     -p https://github.com/zsh-users/zsh-autosuggestions \
     -p https://github.com/zsh-users/zsh-completions \
     -p https://github.com/zsh-users/zsh-syntax-highlighting \
-    -p git 
+    -p git \
+    -p poetry
 
 RUN git clone https://github.com/pyenv/pyenv.git ~/.pyenv \
     && echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc \
     && echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc \
-    && echo 'eval "$(pyenv init -)"' >> ~/.zshrc
+    && echo 'eval "$(pyenv init -)"' >> ~/.zshrc \
+    && mkdir $ZSH_CUSTOM/plugins/poetry \
+    && poetry completions zsh > $ZSH_CUSTOM/plugins/poetry/_poetry
+
+
+
+
 
 # Default demisto-sdk help
 CMD ["demisto-sdk", "--help"]
