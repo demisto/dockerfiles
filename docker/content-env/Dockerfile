@@ -64,7 +64,7 @@ RUN git clone https://github.com/pyenv/pyenv.git ~/.pyenv \
     && echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc \
     && echo 'eval "$(pyenv init -)"' >> ~/.zshrc \
     && mkdir $HOME/.oh-my-zsh/custom/plugins/poetry \
-    && poetry completions zsh > $ZSH_CUSTOM/plugins/poetry/_poetry
+    && poetry completions zsh > $HOME/.oh-my-zsh/custom/plugins/poetry
 
 
 # Default demisto-sdk help
