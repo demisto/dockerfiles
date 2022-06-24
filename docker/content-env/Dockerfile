@@ -27,17 +27,20 @@ RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.
     && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - \
     && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
     && curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
+    && curl -sSL https://install.python-poetry.org | python3 - \
     && sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-debian-bullseye-prod bullseye main" > /etc/apt/sources.list.d/microsoft.list' \
     && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" \
     && apt-get update && apt-get install google-cloud-sdk docker-ce-cli kubectl powershell -y \
     && gcloud --version \
     && gsutil --version \
-    && docker --version
+    && docker --version \
+    && poetry --version
+
 
 # Python requirements
 ADD requirements.txt .
 
-# install poetry reqs
+# install content reqs
 RUN python3 -m pip install --no-cache-dir -r requirements.txt \
     && git clone --depth 1 https://github.com/demisto/content.git \
     && cd content \
