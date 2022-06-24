@@ -63,7 +63,6 @@ RUN git clone https://github.com/pyenv/pyenv.git ~/.pyenv \
     && echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc \
     && echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc \
     && echo 'eval "$(pyenv init -)"' >> ~/.zshrc \
-    && mkdir $HOME/.oh-my-zsh/custom/plugins/poetry \
     && poetry completions zsh > $HOME/.oh-my-zsh/custom/plugins/poetry
 
 
