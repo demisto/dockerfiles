@@ -45,7 +45,7 @@ RUN python3 -m pip install --no-cache-dir -r requirements.txt \
     && demisto-sdk --version \
     && poetry install \
     && npm ci \
-    && export POETRY_VENV_PATH=${poetry env info -p}
+    && export POETRY_VENV_PATH=$(poetry env info -p)
 
 # install zsh and pyenv
 RUN cd ~ \
