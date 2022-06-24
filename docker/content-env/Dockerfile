@@ -33,9 +33,7 @@ RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.
     && apt-get update && apt-get install google-cloud-sdk docker-ce-cli kubectl powershell -y \
     && gcloud --version \
     && gsutil --version \
-    && docker --version \
-    && poetry --version
-
+    && docker --version
 
 # Python requirements
 ADD requirements.txt .
