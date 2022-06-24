@@ -33,7 +33,8 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && apt-get update && apt-get install google-cloud-sdk docker-ce-cli kubectl powershell -y \
     && gcloud --version \
     && gsutil --version \
-    && docker --version
+    && docker --version \
+    && poetry --version 
 
 # Python requirements
 ADD requirements.txt .
@@ -42,7 +43,6 @@ ADD requirements.txt .
 RUN python3 -m pip install --no-cache-dir -r requirements.txt \
     && git clone --depth 1 https://github.com/demisto/content.git \
     && cd content \
-    && poetry --version \
     && demisto-sdk --version \
     && poetry install \
     && POETRY_VENV_PATH=$(poetry env info -p) \
