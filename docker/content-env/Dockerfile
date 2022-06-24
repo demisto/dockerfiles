@@ -34,26 +34,18 @@ RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.
     && gsutil --version \
     && docker --version
 
-WORKDIR /workspaces/content
-
-ADD https://raw.githubusercontent.com/demisto/content/master/package.json .
-ADD https://raw.githubusercontent.com/demisto/content/master/package-lock.json .
-ADD https://raw.githubusercontent.com/demisto/content/master/pyproject.toml .
-ADD https://raw.githubusercontent.com/demisto/content/master/poetry.lock .
-
-
-
-
 # Python requirements
 ADD requirements.txt .
 
 # install poetry reqs
 RUN python3 -m pip install --no-cache-dir -r requirements.txt \
+    && git clone https://github.com/demisto/content.git \
+    && cd content \
     && poetry --version \
     && demisto-sdk --version \
     && poetry install \
     && npm ci \
-    && export POETRY_VENV_PATH=poetry env info -p
+    && export POETRY_VENV_PATH=${poetry env info -p}
 
 # install zsh and pyenv
 RUN cd ~ \
@@ -68,6 +60,7 @@ RUN git clone https://github.com/pyenv/pyenv.git ~/.pyenv \
     && echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc \
     && echo 'eval "$(pyenv init -)"' >> ~/.zshrc
 
+RUN rm 
 
 # Default demisto-sdk help
 CMD ["demisto-sdk", "--help"]
