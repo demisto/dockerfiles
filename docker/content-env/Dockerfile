@@ -1,5 +1,6 @@
 FROM demisto/python3-deb:3.10.4.30603
 
+ENV PATH /root/.local/bin:$PATH
 # All content dependencies preinstalled
 RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get install \
     git \ 
