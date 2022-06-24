@@ -45,7 +45,7 @@ RUN python3 -m pip install --no-cache-dir -r requirements.txt \
     && demisto-sdk --version \
     && poetry install \
     && npm ci 
-    
+
 ENV POETRY_VENV_PATH $(poetry env info -p)
 # install zsh and pyenv
 RUN cd ~ \
@@ -59,8 +59,6 @@ RUN git clone https://github.com/pyenv/pyenv.git ~/.pyenv \
     && echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc \
     && echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc \
     && echo 'eval "$(pyenv init -)"' >> ~/.zshrc
-
-RUN rm 
 
 # Default demisto-sdk help
 CMD ["demisto-sdk", "--help"]
