@@ -28,7 +28,6 @@ RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.
     && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
     && curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
     && sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-debian-bullseye-prod bullseye main" > /etc/apt/sources.list.d/microsoft.list' \
-
     && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" \
     && apt-get update && apt-get install google-cloud-sdk docker-ce-cli kubectl powershell -y \
     && gcloud --version \
@@ -52,7 +51,6 @@ ADD requirements.txt .
 RUN python3 -m pip install --no-cache-dir -r requirements.txt \
     && poetry --version \
     && demisto-sdk --version \
-    && poetry config virtualenvs.in-project true \
     && poetry install \
     && npm ci
 
