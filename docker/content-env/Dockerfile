@@ -34,7 +34,7 @@ WORKDIR /workspaces/content
 
 ADD https://raw.githubusercontent.com/demisto/content/master/package.json .
 ADD https://raw.githubusercontent.com/demisto/content/master/package-lock.json .
-ADD https://raw.githubusercontent.com/demisto/content/master/pyproject .
+ADD https://raw.githubusercontent.com/demisto/content/master/pyproject.toml .
 ADD https://raw.githubusercontent.com/demisto/content/master/poetry.lock .
 
 
