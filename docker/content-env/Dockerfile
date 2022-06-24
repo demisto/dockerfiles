@@ -20,10 +20,9 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     software-properties-common \
     apt-transport-https \
     gpgv \
-    -y 
-
-# Docker cli, gsutil, gcloud, powershell tools installation
-RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" |  tee -a /etc/apt/sources.list.d/google-cloud-sdk.list \
+    -y \
+    # Docker cli, gsutil, gcloud, powershell tools installation
+    && echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" |  tee -a /etc/apt/sources.list.d/google-cloud-sdk.list \
     && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - \
     && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
     && curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
@@ -65,9 +64,6 @@ RUN git clone https://github.com/pyenv/pyenv.git ~/.pyenv \
     && echo 'eval "$(pyenv init -)"' >> ~/.zshrc \
     && mkdir $ZSH_CUSTOM/plugins/poetry \
     && poetry completions zsh > $ZSH_CUSTOM/plugins/poetry/_poetry
-
-
-
 
 
 # Default demisto-sdk help
