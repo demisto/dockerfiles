@@ -18,19 +18,22 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     libffi-dev \
     libssl-dev \
     software-properties-common \
+    apt-transport-https \
+    gpgv \
     -y 
 
-# Docker cli tools installation
-RUN curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg \
-    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian \
-    $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null \
-    && apt-get update && apt-get install docker-ce-cli -y
-
-# Install Powershell
-RUN curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
+# Docker cli, gsutil, gcloud, powershell tools installation
+RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" |  tee -a /etc/apt/sources.list.d/google-cloud-sdk.list \
+    && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - \
+    && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
+    && curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
     && sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-debian-bullseye-prod bullseye main" > /etc/apt/sources.list.d/microsoft.list' \
-    && apt-get update && apt-get install -y powershell
 
+    && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" \
+    && apt-get update && apt-get install google-cloud-sdk docker-ce-cli kubectl powershell -y \
+    && gcloud --version \
+    && gsutil --version \
+    && docker --version
 
 WORKDIR /workspaces/content
 
@@ -44,7 +47,11 @@ ADD https://raw.githubusercontent.com/demisto/content/master/poetry.lock .
 
 # Python requirements
 ADD requirements.txt .
+
+# install poetry reqs
 RUN python3 -m pip install --no-cache-dir -r requirements.txt \
+    && poetry --version \
+    && demisto-sdk --version \
     && poetry config virtualenvs.in-project true \
     && poetry install \
     && npm ci
