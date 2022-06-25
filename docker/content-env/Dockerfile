@@ -1,6 +1,6 @@
 FROM demisto/python3-deb:3.10.4.30603
 
-ENV PYENV_ROOT ~$HOME/pyenv
+ENV PYENV_ROOT /root/pyenv
 ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:/root/.local/bin:$PATH
 ENV PYTHON_VERSION 3.10.4
 
