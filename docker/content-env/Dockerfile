@@ -1,6 +1,8 @@
 FROM demisto/python3-deb:3.10.4.30603
 
-ENV PATH /root/.local/bin:$PATH
+ENV PYENV_ROOT ~$HOME/pyenv
+ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:/root/.local/bin:$PATH
+ENV PYTHON_VERSION 3.10.4
 
 # Python requirements
 ADD requirements.txt .
@@ -36,6 +38,11 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-debian-bullseye-prod bullseye main" > /etc/apt/sources.list.d/microsoft.list' \
     && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" \
     && apt-get update && apt-get install google-cloud-sdk docker-ce-cli kubectl powershell -y \
+    && curl -fSSL https://pyenv.run | bash \
+    && pyenv update \
+    && pyenv install $PYTHON_VERSION \
+    && pyenv global $PYTHON_VERSION \
+    && python --version \
     && gcloud --version \
     && gsutil --version \
     && docker --version \
@@ -46,7 +53,8 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && cd content \
     && demisto-sdk --version \
     && poetry install \
-    && POETRY_VENV_PATH=$(poetry run python -c "import sys; print(sys.executable)") \
+    && POETRY_VENV_PATH=$(poetry env info --path) \
+    && echo $POETRY_VENV_PATH \
     && npm install -g \
     && rm -rf /content \
     # install zsh and oh-my-zsh with plugins 
@@ -58,16 +66,9 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     -p git \
     -p poetry
 
+RUN poetry completions zsh > $HOME/.oh-my-zsh/custom/plugins/poetry
 
 ENV POETRY_VENV_PATH $POETRY_VENV_PATH
-
-# install poetry and add stuff to zshrc
-RUN git clone https://github.com/pyenv/pyenv.git ~/.pyenv \
-    && echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc \
-    && echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc \
-    && echo 'eval "$(pyenv init -)"' >> ~/.zshrc \
-    && poetry completions zsh > $HOME/.oh-my-zsh/custom/plugins/poetry
-
 
 # Default demisto-sdk help
 CMD ["demisto-sdk", "--help"]
