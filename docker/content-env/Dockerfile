@@ -48,7 +48,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && docker --version \
     && poetry --version \
     # install content dependencies
-    && python3 -m pip install --no-cache-dir -r requirements.txt \
+    && python -m pip install --no-cache-dir -r requirements.txt \
     && git clone --depth 1 https://github.com/demisto/content.git \
     && cd content \
     && demisto-sdk --version \
