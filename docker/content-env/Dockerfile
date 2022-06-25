@@ -36,7 +36,6 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-debian-bullseye-prod bullseye main" > /etc/apt/sources.list.d/microsoft.list' \
     && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" \
     && apt-get update && apt-get install google-cloud-sdk docker-ce-cli kubectl powershell -y \
-    && git clone https://github.com/pyenv/pyenv.git ~/.pyenv \
     && gcloud --version \
     && gsutil --version \
     && docker --version \
