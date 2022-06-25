@@ -47,7 +47,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && cd content \
     && demisto-sdk --version \
     && poetry install \
-    && POETRY_VENV_PATH=$(poetry run python -c "import sys; print(sys.executale)") \
+    && POETRY_VENV_PATH=$(poetry run python -c "import sys; print(sys.executable)") \
     && npm ci -g \
     && rm -rf /content \
     # install zsh and oh-my-zsh with plugins 
