@@ -1,7 +1,6 @@
 FROM demisto/python3-deb:3.10.4.30603
 
-ENV PYENV_ROOT /root/pyenv
-ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:/root/.local/bin:$PATH
+ENV PATH /root/.local/bin:$PATH
 ENV PYTHON_VERSION 3.10.4
 
 # Python requirements
@@ -39,6 +38,10 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" \
     && apt-get update && apt-get install google-cloud-sdk docker-ce-cli kubectl powershell -y \
     && curl -fSSL https://pyenv.run | bash \
+    && echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc \
+    && echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc \
+    && echo 'eval "$(pyenv init -)"' >> ~/.bashrc \
+    && source ~/.bashrc \
     && pyenv update \
     && pyenv install $PYTHON_VERSION \
     && pyenv global $PYTHON_VERSION \
@@ -66,7 +69,11 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     -p git \
     -p poetry
 
-RUN poetry completions zsh > $HOME/.oh-my-zsh/custom/plugins/poetry
+RUN poetry completions zsh > $HOME/.oh-my-zsh/custom/plugins/poetry \
+    && echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc \
+    && echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc \
+    && echo 'eval "$(pyenv init -)"' >> ~/.zshrc
+
 
 ENV POETRY_VENV_PATH $POETRY_VENV_PATH
 
