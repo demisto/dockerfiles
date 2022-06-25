@@ -6,6 +6,8 @@ ENV PYTHON_VERSION 3.10.4
 # Python requirements
 ADD requirements.txt .
 
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+
 # All content dependencies preinstalled
 RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get install \
     git \ 
@@ -41,7 +43,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc \
     && echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc \
     && echo 'eval "$(pyenv init -)"' >> ~/.bashrc \
-    && source ~/.bashrc \
+    && . ~/.bashrc \
     && pyenv update \
     && pyenv install $PYTHON_VERSION \
     && pyenv global $PYTHON_VERSION \
