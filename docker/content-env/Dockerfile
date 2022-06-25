@@ -53,7 +53,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && cd content \
     && demisto-sdk --version \
     && poetry install \
-    && POETRY_VENV_PATH=$(poetry env info --path) \
+    && export POETRY_VENV_PATH=$(poetry env info --path) \
     && echo $POETRY_VENV_PATH \
     && npm install -g \
     && rm -rf /content \
