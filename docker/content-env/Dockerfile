@@ -1,6 +1,10 @@
 FROM demisto/python3-deb:3.10.4.30603
 
 ENV PATH /root/.local/bin:$PATH
+
+# Python requirements
+ADD requirements.txt .
+
 # All content dependencies preinstalled
 RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get install \
     git \ 
@@ -16,6 +20,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     zsh \
     wget \
     python3-dev \
+    python2 \
     libffi-dev \
     libssl-dev \
     software-properties-common \
@@ -31,27 +36,22 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-debian-bullseye-prod bullseye main" > /etc/apt/sources.list.d/microsoft.list' \
     && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" \
     && apt-get update && apt-get install google-cloud-sdk docker-ce-cli kubectl powershell -y \
+    && git clone https://github.com/pyenv/pyenv.git ~/.pyenv \
     && gcloud --version \
     && gsutil --version \
     && docker --version \
-    && poetry --version 
-
-# Python requirements
-ADD requirements.txt .
-
-# install content reqs
-RUN python3 -m pip install --no-cache-dir -r requirements.txt \
+    && poetry --version \
+    # install content dependencies
+    && python3 -m pip install --no-cache-dir -r requirements.txt \
     && git clone --depth 1 https://github.com/demisto/content.git \
     && cd content \
     && demisto-sdk --version \
     && poetry install \
-    && POETRY_VENV_PATH=$(poetry env info -p) \
-    && npm ci \
-    && rm -rf /content
-
-ENV POETRY_VENV_PATH $POETRY_VENV_PATH
-# install zsh and pyenv
-RUN cd ~ \
+    && POETRY_VENV_PATH=$(poetry run python -c "import sys; print(sys.executale)") \
+    && npm ci -g \
+    && rm -rf /content \
+    # install zsh and oh-my-zsh with plugins 
+    && cd ~ \
     && sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.2/zsh-in-docker.sh)" -- \
     -p https://github.com/zsh-users/zsh-autosuggestions \
     -p https://github.com/zsh-users/zsh-completions \
@@ -59,6 +59,10 @@ RUN cd ~ \
     -p git \
     -p poetry
 
+
+ENV POETRY_VENV_PATH $POETRY_VENV_PATH
+
+# install poetry and add stuff to zshrc
 RUN git clone https://github.com/pyenv/pyenv.git ~/.pyenv \
     && echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc \
     && echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc \
