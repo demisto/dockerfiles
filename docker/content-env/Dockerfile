@@ -28,8 +28,8 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     apt-transport-https \
     gpgv \
     bzip2 \
-    ncurses \
-    lib32readline7 \
+    ncurses-dev \
+    lib32readline-dev \
     sqlite3 \
     lzma \
     -y \
