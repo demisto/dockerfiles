@@ -74,7 +74,9 @@ RUN poetry completions zsh > $HOME/.oh-my-zsh/custom/plugins/poetry \
     && source ~/.zshrc \
     && pyenv update \
     && pyenv install $PYTHON_VERSION \
-    && pyenv global $PYTHON_VERSION
+    && pyenv global $PYTHON_VERSION \
+    # check if demisto-sdk is still available
+    && demisto-sdk --version
 
 
 ENV POETRY_VENV_PATH $POETRY_VENV_PATH
