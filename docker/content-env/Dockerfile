@@ -29,7 +29,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     gpgv \
     bzip2 \
     ncurses \
-    libreadline \
+    lib32readline7 \
     sqlite3 \
     lzma \
     -y \
