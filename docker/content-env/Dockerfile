@@ -2,8 +2,17 @@ FROM demisto/python3-deb:3.10.4.30603
 
 ENV PATH /root/.local/bin:$PATH
 
+ARG PYTHON_VERSION 3.10.4
 # Python requirements
 ADD requirements.txt .
+
+# install zsh first
+RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.2/zsh-in-docker.sh)" -- \
+    -p https://github.com/zsh-users/zsh-autosuggestions \
+    -p https://github.com/zsh-users/zsh-completions \
+    -p https://github.com/zsh-users/zsh-syntax-highlighting \
+    -p git \
+    -p poetry
 
 # All content dependencies preinstalled
 RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get install \
@@ -32,6 +41,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     sqlite3 \
     lzma \
     -y \
+    && python -m pip install --no-cache-dir -r requirements.txt \
     # Docker cli, gsutil, gcloud, powershell, poetry tools installation
     && echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" |  tee -a /etc/apt/sources.list.d/google-cloud-sdk.list \
     && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - \
@@ -41,36 +51,33 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-debian-bullseye-prod bullseye main" > /etc/apt/sources.list.d/microsoft.list' \
     && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" \
     && apt-get update && apt-get install google-cloud-sdk docker-ce-cli kubectl powershell -y \
+    && curl -fSSL https://pyenv.run | bash \
+    && echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc \
+    && echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc \
+    && echo 'eval "$(pyenv init -)"' >> ~/.zshrc \
+    && . ~/.zshrc \
     && python --version \
     && gcloud --version \
     && gsutil --version \
     && docker --version \
     && poetry --version \
+    && pyenv --version \
+    && pyenv update \
+    && pyenv install $PYTHON_VERSION \
+    && pyenv global $PYTHON_VERSION \
     # install content dependencies
     && python -m pip install --no-cache-dir -r requirements.txt \
     && git clone --depth 1 https://github.com/demisto/content.git \
     && cd content \
     && demisto-sdk --version \
     && poetry install \
-    && export POETRY_VENV_PATH=$(poetry env info --path) \
-    && echo $POETRY_VENV_PATH \
+    && export POETRY_VENV_PATH=$(poetry env list --full-path) \
+    && echo "poetry path is $POETRY_VENV_PATH" \
+    && echo "poetry2 path is $(poetry run python -c 'import sys; print(sys.executable)')" \
     && npm install -g \
     && rm -rf /content \
     # install zsh and oh-my-zsh with plugins 
-    && cd ~ \
-    && sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.2/zsh-in-docker.sh)" -- \
-    -p https://github.com/zsh-users/zsh-autosuggestions \
-    -p https://github.com/zsh-users/zsh-completions \
-    -p https://github.com/zsh-users/zsh-syntax-highlighting \
-    -p git \
-    -p poetry
-
-RUN poetry completions zsh > $HOME/.oh-my-zsh/custom/plugins/poetry \
-    && curl -fSSL https://pyenv.run | bash \
-    && echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc \
-    && echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc \
-    && echo 'eval "$(pyenv init -)"' >> ~/.zshrc
-
+    && poetry completions zsh > $HOME/.oh-my-zsh/custom/plugins/poetry 
 
 ENV POETRY_VENV_PATH $POETRY_VENV_PATH
 
