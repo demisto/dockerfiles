@@ -54,7 +54,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc \
     && echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc \
     && echo 'eval "$(pyenv init -)"' >> ~/.zshrc \
-    && . ~/.zshrc \
+    && source ~/.zshrc \
     && python --version \
     && gcloud --version \
     && gsutil --version \
