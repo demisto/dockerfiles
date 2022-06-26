@@ -1,7 +1,7 @@
 FROM demisto/python3-deb:3.10.4.30603
 
 ENV PATH /root/.pyenv/bin:/root/.local/bin:$PATH \
-    PYENV_ROOT /root/.pyenv \
+    PYENV_ROOT /root/.pyenv
 
 ARG PYTHON_VERSION 3.10.4
 # Python requirements
