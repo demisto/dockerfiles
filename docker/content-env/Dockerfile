@@ -6,8 +6,6 @@ ENV PYTHON_VERSION 3.10.4
 # Python requirements
 ADD requirements.txt .
 
-RUN rm /bin/sh && ln -s /bin/bash /bin/sh
-
 # All content dependencies preinstalled
 RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get install \
     git \ 
@@ -29,6 +27,11 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     software-properties-common \
     apt-transport-https \
     gpgv \
+    bzip2 \
+    ncurses \
+    libreadline \
+    sqlite3 \
+    lzma \
     -y \
     # Docker cli, gsutil, gcloud, powershell, poetry tools installation
     && echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" |  tee -a /etc/apt/sources.list.d/google-cloud-sdk.list \
@@ -39,14 +42,6 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-debian-bullseye-prod bullseye main" > /etc/apt/sources.list.d/microsoft.list' \
     && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" \
     && apt-get update && apt-get install google-cloud-sdk docker-ce-cli kubectl powershell -y \
-    && curl -fSSL https://pyenv.run | bash \
-    && echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc \
-    && echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc \
-    && echo 'eval "$(pyenv init -)"' >> ~/.bashrc \
-    && . ~/.bashrc \
-    && pyenv update \
-    && pyenv install $PYTHON_VERSION \
-    && pyenv global $PYTHON_VERSION \
     && python --version \
     && gcloud --version \
     && gsutil --version \
@@ -72,9 +67,14 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     -p poetry
 
 RUN poetry completions zsh > $HOME/.oh-my-zsh/custom/plugins/poetry \
+    && curl -fSSL https://pyenv.run | bash \
     && echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc \
     && echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc \
-    && echo 'eval "$(pyenv init -)"' >> ~/.zshrc
+    && echo 'eval "$(pyenv init -)"' >> ~/.zshrc \
+    && source ~/.zshrc \
+    && pyenv update \
+    && pyenv install $PYTHON_VERSION \
+    && pyenv global $PYTHON_VERSION
 
 
 ENV POETRY_VENV_PATH $POETRY_VENV_PATH
