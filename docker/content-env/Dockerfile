@@ -1,6 +1,7 @@
 FROM demisto/python3-deb:3.10.4.30603
 
-ENV PATH /root/.local/bin:$PATH
+ENV PATH /root/.pyenv/bin:/root/.local/bin:$PATH \
+    PYENV_ROOT /root/.pyenv \
 
 ARG PYTHON_VERSION 3.10.4
 # Python requirements
@@ -51,10 +52,8 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" \
     && apt-get update && apt-get install google-cloud-sdk docker-ce-cli kubectl powershell -y \
     && curl -fSSL https://pyenv.run | bash \
-    && echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc \
-    && echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc \
     && echo 'eval "$(pyenv init -)"' >> ~/.zshrc \
-    && source ~/.zshrc \
+    && pyenv init - \
     && python --version \
     && gcloud --version \
     && gsutil --version \
