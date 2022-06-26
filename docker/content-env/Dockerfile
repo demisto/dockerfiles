@@ -7,7 +7,8 @@ ARG PYTHON_VERSION 3.10.4
 ADD requirements.txt .
 
 # install zsh first
-RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.2/zsh-in-docker.sh)" -- \
+RUN apt-get update && apt-get install -y zsh wget \
+    && sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.2/zsh-in-docker.sh)" -- \
     -p https://github.com/zsh-users/zsh-autosuggestions \
     -p https://github.com/zsh-users/zsh-completions \
     -p https://github.com/zsh-users/zsh-syntax-highlighting \
@@ -26,8 +27,6 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     lsb-release \
     make \
     build-essential \
-    zsh \
-    wget \
     python3-dev \
     python2 \
     libffi-dev \
@@ -71,15 +70,13 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && cd content \
     && demisto-sdk --version \
     && poetry install \
-    && export POETRY_VENV_PATH=$(poetry env list --full-path) \
-    && echo "poetry path is $POETRY_VENV_PATH" \
-    && echo "poetry2 path is $(poetry run python -c 'import sys; print(sys.executable)')" \
+    && POETRY_VENV_PATH=$(poetry run python -c 'import sys; print(sys.executable)') \
+    && echo "export POETRY_VENV_PATH=$POETRY_VENV_PATH" >> ~/.zshrc \
     && npm install -g \
     && rm -rf /content \
     # install zsh and oh-my-zsh with plugins 
     && poetry completions zsh > $HOME/.oh-my-zsh/custom/plugins/poetry 
 
-ENV POETRY_VENV_PATH $POETRY_VENV_PATH
 
 # Default demisto-sdk help
 CMD ["demisto-sdk", "--help"]
