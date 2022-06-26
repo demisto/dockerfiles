@@ -1,7 +1,6 @@
 FROM demisto/python3-deb:3.10.4.30603
 
 ENV PATH /root/.local/bin:$PATH
-ENV PYTHON_VERSION 3.10.4
 
 # Python requirements
 ADD requirements.txt .
@@ -70,12 +69,7 @@ RUN poetry completions zsh > $HOME/.oh-my-zsh/custom/plugins/poetry \
     && curl -fSSL https://pyenv.run | bash \
     && echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc \
     && echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc \
-    && echo 'eval "$(pyenv init -)"' >> ~/.zshrc \
-    && pyenv update \
-    && pyenv install $PYTHON_VERSION \
-    && pyenv global $PYTHON_VERSION \
-    # check if demisto-sdk is still available
-    && demisto-sdk --version
+    && echo 'eval "$(pyenv init -)"' >> ~/.zshrc
 
 
 ENV POETRY_VENV_PATH $POETRY_VENV_PATH
