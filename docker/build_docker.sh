@@ -181,7 +181,7 @@ function docker_build {
         echo "ENV DEPRECATED_REASON=\"$reason\"" >> "$tmp_dir/Dockerfile"
     fi
     
-    docker build -f "$tmp_dir/Dockerfile" . -t ${image_full_name} \
+    docker buildx build --platform linux/amd64,linux/arm64 -f "$tmp_dir/Dockerfile" . -t ${image_full_name} \
         --label "org.opencontainers.image.authors=Demisto <containers@demisto.com>" \
         --label "org.opencontainers.image.version=${VERSION}" \
         --label "org.opencontainers.image.revision=${CIRCLE_SHA1}"
