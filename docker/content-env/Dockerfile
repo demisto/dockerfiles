@@ -1,4 +1,4 @@
-FROM demisto/python3-deb:3.10.4.30603
+FROM arm64v8/python:3.10.5-bullseye
 
 ENV PATH /root/.pyenv/bin:/root/.local/bin:$PATH
 ENV PYENV_ROOT /root/.pyenv
