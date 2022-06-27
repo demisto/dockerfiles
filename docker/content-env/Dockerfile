@@ -3,7 +3,7 @@ FROM arm64v8/python:3.10.5-bullseye
 ENV PATH /root/.pyenv/bin:/root/.local/bin:$PATH
 ENV PYENV_ROOT /root/.pyenv
 
-ARG PYTHON_VERSION 3.10.4
+ARG PYTHON_VERSION 3.10.5
 # Python requirements
 ADD requirements.txt .
 
