@@ -183,10 +183,11 @@ function docker_build {
     fi
     
     docker buildx build --platform=linux/amd64,linux/arm64 \
-        -f "$tmp_dir/Dockerfile" . -t ${image_full_name} \
+        -t ${image_full_name} \
         --label "org.opencontainers.image.authors=Demisto <containers@demisto.com>" \
         --label "org.opencontainers.image.version=${VERSION}" \
-        --label "org.opencontainers.image.revision=${CIRCLE_SHA1}"
+        --label "org.opencontainers.image.revision=${CIRCLE_SHA1}" \
+        -f "$tmp_dir/Dockerfile" .
     rm -rf "$tmp_dir"
     if [ ${del_requirements} = "yes" ]; then
         rm requirements.txt
