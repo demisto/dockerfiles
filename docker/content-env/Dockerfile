@@ -49,7 +49,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - \
     && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
     && curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
-    && curl -sSL https://install.python-poetry.org | python3 - \
+    && curl -fsSL https://install.python-poetry.org | python3 - \
     && sh -c 'echo "deb [arch=$(dpkg --print-architecture)] https://packages.microsoft.com/repos/microsoft-debian-bullseye-prod bullseye main" > /etc/apt/sources.list.d/microsoft.list' \
     && add-apt-repository "deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/ubuntu bionic stable" \
     && apt-get update && apt-get install google-cloud-sdk docker-ce-cli powershell -y \
