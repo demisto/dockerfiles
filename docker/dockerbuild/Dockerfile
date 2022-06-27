@@ -13,8 +13,7 @@ RUN bash -i -c 'pyenv install 3.6.10 && pyenv versions | grep 3.6.10'
 RUN bash -i -c 'pyenv install 3.9.0 && pyenv versions | grep 3.9.0'
 RUN bash -i -c 'pyenv install 3.10.0 && pyenv versions | grep 3.10.0'
 
-RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" |  tee -a /etc/apt/sources.list.d/google-cloud-sdk.list \
-  && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - \
+RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - \
   && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
   && apt-get update && apt-get install -y docker-ce-cli kubectl
 
