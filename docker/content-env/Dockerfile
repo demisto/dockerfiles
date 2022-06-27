@@ -74,7 +74,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && echo "export POETRY_VENV_PATH=$POETRY_VENV_PATH" >> ~/.zshrc \
     && npm install -g \
     && rm -rf /content \
-    # install zsh and oh-my-zsh with plugins 
+    # install poetry plugin for oh my zsh 
     && poetry completions zsh > $HOME/.oh-my-zsh/custom/plugins/poetry 
 
 
