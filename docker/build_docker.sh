@@ -181,15 +181,12 @@ function docker_build {
         reason=$(prop 'deprecated_reason')
         echo "ENV DEPRECATED_REASON=\"$reason\"" >> "$tmp_dir/Dockerfile"
     fi
-    pushd ${tmp_dir}
-    docker buildx create --use --platform linux/amd64,linux/arm64
-    docker buildx build \
+    docker build \
         -t "${image_full_name}" \
         --label "org.opencontainers.image.authors=Demisto <containers@demisto.com>" \
         --label "org.opencontainers.image.version=${VERSION}" \
         --label "org.opencontainers.image.revision=${CIRCLE_SHA1}" \
         -f ${tmp_dir}/Dockerfile .
-    popd
     rm -rf "$tmp_dir"
     if [ ${del_requirements} = "yes" ]; then
         rm requirements.txt
