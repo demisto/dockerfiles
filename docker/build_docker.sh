@@ -187,7 +187,7 @@ function docker_build {
         --label "org.opencontainers.image.authors=Demisto <containers@demisto.com>" \
         --label "org.opencontainers.image.version=${VERSION}" \
         --label "org.opencontainers.image.revision=${CIRCLE_SHA1}" \
-        --push
+        --output type=oci,dest=~/${image_full_name}.tar.gz 
     rm -rf "$tmp_dir"
     if [ ${del_requirements} = "yes" ]; then
         rm requirements.txt
@@ -281,6 +281,7 @@ EOF
     
 
     if [ -n "$CR_REPO" ] && cr_login; then
+        docker load -i ~/${image_full_name}.tar
         docker tag ${image_full_name} ${CR_REPO}/${image_full_name}
         docker push ${CR_REPO}/${image_full_name} > /dev/null
         echo "Done docker push for cr: ${image_full_name}"
