@@ -1,5 +1,6 @@
 FROM cimg/python:3.10.5
 
+SHELL [ "/bin/sh", "-c" ]
 # Setup pyenv and install extra python versions
 RUN rm -rf $HOME/.pyenv \
   && curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
@@ -16,5 +17,5 @@ RUN bash -i -c 'pyenv install 3.10.0 && pyenv versions | grep 3.10.0'
 
 COPY requirements.txt .
 
-RUN bash -i -c 'pip install --user --no-cache-dir -r requirements.txt'
+RUN pip install --user --no-cache-dir -r requirements.txt
 RUN bash -i -c 'pyenv shell 3.7.6 && pyenv exec pip3 install --no-cache-dir -r requirements.txt'
