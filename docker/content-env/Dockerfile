@@ -1,7 +1,7 @@
 FROM demisto/python3-deb:3.10.4.30603
 
-ENV PATH /root/.pyenv/bin:/root/.local/bin:$PATH \
-    PYENV_ROOT /root/.pyenv
+ENV PATH /root/.pyenv/bin:/root/.local/bin:$PATH
+ENV PYENV_ROOT /root/.pyenv
 
 ARG PYTHON_VERSION 3.10.4
 # Python requirements
@@ -16,6 +16,7 @@ RUN apt-get update && apt-get install -y zsh wget \
     -p git \
     -p poetry
 
+SHELL [ "/bin/zsh", "-c" ]
 # All content dependencies preinstalled
 RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get install \
     git \ 
@@ -53,7 +54,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && apt-get update && apt-get install google-cloud-sdk docker-ce-cli kubectl powershell -y \
     && curl -fSSL https://pyenv.run | bash \
     && echo 'eval "$(pyenv init -)"' >> ~/.zshrc \
-    && pyenv init - \
+    && source ~/.zshrc \
     && python --version \
     && gcloud --version \
     && gsutil --version \
