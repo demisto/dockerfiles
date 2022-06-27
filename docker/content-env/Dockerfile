@@ -78,7 +78,8 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && rm -rf /content \
     # install poetry plugin for oh my zsh 
     && poetry completions zsh > $HOME/.oh-my-zsh/custom/plugins/poetry \
-    && apt-get purge -y --auto-remove ncurses-dev sqlite3 lzma bzip2
+    && apt-get purge -y --auto-remove ncurses-dev sqlite3 lzma bzip2 lib32readline-dev \
+    gpgv lsb-release
 
 
 # Default demisto-sdk help
