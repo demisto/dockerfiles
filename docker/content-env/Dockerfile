@@ -77,7 +77,8 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && npm install -g \
     && rm -rf /content \
     # install poetry plugin for oh my zsh 
-    && poetry completions zsh > $HOME/.oh-my-zsh/custom/plugins/poetry 
+    && poetry completions zsh > $HOME/.oh-my-zsh/custom/plugins/poetry \
+    && apt-get purge -y --auto-remove ncurses-dev sqlite3 lzma bzip2
 
 
 # Default demisto-sdk help
