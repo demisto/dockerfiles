@@ -180,9 +180,10 @@ function docker_build {
         reason=$(prop 'deprecated_reason')
         echo "ENV DEPRECATED_REASON=\"$reason\"" >> "$tmp_dir/Dockerfile"
     fi
+    docker run -it --rm --privileged tonistiigi/binfmt --install all
     docker context create build
-    docker buildx create --use "build" --name "build"
-    docker buildx build --platform linux/amd64,linux/arm64/v8 -f "$tmp_dir/Dockerfile" . -t ${image_full_name} \
+    docker buildx create --use "build" --name "build" --platform linux/amd64,linux/arm64/v8
+    docker buildx build -f "$tmp_dir/Dockerfile" . -t ${image_full_name} \
         --label "org.opencontainers.image.authors=Demisto <containers@demisto.com>" \
         --label "org.opencontainers.image.version=${VERSION}" \
         --label "org.opencontainers.image.revision=${CIRCLE_SHA1}"
