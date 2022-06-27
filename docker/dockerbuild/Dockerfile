@@ -1,7 +1,8 @@
 FROM cimg/python:3.10.5
 
 # Setup pyenv and install extra python versions
-RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
+RUN rm -rf $HOME/.pyenv \
+  && curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
   && echo 'export PATH="/home/circleci/.pyenv/bin:$PATH"' >> ~/.bashrc \
   && echo 'eval "$(pyenv init -)"' >> ~/.bashrc \
   && echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.bashrc
