@@ -1,4 +1,5 @@
-FROM arm64v8/python:3.10.5-bullseye
+FROM demisto/python3-deb:3.10.4.30603
+
 
 ENV PATH /root/.pyenv/bin:/root/.local/bin:$PATH
 ENV PYENV_ROOT /root/.pyenv
@@ -51,7 +52,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && curl -sSL https://install.python-poetry.org | python3 - \
     && sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-debian-bullseye-prod bullseye main" > /etc/apt/sources.list.d/microsoft.list' \
     && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" \
-    && apt-get update && apt-get install google-cloud-sdk docker-ce-cli kubectl powershell -y \
+    && apt-get update && apt-get install google-cloud-sdk docker-ce-cli powershell -y \
     && curl -fSSL https://pyenv.run | bash \
     && echo 'eval "$(pyenv init -)"' >> ~/.zshrc \
     && source ~/.zshrc \

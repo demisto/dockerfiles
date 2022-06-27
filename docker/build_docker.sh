@@ -161,7 +161,6 @@ function docker_build {
         pipenv --rm || echo "Proceeding. It is ok that no virtualenv is available to remove"
         pipenv install --deploy # fails if lock is outdated
         PIPENV_YES=yes pipenv run pip freeze > requirements.txt
-
         echo "Pipfile lock generated requirements.txt: "
         echo "############ REQUIREMENTS.TXT ###########"
         cat requirements.txt
@@ -181,12 +180,11 @@ function docker_build {
         reason=$(prop 'deprecated_reason')
         echo "ENV DEPRECATED_REASON=\"$reason\"" >> "$tmp_dir/Dockerfile"
     fi
-    docker build \
-        -t "${image_full_name}" \
+    
+    docker build -f "$tmp_dir/Dockerfile" . -t ${image_full_name} \
         --label "org.opencontainers.image.authors=Demisto <containers@demisto.com>" \
         --label "org.opencontainers.image.version=${VERSION}" \
-        --label "org.opencontainers.image.revision=${CIRCLE_SHA1}" \
-        -f ${tmp_dir}/Dockerfile .
+        --label "org.opencontainers.image.revision=${CIRCLE_SHA1}"
     rm -rf "$tmp_dir"
     if [ ${del_requirements} = "yes" ]; then
         rm requirements.txt
