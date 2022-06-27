@@ -1,6 +1,6 @@
 FROM cimg/python:3.10.5
 
-SHELL [ "/bin/sh", "-c" ]
+SHELL [ "/bin/bash", "-c" ]
 
 ADD requirements.txt .
 
