@@ -1,4 +1,4 @@
-FROM circleci/python:3.10.1
+FROM cimg/python:3.10.5
 
 # Setup pyenv and install extra python versions
 RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
@@ -12,11 +12,6 @@ RUN bash -i -c 'pyenv install 3.8.1 && pyenv versions | grep 3.8.1'
 RUN bash -i -c 'pyenv install 3.6.10 && pyenv versions | grep 3.6.10'
 RUN bash -i -c 'pyenv install 3.9.0 && pyenv versions | grep 3.9.0'
 RUN bash -i -c 'pyenv install 3.10.0 && pyenv versions | grep 3.10.0'
-
-RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - \
-  && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
-  && apt-get update && apt-get install -y docker-ce-cli kubectl
-
 
 COPY requirements.txt .
 
