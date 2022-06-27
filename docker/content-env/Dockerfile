@@ -8,6 +8,8 @@ ARG PYTHON_VERSION 3.10.5
 # Python requirements
 ADD requirements.txt .
 
+RUN apt-get install qemu qemu-user-static binfmt-support debootstrap -y
+
 # install zsh first
 RUN apt-get update && apt-get install -y zsh wget \
     && sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.2/zsh-in-docker.sh)" -- \
