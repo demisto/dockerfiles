@@ -72,6 +72,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && demisto-sdk --version \
     && poetry install \
     && POETRY_VENV_PATH=$(poetry run python -c 'import sys; print(sys.executable)') \
+    && echo $POETRY_VENV_PATH \
     && echo "export POETRY_VENV_PATH=$POETRY_VENV_PATH" >> ~/.zshrc \
     && npm install -g \
     && rm -rf /content \
