@@ -67,10 +67,10 @@ class HardeningManifest:
         self.labels = {
             HardeningManifestLabels.TITLE: HardeningManifestLabels.BASE_TITLE.format(self.docker_image_name),
             HardeningManifestLabels.DESCRIPTION: HardeningManifestLabels.BASE_DESCRIPTION.format(self.docker_image_name),
-            HardeningManifestLabels.LICENSES: ' ',
-            HardeningManifestLabels.URL: ' ',
+            HardeningManifestLabels.LICENSES: "The MIT License (MIT)" ,
+            HardeningManifestLabels.URL: "https://www.paloaltonetworks.com/cortex/cortex-xsoar",
             HardeningManifestLabels.VENDOR: HardeningManifestLabels.DEMISTO,
-            HardeningManifestLabels.VERSION: '1.0',
+            HardeningManifestLabels.VERSION: "1.0",
             HardeningManifestLabels.TYPE: HardeningManifestLabels.OPEN_SOURCE,
             HardeningManifestLabels.NAME: f'{HardeningManifestLabels.BASE_NAME}-{self.docker_image_name}'
         }
@@ -80,7 +80,7 @@ class HardeningManifest:
         if pip_file_lock_data_keys:
             self.labels[HardeningManifestLabels.KEYWORDS] = ', '.join(pip_file_lock_data_keys)
         else:
-            self.labels[HardeningManifestLabels.KEYWORDS] = ' '
+            self.labels[HardeningManifestLabels.KEYWORDS] = f'{self.docker_image_name}'
 
     def handle_tags(self):
         # latest tag in list's first place
