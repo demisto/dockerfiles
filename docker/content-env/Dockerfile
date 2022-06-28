@@ -36,12 +36,6 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     libssl-dev \
     software-properties-common \
     apt-transport-https \
-    gpgv \
-    bzip2 \
-    ncurses-dev \
-    lib32readline-dev \
-    sqlite3 \
-    lzma \
     -y \
     && python -m pip install --no-cache-dir -r requirements.txt \
     # Docker cli, gsutil, gcloud, powershell, poetry tools installation
@@ -77,8 +71,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && npm install -g \
     && rm -rf /content \
     # install poetry plugin for oh my zsh 
-    && poetry completions zsh > $HOME/.oh-my-zsh/custom/plugins/poetry \
-    && apt-get purge -y --auto-remove ncurses-dev sqlite3 lzma bzip2 lsb-release
+    && poetry completions zsh > $HOME/.oh-my-zsh/custom/plugins/poetry
 
 
 # Default demisto-sdk help
