@@ -47,9 +47,10 @@ jobs:
   docker_build_arm:
     machine:
       image: ubuntu-2004:current
-      resource_class: arm.medium
+    resource_class: arm.medium
     steps:
       - checkout
+      - run: docker info
       # - run:
       #     name: Validate Approved Licenses File
       #     command: python -m jsonschema -i docker/approved_licenses.json docker/approved_licenses.schema.json
