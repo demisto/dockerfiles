@@ -50,12 +50,12 @@ jobs:
       resource_class: arm.medium
     steps:
       - checkout
-      - run:
-          name: Validate Approved Licenses File
-          command: python -m jsonschema -i docker/approved_licenses.json docker/approved_licenses.schema.json
-      - run:
-          name: Validate Dependabot Config
-          command: ./docker/verify_dependabot.sh
+      # - run:
+      #     name: Validate Approved Licenses File
+      #     command: python -m jsonschema -i docker/approved_licenses.json docker/approved_licenses.schema.json
+      # - run:
+      #     name: Validate Dependabot Config
+      #     command: ./docker/verify_dependabot.sh
       - add_ssh_keys:
           fingerprints:
             - 46:c2:72:91:9d:0e:2d:3c:93:d6:6c:12:31:df:8e:db
