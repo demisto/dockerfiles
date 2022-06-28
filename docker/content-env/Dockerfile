@@ -47,7 +47,6 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && curl -fsSL https://install.python-poetry.org | python3 - \
     && add-apt-repository "deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/ubuntu bionic stable" \
     && apt-get update && apt-get install google-cloud-sdk docker-ce-cli -y \
-    && snap install powershell --classic \
     && curl -fSSL https://pyenv.run | bash \
     && echo 'eval "$(pyenv init -)"' >> ~/.zshrc \
     && source ~/.zshrc \
