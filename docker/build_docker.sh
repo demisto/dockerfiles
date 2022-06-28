@@ -186,12 +186,13 @@ function docker_build {
     docker run -it --rm --privileged tonistiigi/binfmt --install all
     docker context create build
     docker buildx create --use "build" --name "build" --platform linux/amd64,linux/arm64/v8
-    docker buildx build -f "$tmp_dir/Dockerfile" . -t ${image_full_name} \
+    docker buildx build --platform linux/amd64,linux/arm64/v8 -f "$tmp_dir/Dockerfile" . -t ${image_full_name} \
         --label "org.opencontainers.image.authors=Demisto <containers@demisto.com>" \
         --label "org.opencontainers.image.version=${VERSION}" \
         --label "org.opencontainers.image.revision=${CIRCLE_SHA1}" \
         --push 
     rm -rf "$tmp_dir"
+    pip install requests
     ${DOCKER_SRC_DIR}/post_github_comment.py ${image_full_name}
     exit
     if [ ${del_requirements} = "yes" ]; then
