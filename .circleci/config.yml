@@ -40,7 +40,7 @@ jobs:
       - run:
           name: Build Ironbank Docker Images
           command: |
-            pipenv run ./ironbank/build_ironbank_docker.sh --python 3.9
+            pipenv run ./ironbank/build_ironbank_docker.sh
       - store_artifacts:
           path: artifacts
           destination: ironbank_docker_images
