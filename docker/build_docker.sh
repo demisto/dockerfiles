@@ -180,19 +180,12 @@ function docker_build {
         reason=$(prop 'deprecated_reason')
         echo "ENV DEPRECATED_REASON=\"$reason\"" >> "$tmp_dir/Dockerfile"
     fi
-    docker run -it --rm --privileged tonistiigi/binfmt --install all
-    docker context create build
-    docker buildx create --use "build" --name "build"
-    apt-add-repository ppa:tsuru/ppa
-    apt-get update
-    apt-get install crane
-    docker buildx build --platform linux/amd64,linux/arm64 -f "$tmp_dir/Dockerfile" . -t ${image_full_name} \
+    
+    docker build -f "$tmp_dir/Dockerfile" . -t ${image_full_name} \
         --label "org.opencontainers.image.authors=Demisto <containers@demisto.com>" \
         --label "org.opencontainers.image.version=${VERSION}" \
-        --label "org.opencontainers.image.revision=${CIRCLE_SHA1}" \
-        --output type=oci,dest=/${image_full_name}.tar
+        --label "org.opencontainers.image.revision=${CIRCLE_SHA1}"
     rm -rf "$tmp_dir"
-    exit
     if [ ${del_requirements} = "yes" ]; then
         rm requirements.txt
     fi
@@ -242,7 +235,7 @@ function docker_build {
         echo "using DOCKER_TRUST=${docker_trust} DOCKER_CONFIG=${DOCKER_CONFIG}"
     fi
     if docker_login; then
-        env DOCKER_CONTENT_TRUST=$docker_trust DOCKER_CONFIG="${DOCKER_CONFIG}" crane push /${image_full_name}.tar ${image_full_name}
+        env DOCKER_CONTENT_TRUST=$docker_trust DOCKER_CONFIG="${DOCKER_CONFIG}"  docker push ${image_full_name}
         echo "Done docker push for: ${image_full_name}"
         if [[ "$docker_trust" == "1" ]]; then
             commit_dockerfiles_trust
@@ -286,7 +279,7 @@ EOF
 
     if [ -n "$CR_REPO" ] && cr_login; then
         docker tag ${image_full_name} ${CR_REPO}/${image_full_name}
-        crane push /${image_full_name}.tar ${CR_REPO}/${image_full_name} > /dev/null
+        docker push ${CR_REPO}/${image_full_name} > /dev/null
         echo "Done docker push for cr: ${image_full_name}"
     else
         echo "Skipping docker push for cr"
