@@ -36,6 +36,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     libssl-dev \
     software-properties-common \
     apt-transport-https \
+    snapd \
     -y \
     && python -m pip install --no-cache-dir -r requirements.txt \
     # Docker cli, gsutil, gcloud, powershell, poetry tools installation
@@ -44,9 +45,9 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
     && curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
     && curl -fsSL https://install.python-poetry.org | python3 - \
-    && sh -c 'echo "deb [arch=$(dpkg --print-architecture)] https://packages.microsoft.com/repos/microsoft-debian-bullseye-prod bullseye main" > /etc/apt/sources.list.d/microsoft.list' \
     && add-apt-repository "deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/ubuntu bionic stable" \
-    && apt-get update && apt-get install google-cloud-sdk docker-ce-cli powershell -y \
+    && apt-get update && apt-get install google-cloud-sdk docker-ce-cli -y \
+    && snap install powershell --classic -y \
     && curl -fSSL https://pyenv.run | bash \
     && echo 'eval "$(pyenv init -)"' >> ~/.zshrc \
     && source ~/.zshrc \
