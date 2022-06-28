@@ -50,7 +50,7 @@ jobs:
     resource_class: arm.medium
     steps:
       - checkout
-      - run: docker info
+      - run: pip install pipenv
       # - run:
       #     name: Validate Approved Licenses File
       #     command: python -m jsonschema -i docker/approved_licenses.json docker/approved_licenses.schema.json
