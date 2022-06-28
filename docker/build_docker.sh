@@ -181,6 +181,7 @@ function docker_build {
         echo "ENV DEPRECATED_REASON=\"$reason\"" >> "$tmp_dir/Dockerfile"
     fi
     sign_setup
+    commit_dockerfiles_trust
     docker_login
     docker run -it --rm --privileged tonistiigi/binfmt --install all
     docker context create build
@@ -191,6 +192,7 @@ function docker_build {
         --label "org.opencontainers.image.revision=${CIRCLE_SHA1}" \
         --push 
     rm -rf "$tmp_dir"
+    ${DOCKER_SRC_DIR}/post_github_comment.py ${image_full_name}
     exit
     if [ ${del_requirements} = "yes" ]; then
         rm requirements.txt
