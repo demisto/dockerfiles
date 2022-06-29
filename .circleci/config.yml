@@ -50,8 +50,6 @@ jobs:
     machine:
       image: ubuntu-2004:current
     resource_class: arm.medium
-    environnement:
-      REVISION: << pipeline.number >>
     steps:
       - checkout
       - run: pip install pipenv jsonschema requests

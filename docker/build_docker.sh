@@ -3,8 +3,8 @@
 # exit on errors
 set -e
 
-REVISION=${REVISION:-`date +%s`}
-echo $REVISION
+REVISION=${CIRCLE_WORKFLOW_ID:-`date +%s`}
+echo $CIRCLE_WORKFLOW_ID
 CURRENT_DIR=`pwd`
 SCRIPT_DIR=$(dirname ${BASH_SOURCE})
 DOCKER_SRC_DIR=${SCRIPT_DIR}
