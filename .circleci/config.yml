@@ -2,6 +2,8 @@ jobs:
   docker_build:
     docker:
       - image: devdemisto/dockerbuild:1.0.0.25778
+    environnement:
+      REVISION: << pipeline.number >>
     steps:
       - checkout
       - run:
@@ -32,7 +34,7 @@ jobs:
       - run:
           name: Build Docker Images
           command: |
-            REVISION=<< pipeline.number >> ./docker/build_docker.sh
+            ./docker/build_docker.sh
           no_output_timeout: 60m
       - store_artifacts:
           path: artifacts
@@ -48,6 +50,8 @@ jobs:
     machine:
       image: ubuntu-2004:current
     resource_class: arm.medium
+    environnement:
+      REVISION: << pipeline.number >>
     steps:
       - checkout
       - run: pip install pipenv jsonschema requests
@@ -76,7 +80,7 @@ jobs:
       - run:
           name: Build Docker Images
           command: |
-            REVISION=<< pipeline.number >> ./docker/build_docker.sh
+            ./docker/build_docker.sh
           no_output_timeout: 60m
       - store_artifacts:
           path: artifacts
