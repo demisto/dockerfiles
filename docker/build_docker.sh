@@ -380,4 +380,4 @@ done
 docker manifest create devdemisto/content-env:latest \
     --amend devdemisto/content-env:amd64 \
     --amend devdemisto/content-env:arm64
-docker manifest push content-env:latest
+docker manifest push devdemisto/content-env:latest
