@@ -3,7 +3,7 @@
 # exit on errors
 set -e
 
-REVISION=${CIRCLE_BUILD_NUM:-`date +%s`}
+REVISION=${REVISION:-`date +%s`}
 CURRENT_DIR=`pwd`
 SCRIPT_DIR=$(dirname ${BASH_SOURCE})
 DOCKER_SRC_DIR=${SCRIPT_DIR}
