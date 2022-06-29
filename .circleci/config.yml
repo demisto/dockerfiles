@@ -32,7 +32,7 @@ jobs:
       - run:
           name: Build Docker Images
           command: |
-            REVISION=<< pipline.number >> ./docker/build_docker.sh
+            REVISION=<< pipeline.number >> ./docker/build_docker.sh
           no_output_timeout: 60m
       - store_artifacts:
           path: artifacts
@@ -76,7 +76,7 @@ jobs:
       - run:
           name: Build Docker Images
           command: |
-            REVISION=<< pipline.number >> ./docker/build_docker.sh
+            REVISION=<< pipeline.number >> ./docker/build_docker.sh
           no_output_timeout: 60m
       - store_artifacts:
           path: artifacts
