@@ -64,10 +64,8 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && git clone --depth 1 https://github.com/demisto/content.git \
     && cd content \
     && demisto-sdk --version \
+    && poetry config virtualenvs.create false \
     && poetry install \
-    && POETRY_VENV_PATH=$(poetry env info -p) \
-    && echo $POETRY_VENV_PATH \
-    && echo "export POETRY_VENV_PATH=$POETRY_VENV_PATH" >> ~/.zshrc \
     && npm install -g \
     && rm -rf /content \
     # install poetry plugin for oh my zsh 
