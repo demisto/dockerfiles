@@ -3,8 +3,8 @@
 # exit on errors
 set -e
 
-REVISION=${CIRCLE_WORKFLOW_ID:-`date +%s`}
-echo $CIRCLE_WORKFLOW_ID
+REVISION=$(dpkg --print-architecture)
+echo $REVISION
 CURRENT_DIR=`pwd`
 SCRIPT_DIR=$(dirname ${BASH_SOURCE})
 DOCKER_SRC_DIR=${SCRIPT_DIR}
@@ -376,3 +376,8 @@ for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | so
         echo ">>>>>>>>>>>>>>> `date`: Done docker build <<<<<<<<<<<<<"
     fi
 done
+
+docker manifest create devdemisto/content-env:latest \
+    --amend devdemisto/content-env:amd64 \
+    --amend devdemisto/content-env:arm64
+docker manifest push content-env:latest
