@@ -376,7 +376,7 @@ for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | so
         echo ">>>>>>>>>>>>>>> `date`: Done docker build <<<<<<<<<<<<<"
     fi
 done
-
+export DOCKER_CLI_EXPERIMENTAL=enabled
 docker manifest create devdemisto/content-env:latest \
     --amend devdemisto/content-env:amd64 \
     --amend devdemisto/content-env:arm64
