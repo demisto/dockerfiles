@@ -4,6 +4,7 @@
 set -e
 
 REVISION=${REVISION:-`date +%s`}
+echo $REVISION
 CURRENT_DIR=`pwd`
 SCRIPT_DIR=$(dirname ${BASH_SOURCE})
 DOCKER_SRC_DIR=${SCRIPT_DIR}
