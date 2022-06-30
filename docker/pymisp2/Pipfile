@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-pymisp = "2.4.135"
+pymisp = {version = "2.4.135", extras = ["email"]}
 
 [dev-packages]
 
