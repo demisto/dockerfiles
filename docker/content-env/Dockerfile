@@ -56,8 +56,6 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && pyenv update \
     && pyenv install $PYTHON_VERSION \
     && pyenv global $PYTHON_VERSION \
-    # install content dependencies
-    && python -m pip install --no-cache-dir -r requirements.txt \
     && git clone --depth 1 https://github.com/demisto/content.git \
     && cd content \
     && demisto-sdk --version \
