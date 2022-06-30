@@ -377,7 +377,7 @@ for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | so
     fi
 done
 export DOCKER_CLI_EXPERIMENTAL=enabled
-docker manifest create devdemisto/content-env:1.0.0.${CIRCLE_BUILD_NUMBER} \
+docker manifest create devdemisto/content-env:latest \
     --amend devdemisto/content-env:1.0.0.amd64 \
     --amend devdemisto/content-env:1.0.0.arm64
-docker manifest push devdemisto/content-env:1.0.0.${CIRCLE_BUILD_NUMBER}
+docker manifest push devdemisto/content-env:1.0.0.latest
