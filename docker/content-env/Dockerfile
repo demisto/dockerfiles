@@ -56,10 +56,12 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && pyenv update \
     && pyenv install $PYTHON_VERSION \
     && pyenv global $PYTHON_VERSION \
+    && source ~/.zshrc \
     && git clone --depth 1 https://github.com/demisto/content.git \
     && cd content \
     # use poetry just to install dependencies, without virtualenv
     && poetry config virtualenvs.create false \
+    && which python \
     && poetry install \
     # make sure demisto-sdk installed
     && demisto-sdk --version \
