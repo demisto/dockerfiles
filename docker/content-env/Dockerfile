@@ -5,8 +5,6 @@ ENV PATH /root/.pyenv/bin:/root/.local/bin:$PATH
 ENV PYENV_ROOT /root/.pyenv
 
 ARG PYTHON_VERSION 3.10.5
-# Python requirements
-ADD requirements.txt .
 
 # install zsh first
 RUN apt-get update && apt-get install -y zsh wget \
