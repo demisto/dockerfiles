@@ -58,9 +58,11 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && pyenv global $PYTHON_VERSION \
     && git clone --depth 1 https://github.com/demisto/content.git \
     && cd content \
-    && demisto-sdk --version \
+    # use poetry just to install dependencies, without virtualenv
     && poetry config virtualenvs.create false \
     && poetry install \
+    # make sure demisto-sdk installed
+    && demisto-sdk --version \
     && npm install -g \
     && rm -rf /content \
     # install poetry plugin for oh my zsh 
