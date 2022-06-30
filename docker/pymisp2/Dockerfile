@@ -5,4 +5,4 @@ COPY requirements.txt .
 
 RUN pip install --upgrade pip \
  && apk --update add --no-cache --virtual .build-dependencies python3-dev gcc linux-headers libc-dev libffi-dev\
- build-base wget git && pip install --no-cache-dir -r requirements.txt && pip uninstall extract-msg -y && apk del .build-dependencies
+ build-base wget git && pip install --no-cache-dir -r requirements.txt && pip uninstall extract-msg -y && pip uninstall pcodedmp -y && apk del .build-dependencies
