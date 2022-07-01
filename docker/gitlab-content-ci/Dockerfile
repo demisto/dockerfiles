@@ -30,6 +30,7 @@ RUN apt-get update  && apt-get upgrade -y \
     && gsutil --version \
     && docker --version \
     && ! kubectl version --output yaml \
+    && poetry --version \
     # Installing goenv
     && git clone https://github.com/syndbg/goenv.git ~/.goenv \
     && echo 'export GOENV_ROOT="$HOME/.goenv"' >> ~/.bashrc \

@@ -1,4 +1,4 @@
-# Last modified: Sun, 29 May 2022 11:04:54 +0000
+# Last modified: Thu, 16 Jun 2022 07:01:46 +0000
 FROM demisto/python3-deb:3.10.4.27798
 
 COPY requirements.txt .
@@ -49,3 +49,5 @@ RUN apt-get update && apt-get -t bullseye-backports install -y --no-install-reco
   curl \
   unzip \
 && rm -rf /var/lib/apt/lists/*
+
+ENV CHROME_EXE="/opt/google/chrome/google-chrome"
