@@ -234,32 +234,32 @@ function docker_build {
         docker_trust=1
         echo "using DOCKER_TRUST=${docker_trust} DOCKER_CONFIG=${DOCKER_CONFIG}"
     fi
-    if docker_login; then
-        env DOCKER_CONTENT_TRUST=$docker_trust DOCKER_CONFIG="${DOCKER_CONFIG}"  docker push ${image_full_name}
-        echo "Done docker push for: ${image_full_name}"
-        if [[ "$docker_trust" == "1" ]]; then
-            commit_dockerfiles_trust
-        fi
-        if ! ${DOCKER_SRC_DIR}/post_github_comment.py ${image_full_name}; then 
-            echo "Failed post_github_comment.py. Will stop build only if not on master"
-            if [ "$CIRCLE_BRANCH" == "master" ]; then
-                echo "Continuing as we are on master branch..."
-            else
-                echo "failing build!!"
-                exit 5
-            fi
-        fi
-    else
-        echo "Skipping docker push"
-        if [ -n "$CI" ]; then
-            echo "Creating artifact of docker image..."
-            ARTDIR="${DOCKER_SRC_DIR}/../artifacts"
-            mkdir -p "${ARTDIR}"
-            IMAGENAMESAVE=`echo ${image_full_name} | tr / _`.tar
-            IMAGESAVE=${ARTDIR}/$IMAGENAMESAVE
-            docker save -o "$IMAGESAVE" ${image_full_name}
-            gzip "$IMAGESAVE"
-            cat << EOF
+    # if docker_login; then
+    #     env DOCKER_CONTENT_TRUST=$docker_trust DOCKER_CONFIG="${DOCKER_CONFIG}"  docker push ${image_full_name}
+    #     echo "Done docker push for: ${image_full_name}"
+    #     if [[ "$docker_trust" == "1" ]]; then
+    #         commit_dockerfiles_trust
+    #     fi
+    #     if ! ${DOCKER_SRC_DIR}/post_github_comment.py ${image_full_name}; then 
+    #         echo "Failed post_github_comment.py. Will stop build only if not on master"
+    #         if [ "$CIRCLE_BRANCH" == "master" ]; then
+    #             echo "Continuing as we are on master branch..."
+    #         else
+    #             echo "failing build!!"
+    #             exit 5
+    #         fi
+    #     fi
+    # else
+    echo "Skipping docker push"
+    if [ -n "$CI" ]; then
+        echo "Creating artifact of docker image..."
+        ARTDIR="${DOCKER_SRC_DIR}/../artifacts"
+        mkdir -p "${ARTDIR}"
+        IMAGENAMESAVE=`echo ${image_full_name} | tr / _`.tar
+        IMAGESAVE=${ARTDIR}/$IMAGENAMESAVE
+        docker save -o "$IMAGESAVE" ${image_full_name}
+        gzip "$IMAGESAVE"
+        cat << EOF
 -------------------------
 
 Docker image [$image_full_name] has been saved as an artifact. It is available at the following link: 
