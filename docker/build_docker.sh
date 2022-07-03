@@ -278,7 +278,7 @@ curl -L "https://output.circle-artifacts.com/output/job/${CIRCLE_WORKFLOW_JOB_ID
 --------------------------
 EOF
         fi
-    fi
+    # fi
     
 
     if [ -n "$CR_REPO" ] && cr_login; then
