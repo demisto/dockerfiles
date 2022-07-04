@@ -63,8 +63,6 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && poetry --version \
     && pyenv --version \
     && pyenv update \
-    && pyenv install $PYTHON_VERSION \
-    && pyenv global $PYTHON_VERSION \
     && source ~/.zshrc \
     && git clone --depth 1 https://github.com/demisto/content.git \
     && cd content \
