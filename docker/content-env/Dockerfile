@@ -1,5 +1,7 @@
 FROM python:3.10.5-bullseye
 
+ENV PATH /root/.local/bin:$PATH
+
 # install zsh first
 RUN apt-get update && apt-get install -y zsh wget \
     && sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.2/zsh-in-docker.sh)" -- \
