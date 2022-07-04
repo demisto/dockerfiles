@@ -39,7 +39,6 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     libncursesw5-dev \
     libreadline-dev \
     libsqlite3-dev \
-    libssl-dev \
     tk-dev \
     xz-utils \
     zlib1g-dev \
