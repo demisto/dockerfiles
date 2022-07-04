@@ -3,7 +3,7 @@
 # exit on errors
 set -e
 
-REVISION=$(dpkg --print-architecture)
+REVISION=$(dpkg --print-architecture)-dev
 echo $REVISION
 CURRENT_DIR=`pwd`
 SCRIPT_DIR=$(dirname ${BASH_SOURCE})
