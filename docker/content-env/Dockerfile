@@ -26,6 +26,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     build-essential \
     python3-dev \
     python2-dev \
+    python-dev \
     libffi-dev \
     libssl-dev \
     software-properties-common \
@@ -42,6 +43,12 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     tk-dev \
     xz-utils \
     zlib1g-dev \
+    libpq-dev \
+    python-dev \
+    libxml2-dev \
+    libxslt1-dev \
+    libldap2-dev \ 
+    libsasl2-dev \
     -y \
     # Docker cli, gsutil, gcloud, poetry tools installation
     && echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" |  tee -a /etc/apt/sources.list.d/google-cloud-sdk.list \
