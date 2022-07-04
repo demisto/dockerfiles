@@ -44,7 +44,6 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     xz-utils \
     zlib1g-dev \
     libpq-dev \
-    python-dev \
     libxml2-dev \
     libxslt1-dev \
     libldap2-dev \ 
