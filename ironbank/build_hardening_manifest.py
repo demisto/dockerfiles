@@ -67,8 +67,8 @@ class HardeningManifest:
         self.labels = {
             HardeningManifestLabels.TITLE: HardeningManifestLabels.BASE_TITLE.format(self.docker_image_name),
             HardeningManifestLabels.DESCRIPTION: HardeningManifestLabels.BASE_DESCRIPTION.format(self.docker_image_name),
-            HardeningManifestLabels.LICENSES: ' ',
-            HardeningManifestLabels.URL: ' ',
+            HardeningManifestLabels.LICENSES: 'The MIT License (MIT)',
+            HardeningManifestLabels.URL: 'https://www.paloaltonetworks.com/cortex/cortex-xsoar',
             HardeningManifestLabels.VENDOR: HardeningManifestLabels.DEMISTO,
             HardeningManifestLabels.VERSION: '1.0',
             HardeningManifestLabels.TYPE: HardeningManifestLabels.OPEN_SOURCE,
