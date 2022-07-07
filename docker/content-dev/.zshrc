@@ -26,8 +26,6 @@ POWERLEVEL9K_STATUS_CROSS=true
 export PYENV_ROOT="$HOME/.pyenv"
 command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
-export PYTHONPATH=$(printf %s:  /workspaces/content/Packs/ApiModules/Scripts/*):$PYTHONPATH
-export MYPYPATH=$(printf %s:  /workspaces/content/Packs/ApiModules/Scripts/*):$MYPYPATH
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
