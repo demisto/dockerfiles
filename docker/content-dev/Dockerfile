@@ -2,6 +2,8 @@ FROM python:3.10.5-bullseye
 
 ENV PATH /root/.local/bin:$PATH
 
+ADD .p10k.zsh /root/.p10k.zsh
+
 # install zsh first
 RUN apt-get update && apt-get install -y zsh wget \
     && sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.2/zsh-in-docker.sh)" -- \
@@ -9,9 +11,7 @@ RUN apt-get update && apt-get install -y zsh wget \
     -p https://github.com/zsh-users/zsh-completions \
     -p https://github.com/zsh-users/zsh-syntax-highlighting \
     -p poetry \
-    -p git \
-    -a "POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir)"
-
+    -p git
 
 SHELL [ "/bin/zsh", "-c" ]
 # All content dependencies preinstalled
