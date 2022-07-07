@@ -378,6 +378,6 @@ for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | so
 done
 export DOCKER_CLI_EXPERIMENTAL=enabled
 docker manifest create devdemisto/content-dev:${CIRCLE_BUILD_NUM} \
-    --amend devdemisto/content-dev:1.0.0.amd64 \
-    --amend devdemisto/content-dev:1.0.0.arm64
+    --amend devdemisto/content-dev:1.0.0.amd64-dev \
+    --amend devdemisto/content-dev:1.0.0.arm64-dev
 docker manifest push devdemisto/content-dev:${CIRCLE_BUILD_NUM}
