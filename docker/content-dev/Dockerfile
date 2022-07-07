@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y zsh wget \
     -p https://github.com/zsh-users/zsh-syntax-highlighting \
     -p poetry \
     -p git \
-    -a POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir)
+    -a "POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir)"
 
 
 SHELL [ "/bin/zsh", "-c" ]
