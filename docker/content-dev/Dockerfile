@@ -7,11 +7,10 @@ RUN apt-get update && apt-get install -y zsh wget \
     && sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.2/zsh-in-docker.sh)" -- \
     -p https://github.com/zsh-users/zsh-autosuggestions \
     -p https://github.com/zsh-users/zsh-completions \
-    -p https://github.com/zsh-users/zsh-syntax-highlighting \
-    -p poetry \
-    -p git
+    -p https://github.com/zsh-users/zsh-syntax-highlighting
 
 ADD .p10k.zsh /root/.p10k.zsh
+ADD .zshrc /root/.zshrc
 
 SHELL [ "/bin/zsh", "-c" ]
 # All content dependencies preinstalled
@@ -60,9 +59,6 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && add-apt-repository "deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/ubuntu bionic stable" \
     && apt-get update && apt-get install google-cloud-sdk docker-ce-cli -y \
     && curl -fSSL https://pyenv.run | bash \
-    && echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc \
-    && echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc \
-    && echo 'eval "$(pyenv init -)"' >> ~/.zshrc \
     && source ~/.zshrc \
     && python --version \
     && gcloud --version \
