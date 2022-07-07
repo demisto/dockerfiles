@@ -754,10 +754,6 @@ updates:
     schedule:
      interval: daily
   - package-ecosystem: pip
-    directory: /docker/pycountry
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
     directory: /docker/exodusintelligence
     schedule:
      interval: daily
@@ -765,3 +761,8 @@ updates:
     directory: /docker/xsoar-tools-hf
     schedule:
      interval: daily
+  - package-ecosystem: pip
+    directory: /docker/armorblox
+    schedule:
+      interval: daily
+      
