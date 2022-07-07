@@ -8,7 +8,6 @@ RUN apt-get update && apt-get install -y zsh wget \
     -p https://github.com/zsh-users/zsh-autosuggestions \
     -p https://github.com/zsh-users/zsh-completions \
     -p https://github.com/zsh-users/zsh-syntax-highlighting \
-    -p git \
     -p poetry
 
 SHELL [ "/bin/zsh", "-c" ]
