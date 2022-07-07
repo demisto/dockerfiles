@@ -8,7 +8,9 @@ RUN apt-get update && apt-get install -y zsh wget \
     -p https://github.com/zsh-users/zsh-autosuggestions \
     -p https://github.com/zsh-users/zsh-completions \
     -p https://github.com/zsh-users/zsh-syntax-highlighting \
-    -p poetry
+    -p poetry \
+    -a POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir)
+
 
 SHELL [ "/bin/zsh", "-c" ]
 # All content dependencies preinstalled
