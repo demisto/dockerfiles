@@ -159,9 +159,14 @@ function docker_build {
             return 1
         fi
         pipenv --rm || echo "Proceeding. It is ok that no virtualenv is available to remove"
-        PIPENV_YES=yes pipenv lock -r --no-header> requirements.txt
+        pipenv install --deploy # fails if lock is outdated
+        PIPENV_YES=yes pipenv run pip freeze > requirements.txt
         echo "Pipfile lock generated requirements.txt: "
+        echo "############ REQUIREMENTS.TXT ###########"
         cat requirements.txt
+        echo "##########################################"
+        [ ! -f requirements.txt ] && echo "WARNING: requirements.txt does not exist, this is ok if python usage is not intended."
+        [ ! -s requirements.txt ] && echo "WARNING: requirements.txt is empty"
         # del_requirements=yes
     fi
 
@@ -258,12 +263,12 @@ function docker_build {
 -------------------------
 
 Docker image [$image_full_name] has been saved as an artifact. It is available at the following link: 
-https://${REVISION}-161347705-gh.circle-artifacts.com/0/docker_images/$IMAGENAMESAVE.gz
+https://output.circle-artifacts.com/output/job/${CIRCLE_WORKFLOW_JOB_ID}/artifacts/0/docker_images/$IMAGENAMESAVE.gz
 
 Load it locally into docker by running:
 
 \`\`\`
-curl -L "https://${REVISION}-161347705-gh.circle-artifacts.com/0/docker_images/$IMAGENAMESAVE.gz" | gunzip | docker load
+curl -L "https://output.circle-artifacts.com/output/job/${CIRCLE_WORKFLOW_JOB_ID}/artifacts/0/docker_images/$IMAGENAMESAVE.gz" | gunzip | docker load
 \`\`\`
 
 --------------------------
