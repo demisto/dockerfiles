@@ -29,6 +29,7 @@ RUN apt-get update  && apt-get upgrade -y \
     && wget -O - https://debian.neo4j.com/neotechnology.gpg.key | apt-key add - \
     && echo 'deb https://debian.neo4j.com stable latest' | tee -a /etc/apt/sources.list.d/neo4j.list \
     && apt-get update &&  apt-get install google-cloud-sdk docker-ce-cli kubectl openjdk-11-jre neo4j -y \
+    && wget -O /var/lib/neo4j/plugins https://github.com/neo4j-contrib/neo4j-apoc-procedures/releases/download/4.1.0.0/apoc-4.1.0.0-all.jar \
     && gcloud --version \
     && gsutil --version \
     && docker --version \
