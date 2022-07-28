@@ -27,7 +27,6 @@ RUN apt-get update  && apt-get upgrade -y \
     && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" \
     && sudo curl -L https://github.com/docker/compose/releases/download/2.7.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose \
     && chmod +x /usr/local/bin/docker-compose \
-    && mv docker-compose-linux-x86_64 /usr/local/bin/docker-compose \
     && apt-get update &&  apt-get install google-cloud-sdk docker-ce-cli kubectl -y \
     && gcloud --version \
     && gsutil --version \
