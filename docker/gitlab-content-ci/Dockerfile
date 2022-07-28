@@ -25,12 +25,13 @@ RUN apt-get update  && apt-get upgrade -y \
     && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - \
     && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
     && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" \
-    && sudo curl -L https://github.com/docker/compose/releases/download/2.7.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose \
+    && curl -L https://github.com/docker/compose/releases/download/v2.7.0/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose \
     && chmod +x /usr/local/bin/docker-compose \
     && apt-get update &&  apt-get install google-cloud-sdk docker-ce-cli kubectl -y \
     && gcloud --version \
     && gsutil --version \
     && docker --version \
+    && docker-compose --version \
     && ! kubectl version --output yaml \
     && poetry --version \
     # Installing goenv
