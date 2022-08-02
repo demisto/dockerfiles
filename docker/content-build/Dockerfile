@@ -1,6 +1,7 @@
 FROM cimg/python:3.10.5-node
 
-RUN sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 6494C6D6997C215E \
+RUN sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 648ACFD622F3D138 \
+  && sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 0E98404D386FA1D9 \ 
   && sudo apt-get update && \
   sudo apt-get install -y --no-install-recommends libxml2-dev libxslt1-dev zlib1g-dev jq \
   make cowsay build-essential libssl-dev libbz2-dev \
