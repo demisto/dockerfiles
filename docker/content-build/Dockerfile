@@ -11,9 +11,9 @@ RUN sudo apt-get update && sudo apt-get install apt-transport-https ca-certifica
   && echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list \
   && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - \
   # install neo4j
-  && sudo echo "deb http://httpredir.debian.org/debian stretch-backports main" | sudo tee -a /etc/apt/sources.list.d/stretch-backports.list \
-  && sudo wget -O - https://debian.neo4j.com/neotechnology.gpg.key | sudo apt-key add - \
-  && sudo echo 'deb https://debian.neo4j.com stable latest' | sudo tee -a /etc/apt/sources.list.d/neo4j.list \
+  && echo "deb http://httpredir.debian.org/debian stretch-backports main" | sudo tee -a /etc/apt/sources.list.d/stretch-backports.list \
+  && wget -O - https://debian.neo4j.com/neotechnology.gpg.key | sudo apt-key add - \
+  && echo 'deb https://debian.neo4j.com stable latest' | sudo tee -a /etc/apt/sources.list.d/neo4j.list \
   && sudo apt-get update && sudo apt-get install google-cloud-sdk kubectl openjdk-11-jre neo4j \
   && gcloud --version \
   && gsutil --version  \
