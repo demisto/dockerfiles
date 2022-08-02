@@ -33,6 +33,8 @@ RUN apt-get update  && apt-get upgrade -y \
     && gcloud --version \
     && gsutil --version \
     && docker --version \
+    && neo4j --version \
+    && neo4j-admin --version \
     && ! kubectl version --output yaml \
     && poetry --version \
     # Installing goenv

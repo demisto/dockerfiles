@@ -1,6 +1,7 @@
 FROM cimg/python:3.10.5-node
 
-RUN sudo apt-get update && \
+RUN sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 6494C6D6997C215E \
+  && sudo apt-get update && \
   sudo apt-get install -y --no-install-recommends libxml2-dev libxslt1-dev zlib1g-dev jq \
   make cowsay build-essential libssl-dev libbz2-dev \
   libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
@@ -17,4 +18,6 @@ RUN sudo apt-get update && sudo apt-get install apt-transport-https ca-certifica
   && sudo apt-get update && sudo apt-get install google-cloud-sdk kubectl openjdk-11-jre neo4j \
   && gcloud --version \
   && gsutil --version  \
-  && poetry --version
+  && poetry --version \
+  && neo4j --version \
+  && neo4j-admin --version
