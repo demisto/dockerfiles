@@ -26,10 +26,10 @@ RUN apt-get update  && apt-get upgrade -y \
     && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
     && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" \
     && echo "deb http://httpredir.debian.org/debian stretch-backports main" | tee -a /etc/apt/sources.list.d/stretch-backports.list \
+    # install neo4j
     && wget -O - https://debian.neo4j.com/neotechnology.gpg.key | apt-key add - \
     && echo 'deb https://debian.neo4j.com stable latest' | tee -a /etc/apt/sources.list.d/neo4j.list \
-    && apt-get update &&  apt-get install google-cloud-sdk docker-ce-cli kubectl openjdk-11-jre neo4j -y \
-    && wget -O /var/lib/neo4j/plugins/apoc-4.1.0.0-all.jar https://github.com/neo4j-contrib/neo4j-apoc-procedures/releases/download/4.1.0.0/apoc-4.1.0.0-all.jar \
+    && apt-get update && apt-get install google-cloud-sdk docker-ce-cli kubectl openjdk-11-jre neo4j -y \
     && gcloud --version \
     && gsutil --version \
     && docker --version \
