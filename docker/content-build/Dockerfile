@@ -15,7 +15,7 @@ RUN sudo apt-get update && sudo apt-get install apt-transport-https ca-certifica
   # install neo4j
   && echo "deb http://httpredir.debian.org/debian stretch-backports main" | sudo tee -a /etc/apt/sources.list.d/stretch-backports.list \
   && wget -O - https://debian.neo4j.com/neotechnology.gpg.key | sudo apt-key add - \
-  && wget -O /var/lib/neo4j/plugins/apoc-4.1.0.0-all.jar https://github.com/neo4j-contrib/neo4j-apoc-procedures/releases/download/4.1.0.0/apoc-4.1.0.0-all.jar \
+  && wget -O /var/lib/neo4j/plugins/apoc-4.4.0.8-all.jar https://github.com/neo4j-contrib/neo4j-apoc-procedures/releases/download/4.4.0.8/apoc-4.4.0.8-all.jar \
   && echo 'deb https://debian.neo4j.com stable latest' | sudo tee -a /etc/apt/sources.list.d/neo4j.list \
   && sudo apt-get update && sudo apt-get install google-cloud-sdk kubectl openjdk-11-jre neo4j \
   && gcloud --version \
