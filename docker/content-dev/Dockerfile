@@ -13,7 +13,7 @@ ADD .p10k.zsh /root/.p10k.zsh
 ADD .zshrc /root/.zshrc
 
 SHELL [ "/bin/zsh", "-c" ]
-# All content dependencies preinstalled
+
 RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get install \
     git \ 
     gcc \
@@ -59,6 +59,11 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && add-apt-repository "deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/ubuntu bionic stable" \
     && apt-get update && apt-get install google-cloud-sdk docker-ce-cli -y \
     && curl -fSSL https://pyenv.run | bash \
+    && pip install pipx \
+    && pipx ensurepath \
+    && source ~/.zshrc \
+    && pipx install demisto-sdk \
+    && demisto-sdk --version \
     && source ~/.zshrc \
     && python --version \
     && gcloud --version \
@@ -68,16 +73,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && pyenv --version \
     && pyenv update \
     && source ~/.zshrc \
-    && git clone --depth 1 https://github.com/demisto/content.git \
-    && cd content \
-    # use poetry just to install dependencies, without virtualenv
-    && poetry config virtualenvs.create false \
-    && which python \
-    && poetry install \
-    # make sure demisto-sdk installed
-    && demisto-sdk --version \
-    && npm install -g \
-    && rm -rf /content \
+    && npm install -g jsdoc-to-markdown@5.0.3 \
     # install poetry plugin for oh my zsh 
     && poetry completions zsh > $HOME/.oh-my-zsh/custom/plugins/poetry
 
