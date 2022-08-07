@@ -32,7 +32,8 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && pipx install demisto-sdk --force \
     && npm install -g jsdoc-to-markdown@5.0.3 \
     && cd content \
-    && npm install -g
+    && npm install -g \
+    && demisto-sdk --version
 
 # Default demisto-sdk help
 CMD ["demisto-sdk", "--help"]
