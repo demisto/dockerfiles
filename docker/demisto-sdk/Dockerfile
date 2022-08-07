@@ -28,7 +28,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     # install demisto-sdk and npm dependency
     && pip install pipx --no-cache-dir \
     && pipx ensurepath \
-    && source ~/.bashrc \
+    && . ~/.bashrc \
     && pipx install demisto-sdk --force \
     && npm install -g jsdoc-to-markdown@5.0.3 \ 
     && npm install -g
