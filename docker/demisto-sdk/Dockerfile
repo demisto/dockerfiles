@@ -26,7 +26,10 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null \
     && apt-get update && apt-get install docker-ce-cli -y \
     # install demisto-sdk and npm dependency
-    && pip install -r requirements.txt --no-cache-dir \
+    && pip install pipx --no-cache-dir \
+    && pipx ensurepath \
+    && source ~/.bashrc \
+    && pipx install demisto-sdk --force \
     && npm install -g jsdoc-to-markdown@5.0.3 \ 
     && npm install -g
 
