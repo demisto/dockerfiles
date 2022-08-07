@@ -1,7 +1,7 @@
 FROM python:3.10.6-bullseye
 
-ADD https://raw.githubusercontent.com/demisto/demisto-sdk/master/package.json .
-ADD https://raw.githubusercontent.com/demisto/demisto-sdk/master/package-lock.json .
+ADD https://raw.githubusercontent.com/demisto/content/master/package.json /content/
+ADD https://raw.githubusercontent.com/demisto/content/master/package-lock.json /content/
 
 # All content dependencies preinstalled
 RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get install \
@@ -30,8 +30,8 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && pipx ensurepath \
     && . ~/.bashrc \
     && pipx install demisto-sdk --force \
-    && npm cache clean --force \ 
-    && npm install -g jsdoc-to-markdown@5.0.3 \ 
+    && npm install -g jsdoc-to-markdown@5.0.3 \
+    && cd content \
     && npm install -g
 
 # Default demisto-sdk help
