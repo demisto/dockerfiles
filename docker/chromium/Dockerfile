@@ -3,7 +3,7 @@ FROM demisto/python3-deb:3.10.5.31873
 
 COPY requirements.txt .
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
   python3-dev \
   wget \
   libxss1 \
@@ -36,6 +36,7 @@ RUN apt-get update && apt-get -t bullseye-backports install -y --no-install-reco
 && apt-get update && apt-get install -y --no-install-recommends \
   curl \
   unzip \
+  tesseract-ocr \
 && curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
 && echo "deb [arch=amd64]  http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
 && apt-get -y update && apt-get install -y google-chrome-stable \
