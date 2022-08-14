@@ -37,4 +37,4 @@ RUN python get_build_artifacts.py --project sane-reports --branch master --filte
     && mv sane-report sane-report.tar && tar -xvf sane-report.tar && rm -f sane-report.tar
 
 # Update permissions and ownership on /app dir
-RUN chown -R root:demisto /app/ && chmod 775 /app/ && chmod 775 /app/dist
+RUN chown -R root:demisto /app/ && chmod 777 /app/ && chmod 775 /app/dist
