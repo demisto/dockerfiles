@@ -1,4 +1,4 @@
-# Last modified: Wed, 06 Jul 2022 18:05:52 +0000
+# Last modified: Sun, 14 Aug 2022 09:03:59 +0000
 FROM demisto/python3-deb:3.10.5.31873
 
 COPY requirements.txt .
