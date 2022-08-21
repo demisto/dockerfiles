@@ -1,4 +1,3 @@
-from re import I
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException, InvalidArgumentException
 from PyPDF2 import PdfFileReader
