@@ -1,3 +1,4 @@
+from re import I
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException, InvalidArgumentException
 from PyPDF2 import PdfFileReader
@@ -7,6 +8,7 @@ from PIL import Image
 import sys
 import base64
 import subprocess
+from bs4 import BeautifulSoup
 
 # verify the google-chrome and chromedriver have the same version (exluding patch level)
 chrome_version = subprocess.check_output(["google-chrome", "--version"], text=True).split()[2]
