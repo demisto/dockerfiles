@@ -8,3 +8,4 @@ RUN apk --update add --no-cache --virtual .build-dependencies \
   wget \
   git \
 && pip install --no-cache-dir -r requirements.txt
+RUN pip install git+https://github.com/AccessDataOps/FTK-API-SDK.git@AccessDataV2
