@@ -1,7 +1,15 @@
 FROM alpine:3.12.3 as files-src
 RUN mkdir /ml
 COPY ./encrypted_model.b /ml/encrypted_model.b
-RUN chmod -R 775 /ml
+
+COPY ./distilledbert-base-uncased /distilledbert-base-uncased
+RUN cat /distilledbert-base-uncased/aa.onnx /distilledbert-base-uncased/ab.onnx /distilledbert-base-uncased/ac.onnx /distilledbert-base-uncased/ad.onnx > /ml/distilbert-base-uncased.onnx
+RUN rm -r /distilledbert-base-uncased
+
+COPY ./distilled_bert_base_uncased_tokenizer.zip /distilled_bert_base_uncased_tokenizer.zip
+RUN unzip /distilled_bert_base_uncased_tokenizer.zip -d /ml \
+  && rm /distilled_bert_base_uncased_tokenizer.zip \
+  && chmod -R 775 /ml
 
 FROM demisto/python3-deb:3.9.6.22912
 
