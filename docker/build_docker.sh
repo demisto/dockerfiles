@@ -174,6 +174,9 @@ function docker_build {
     cp Dockerfile "$tmp_dir/Dockerfile"
     echo "" >> "$tmp_dir/Dockerfile"
     echo "ENV DOCKER_IMAGE=$image_full_name" >> "$tmp_dir/Dockerfile"
+    if [ Ironbank]
+        echo "ENV DOCKER_IMAGE_IRONBANK=$image_full_name" >> "$tmp_dir/Dockerfile.ironbank"
+        echo "ENV DOCKER_IMAGE=$image_full_name" >> "$tmp_dir/Dockerfile.ironbank    qq qq"
     
     if [[ "$(prop 'deprecated')" ]]; then
         echo "ENV DEPRECATED_IMAGE=true" >> "$tmp_dir/Dockerfile"
