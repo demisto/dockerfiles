@@ -4,15 +4,13 @@ COPY requirements.txt .
 
 ENV NODE_VERSION 14.14.0
 ENV NVM_DIR /root/.nvm
-ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
+ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$HOME/.local/bin:$PATH
 
 # Currently sh is linked to dash, linking it to /bin/bash instead.
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
 RUN apt-get update  && apt-get upgrade -y \
     && apt-get install -y curl jq unzip openssh-client gcc libffi-dev libssl-dev git zip cowsay netcat wget python2 python3-pip software-properties-common \
-    # Install requirements
-    && pip install --no-cache-dir -r requirements.txt \
     # Installing nvm, npm and node.js
     && curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash \
     && . $NVM_DIR/nvm.sh \
@@ -26,6 +24,7 @@ RUN apt-get update  && apt-get upgrade -y \
     && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
     && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" \
     && apt-get update &&  apt-get install google-cloud-sdk docker-ce-cli kubectl -y \
+    && curl -sSL https://install.python-poetry.org | python3 - \
     && gcloud --version \
     && gsutil --version \
     && docker --version \
