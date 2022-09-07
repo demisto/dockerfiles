@@ -27,6 +27,7 @@ RUN apt-get update  && apt-get upgrade -y \
     && source ~/.bashrc \
     && gsutil --version \
     && docker --version \
+    && gcloud --version \
     && ! kubectl version --output yaml \
     && poetry --version \
     # Installing goenv
