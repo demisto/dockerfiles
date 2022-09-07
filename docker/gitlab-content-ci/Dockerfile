@@ -2,7 +2,7 @@ FROM demisto/python3-deb:3.10.6.33421
 
 ENV NODE_VERSION 14.14.0
 ENV NVM_DIR /root/.nvm
-ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$HOME/.local/bin:$PATH
+ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:/root/.local/bin:$PATH
 
 # Currently sh is linked to dash, linking it to /bin/bash instead.
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
@@ -23,7 +23,6 @@ RUN apt-get update  && apt-get upgrade -y \
     && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" \
     && apt-get update &&  apt-get install google-cloud-sdk docker-ce-cli kubectl -y \
     && curl -sSL https://install.python-poetry.org | python3 - \
-    && echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc \
     && source ~/.bashrc \
     && gsutil --version \
     && docker --version \
