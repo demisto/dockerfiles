@@ -52,4 +52,7 @@ RUN apt-get update && apt-get -t bullseye-backports install -y --no-install-reco
   unzip \
 && rm -rf /var/lib/apt/lists/*
 
+# set setuid on tigervnc
+RUN chmod u+s /usr/bin/Xtigervnc
+
 ENV CHROME_EXE="/opt/google/chrome/google-chrome"
