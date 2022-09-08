@@ -1,5 +1,5 @@
-# Last modified: Thu, 21 jul 2022 12:00:00 +0200
-FROM demisto/python3-deb:3.9.6.22912
+# Last modified: Thu, 8 Sep 2022 12:00:00 +0200
+FROM demisto/python3-deb:3.10.6.33421
 
 WORKDIR "/app"
 
