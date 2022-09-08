@@ -20,7 +20,7 @@ RUN apt-get update -y -q && \
     libxext6 libxfixes3 libxi6 libxrandr2 \
     libxrender1 libxss1 libxtst6 \
     ca-certificates fonts-liberation \
-    libappindicator1 libnss3 lsb-release \
+    libnss3 lsb-release \
     xdg-utils wget locales \
     fonts-arphic-ukai fonts-arphic-uming \
     fonts-ipafont-mincho fonts-ipafont-gothic \
