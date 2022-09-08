@@ -5,7 +5,7 @@ FROM mcr.microsoft.com/powershell:7.2.2-ubuntu-20.04-20220318
 RUN apt-get update -y
 RUN sh -c "yes | pwsh -Command 'Install-Module -Name PSWSMan'"
 RUN pwsh -Command 'Install-WSMan'
-RUN sh -c "yes | pwsh -Command 'Install-Module -Name ExchangeOnlineManagement -RequiredVersion 2.0.5'"
+RUN sh -c "yes | pwsh -Command 'Install-Module -Name ExchangeOnlineManagement -RequiredVersion 2.0.5 -Scope AllUsers'"
 
 RUN apt update && apt install netbase -y
 # Upgrade all packages to latest
