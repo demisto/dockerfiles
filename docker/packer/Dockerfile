@@ -4,6 +4,10 @@ RUN apt-get update
 
 RUN apt-get install curl jq unzip openssh-client -y
 
+COPY requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
 RUN curl -so packer.zip $(curl -sk https://www.packer.io/downloads |grep -oE https://releases\.hashicorp\.com/packer/\[0-9.\]\{5\}/packer_\[0-9.\]\{5\}_linux_amd64\.zip)
 
 RUN unzip packer.zip
@@ -11,10 +15,6 @@ RUN unzip packer.zip
 RUN mv packer /usr/bin/
 
 RUN rm -f packer.zip
-
-COPY requirements.txt .
-
-RUN pip install --no-cache-dir -r requirements.txt
 
 # Instaling the gsutil
 RUN  apt-get update -y \
