@@ -124,9 +124,9 @@ def update_internal_base_dockerfile(git_repo: Repo) -> None:
         latest_tag_last_updated = latest_tag['last_updated']
         outdated_files = [file for file in dependency_list if
                           is_docker_file_outdated(file, latest_tag_name, latest_tag_last_updated)]
-        for index, batch_slice in enumerate(batch(outdated_files, 25)):
-            branch_name = fr"autoupdate/{base_image}_{index}"
-            update_and_push_dockerfiles(git_repo, branch_name, batch_slice, latest_tag_name)
+        for file in outdated_files:
+            branch_name = fr"autoupdate/{base_image}_{latest_tag_name}_{file['path'].split('/')[1]}"
+            update_and_push_dockerfiles(git_repo, branch_name, [file], latest_tag_name)
 
 
 def update_and_push_dockerfiles(git_repo: Repo, branch_name: str, files: List[Dict], latest_tag_name: str) -> None:
