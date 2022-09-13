@@ -131,7 +131,8 @@ function commit_dockerfiles_trust {
 # build docker. 
 # Param $1: docker dir with all relevant files
 function docker_build {
-    DOCKER_ORG=${DOCKER_ORG:-devdemisto}    
+    DOCKER_ORG=${DOCKER_ORG:-devdemisto}
+    DOCKER_ORG_DEMISTO=demisto
     image_name=$(basename $1)
     echo "Starting build for dir: $1, image: ${image_name}, pwd: $(pwd)"
     cd $1        
@@ -139,10 +140,18 @@ function docker_build {
         echo "== skipping image [${image_name}] as it is marked devonly =="
         return 0
     fi
+    
     VERSION=$(prop 'version' '1.0.0')    
     VERSION="${VERSION}.${REVISION}"
     echo "${image_name}: using version: ${VERSION}"
     image_full_name="${DOCKER_ORG}/${image_name}:${VERSION}"
+
+    if [[ "$(prop 'deprecated')" ]]; then
+        echo "${DOCKER_ORG_DEMISTO}/${image_name} image is deprected, checking whether the image is listed in the deprecated list or not"
+        reason=$(prop 'deprecated_reason')        
+        ${PY3CMD} "${DOCKER_SRC_DIR}"/add_image_to_deprecated_or_internal_list.py "${DOCKER_ORG_DEMISTO}"/"${image_name}" "${reason}" "${DOCKER_SRC_DIR}"/deprecated_images.json
+    fi
+
     del_requirements=no
     if [ -f "Pipfile" -a ! -f "requirements.txt" ]; then
         if [ ! -f "Pipfile.lock" ]; then
@@ -150,15 +159,28 @@ function docker_build {
             return 1
         fi
         pipenv --rm || echo "Proceeding. It is ok that no virtualenv is available to remove"
-        PIPENV_YES=yes pipenv lock -r --no-header> requirements.txt
+        pipenv install --deploy # fails if lock is outdated
+        PIPENV_YES=yes pipenv run pip freeze > requirements.txt
         echo "Pipfile lock generated requirements.txt: "
+        echo "############ REQUIREMENTS.TXT ###########"
         cat requirements.txt
+        echo "##########################################"
+        [ ! -f requirements.txt ] && echo "WARNING: requirements.txt does not exist, this is ok if python usage is not intended."
+        [ ! -s requirements.txt ] && echo "WARNING: requirements.txt is empty"
         # del_requirements=yes
     fi
+
     tmp_dir=$(mktemp -d)
     cp Dockerfile "$tmp_dir/Dockerfile"
     echo "" >> "$tmp_dir/Dockerfile"
     echo "ENV DOCKER_IMAGE=$image_full_name" >> "$tmp_dir/Dockerfile"
+    
+    if [[ "$(prop 'deprecated')" ]]; then
+        echo "ENV DEPRECATED_IMAGE=true" >> "$tmp_dir/Dockerfile"
+        reason=$(prop 'deprecated_reason')
+        echo "ENV DEPRECATED_REASON=\"$reason\"" >> "$tmp_dir/Dockerfile"
+    fi
+    
     docker build -f "$tmp_dir/Dockerfile" . -t ${image_full_name} \
         --label "org.opencontainers.image.authors=Demisto <containers@demisto.com>" \
         --label "org.opencontainers.image.version=${VERSION}" \
@@ -184,6 +206,7 @@ function docker_build {
             return 1
         fi
     fi
+    
     if [[ "$(prop 'devonly')" ]]; then
         echo "Skipping license verification for devonly image"
     else
@@ -240,12 +263,12 @@ function docker_build {
 -------------------------
 
 Docker image [$image_full_name] has been saved as an artifact. It is available at the following link: 
-https://${REVISION}-161347705-gh.circle-artifacts.com/0/docker_images/$IMAGENAMESAVE.gz
+https://output.circle-artifacts.com/output/job/${CIRCLE_WORKFLOW_JOB_ID}/artifacts/0/docker_images/$IMAGENAMESAVE.gz
 
 Load it locally into docker by running:
 
 \`\`\`
-curl -L "https://${REVISION}-161347705-gh.circle-artifacts.com/0/docker_images/$IMAGENAMESAVE.gz" | gunzip | docker load
+curl -L "https://output.circle-artifacts.com/output/job/${CIRCLE_WORKFLOW_JOB_ID}/artifacts/0/docker_images/$IMAGENAMESAVE.gz" | gunzip | docker load
 \`\`\`
 
 --------------------------
