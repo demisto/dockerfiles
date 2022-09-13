@@ -106,7 +106,8 @@ def get_docker_files(base_path="docker/", devonly=False, external=False, interna
                                    "image_name": image_name,
                                    "tag": tag,
                                    "last_modified": last_modified,
-                                   "content": docker_file_content}
+                                   "content": docker_file_content,
+                                   "name": dockerfile_dir_path.split('/')[1]}
 
                 files_list.append(curr_dockerfile)
 

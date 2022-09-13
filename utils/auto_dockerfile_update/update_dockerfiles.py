@@ -9,6 +9,10 @@ import re
 from get_dockerfiles import LAST_MODIFIED_REGEX
 from datetime import datetime, timezone
 
+AUTO_UPDATE_CONF_VERSION = ('python3', 'python3-deb')
+PYTHON3_REGEX = r'3\.\d+\.\d+'
+VERSION_CONF_REGEX = fr'version ?= ?{PYTHON3_REGEX}'
+
 
 def is_docker_file_outdated(dockerfile: Dict, latest_tag: str, last_updated: str = "") -> bool:
     """
@@ -57,6 +61,16 @@ def update_dockerfile(dockerfile: Dict, latest_tag: str) -> None:
         new_last_modified_string = f"# Last modified: {now.isoformat()}"
         new_dockerfile = new_dockerfile.replace(last_modified_string, new_last_modified_string)
 
+    if dockerfile['name'] in AUTO_UPDATE_CONF_VERSION:
+        build_conf_path = dockerfile['path'].replace("/Dockerfile", "/build.conf")
+        if match := re.search(PYTHON3_REGEX, new_base_image):
+            with open(build_conf_path) as f:
+                data = f.read()
+            new_data = re.sub(VERSION_CONF_REGEX, f'version={match[0]}', data)
+            with open(build_conf_path, 'w') as f:
+                f.write(new_data)
+        else:
+            print(f'Could not find updated py3 version in image {new_base_image} for {dockerfile["name"]}')
     with open(dockerfile['path'], "w") as f:
         f.write(new_dockerfile)
 
@@ -125,7 +139,7 @@ def update_internal_base_dockerfile(git_repo: Repo) -> None:
         outdated_files = [file for file in dependency_list if
                           is_docker_file_outdated(file, latest_tag_name, latest_tag_last_updated)]
         for file in outdated_files:
-            branch_name = fr"autoupdate/{base_image}_{latest_tag_name}_{file['path'].split('/')[1]}"
+            branch_name = fr"autoupdate/{base_image}_{latest_tag_name}_{file['name']}"
             update_and_push_dockerfiles(git_repo, branch_name, [file], latest_tag_name)
 
 
