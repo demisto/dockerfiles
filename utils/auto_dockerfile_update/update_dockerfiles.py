@@ -12,6 +12,7 @@ from datetime import datetime, timezone
 AUTO_UPDATE_CONF_VERSION = ('python3', 'python3-deb')
 PYTHON3_REGEX = r'3\.\d+\.\d+'
 VERSION_CONF_REGEX = fr'version ?= ?{PYTHON3_REGEX}'
+BATCH_SIZE = 5
 
 
 def is_docker_file_outdated(dockerfile: Dict, latest_tag: str, last_updated: str = "") -> bool:
@@ -138,9 +139,10 @@ def update_internal_base_dockerfile(git_repo: Repo) -> None:
         latest_tag_last_updated = latest_tag['last_updated']
         outdated_files = [file for file in dependency_list if
                           is_docker_file_outdated(file, latest_tag_name, latest_tag_last_updated)]
-        for file in outdated_files:
-            branch_name = fr"autoupdate/{base_image}_{latest_tag_name}_{file['name']}"
-            update_and_push_dockerfiles(git_repo, branch_name, [file], latest_tag_name)
+        for batch_slice in batch(outdated_files, BATCH_SIZE):
+            image_names = reduce(lambda a, b: f"{a}_{b}", [file['name'] for file in batch_slice])
+            branch_name = fr"autoupdate/{base_image}_{latest_tag_name}_{image_names}"
+            update_and_push_dockerfiles(git_repo, branch_name, batch_slice, latest_tag_name)
 
 
 def update_and_push_dockerfiles(git_repo: Repo, branch_name: str, files: List[Dict], latest_tag_name: str) -> None:
