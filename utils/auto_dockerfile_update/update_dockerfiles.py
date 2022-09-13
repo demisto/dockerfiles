@@ -10,7 +10,7 @@ from get_dockerfiles import LAST_MODIFIED_REGEX
 from datetime import datetime, timezone
 
 AUTO_UPDATE_CONF_VERSION = ('python3', 'python3-deb')
-PYTHON3_REGEX = r'3\.\d+\.\d+'
+PYTHON3_REGEX = r'3\.\d{1,2}(?:\.\d+)?'
 VERSION_CONF_REGEX = fr'version ?= ?{PYTHON3_REGEX}'
 BATCH_SIZE = 5
 
