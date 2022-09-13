@@ -44,7 +44,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: pull-request
-      id: pull-request
+      id: open-pr
       uses: repo-sync/pull-request@v2
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -56,9 +56,10 @@ jobs:
     - name: approve and merge
       env:
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-        PR_URL: ${{ steps.pull-request.outputs.pr_url }}
+        PR_URL: ${{ steps.open-pr.outputs.pr_url }}
       run: |
         echo "Approving and merging"
+        echo "pr url is $PR_URL"
         gh pr review --approve "$PR_URL"
 #        gh pr merge --auto --squash "$PR_URL" lets add this in after we know it works
 
