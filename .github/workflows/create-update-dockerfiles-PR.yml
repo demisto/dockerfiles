@@ -58,7 +58,6 @@ jobs:
         PR_URL: ${{ steps.open-pr.outputs.pr_url }}
       run: |
         echo "Approving and merging"
-        echo "pr url is $PR_URL"
         gh pr review --approve "$PR_URL"
 #        gh pr merge --auto --squash "$PR_URL" lets add this in after we know it works
 
