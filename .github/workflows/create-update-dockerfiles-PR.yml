@@ -61,6 +61,7 @@ jobs:
         echo "1 ${{ steps.open-pr.outputs.pr_url }}"
         echo "2 ${{ steps.open-pr.outputs.* }}"
         echo "3 ${{ steps.open-pr.outputs }}"
+        echo "4 ${{join(steps.open-pr.outputs.*, '\n')}}"
         echo "Approving and merging"
         echo "pr url is $PR_URL"
         gh pr review --approve "$PR_URL"
