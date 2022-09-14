@@ -8,6 +8,7 @@ from git import Repo, GitCommandError
 import re
 from get_dockerfiles import LAST_MODIFIED_REGEX
 from datetime import datetime, timezone
+from functools import reduce
 
 AUTO_UPDATE_CONF_VERSION = ('python3', 'python3-deb')
 PYTHON3_REGEX = r'3\.\d{1,2}(?:\.\d+)?'
