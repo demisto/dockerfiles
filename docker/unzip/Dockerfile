@@ -1,6 +1,5 @@
 
-FROM demisto/python3:3.10.7.33922
-
+FROM demisto/python3:3.9.6.22912
 COPY requirements.txt .
 
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git \
