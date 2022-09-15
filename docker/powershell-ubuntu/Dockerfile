@@ -8,6 +8,7 @@ RUN pwsh -Command 'Install-WSMan'
 RUN pwsh -c "Install-Module -Name ExchangeOnlineManagement -RequiredVersion 2.0.5 -Scope AllUsers -Force"
 
 RUN apt update && apt install netbase -y
+RUN apt update && apt-get install xdg-utils -y
 # Upgrade all packages to latest
 RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 && rm -rf /var/lib/apt/lists/*
