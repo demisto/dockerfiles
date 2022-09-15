@@ -1,4 +1,6 @@
-FROM cimg/python:3.10.5-node
+FROM cimg/python:3.10.6-node
+
+ENV PATH $HOME/.local/bin:$PATH
 
 RUN sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 648ACFD622F3D138 \
   && sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 0E98404D386FA1D9 \ 
@@ -19,6 +21,7 @@ RUN sudo apt-get update && sudo apt-get install apt-transport-https ca-certifica
   && sudo wget -O /var/lib/neo4j/plugins/apoc-4.4.0.8-all.jar https://github.com/neo4j-contrib/neo4j-apoc-procedures/releases/download/4.4.0.8/apoc-4.4.0.8-all.jar \
   && echo 'deb https://debian.neo4j.com stable latest' | sudo tee -a /etc/apt/sources.list.d/neo4j.list \
   && sudo apt-get update && sudo apt-get install google-cloud-sdk kubectl openjdk-11-jre neo4j \
+  && sudo curl -sSL https://install.python-poetry.org | python3 - \
   && gcloud --version \
   && gsutil --version  \
   && poetry --version \

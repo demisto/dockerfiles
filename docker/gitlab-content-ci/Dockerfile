@@ -1,18 +1,14 @@
-FROM demisto/python3-deb:3.10.4.29329
-
-COPY requirements.txt .
+FROM demisto/python3-deb:3.10.6.33421
 
 ENV NODE_VERSION 14.14.0
 ENV NVM_DIR /root/.nvm
-ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
+ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:/root/.local/bin:$PATH
 
 # Currently sh is linked to dash, linking it to /bin/bash instead.
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
 RUN apt-get update  && apt-get upgrade -y \
     && apt-get install -y curl jq unzip openssh-client gcc libffi-dev libssl-dev git zip cowsay netcat wget python2 python3-pip software-properties-common \
-    # Install requirements
-    && pip install --no-cache-dir -r requirements.txt \
     # Installing nvm, npm and node.js
     && curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash \
     && . $NVM_DIR/nvm.sh \
@@ -32,11 +28,13 @@ RUN apt-get update  && apt-get upgrade -y \
     && mkdir -p /var/lib/neo4j/plugins \
     && wget -O /var/lib/neo4j/plugins/apoc-4.4.0.8-all.jar https://github.com/neo4j-contrib/neo4j-apoc-procedures/releases/download/4.4.0.8/apoc-4.4.0.8-all.jar \
     && apt-get update && apt-get install google-cloud-sdk docker-ce-cli kubectl openjdk-11-jre neo4j -y \
-    && gcloud --version \
+    && curl -sSL https://install.python-poetry.org | python3 - \
+    && source ~/.bashrc \
     && gsutil --version \
     && docker --version \
     && neo4j --version \
     && neo4j-admin --version \
+    && gcloud --version \
     && ! kubectl version --output yaml \
     && poetry --version \
     # Installing goenv
