@@ -44,6 +44,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: pull-request
+      id: open-pr
       uses: repo-sync/pull-request@v2
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -51,6 +52,12 @@ jobs:
         destination_branch: ""                                                    # If blank, default: master
         pr_title: "build(dockerfiles) update Dockerfile - ${{ matrix.branches }}" # Title of pull request
         pr_body: "This is automated PR to update dockerfiles base images\n${{ matrix.branches }}"
-        pr_assignee: "itay-ye"                                                    # Comma-separated list (no spaces)
-
+    - name: approve and merge
+      env:
+        GITHUB_TOKEN: ${{secrets.CONTENT_BOT_TOKEN}}
+        PR_URL: ${{ steps.open-pr.outputs.pr_url }}
+      run: |
+        echo "Approving and merging"
+        gh pr review --approve "$PR_URL"
+#        gh pr merge --auto --squash "$PR_URL" lets add this in after we know it works
 
