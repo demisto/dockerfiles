@@ -40,6 +40,7 @@ jobs:
       - get_branches
     strategy:
       matrix:
+        max-parallel: 2
         branches: ${{ fromJSON(needs.get_branches.outputs.branches) }}
     steps:
     - uses: actions/checkout@v2

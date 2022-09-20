@@ -13,7 +13,7 @@ from functools import reduce
 AUTO_UPDATE_CONF_VERSION = ('python3', 'python3-deb')
 PYTHON3_REGEX = r'3\.\d{1,2}(?:\.\d+)?'
 VERSION_CONF_REGEX = fr'version ?= ?{PYTHON3_REGEX}'
-BATCH_SIZE = 5
+BATCH_SIZE = 1
 
 
 def is_docker_file_outdated(dockerfile: Dict, latest_tag: str, last_updated: str = "") -> bool:
