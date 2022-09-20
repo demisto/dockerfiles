@@ -16,7 +16,7 @@ RUN apt-get update  && apt-get upgrade -y \
     && nvm alias default $NODE_VERSION \
     && nvm use default \
     # installing firebase-tools globally
-    && curl -sL https://firebase.tools | bash \
+    && suod curl -sL https://firebase.tools | bash \
     # Installing the gsutil and docker cli
     && apt-get install apt-transport-https ca-certificates gnupg gpgv -y --allow-downgrades\
     && echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" |  tee -a /etc/apt/sources.list.d/google-cloud-sdk.list \
