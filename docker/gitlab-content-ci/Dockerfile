@@ -1,6 +1,6 @@
 FROM demisto/python3-deb:3.10.6.33421
 
-ENV NODE_VERSION 14.14.0
+ENV NODE_VERSION 14.18.0
 ENV NVM_DIR /root/.nvm
 ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:/root/.local/bin:$PATH
 
