@@ -5,8 +5,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import List, Dict
 
-import dateparser
-
+from dateutil.parser import parse
 BASE_IMAGE_REGEX = re.compile(r"(?:FROM [\S]+)")
 INTERNAL_BASE_IMAGES = re.compile(r"(demisto\/|devdemisto\/)")
 LAST_MODIFIED_REGEX = re.compile(r"# Last modified: [^\n]*")
@@ -79,7 +78,7 @@ def filter_ignored_files(files_list):
             ret_list = []
             for file in files_list:
                 if not (config := ignored_files_by_name.get(file['name'])) or \
-                        not config.get('permanent') and dateparser.parse(config['valid_until']) < datetime.now():
+                        not config.get('permanent') and parse(config['valid_until']) < datetime.now():
                     ret_list.append(file)
             return ret_list
     except Exception as e:
