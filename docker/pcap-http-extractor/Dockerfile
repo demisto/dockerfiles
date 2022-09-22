@@ -12,5 +12,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   python-dev \
 && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y tshark --no-install-recommends
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+  tshark \
 && rm -rf /var/lib/apt/lists/*
