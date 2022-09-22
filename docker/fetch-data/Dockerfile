@@ -1,4 +1,4 @@
-FROM alpine:3.12.3 as files-src
+FROM alpine:3.12.12 as files-src
 RUN mkdir /ml
 COPY ./glove_50_top_20k.p /ml/glove_50_top_20k.p
 COPY ./glove_100_top_20k.p /ml/glove_100_top_20k.p
