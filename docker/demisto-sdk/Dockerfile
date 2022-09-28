@@ -1,4 +1,4 @@
-FROM python:3.10-bullseye
+FROM demisto/3.10.7.33954
 
 ADD https://raw.githubusercontent.com/demisto/demisto-sdk/master/package.json .
 ADD https://raw.githubusercontent.com/demisto/demisto-sdk/master/package-lock.json .
