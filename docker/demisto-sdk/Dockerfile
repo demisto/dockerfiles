@@ -1,9 +1,8 @@
-FROM python:3.10.6-bullseye
+FROM python:3.10-bullseye
 
-ADD https://raw.githubusercontent.com/demisto/content/master/package.json /content/
-ADD https://raw.githubusercontent.com/demisto/content/master/package-lock.json /content/
+ADD https://raw.githubusercontent.com/demisto/demisto-sdk/master/package.json .
+ADD https://raw.githubusercontent.com/demisto/demisto-sdk/master/package-lock.json .
 
-# All content dependencies preinstalled
 RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get install \
     git \ 
     gcc \
@@ -25,13 +24,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian \
     $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null \
     && apt-get update && apt-get install docker-ce-cli -y \
-    # install demisto-sdk and npm dependency
-    && pip install pipx --no-cache-dir \
-    && pipx ensurepath \
-    && . ~/.bashrc \
-    && pipx install demisto-sdk --force \
     && npm install -g jsdoc-to-markdown@5.0.3 \
-    && cd content \
     && npm install -g \
     && demisto-sdk --version
 
