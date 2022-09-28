@@ -1,7 +1,7 @@
 FROM demisto/python3-deb:3.10.7.33954
 
-ADD https://raw.githubusercontent.com/demisto/demisto-sdk/master/package.json /modules
-ADD https://raw.githubusercontent.com/demisto/demisto-sdk/master/package-lock.json /modules
+ADD https://raw.githubusercontent.com/demisto/demisto-sdk/master/package.json /modules/.
+ADD https://raw.githubusercontent.com/demisto/demisto-sdk/master/package-lock.json /modules/.
 
 RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get install \
     git \ 
