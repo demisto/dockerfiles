@@ -1,10 +1,10 @@
 FROM demisto/python3-deb:3.10.7.33954
 RUN apt-get update && apt-get upgrade -y && apt-get -t bullseye-backports install gcc g++ wget git pkg-config \
-make autoconf automake libtool libpng-dev libjpeg-dev libtiff5-dev zlib1g-dev libleptonica-dev libicu-dev libpango1.0-dev liblept5 -y \
+make autoconf automake libtool libgif-dev libpng-dev libjpeg-dev libtiff5-dev zlib1g-dev libleptonica-dev libicu-dev libpango1.0-dev liblept5 -y \
 && mkdir /build && cd /build && git clone --depth 1 https://github.com/tesseract-ocr/tesseract.git \
 && cd tesseract && ./autogen.sh && ./configure && gmake && make install && ldconfig \
 && apt-get -t bullseye-backports install -y --no-install-recommends imagemagick file \
-&& apt-get purge -y --auto-remove gcc g++ pkg-config make autoconf automake libtool libpng-dev \
+&& apt-get purge -y --auto-remove gcc g++ pkg-config make autoconf automake libtool libgif-dev libpng-dev \
 libjpeg-dev libtiff5-dev zlib1g-dev libleptonica-dev libicu-dev libpango1.0-dev \
 && rm -rf /var/lib/apt/lists/* \
 && git clone https://github.com/zdenop/tessdata_downloader.git \
