@@ -18,11 +18,11 @@ COPY requirements.txt .
 RUN apt-get update \
 && apt-get install -y --no-install-recommends \
   gcc \
-  python3-dev gfortran wget git g++ pkg-config libhdf5-dev \
+  python-dev gfortran wget git g++ pkg-config libhdf5-dev \
 && pip install --no-cache-dir -r requirements.txt \
 && pip install torch==1.9.0+cpu -f https://download.pytorch.org/whl/torch_stable.html\
 && apt-get purge -y --auto-remove gcc \
-  python3-dev gfortran wget git g++ pkg-config libhdf5-dev
+  python-dev gfortran wget git g++ pkg-config libhdf5-dev
 COPY demisto_ml-0.2.tar.gz .
 RUN pip install demisto_ml-0.2.tar.gz
 RUN rm -rf /var/lib/apt/lists/*
