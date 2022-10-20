@@ -28,6 +28,7 @@ verify_stat('/ml/encrypted_model.b')
 verify_stat('/ml/nltk_data')
 verify_stat('/ml/oob_evaluation.txt')
 
+encoded_model = demisto_ml.load_oob('/ml/encrypted_model.b')
 
 print('All package imported succesfully')
 
