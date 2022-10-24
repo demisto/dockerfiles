@@ -1,4 +1,4 @@
-FROM node:18.9.0-bullseye-slim
+FROM node:18.9.1-bullseye-slim
 
 WORKDIR /content
 
