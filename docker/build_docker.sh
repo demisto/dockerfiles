@@ -170,6 +170,23 @@ function docker_build {
         # del_requirements=yes
     fi
 
+    if [ -f "pyproject.toml" -a ! -f "requirements.txt" ]; then
+       if [ ! -f "poetry.lock" ]; then
+            echo "Error: pyproject.toml present without poetry.lock. Make sure to commit your poetry.lock file"
+            return 1
+        fi
+
+      curl -sSL https://install.python-poetry.org | python3 -  # download poetry
+      echo "starting to install dependencies in poetry..."
+      poetry --version
+      poetry self add poetry-plugin-export
+      poetry export -f requirements.txt --output requirements.txt
+      echo "poetry.lock generated requirements.txt file"
+      echo "############ REQUIREMENTS.TXT ###########"
+      cat requirements.txt
+
+    fi
+
     tmp_dir=$(mktemp -d)
     cp Dockerfile "$tmp_dir/Dockerfile"
     echo "" >> "$tmp_dir/Dockerfile"
