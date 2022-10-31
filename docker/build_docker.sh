@@ -164,7 +164,7 @@ function docker_build {
         echo "Pipfile lock generated requirements.txt: "
         echo "############ REQUIREMENTS.TXT ###########"
         cat requirements.txt
-        echo "##########################################"
+        echo "#################################dd#########"
         [ ! -f requirements.txt ] && echo "WARNING: requirements.txt does not exist, this is ok if python usage is not intended."
         [ ! -s requirements.txt ] && echo "WARNING: requirements.txt is empty"
         # del_requirements=yes
@@ -177,10 +177,9 @@ function docker_build {
         fi
 
       curl -sSL https://install.python-poetry.org | python3 -  # download poetry
-      poetry config virtualenvs.create false  # dont install in a virtual env
       echo "starting to install dependencies in poetry..."
-      poetry install
-      poetry export -f requirements.txt --output requirements.txt --without-hashes  # export poetry into a requirements.txt
+      poetry self add poetry-plugin-export
+      poetry export -f requirements.txt --output requirements.txt # export poetry into a requirements.txt
       echo "poetry.lock generated requirements.txt file"
       echo "############ REQUIREMENTS.TXT ###########"
       cat requirements.txt
