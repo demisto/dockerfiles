@@ -11,4 +11,4 @@ RUN apt-get update && apt-get install -y python3-pip curl build-essential wget g
     && pip install -U pip virtualenv \
     && poetry config virtualenvs.create false \
     && poetry install \
-    && poetry remove pcodedmp
+    && pip uninstall -y pcodedmp
