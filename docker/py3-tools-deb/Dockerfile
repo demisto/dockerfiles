@@ -8,4 +8,4 @@ ENV PATH /root/.local/bin:$PATH
 
 RUN apt-get update && apt-get install -y python3-pip curl build-essential wget git libffi-dev \
     && curl -sSL https://install.python-poetry.org | python3 - \
-    && poetry install
+    && poetry run pip install -e .
