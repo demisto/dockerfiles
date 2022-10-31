@@ -178,6 +178,8 @@ function docker_build {
 
       echo "starting to install dependencies in poetry..."
       poetry --version
+      poetry self update
+      poetry --version
       poetry self add poetry-plugin-export
       poetry export -f requirements.txt --output requirements.txt
       echo "poetry.lock generated requirements.txt file"
