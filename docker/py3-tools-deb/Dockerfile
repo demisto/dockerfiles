@@ -8,7 +8,6 @@ ENV PATH /root/.local/bin:$PATH
 
 RUN apt-get update && apt-get install -y python3-pip curl build-essential wget git libffi-dev \
     && curl -sSL https://install.python-poetry.org | python3 - \
-    && pip install -U pip virtualenv \
     && poetry config virtualenvs.create false \
     && poetry install \
     && pip uninstall -y pcodedmp
