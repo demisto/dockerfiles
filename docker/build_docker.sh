@@ -178,7 +178,7 @@ function docker_build {
 
       echo "starting to install dependencies in poetry..."
       poetry --version
-      poetry self update
+      pip install --upgrade poetry
       poetry --version
       poetry self add poetry-plugin-export
       poetry export -f requirements.txt --output requirements.txt
