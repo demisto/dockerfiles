@@ -755,19 +755,6 @@ python-versions = "*"
 dev = ["mypy (==0.950)", "pylint (==2.13.8)"]
 
 [[package]]
-name = "fasttext"
-version = "0.9.2"
-description = "fasttext Python bindings"
-category = "main"
-optional = false
-python-versions = "*"
-
-[package.dependencies]
-numpy = "*"
-pybind11 = ">=2.2"
-setuptools = ">=0.7.0"
-
-[[package]]
 name = "feedparser"
 version = "6.0.10"
 description = "Universal feed parser, handles RSS 0.9x, RSS 1.0, RSS 2.0, CDF, Atom 0.3, and Atom 1.0 feeds"
@@ -1873,17 +1860,6 @@ python-versions = "*"
 
 [package.dependencies]
 pyasn1 = ">=0.4.6,<0.5.0"
-
-[[package]]
-name = "pybind11"
-version = "2.10.0"
-description = "Seamless operability between C++11 and Python"
-category = "main"
-optional = false
-python-versions = ">=3.6"
-
-[package.extras]
-global = ["pybind11-global (==2.10.0)"]
 
 [[package]]
 name = "pycares"
@@ -3093,7 +3069,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "d3e20908ec1d68cffa50034274e6a76a0fd3e656d770120b026eaa487801d231"
+content-hash = "a1fa86b40760367c6aa168c8960c6c25ddfa4efcc524b0e93bb2ab8e7b500819"
 
 [metadata.files]
 aiodns = [
@@ -3705,9 +3681,6 @@ exchangelib = [
 exifread = [
     {file = "ExifRead-3.0.0-py3-none-any.whl", hash = "sha256:2c5c59ef03b3bbee75b82b82d2498006b3c13509f35c9a76c7552faff73fa2d5"},
     {file = "ExifRead-3.0.0.tar.gz", hash = "sha256:0ac5a364169dbdf2bd62f94f5c073970ab6694a3166177f5e448b10c943e2ca4"},
-]
-fasttext = [
-    {file = "fasttext-0.9.2.tar.gz", hash = "sha256:665556f1f6dcb4fcbe25fa8ebcd4f71b18fa96a090de09d88d97a60cbd29dcb5"},
 ]
 feedparser = [
     {file = "feedparser-6.0.10-py3-none-any.whl", hash = "sha256:79c257d526d13b944e965f6095700587f27388e50ea16fd245babe4dfae7024f"},
@@ -4717,10 +4690,6 @@ pyasn1 = [
 pyasn1-modules = [
     {file = "pyasn1-modules-0.2.8.tar.gz", hash = "sha256:905f84c712230b2c592c19470d3ca8d552de726050d1d1716282a1f6146be65e"},
     {file = "pyasn1_modules-0.2.8-py2.py3-none-any.whl", hash = "sha256:a50b808ffeb97cb3601dd25981f6b016cbb3d31fbf57a8b8a87428e6158d0c74"},
-]
-pybind11 = [
-    {file = "pybind11-2.10.0-py3-none-any.whl", hash = "sha256:6bbc7a2f79689307f0d8d240172851955fc214b33e4cbd7fdbc9cd7176a09260"},
-    {file = "pybind11-2.10.0.tar.gz", hash = "sha256:18977589c10f595f65ec1be90b0a0763b43e458d25d97be9db75b958eb1f43fe"},
 ]
 pycares = [
     {file = "pycares-4.2.2-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:5dc6418e87729105d93162155793002b3fa95490e2f2df33afec08b0b0d44989"},
