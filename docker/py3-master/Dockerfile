@@ -69,9 +69,10 @@ do python tessdata_downloader.py -o /usr/local/share/tessdata/ -l $lang; done \
 
 
 # dxl + crypto + oauthlib + py3ews + readpdf + iputils + bs4-py3 + pcap-http-extractor + unzip + parse-emails + docxpy + netutils + ssdeep + sklearn + pandas
-RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends python3-dev build-essential wget git libffi-dev openssl curl rust cargo libxslt-dev libxml2-dev poppler-utils inetutils-ping p7zip libmagic-dev bind9 ssdeep g++ openssh-server curl ca-certificates openssl less htop make rsync libpng-dev libfreetype-dev libexecinfo-dev lapack-dev gfortran musl-dev openblas-dev libstdc++ openblas libgomp bash \
+RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends python3-dev build-essential wget git libffi-dev openssl curl rust cargo libxml2-dev poppler-utils inetutils-ping p7zip libmagic-dev bind9 ssdeep g++ openssh-server curl ca-certificates openssl less htop make rsync libpng-dev libfreetype-dev libexecinfo-dev liblapack-dev gfortran musl-dev libopenblas-dev libopenblas-base libstdc++ libgomp1 bash \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tshark \
     && ln -s /usr/include/locale.h /usr/include/xlocale.h \
+    && curl https://sh.rustup.rs -sSf | bash -s -- -y \
     && pip install --no-cache-dir -r requirements.txt \
     && apt-get purge -y --auto-remove python3-dev build-essential \
     && rm -rf /var/lib/apt/lists/* \
