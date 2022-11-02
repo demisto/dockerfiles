@@ -69,7 +69,7 @@ do python tessdata_downloader.py -o /usr/local/share/tessdata/ -l $lang; done \
 
 
 # dxl + crypto + oauthlib + py3ews + readpdf + iputils + bs4-py3 + pcap-http-extractor + unzip + parse-emails + docxpy + netutils + ssdeep
-RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends python3-dev build-essential wget git libffi-dev libssl-dev curl cargo libxslt-dev libxml2-dev libxml2 libxslt poppler-utils iputils p7zip unrar libmagic bind9 ssdeep \
+RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends python3-dev build-essential wget git libffi-dev libssl-dev curl cargo libxslt-dev libxml2-dev poppler-utils inetutils-ping p7zip unrar libmagic bind9 ssdeep \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tshark \
     && curl https://sh.rustup.rs -sSf | sh \
     && pip install --no-cache-dir -r requirements.txt \
