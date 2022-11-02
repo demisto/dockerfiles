@@ -93,6 +93,7 @@ RUN pip install --no-cache-dir -r requirements.txt \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /root/.cargo \
+    && pip uninstall -y pcodedmp
 
 
 # dxl
