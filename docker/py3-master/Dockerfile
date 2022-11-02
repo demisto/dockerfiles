@@ -75,7 +75,8 @@ COPY requirements.txt .
 # line 88 - install rust
 
 ENV NLTK_DATA='/ml/nltk_data'
-RUN mkdir /ml \
+RUN pip install --no-cache-dir -r requirements.txt \
+    && mkdir /ml \
     && python -c "import nltk; nltk.download('wordnet', download_dir='/ml/nltk_data'); nltk.download('stopwords', download_dir='/ml/nltk_data'); nltk.download('punkt', download_dir='/ml/nltk_data')" \
     && chown -R demisto:demisto /ml && chmod -R 775 /ml \
     && mkdir /usr/local/share/nltk_data \
@@ -88,7 +89,6 @@ RUN mkdir /ml \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tshark \
     && ln -s /usr/include/locale.h /usr/include/xlocale.h \
     && curl https://sh.rustup.rs -sSf | bash -s -- -y \
-    && pip install --no-cache-dir -r requirements.txt \
     && apt-get purge -y --auto-remove python3-dev build-essential \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
@@ -118,27 +118,6 @@ RUN mkdir /ml \
 #  && apk del .build-dependencies
 
 
-# powershell-deb
-
-#FROM mcr.microsoft.com/powershell:7.2.2-debian-buster-slim-20220318
-#
-#RUN echo 'deb http://deb.debian.org/debian buster-backports main' >> /etc/apt/sources.list
-#
-## Basic linux utilities
-#RUN apt-get update && apt-get install -y --no-install-recommends \
-#  procps \
-#&& rm -rf /var/lib/apt/lists/*
-#
-## Upgrade all packages to latest
-#RUN apt-get update && apt-get -y --no-install-recommends upgrade \
-#&& rm -rf /var/lib/apt/lists/*
-#
-## Upgrade using backports
-#RUN apt-get update && apt-get -t buster-backports -y --no-install-recommends upgrade \
-#&& rm -rf /var/lib/apt/lists/*
-#
-#RUN groupadd --gid 4000 demisto \
-#  && useradd --uid 4000 --gid demisto --shell /bin/bash --create-home demisto
 
 # py3ews
 #RUN apk --update add --no-cache libxslt-dev \
