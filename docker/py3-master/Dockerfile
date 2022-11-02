@@ -68,20 +68,17 @@ do python tessdata_downloader.py -o /usr/local/share/tessdata/ -l $lang; done \
 
 
 
-# dxl + crypto + oauthlib + py3ews + readpdf + iputils + bs4-py3 + pcap-http-extractor + unzip + parse-emails + docxpy + netutils + ssdeep
-RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends python3-dev build-essential wget git libffi-dev libssl-dev curl cargo libxslt-dev libxml2-dev poppler-utils inetutils-ping p7zip unrar libmagic bind9 ssdeep \
+# dxl + crypto + oauthlib + py3ews + readpdf + iputils + bs4-py3 + pcap-http-extractor + unzip + parse-emails + docxpy + netutils + ssdeep + sklearn + pandas
+RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends python3-dev build-essential wget git libffi-dev openssl curl rust cargo libxslt-dev libxml2-dev poppler-utils inetutils-ping p7zip libmagic-dev bind9 ssdeep g++ openssh-server curl ca-certificates openssl less htop make rsync libpng-dev libfreetype-dev libexecinfo-dev lapack-dev gfortran musl-dev openblas-dev libstdc++ openblas libgomp bash \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tshark \
-    && curl https://sh.rustup.rs -sSf | sh \
+    && ln -s /usr/include/locale.h /usr/include/xlocale.h \
     && pip install --no-cache-dir -r requirements.txt \
     && apt-get purge -y --auto-remove python3-dev build-essential \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /root/.cargo
 
 
-# sklearn + pandas
-RUN apt-get update && apt-get upgrade -y && apt-get install -y python3-dev build-essential wget git g++ openssh curl ca-certificates libssl-dev less htop make rsync libpng-dev freetype-dev libexecinfo-dev lapack-dev gfortran musl-dev openblas-dev libstdc++ openblas libgomp bash \
-    && ln -s /usr/include/locale.h /usr/include/xlocale.h
-
+# sklearn config
 RUN mkdir /ml
 RUN python -c "import nltk; nltk.download('wordnet', download_dir='/ml/nltk_data'); nltk.download('stopwords', download_dir='/ml/nltk_data'); nltk.download('punkt', download_dir='/ml/nltk_data')"
 
