@@ -51,20 +51,20 @@ COPY requirements.txt .
 
 
 # tesseract
-#RUN apt-get update && apt-get upgrade -y && apt-get -t bullseye-backports install gcc g++ git pkg-config \
-#make autoconf automake libtool libpng-dev libjpeg-dev libtiff5-dev zlib1g-dev libleptonica-dev libicu-dev libpango1.0-dev liblept5 -y \
-#&& mkdir /build && cd /build && git clone --depth 1 https://github.com/tesseract-ocr/tesseract.git \
-#&& cd tesseract && ./autogen.sh && ./configure && gmake && make install && ldconfig \
-#&& apt-get -t bullseye-backports install -y --no-install-recommends imagemagick file \
-#&& apt-get purge -y --auto-remove gcc g++ pkg-config make autoconf automake libtool libpng-dev \
-#libjpeg-dev libtiff5-dev zlib1g-dev libleptonica-dev libicu-dev libpango1.0-dev \
-#&& rm -rf /var/lib/apt/lists/* \
-#&& git clone https://github.com/zdenop/tessdata_downloader.git \
-#&& cd tessdata_downloader \
-#&& for lang in  eng ara chi_sim chi_sim_vert chi_tra chi_tra_vert deu fra heb ita jpn jpn_vert pol por rus spa swe tur ; \
-#do python tessdata_downloader.py -o /usr/local/share/tessdata/ -l $lang; done \
-#&& rm -rf /build \
-#&& tesseract --version --list-langs
+RUN apt-get update && apt-get upgrade -y && apt-get -t bullseye-backports install gcc g++ git pkg-config \
+make autoconf automake libtool libpng-dev libjpeg-dev libtiff5-dev zlib1g-dev libleptonica-dev libicu-dev libpango1.0-dev liblept5 -y \
+&& mkdir /build && cd /build && git clone --depth 1 https://github.com/tesseract-ocr/tesseract.git \
+&& cd tesseract && ./autogen.sh && ./configure && gmake && make install && ldconfig \
+&& apt-get -t bullseye-backports install -y --no-install-recommends imagemagick file \
+&& apt-get purge -y --auto-remove gcc g++ pkg-config make autoconf automake libtool libpng-dev \
+libjpeg-dev libtiff5-dev zlib1g-dev libleptonica-dev libicu-dev libpango1.0-dev \
+&& rm -rf /var/lib/apt/lists/* \
+&& git clone https://github.com/zdenop/tessdata_downloader.git \
+&& cd tessdata_downloader \
+&& for lang in  eng ara chi_sim chi_sim_vert chi_tra chi_tra_vert deu fra heb ita jpn jpn_vert pol por rus spa swe tur ; \
+do python tessdata_downloader.py -o /usr/local/share/tessdata/ -l $lang; done \
+&& rm -rf /build \
+&& tesseract --version --list-langs
 
 
 
@@ -88,34 +88,29 @@ RUN pip install --no-cache-dir -r requirements.txt \
     && apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends python3-dev build-essential cargo  \
     libxml2-dev poppler-utils inetutils-ping p7zip libmagic-dev bind9 ssdeep g++ openssh-server less htop make rsync  \
     libpng-dev libfreetype-dev liblapack-dev gfortran musl-dev libopenblas-dev libopenblas-base libgomp1 libgpgme11 libreoffice default-jre-headless \
-    libxss1 fonts-noto-cjk fonts-noto-core zlib1g-dev \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tshark \
-    && apt-get -t bullseye-backports install -y gcc g++ git pkg-config make autoconf automake libtool libpng-dev libjpeg-dev libtiff5-dev zlib1g-dev libleptonica-dev libicu-dev libpango1.0-dev liblept5 \
-    && mkdir /build  \
-    && cd /build  \
-    && git clone --depth 1 https://github.com/tesseract-ocr/tesseract.git \
-    && cd tesseract &&  \
-    && ./autogen.sh  \
-    && ./configure  \
-    && gmake  \
-    && make install  \
-    && ldconfig \
+    && ln -s /usr/include/locale.h /usr/include/xlocale.h \
+    && curl https://sh.rustup.rs -sSf | bash -s -- -y \
+    && apt-get update && apt-get upgrade -y && apt-get -t bullseye-backports install gcc g++ git pkg-config \
+    make autoconf automake libtool libpng-dev libjpeg-dev libtiff5-dev zlib1g-dev libleptonica-dev libicu-dev libpango1.0-dev liblept5 -y \
+    && mkdir /build && cd /build && git clone --depth 1 https://github.com/tesseract-ocr/tesseract.git \
+    && cd tesseract && ./autogen.sh && ./configure && gmake && make install && ldconfig \
     && apt-get -t bullseye-backports install -y --no-install-recommends imagemagick file \
-    && apt-get purge -y --auto-remove gcc g++ pkg-config make autoconf automake libtool libpng-dev  \
+    && apt-get purge -y --auto-remove gcc g++ pkg-config make autoconf automake libtool libpng-dev \
     libjpeg-dev libtiff5-dev zlib1g-dev libleptonica-dev libicu-dev libpango1.0-dev \
+    && rm -rf /var/lib/apt/lists/* \
     && git clone https://github.com/zdenop/tessdata_downloader.git \
     && cd tessdata_downloader \
     && for lang in  eng ara chi_sim chi_sim_vert chi_tra chi_tra_vert deu fra heb ita jpn jpn_vert pol por rus spa swe tur ; \
     do python tessdata_downloader.py -o /usr/local/share/tessdata/ -l $lang; done \
     && rm -rf /build \
     && tesseract --version --list-langs \
-    && ln -s /usr/include/locale.h /usr/include/xlocale.h \
-    && curl https://sh.rustup.rs -sSf | bash -s -- -y \
     && apt-get purge -y --auto-remove python3-dev build-essential \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /root/.cargo \
     && pip uninstall -y pcodedmp
+
 
 
 # dxl
