@@ -1,5 +1,4 @@
 # chromium
-
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException, InvalidArgumentException
 from PyPDF2 import PdfFileReader
@@ -134,3 +133,7 @@ print('pandas is good!!!')
 # nltk
 import nltk
 print('nltk is good')
+
+import regex
+pattern = regex.Regex('\\\\d\\+', flags=regex.V0)
+print('regex is good')
