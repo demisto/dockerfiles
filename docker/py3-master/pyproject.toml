@@ -81,7 +81,7 @@ slackclient = "*"
 regex = "*"
 dpkt = "*"
 aiodns = "*"
-pysocks = "^1.7.0"
+pysocks = "^1.7.0"  # must be 1.7.0 or above, cause 1.6.8 doesn't work on python 3.10
 
 [build-system]
 requires = ["poetry-core"]
