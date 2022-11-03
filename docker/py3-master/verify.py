@@ -25,7 +25,6 @@
 # dxl
 from dxlclient.broker import Broker
 test = Broker("test.com")
-
 print('dxl is good!!!')
 
 # crypto
