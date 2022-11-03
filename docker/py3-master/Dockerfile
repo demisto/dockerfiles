@@ -65,10 +65,10 @@ RUN apt-get update && apt-get upgrade -y && apt-get -t bullseye-backports instal
 
 
 # handles dxl + crypto + oauthlib + py3ews + readpdf + iputils + bs4-py3 + pcap-http-extractor + unzip + parse-emails + docxpy + netutils + ssdeep + sklearn + pandas
-# 73-77 - sklearn image config
-# 78-82 - nltk image configuration
+# 73-76 - sklearn image config
+# 77-80 - nltk image configuration
 # 82-84 - install all os libraries needed for the images above
-# line 88 - install rust
+# 86 - install rust
 ENV NLTK_DATA='/ml/nltk_data'
 RUN pip install --no-cache-dir -r requirements.txt \
     && mkdir /ml \
