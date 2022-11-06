@@ -79,7 +79,7 @@ RUN pip install --no-cache-dir -r requirements.txt \
     && python -m nltk.downloader -d /usr/local/share/nltk_data punkt \
     && mkdir -p /usr/share/man/man1 \
     && apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends python3-dev build-essential cargo \
-    libxml2-dev poppler-utils iputils-ping p7zip-full unrar-free libmagic-dev bind9 ssdeep g++ openssh-server less htop make rsync  \
+    libxml2-dev poppler-utils iputils-ping p7zip-full p7zip-rar unrar-free libmagic-dev bind9 ssdeep g++ openssh-server less htop make rsync  \
     libpng-dev libfreetype-dev liblapack-dev gfortran musl-dev libopenblas-dev libopenblas-base libgomp1 libgpgme11 libreoffice default-jre-headless \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tshark \
     && ln -s /usr/include/locale.h /usr/include/xlocale.h \
