@@ -1,5 +1,5 @@
-# Last modified: Thu, 21 jul 2022 12:00:00 +0200
-FROM demisto/python3-deb:3.9.6.22912
+# Last modified: 2022-10-30T11:33:32.647193+00:00
+FROM demisto/python3-deb:3.10.8.35504
 
 WORKDIR "/app"
 
@@ -20,7 +20,7 @@ RUN apt-get update -y -q && \
     libxext6 libxfixes3 libxi6 libxrandr2 \
     libxrender1 libxss1 libxtst6 \
     ca-certificates fonts-liberation \
-    libappindicator1 libnss3 lsb-release \
+    libnss3 lsb-release \
     xdg-utils wget locales \
     fonts-arphic-ukai fonts-arphic-uming \
     fonts-ipafont-mincho fonts-ipafont-gothic \

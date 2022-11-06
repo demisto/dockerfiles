@@ -1,7 +1,11 @@
+import json
 from glob import glob
 import re
+from datetime import datetime
+from pathlib import Path
 from typing import List, Dict
 
+from dateutil.parser import parse
 BASE_IMAGE_REGEX = re.compile(r"(?:FROM [\S]+)")
 INTERNAL_BASE_IMAGES = re.compile(r"(demisto\/|devdemisto\/)")
 LAST_MODIFIED_REGEX = re.compile(r"# Last modified: [^\n]*")
@@ -67,6 +71,21 @@ def is_dev_only(dockerfile_path=str) -> bool:
     return False
 
 
+def filter_ignored_files(files_list):
+    try:
+        with open(Path(__file__).with_name('autoupdate-config.json'), 'r') as f:
+            ignored_files_by_name = {config['name']: config for config in json.load(f).get('ignored_dockerfiles')}
+            ret_list = []
+            for file in files_list:
+                if not (config := ignored_files_by_name.get(file['name'])) or \
+                        not config.get('permanent') and parse(config['valid_until']) < datetime.now():
+                    ret_list.append(file)
+            return ret_list
+    except Exception as e:
+        print(f'could not read ignored config {str(e)}')
+        return files_list
+
+
 def get_docker_files(base_path="docker/", devonly=False, external=False, internal=False) -> List[Dict]:
     """
     Get all the relevant dockerfiles from the repository.
@@ -106,8 +125,10 @@ def get_docker_files(base_path="docker/", devonly=False, external=False, interna
                                    "image_name": image_name,
                                    "tag": tag,
                                    "last_modified": last_modified,
-                                   "content": docker_file_content}
+                                   "content": docker_file_content,
+                                   "name": dockerfile_dir_path.split('/')[1],
+                                   }
 
                 files_list.append(curr_dockerfile)
 
-    return files_list
+    return filter_ignored_files(files_list)
