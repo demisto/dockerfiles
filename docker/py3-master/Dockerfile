@@ -64,11 +64,16 @@ RUN apt-get update && apt-get upgrade -y && apt-get -t bullseye-backports instal
 
 
 
-# handles dxl + crypto + oauthlib + py3ews + readpdf + iputils + bs4-py3 + pcap-http-extractor + unzip + parse-emails + docxpy + netutils + ssdeep + sklearn + pandas
-# 73-76 - sklearn image config
-# 77-80 - nltk image configuration
-# 82-84 - install all os libraries needed for the images above
-# 86 - install rust
+# populate zeep's cache so offline can work too
+ENV ZEEP_STATIC_CACHE_DB=/zeep/static/cache.db
+COPY zeep-add-to-cache.py .
+
+
+# handles dxl + crypto + oauthlib + py3ews + readpdf + iputils + bs4-py3 + pcap-http-extractor + unzip + parse-emails + docxpy + netutils + ssdeep + sklearn + pandas + zeep + python_pancloud_v2 + ippysocks + akamai + google-k8s-engine
+# 1) sklearn image config
+# 2) nltk image configuration
+# 3) install all os libraries needed for the images above
+# 4) zeep image config
 ENV NLTK_DATA='/ml/nltk_data'
 RUN pip install --no-cache-dir -r requirements.txt \
     && mkdir /ml \
@@ -79,10 +84,15 @@ RUN pip install --no-cache-dir -r requirements.txt \
     && python -m nltk.downloader -d /usr/local/share/nltk_data punkt \
     && mkdir -p /usr/share/man/man1 \
     && apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends python3-dev build-essential cargo \
-    libxml2-dev poppler-utils iputils-ping p7zip-full unrar-free libmagic-dev bind9 ssdeep g++ openssh-server less htop make rsync  \
-    libpng-dev libfreetype-dev liblapack-dev gfortran musl-dev libopenblas-dev libopenblas-base libgomp1 libgpgme11 libreoffice default-jre-headless \
+    libxml2-dev poppler-utils iputils-ping p7zip-full unrar-free libmagic-dev bind9 ssdeep g++ openssh-server less htop make rsync openssl  \
+    libpng-dev libffi-dev libxslt-dev libfreetype-dev liblapack-dev gfortran musl-dev libopenblas-dev libopenblas-base libgomp1 libgpgme11 libreoffice default-jre-headless \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tshark \
     && ln -s /usr/include/locale.h /usr/include/xlocale.h \
+    && mkdir -p /zeep/static \
+    && chmod 755 /zeep \
+    && chmod 755 /zeep/static \
+    && python zeep-add-to-cache.py https://www.w3.org/2005/05/xmlmime \
+    && python zeep-add-to-cache.py http://www.w3.org/2005/05/xmlmime \
     && apt-get purge -y --auto-remove python3-dev build-essential zlib1g-dev curl \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
