@@ -177,3 +177,11 @@ except Exception as ex:
     assert "Can't open lib" not in str(ex), "Failed because of missing lib: " + str(ex)
 
 print("genericsql is good")
+
+from google.cloud.container_v1 import ClusterManagerClient
+from google.protobuf.json_format import MessageToDict
+from google.protobuf.message import Message
+from google.cloud.container_v1 import enums  # make sure we can import enums, in versions > 0.5.0 there is no "enums"
+from google.oauth2 import service_account
+
+print('google-k8s-engine is good')
