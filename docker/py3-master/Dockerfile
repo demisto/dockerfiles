@@ -145,6 +145,7 @@ ENV ZEEP_STATIC_CACHE_DB=/zeep/static/cache.db
 COPY zeep-add-to-cache.py .
 
 
+COPY ./model_docker.pkl .
 
 # handles dxl + crypto + oauthlib + py3ews + readpdf + iputils + bs4-py3 + pcap-http-extractor + unzip + parse-emails + docxpy + netutils + ssdeep + sklearn + pandas + zeep + python_pancloud_v2 + ippysocks + akamai + google-k8s-engine
 # 1) sklearn image config
