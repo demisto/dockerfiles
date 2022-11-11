@@ -15,7 +15,7 @@ import demisto_ml
 import catboost
 import eli5
 import langdetect
-
+import onnx
 
 def verify_stat(filename):
     res = os.stat(filename)
