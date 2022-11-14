@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-demisto-sdk = "*"
+demisto-sdk = {git = "https://github.com/demisto/demisto-sdk.git", editable = true, ref = "9afe34df710e73af635f6019a3cf6c2234937f3a"}
 demisto-py = "*"
 
 [dev-packages]
