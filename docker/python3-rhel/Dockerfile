@@ -1,3 +1,4 @@
+# python3.10.8 at the moment - if updated please update this comment
 ARG BASE_UBI_TAG=8.6
 
 FROM registry.access.redhat.com/ubi8:${BASE_UBI_TAG} as build
@@ -73,10 +74,11 @@ RUN cd /usr/local/bin && \
     echo '/usr/local/lib' > /etc/ld.so.conf && \
     ldconfig
 
-RUN groupadd -g 1001 python && \
-    useradd -r -u 1001 -m -s /sbin/nologin -g python python
 
-USER 1001
+RUN groupadd -g 4000 demisto \
+      && useradd -u 4000 -g demisto demisto -s /bin/sh
+
+USER demisto
 
 CMD ["python3"]
 
