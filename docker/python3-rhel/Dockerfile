@@ -1,7 +1,8 @@
 # python3.10.8 at the moment - if updated please update this comment
 ARG BASE_UBI_TAG=8.6
+ARG BASE_UBI_VERSION=ubi8
 
-FROM registry.access.redhat.com/ubi8:${BASE_UBI_TAG} as build
+FROM registry.access.redhat.com/${BASE_UBI_VERSION}:${BASE_UBI_TAG} as build
 
 RUN dnf upgrade -y --nodocs && \
     dnf install -y --nodocs \
@@ -44,7 +45,7 @@ RUN find /usr/local -depth \
 COPY requirements.txt .
 RUN pip3.10 install -r requirements.txt
 
-FROM registry.access.redhat.com/ubi8:${BASE_UBI_TAG}
+FROM registry.access.redhat.com/${BASE_UBI_VERSION}:${BASE_UBI_TAG}
 
 RUN dnf update -y --nodocs && \
     dnf clean all && \
@@ -76,7 +77,7 @@ RUN cd /usr/local/bin && \
 
 
 RUN groupadd -g 4000 demisto \
-      && useradd -u 4000 -g demisto demisto -s /bin/sh --create-home demisto
+      && useradd -r -u 4000 -g demisto demisto -s /bin/sh
 
 USER demisto
 
