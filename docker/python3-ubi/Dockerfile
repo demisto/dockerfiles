@@ -76,10 +76,8 @@ RUN cd /usr/local/bin && \
     ldconfig
 
 
-RUN groupadd -g 4000 demisto \
-      && useradd -r -u 4000 -g demisto demisto -s /bin/sh
-
-USER demisto
+RUN groupadd -g 4000 demisto && \
+    useradd -u 4000 -g demisto demisto -s /bin/sh
 
 CMD ["python3"]
 
