@@ -4,7 +4,11 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-pymisp = {version = "*", extras=["email"]}
+websocket-client = "*"
+websockets = "*"
+oauthlib = "*"
+requests-oauthlib = "*"
+pysnmp = "*"
 
 [dev-packages]
 
