@@ -76,7 +76,7 @@ RUN cd /usr/local/bin && \
 
 
 RUN groupadd -g 4000 demisto \
-      && useradd -u 4000 -g demisto demisto -s /bin/sh
+      && useradd -u 4000 -g demisto demisto -s /bin/sh --create-home demisto
 
 USER demisto
 
