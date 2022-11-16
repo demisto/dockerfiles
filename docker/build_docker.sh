@@ -147,7 +147,7 @@ function docker_build {
     image_full_name="${DOCKER_ORG}/${image_name}:${VERSION}"
 
     if [[ "$(prop 'deprecated')" ]]; then
-        echo "${DOCKER_ORG_DEMISTO}/${image_name} image is deprected, checking whether the image is listed in the deprecated list or not"
+        echo "${DOCKER_ORG_DEMISTO}/${image_name} image is deprecated, checking whether the image is listed in the deprecated list or not"
         reason=$(prop 'deprecated_reason')        
         ${PY3CMD} "${DOCKER_SRC_DIR}"/add_image_to_deprecated_or_internal_list.py "${DOCKER_ORG_DEMISTO}"/"${image_name}" "${reason}" "${DOCKER_SRC_DIR}"/deprecated_images.json
     fi
