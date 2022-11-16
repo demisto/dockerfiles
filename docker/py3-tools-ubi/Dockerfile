@@ -6,7 +6,7 @@ COPY requirements.txt .
 RUN dnf upgrade -y --nodocs && \
     dnf install -y gcc && \
     pip install --no-cache-dir -r requirements.txt && \
-    dnf clean all && \
     dnf remove -y gcc && \
+    dnf clean all && \
     rm -rf /var/cache/dnf && \
     pip uninstall -y pcodedmp
