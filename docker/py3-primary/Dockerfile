@@ -6,42 +6,58 @@ COPY requirements.txt .
 
 
 # chromium
-RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends python3-dev wget libxss1 poppler-utils fonts-noto-cjk fonts-noto-core zlib1g-dev \
-&& wget http://http.us.debian.org/debian/pool/main/liba/libappindicator/libappindicator1_0.4.92-7_amd64.deb -O /tmp/libappindicator1_0.4.92-7_amd64.deb \
-&& wget http://http.us.debian.org/debian/pool/main/libi/libindicator/libindicator7_0.5.0-4_amd64.deb -O /tmp/libindicator7_0.5.0-4_amd64.deb \
-&& apt-get install -y  /tmp/libindicator7_0.5.0-4_amd64.deb /tmp/libappindicator1_0.4.92-7_amd64.deb \
+RUN dnf upgrade -y --nodocs && dnf update -y --nodocs && dnf install -y --nodocs python3-devel wget libXScrnSaver poppler-utils liberation-fonts-common liberation-mono-fonts zlib-devel \
 && pip3 install --no-cache-dir -r requirements.txt \
-&& apt-get purge -y --auto-remove \
-  python3-dev \
-  zlib1g-dev \
-&& rm -rf /var/lib/apt/lists/*
+&& dnf remove -y python3-devel zlib-devel \
+&& dnf clean all \
+&& rm -rf /var/cache/dnf \
+&& rm -rf /var/cache/*
 
-# Based on instructions at: https://tecadmin.net/setup-selenium-with-chromedriver-on-debian/
-# Will install the latest version available from the chrome repo.
-# To see available chromedriver go to https://chromedriver.storage.googleapis.com/ and search for the major version
-# of chrome(for  example 91.0).
+# Based on instructions at: https://access.redhat.com/discussions/6303971
 
-COPY download_chromedriver.sh .
+ARG CHROME_VERSION=107.0.5304.62
+
+# Get and install LATEST_RELEASE of ChromeDriver + Install Google Chrome (same version as ChromeDriver)
+RUN dnf update -y \
+&& dnf install maven unzip wget -y \
+&& dnf wget https://chromedriver.storage.googleapis.com/${CHROME_VERSION}/chromedriver_linux64.zip && \
+&& unzip /tmp/chromedriver.zip  \
+&& mv chromedriver /usr/bin \
+&& wget https://dl.google.com/linux/linux_signing_key.pub \
+&& rpm --import linux_signing_key.pub  \
+&& dnf install https://dl.google.com/linux/chrome/rpm/stable/x86_64/google-chrome-stable-${CHROME_VERSION}-1.x86_64.rpm -y \
+&& dnf remove unzip -y \
+&& dnf clean all  \
+&& rm -f /tmp/chromedriver.zip linux_signing_key.pub \
+&& rm -rf /var/cache/*
+
+
 
 # Deps needed by google-chrome
-RUN apt-get update && apt-get -t bullseye-backports install -y --no-install-recommends gnupg1 libgtk-3-0 libu2f-udev udev \
-    && apt-get update && apt-get install -y --no-install-recommends \
-      curl \
-      unzip \
-    && curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-    && echo "deb [arch=amd64]  http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
-    && apt-get -y update && apt-get install -y google-chrome-stable \
-    && apt-get install -y tigervnc-standalone-server x11-utils imagemagick \
-    && ./download_chromedriver.sh \
-    && unzip chromedriver_linux64.zip \
-    && mv chromedriver /usr/bin/chromedriver \
-    && rm -rf chromedriver_linux64.zip \
-    && google-chrome --version \
-    && chromedriver --version \
-    && apt-get purge -y --auto-remove \
-      curl \
-      unzip \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get -t bullseye-backports install -y --no-install-recommends \
+  gnupg1 \
+  libgtk-3-0 \
+  libu2f-udev \
+  udev \
+&& apt-get update && apt-get install -y --no-install-recommends \
+  curl \
+  unzip \
+&& curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+&& echo "deb [arch=amd64]  http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
+&& apt-get -y update && apt-get install -y google-chrome-stable \
+&& apt-get install -y tigervnc-standalone-server x11-utils imagemagick \
+&& ./download_chromedriver.sh \
+&& unzip chromedriver_linux64.zip \
+&& mv chromedriver /usr/bin/chromedriver \
+&& rm -rf chromedriver_linux64.zip \
+&& google-chrome --version \
+&& chromedriver --version \
+&& apt-get purge -y --auto-remove \
+  curl \
+  unzip \
+&& rm -rf /var/lib/apt/lists/*
+
+ENV CHROME_EXE="/opt/google/chrome/google-chrome"
 
 ENV CHROME_EXE="/opt/google/chrome/google-chrome"
 
