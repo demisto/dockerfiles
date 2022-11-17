@@ -281,7 +281,9 @@ EOF
         docker tag ${image_full_name} ${CR_REPO}/${image_full_name}
         if [[ "$(prop 'support_latest')" ]]; then
           echo "adding latest tag"
-          docker tag ${image_full_name} "${CR_REPO}/${image_name}:latest"
+          latest_tag="${CR_REPO}/${image_name}:latest"
+          docker tag ${image_full_name} latest_tag
+          docker push latest_tag > /dev/null
         fi
         docker push ${CR_REPO}/${image_full_name} > /dev/null
         echo "Done docker push for cr: ${image_full_name}"
