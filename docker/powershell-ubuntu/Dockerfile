@@ -6,7 +6,6 @@ RUN apt-get update -y
 RUN sh -c "yes | pwsh -Command 'Install-Module -Name PSWSMan'"
 RUN pwsh -Command 'Install-WSMan'
 RUN sh -c "yes | pwsh -Command 'Install-Module -Name ExchangeOnlineManagement'"
-RUN sh -c "yes | pwsh -Command 'Install-Module -Name PartnerCenter'"
 
 RUN apt update && apt install netbase -y
 # Upgrade all packages to latest
