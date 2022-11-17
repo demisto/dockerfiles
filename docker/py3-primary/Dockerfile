@@ -5,7 +5,6 @@ COPY download_chromedriver.sh .
 
 # chromium
 RUN mkdir chromium  \
-    && dnf install -y wget \
     && wget -O chromium/linux_signing_key.pub https://dl.google.com/linux/linux_signing_key.pub \
     && wget -O chromium/RPM-GPG-KEY-CentOS-Official https://www.centos.org/keys/RPM-GPG-KEY-CentOS-Official \
     && rpm --import chromium/linux_signing_key.pub \
