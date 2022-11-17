@@ -1,14 +1,11 @@
-
-# TODO - update the image here
 FROM devdemisto/py3-tools-ubi:1.0.0.37496
 
 COPY requirements.txt .
-
-
 COPY download_chromedriver.sh .
 
 # chromium
-RUN mkdir chromium && dnf install -y wget \
+RUN mkdir chromium  \
+    && dnf install -y wget \
     && wget -O chromium/linux_signing_key.pub https://dl.google.com/linux/linux_signing_key.pub \
     && wget -O chromium/RPM-GPG-KEY-CentOS-Official https://www.centos.org/keys/RPM-GPG-KEY-CentOS-Official \
     && rpm --import chromium/linux_signing_key.pub \
@@ -38,6 +35,7 @@ RUN mkdir chromium && dnf install -y wget \
     && dnf remove -y python3-devel gcc gcc-c++ make platform-python-pip unzip \
     && dnf clean all \
     && rm -rf /var/cache/dnf \
+    && rm -rf download_chromedriver.sh
 
 
 # tesseract - when installing a language package it is not added to tesseract when using --list-langs, need to check
