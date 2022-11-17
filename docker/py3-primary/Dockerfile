@@ -28,7 +28,6 @@ RUN mkdir chromium && dnf install -y wget \
     chromium/liberation-fonts-2.00.3-7.el8.noarch.rpm chromium/liberation-sans-fonts-2.00.3-7.el8.noarch.rpm chromium/liberation-serif-fonts-2.00.3-7.el8.noarch.rpm \
     chromium/mesa-vulkan-drivers-22.1.1-1.el8.x86_64.rpm .chromium/vulkan-loader-1.2.189.0-1.el8.x86_64.rpm chromium/xdg-utils-1.1.2-5.el8.noarch.rpm \
     chromium/dejavu-sans-mono-fonts-2.35-7.el8.noarch.rpm \
-    && pip install --no-cache-dir --no-index -r requirements.txt \
     && ./download_chromedriver.sh \
     && unzip chromedriver_linux64.zip \
     && mv chromedriver /usr/bin/chromedriver \
@@ -59,6 +58,8 @@ RUN dnf update --nodocs  \
     && rm -rf /var/cache/dnf
 
 
+RUN pip install --no-cache-dir --no-index -r requirements.txt \
+    && pip uninstall -y pcodedmp
 
 
 # populate zeep's cache so offline can work too
