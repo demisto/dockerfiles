@@ -284,7 +284,7 @@ EOF
           latest_tag="${DOCKER_ORG}/${image_name}:latest"
           docker tag "${image_full_name}" "${CR_REPO}/${latest_tag}"
         fi
-        docker push -a ${CR_REPO}/${image_full_name} > /dev/null
+        docker push --all-tags ${CR_REPO}/${image_full_name} > /dev/null
         echo "Done docker push for cr: ${image_full_name}"
     else
         echo "Skipping docker push for cr"
