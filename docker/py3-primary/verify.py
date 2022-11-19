@@ -21,11 +21,6 @@ assert chrome_version_arr == driver_version_arr
 
 print('chromium is good!!!')
 
-# dxl
-from dxlclient.broker import Broker
-test = Broker("test.com")
-print('dxl is good!!!')
-
 # crypto
 from cryptography.fernet import Fernet
 import msal
@@ -83,14 +78,6 @@ from pikepdf import Pdf
 from PyPDF2 import PdfFileReader, PdfFileWriter
 print('readpdf is good!!!')
 
-# bs4-py3
-import markdown
-from lxml import etree
-print('bs4-py3 is good!!!')
-
-# pcap-http-extractor
-import pyshark
-print('pcap-http-extractor is good!!!')
 
 # parse-emails
 from parse_emails.parse_emails import EmailParser
@@ -130,10 +117,6 @@ print(data)
 
 print('pandas is good!!!')
 
-# nltk
-import nltk
-print('nltk is good')
-
 import regex
 pattern = regex.Regex('\\\\d\\+', flags=regex.V0)
 print('regex is good')
@@ -151,11 +134,3 @@ from PIL import Image
 
 print('mlurlphishing is good')
 
-
-from google.cloud.container_v1 import ClusterManagerClient
-from google.protobuf.json_format import MessageToDict
-from google.protobuf.message import Message
-from google.cloud.container_v1 import enums  # make sure we can import enums, in versions > 0.5.0 there is no "enums"
-from google.oauth2 import service_account
-
-print('google-k8s-engine is good')

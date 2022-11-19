@@ -4,7 +4,7 @@ COPY requirements.txt .
 
 # chromium
 COPY download_chromedriver.sh .
-COPY google-chrome.repo /etc/yum.repos.d/
+COPY chromium/google-chrome.repo /etc/yum.repos.d/
 
 # will always install the latest stable google-chrome version
 RUN dnf update --nodocs -y  \
@@ -48,63 +48,57 @@ RUN dnf install -y git \
     && dnf clean all \
     && rm -rf /var/cache/dnf
 
-# handles os dependancies for: crypto + readpdf + iputils + bs4py3 + parse-emails + docxpy + netutils + sklearn + pandas + python_pancloud_v2 + ippysocks-py3 +
-# akamai + google-k8s-engine + dxl + unzip + py3ews + taxii2 + pan-os-python + bs4-tld + slackv3 + google-api-py3 + boto3 +
-# pyjwt3 + netmiko + googleapi-python3 + btfl-soup + joe-security + dnspython + slack + pcap-http-extractor
+# copy model_docker.pkl for mlurlphishing
+COPY ./model_docker.pkl /model/model_docker.pkl
+
+# handles os dependancies for: crypto + readpdf + parse-emails + docxpy + sklearn + pandas + ippysocks-py3 +
+# unzip + py3ews + taxii2 + pan-os-python + bs4-tld + slackv3 + google-api-py3 + boto3py3 +
+# pyjwt3 + btfl-soup + joe-security + slack + pcap-http-extractor
 # note: the packages that are being removed by dnf remove at the end are packages that are required during the installation of python dependancies
 
 # crypto os dependancies: python3-devel gcc gcc-c++ make wget git rust cargo libffi-devel openssl-devel
 # readpdf os dependancies: poppler poppler-utils
-# iputils os dependancies: iputils
-# bs4py3 os dependancies: libxml2-devel, libxslt-devel
 # parse-emails os dependancies: libffi-devel, python3-devel, wget, git
 # docxpy os dependancies: libxml2-devel, libxslt-devel, python3-devel, wget
-# netutils os dependancies: python3-devel, wget, git, curl, bind-utils
 # sklearn os dependancies: python3-devel gcc gcc-c++ make wget git openssh curl ca-certificates openssl less make rsync libpng-devel freetype-devel gcc-gfortran.x86_64 openblas unzip
 # pandas os dependancies: python3-devel gcc gcc-c++ make wget git libstdc++
-# python_pancloud_v2 os dependancies: python3-devel gcc gcc-c++ make wget git libffi-devel openssl-devel
 # ippysocks-py3 os dependancies: gcc python3-devel
-# akamai os dependanices: python3-devel gcc gcc-c++ make wget
-# google-k8s-engine os dependanices: python3-devel gcc
 # oauthlib os dependanices: python3-devel gcc gcc-c++ make wget git
-# dxl os dependanices: python3-devel gcc gcc-c++ make wget git
 # unzip os dependanices: python3-devel gcc gcc-c++ make wget git p7zip unrar unrar-free
 # py3ews os dependanices: python3-devel gcc gcc-c++ make wget git libxml2-devel openssl-devel
 # taxii2 os dependanices: python3-devel gcc gcc-c++ make wget git
 # pan-os-python os dependanices: python3-devel gcc gcc-c++ make wget git
-# bs4-tld os dependanices: python3-devel gcc gcc-c++ make wget git
 # slackv3 os dependanices: python3-devel gcc gcc-c++ make wget git libffi-devel
 # google-api-py3 os dependanices: python3-devel gcc
-# boto3 os dependanices: python3-devel gcc gcc-c++ make wget git
+# boto3py3 os dependanices: python3-devel gcc gcc-c++ make wget git
 # pyjwt3 os dependanices: python3-devel gcc gcc-c++ make wget git
-# netmiko os dependanices: python3-devel gcc
-# googleapi-python3 os dependancies: python3-devel gcc
-# btfl-soup os dependancies: python3-devel gcc gcc-c++ make wget git
 # joe-security os dependancies: python3-devel gcc gcc-c++ make wget git
-# dnspython os dependancies: python3-devel gcc gcc-c++ make wget git
 # slack os dependancies: python3-devel gcc gcc-c++ make wget git libffi
-# pcap-http-extractor os dependancies: python3-devel gcc gcc-c++ make wget git libsmi wireshark-cli c-ares
+# mlurlphishing os dependancies: python3-devel gcc libjpeg-turbo-devel glib2-devel libSM libXext mesa-libGL libXrender-devel
 
-# lines 5-7 are the RPMs for unrar and p7zip
-# lines 8-10 are the RPMs for wireshark
-# line 11 - since in ubi its 7za --> need to make it to run as 7z like our script
-# lines 13-15 is the configuration for sklearn
-RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git poppler poppler-utils iputils \
+# lines 5-7 are the RPMs for unrar and p7zip (unzip image)
+# lines 8-9 are the RPMs for libjpeg-turbo-devel and libXrender-devel (mlurlphishing image)
+# line 10 - since in ubi its 7za --> need to make it to run as 7z like our script
+# lines 12-14 is the configuration for sklearn
+# lines 15-17 is the configuration for mlurlphishing
+RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git poppler poppler-utils \
         rust cargo libxml2-devel libxslt-devel \
-        libffi-devel openssl-devel bind-utils curl libffi \
+        libffi-devel openssl-devel curl libffi glib2-devel libSM libXext mesa-libGL libXrender \
         openssh ca-certificates openssl less rsync libpng-devel freetype-devel gcc-gfortran.x86_64 openblas unzip libstdc++ \
         http://mirror.dogado.de/fedora-epel/8/Everything/x86_64/Packages/p/p7zip-16.02-20.el8.x86_64.rpm \
         https://mirror.dogado.de/fedora-epel/8/Everything/x86_64/Packages/u/unrar-0.1.1-1.el8.x86_64.rpm \
         https://mirror.dogado.de/fedora-epel/8/Everything/x86_64/Packages/u/unrar-free-0.1.1-1.el8.x86_64.rpm \
-        http://mirror.centos.org/centos/8-stream/AppStream/x86_64/os/Packages/libsmi-0.4.8-23.el8.x86_64.rpm \
-        http://mirror.centos.org/centos/8-stream/AppStream/x86_64/os/Packages/wireshark-cli-2.6.2-15.el8.x86_64.rpm \
-        http://mirror.centos.org/centos/8-stream/BaseOS/x86_64/os/Packages/c-ares-1.13.0-6.el8.x86_64.rpm \
+        http://mirror.centos.org/centos/8-stream/AppStream/x86_64/os/Packages/libjpeg-turbo-devel-1.5.3-12.el8.x86_64.rpm \
+        http://mirror.centos.org/centos/8-stream/AppStream/x86_64/os/Packages/libXrender-devel-0.9.10-7.el8.x86_64.rpm \
         && ln -s /usr/bin/7za /usr/bin/7z \
         && pip install --no-cache-dir --no-index -r requirements.txt \
         && mkdir /ml \
         && python -c "import nltk; nltk.download('wordnet', download_dir='/ml/nltk_data'); nltk.download('stopwords', download_dir='/ml/nltk_data'); nltk.download('punkt', download_dir='/ml/nltk_data')" \
         && chown -R demisto:demisto /ml && chmod -R 775 /ml \
-        && dnf remove -y python3-devel rust cargo libffi-devel openssl-devel gcc gcc-c++ make git platform-python-pip \
+        && mkdir /model \
+        && mv model_docker.pkl model/model_docker.pkl \
+        && chmod -R 775 /model \
+        && dnf remove -y python3-devel rust cargo libffi-devel openssl-devel gcc gcc-c++ make git platform-python-pip libXrender-devel \
         && dnf clean all \
         && rm -rf /var/cache/dnf \
         && rm -rf /root/.cargo \
