@@ -16,7 +16,7 @@ driver_version = subprocess.check_output(["/usr/bin/chromedriver", "--version"],
 print(f'Comparing full versions: {chrome_version} to: {driver_version}')
 chrome_version_arr = chrome_version.split('.')[:3]
 driver_version_arr = driver_version.split('.')[:3]
-print(f'Comparing  versions without patch: {chrome_version_arr} to: {driver_version_arr}')
+print(f'Comparing versions without patch: {chrome_version_arr} to: {driver_version_arr}')
 assert chrome_version_arr == driver_version_arr
 
 print('chromium is good!!!')
@@ -151,32 +151,6 @@ from PIL import Image
 
 print('mlurlphishing is good')
 
-
-import sqlalchemy
-import psycopg2
-import pyodbc
-import psycopg2
-import cx_Oracle
-
-assert 'FreeTDS' in pyodbc.drivers()
-assert 'ODBC Driver 18 for SQL Server' in pyodbc.drivers()
-
-try:
-    # make sure oracle manages to load tns client libraries.
-    # Will fail but we want to be sure we don't fail on loading the driver
-    cx_Oracle.connect()
-except Exception as ex:
-    assert 'ORA-12162' in str(ex)
-
-
-# freetds test
-engine = sqlalchemy.create_engine('mssql+pyodbc:///testuser:testpass@127.0.0.1:1433/TEST?driver=FreeTDS')
-try:
-    engine.execute('select 1 as [Result]')
-except Exception as ex:
-    assert "Can't open lib" not in str(ex), "Failed because of missing lib: " + str(ex)
-
-print("genericsql is good")
 
 from google.cloud.container_v1 import ClusterManagerClient
 from google.protobuf.json_format import MessageToDict

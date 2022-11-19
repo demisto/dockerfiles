@@ -4,7 +4,9 @@ COPY requirements.txt .
 
 # chromium
 COPY download_chromedriver.sh .
+COPY google-chrome.repo /etc/yum.repos.d/
 
+# will always install the latest stable google-chrome version
 RUN dnf update --nodocs -y  \
     && dnf upgrade -y --nodocs \
     && dnf install -y wget \
@@ -12,8 +14,7 @@ RUN dnf update --nodocs -y  \
     && wget https://www.centos.org/keys/RPM-GPG-KEY-CentOS-Official \
     && rpm --import linux_signing_key.pub \
     && rpm --import RPM-GPG-KEY-CentOS-Official \
-    && dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git unzip llvm-libs \
-    http://dl.google.com/linux/chrome/rpm/stable/x86_64/google-chrome-stable-107.0.5304.110-1.x86_64.rpm \
+    && dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git unzip llvm-libs google-chrome-stable \
     http://mirror.centos.org/centos/8-stream/AppStream/x86_64/os/Packages/desktop-file-utils-0.23-8.el8.x86_64.rpm \
     http://mirror.centos.org/centos/8-stream/BaseOS/x86_64/os/Packages/liberation-fonts-2.00.3-7.el8.noarch.rpm  \
     http://mirror.centos.org/centos/8-stream/BaseOS/x86_64/os/Packages/liberation-sans-fonts-2.00.3-7.el8.noarch.rpm \
@@ -47,7 +48,7 @@ RUN dnf install -y git \
     && dnf clean all \
     && rm -rf /var/cache/dnf
 
-# handles crypto + readpdf + iputils + bs4py3 + parse-emails + docxpy + netutils + sklearn + pandas + python_pancloud_v2 + ippysocks-py3 +
+# handles os dependancies for: crypto + readpdf + iputils + bs4py3 + parse-emails + docxpy + netutils + sklearn + pandas + python_pancloud_v2 + ippysocks-py3 +
 # akamai + google-k8s-engine + dxl + unzip + py3ews + taxii2 + pan-os-python + bs4-tld + slackv3 + google-api-py3 + boto3 +
 # pyjwt3 + netmiko + googleapi-python3 + btfl-soup + joe-security + dnspython + slack + pcap-http-extractor
 # note: the packages that are being removed by dnf remove at the end are packages that are required during the installation of python dependancies

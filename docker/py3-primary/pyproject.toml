@@ -81,7 +81,6 @@ regex = "==2022.3.2"  # seems to be a bug in versions > 2022.3.2 https://stackov
 dpkt = "*"
 aiodns = "*"
 pysocks = "^1.7.0"  # must be 1.7.0 or above, cause 1.6.8 doesn't work on python 3.10
-zeep = "*"
 pancloud = "==2.0.0a2"
 netmiko = "*"
 jbxapi = "*"
@@ -91,12 +90,6 @@ ipwhois = "*"
 edgegrid-python = "*"
 google-cloud-container = "==0.5.0"  # in newer versions the enums were removed, see verify.py
 opencv-python = "==4.6.0.66"
-sqlalchemy = "*"
-pymysql = "*"
-psycopg2-binary = "*"
-pyodbc = "*"
-cx-oracle = "*"
-expiringdict = "*"
 
 [build-system]
 requires = ["poetry-core"]
