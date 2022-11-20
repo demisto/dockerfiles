@@ -57,8 +57,8 @@ COPY --from=mlurlphishing /model /model
 COPY office-utils/LibreOffice_7.4.2.3_Linux_x86-64_rpm LibreOffice_Linux_x86-64_rpm
 
 # handles os dependancies for: crypto + readpdf + parse-emails + docxpy + sklearn + pandas + ippysocks-py3 + oauthlib
-# unzip + py3ews + taxii2 + pan-os-python + slackv3 + google-api-py3 + boto3py3 + office-utils
-# pyjwt3 + joe-security + slack + mlurlphishing
+# unzip + py3ews + taxii2 + pan-os-python + slackv3 + google-api-py3 + boto3py3
+# pyjwt3 + joe-security + slack + mlurlphishing + office-utils
 # note: the packages that are being removed by dnf remove at the end are packages that are required during the installation of python dependancies
 
 # crypto os dependancies: python3-devel gcc gcc-c++ make wget git rust cargo libffi-devel openssl-devel
@@ -80,6 +80,7 @@ COPY office-utils/LibreOffice_7.4.2.3_Linux_x86-64_rpm LibreOffice_Linux_x86-64_
 # joe-security os dependancies: python3-devel gcc gcc-c++ make wget git
 # slack os dependancies: python3-devel gcc gcc-c++ make wget git libffi
 # mlurlphishing os dependancies: python3-devel gcc libjpeg-turbo-devel glib2-devel libSM libXext mesa-libGL libXrender-devel
+# office-utils os dependancies: LibreOffice_Linux_x86-64_rpm java-11-openjdk-headless cairo libSM libX11-xcb
 
 # lines 6-8 are the RPMs for unrar and p7zip (unzip image)
 # lines 9-10 are the RPMs for libjpeg-turbo-devel and libXrender-devel (mlurlphishing image)
@@ -103,7 +104,7 @@ RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git poppler popp
         && python -c "import nltk; nltk.download('wordnet', download_dir='/ml/nltk_data'); nltk.download('stopwords', download_dir='/ml/nltk_data'); nltk.download('punkt', download_dir='/ml/nltk_data')" \
         && chown -R demisto:demisto /ml && chmod -R 775 /ml \
         && chmod -R 775 /model \
-        && dnf install -y --nodocs java-11-openjdk-headless \
+        && dnf install -y --nodocs java-11-openjdk-headless cairo libX11-xcb \
         && dnf localinstall -y LibreOffice_Linux_x86-64_rpm/RPMS/*.rpm \
         && soffice --version \
         && rm -rf LibreOffice_Linux_x86-64_rpm \
@@ -115,5 +116,6 @@ RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git poppler popp
         && rm -rf /root/.cargo \
         && pip uninstall -y pcodedmp
 
-
+# add libreoffice to path
+ENV PATH=$PATH:/opt/libreoffice7.4/program
 ENV NLTK_DATA='/ml/nltk_data'
