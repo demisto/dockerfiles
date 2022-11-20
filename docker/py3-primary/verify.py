@@ -21,6 +21,10 @@ assert chrome_version_arr == driver_version_arr
 
 print('chromium is good!!!')
 
+
+# tesseract
+subprocess.check_output(["tesseract", "--version", "--list-langs"], text=True)
+
 # crypto
 from cryptography.fernet import Fernet
 import msal
@@ -32,28 +36,63 @@ print(msal.oauth2cli.assertion.JwtAssertionCreator('', 'All is good. msal was im
 
 print('crypto is good!!!')
 
+
+# readpdf
+from pikepdf import Pdf
+from PyPDF2 import PdfFileReader, PdfFileWriter
+print('readpdf is good!!!')
+
+
+# parse-emails
+from parse_emails.parse_emails import EmailParser
+print('parse-emails is good!!!')
+
+
+# docxpy + office-utils
+from docx import Document
+# make sure libreoffice is installed
+subprocess.check_output(["soffice", "--version"], text=True)
+print('docxpy + office-utils are good!!!')
+
+
+# sklearn
+import sklearn
+import pandas
+import numpy
+import nltk
+import dill
+import eli5
+import networkx
+print('sklearn is good!!!')
+
+# pandas
+import pandas as pd
+dict = {
+    "country": ["Brazil", "Russia", "India", "China", "South Africa"],
+    "capital": ["Brasilia", "Moscow", "New Dehli", "Beijing", "Pretoria"],
+    "area": [8.516, 17.10, 3.286, 9.597, 1.221],
+    "population": [200.4, 143.5, 1252, 1357, 52.98]
+}
+data = pd.DataFrame(dict)
+print(data)
+print('pandas is good!!!')
+
+# ippysocks-py3
+import whois
+print('ippysocks-py3 is good!!!')
+
+
 # oauthlib
 from requests_oauthlib import OAuth1
 from oauthlib.oauth2 import BackendApplicationClient
-
 print('oauthlib is good!!!')
 
+# unzip
+subprocess.check_output(["unrar", "--version"], text=True)
+subprocess.check_output(["7z", "--version"], text=True)
+print('unzip is good!!!')
 
 # py3ews
-
-import traceback
-import json
-import os
-import hashlib
-from datetime import timedelta
-from io import StringIO
-import logging
-import warnings
-import email
-from requests.exceptions import ConnectionError
-from collections import deque
-
-from multiprocessing import Process
 import exchangelib
 from exchangelib.errors import ErrorItemNotFound, ResponseMessageError, TransportError, RateLimitError, \
     ErrorInvalidIdMalformed, \
@@ -73,55 +112,56 @@ test = tzlocal.get_localzone()
 print('all is good, `get_localzone() -> {}` is working'.format(test))
 print('py3ews is good!!!')
 
-# readpdf
-from pikepdf import Pdf
-from PyPDF2 import PdfFileReader, PdfFileWriter
-print('readpdf is good!!!')
+# taxii2
+from stix2 import TAXIICollectionSource, Filter
+from taxii2client import Server, Collection
+print("taxii2 is good!!!")
 
 
-# parse-emails
-from parse_emails.parse_emails import EmailParser
-print('parse-emails is good!!!')
+# pan-os-python
+from panos.base import PanDevice
+from lxml import etree
+print("pan-os-python is good!!!")
 
-# docxpy + office-utils
-from docx import Document
-print('docxpy + office-utils are good!!!')
+# slackv3
+import slack_sdk
+from slack_sdk.errors import SlackApiError
+from slack_sdk.socket_mode.aiohttp import SocketModeClient
+from slack_sdk.socket_mode.request import SocketModeRequest
+from slack_sdk.socket_mode.response import SocketModeResponse
+from slack_sdk.web.async_client import AsyncWebClient
+from slack_sdk.web.async_slack_response import AsyncSlackResponse
+from slack_sdk.web.slack_response import SlackResponse
+print('slackv3 is good!!!')
 
-#netutils
-from netaddr import IPAddress, IPNetwork
-print('netutils is good!!!')
-
-# sklearn
-import sklearn
-import pandas
-import numpy
-import nltk
-import dill
-import eli5
-import networkx
-print('sklearn is good!!!')
-
-
-import pandas as pd
-
-dict = {
-    "country": ["Brazil", "Russia", "India", "China", "South Africa"],
-    "capital": ["Brasilia", "Moscow", "New Dehli", "Beijing", "Pretoria"],
-    "area": [8.516, 17.10, 3.286, 9.597, 1.221],
-    "population": [200.4, 143.5, 1252, 1357, 52.98]
-}
-
-data = pd.DataFrame(dict)
-
-print(data)
-
-print('pandas is good!!!')
-
-import regex
-pattern = regex.Regex('\\\\d\\+', flags=regex.V0)
-print('regex is good')
+# google-api-py3
+import google_auth_httplib2
+import httplib2
+from apiclient import discovery
+from google.oauth2 import service_account
+from googleapiclient.errors import HttpError
+print('google-api-py3 is good!!!')
 
 
+# boto3py3
+import boto3
+print('boto3py3 is good!!!')
+
+# pyjwt3
+import jwt
+print('pyjwt3 is good!!!')
+
+# joe-security
+import jbxapi
+print('joe-security is good!!!')
+
+# slack
+import slack
+from slack.errors import SlackApiError
+from slack.web.slack_response import SlackResponse
+print('slack is good!!!')
+
+# mlurlphishing
 import numpy as np
 import pandas
 import sklearn
@@ -131,6 +171,53 @@ import tldextract
 import dill
 import catboost
 from PIL import Image
+print('mlurlphishing is good!!!')
 
+# make sure regex is working cause in new versions there are problems
+import regex
+pattern = regex.Regex('\\\\d\\+', flags=regex.V0)
+print('regex is good')
+
+
+# mlurlphishing
+import numpy as np
+import pandas
+import sklearn
+from bs4 import BeautifulSoup
+import cv2 as cv
+import dill
+import catboost
+from PIL import Image
 print('mlurlphishing is good')
+
+
+# ml
+import torch.nn as nn
+import os
+import fasttext
+import sklearn
+import numpy
+import pandas
+import nltk
+import lime
+import tabulate
+from Crypto.Hash import SHA256
+import spacy
+nlp = spacy.load('en_core_web_sm', disable=['tagger', 'parser', 'ner', 'textcat'])
+doc = nlp('tokenize this sentence')
+import demisto_ml
+import catboost
+import eli5
+import langdetect
+import onnx
+
+def verify_stat(filename):
+    res = os.stat(filename)
+    assert res.st_uid == 4000
+    assert res.st_gid == 4000
+    assert oct(res.st_mode)[-3:] == '775'
+verify_stat('/ml/encrypted_model.b')
+verify_stat('/ml/nltk_data')
+verify_stat('/ml/oob_evaluation.txt')
+print('ml is good!!!')
 
