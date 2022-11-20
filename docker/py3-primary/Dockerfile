@@ -103,7 +103,7 @@ RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git poppler popp
         && python -c "import nltk; nltk.download('wordnet', download_dir='/ml/nltk_data'); nltk.download('stopwords', download_dir='/ml/nltk_data'); nltk.download('punkt', download_dir='/ml/nltk_data')" \
         && chown -R demisto:demisto /ml && chmod -R 775 /ml \
         && chmod -R 775 /model \
-        && dnf install -y --no-docs java-11-openjdk-headless \
+        && dnf install -y --nodocs java-11-openjdk-headless \
         && dnf localinstall -y LibreOffice_Linux_x86-64_rpm/RPMS/*.rpm \
         && soffice --version \
         && rm -rf LibreOffice_Linux_x86-64_rpm \
