@@ -6,6 +6,7 @@ FROM registry.access.redhat.com/${BASE_UBI_VERSION}:${BASE_UBI_TAG} as build
 
 RUN dnf upgrade -y --nodocs && \
     dnf install -y --nodocs \
+       procps-ng \
        bzip2-devel \
        expat-devel \
        gcc \
