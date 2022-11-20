@@ -1,7 +1,5 @@
 FROM demisto/mlurlphishing:1.0.0.28347 as mlurlphishing
 
-FROM demisto/ml:1.0.0.32340 as ml
-
 FROM devdemisto/py3-tools-ubi:1.0.0.37496
 
 COPY requirements.txt .
@@ -54,17 +52,13 @@ RUN dnf install -y git \
 
 # copy the model from mlurlphishing image
 COPY --from=mlurlphishing /model /model
-# copy demisto_ml from ml image
-COPY --from=ml demisto_ml-0.2.tar.gz demisto_ml-0.2.tar.gz
-# copy the ml folder from ml image
-COPY --from=ml /ml /ml
 
 # this is being done because when trying to unzip the rpm inside the container doesn't work, hence copying it as rpm.
 COPY office-utils/LibreOffice_7.4.2.3_Linux_x86-64_rpm LibreOffice_Linux_x86-64_rpm
 
 # handles os dependancies for: crypto + readpdf + parse-emails + docxpy + sklearn + pandas + ippysocks-py3 + oauthlib
 # unzip + py3ews + taxii2 + pan-os-python + slackv3 + google-api-py3 + boto3py3 + office-utils
-# pyjwt3 + joe-security + slack + mlurlphishing + ml
+# pyjwt3 + joe-security + slack + mlurlphishing
 # note: the packages that are being removed by dnf remove at the end are packages that are required during the installation of python dependancies
 
 # crypto os dependancies: python3-devel gcc gcc-c++ make wget git rust cargo libffi-devel openssl-devel
@@ -86,7 +80,6 @@ COPY office-utils/LibreOffice_7.4.2.3_Linux_x86-64_rpm LibreOffice_Linux_x86-64_
 # joe-security os dependancies: python3-devel gcc gcc-c++ make wget git
 # slack os dependancies: python3-devel gcc gcc-c++ make wget git libffi
 # mlurlphishing os dependancies: python3-devel gcc libjpeg-turbo-devel glib2-devel libSM libXext mesa-libGL libXrender-devel
-# ml os dependancies: python3-devel wget git gcc-gfortran pkgconf-pkg-config
 
 # lines 6-8 are the RPMs for unrar and p7zip (unzip image)
 # lines 9-10 are the RPMs for libjpeg-turbo-devel and libXrender-devel (mlurlphishing image)
@@ -98,7 +91,6 @@ COPY office-utils/LibreOffice_7.4.2.3_Linux_x86-64_rpm LibreOffice_Linux_x86-64_
 RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git poppler poppler-utils \
         rust cargo libxml2-devel libxslt-devel \
         libffi-devel openssl-devel curl libffi glib2-devel libSM libXext mesa-libGL libXrender \
-        gcc-gfortran pkgconf-pkg-config \
         openssh ca-certificates openssl less rsync libpng-devel freetype-devel gcc-gfortran.x86_64 openblas unzip libstdc++ \
         http://mirror.dogado.de/fedora-epel/8/Everything/x86_64/Packages/p/p7zip-16.02-20.el8.x86_64.rpm \
         https://mirror.dogado.de/fedora-epel/8/Everything/x86_64/Packages/u/unrar-0.1.1-1.el8.x86_64.rpm \
@@ -107,17 +99,14 @@ RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git poppler popp
         http://mirror.centos.org/centos/8-stream/AppStream/x86_64/os/Packages/libXrender-devel-0.9.10-7.el8.x86_64.rpm \
         && ln -s /usr/bin/7za /usr/bin/7z \
         && pip install --no-cache-dir --no-index -r requirements.txt \
-        && pip install torch -f https://download.pytorch.org/whl/torch_stable.html \
-        && pip install demisto_ml-0.2.tar.gz \
-        && python -c "import nltk; nltk.download('punkt', download_dir='/ml/nltk_data')" \
-        && chown -R demisto:demisto /ml \
-        && chmod -R 775 /ml \
+        && mkdir /ml \
+        && python -c "import nltk; nltk.download('wordnet', download_dir='/ml/nltk_data'); nltk.download('stopwords', download_dir='/ml/nltk_data'); nltk.download('punkt', download_dir='/ml/nltk_data')" \
+        && chown -R demisto:demisto /ml && chmod -R 775 /ml \
         && chmod -R 775 /model \
-        && python -m spacy download en_core_web_sm \
         && dnf install -y --no-docs java-11-openjdk-headless \
         && dnf localinstall -y LibreOffice_Linux_x86-64_rpm/RPMS/*.rpm \
         && soffice --version \
-        && rm -rf LibreOffice_7.4.2.3_Linux_x86-64_rpm \
+        && rm -rf LibreOffice_Linux_x86-64_rpm \
         && dnf remove -y python3-devel rust cargo libffi-devel openssl-devel gcc gcc-c++ make git platform-python-pip libXrender-devel \
         gcc-gfortran pkgconf-pkg-config \
         && rm -rf demisto_ml-0.2.tar.gz \
@@ -127,5 +116,4 @@ RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git poppler popp
         && pip uninstall -y pcodedmp
 
 
-ENV MPLCONFIGDIR='/ml/matplotlib'
 ENV NLTK_DATA='/ml/nltk_data'
