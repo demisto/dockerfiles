@@ -1,5 +1,4 @@
-# This is a py-tools image that is based on debian linux
-FROM devdemisto/python3-ubi:3.10.8.37476
+FROM devdemisto/python3-ubi:3.10.8.37604
 
 COPY requirements.txt .
 
