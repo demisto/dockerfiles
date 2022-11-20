@@ -107,7 +107,7 @@ RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git poppler popp
         http://mirror.centos.org/centos/8-stream/AppStream/x86_64/os/Packages/libXrender-devel-0.9.10-7.el8.x86_64.rpm \
         && ln -s /usr/bin/7za /usr/bin/7z \
         && pip install --no-cache-dir --no-index -r requirements.txt \
-        && pip install torch==1.9.0+cpu -f https://download.pytorch.org/whl/torch_stable.html \
+        && pip install torch -f https://download.pytorch.org/whl/torch_stable.html \
         && pip install demisto_ml-0.2.tar.gz \
         && python -c "import nltk; nltk.download('punkt', download_dir='/ml/nltk_data')" \
         && chown -R demisto:demisto /ml \
