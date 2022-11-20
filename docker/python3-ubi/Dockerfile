@@ -1,5 +1,5 @@
 # python3.10.8 at the moment - if updated please update this comment
-ARG BASE_UBI_TAG=8.6
+ARG BASE_UBI_TAG=8.7
 ARG BASE_UBI_VERSION=ubi8
 
 FROM registry.access.redhat.com/${BASE_UBI_VERSION}:${BASE_UBI_TAG} as build
