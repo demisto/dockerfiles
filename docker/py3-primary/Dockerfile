@@ -98,7 +98,7 @@ RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git poppler popp
         http://mirror.centos.org/centos/8-stream/AppStream/x86_64/os/Packages/libjpeg-turbo-devel-1.5.3-12.el8.x86_64.rpm \
         http://mirror.centos.org/centos/8-stream/AppStream/x86_64/os/Packages/libXrender-devel-0.9.10-7.el8.x86_64.rpm \
         && ln -s /usr/bin/7za /usr/bin/7z \
-        && pip install --no-cache-dir --no-index -r requirements.txt \
+        && pip install --no-cache-dir -r requirements.txt \
         && mkdir /ml \
         && python -c "import nltk; nltk.download('wordnet', download_dir='/ml/nltk_data'); nltk.download('stopwords', download_dir='/ml/nltk_data'); nltk.download('punkt', download_dir='/ml/nltk_data')" \
         && chown -R demisto:demisto /ml && chmod -R 775 /ml \
