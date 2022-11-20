@@ -6,7 +6,6 @@ FROM registry.access.redhat.com/${BASE_UBI_VERSION}:${BASE_UBI_TAG} as build
 
 RUN dnf upgrade -y --nodocs && \
     dnf install -y --nodocs \
-       procps-ng \
        bzip2-devel \
        expat-devel \
        gcc \
@@ -49,6 +48,7 @@ RUN pip3.10 install -r requirements.txt
 FROM registry.access.redhat.com/${BASE_UBI_VERSION}:${BASE_UBI_TAG}
 
 RUN dnf update -y --nodocs && \
+    dnf install -y procps-ng && \
     dnf clean all && \
     rm -rf /var/cache/dnf
 
