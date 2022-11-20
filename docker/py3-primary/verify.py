@@ -18,7 +18,6 @@ chrome_version_arr = chrome_version.split('.')[:3]
 driver_version_arr = driver_version.split('.')[:3]
 print(f'Comparing versions without patch: {chrome_version_arr} to: {driver_version_arr}')
 assert chrome_version_arr == driver_version_arr
-
 print('chromium is good!!!')
 
 
@@ -33,7 +32,6 @@ from bs4 import BeautifulSoup
 key = Fernet.generate_key()
 print("All is good. cryptography generated a key: {}".format(key))
 print(msal.oauth2cli.assertion.JwtAssertionCreator('', 'All is good. msal was imported successfully').algorithm)
-
 print('crypto is good!!!')
 
 
@@ -89,7 +87,7 @@ print('oauthlib is good!!!')
 
 # unzip
 subprocess.check_output(["unrar", "--version"], text=True)
-subprocess.check_output(["7z", "--version"], text=True)
+subprocess.check_output(["7z"], text=True)
 print('unzip is good!!!')
 
 # py3ews
@@ -177,47 +175,3 @@ print('mlurlphishing is good!!!')
 import regex
 pattern = regex.Regex('\\\\d\\+', flags=regex.V0)
 print('regex is good')
-
-
-# mlurlphishing
-import numpy as np
-import pandas
-import sklearn
-from bs4 import BeautifulSoup
-import cv2 as cv
-import dill
-import catboost
-from PIL import Image
-print('mlurlphishing is good')
-
-
-# ml
-import torch.nn as nn
-import os
-import fasttext
-import sklearn
-import numpy
-import pandas
-import nltk
-import lime
-import tabulate
-from Crypto.Hash import SHA256
-import spacy
-nlp = spacy.load('en_core_web_sm', disable=['tagger', 'parser', 'ner', 'textcat'])
-doc = nlp('tokenize this sentence')
-import demisto_ml
-import catboost
-import eli5
-import langdetect
-import onnx
-
-def verify_stat(filename):
-    res = os.stat(filename)
-    assert res.st_uid == 4000
-    assert res.st_gid == 4000
-    assert oct(res.st_mode)[-3:] == '775'
-verify_stat('/ml/encrypted_model.b')
-verify_stat('/ml/nltk_data')
-verify_stat('/ml/oob_evaluation.txt')
-print('ml is good!!!')
-
