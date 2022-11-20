@@ -106,7 +106,6 @@ RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git poppler popp
         && chmod -R 775 /model \
         && dnf install -y --nodocs java-11-openjdk-headless cairo libX11-xcb \
         && dnf localinstall -y LibreOffice_Linux_x86-64_rpm/RPMS/*.rpm \
-        && soffice --version \
         && rm -rf LibreOffice_Linux_x86-64_rpm \
         && dnf remove -y python3-devel rust cargo libffi-devel openssl-devel gcc gcc-c++ make git platform-python-pip libXrender-devel \
         gcc-gfortran pkgconf-pkg-config \
