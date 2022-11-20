@@ -60,7 +60,7 @@ COPY --from=ml demisto_ml-0.2.tar.gz demisto_ml-0.2.tar.gz
 COPY --from=ml /ml /ml
 
 # this is being done because when trying to unzip the rpm inside the container doesn't work, hence copying it as rpm.
-COPY office-utils/LibreOffice_7.4.2.3_Linux_x86-64_rpm .
+COPY office-utils/LibreOffice_7.4.2.3_Linux_x86-64_rpm LibreOffice_Linux_x86-64_rpm
 
 # handles os dependancies for: crypto + readpdf + parse-emails + docxpy + sklearn + pandas + ippysocks-py3 + oauthlib
 # unzip + py3ews + taxii2 + pan-os-python + slackv3 + google-api-py3 + boto3py3 + office-utils
@@ -86,17 +86,15 @@ COPY office-utils/LibreOffice_7.4.2.3_Linux_x86-64_rpm .
 # joe-security os dependancies: python3-devel gcc gcc-c++ make wget git
 # slack os dependancies: python3-devel gcc gcc-c++ make wget git libffi
 # mlurlphishing os dependancies: python3-devel gcc libjpeg-turbo-devel glib2-devel libSM libXext mesa-libGL libXrender-devel
-# ml os dependancies: python3-devel wget git gcc-gfortran pkgconf-pkg-config hdf5-devel
+# ml os dependancies: python3-devel wget git gcc-gfortran pkgconf-pkg-config
 
 # lines 6-8 are the RPMs for unrar and p7zip (unzip image)
 # lines 9-10 are the RPMs for libjpeg-turbo-devel and libXrender-devel (mlurlphishing image)
-# lines 11 is the RPM for hdf5-devel (ml image)
-# line 12 - since in ubi its 7za --> need to make it to run as 7z like our script
+# line 11 - since in ubi its 7za --> need to make it to run as 7z like our script
+# lines 11-13 is the configuration for sklearn
 # line 14 - install the demisto_ml image
-# 15-16 - add punkt for sklearn image
-# lines 12-14 is the configuration for sklearn
-# lines 15-17 is the configuration for mlurlphishing
-# lines 20-22 - installing libreoffice for the office-utils image
+# lines 15 - add punkt for sklearn image
+# lines 21-23 - installing libreoffice for the office-utils image
 RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git poppler poppler-utils \
         rust cargo libxml2-devel libxslt-devel \
         libffi-devel openssl-devel curl libffi glib2-devel libSM libXext mesa-libGL libXrender \
@@ -107,9 +105,9 @@ RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git poppler popp
         https://mirror.dogado.de/fedora-epel/8/Everything/x86_64/Packages/u/unrar-free-0.1.1-1.el8.x86_64.rpm \
         http://mirror.centos.org/centos/8-stream/AppStream/x86_64/os/Packages/libjpeg-turbo-devel-1.5.3-12.el8.x86_64.rpm \
         http://mirror.centos.org/centos/8-stream/AppStream/x86_64/os/Packages/libXrender-devel-0.9.10-7.el8.x86_64.rpm \
-        https://mirror.dogado.de/fedora-epel/8/Everything/x86_64/Packages/h/hdf5-devel-1.10.5-4.el8.x86_64.rpm \
         && ln -s /usr/bin/7za /usr/bin/7z \
         && pip install --no-cache-dir --no-index -r requirements.txt \
+        && pip install torch==1.9.0+cpu -f https://download.pytorch.org/whl/torch_stable.html \
         && pip install demisto_ml-0.2.tar.gz \
         && python -c "import nltk; nltk.download('punkt', download_dir='/ml/nltk_data')" \
         && chown -R demisto:demisto /ml \
@@ -117,11 +115,11 @@ RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git poppler popp
         && chmod -R 775 /model \
         && python -m spacy download en_core_web_sm \
         && dnf install -y --no-docs java-11-openjdk-headless \
-        && dnf localinstall -y LibreOffice_7.4.2.3_Linux_x86-64_rpm/RPMS/*.rpm \
+        && dnf localinstall -y LibreOffice_Linux_x86-64_rpm/RPMS/*.rpm \
         && soffice --version \
         && rm -rf LibreOffice_7.4.2.3_Linux_x86-64_rpm \
         && dnf remove -y python3-devel rust cargo libffi-devel openssl-devel gcc gcc-c++ make git platform-python-pip libXrender-devel \
-        gcc-gfortran pkgconf-pkg-config hdf5-devel \
+        gcc-gfortran pkgconf-pkg-config \
         && rm -rf demisto_ml-0.2.tar.gz \
         && dnf clean all \
         && rm -rf /var/cache/dnf \
