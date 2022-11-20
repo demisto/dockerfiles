@@ -1,6 +1,6 @@
 FROM demisto/mlurlphishing:1.0.0.28347 as mlurlphishing
 
-FROM devdemisto/py3-tools-ubi:1.0.0.37496
+FROM devdemisto/py3-tools-ubi:1.0.0.37605
 
 COPY requirements.txt .
 
