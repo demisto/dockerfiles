@@ -279,6 +279,7 @@ EOF
 
     if [ -n "$CR_REPO" ] && cr_login; then
         docker tag ${image_full_name} ${CR_REPO}/${image_full_name}
+        docker push ${CR_REPO}/${image_full_name} > /dev/null
         if [[ "$(prop 'support_latest')" ]]; then
           echo "adding latest tag"
           latest_tag="${DOCKER_ORG}/${image_name}:latest"
@@ -286,7 +287,6 @@ EOF
           docker push "${CR_REPO}/${latest_tag}"
           echo "Done docker push for ${latest_tag}"
         fi
-        docker push ${CR_REPO}/${image_full_name} > /dev/null
         echo "Done docker push for cr: ${image_full_name}"
     else
         echo "Skipping docker push for cr"
