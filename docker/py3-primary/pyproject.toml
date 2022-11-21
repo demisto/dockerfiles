@@ -69,7 +69,8 @@ jbxapi = "*"
 python-whois = "*"
 ipwhois = "*"
 edgegrid-python = "*"
-opencv-python = "==4.5.5.64"  # locked by mlurlphishing to be this specific version because of this issue https://github.com/opencv/opencv-python/issues/676
+opencv-python = "==4.5.5.64"  # locked this specific version because of this issue https://github.com/opencv/opencv-python/issues/676
+tldextract = "==2.2.3" # locked on this version because of this issue: https://github.com/john-kurkowski/tldextract/issues/209
 
 [build-system]
 requires = ["poetry-core"]
