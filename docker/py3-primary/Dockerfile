@@ -40,7 +40,7 @@ RUN dnf update --nodocs -y  \
     && cd .. \
     && git clone https://github.com/zdenop/tessdata_downloader.git \
     && for lang in eng ara chi_sim chi_sim_vert chi_tra chi_tra_vert deu fra heb ita jpn jpn_vert pol por rus spa swe tur ; \
-    do python tessdata_downloader/tessdata_downloader.py -o /usr/share/tesseract/tessdata/ -l $lang; done \
+    do python tessdata_downloader/tessdata_downloader.py -o /usr/local/share/tessdata/ -l $lang; done \
     && tesseract --version --list-langs \
     && rm -rf tessdata_downloader leptonica tesseract download_chromedriver.sh repos \
     && dnf remove -y python3-devel gcc gcc-c++ make platform-python-pip unzip git make autoconf automake libtool libpng-devel libjpeg-devel libtiff-devel zlib-devel pango \
