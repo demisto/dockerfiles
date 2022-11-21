@@ -4,7 +4,7 @@ FROM devdemisto/py3-tools-ubi:1.0.0.37605
 
 COPY requirements.txt .
 COPY chromium/download_chromedriver.sh .
-COPY repos .
+COPY repos /repos
 
 # handles chromium + tesseract
 RUN dnf update --nodocs -y  \
@@ -14,9 +14,7 @@ RUN dnf update --nodocs -y  \
     && wget https://www.centos.org/keys/RPM-GPG-KEY-CentOS-Official \
     && rpm --import linux_signing_key.pub \
     && rpm --import RPM-GPG-KEY-CentOS-Official \
-    && mv repos/fedora-epel.repo /etc/yum.repos.d/ \
-    && mv repos/google-chrome.repo /etc/yum.repos.d/ \
-    && mv repos/rocky8.repo /etc/yum.repos.d/ \
+    && mv repos/* /etc/yum.repos.d/ \
     && dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git unzip llvm-libs libXpm \
     && dnf install -y --nodocs --enablerepo=rocky8-base --enablerepo=rocky8-release tigervnc-server-minimal xorg-x11-utils google-chrome-stable \
     && dnf install -y --nodocs --enablerepo=rocky8-base --enablerepo=rocky8-release --enablerepo=fedora-epel ImageMagick \
