@@ -25,6 +25,15 @@ RUN dnf update --nodocs -y  \
     http://mirror.centos.org/centos/8-stream/AppStream/x86_64/os/Packages/vulkan-loader-1.2.189.0-1.el8.x86_64.rpm  \
     http://mirror.centos.org/centos/8-stream/AppStream/x86_64/os/Packages/xdg-utils-1.1.2-5.el8.noarch.rpm  \
     http://mirror.centos.org/centos/8-stream/BaseOS/x86_64/os/Packages/dejavu-sans-mono-fonts-2.35-7.el8.noarch.rpm \
+    http://mirror.centos.org/centos/8-stream/AppStream/x86_64/os/Packages/tigervnc-1.12.0-7.el8.x86_64.rpm \
+    http://mirror.centos.org/centos/8-stream/AppStream/x86_64/os/Packages/fltk-1.3.4-5.el8.x86_64.rpm \
+    http://mirror.centos.org/centos/8-stream/AppStream/x86_64/os/Packages/mesa-libGLU-9.0.0-15.el8.x86_64.rpm \
+    http://mirror.centos.org/centos/8-stream/AppStream/x86_64/os/Packages/tigervnc-icons-1.12.0-7.el8.noarch.rpm \
+    http://mirror.centos.org/centos/8-stream/AppStream/x86_64/os/Packages/tigervnc-license-1.12.0-7.el8.noarch.rpm \
+    http://mirror.centos.org/centos/8-stream/AppStream/x86_64/os/Packages/xorg-x11-utils-7.5-28.el8.x86_64.rpm \
+    http://mirror.centos.org/centos/8-stream/AppStream/x86_64/os/Packages/libXv-1.0.11-7.el8.x86_64.rpm \
+    http://mirror.centos.org/centos/8-stream/AppStream/x86_64/os/Packages/libXxf86dga-1.1.5-1.el8.x86_64.rpm \
+    http://mirror.centos.org/centos/8-stream/AppStream/x86_64/os/Packages/libdmx-1.1.4-3.el8.x86_64.rpm \
     && ./download_chromedriver.sh \
     && unzip chromedriver_linux64.zip \
     && mv chromedriver /usr/bin/chromedriver \
