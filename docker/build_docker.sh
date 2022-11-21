@@ -162,7 +162,7 @@ function docker_build {
         pipenv install --deploy # fails if lock is outdated
         PIPENV_YES=yes pipenv run pip freeze > requirements.txt
         echo "Pipfile lock generated requirements.txt: "
-        echo "############ REQUIREMENTS.TXT ###########"
+        echo "############ REQUIREMENTS.TXT ############"
         cat requirements.txt
         echo "##########################################"
         [ ! -f requirements.txt ] && echo "WARNING: requirements.txt does not exist, this is ok if python usage is not intended."
@@ -182,7 +182,7 @@ function docker_build {
       poetry self add poetry-plugin-export
       poetry export -f requirements.txt --output requirements.txt
       echo "poetry.lock generated requirements.txt file"
-      echo "############ REQUIREMENTS.TXT ###########"
+      echo "############ REQUIREMENTS.TXT ############"
       cat requirements.txt
 
     fi
