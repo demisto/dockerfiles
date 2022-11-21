@@ -6,7 +6,10 @@ COPY requirements.txt .
 COPY chromium/download_chromedriver.sh .
 COPY repos /repos
 
+ENV PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
+
 # handles chromium + tesseract
+# for tesseract - followed instructions from here: https://computingforgeeks.com/install-tesseract-ocr-on-rocky-almalinux/
 RUN dnf update --nodocs -y  \
     && dnf upgrade -y --nodocs \
     && dnf install --nodocs -y wget git \
@@ -24,18 +27,27 @@ RUN dnf update --nodocs -y  \
     && rm -rf chromedriver_linux64.zip \
     && google-chrome --version \
     && chromedriver --version \
-    && dnf install -y git \
-    && dnf install -y --enablerepo=rocky8-base --enablerepo=rocky8-release tesseract \
+    && dnf install -y --nodocs git automake make autoconf libtool clang zlib zlib-devel libjpeg libjpeg-devel libwebp libwebp-devel libtiff libtiff-devel libpng libpng-devel pango \
+    && git clone --depth 1 https://github.com/DanBloomberg/leptonica.git \
+    && cd leptonica \
+    && ./autogen.sh && ./configure && make && make install && ldconfig \
+    && cd .. \
+    && git clone --depth 1 https://github.com/tesseract-ocr/tesseract.git \
+    && cd tesseract \
+    && PKG_CONFIG_PATH=/usr/local/lib/pkgconfig ./autogen.sh  \
+    && PKG_CONFIG_PATH=/usr/local/lib/pkgconfig ./configure  \
+    && PKG_CONFIG_PATH=/usr/local/lib/pkgconfig gmake \
+    && PKG_CONFIG_PATH=/usr/local/lib/pkgconfig make install \
+    && ldconfig \
+    && cd .. \
     && git clone https://github.com/zdenop/tessdata_downloader.git \
     && for lang in eng ara chi_sim chi_sim_vert chi_tra chi_tra_vert deu fra heb ita jpn jpn_vert pol por rus spa swe tur ; \
     do python tessdata_downloader/tessdata_downloader.py -o /usr/share/tesseract/tessdata/ -l $lang; done \
     && tesseract --version --list-langs \
-    && rm -rf tessdata_downloader \
-    && dnf remove -y python3-devel gcc gcc-c++ make platform-python-pip unzip git \
+    && rm -rf tessdata_downloader leptonica tesseract download_chromedriver.sh repos \
+    && dnf remove -y python3-devel gcc gcc-c++ make platform-python-pip unzip git make autoconf automake libtool libpng-devel libjpeg-devel libtiff-devel zlib-devel pango \
     && dnf clean all \
-    && rm -rf /var/cache/dnf \
-    && rm -rf download_chromedriver.sh \
-    && rm -rf /repos
+    && rm -rf /var/cache/dnf
 
 
 # copy the model from mlurlphishing image
