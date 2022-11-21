@@ -6,8 +6,6 @@ COPY requirements.txt .
 COPY chromium/download_chromedriver.sh .
 COPY repos /repos
 
-ENV PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
-
 # handles chromium + tesseract
 # for tesseract - followed instructions from here: https://computingforgeeks.com/install-tesseract-ocr-on-rocky-almalinux/
 RUN dnf update --nodocs -y  \
