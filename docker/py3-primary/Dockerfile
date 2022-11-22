@@ -43,7 +43,7 @@ RUN dnf update --nodocs -y  \
     do python tessdata_downloader/tessdata_downloader.py -o /usr/local/share/tessdata/ -l $lang; done \
     && tesseract --version --list-langs \
     && rm -rf tessdata_downloader leptonica tesseract download_chromedriver.sh repos \
-    && dnf remove -y python3-devel gcc gcc-c++ make platform-python-pip unzip git make autoconf automake libtool libpng-devel libjpeg-devel libtiff-devel zlib-devel pango \
+    && dnf remove -y python3-devel gcc gcc-c++ make platform-python-pip unzip git make autoconf automake libtool libpng-devel libjpeg-devel libtiff-devel zlib-devel \
     && dnf clean all \
     && rm -rf /var/cache/dnf
 
