@@ -26,6 +26,7 @@ RUN dnf update --nodocs -y  \
     && google-chrome --version \
     && chromedriver --version \
     && dnf install -y --nodocs git automake make autoconf libtool clang zlib zlib-devel libjpeg libjpeg-devel libwebp libwebp-devel libtiff libtiff-devel libpng libpng-devel pango giflib \
+    && dnf install -y https://vault.centos.org/centos/8/PowerTools/x86_64/os/Packages/giflib-devel-5.1.4-3.el8.x86_64.rpm \
     && git clone --depth 1 https://github.com/DanBloomberg/leptonica.git \
     && cd leptonica \
     && ./autogen.sh && ./configure && make && make install && ldconfig \
@@ -43,7 +44,7 @@ RUN dnf update --nodocs -y  \
     do python tessdata_downloader/tessdata_downloader.py -o /usr/local/share/tessdata/ -l $lang; done \
     && tesseract --version --list-langs \
     && rm -rf tessdata_downloader leptonica tesseract download_chromedriver.sh repos \
-    && dnf remove -y python3-devel gcc gcc-c++ make platform-python-pip unzip git make autoconf automake libtool libpng-devel libjpeg-devel libtiff-devel zlib-devel \
+    && dnf remove -y python3-devel gcc gcc-c++ make platform-python-pip unzip git make autoconf automake libtool libpng-devel libjpeg-devel libtiff-devel zlib-devel giflib-devel \
     && dnf clean all \
     && rm -rf /var/cache/dnf
 
