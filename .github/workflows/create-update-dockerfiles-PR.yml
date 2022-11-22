@@ -39,6 +39,7 @@ jobs:
     needs:
       - get_branches
     strategy:
+      max-parallel: 2
       fail-fast: false
       matrix:
         branches: ${{ fromJSON(needs.get_branches.outputs.branches) }}
