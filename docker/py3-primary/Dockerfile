@@ -25,7 +25,7 @@ RUN dnf update --nodocs -y  \
     && rm -rf chromedriver_linux64.zip \
     && google-chrome --version \
     && chromedriver --version \
-    && dnf install -y --nodocs git automake make autoconf libtool clang zlib zlib-devel libjpeg libjpeg-devel libwebp libwebp-devel libtiff libtiff-devel libpng libpng-devel pango \
+    && dnf install -y --nodocs git automake make autoconf libtool clang zlib zlib-devel libjpeg libjpeg-devel libwebp libwebp-devel libtiff libtiff-devel libpng libpng-devel pango giflib \
     && git clone --depth 1 https://github.com/DanBloomberg/leptonica.git \
     && cd leptonica \
     && ./autogen.sh && ./configure && make && make install && ldconfig \
