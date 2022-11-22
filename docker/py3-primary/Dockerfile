@@ -100,7 +100,6 @@ RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git poppler popp
         && dnf localinstall -y LibreOffice_7.4.2.3_Linux_x86-64_rpm/RPMS/*.rpm \
         && rm -rf LibreOffice_7.4.2.3_Linux_x86-64_rpm LibreOffice_7.4.2_Linux_x86-64_rpm.tar.gz \
         && dnf remove -y python3-devel rust cargo libffi-devel openssl-devel gcc gcc-c++ make git platform-python-pip libXrender-devel \
-        gcc-gfortran pkgconf-pkg-config \
         && dnf clean all \
         && rm -rf /var/cache/dnf \
         && rm -rf /root/.cargo \
