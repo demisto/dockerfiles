@@ -39,6 +39,7 @@ jobs:
     needs:
       - get_branches
     strategy:
+      fail-fast: false
       matrix:
         branches: ${{ fromJSON(needs.get_branches.outputs.branches) }}
     steps:
@@ -56,6 +57,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{secrets.CONTENT_BOT_TOKEN}}
         PR_URL: ${{ steps.open-pr.outputs.pr_url }}
+        if: ${{ steps.open-pr.outputs.pr_url }}
       run: |
         echo "Approving and merging"
         gh pr review --approve "$PR_URL"
