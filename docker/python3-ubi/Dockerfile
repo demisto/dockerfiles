@@ -29,7 +29,9 @@ RUN wget https://www.python.org/ftp/python/3.10.8/Python-3.10.8.tgz && \
       --enable-optimizations \
       --enable-option-checking=fatal \
       --with-system-expat \
-      --with-ensurepip && \
+      --with-ensurepip \
+      --enable-shared LDFLAGS="-Wl,-rpath /usr/local/lib" && \
+      --prefix=/usr/local \
     make && \
     make altinstall
 
