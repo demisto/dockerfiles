@@ -159,18 +159,6 @@ from slack.errors import SlackApiError
 from slack.web.slack_response import SlackResponse
 print('slack is good!!!')
 
-# mlurlphishing
-import numpy as np
-import pandas
-import sklearn
-from bs4 import BeautifulSoup
-import cv2 as cv
-import tldextract
-import dill
-import catboost
-from PIL import Image
-print('mlurlphishing is good!!!')
-
 # make sure regex is working cause in new versions there are problems
 import regex
 pattern = regex.Regex('\\\\d\\+', flags=regex.V0)
