@@ -82,7 +82,6 @@ RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git poppler popp
         libffi-devel openssl-devel curl libffi libSM mesa-libGL \
         openssh ca-certificates openssl less rsync libpng-devel freetype-devel gcc-gfortran openblas unzip libstdc++ \
         && dnf install -y --nodocs --enablerepo=fedora-epel p7zip unrar \
-        && dnf install -y --nodocs --enablerepo=rocky8-base --enablerepo=rocky8-release libjpeg-turbo-devel \
         && ln -s /usr/bin/7za /usr/bin/7z \
         && pip install --no-cache-dir -r requirements.txt \
         && mkdir /ml \
