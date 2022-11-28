@@ -21,11 +21,19 @@ RUN apt-get update  && apt-get upgrade -y \
     && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - \
     && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
     && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" \
-    && apt-get update &&  apt-get install google-cloud-sdk docker-ce-cli kubectl -y \
+    # install neo4j
+    && echo "deb http://httpredir.debian.org/debian stretch-backports main" | tee -a /etc/apt/sources.list.d/stretch-backports.list \
+    && wget -O - https://debian.neo4j.com/neotechnology.gpg.key | apt-key add - \
+    && echo 'deb https://debian.neo4j.com stable 4.4' | tee -a /etc/apt/sources.list.d/neo4j.list \
+    && mkdir -p /var/lib/neo4j/plugins \
+    && wget -O /var/lib/neo4j/plugins/apoc-4.4.0.8-all.jar https://github.com/neo4j-contrib/neo4j-apoc-procedures/releases/download/4.4.0.8/apoc-4.4.0.8-all.jar \
+    && apt-get update && apt-get install google-cloud-sdk docker-ce-cli kubectl openjdk-11-jre neo4j -y \
     && curl -sSL https://install.python-poetry.org | python3 - \
     && source ~/.bashrc \
     && gsutil --version \
     && docker --version \
+    && neo4j --version \
+    && neo4j-admin --version \
     && gcloud --version \
     && ! kubectl version --output yaml \
     && poetry --version \
