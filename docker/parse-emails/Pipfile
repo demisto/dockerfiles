@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-parse-emails = "*"
+parse-emails = {ref = "XSUP-18613", git = "https://github.com/demisto/parse-emails.git"}
 rtfde = "*"
 
 [dev-packages]
