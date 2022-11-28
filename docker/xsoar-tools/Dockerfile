@@ -1,5 +1,5 @@
 
-FROM demisto/python3:3.10.8.35482
+FROM demisto/python3:3.10.8.37753
 ENV DEMISTO_SDK_IGNORE_CONTENT_WARNING true
 COPY requirements.txt .
 
