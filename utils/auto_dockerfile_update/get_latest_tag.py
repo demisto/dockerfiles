@@ -94,18 +94,18 @@ def get_version_regex(version: str):
     return regex_version
 
 
-def parse_single_version(version: str) -> Tuple[int, int, int]:
+def parse_single_version(version: str) -> Tuple[int, int, int, int]:
     """
     convert version string to tuple
     Args:
         version (str): version string e.x. 3.14.1
 
     Returns:
-        tuple e.x. (3,14,1)
+        tuple e.x. (3,14,1) ex. 2.7.8.12312
 
     """
-    major, minor, micro = re.search(r"(\d*)\.*(\d*)\.*(\d*)", version).groups()
-    return int(major or 0), int(minor or 0), int(micro or 0)
+    major, minor, micro, revision = re.search(r"(\d*)\.*(\d*)\.*(\d*)\.*(\d*)", version).groups()
+    return int(major or 0), int(minor or 0), int(micro or 0), int(revision or 0)
 
 
 def parse_versions(full_image_name: Union[str, Dict], key='name') -> List[Tuple[int, int, int]]:

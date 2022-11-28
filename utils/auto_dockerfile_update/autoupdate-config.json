@@ -1,0 +1,15 @@
+{
+  "ignored_dockerfiles" : [
+    {
+      "name" : "unzip",
+      "description" : "Library unrar is not yet available for alpine 3.16",
+      "valid_until" : "30/09/2022",
+      "permanent" : false
+    },
+    {
+      "name": "python3-ubi",
+      "description": "This image should not be automatically updated as its one of the base images for the py3-primary image",
+      "permanent" : true
+    }
+  ]
+}
