@@ -1,9 +1,10 @@
 name: Update internal base images
 
 on:
-  push:
+  pull_request:
+    types: [closed]
     branches:
-      - "*"
+      - master
   workflow_dispatch:
 
 jobs:
