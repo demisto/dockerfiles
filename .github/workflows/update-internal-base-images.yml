@@ -1,15 +1,14 @@
 name: Update internal base images
 
 on:
-  pull_request:
-    types: [closed]
+  push:
     branches:
-      - master
+      - "*"
   workflow_dispatch:
 
 jobs:
   update-docker-files:
-    if: ${{ github.repository == 'demisto/dockerFiles' && github.event.pull_request.merged && contains(github.head_ref, 'autoupdate/') }}
+    if: ${{ github.repository == 'demisto/dockerFiles' }}
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
