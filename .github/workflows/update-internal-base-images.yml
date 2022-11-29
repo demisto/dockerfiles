@@ -9,7 +9,7 @@ on:
 
 jobs:
   update-docker-files:
-    if: ${{ github.repository == 'demisto/dockerFiles' }}
+    if: ${{ github.repository == 'demisto/dockerFiles'&& github.event.pull_request.merged && contains(github.head_ref, 'autoupdate/') }}
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
