@@ -1,8 +1,9 @@
 name: Update internal base images
 
 on:
-  schedule:
-    - cron: '30 0 * * *'
+  push:
+    branches:
+      - "*"
   workflow_dispatch:
 
 jobs:
