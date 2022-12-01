@@ -176,10 +176,6 @@ function docker_build {
             return 1
         fi
 
-      curl -sSL https://install.python-poetry.org | python3 -  # download poetry
-      echo "starting to install dependencies in poetry..."
-      poetry --version
-      poetry self add poetry-plugin-export
       poetry export -f requirements.txt --output requirements.txt
       echo "poetry.lock generated requirements.txt file"
       echo "############ REQUIREMENTS.TXT ############"
