@@ -5,7 +5,7 @@ updates:
     directory: /
     schedule:
      interval: daily
-    open-pull-requests-limit: 210
+    open-pull-requests-limit: 200
     labels:
       - "docker"
       - "dependencies"
@@ -67,10 +67,6 @@ updates:
       interval: daily
   - package-ecosystem: pip
     directory: /docker/powershell-core
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/gvault
     schedule:
       interval: daily
   - package-ecosystem: pip
