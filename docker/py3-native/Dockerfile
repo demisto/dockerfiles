@@ -50,33 +50,10 @@ RUN dnf update --nodocs -y  \
 # handles os dependancies for: crypto + readpdf + parse-emails + docxpy + sklearn + pandas + ippysocks-py3 + oauthlib
 # unzip + py3ews + taxii2 + pan-os-python + slackv3 + google-api-py3 + boto3py3
 # pyjwt3 + joe-security + slack + office-utils
-# note: the packages that are being removed by dnf remove at the end are packages that are required during the installation of python dependancies
 
-# crypto os dependancies: python3-devel gcc gcc-c++ make wget git rust cargo libffi-devel openssl-devel
-# readpdf os dependancies: poppler poppler-utils
-# parse-emails os dependancies: libffi-devel, python3-devel, wget, git
-# docxpy os dependancies: libxml2-devel, libxslt-devel, python3-devel, wget
-# sklearn os dependancies: python3-devel gcc gcc-c++ make wget git openssh curl ca-certificates openssl less make rsync libpng-devel freetype-devel gcc-gfortran openblas unzip
-# pandas os dependancies: python3-devel gcc gcc-c++ make wget git libstdc++
-# ippysocks-py3 os dependancies: gcc python3-devel
-# oauthlib os dependanices: python3-devel gcc gcc-c++ make wget git
-# unzip os dependanices: python3-devel gcc gcc-c++ make wget git p7zip unrar unrar-free
-# py3ews os dependanices: python3-devel gcc gcc-c++ make wget git libxml2-devel openssl-devel
-# taxii2 os dependanices: python3-devel gcc gcc-c++ make wget git
-# pan-os-python os dependanices: python3-devel gcc gcc-c++ make wget git
-# slackv3 os dependanices: python3-devel gcc gcc-c++ make wget git libffi-devel
-# google-api-py3 os dependanices: python3-devel gcc
-# boto3py3 os dependanices: python3-devel gcc gcc-c++ make wget git
-# pyjwt3 os dependanices: python3-devel gcc gcc-c++ make wget git
-# joe-security os dependancies: python3-devel gcc gcc-c++ make wget git
-# slack os dependancies: python3-devel gcc gcc-c++ make wget git libffi
-# office-utils os dependancies: LibreOffice_Linux_x86-64_rpm java-11-openjdk-headless cairo libSM libX11-xcb
-
-
-# line 7 - since in ubi its 7za --> need to make it to run as 7z like our script
-# lines 9-11 is the configuration for sklearn
-# linex 14-16 - install LibreOffice for the office-utils image
-# lines 21-23 - installing libreoffice for the office-utils image
+# line 6 - since in ubi its 7za --> need to make it to run as 7z like our script
+# lines 8-10 is the configuration for sklearn
+# linex 11-14 - install LibreOffice for the office-utils image
 RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git poppler poppler-utils \
         rust cargo libxml2-devel libxslt-devel \
         libffi-devel openssl-devel curl libffi libSM mesa-libGL \
@@ -88,10 +65,10 @@ RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git poppler popp
         && python -c "import nltk; nltk.download('wordnet', download_dir='/ml/nltk_data'); nltk.download('stopwords', download_dir='/ml/nltk_data'); nltk.download('punkt', download_dir='/ml/nltk_data')" \
         && chown -R demisto:demisto /ml && chmod -R 775 /ml \
         && dnf install -y --nodocs java-11-openjdk-headless cairo libX11-xcb \
-        && wget http://download.documentfoundation.org/libreoffice/stable/7.4.3/rpm/x86_64/LibreOffice_7.4.3_Linux_x86-64_rpm.tar.gz \
-        && tar -xzvf LibreOffice_7.4.3_Linux_x86-64_rpm.tar.gz \
-        && dnf localinstall -y LibreOffice_7.4.2.3_Linux_x86-64_rpm/RPMS/*.rpm \
-        && rm -rf LibreOffice_7.4.2.3_Linux_x86-64_rpm LibreOffice_7.4.2_Linux_x86-64_rpm.tar.gz \
+        && wget -O LibreOffice_Linux_x86-64_rpm.tar.gz http://download.documentfoundation.org/libreoffice/stable/7.4.3/rpm/x86_64/LibreOffice_7.4.3_Linux_x86-64_rpm.tar.gz \
+        && tar -xzvf LibreOffice_Linux_x86-64_rpm.tar.gz \
+        && dnf localinstall -y LibreOffice_7.4.3.2_Linux_x86-64_rpm/RPMS/*.rpm \
+        && rm -rf LibreOffice_Linux_x86-64_rpm.tar.gz LibreOffice_7.4.3.2_Linux_x86-64_rpm \
         && dnf remove -y python3-devel rust cargo libffi-devel openssl-devel gcc gcc-c++ make git platform-python-pip \
         && dnf clean all \
         && rm -rf /var/cache/dnf \
