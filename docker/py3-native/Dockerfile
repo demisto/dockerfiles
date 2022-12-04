@@ -88,7 +88,7 @@ RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git poppler popp
         && python -c "import nltk; nltk.download('wordnet', download_dir='/ml/nltk_data'); nltk.download('stopwords', download_dir='/ml/nltk_data'); nltk.download('punkt', download_dir='/ml/nltk_data')" \
         && chown -R demisto:demisto /ml && chmod -R 775 /ml \
         && dnf install -y --nodocs java-11-openjdk-headless cairo libX11-xcb \
-        && wget http://download.documentfoundation.org/libreoffice/stable/7.4.2/rpm/x86_64/LibreOffice_7.4.2_Linux_x86-64_rpm.tar.gz \
+        && wget http://download.documentfoundation.org/libreoffice/stable/7.4.3/rpm/x86_64/LibreOffice_7.4.3_Linux_x86-64_rpm.tar.gz \
         && tar -xzvf LibreOffice_7.4.2_Linux_x86-64_rpm.tar.gz \
         && dnf localinstall -y LibreOffice_7.4.2.3_Linux_x86-64_rpm/RPMS/*.rpm \
         && rm -rf LibreOffice_7.4.2.3_Linux_x86-64_rpm LibreOffice_7.4.2_Linux_x86-64_rpm.tar.gz \
