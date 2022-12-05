@@ -234,7 +234,7 @@ function docker_build {
         $PY3CMD ${DOCKER_SRC_DIR}/verify_licenses.py ${image_full_name}
     fi
 
-    for filename in `find . -type f -name "*.py"`; do
+    for filename in `find . -name "*.py"`; do
       echo "==========================="
       echo "Verifying docker image by running the python script $filename within the docker image"
       cat $filename | docker run --rm -i ${image_full_name} python '-'
