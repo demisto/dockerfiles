@@ -1,1 +1,1 @@
-../chromium/verify.py
+../../chromium/verify.py
