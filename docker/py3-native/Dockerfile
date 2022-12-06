@@ -4,6 +4,9 @@ COPY requirements.txt .
 COPY chromium/download_chromedriver.sh .
 COPY repos /repos
 
+ARG LEPTONICA_VERSION=1.8.2
+ARG TESSERACT_VERSION=5.2.0
+
 # handles chromium + tesseract
 # for tesseract - followed instructions from here: https://computingforgeeks.com/install-tesseract-ocr-on-rocky-almalinux/
 RUN dnf update --nodocs -y  \
@@ -25,11 +28,11 @@ RUN dnf update --nodocs -y  \
     && chromedriver --version \
     && dnf install -y --nodocs git automake make autoconf libtool clang zlib zlib-devel libjpeg libjpeg-devel libwebp libwebp-devel libtiff libtiff-devel libpng libpng-devel pango giflib \
     && dnf install -y https://vault.centos.org/centos/8/PowerTools/x86_64/os/Packages/giflib-devel-5.1.4-3.el8.x86_64.rpm \
-    && git clone --depth 1 https://github.com/DanBloomberg/leptonica.git \
+    && git clone --depth 1 -b $LEPTONICA_VERSION https://github.com/DanBloomberg/leptonica \
     && cd leptonica \
     && ./autogen.sh && ./configure && make && make install && ldconfig \
     && cd .. \
-    && git clone --depth 1 https://github.com/tesseract-ocr/tesseract.git \
+    && git clone --depth 1 -b $TESSERACT_VERSION https://github.com/tesseract-ocr/tesseract.git \
     && cd tesseract \
     && PKG_CONFIG_PATH=/usr/local/lib/pkgconfig ./autogen.sh  \
     && PKG_CONFIG_PATH=/usr/local/lib/pkgconfig ./configure  \
@@ -75,6 +78,8 @@ RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git poppler popp
         && rm -rf /root/.cargo \
         && pip uninstall -y pcodedmp
 
+ARG LIBRE_OFFICE_VERSION=7.4
+
 # add libreoffice to path
-ENV PATH=$PATH:/opt/libreoffice7.4/program
+ENV PATH=$PATH:/opt/libreoffice$LIBRE_OFFICE_VERSION/program
 ENV NLTK_DATA='/ml/nltk_data'
