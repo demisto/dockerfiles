@@ -1,7 +1,9 @@
 
-# Summary
-This README purpose is to clarify which docker images the native image support and what's their OS dependencies.
-
+# Introduction
+This README purpose is to clarify the following:
+* Which docker images the native image supports
+* The purpose of the **verifiers** folder
+* OS dependencies for each docker image that the native image supports.
 
 ## Supported Docker Images
 * python3 
@@ -32,9 +34,15 @@ This README purpose is to clarify which docker images the native image support a
 * office-utils
 
 
+## Verifiers Folder
+For each docker image that the native image supports, a symbolic link has been created to reference to original `verify.py` of that docker image.
+
+That is done in order to keep updated with the python dependencies the original docker images that the native image supports. 
+
+
 ## OS Dependencies For Each Custom Image
-* tesseract: 
-* chromium: 
+* tesseract: git automake make autoconf libtool clang zlib zlib-devel libjpeg libjpeg-devel libwebp libwebp-devel libtiff libtiff-devel libpng libpng-devel pango giflib giflib-devel leptonica 
+* chromium: python3-devel gcc gcc-c++ make wget git unzip llvm-libs libXpm tigervnc-server-minimal xorg-x11-utils google-chrome-stable ImageMagick
 * crypto: python3-devel gcc gcc-c++ make wget git rust cargo libffi-devel openssl-devel
 * readpdf: poppler poppler-utils
 * parse-emails: libffi-devel, python3-devel, wget, git
