@@ -71,7 +71,7 @@ def get_all_tags_general(repo: str, image_name: str) -> List[Dict]:
     return tags_list
 
 
-def get_version_regex(version: str):
+def get_version_regex(version: str, replace_all=True):
     """
     Convert the given version to regex string e.x. 3.10.4-alpine-10.4-1020202 -> 3.10.[\\d]+-alpine-10.[\\d]+-[\\d]+$
     Args:
@@ -86,7 +86,10 @@ def get_version_regex(version: str):
         v = v[0] if v[0] else v[-1]
 
         version_list = v.split('.')
-        version_list[-1] = r"[\d]+"
+        if replace_all:
+            version_list = r"[\d]+" * len(version_list)
+        else:
+            version_list[-1] = r"[\d]+"
         temp_version = r'.'.join(version_list)
         regex_version = regex_version.replace(v, temp_version)
 
