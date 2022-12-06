@@ -4,7 +4,7 @@ COPY requirements.txt .
 COPY chromium/download_chromedriver.sh .
 COPY repos /repos
 
-ARG LEPTONICA_VERSION=1.8.2
+ARG LEPTONICA_VERSION=1.82.0
 ARG TESSERACT_VERSION=5.2.0
 
 # handles chromium + tesseract
