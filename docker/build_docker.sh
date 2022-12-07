@@ -251,6 +251,15 @@ function docker_build {
         docker_trust=1
         echo "using DOCKER_TRUST=${docker_trust} DOCKER_CONFIG=${DOCKER_CONFIG}"
     fi
+
+    if [ -n "$CR_REPO" ] && cr_login; then
+        docker tag ${image_full_name} ${CR_REPO}/${image_full_name}
+        docker push ${CR_REPO}/${image_full_name} > /dev/null
+        echo "Done docker push for cr: ${image_full_name}"
+    else
+        echo "Skipping docker push for cr"
+    fi
+
     if docker_login; then
         env DOCKER_CONTENT_TRUST=$docker_trust DOCKER_CONFIG="${DOCKER_CONFIG}"  docker push ${image_full_name}
         echo "Done docker push for: ${image_full_name}"
@@ -291,15 +300,6 @@ curl -L "https://output.circle-artifacts.com/output/job/${CIRCLE_WORKFLOW_JOB_ID
 --------------------------
 EOF
         fi
-    fi
-    
-
-    if [ -n "$CR_REPO" ] && cr_login; then
-        docker tag ${image_full_name} ${CR_REPO}/${image_full_name}
-        docker push ${CR_REPO}/${image_full_name} > /dev/null
-        echo "Done docker push for cr: ${image_full_name}"
-    else
-        echo "Skipping docker push for cr"
     fi
 
 }
