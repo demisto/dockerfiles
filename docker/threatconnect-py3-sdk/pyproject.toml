@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "threatconnect-py3-sdk"
+version = "0.1.0"
+description = ""
+authors = ["Judah Schwartz <juschwartz@paloaltonetworks.com>"]
+readme = "README.md"
+packages = [{include = "threatconnect_py3_sdk"}]
+
+[tool.poetry.dependencies]
+threatconnect = "*"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
