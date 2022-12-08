@@ -2,7 +2,7 @@ FROM demisto/python3-deb:3.10.9.40424
 
 COPY requirements.txt .
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN pip install setuptools==57.5.0 && apt-get update && apt-get install -y --no-install-recommends \
   gcc \
   python3-dev \
   git \
