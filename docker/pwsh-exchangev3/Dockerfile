@@ -5,3 +5,4 @@ RUN pwsh -c "Set-PSRepository -Name PSGallery -InstallationPolicy Trusted -Error
 RUN pwsh -c "Install-Module -Name ExchangeOnlineManagement -RequiredVersion 3.0.0 -AllowPrerelease -Scope AllUsers -Force -ErrorAction Stop"
 RUN pwsh -c "Install-Module -Name SelfSignedCertificate -Scope AllUsers -Force -ErrorAction Stop"
 RUN pwsh -c "winrm set winrm/config/service/Auth '@{Basic=\"true\"}'"
+
