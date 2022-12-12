@@ -806,6 +806,10 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: pip
+    directory: /docker/splunksdk-py3
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
     directory: /docker/panw-iot
     schedule:
       interval: daily
