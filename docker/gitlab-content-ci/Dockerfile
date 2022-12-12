@@ -4,6 +4,8 @@ ENV NODE_VERSION 14.14.0
 ENV NVM_DIR /root/.nvm
 ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:/root/.local/bin:$PATH
 
+ADD neo4j.conf /etc/neo4j/neo4j.conf
+
 # Currently sh is linked to dash, linking it to /bin/bash instead.
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
