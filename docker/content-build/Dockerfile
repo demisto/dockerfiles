@@ -17,9 +17,9 @@ RUN sudo apt-get update && sudo apt-get install apt-transport-https ca-certifica
   && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - \
   && sudo apt-get update && sudo apt-get install google-cloud-sdk \
   && sudo curl -sSL https://install.python-poetry.org | python3 - \
-  && sudo echo "deb http://httpredir.debian.org/debian stretch-backports main" | tee -a /etc/apt/sources.list.d/stretch-backports.list \
-  && sudo wget -O - https://debian.neo4j.com/neotechnology.gpg.key | apt-key add - \
-  && sudo echo 'deb https://debian.neo4j.com stable 4.4' | tee -a /etc/apt/sources.list.d/neo4j.list \
+  && sudo echo "deb http://httpredir.debian.org/debian stretch-backports main" | sudo tee -a /etc/apt/sources.list.d/stretch-backports.list \
+  && sudo wget -O - https://debian.neo4j.com/neotechnology.gpg.key | sudo apt-key add - \
+  && sudo echo 'deb https://debian.neo4j.com stable 4.4' | sudo tee -a /etc/apt/sources.list.d/neo4j.list \
   && sudo apt-get install neo4j \
   && sudo chown -R circleci /var/log/neo4j \
   && sudo chown -R circleci /var/lib/neo4j \
