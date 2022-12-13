@@ -31,7 +31,13 @@ RUN apt-get update  && apt-get upgrade -y \
     && mkdir -p /var/lib/neo4j/plugins \
     && wget -O /var/lib/neo4j/plugins/apoc-4.4.0.8-all.jar https://github.com/neo4j-contrib/neo4j-apoc-procedures/releases/download/4.4.0.8/apoc-4.4.0.8-all.jar \
     && apt-get update && apt-get install google-cloud-sdk docker-ce-cli kubectl openjdk-11-jre neo4j -y \
-    && cp neo4j.conf /etc/neo4j/neo4j.conf && cp apoc.conf /etc/neo4j/apoc.conf \
+    && neo4j_conf_file="/etc/neo4j/neo4j.conf" \
+    && echo "dbms.security.procedures.unrestricted=apoc.*" >> $neo4j_conf_file \
+    && echo "dbms.security.procedures.allowlist=apoc.*" >> $neo4j_conf_file \
+    && apoc_conf_file="/etc/neo4j/apoc.conf" \
+    && echo "apoc.export.file.enabled=true" > $apoc_conf_file \
+    && echo "apoc.import.file.enabled=true" >> $apoc_conf_file \
+    && echo "apoc.import.file.use_neo4j_config=true" >> $apoc_conf_file \
     && curl -sSL https://install.python-poetry.org | python3 - \
     && source ~/.bashrc \
     && gsutil --version \

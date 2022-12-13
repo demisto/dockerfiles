@@ -21,7 +21,13 @@ RUN sudo apt-get update && sudo apt-get install apt-transport-https ca-certifica
   && echo 'deb https://debian.neo4j.com stable 4.4' | sudo tee -a /etc/apt/sources.list.d/neo4j.list \
   && sudo apt-get update \
   && sudo apt-get install neo4j -y \
-  && sudo cp neo4j.conf /etc/neo4j/neo4j.conf && sudo cp apoc.conf /etc/neo4j/apoc.conf \
+  && neo4j_conf_file="/etc/neo4j/neo4j.conf" \
+  && sudo echo "dbms.security.procedures.unrestricted=apoc.*" >> $neo4j_conf_file \
+  && sudo echo "dbms.security.procedures.allowlist=apoc.*" >> $neo4j_conf_file \
+  && apoc_conf_file="/etc/neo4j/apoc.conf" \
+  && sudo echo "apoc.export.file.enabled=true" > $apoc_conf_file \
+  && sudo echo "apoc.import.file.enabled=true" >> $apoc_conf_file \
+  && sudo echo "apoc.import.file.use_neo4j_config=true" >> $apoc_conf_file \
   && sudo chown -R circleci /var/log/neo4j \
   && sudo chown -R circleci /var/lib/neo4j \
   && sudo chown -R circleci /etc/neo4j \
