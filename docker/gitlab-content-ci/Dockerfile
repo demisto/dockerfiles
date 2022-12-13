@@ -3,6 +3,8 @@ FROM demisto/python3-deb:3.10.6.33421
 ENV NODE_VERSION 14.14.0
 ENV NVM_DIR /root/.nvm
 ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:/root/.local/bin:$PATH
+ENV NEO4J_CONF_FILE /etc/neo4j/neo4j.conf
+ENV APOC_CONF_FILE /etc/neo4j/apoc.conf
 
 # Currently sh is linked to dash, linking it to /bin/bash instead.
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
@@ -29,12 +31,12 @@ RUN apt-get update  && apt-get upgrade -y \
     && wget -O /var/lib/neo4j/plugins/apoc-4.4.0.8-all.jar https://github.com/neo4j-contrib/neo4j-apoc-procedures/releases/download/4.4.0.8/apoc-4.4.0.8-all.jar \
     && apt-get update && apt-get install google-cloud-sdk docker-ce-cli kubectl openjdk-11-jre neo4j -y \
     && neo4j_conf_file="/etc/neo4j/neo4j.conf" \
-    && echo "dbms.security.procedures.unrestricted=apoc.*" >> $neo4j_conf_file \
-    && echo "dbms.security.procedures.allowlist=apoc.*" >> $neo4j_conf_file \
+    && echo "dbms.security.procedures.unrestricted=apoc.*" >> $NEO4J_CONF_FILE \
+    && echo "dbms.security.procedures.allowlist=apoc.*" >> $NEO4J_CONF_FILE \
     && apoc_conf_file="/etc/neo4j/apoc.conf" \
-    && echo "apoc.export.file.enabled=true" > $apoc_conf_file \
-    && echo "apoc.import.file.enabled=true" >> $apoc_conf_file \
-    && echo "apoc.import.file.use_neo4j_config=true" >> $apoc_conf_file \
+    && echo "apoc.export.file.enabled=true" > $APOC_CONF_FILE \
+    && echo "apoc.import.file.enabled=true" >> $APOC_CONF_FILE \
+    && echo "apoc.import.file.use_neo4j_config=true" >> $APOC_CONF_FILE \
     && curl -sSL https://install.python-poetry.org | python3 - \
     && source ~/.bashrc \
     && gsutil --version \
