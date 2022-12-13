@@ -2,9 +2,6 @@ FROM cimg/python:3.10.6-node
 
 ENV PATH $HOME/.local/bin:$PATH
 
-ADD neo4j.conf neo4j.conf
-ADD apoc.conf apoc.conf
-
 RUN sudo apt-get update && \
   sudo apt-get install -y --no-install-recommends libxml2-dev libxslt1-dev zlib1g-dev jq \
   make cowsay build-essential libssl-dev libbz2-dev \
