@@ -2,8 +2,8 @@ FROM cimg/python:3.10.6-node
 
 ENV PATH $HOME/.local/bin:$PATH
 
-ADD neo4j.conf /etc/neo4j/neo4j.conf
-ADD apoc.conf /etc/neo4j/apoc.conf
+ADD neo4j.conf neo4j.conf
+ADD apoc.conf apoc.conf
 
 RUN sudo apt-get update && \
   sudo apt-get install -y --no-install-recommends libxml2-dev libxslt1-dev zlib1g-dev jq \
@@ -21,6 +21,7 @@ RUN sudo apt-get update && sudo apt-get install apt-transport-https ca-certifica
   && echo 'deb https://debian.neo4j.com stable 4.4' | sudo tee -a /etc/apt/sources.list.d/neo4j.list \
   && sudo apt-get update \
   && sudo apt-get install neo4j -y \
+  && cp neo4j /etc/neo4j/neo4j.conf && cp apoc.conf /etc/neo4j/apoc.conf \
   && sudo chown -R circleci /var/log/neo4j \
   && sudo chown -R circleci /var/lib/neo4j \
   && sudo chown -R circleci /etc/neo4j \
