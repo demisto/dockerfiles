@@ -31,9 +31,9 @@ verify_stat('/ml/oob_evaluation.txt')
 OUT_OF_THE_BOX_MODEL_PATH = '/ml/encrypted_model.b'
 model_type = 'torch'
 
-model_data = demisto_ml.load_oob_model(OUT_OF_THE_BOX_MODEL_PATH)
-phishing_model = demisto_ml.phishing_model_loads_handler(model_data, model_type)
-pred = phishing_model.predict('a test input text')
+# model_data = demisto_ml.load_oob_model(OUT_OF_THE_BOX_MODEL_PATH)
+# phishing_model = demisto_ml.phishing_model_loads_handler(model_data, model_type)
+# pred = phishing_model.predict('a test input text')
 
 
 print('All package imported succesfully')
