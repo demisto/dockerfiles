@@ -1,4 +1,5 @@
 version: 2
+version: 2
 updates:
     # this one is for pr limits
   - package-ecosystem: pip
@@ -821,7 +822,3 @@ updates:
     directory: /docker/python3-ubi
     schedule:
       interval: daily
-  - package-ecosystem: pip
-    directory: /docker/lightrun
-    schedule:
-     interval: daily
