@@ -143,7 +143,7 @@ There are 3 base PowerShell images which should be used when building a new imag
 We recommend using the default Alpine based image. The Debian and Ubuntu images are provided mainly for cases that there is need to install additional OS packages.
 
 ### Adding a `verify.ps1` script
-Similar to the the `verify.py` script for Python images, you can add a `verify.ps1` script to test and check the image you created. 
+Similar to the `verify.py` script for Python images, you can add a `verify.ps1` script to test and check the image you created. 
 
 Once the docker image is built, if the script is present it will be run within the image using the following command:
 ```bash

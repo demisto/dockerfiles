@@ -162,12 +162,27 @@ function docker_build {
         pipenv install --deploy # fails if lock is outdated
         PIPENV_YES=yes pipenv run pip freeze > requirements.txt
         echo "Pipfile lock generated requirements.txt: "
-        echo "############ REQUIREMENTS.TXT ###########"
+        echo "############ REQUIREMENTS.TXT ############"
         cat requirements.txt
         echo "##########################################"
         [ ! -f requirements.txt ] && echo "WARNING: requirements.txt does not exist, this is ok if python usage is not intended."
         [ ! -s requirements.txt ] && echo "WARNING: requirements.txt is empty"
         # del_requirements=yes
+    fi
+
+    if [ -f "pyproject.toml" -a ! -f "requirements.txt" ]; then
+       if [ ! -f "poetry.lock" ]; then
+            echo "Error: pyproject.toml present without poetry.lock. Make sure to commit your poetry.lock file"
+            return 1
+        fi
+
+      echo "starting to install dependencies from poetry..."
+      poetry export -f requirements.txt --output requirements.txt --without-hashes
+      echo "poetry.lock generated requirements.txt file: "
+      echo "############ REQUIREMENTS.TXT ############"
+      cat requirements.txt
+      echo "##########################################"
+
     fi
 
     tmp_dir=$(mktemp -d)
@@ -218,11 +233,13 @@ function docker_build {
         fi
         $PY3CMD ${DOCKER_SRC_DIR}/verify_licenses.py ${image_full_name}
     fi
-    if [ -f "verify.py" ]; then
-        echo "==========================="            
-        echo "Verifying docker image by running the python script verify.py within the docker image"
-        cat verify.py | docker run --rm -i ${image_full_name} python '-'
-    fi
+
+    for filename in `find . -name "*verify.py"`; do
+      echo "==========================="
+      echo "Verifying docker image by running the python script $filename within the docker image"
+      cat $filename | docker run --rm -i ${image_full_name} python '-'
+    done
+
     if [ -f "verify.ps1" ]; then
         echo "==========================="            
         echo "Verifying docker image by running the pwsh script verify.ps1 within the docker image"
