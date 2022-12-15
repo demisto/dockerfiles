@@ -712,7 +712,11 @@ updates:
   - package-ecosystem: pip
     directory: /docker/py3-tools
     schedule:
-      interval: daily  
+      interval: daily
+  - package-ecosystem: pip
+    directory: /docker/py3-tools-ubi
+    schedule:
+      interval: daily
   - package-ecosystem: pip
     directory: /docker/pan-os-python
     schedule:
@@ -790,6 +794,10 @@ updates:
     schedule:
      interval: daily
   - package-ecosystem: pip
+    directory: /docker/py3-native
+    schedule:
+      interval: daily
+  - package-ecosystem: pip
     directory: /docker/octoxlabs
     schedule:
      interval: daily
@@ -797,6 +805,10 @@ updates:
     directory: /docker/aquatone
     schedule:
       interval: daily
+  - package-ecosystem: pip
+    directory: /docker/splunksdk-py3
+    schedule:
+     interval: daily
   - package-ecosystem: pip
     directory: /docker/panw-iot
     schedule:
