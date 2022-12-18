@@ -10,7 +10,7 @@ jobs:
       - run:
           name: Validate Native docker image
           PR_NUMBER: ${{ github.event.pull_request.number }}
-          command: echo "$PR_NUMBER"         
+          command: echo $PR_NUMBER      
       - run:
           name: Validate Dependabot Config
           command: ./docker/verify_dependabot.sh
