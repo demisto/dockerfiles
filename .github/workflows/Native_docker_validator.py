@@ -7,7 +7,7 @@ import requests
 
 def main():
     parser = argparse.ArgumentParser(description='Deploy a pack from a contribution PR to a branch')
-    parser.add_argument('-p', '--pr_number')
+    parser.add_argument('-p', '--pr_number', action='store_true', help='Contrib PR number')
     args = parser.parse_args()
 
     pr_number = args.pr_number
