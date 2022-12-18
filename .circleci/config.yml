@@ -21,7 +21,7 @@ references:
             command: python -m jsonschema -i docker/approved_licenses.json docker/approved_licenses.schema.json
         - run:
             name: Validate Native docker image
-            command: echo $CI_PULL_REQUEST;
+            command: echo $PULL_REQUEST_NUMBER;
               python3 ./.github/workflows/Native_docker_validator.py -p $PULL_REQUEST_NUMBER
         - run:
             name: Validate Dependabot Config
