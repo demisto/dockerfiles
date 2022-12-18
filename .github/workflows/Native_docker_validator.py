@@ -30,8 +30,7 @@ def get_labels(pr_number: str) -> Iterable[str]:
     Returns:
         A list of the applied labels, if found.
     """
-    response = requests.get(f'https://api.github.com/repos/demisto/dockerfiles/pulls/{pr_number}',
-                            params={'page': str(page)})
+    response = requests.get(f'https://api.github.com/repos/demisto/dockerfiles/pulls/{pr_number}')
     response.raise_for_status()
     pr = response.json()
     labels = pr["labels"]
