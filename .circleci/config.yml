@@ -21,7 +21,7 @@ jobs:
           command: python -m jsonschema -i docker/approved_licenses.json docker/approved_licenses.schema.json
       - run: 
           name: Validate Native docker image
-          command: echo $PULL_REQUEST_NUMBER
+          command: echo "$PULL_REQUEST_NUMBER"
       - run:
           name: Validate Dependabot Config
           command: ./docker/verify_dependabot.sh
