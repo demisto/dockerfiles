@@ -1,5 +1,3 @@
-#!/bin/bash
-
 jobs:
   docker_build:
     docker:
@@ -11,7 +9,7 @@ jobs:
           command: python -m jsonschema -i docker/approved_licenses.json docker/approved_licenses.schema.json
       - run: 
           name: Validate Native docker image
-          command: echo ${{ github.event.pull_request.number }}
+          command: echo $'pipeline.parameters.pr_number'
       - run:
           name: Validate Dependabot Config
           command: ./docker/verify_dependabot.sh
