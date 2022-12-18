@@ -12,7 +12,7 @@ jobs:
           env:
             PR_NUMBER: ${{ github.event.pull_request.number }}
           command:
-            python3 ./.github/workflows/Native_docker_validator.py -p $PR_NUMBER          
+            echo $PR_NUMBER          
       - run:
           name: Validate Dependabot Config
           command: ./docker/verify_dependabot.sh
