@@ -7,11 +7,10 @@ jobs:
       - run:
           name: Validate Approved Licenses File
           command: python -m jsonschema -i docker/approved_licenses.json docker/approved_licenses.schema.json
-      - env:
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-          name: Validate Native docker image
-          run:
-            echo "$PR_NUMBER"         
+      - name: Validate Native docker image
+        PR_NUMBER: ${{ github.event.pull_request.number }}
+        run:
+          echo "$PR_NUMBER"         
       - run:
           name: Validate Dependabot Config
           command: ./docker/verify_dependabot.sh
