@@ -1,4 +1,16 @@
+parameters:
+  artifact_build_num:
+  pr_number:
+    type: string
+    default: ""
+
+references:
+  environment: &environment
+    environment:
+      PULL_REQUEST_NUMBER: << pipeline.parameters.pr_number >>
 jobs:
+  Setup Environment:
+    <<: *environment
   docker_build:
     docker:
       - image: devdemisto/dockerbuild:1.0.0.25778
