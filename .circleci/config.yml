@@ -7,9 +7,12 @@ jobs:
       - run:
           name: Validate Approved Licenses File
           command: python -m jsonschema -i docker/approved_licenses.json docker/approved_licenses.schema.json
-      - run:
-          name: Validate Native docker image
-          command: python3 ./.github/workflows/Native_docker_validator.py -p ${{github.event.pull_request.number}}
+      - name: Validate Native docker image
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          echo "Checking if contribution form needs to be filled for PR: $PR_NUMBER"
+          pipenv run ./.github/workflows/Native_docker_validator.py --pr_number $PR_NUMBER
       - run:
           name: Validate Dependabot Config
           command: ./docker/verify_dependabot.sh
