@@ -1,3 +1,15 @@
+parameters:
+  pr_number:
+    type: string
+    default: ""
+
+references:
+  environment: &environment
+    environment:
+      # Giving different names to the following pipeline parameters to avoid collision, handling such collision case
+      # is done in 'Setup Environment' step.
+      PULL_REQUEST_NUMBER: << pipeline.parameters.pr_number >>
+
 jobs:
   docker_build:
     docker:
@@ -9,7 +21,7 @@ jobs:
           command: python -m jsonschema -i docker/approved_licenses.json docker/approved_licenses.schema.json
       - run:
           name: Validate Native docker image
-          command: python3 ./.github/workflows/Native_docker_validator.py
+          command: python3 ./.github/workflows/Native_docker_validator.py -p $PULL_REQUEST_NUMBER
       - run:
           name: Validate Dependabot Config
           command: ./docker/verify_dependabot.sh
