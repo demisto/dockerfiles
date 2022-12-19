@@ -1,16 +1,4 @@
-parameters:
-  artifact_build_num:
-  pr_number:
-    type: string
-    default: ""
-
-references:
-  environment: &environment
-    environment:
-      PULL_REQUEST_NUMBER: << pipeline.parameters.pr_number >>
 jobs:
-  Setup Environment:
-    <<: *environment
   docker_build:
     docker:
       - image: devdemisto/dockerbuild:1.0.0.25778
@@ -19,9 +7,6 @@ jobs:
       - run:
           name: Validate Approved Licenses File
           command: python -m jsonschema -i docker/approved_licenses.json docker/approved_licenses.schema.json
-      - run: 
-          name: Validate Native docker image
-          command: echo "$PULL_REQUEST_NUMBER"
       - run:
           name: Validate Dependabot Config
           command: ./docker/verify_dependabot.sh
