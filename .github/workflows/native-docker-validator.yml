@@ -1,0 +1,33 @@
+name: Native docker validator
+on: pull_request
+
+
+jobs:
+  validate_native_docker:
+    runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]'
+    steps:
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v18.7
+        with:
+          separator: ';'
+      - name: Setup Python
+        uses: actions/setup-python@v3
+        with:
+        python-version: '3.9'
+      - name: Run native_docker_validator Script
+        env:
+          LABELS: ${{ github.event.pull_request.labels.*.name }}
+          CHANGED_FILES: "${{ steps.changed-files.outputs.all_changed_files }}"
+        run: |
+          echo "==== $(date): Starting pipenv setup... ===="
+          python -m pip install --upgrade pip
+          pip install pipenv
+          pipenv install
+          echo "==== $(date): Running notify... ===="
+          pipenv run python  ./native_docker_validator.py -l "$LABELS" -c "$CHANGED_FILES"
+
+
+
+
