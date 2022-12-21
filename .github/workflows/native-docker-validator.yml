@@ -7,7 +7,7 @@ on:
 jobs:
   validate_native_docker:
     runs-on: ubuntu-latest
-    if: github.actor != 'dependabot[bot]'  && contains(github.event.pull_request.labels.*.name, 'docker update approved') == true
+    if: github.actor != 'dependabot[bot]'  && contains(github.event.pull_request.labels.*.name, 'docker update approved') == false
     steps:
       - name: Get changed files
         id: changed-files
