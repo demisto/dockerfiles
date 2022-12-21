@@ -27,5 +27,5 @@ jobs:
           python -m pip install --upgrade pip
           pip install pipenv
           pipenv install
-          echo "==== $(date): Running notify... ===="
-          pipenv run ./native_docker_validator.py -c "$CHANGED_FILES"
+          echo "==== $(date): Running validator... ===="
+          pipenv run ./validate-native-docker/native_docker_validator.py -c "$CHANGED_FILES"
