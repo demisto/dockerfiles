@@ -1,6 +1,9 @@
 name: Native docker validator
 on: pull_request_target
 
+permissions:
+  pull-requests: read
+  contents: read
 
 jobs:
   validate_native_docker:
