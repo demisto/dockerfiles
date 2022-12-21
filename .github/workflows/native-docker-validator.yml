@@ -26,6 +26,10 @@ jobs:
           echo "==== $(date): Starting pipenv setup... ===="
           python -m pip install --upgrade pip
           pip install pipenv
+          pwd
+          cd "$GITHUB_WORKSPACE/.github/workflows/validate-native-docker"
           pipenv install
           echo "==== $(date): Running validator... ===="
-          pipenv run ./validate-native-docker/native_docker_validator.py -c "$CHANGED_FILES"
+          pipenv run ./native_docker_validator.py -c "$CHANGED_FILES"
+
+
