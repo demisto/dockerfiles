@@ -1,10 +1,6 @@
 name: Native docker validator
 on: pull_request_target
 
-permissions:
-  pull-requests: read
-  contents: read
-
 jobs:
   validate_native_docker:
     runs-on: ubuntu-latest
@@ -30,7 +26,3 @@ jobs:
           pipenv install
           echo "==== $(date): Running notify... ===="
           pipenv run python  ./native_docker_validator.py -l "$LABELS" -c "$CHANGED_FILES"
-
-
-
-
