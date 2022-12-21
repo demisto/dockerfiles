@@ -7,7 +7,7 @@ on:
 jobs:
   validate_native_docker:
     runs-on: ubuntu-latest
-    if: github.actor != 'dependabot[bot]'
+    if: github.actor != 'dependabot[bot]'  && contains(github.event.pull_request.labels.*.name, 'docker update approved') == true
     steps:
       - name: Get changed files
         id: changed-files
@@ -20,7 +20,6 @@ jobs:
           python-version: '3.9'
       - name: Run native_docker_validator Script
         env:
-          LABELS: ${{ github.event.pull_request.labels.*.name }}
           CHANGED_FILES: "${{ steps.changed-files.outputs.all_changed_files }}"
         run: |
           echo "==== $(date): Starting pipenv setup... ===="
@@ -28,4 +27,4 @@ jobs:
           pip install pipenv
           pipenv install
           echo "==== $(date): Running notify... ===="
-          pipenv run ./native_docker_validator.py -l "$LABELS" -c "$CHANGED_FILES"
+          pipenv run ./native_docker_validator.py -c "$CHANGED_FILES"
