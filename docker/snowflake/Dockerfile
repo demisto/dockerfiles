@@ -3,7 +3,12 @@ FROM demisto/python3-deb:3.10.9.40424
 
 COPY requirements.txt .
 
-RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git \
+RUN apt-get update && apt-get install -y --no-install-recommends python3-dev build-base wget git \
   libffi-dev openssl-dev \
   && pip install --no-cache-dir -r requirements.txt \
-  && apk del .build-dependencies
+  && apt-get purge -y --auto-remove \
+  gcc \
+  python3-dev \
+  wget \
+  git \
+&& rm -rf /var/lib/apt/lists/*
