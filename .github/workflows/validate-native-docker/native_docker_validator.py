@@ -8,8 +8,10 @@ def main():
     parser = argparse.ArgumentParser(description='Deploy a pack from a contribution PR to a branch')
     parser.add_argument('-c', '--changed_files', help='list of the changed files')
     args = parser.parse_args()
-
-    changed_files = args.changed_files.split(";")
+    changed_files = args.changed_files
+    print(changed_files)
+    # changed_files = args.changed_files.split(";")
+    
     validate_native_docker_image(changed_files)
 
 
