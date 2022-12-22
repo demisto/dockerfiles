@@ -4,7 +4,9 @@ on:
     branches:
       - master
 
-permissions: read-all|write-all
+permissions:
+  pull-requests: write|read
+  contents: write|read
 
 jobs:
   validate_native_docker:
