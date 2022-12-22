@@ -4,6 +4,8 @@ on:
     branches:
       - master
 
+permissions: read-all|write-all
+
 jobs:
   validate_native_docker:
     runs-on: ubuntu-latest
