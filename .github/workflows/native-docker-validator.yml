@@ -4,10 +4,6 @@ on:
     branches:
       - master
 
-permissions:
-  pull-requests: read
-  contents: read
-
 jobs:
   validate_native_docker:
     runs-on: ubuntu-latest
@@ -34,6 +30,7 @@ jobs:
           cd "$GITHUB_WORKSPACE/.github/workflows/validate-native-docker"
           pipenv install
           echo "==== $(date): Running validator... ===="
+          echo "$CHANGED_FILES"
           pipenv run ./native_docker_validator.py -c "$CHANGED_FILES"
 
 
