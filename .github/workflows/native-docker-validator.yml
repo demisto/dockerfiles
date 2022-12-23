@@ -24,7 +24,7 @@ jobs:
       - name: Run native_docker_validator Script
         env:
           CHANGED_FILES: "${{ steps.changed-files.outputs.all_changed_files }}"
-          LABELS: "${{ github.event.pull_request.labels.*.name }}"
+          LABELS: "${{ github.event.pull_request.labels }}"
         run: |
           echo "==== $(date): Starting pipenv setup... ===="
           echo "$LABELS"
