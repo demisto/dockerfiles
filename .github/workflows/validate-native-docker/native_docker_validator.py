@@ -3,7 +3,6 @@ import argparse
 import requests
 import os
 import sys
-import click
 
 
 DOCKER_FILES_SUFFIX = ["Dockerfile", "Pipfile", "Pipfile.lock"]
@@ -18,14 +17,27 @@ def main():
 
 
 def validate_native_docker(changed_files):
+    """
+    This function validate that no native docker supported dockers are being updated.
+    Args:
+        changed_files: the list of files that are being changed in the current pr.
+
+    Returns: the exit code according to wether the list of native docker supported dockers is empty or not.
+    """
     updated_supported_dockers = get_updated_supported_dockers(changed_files)
     if updated_supported_dockers:
-        click.secho(f"the following dockers are updated and supported by the native docker: {','.join(updated_supported_dockers)}. Please make sure to update the native docker accordingly.", fg="red")
-        return 1
+        print(f"the following dockers are updated and supported by the native docker: {','.join(updated_supported_dockers)}. Please make sure to update the native docker accordingly.")
     return 0
 
 
 def get_updated_supported_dockers(changed_files):
+    """
+    This function list the dockers that are supported by the native docker and being updated at the current pr.
+    Args:
+        changed_files: the list of files that are being changed in the current pr.
+
+    Returns: the list of the native supported dockers supported dockers that are being updated.
+    """
     updated_supported_dockers = []
     updated_dockers_ls = get_list_of_updated_dockers(changed_files)
     if updated_dockers_ls:
@@ -37,6 +49,13 @@ def get_updated_supported_dockers(changed_files):
 
 
 def get_list_of_updated_dockers(changed_files):
+    """
+    This function list the dockers that are being updated at the current pr.
+    Args:
+        changed_files: the list of files that are being changed in the current pr.
+
+    Returns: the list of the dockers that are being updated at the current pr.
+    """
     dockers = []
     for file in changed_files:
         for suffix in DOCKER_FILES_SUFFIX:
@@ -46,6 +65,11 @@ def get_list_of_updated_dockers(changed_files):
 
 
 def get_supported_dockers():
+    """
+    This function list the dockers that are supported by the native docker.
+
+    Returns: the list of the dockers that are supported by the native docker.
+    """
     response = requests.get("https://raw.githubusercontent.com/demisto/content/master/Tests/docker_native_image_config.json")
     response.raise_for_status()
     data = response.json()
