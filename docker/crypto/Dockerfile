@@ -14,4 +14,3 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies \
   && rm -rf /root/.cargo
-aa
