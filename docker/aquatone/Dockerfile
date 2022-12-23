@@ -12,4 +12,3 @@ RUN apt-get update \
     ruby-dev \
     rubygems \
 && rm -rf /var/lib/apt/lists/*
-a
