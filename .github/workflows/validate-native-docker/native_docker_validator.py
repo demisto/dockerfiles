@@ -19,7 +19,9 @@ def main():
 def validate_native_docker_image(changed_files):
     if is_docker_being_updated(changed_files):
         response = requests.get("https://raw.githubusercontent.com/demisto/content/master/Tests/docker_native_image_config.json")
-        print(response)
+        response.raise_for_status()
+        data = response.json()
+        print(data)
         # if is_update_related_to_native_docker(changed_files):
         #     return False
     return True
