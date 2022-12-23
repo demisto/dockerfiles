@@ -9,7 +9,7 @@ on:
 jobs:
   validate_native_docker:
     runs-on: ubuntu-latest
-    if: github.actor != 'dependabot[bot]'  && contains(github.event.pull_request.labels.*.name, 'docker update approved') == false
+    if: github.actor != 'dependabot[bot]'
     steps:
       - uses: actions/checkout@v3
         with:
