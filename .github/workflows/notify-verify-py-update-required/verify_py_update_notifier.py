@@ -72,7 +72,7 @@ def get_updated_verify_py_files(changed_files):
     """
     verify_py_files = []
     for file_path in changed_files:
-        if file_path.endswith("verify.py"):
+        if file_path.endswith("verify.py") and file_path.startswith("docker/"):
             verify_py_files.append(os.path.basename(os.path.dirname(file_path)))
     return set(verify_py_files)
 
