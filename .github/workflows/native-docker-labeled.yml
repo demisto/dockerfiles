@@ -1,11 +1,9 @@
 name: Native docker validator
 on:
-  label:
-    types:
-      - created
-  push:
+  pull_request:
     branches:
-      - main
+      - master
+    types: [labeled, edited]
 
 jobs:
   native_docker_image_labeled:
@@ -31,7 +29,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install pipenv
           pwd
-          cd "$GITHUB_WORKSPACE/.github/workflows/native-docker-labeled"
+          cd "$GITHUB_WORKSPACE/.github/workflows/native-docker"
           pipenv install
           echo "==== $(date): Running validator... ===="
           pipenv run ./native_docker_labeled.py -c "$CHANGED_FILES"
