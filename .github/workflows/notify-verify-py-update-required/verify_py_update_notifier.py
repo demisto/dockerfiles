@@ -12,7 +12,7 @@ def main():
     parser.add_argument('-c', '--changed_files', help='list of the changed files')
     args = parser.parse_args()
     changed_files = args.changed_files.split(" ")
-    return list_verify_py_files_require_update(changed_files)
+    return notify_verify_py_files_require_update(changed_files)
 
 
 def notify_verify_py_files_require_update(changed_files):
