@@ -19,7 +19,7 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: "3.11"
-      - name: Run native_docker_validator Script
+      - name: Run verify_py_update_notifier Script
         env:
           CHANGED_FILES: "${{ steps.changed-files.outputs.all_changed_files }}"
         run: |
