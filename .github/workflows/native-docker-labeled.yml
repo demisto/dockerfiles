@@ -1,12 +1,12 @@
 name: Native docker validator
 on:
+  push:
+    branches:
+      - master 
   pull_request:
     branches:
       - master
     types: [labeled, opened]
-  push:
-    branches:
-      - master 
 
 jobs:
   native_docker_image_labeled:
