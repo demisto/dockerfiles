@@ -38,7 +38,7 @@ def list_verify_py_files_require_update(changed_files):
 
     Returns: the set of the verify.py files that require update.
     """
-    verify_py_files_require_update = {}
+    verify_py_files_require_update = []
     updated_dockers = get_updated_dockers(changed_files)
     if updated_dockers:
         updated_verify_py_files = get_updated_verify_py_files(changed_files)
