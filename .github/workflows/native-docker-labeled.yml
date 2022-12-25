@@ -1,10 +1,11 @@
 name: Native docker validator
 on:
-  pull_request:
-    branches:
-      - master
   label:
-    types: [created, deleted]
+    types:
+      - created
+  push:
+    branches:
+      - main
 
 jobs:
   native_docker_image_labeled:
