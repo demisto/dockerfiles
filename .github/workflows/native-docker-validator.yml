@@ -4,8 +4,7 @@ on:
     branches:
       - master
   label:
-    types:
-      - created
+    types: [created, deleted]
 
 jobs:
   validate_native_docker:
