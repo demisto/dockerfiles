@@ -40,14 +40,14 @@ def get_updated_supported_dockers(changed_files):
     Returns: the set of the native supported dockers supported dockers that are being updated.
     """
     updated_supported_dockers = {}
-    updated_dockers_ls = get_list_of_updated_dockers(changed_files)
+    updated_dockers_ls = get_updated_dockers(changed_files)
     if updated_dockers_ls:
         supported_dockers = get_supported_dockers()
         return supported_dockers & updated_dockers_ls
     return updated_supported_dockers
 
 
-def get_list_of_updated_dockers(changed_files):
+def get_updated_dockers(changed_files):
     """
     This function lists the dockers that are being updated at the current pr.
     Args:
@@ -56,10 +56,10 @@ def get_list_of_updated_dockers(changed_files):
     Returns: the set of the dockers that are being updated at the current pr.
     """
     dockers = []
-    for file in changed_files:
+    for file_path in changed_files:
         for suffix in DOCKER_FILES_SUFFIX:
-            if file.endswith(suffix):
-                dockers.append(os.path.basename(os.path.dirname(file)))
+            if file_path.endswith(suffix) and file_path.startswith("docker/"):
+                dockers.append(os.path.basename(os.path.dirname(file_path)))
     return set(dockers)
 
 

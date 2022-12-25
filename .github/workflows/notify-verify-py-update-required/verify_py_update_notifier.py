@@ -55,10 +55,10 @@ def get_updated_dockers(changed_files):
     Returns: the set of the dockers that are being updated at the current pr.
     """
     dockers = []
-    for file in changed_files:
+    for file_path in changed_files:
         for suffix in DOCKER_FILES_SUFFIX:
-            if file.endswith(suffix):
-                dockers.append(os.path.basename(os.path.dirname(file)))
+            if file_path.endswith(suffix) and file_path.startswith("docker/"):
+                dockers.append(os.path.basename(os.path.dirname(file_path)))
     return set(dockers)
 
 
@@ -72,7 +72,7 @@ def get_updated_verify_py_files(changed_files):
     """
     verify_py_files = []
     for file_path in changed_files:
-        if file_path.endswith("verify.py") and file_path.startswith("docker/"):
+        if file_path.endswith("verify.py"):
             verify_py_files.append(os.path.basename(os.path.dirname(file_path)))
     return set(verify_py_files)
 
