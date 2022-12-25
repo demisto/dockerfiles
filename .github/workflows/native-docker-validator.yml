@@ -7,7 +7,7 @@ on:
 jobs:
   validate_native_docker:
     runs-on: ubuntu-latest
-    if: github.actor != 'dependabot[bot]'
+    if: github.actor != 'dependabot[bot]' && ${{ !github.event.pull_request.auto_merge }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -15,10 +15,10 @@ jobs:
       - name: Get changed files
         id: changed-files
         uses: tj-actions/changed-files@v35
-      - name: Setup Python
-        uses: actions/setup-python@v1
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v3
         with:
-          python-version: '3.9'
+          python-version: "3.11"
       - name: Run native_docker_validator Script
         if: contains(github.event.pull_request.labels.*.name, 'docker update approved') == false
         env:

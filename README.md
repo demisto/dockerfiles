@@ -229,8 +229,9 @@ To mark an image as deprecated please follow the following steps:
   * DEPRECATED_REASON="the same text as deprecated_reason key from the build.conf file"
 * 3- commit all chnaged files including the deprecated_image.json and create a new PR
 
-### native docker validator
+### Native Image Docker Validator
 
 This validator is testing wether a docker that is supported by the native docker is being updated or not.
-If such docker is being updated, then the validation will fail to alarm the user that the native docker might need updates according to the changes done to the supported updated docker.
-After the related changes are done the user should add the 'docker update approved' label to his pr and re-trigger the build.
+If such docker is being updated, then the validation will fail to alarm the user that the native docker might need updates according to the changes done to the supported updated docker. 
+The user should Check if the native image is already compatible with this change. If it is, great. Otherwise, the user should add compatibility, and add the relevant integration to the ignore conf. as necessary.
+After the required changes are done the user should add the 'docker update approved' label to his pr and re-trigger the build.
