@@ -3,7 +3,10 @@ on:
   pull_request:
     branches:
       - master
-    types: [labeled, edited]
+    types: [labeled, opened]
+  push:
+    branches:
+      - master 
 
 jobs:
   native_docker_image_labeled:
