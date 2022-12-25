@@ -22,7 +22,7 @@ def notify_verify_py_files_require_update(changed_files):
     """
     verify_py_files_require_update = list_verify_py_files_require_update(changed_files)
     if verify_py_files_require_update:
-        print(f"the following dockers were updated: {', '.join(verify_py_files_require_update)}. Please consider updating their verify.py file accordingly.")
+        print(f"the following dockers were updated: {', '.join(verify_py_files_require_update)}. Please consider updating their verify.py file accordingly.\nFor more information please refer to the repo's README file.")
         return 1
     return 0
 
