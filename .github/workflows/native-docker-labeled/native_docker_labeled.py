@@ -13,7 +13,7 @@ def main():
     return validate_native_docker(changed_files)
 
 
-def validate_native_docker(changed_files):
+def validate_native_docker(changed_files) -> int:
     """
     This function validate that no native docker supported dockers are being updated.
     Args:
@@ -23,12 +23,12 @@ def validate_native_docker(changed_files):
     """
     updated_supported_dockers = get_updated_supported_dockers(changed_files)
     if updated_supported_dockers:
-        print(f"the following dockers are updated and supported by the native docker: {', '.join(updated_supported_dockers)}. Please make sure to update the native docker accordingly and add the 'native image approved' label.")
+        print(f"the following dockers are updated and supported by the native docker: {', '.join(updated_supported_dockers)}. Please make sure to Check what is required to meet the criteria here: https://github.com/demisto/dockerfiles/blob/master/README.md and add the 'native image approved' label.")
         return 1
     return 0
 
 
-def get_updated_supported_dockers(changed_files):
+def get_updated_supported_dockers(changed_files) -> set:
     """
     This function lists the dockers that are supported by the native docker and being updated at the current pr.
     Args:
@@ -36,15 +36,14 @@ def get_updated_supported_dockers(changed_files):
 
     Returns: the set of the native supported dockers supported dockers that are being updated.
     """
-    updated_supported_dockers = {}
-    updated_dockers_ls = get_updated_dockers(changed_files)
-    if updated_dockers_ls:
+    updated_dockers = get_updated_dockers(changed_files)
+    if updated_dockers:
         supported_dockers = get_supported_dockers()
-        return supported_dockers & updated_dockers_ls
-    return updated_supported_dockers
+        return supported_dockers & updated_dockers
+    return set()
 
 
-def get_updated_dockers(changed_files):
+def get_updated_dockers(changed_files) -> set:
     """
     This function lists the dockers that are being updated at the current pr.
     Args:
@@ -52,14 +51,14 @@ def get_updated_dockers(changed_files):
 
     Returns: the set of the dockers that are being updated at the current pr.
     """
-    dockers = []
+    updated_dockers = []
     for file_path in changed_files:
         if file_path.startswith("docker/"):
-            dockers.append(os.path.basename(os.path.dirname(file_path)))
-    return set(dockers)
+            updated_dockers.append(os.path.basename(os.path.dirname(file_path)))
+    return set(updated_dockers)
 
 
-def get_supported_dockers():
+def get_supported_dockers() -> set:
     """
     This function lists the dockers that are supported by the native docker.
 

@@ -23,13 +23,11 @@ jobs:
         env:
           CHANGED_FILES: "${{ steps.changed-files.outputs.all_changed_files }}"
         run: |
-          echo "==== $(date): Starting pipenv setup... ===="
+          echo "==== $(date): Starting environment setup... ===="
           python -m pip install --upgrade pip
-          pip install pipenv
           pwd
           cd "$GITHUB_WORKSPACE/.github/workflows/update-verify-py"
-          pipenv install
           echo "==== $(date): Running validator... ===="
-          pipenv run ./update_verify_py.py -c "$CHANGED_FILES"
+          python ./update_verify_py.py -c "$CHANGED_FILES"
 
 

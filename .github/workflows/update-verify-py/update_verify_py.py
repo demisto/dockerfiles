@@ -12,7 +12,7 @@ def main():
     return notify_verify_py_files_require_update(changed_files)
 
 
-def notify_verify_py_files_require_update(changed_files):
+def notify_verify_py_files_require_update(changed_files) -> int:
     """
     This function recommend the user to update the verify.py files of docker files that was updated.
     Args:
@@ -22,12 +22,12 @@ def notify_verify_py_files_require_update(changed_files):
     """
     verify_py_files_require_update = list_verify_py_files_require_update(changed_files)
     if verify_py_files_require_update:
-        print(f"the following dockers were updated: {', '.join(verify_py_files_require_update)}. Please consider updating their verify.py file accordingly.\nFor more information please refer to the repo's README file.")
+        print(f"the following dockers were updated: {', '.join(verify_py_files_require_update)}. Please consider updating their verify script accordingly.\nFor more information please refer to the repo's README file: https://github.com/demisto/dockerfiles/blob/master/README.md")
         return 1
     return 0
 
 
-def list_verify_py_files_require_update(changed_files):
+def list_verify_py_files_require_update(changed_files) -> set:
     """
      This function lists all the dockers that was updated and their verify.py wasn't updated.
     Args:
@@ -35,15 +35,14 @@ def list_verify_py_files_require_update(changed_files):
 
     Returns: the set of the verify.py files that require update.
     """
-    verify_py_files_require_update = []
     updated_dockers = get_updated_dockers(changed_files)
     if updated_dockers:
         updated_verify_py_files = get_updated_verify_py_files(changed_files)
         return updated_dockers - updated_verify_py_files
-    return verify_py_files_require_update
+    return set()
 
 
-def get_updated_dockers(changed_files):
+def get_updated_dockers(changed_files) -> set:
     """
     This function lists the dockers that are being updated at the current pr.
     Args:
@@ -58,7 +57,7 @@ def get_updated_dockers(changed_files):
     return set(dockers)
 
 
-def get_updated_verify_py_files(changed_files):
+def get_updated_verify_py_files(changed_files) -> set:
     """
     This function lists the verify.py files that are being updated at the current pr.
     Args:
