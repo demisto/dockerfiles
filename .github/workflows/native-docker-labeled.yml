@@ -4,7 +4,7 @@ on:
   pull_request:
     branches:
       - master
-    types: [labeled, opened]
+    types: [labeled, opened, synchronize]
 
 jobs:
   native_docker_image_labeled:
