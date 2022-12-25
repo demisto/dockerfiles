@@ -1,0 +1,35 @@
+name: Verify.py update notifier
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  notify_verify_py:
+    runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]' && ${{ !github.event.pull_request.auto_merge }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v35
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.11"
+      - name: Run native_docker_validator Script
+        env:
+          CHANGED_FILES: "${{ steps.changed-files.outputs.all_changed_files }}"
+        run: |
+          echo "==== $(date): Starting pipenv setup... ===="
+          python -m pip install --upgrade pip
+          pip install pipenv
+          pwd
+          cd "$GITHUB_WORKSPACE/.github/workflows/notify-verify-py-update-required"
+          pipenv install
+          echo "==== $(date): Running validator... ===="
+          pipenv run ./native_docker_validator.py -c "$CHANGED_FILES"
+
+
