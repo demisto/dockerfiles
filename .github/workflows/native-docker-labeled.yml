@@ -7,7 +7,7 @@ on:
     types: [created, deleted]
 
 jobs:
-  validate_native_docker:
+  native_docker_image_labeled:
     runs-on: ubuntu-latest
     if: github.actor != 'dependabot[bot]' && ${{ !github.event.pull_request.auto_merge }}
     steps:
@@ -21,7 +21,7 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: "3.11"
-      - name: Run native_docker_validator Script
+      - name: Run native_docker_labeled Script
         if: contains(github.event.pull_request.labels.*.name, 'docker update approved') == false
         env:
           CHANGED_FILES: "${{ steps.changed-files.outputs.all_changed_files }}"
@@ -30,9 +30,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install pipenv
           pwd
-          cd "$GITHUB_WORKSPACE/.github/workflows/validate-native-docker"
+          cd "$GITHUB_WORKSPACE/.github/workflows/native-docker-labeled"
           pipenv install
           echo "==== $(date): Running validator... ===="
-          pipenv run ./native_docker_validator.py -c "$CHANGED_FILES"
+          pipenv run ./native_docker_labeled.py -c "$CHANGED_FILES"
 
 
