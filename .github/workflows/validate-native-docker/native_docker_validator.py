@@ -5,9 +5,6 @@ import os
 import sys
 
 
-DOCKER_FILES_SUFFIX = ["Dockerfile", "Pipfile", "Pipfile.lock"]
-
-
 def main():
     parser = argparse.ArgumentParser(description='Deploy a pack from a contribution PR to a branch')
     parser.add_argument('-c', '--changed_files', help='list of the changed files')
@@ -57,9 +54,8 @@ def get_updated_dockers(changed_files):
     """
     dockers = []
     for file_path in changed_files:
-        for suffix in DOCKER_FILES_SUFFIX:
-            if file_path.endswith(suffix) and file_path.startswith("docker/"):
-                dockers.append(os.path.basename(os.path.dirname(file_path)))
+        if file_path.startswith("docker/"):
+            dockers.append(os.path.basename(os.path.dirname(file_path)))
     return set(dockers)
 
 

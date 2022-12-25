@@ -1,8 +1,7 @@
 name: Verify.py update notifier
 on:
   pull_request:
-    branches:
-      - master
+    types: [opened, labeled]
 
 jobs:
   notify_verify_py:
