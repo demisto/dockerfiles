@@ -234,4 +234,4 @@ To mark an image as deprecated please follow the following steps:
 This validator is testing wether a docker that is supported by the native docker is being updated or not.
 If such docker is being updated, then the validation will fail to alarm the user that the native docker might need updates according to the changes done to the supported updated docker. 
 The user should Check if the native image is already compatible with this change. If it is, great. Otherwise, the user should add compatibility, and add the relevant integration to the ignore conf. as necessary.
-After the required changes are done the user should add the 'docker update approved' label which will re-trigger the workflow and pass the validation.
+After the required changes are done the user should add the 'native image approved' label which will re-trigger the workflow and pass the validation.

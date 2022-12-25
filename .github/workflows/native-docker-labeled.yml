@@ -21,7 +21,7 @@ jobs:
         with:
           python-version: "3.11"
       - name: Run native_docker_labeled Script
-        if: contains(github.event.pull_request.labels.*.name, 'docker update approved') == false
+        if: contains(github.event.pull_request.labels.*.name, 'native image approved') == false
         env:
           CHANGED_FILES: "${{ steps.changed-files.outputs.all_changed_files }}"
         run: |

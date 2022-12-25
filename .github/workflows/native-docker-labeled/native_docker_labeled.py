@@ -23,7 +23,7 @@ def validate_native_docker(changed_files):
     """
     updated_supported_dockers = get_updated_supported_dockers(changed_files)
     if updated_supported_dockers:
-        print(f"the following dockers are updated and supported by the native docker: {', '.join(updated_supported_dockers)}. Please make sure to update the native docker accordingly and add the 'docker update approved' label.")
+        print(f"the following dockers are updated and supported by the native docker: {', '.join(updated_supported_dockers)}. Please make sure to update the native docker accordingly and add the 'native image approved' label.")
         return 1
     return 0
 
