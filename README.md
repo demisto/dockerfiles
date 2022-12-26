@@ -235,4 +235,4 @@ In the event that you've updated a native-image-supported dockerimage, you need 
 If such docker is being updated, then the validation will fail to alarm the user that the native docker might need updates according to the changes done to the supported updated docker.
 For example, if you added a new package to the image, chances are you will need to add the same package to the native image.  
 The user should Check if the native image is already compatible with this change. If it is, great. Otherwise, the user should add compatibility, and add the relevant integration to the ignore conf. as necessary.
-After the required changes are done in this repository and in the content repository, the add the 'native image approved' label which will re-trigger the workflow and pass the validation.
+After the required changes are done in this repository and in the content repository, the reviewer should add the 'native image approved' label which will re-trigger the workflow and pass the validation.
