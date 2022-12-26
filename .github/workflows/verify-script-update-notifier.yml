@@ -7,7 +7,7 @@ on:
 jobs:
   update_verify_script:
     runs-on: ubuntu-latest
-    if: github.actor != 'dependabot[bot]' && ${{ !github.event.pull_request.auto_merge }}
+    if: github.actor != 'dependabot[bot]' && ${{ !github.event.pull_request.auto_merge }} && github.repository == 'demisto/dockerFiles'
     steps:
       - uses: actions/checkout@v3
         with:
