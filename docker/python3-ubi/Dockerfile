@@ -84,3 +84,7 @@ RUN groupadd -g 4000 demisto && \
 CMD ["python3"]
 
 HEALTHCHECK NONE
+
+# Handling the issue described here https://knowledgebase.paloaltonetworks.com/KCSArticleDetail?id=kA10g000000POJ0CAO&lang=en_US%E2%80%A9
+# by enabling UnsafeLegacyRenegotiation
+COPY openssl.cnf /etc/ssl/openssl.cnf
