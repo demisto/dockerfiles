@@ -23,7 +23,7 @@ def validate_native_docker(changed_files) -> int:
     """
     updated_supported_dockers = get_updated_supported_dockers(changed_files)
     if updated_supported_dockers:
-        print(f"the following dockers are updated and supported by the native docker: {', '.join(updated_supported_dockers)}. Please make sure to Check what is required to meet the criteria here: https://github.com/demisto/dockerfiles/blob/master/README.md and add the 'native image approved' label.")
+        print(f"the following dockers are updated and supported by the native docker: {', '.join(updated_supported_dockers)}. Please make sure to Check what is required to meet the criteria here: https://github.com/demisto/dockerfiles/blob/master/README.md#the-native-image-docker-validator-and-native-image-approved-label and ask your reviewer to add the 'native image approved' label.")
         return 1
     return 0
 

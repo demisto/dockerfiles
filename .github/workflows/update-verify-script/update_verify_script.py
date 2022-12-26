@@ -22,7 +22,7 @@ def notify_verify_script_files_require_update(changed_files) -> int:
     """
     verify_script_files_require_update = list_verify_script_files_require_update(changed_files)
     if verify_script_files_require_update:
-        print(f"the following dockers were updated: {', '.join(verify_script_files_require_update)}. Please consider updating their verify script accordingly.\nFor more information please refer to the repo's README file: https://github.com/demisto/dockerfiles/blob/master/README.md")
+        print(f"the following dockers were updated: {', '.join(verify_script_files_require_update)}. Please consider updating their verify script accordingly.\nFor more information please refer to the repo's README file: https://github.com/demisto/dockerfiles/blob/master/README.md#the-native-image-docker-validator-and-native-image-approved-label")
         return 1
     return 0
 
