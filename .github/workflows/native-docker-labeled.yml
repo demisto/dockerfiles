@@ -8,7 +8,7 @@ on:
 jobs:
   native_docker_image_labeled:
     runs-on: ubuntu-latest
-    if: github.actor != 'dependabot[bot]' && ${{ !github.event.pull_request.auto_merge }} && github.repository == 'demisto/dockerFiles'
+    if: github.actor != 'dependabot[bot]' && contains(github.event.pull_request.title, 'autoupdate') == false && github.repository == 'demisto/dockerFiles'
     steps:
       - uses: actions/checkout@v3
         with:
