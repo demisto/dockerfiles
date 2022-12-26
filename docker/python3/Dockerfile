@@ -17,4 +17,22 @@ RUN addgroup -g 4000 demisto \
 
 # Handling the issue described here https://knowledgebase.paloaltonetworks.com/KCSArticleDetail?id=kA10g000000POJ0CAO&lang=en_US%E2%80%A9
 # by enabling UnsafeLegacyRenegotiation
-RUN bash './edit_openssl.sh'
+RUN sed -iE "s/^openssl_conf = .*/openssl_conf = openssl_init/" $destination_file \
+if ! grep -q "openssl_conf = openssl_init" $destination_file; then \
+	echo "openssl_conf = openssl_init" >> "$destination_file" \
+fi \
+if ! grep -qF "[openssl_init]" $destination_file; then \
+	echo "[openssl_init]" >> "$destination_file" \
+	echo "ssl_conf = ssl_sect" >> "$destination_file" \
+fi \
+sed -iE "s/^ssl_conf = .*/ssl_conf = ssl_sect/" $destination_file \
+if ! grep -qF "[ssl_sect]" $destination_file; then \
+	echo "[ssl_sect]" >> "$destination_file" \
+	echo "system_default = system_default_sect" >> "$destination_file" \
+fi \
+sed -iE "s/system_default = .*/system_default = system_default_sect/" $destination_file \
+if ! grep -qF "[system_default_sect]" $destination_file; then \
+	echo "[system_default_sect]" >> "$destination_file" \
+	echo "Options = UnsafeLegacyRenegotiation" >> "$destination_file" \
+fi \
+sed -iE "s/Options = .*/Options = UnsafeLegacyRenegotiation/" $destination_file
