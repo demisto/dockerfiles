@@ -17,7 +17,7 @@ RUN addgroup -g 4000 demisto \
 
 # Handling the issue described here https://knowledgebase.paloaltonetworks.com/KCSArticleDetail?id=kA10g000000POJ0CAO&lang=en_US%E2%80%A9
 # by enabling UnsafeLegacyRenegotiation
-RUN echo'openssl_conf = openssl_init\
+RUN echo 'openssl_conf = openssl_init\
 \n\
 [openssl_init]\
 ssl_conf = ssl_sect\
