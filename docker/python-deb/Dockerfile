@@ -199,3 +199,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN groupadd --gid 4000 demisto \
   && useradd --uid 4000 --gid demisto --shell /bin/bash --create-home demisto
+
+# Handling the issue described here https://knowledgebase.paloaltonetworks.com/KCSArticleDetail?id=kA10g000000POJ0CAO&lang=en_US%E2%80%A9
+# by enabling UnsafeLegacyRenegotiation
+COPY openssl.cnf /etc/ssl/openssl.cnf

@@ -176,3 +176,7 @@ RUN addgroup -g 4000 demisto \
   && adduser -u 4000 -G demisto -D demisto -s /bin/sh 
 
 CMD ["python2"]
+
+# Handling the issue described here https://knowledgebase.paloaltonetworks.com/KCSArticleDetail?id=kA10g000000POJ0CAO&lang=en_US%E2%80%A9
+# by enabling UnsafeLegacyRenegotiation
+COPY openssl.cnf /etc/ssl/openssl.cnf

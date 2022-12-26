@@ -8,3 +8,7 @@ ADD https://raw.githubusercontent.com/demisto/demisto-sdk/master/package.json /c
 ADD https://raw.githubusercontent.com/demisto/demisto-sdk/master/package-lock.json /content/
 
 RUN npm ci
+
+# Handling the issue described here https://knowledgebase.paloaltonetworks.com/KCSArticleDetail?id=kA10g000000POJ0CAO&lang=en_US%E2%80%A9
+# by enabling UnsafeLegacyRenegotiation
+COPY openssl.cnf /etc/ssl/openssl.cnf

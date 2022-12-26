@@ -35,3 +35,8 @@ RUN python -c "import nltk; nltk.download('stopwords', download_dir='/ml/nltk_da
 ENV NLTK_DATA='/ml/nltk_data'
 
 COPY --from=files-src --chown=demisto:demisto /ml /ml
+
+
+# Handling the issue described here https://knowledgebase.paloaltonetworks.com/KCSArticleDetail?id=kA10g000000POJ0CAO&lang=en_US%E2%80%A9
+# by enabling UnsafeLegacyRenegotiation
+COPY openssl.cnf /etc/ssl/openssl.cnf
