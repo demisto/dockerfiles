@@ -14,7 +14,7 @@ def main():
 
 def notify_verify_script_files_require_update(changed_files) -> int:
     """
-    This function recommend the user to update the verify.py files of docker files that was updated.
+    This function recommend the user to update the verify.py or verify.ps1 files of docker files that was updated.
     Args:
         changed_files: the list of files that are being changed in the current pr.
 
@@ -29,11 +29,11 @@ def notify_verify_script_files_require_update(changed_files) -> int:
 
 def list_verify_script_files_require_update(changed_files) -> set:
     """
-     This function lists all the dockers that was updated and their verify.py wasn't updated.
+     This function lists all the dockers that was updated and their verify.py or verify.ps1 file wasn't updated.
     Args:
         changed_files: the list of files that are being changed in the current pr.
 
-    Returns: the set of the verify.py files that require update.
+    Returns: the set of the verify.py or verify.ps1 files that require update.
     """
     updated_dockers = get_updated_dockers(changed_files)
     if updated_dockers:
@@ -59,15 +59,15 @@ def get_updated_dockers(changed_files) -> set:
 
 def get_updated_verify_script_files(changed_files) -> set:
     """
-    This function lists the verify.py files that are being updated at the current pr.
+    This function lists the verify.py and verify.ps1 files that are being updated at the current pr.
     Args:
         changed_files: the list of files that are being changed in the current pr.
 
-    Returns: the list of the verify.py files that are being updated at the current pr.
+    Returns: the list of the verify.py and verify.ps1 files that are being updated at the current pr.
     """
     verify_script_files = []
     for file_path in changed_files:
-        if file_path.endswith("verify.py"):
+        if file_path.endswith("verify.py") or file_path.endswith("verify.ps1"):
             verify_script_files.append(os.path.basename(os.path.dirname(file_path)))
     return set(verify_script_files)
 
