@@ -17,4 +17,4 @@ RUN addgroup -g 4000 demisto \
 
 # Handling the issue described here https://knowledgebase.paloaltonetworks.com/KCSArticleDetail?id=kA10g000000POJ0CAO&lang=en_US%E2%80%A9
 # by enabling UnsafeLegacyRenegotiation
-COPY openssl_ssl.cnf /etc/ssl/openssl.cnf
+COPY openssl.cnf /etc/ssl/openssl.cnf
