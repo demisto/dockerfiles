@@ -14,3 +14,16 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
 
 RUN addgroup -g 4000 demisto \
   && adduser -u 4000 -G demisto -D demisto -s /bin/sh 
+
+# Handling the issue described here https://knowledgebase.paloaltonetworks.com/KCSArticleDetail?id=kA10g000000POJ0CAO&lang=en_US%E2%80%A9
+# by enabling UnsafeLegacyRenegotiation
+RUN echo'openssl_conf = openssl_init\
+\n\
+[openssl_init]\
+ssl_conf = ssl_sect\
+\n\
+[ssl_sect]\
+system_default = system_default_sect\
+\n\
+[system_default_sect]\
+Options = UnsafeLegacyRenegotiation\n'>> /etc/ssl/openssl.cnf
