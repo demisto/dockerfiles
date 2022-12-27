@@ -17,6 +17,9 @@ RUN addgroup -g 4000 demisto \
 
 # Handling the issue described here https://knowledgebase.paloaltonetworks.com/KCSArticleDetail?id=kA10g000000POJ0CAO&lang=en_US%E2%80%A9
 # by enabling UnsafeLegacyRenegotiation
+
+ARG destination_file=ֿ'/etc/ssl/openssl.cnf'
+
 RUN sed -iE "s/^openssl_conf = .*/openssl_conf = openssl_init/" $destination_file \
 if ! grep -q "openssl_conf = openssl_init" $destination_file; then \
 	echo "openssl_conf = openssl_init" >> "$destination_file" \
