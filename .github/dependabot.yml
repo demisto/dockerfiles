@@ -254,10 +254,6 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: pip
-    directory: /docker/threatconnect-sdk
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
     directory: /docker/bs4
     schedule:
       interval: daily
@@ -689,7 +685,3 @@ updates:
     directory: /docker/splunksdk-py3
     schedule:
       interval: daily
-  - package-ecosystem: pip
-    directory: /docker/hashicorp
-    schedule:
-     interval: daily
