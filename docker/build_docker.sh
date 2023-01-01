@@ -158,16 +158,22 @@ function docker_build {
             echo "Error: Pipfile present without Pipfile.lock. Make sure to commit your Pipfile.lock file"
             return 1
         fi
-        pipenv --rm || echo "Proceeding. It is ok that no virtualenv is available to remove"
-        pipenv install --deploy # fails if lock is outdated
-        PIPENV_YES=yes pipenv run pip freeze > requirements.txt
-        echo "Pipfile lock generated requirements.txt: "
-        echo "############ REQUIREMENTS.TXT ############"
-        cat requirements.txt
-        echo "##########################################"
-        [ ! -f requirements.txt ] && echo "WARNING: requirements.txt does not exist, this is ok if python usage is not intended."
-        [ ! -s requirements.txt ] && echo "WARNING: requirements.txt is empty"
-        # del_requirements=yes
+
+        if ! [[ "$(prop 'deprecated')" ]]; then
+          echo 'Not generating requirements as dont_generate_requirements is true' # only implemented for pipenv
+        else
+          pipenv --rm || echo "Proceeding. It is ok that no virtualenv is available to remove"
+          pipenv install --deploy # fails if lock is outdated
+          PIPENV_YES=yes pipenv run pip freeze > requirements.txt
+          echo "Pipfile lock generated requirements.txt: "
+          echo "############ REQUIREMENTS.TXT ############"
+          cat requirements.txt
+          echo "##########################################"
+          [ ! -f requirements.txt ] && echo "WARNING: requirements.txt does not exist, this is ok if python usage is not intended."
+          [ ! -s requirements.txt ] && echo "WARNING: requirements.txt is empty"
+          # del_requirements=yes
+        fi
+
     fi
 
     if [ -f "pyproject.toml" -a ! -f "requirements.txt" ]; then
