@@ -159,7 +159,7 @@ function docker_build {
             return 1
         fi
 
-        if [[ ! "$(prop 'dont_generate_requirements')" ]]; then
+        if ! [[ "$(prop 'deprecated')" ]]; then
           echo 'Not generating requirements as dont_generate_requirements is true' # only implemented for pipenv
         else
           pipenv --rm || echo "Proceeding. It is ok that no virtualenv is available to remove"
