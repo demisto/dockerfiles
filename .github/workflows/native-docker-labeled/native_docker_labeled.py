@@ -3,6 +3,7 @@ import argparse
 import requests
 import os
 import sys
+import re
 
 
 def main():
@@ -51,11 +52,12 @@ def get_updated_dockers(changed_files) -> set:
 
     Returns: the set of the dockers that are being updated at the current pr.
     """
-    updated_dockers = []
+    dockers = []
+    pattern = re.compile("docker\/.*\/.*")
     for file_path in changed_files:
-        if file_path.startswith("docker/"):
-            updated_dockers.append(os.path.basename(os.path.dirname(file_path)))
-    return set(updated_dockers)
+        if pattern.match(file_path):
+            dockers.append(os.path.basename(os.path.dirname(file_path)))
+    return set(dockers)
 
 
 def get_supported_dockers() -> set:
