@@ -16,7 +16,7 @@ if [[ -z "$1" ]] || [[ "$1" == -* ]]; then
     echo "For example: ${BASH_SOURCE} docker/ldap"
     exit 1
 fi
-a
+
 if [[ ! -d  "$1" ]]; then
     echo "Dir: [$1] specified as command line parameter but directory not found"
     exit 1
