@@ -15,17 +15,17 @@ This README purpose is to clarify the following:
 * That means that every integration/script that uses taxii2, tesseract or chromium docker image can also be used in the native image and there is compatibility between them.
 
 ### What should I do when changing a docker-image in the dockerfiles repo?
-* Check if the docker image that was changed is supported also in the native image. It is possible to check it in the docker native image configuration file. Note: if you have changed a docker-image that is supported in the native image the native docker validator workflow will fail and alert you. 
-* if the docker image is supported in the native image, make sure that the changes that you made to that docker image will also be applied in the native image.
+* Check if the docker image that was changed is supported also in the native image. It is possible to check it in the [docker native image configuration file]((https://github.com/demisto/content/blob/master/Tests/docker_native_image_config.json)). Note: if you have changed a docker-image that is supported in the native image the native docker validator workflow will fail and alert you. 
+* If the docker image is supported by the native image, apply the same changes to the native image.
 * If a new python dependency was added to the docker image, make sure it's also added to the native image.  
 * If a new OS dependency was added to the docker image, make sure it's also added to the native image.
 * After you are done, add to your PR the label "native image approved" that means that the native image is compatible with the updated docker image that you changed. 
-* If the issue cannot be resolved, add the script/integration to be ignored in the docker native image configuration file with the native image version that failed, that will make the script/integration to run on the original docker image in XSOAR-NG. 
+* If the issue cannot be resolved, add the script/integration to be ignored in the [docker native image configuration file]((https://github.com/demisto/content/blob/master/Tests/docker_native_image_config.json)) with the native image version that failed, that will make the script/integration to run on the original docker image in XSOAR-NG. 
 
 ### What should I do when lint/test-playbook fails on the one of the native images?
 * Check if lint / test-playbook has passed on the original docker image.
 * In case yes, try to figure out what are the possible differences that can be between the original docker image to the native image version that failed.
-* Run: docker run -it --rm <native_image_docker> sh - that command will create a new container that is based on the native image that you put.
+* To create a terminal in the native image, Run: `docker run -it --rm <native_image_docker> sh`.
 * Based on the error that the native image failed, try to understand what could be missing in the native image. For example if it's a possible python dependency issue, Run: *pip list* inside the docker of the native-image / original docker image and see if there is incompatibility between the version of the problematic python package.  
 * The most common case will be that you miss a python dependency in the native image / the original docker image uses python module A version XXX and the native image uses python module A version YYY which might contain some significant changes between those two versions.
 * If the issue cannot be resolved, add the script/integration to be ignored in the docker native image configuration file with the native image version that failed, that will make the script/integration to run on the original docker image in XSOAR-NG. 
