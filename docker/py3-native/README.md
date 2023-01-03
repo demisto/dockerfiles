@@ -20,7 +20,7 @@ This README purpose is to clarify the following:
 * If a new python dependency was added to the docker image, make sure it's also added to the native image.  
 * If a new OS dependency was added to the docker image, make sure it's also added to the native image.
 * After you are done, add to your PR the label "native image approved" that means that the native image is compatible with the updated docker image that you changed. 
-* If the issue cannot be resolved, add the script/integration to be ignored in the [docker native image configuration file]((https://github.com/demisto/content/blob/master/Tests/docker_native_image_config.json)) with the native image version that failed, that will make the script/integration to run on the original docker image in XSOAR-NG. 
+* If the issue cannot be resolved, add the script/integration to be ignored in the [docker native image configuration file](https://github.com/demisto/content/blob/master/Tests/docker_native_image_config.json) with the native image version that failed, that will make the script/integration to run on the original docker image in XSOAR-NG. 
 
 ### What should I do when lint/test-playbook fails on the one of the native images?
 * Check if lint / test-playbook has passed on the original docker image.
@@ -28,7 +28,7 @@ This README purpose is to clarify the following:
 * To create a terminal in the native image, Run: `docker run -it --rm <native_image_docker> sh`.
 * Based on the error that the native image failed, try to understand what could be missing in the native image. For example if it's a possible python dependency issue, Run: *pip list* inside the docker of the native-image / original docker image and see if there is incompatibility between the version of the problematic python package.  
 * The most common case will be that you miss a python dependency in the native image / the original docker image uses python module A version XXX and the native image uses python module A version YYY which might contain some significant changes between those two versions.
-* If the issue cannot be resolved, add the script/integration to be ignored in the docker native image configuration file with the native image version that failed, that will make the script/integration to run on the original docker image in XSOAR-NG. 
+* If the issue cannot be resolved, add the script/integration to be ignored in the [docker native image configuration file](https://github.com/demisto/content/blob/master/Tests/docker_native_image_config.json) with the native image version that failed, that will make the script/integration to run on the original docker image in XSOAR-NG. 
 
 ## Supported Docker Images
 * python3 
