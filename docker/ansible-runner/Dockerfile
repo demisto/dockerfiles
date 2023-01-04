@@ -1,5 +1,5 @@
 
-FROM demisto/python3-deb:3.9.6.24019
+FROM demisto/python3-deb:3.10.9.42461
 
 COPY requirements.txt .
 
@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   sshpass \
   openssh-client \
 && pip install --no-cache-dir -r requirements.txt \
+&& pip install git+https://github.com/vmware/vsphere-automation-sdk-python.git@v7.0.1.0 \
 && apt-get purge -y --auto-remove \
   gcc \
   python3-dev \
