@@ -1,4 +1,4 @@
-FROM circleci/python:3.10.1
+FROM circleci/python:3.10.9
 
 # Setup pyenv + poetry and install extra python versions
 RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
