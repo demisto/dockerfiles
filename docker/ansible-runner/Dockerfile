@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   sshpass \
   openssh-client \
 && pip install --no-cache-dir -r requirements.txt \
-&& pip install https://github.com/vmware/vsphere-automation-sdk-python/archive/refs/tags/v7.0.1.0.tar.gz \
+&& pip install https://github.com/vmware/vsphere-automation-sdk-python/archive/refs/tags/v7.0.3.2.tar.gz \
 && apt-get purge -y --auto-remove \
   gcc \
   python3-dev \
