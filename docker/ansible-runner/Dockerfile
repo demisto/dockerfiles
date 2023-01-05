@@ -8,15 +8,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   python3-dev \
   linux-libc-dev \
   libc6-dev \
-  git \
   sshpass \
   openssh-client \
 && pip install --no-cache-dir -r requirements.txt \
-&& pip install git+https://github.com/vmware/vsphere-automation-sdk-python.git@v7.0.1.0 \
+&& pip install https://github.com/vmware/vsphere-automation-sdk-python/archive/refs/tags/v7.0.1.0.tar.gz \
 && apt-get purge -y --auto-remove \
   gcc \
   python3-dev \
-  git \
   linux-libc-dev \
   libc6-dev \
 && rm -rf /var/lib/apt/lists/*
