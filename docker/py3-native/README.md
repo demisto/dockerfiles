@@ -36,7 +36,7 @@ This README purpose is to clarify the following:
    - add the ID of the integration/script that needs to be ignored.
    - add the reason that this integration/script fails on the native-image(s).
    - add which native images should be ignored.
-   - Full example: UnzipFile script that should not run on native-image 8.1 because there is a unit-test that fails along with that native image.
+   - Full example: *UnzipFile* script that should not run on native-image 8.1 because there is a unit-test that fails along with that native image.
     ```
      {
         "id":"UnzipFile",
