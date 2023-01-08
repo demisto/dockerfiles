@@ -183,6 +183,7 @@ function docker_build {
         fi
 
       echo "starting to install dependencies from poetry..."
+      poetry --version
       poetry export -f requirements.txt --output requirements.txt --without-hashes
       echo "poetry.lock generated requirements.txt file: "
       echo "############ REQUIREMENTS.TXT ############"
