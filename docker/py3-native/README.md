@@ -15,7 +15,7 @@ This README purpose is to clarify the following:
 * That means that every integration/script that uses taxii2, tesseract or chromium docker image can also be used in the native image and there is compatibility between them.
 
 ### What should I do when changing a docker-image that is supported in the native image?
-1) Check if the docker image that was changed is supported also in the native image. It is possible to check it in the [docker native image configuration file]((https://github.com/demisto/content/blob/master/Tests/docker_native_image_config.json)). **Note:** if you have changed a docker-image that is supported in the native image the **native docker validator workflow** will fail and alert you. 
+1) Check if the docker image that was changed is supported also in the native image. It is possible to check it in the [docker native image configuration file](https://github.com/demisto/content/blob/master/Tests/docker_native_image_config.json). **Note:** if you have changed a docker-image that is supported in the native image the **native docker validator workflow** will fail and alert you. 
 2) If the docker image is supported by the native image, apply the same changes to the native image by the following scenarios:
    - If a new python dependency was added to the docker image, make sure it's also added to the native image, examples:  
       - assuming "pan-os-python" python module was added to the **[pan-os-python](https://github.com/demisto/dockerfiles/tree/master/docker/pan-os-python)** docker image, make sure to add the "pan-os-python" module library also to the native image.
@@ -28,10 +28,27 @@ This README purpose is to clarify the following:
  
 
 ### What should I do when lint/test-playbook fails on the one of the native images?
+* Add the script/integration to be ignored only in the problematic native image(s) in the [docker native image configuration file](https://github.com/demisto/content/blob/master/Tests/docker_native_image_config.json) under the `ignored_content_items` section, that will make the script/integration to run on the original docker image in XSOAR-NG.**
+  - add the ID of the integration/script.
+  - add the reason that this integration/script fails on the native-image(s).
+  - add which native images should be ignored.
+  - Example: UnzipFile script that should not run on native-image 8.1 because there is a unit-test that fails along with that native image.
+  ```
+  {
+    "id":"UnzipFile",
+    "reason":"Failed unit-test: test_unrar_no_password",
+    "ignored_native_images":[
+        "native:8.1"
+    ]
+  }
+  ```
+
+
+### Optional Reading: Debugging failures/issues with native images in lint / test-playbooks
 1) Check if lint / test-playbook has passed on the original docker image.
    - In case lint / test-playbook also failed on the original docker image:
-     - The new code that was added to the integration is not able to run on the none of the supported docker images - a problem that is not related to native-image(s) - check why.
-   - In case lint / test-playbook also passed on the original docker image:
+     - The integration / script is not able to run on any docker image (original or native-image).
+   - In case lint / test-playbook passed on the original docker image:
      - Create a terminal in the original docker image, Run: `docker run -it --rm <original_docker_image_tag> sh`
      - Create another terminal in the native image, Run: `docker run -it --rm <native_image_docker_tag> sh`.
 2) After creating the terminals above, start debugging it based on the error, **common** scenarios: 
@@ -46,7 +63,7 @@ This README purpose is to clarify the following:
    - Specific unit-test(s) fail when running lint on the native image on integrations/scripts that run shell commands which are based on installed OS dependencies.
      - On both terminals try to run the shell command and compare the results, in addition make sure the OS dependency versions are the same between the original docker image to the native image, example:
        - Given the script *UnzipFile* that uses *7z* OS dependency, run inside the terminals the same shell command that is being run in the unit-test, for example: `7z x -o<out_put_dir> <file_path.zip>`, or to check that versions aligned between the original docker image to the native image run `7z`
-3) **If the issue cannot be resolved, add the script/integration to be ignored only in the problematic native image(s) in the [docker native image configuration file](https://github.com/demisto/content/blob/master/Tests/docker_native_image_config.json), that will make the script/integration to run on the original docker image in XSOAR-NG.**
+3) **If the issue cannot be resolved, refer to the [What should I do when lint/test-playbook fails on the one of the native images?](https://github.com/demisto/dockerfiles/tree/master/docker/py3-native#What-should-I-do-when-lint/test-playbook-fails-on-the-one-of-the-native-images?) section.
 4) **Note:** There could be more complicated scenarios involved here, The scenarios above are only **common** scenarios.
 
 ## Supported Docker Images
