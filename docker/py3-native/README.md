@@ -24,7 +24,7 @@ This README purpose is to clarify the following:
       - assuming "git" was added to the **[crypto](https://github.com/demisto/dockerfiles/tree/master/docker/crypto)** docker image, make sure it is also added to the native image and make sure its documented [here](#os-dependencies-for-each-supported-docker-image).
       - assuming "curl" was added to the **[readpdf](https://github.com/demisto/dockerfiles/tree/master/docker/readpdf)** docker image, make sure it is also added to the native image and make sure its documented [here](#os-dependencies-for-each-supported-docker-image).
 3) After you are done, add to your PR the label "native image approved" that means that the native image is compatible with the updated docker image that you changed.
-4) **Add the script/integration to be ignored only in the production native images, refer the section [How to ignore native-images in the docker native image configuration file?](#how-to-ignore-native-images-in-the-docker-native-image-configuration-file).
+4) **Add the script/integration to be ignored only in the production native images, refer the section [How to ignore native-images in the docker native image configuration file?](#how-to-ignore-native-images-in-the-docker-native-image-configuration-file).**
 
 
 ### What should I do when lint/test-playbook fails on the one of the native images?
