@@ -32,7 +32,7 @@ This README purpose is to clarify the following:
   - add the ID of the integration/script.
   - add the reason that this integration/script fails on the native-image(s).
   - add which native images should be ignored.
-  - Example: UnzipFile script that should not run on native-image 8.1 because there is a unit-test that fails along with that native image.
+  - Full example: UnzipFile script that should not run on native-image 8.1 because there is a unit-test that fails along with that native image.
   ```
   {
     "id":"UnzipFile",
@@ -42,7 +42,6 @@ This README purpose is to clarify the following:
     ]
   }
   ```
-
 
 ### Optional Reading: Debugging failures/issues with native images in lint / test-playbooks
 1) Check if lint / test-playbook has passed on the original docker image.
@@ -63,7 +62,7 @@ This README purpose is to clarify the following:
    - Specific unit-test(s) fail when running lint on the native image on integrations/scripts that run shell commands which are based on installed OS dependencies.
      - On both terminals try to run the shell command and compare the results, in addition make sure the OS dependency versions are the same between the original docker image to the native image, example:
        - Given the script *UnzipFile* that uses *7z* OS dependency, run inside the terminals the same shell command that is being run in the unit-test, for example: `7z x -o<out_put_dir> <file_path.zip>`, or to check that versions aligned between the original docker image to the native image run `7z`
-3) **If the issue cannot be resolved, refer to the [What should I do when lint/test-playbook fails on the one of the native images?](https://github.com/demisto/dockerfiles/tree/master/docker/py3-native#What-should-I-do-when-lint/test-playbook-fails-on-the-one-of-the-native-images?) section.
+3) **If the issue cannot be resolved, refer to the [What should I do when lint/test-playbook fails on the one of the native images?](#what-should-i-do-when-linttest-playbook-fails-on-the-one-of-the-native-images) section.
 4) **Note:** There could be more complicated scenarios involved here, The scenarios above are only **common** scenarios.
 
 ## Supported Docker Images
