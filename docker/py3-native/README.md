@@ -20,9 +20,9 @@ This README purpose is to clarify the following:
    - If a new python dependency was added to the docker image, make sure it's also added to the native image, examples:  
       - assuming "pan-os-python" python module was added to the **[pan-os-python](https://github.com/demisto/dockerfiles/tree/master/docker/pan-os-python)** docker image, make sure to add the "pan-os-python" module library also to the native image.
       - assuming "beautifulsoup4" python module was added to the **[py3ews](https://github.com/demisto/dockerfiles/tree/master/docker/py3ews)** docker image, make sure to add the "beautifulsoup4" python module also to the native image.
-   - If a new OS dependency was added to the docker image, make sure it's also added to the native image and also documented in **this** readme, examples:
-      - assuming "git" was added to the **[crypto](https://github.com/demisto/dockerfiles/tree/master/docker/crypto)** docker image, make sure it is also added to the native image and make sure its documented [here](https://github.com/demisto/dockerfiles/blob/master/docker/py3-native/README.md#os-dependencies-for-each-custom-image).
-      - assuming "curl" was added to the **[readpdf](https://github.com/demisto/dockerfiles/tree/master/docker/readpdf)** docker image, make sure it is also added to the native image and make sure its documented [here](https://github.com/demisto/dockerfiles/blob/master/docker/py3-native/README.md#os-dependencies-for-each-custom-image).
+   - If a new OS dependency was added to the docker image, make sure it's also added to the native image and also documented in [here](#os-dependencies-for-each-supported-docker-image) readme, examples:
+      - assuming "git" was added to the **[crypto](https://github.com/demisto/dockerfiles/tree/master/docker/crypto)** docker image, make sure it is also added to the native image and make sure its documented [here](#os-dependencies-for-each-supported-docker-image).
+      - assuming "curl" was added to the **[readpdf](https://github.com/demisto/dockerfiles/tree/master/docker/readpdf)** docker image, make sure it is also added to the native image and make sure its documented [here](#os-dependencies-for-each-supported-docker-image).
 3) After you are done, add to your PR the label "native image approved" that means that the native image is compatible with the updated docker image that you changed.
 4) **Add the script/integration to be ignored only in the production native images, refer the section [How to ignore native-images in the docker native image configuration file?](#how-to-ignore-native-images-in-the-docker-native-image-configuration-file).
 
@@ -104,7 +104,7 @@ For each docker image that the native image supports, a symbolic link has been c
 That is done in order to keep updated with the python dependencies the original docker images that the native image supports. 
 
 
-## OS Dependencies For Each Custom Image
+## OS Dependencies for each supported docker image
 * **tesseract:** git automake make autoconf libtool clang zlib zlib-devel libjpeg libjpeg-devel libwebp libwebp-devel libtiff libtiff-devel libpng libpng-devel pango giflib giflib-devel leptonica 
 * **chromium:** python3-devel gcc gcc-c++ make wget git unzip llvm-libs libXpm tigervnc-server-minimal xorg-x11-utils google-chrome-stable ImageMagick
 * **crypto:** python3-devel gcc gcc-c++ make wget git rust cargo libffi-devel openssl-devel
