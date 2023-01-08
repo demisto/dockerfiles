@@ -34,13 +34,13 @@ This README purpose is to clarify the following:
   - add which native images should be ignored.
   - Full example: UnzipFile script that should not run on native-image 8.1 because there is a unit-test that fails along with that native image.
   ```
-  {
-    "id":"UnzipFile",
-    "reason":"Failed unit-test: test_unrar_no_password",
-    "ignored_native_images":[
-        "native:8.1"
-    ]
-  }
+     {
+        "id":"UnzipFile",
+        "reason":"Failed unit-test: test_unrar_no_password",
+        "ignored_native_images":[
+           "native:8.1"
+        ]
+     }
   ```
 
 ### Optional Reading: Debugging failures/issues with native images in lint / test-playbooks
