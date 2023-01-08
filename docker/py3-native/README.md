@@ -14,21 +14,40 @@ This README purpose is to clarify the following:
 * For example, given the docker image taxii2, tesseract and chromium, the native image will contain all of their OS / python dependencies. 
 * That means that every integration/script that uses taxii2, tesseract or chromium docker image can also be used in the native image and there is compatibility between them.
 
-### What should I do when changing a docker-image in the dockerfiles repo?
-* Check if the docker image that was changed is supported also in the native image. It is possible to check it in the [docker native image configuration file]((https://github.com/demisto/content/blob/master/Tests/docker_native_image_config.json)). Note: if you have changed a docker-image that is supported in the native image the native docker validator workflow will fail and alert you. 
-* If the docker image is supported by the native image, apply the same changes to the native image.
-* If a new python dependency was added to the docker image, make sure it's also added to the native image.  
-* If a new OS dependency was added to the docker image, make sure it's also added to the native image.
-* After you are done, add to your PR the label "native image approved" that means that the native image is compatible with the updated docker image that you changed. 
-* If the issue cannot be resolved, add the script/integration to be ignored in the [docker native image configuration file](https://github.com/demisto/content/blob/master/Tests/docker_native_image_config.json) with the native image version that failed, that will make the script/integration to run on the original docker image in XSOAR-NG. 
+### What should I do when changing a docker-image that is supported in the native image?
+1) Check if the docker image that was changed is supported also in the native image. It is possible to check it in the [docker native image configuration file]((https://github.com/demisto/content/blob/master/Tests/docker_native_image_config.json)). **Note:** if you have changed a docker-image that is supported in the native image the **native docker validator workflow** will fail and alert you. 
+2) If the docker image is supported by the native image, apply the same changes to the native image by the following scenarios:
+   - If a new python dependency was added to the docker image, make sure it's also added to the native image, examples:  
+      - assuming "pan-os-python" python module was added to the **[pan-os-python](https://github.com/demisto/dockerfiles/tree/master/docker/pan-os-python)** docker image, make sure to add the "pan-os-python" module library also to the native image.
+      - assuming "beautifulsoup4" python module was added to the **[py3ews](https://github.com/demisto/dockerfiles/tree/master/docker/py3ews)** docker image, make sure to add the "beautifulsoup4" python module also to the native image.
+   - If a new OS dependency was added to the docker image, make sure it's also added to the native image and also documented in **this** readme, examples:
+      - assuming "git" was added to the **[crypto](https://github.com/demisto/dockerfiles/tree/master/docker/crypto)** docker image, make sure it is also added to the native image and make sure its documented [here](https://github.com/demisto/dockerfiles/blob/master/docker/py3-native/README.md#os-dependencies-for-each-custom-image).
+      - assuming "curl" was added to the **[readpdf](https://github.com/demisto/dockerfiles/tree/master/docker/readpdf)** docker image, make sure it is also added to the native image and make sure its documented [here](https://github.com/demisto/dockerfiles/blob/master/docker/py3-native/README.md#os-dependencies-for-each-custom-image).
+3) After you are done, add to your PR the label "native image approved" that means that the native image is compatible with the updated docker image that you changed.
+4) **Add the script/integration to be ignored only in the production native images in the [docker native image configuration file](https://github.com/demisto/content/blob/master/Tests/docker_native_image_config.json), that will make the script/integration to run on the original docker image in XSOAR-NG.**
+ 
 
 ### What should I do when lint/test-playbook fails on the one of the native images?
-* Check if lint / test-playbook has passed on the original docker image.
-* In case yes, try to figure out what are the possible differences that can be between the original docker image to the native image version that failed.
-* To create a terminal in the native image, Run: `docker run -it --rm <native_image_docker> sh`.
-* Based on the error that the native image failed, try to understand what could be missing in the native image. For example if it's a possible python dependency issue, Run: *pip list* inside the docker of the native-image / original docker image and see if there is incompatibility between the version of the problematic python package.  
-* The most common case will be that you miss a python dependency in the native image / the original docker image uses python module A version XXX and the native image uses python module A version YYY which might contain some significant changes between those two versions.
-* If the issue cannot be resolved, add the script/integration to be ignored in the [docker native image configuration file](https://github.com/demisto/content/blob/master/Tests/docker_native_image_config.json) with the native image version that failed, that will make the script/integration to run on the original docker image in XSOAR-NG. 
+1) Check if lint / test-playbook has passed on the original docker image.
+   - In case lint / test-playbook also failed on the original docker image:
+     - The new code that was added to the integration is not able to run on the none of the supported docker images - a problem that is not related to native-image(s) - check why.
+   - In case lint / test-playbook also passed on the original docker image:
+     - Create a terminal in the original docker image, Run: `docker run -it --rm <original_docker_image_tag> sh`
+     - Create another terminal in the native image, Run: `docker run -it --rm <native_image_docker_tag> sh`.
+2) After creating the terminals above, start debugging it based on the error, **common** scenarios: 
+   - The lint/test-playbooks that run on the native-image(s) fail on import errors for a specific python module.
+     - Run on both terminals `pip list | grep <python_module>` and check if the native-image is missing the dependency that the original docker image has, examples:
+       - in docker image **[crypto](https://github.com/demisto/dockerfiles/tree/master/docker/crypto)** the *cryptography* python module is installed, while in the native image the *cryptography* python module is not installed at all. 
+       - in docker image **[readpdf](https://github.com/demisto/dockerfiles/tree/master/docker/readpdf)** the *pypdf2* python module is installed, while in the native image the *pypdf2* python module is not installed at all.
+   - The original docker image uses python module with version A and the native image uses the same python module with version B that causes native image to fail.
+     - Run on both terminals `pip list | grep <python_module>` and compare the versions, if the versions are different make sure to install the same version on the native image if possible, examples:
+       - in docker image **[crypto](https://github.com/demisto/dockerfiles/tree/master/docker/crypto)** the *cryptography* python module is installed with version 39.0.0, while in the native image the *cryptography* python module is installed with version 38.0.0.
+       - in docker image **[readpdf](https://github.com/demisto/dockerfiles/tree/master/docker/readpdf)** the *pypdf2* python module is installed with version 2.0.1, while in the native image the *pypdf2* python module is installed with version 3.0.1.
+   - Specific unit-test(s) fail when running lint on the native image on integrations/scripts that run shell commands which are based on installed OS dependencies.
+     - On both terminals try to run the shell command and compare the results, in addition make sure the OS dependency versions are the same between the original docker image to the native image, example:
+       - Given the script *UnzipFile* that uses *7z* OS dependency, run inside the terminals the same shell command that is being run in the unit-test, for example: `7z x -o<out_put_dir> <file_path.zip>`, or to check that versions aligned between the original docker image to the native image run `7z`
+3) **If the issue cannot be resolved, add the script/integration to be ignored only in the problematic native image(s) in the [docker native image configuration file](https://github.com/demisto/content/blob/master/Tests/docker_native_image_config.json), that will make the script/integration to run on the original docker image in XSOAR-NG.**
+4) **Note:** There could be more complicated scenarios involved here, The scenarios above are only **common** scenarios.
 
 ## Supported Docker Images
 * python3 
@@ -88,7 +107,7 @@ That is done in order to keep updated with the python dependencies the original 
 * **slack:** python3-devel gcc gcc-c++ make wget git libffi
 * **office-utils:** LibreOffice_Linux_x86-64_rpm java-11-openjdk-headless cairo libSM libX11-xcb
 
-## Notes
+## Good To Know
 * The packages that are being removed by `dnf remove` at the end are packages that are required **only** during the installation of python dependencies, once the python packages are installed they can be removed.
 
 ## References
