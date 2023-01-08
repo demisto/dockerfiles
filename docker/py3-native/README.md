@@ -65,7 +65,7 @@ This README purpose is to clarify the following:
        - in docker image **[readpdf](https://github.com/demisto/dockerfiles/tree/master/docker/readpdf)** the *pypdf2* python module is installed with version 2.0.1, while in the native image the *pypdf2* python module is installed with version 3.0.1.
    - Specific unit-test(s) fail when running lint on the native image on integrations/scripts that run shell commands which are based on installed OS dependencies.
      - On both terminals try to run the shell command and compare the results, in addition make sure the OS dependency versions are the same between the original docker image to the native image, example:
-       - Given the script *UnzipFile* that uses *7z* OS dependency, run inside the terminals the same shell command that is being run in the unit-test, for example: `7z x -o<out_put_dir> <file_path.zip>`, or to check that versions aligned between the original docker image to the native image run `7z`
+       - Given the script *UnzipFile* that uses *7z* OS dependency, run inside the terminals the same shell command that is being run in the unit-test, for example: `7z x -o<out_put_dir> <file_path.zip>`, or check that the original docker image and the native image use the same `7z` version.
 3) **If the issue cannot be resolved, refer to the [How to ignore native-images in the docker native image configuration file?](#how-to-ignore-native-images-in-the-docker-native-image-configuration-file) section.**
 4) **Note:** There could be more complicated scenarios involved here, The scenarios above are only **common** scenarios.
 
