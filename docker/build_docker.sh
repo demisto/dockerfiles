@@ -159,7 +159,7 @@ function docker_build {
             return 1
         fi
 
-        if ! [[ "$(prop 'deprecated')" ]]; then
+        if [[ "$(prop 'dont_generate_requirements')" ]]; then
           echo 'Not generating requirements as dont_generate_requirements is true' # only implemented for pipenv
         else
           pipenv --rm || echo "Proceeding. It is ok that no virtualenv is available to remove"
@@ -183,6 +183,7 @@ function docker_build {
         fi
 
       echo "starting to install dependencies from poetry..."
+      poetry --version
       poetry export -f requirements.txt --output requirements.txt --without-hashes
       echo "poetry.lock generated requirements.txt file: "
       echo "############ REQUIREMENTS.TXT ############"
