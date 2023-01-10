@@ -15,16 +15,11 @@ This README purpose is to clarify the following:
 * That means that every integration/script that uses taxii2, tesseract or chromium docker image can also be used in the native image and there is compatibility between them.
 
 ### Required: What should I do when changing a docker-image that is supported in the native image?
-1) Check if the docker image that was changed is supported also in the native image. It is possible to check it in the [docker native image configuration file](https://github.com/demisto/content/blob/master/Tests/docker_native_image_config.json). **Note:** if you have changed a docker-image that is supported in the native image the **native docker validator workflow** will fail and alert you. 
-2) If the docker image is supported by the native image, apply the same changes to the native image by the following scenarios:
-   - If a new python dependency was added to the docker image, make sure it's also added to the native image, examples:  
-      - assuming "pan-os-python" python module was added to the **[pan-os-python](https://github.com/demisto/dockerfiles/tree/master/docker/pan-os-python)** docker image, make sure to add the "pan-os-python" module library also to the native image.
-      - assuming "beautifulsoup4" python module was added to the **[py3ews](https://github.com/demisto/dockerfiles/tree/master/docker/py3ews)** docker image, make sure to add the "beautifulsoup4" python module also to the native image.
-   - If a new OS dependency was added to the docker image, make sure it's also added to the native image and also documented in [here](#os-dependencies-for-each-supported-docker-image) readme, examples:
-      - assuming "git" was added to the **[crypto](https://github.com/demisto/dockerfiles/tree/master/docker/crypto)** docker image, make sure it is also added to the native image and make sure its documented [here](#os-dependencies-for-each-supported-docker-image).
-      - assuming "curl" was added to the **[readpdf](https://github.com/demisto/dockerfiles/tree/master/docker/readpdf)** docker image, make sure it is also added to the native image and make sure its documented [here](#os-dependencies-for-each-supported-docker-image).
-3) After you are done, add to your PR the label "native image approved" that means that the native image is compatible with the updated docker image that you changed.
-4) **Add the script/integration to be ignored only in the production native images, refer the section [How to ignore native-images in the docker native image configuration file?](#how-to-ignore-native-images-in-the-docker-native-image-configuration-file).**
+1) Check if the docker image that was changed is supported also in the native image. That can be checked in the [docker native image configuration file](https://github.com/demisto/content/blob/master/Tests/docker_native_image_config.json). **Note:** if you have changed a docker-image that is supported in the native image, the **native docker validator workflow** should fail and alert you. 
+2) If the docker image is supported by the native image, make any necessary changes to the native image to ensure it can still run the integration/script, for more info refer to [Optional: How to adjust changes in the docker image to the native image?](#optional-how-to-adjust-changes-in-the-docker-image-to-the-native-image).
+   - If the changes cant be made and the script can no longer run with the native image, have the native image ignore this script in the [docker native image configuration file](https://github.com/demisto/content/blob/master/Tests/docker_native_image_config.json). For more info refer to [How to ignore native-images in the docker native image configuration file?](#how-to-ignore-native-images-in-the-docker-native-image-configuration-file) section.
+   - Even if the same changes can be made, it's likely that we will need to drop support in the GA version(s) of the native image since that image does not have these changes. If this is the case we should still add this script to the ignore list (for the GA version(s), not dev version).
+3) After you are done, the PR reviewer should add the label "native image approved" that means that the native image is compatible with the updated docker image that you changed.
 
 
 ### What should I do when lint/test-playbook fails on the one of the native images?
@@ -46,6 +41,15 @@ This README purpose is to clarify the following:
         ]
      }
     ```
+  
+### Optional: How to adjust changes in the docker image to the native image?
+* If the docker image is supported by the native image, apply the same changes to the native image by the following **common** scenarios:
+   - If a new python dependency was added to the docker image, make sure it's also added to the native image, examples:  
+      - assuming "pan-os-python" python module was added to the **[pan-os-python](https://github.com/demisto/dockerfiles/tree/master/docker/pan-os-python)** docker image, make sure to add the "pan-os-python" module library also to the native image.
+      - assuming "beautifulsoup4" python module was added to the **[py3ews](https://github.com/demisto/dockerfiles/tree/master/docker/py3ews)** docker image, make sure to add the "beautifulsoup4" python module also to the native image.
+   - If a new OS dependency was added to the docker image, make sure it's also added to the native image and also documented in [here](#os-dependencies-for-each-supported-docker-image) readme, examples:
+      - assuming "git" was added to the **[crypto](https://github.com/demisto/dockerfiles/tree/master/docker/crypto)** docker image, make sure it is also added to the native image and make sure its documented [here](#os-dependencies-for-each-supported-docker-image).
+      - assuming "curl" was added to the **[readpdf](https://github.com/demisto/dockerfiles/tree/master/docker/readpdf)** docker image, make sure it is also added to the native image and make sure its documented [here](#os-dependencies-for-each-supported-docker-image).
 
 ### Optional: Debugging failures/issues with native images in lint / test-playbooks
 1) Check if lint / test-playbook has passed on the original docker image.
