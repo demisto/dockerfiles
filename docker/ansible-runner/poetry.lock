@@ -184,17 +184,16 @@ resolvelib = ">=0.5.3,<0.9.0"
 
 [[package]]
 name = "ansible-runner"
-version = "1.4.9"
-description = ""
+version = "2.1.1"
+description = "\"Consistent Ansible Python API and CLI with container and process isolation runtime capabilities\""
 category = "main"
 optional = false
 python-versions = "*"
 
 [package.dependencies]
 pexpect = ">=4.5"
-psutil = "*"
 python-daemon = "*"
-PyYAML = "*"
+pyyaml = "*"
 six = "*"
 
 [[package]]
@@ -1624,7 +1623,7 @@ python-versions = ">=3.4"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "70de5c6cbaf594744b86b542d2f478f8ce07705d7a724237ab35edf19020d84c"
+content-hash = "3081289fd706c1702f846ebc2c47f0e8c240e4877377f226d76b55e4edeb96b8"
 
 [metadata.files]
 adal = [
@@ -1688,8 +1687,8 @@ ansible-core = [
     {file = "ansible_core-2.14.1-py3-none-any.whl", hash = "sha256:06e136c8eda4d8695251995d3c3efa612ebb3ac66948bf42492d4c7b46a75ff2"},
 ]
 ansible-runner = [
-    {file = "ansible-runner-1.4.9.tar.gz", hash = "sha256:a18eb07f4bbc49499299d3bdc95750f1ba8857a664507218c5cd882afad3e534"},
-    {file = "ansible_runner-1.4.9-py3-none-any.whl", hash = "sha256:56df72568a98aeef55f5aef094807485e927d0429530f2d2012e81d6c77c3183"},
+    {file = "ansible-runner-2.1.1.tar.gz", hash = "sha256:7684612f7543c5f07f3e8135667eeb22a9dbd98f625cc69901ba9924329ef24f"},
+    {file = "ansible_runner-2.1.1-py3-none-any.whl", hash = "sha256:75f41f3a6126c326b2099f69be52f5adce92f2ef62d130f30151b8d9e2bdbbdc"},
 ]
 applicationinsights = [
     {file = "applicationinsights-0.11.10-py2.py3-none-any.whl", hash = "sha256:e89a890db1c6906b6a7d0bcfd617dac83974773c64573147c8d6654f9cf2a6ea"},
