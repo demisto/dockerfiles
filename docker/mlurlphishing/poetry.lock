@@ -15,7 +15,7 @@ lxml = ["lxml"]
 
 [[package]]
 name = "catboost"
-version = "1.1.1"
+version = "1.0.5"
 description = "Catboost Python Package"
 category = "main"
 optional = false
@@ -58,11 +58,11 @@ python-versions = ">=3.6"
 
 [[package]]
 name = "dill"
-version = "0.3.6"
+version = "0.3.4"
 description = "serialize all of python"
 category = "main"
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=2.7, !=3.0.*"
 
 [package.extras]
 graph = ["objgraph (>=1.7.2)"]
@@ -360,7 +360,7 @@ python-versions = ">=3.7"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "df11b9dc19b41e30a72135da5d4a9a0385d93d967c801cd41a3653d7ab8159cc"
+content-hash = "f02126466a61f8066634302a5ab2d54dcd500c8110737b87c6079f7ecaa6e13b"
 
 [metadata.files]
 beautifulsoup4 = [
@@ -368,21 +368,21 @@ beautifulsoup4 = [
     {file = "beautifulsoup4-4.11.1.tar.gz", hash = "sha256:ad9aa55b65ef2808eb405f46cf74df7fcb7044d5cbc26487f96eb2ef2e436693"},
 ]
 catboost = [
-    {file = "catboost-1.1.1-cp310-none-macosx_10_6_universal2.whl", hash = "sha256:93532f6807228f74db9c8184a0893ab222232d23fc5b3db534e2d8fedbba42cf"},
-    {file = "catboost-1.1.1-cp310-none-manylinux1_x86_64.whl", hash = "sha256:7c7364d79d5ff9deb56956560ba91a1b62b84204961d540bffd97f7b995e8cba"},
-    {file = "catboost-1.1.1-cp310-none-win_amd64.whl", hash = "sha256:5ec0c9bd65e53ae6c26d17c06f9c28e4febbd7cbdeb858460eb3d34249a10f30"},
-    {file = "catboost-1.1.1-cp36-none-macosx_10_6_universal2.whl", hash = "sha256:60acc4448eb45242f4d30aea6ccdf45bfaa8646bbc4ede3200cf25ba0d6bcf3d"},
-    {file = "catboost-1.1.1-cp36-none-manylinux1_x86_64.whl", hash = "sha256:b7443b40b5ddb141c6d14bff16c13f7cf4852893b57d7eda5dff30fb7517e14d"},
-    {file = "catboost-1.1.1-cp36-none-win_amd64.whl", hash = "sha256:190828590270e3dea5fb58f0fd13715ee2324f6ee321866592c422a1da141961"},
-    {file = "catboost-1.1.1-cp37-none-macosx_10_6_universal2.whl", hash = "sha256:a2fe4d08a360c3c3cabfa3a94c586f2261b93a3fff043ae2b43d2d4de121c2ce"},
-    {file = "catboost-1.1.1-cp37-none-manylinux1_x86_64.whl", hash = "sha256:4e350c40920dbd9644f1c7b88cb74cb8b96f1ecbbd7c12f6223964465d83b968"},
-    {file = "catboost-1.1.1-cp37-none-win_amd64.whl", hash = "sha256:0033569f2e6314a04a84ec83eecd39f77402426b52571b78991e629d7252c6f7"},
-    {file = "catboost-1.1.1-cp38-none-macosx_10_6_universal2.whl", hash = "sha256:454aae50922b10172b94971033d4b0607128a2e2ca8a5845cf8879ea28d80942"},
-    {file = "catboost-1.1.1-cp38-none-manylinux1_x86_64.whl", hash = "sha256:3fd12d9f1f89440292c63b242ccabdab012d313250e2b1e8a779d6618c734b32"},
-    {file = "catboost-1.1.1-cp38-none-win_amd64.whl", hash = "sha256:840348bf56dd11f6096030208601cbce87f1e6426ef33140fb6cc97bceb5fef3"},
-    {file = "catboost-1.1.1-cp39-none-macosx_10_6_universal2.whl", hash = "sha256:9e7c47050c8840ccaff4d394907d443bda01280a30778ae9d71939a7528f5ae3"},
-    {file = "catboost-1.1.1-cp39-none-manylinux1_x86_64.whl", hash = "sha256:a60ae2630f7b3752f262515a51b265521a4993df75dea26fa60777ec6e479395"},
-    {file = "catboost-1.1.1-cp39-none-win_amd64.whl", hash = "sha256:156264dbe9e841cb0b6333383e928cb8f65df4d00429a9771eb8b06b9bcfa17c"},
+    {file = "catboost-1.0.5-cp310-none-macosx_10_6_universal2.whl", hash = "sha256:7fb3731d4909fec61575a5cf597a32c661e144b5aa88a0f601fb3977a4d51283"},
+    {file = "catboost-1.0.5-cp310-none-manylinux1_x86_64.whl", hash = "sha256:c52f82389f155b15c8c21ea42cd6dea10c01e561cec6c4f18b1d0460ab04e23e"},
+    {file = "catboost-1.0.5-cp310-none-win_amd64.whl", hash = "sha256:8252ae1314608bfefa0896f1d78604bf05b816053abb60b687f5726c8d8cbcbd"},
+    {file = "catboost-1.0.5-cp36-none-macosx_10_6_universal2.whl", hash = "sha256:2101d89b51b367f79cc77976baafd9fc00a36a02961b8978d2634c8385c73284"},
+    {file = "catboost-1.0.5-cp36-none-manylinux1_x86_64.whl", hash = "sha256:8e468f0ce2b322833554b28dde9b35d6035a9e79c3e8ec7ec3bd21ff3b97fe14"},
+    {file = "catboost-1.0.5-cp36-none-win_amd64.whl", hash = "sha256:f5c752111901a5c877b84b9bd6943e2a6419baa0cd53698b6646732c03cc3305"},
+    {file = "catboost-1.0.5-cp37-none-macosx_10_6_universal2.whl", hash = "sha256:50d3fedd5770e392448a092b1b50cd988dd55245aaf5cf1231cea6ef516be691"},
+    {file = "catboost-1.0.5-cp37-none-manylinux1_x86_64.whl", hash = "sha256:73178c1b7cabc97d869522dc72dfcdf521e17edff112fe8d7a62c1c4c737d7ac"},
+    {file = "catboost-1.0.5-cp37-none-win_amd64.whl", hash = "sha256:573384b1e45634a9af72ef3d410ca90994f27e330420699330d2e50a99e775f2"},
+    {file = "catboost-1.0.5-cp38-none-macosx_10_6_universal2.whl", hash = "sha256:d90b5708753e45d15a854db003889c447fc1ef69a7dd2b796695bd89550e9fe3"},
+    {file = "catboost-1.0.5-cp38-none-manylinux1_x86_64.whl", hash = "sha256:d14a481e5f4d20d48d6c7e971f71300b5b58d763950fbcc9a5d9f8642e9ebed3"},
+    {file = "catboost-1.0.5-cp38-none-win_amd64.whl", hash = "sha256:7abbe16ba49c44197061d9c375da8a6d8e586fc1314025427d89271a61c5b483"},
+    {file = "catboost-1.0.5-cp39-none-macosx_10_6_universal2.whl", hash = "sha256:e381d9c23a5e2a77ff953931b9f803a52647c8039cf4ae0c10086296654ec53a"},
+    {file = "catboost-1.0.5-cp39-none-manylinux1_x86_64.whl", hash = "sha256:bd267e97523996478a5c0e0cecdb1f9c186e155faf8b4f2070d78923e79b22b1"},
+    {file = "catboost-1.0.5-cp39-none-win_amd64.whl", hash = "sha256:d092fd6e8a0b8ff541bc4934987eb7a715a132ddf2c80004486a684bc0ee6d2e"},
 ]
 contourpy = [
     {file = "contourpy-1.0.7-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:95c3acddf921944f241b6773b767f1cbce71d03307270e2d769fd584d5d1092d"},
@@ -446,8 +446,8 @@ cycler = [
     {file = "cycler-0.11.0.tar.gz", hash = "sha256:9c87405839a19696e837b3b818fed3f5f69f16f1eec1a1ad77e043dcea9c772f"},
 ]
 dill = [
-    {file = "dill-0.3.6-py3-none-any.whl", hash = "sha256:a07ffd2351b8c678dfc4a856a3005f8067aea51d6ba6c700796a4d9e280f39f0"},
-    {file = "dill-0.3.6.tar.gz", hash = "sha256:e5db55f3687856d8fbdab002ed78544e1c4559a130302693d839dfe8f93f2373"},
+    {file = "dill-0.3.4-py2.py3-none-any.whl", hash = "sha256:7e40e4a70304fd9ceab3535d36e58791d9c4a776b38ec7f7ec9afc8d3dca4d4f"},
+    {file = "dill-0.3.4.zip", hash = "sha256:9f9734205146b2b353ab3fec9af0070237b6ddae78452af83d2fca84d739e675"},
 ]
 fonttools = [
     {file = "fonttools-4.38.0-py3-none-any.whl", hash = "sha256:820466f43c8be8c3009aef8b87e785014133508f0de64ec469e4efb643ae54fb"},
