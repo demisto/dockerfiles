@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "dockerfiles"
+version = "0.1.0"
+description = ""
+authors = ["Judah Schwartz <juschwartz@paloaltonetworks.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+opencv-python = "==4.5.5.64"  # using previous version until fixed https://github.com/opencv/opencv-python/issues/676
+scikit-learn = "*"
+pandas = "*"
+beautifulsoup4 = "*"
+dill = "*"
+catboost = "*"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
