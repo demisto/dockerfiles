@@ -6,6 +6,8 @@ from bs4 import BeautifulSoup
 key = Fernet.generate_key()
 
 # Make sure MD4 is enabled:
+hashlib.algorithms_available
+assert 'md4' in hashlib.algorithms_available
 hashlib.new('md4', b"text")
 
 print("All is good. cryptography generated a key: {}".format(key))
