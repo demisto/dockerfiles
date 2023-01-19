@@ -39,3 +39,8 @@ res.raise_for_status()
 
 # verify dateaparser works. We had a case that it failed with timezone issues
 dateparser.parse("10 minutes")
+
+# Make sure MD4 is enabled:
+hashlib.algorithms_available
+assert 'md4' in hashlib.algorithms_available
+hashlib.new('md4', b"text")
