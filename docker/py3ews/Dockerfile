@@ -12,7 +12,7 @@ RUN apk --update add --no-cache libxslt-dev \
 RUN cp /etc/ssl/openssl.cnf /etc/ssl/openssl.cnf.org \
 && sed -i '/default = default_sect/a legacy = legacy_sect' /etc/ssl/openssl.cnf \
 && echo -e 'activate = 1\n\n[legacy_sect]\nactivate = 1\n' > /tmp/ssl.cnf \
-&& sed -i '/ activate = 1/r /tmp/ssl.cnf' /etc/ssl/openssl.cnf \
+&& sed -i '/\[default_sect\]/r /tmp/ssl.cnf' /etc/ssl/openssl.cnf \
 && sed -i '/# activate = 1/d' /etc/ssl/openssl.cnf \
 && rm /tmp/ssl.cnf \
 && grep 'legacy_sect' /etc/ssl/openssl.cnf
