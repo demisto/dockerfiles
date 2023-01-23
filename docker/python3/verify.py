@@ -25,3 +25,9 @@ Please validate SSL Legacy renegotiation error is not an issue.\n\
 If SSL Legacy renegotiation error occurs, please refer to python3 image Dockerfile for reference.')
             exit(1)
 print('openSSL version is good.')
+
+import more_itertools
+even, odd = more_itertools.partition(lambda num: num % 2 == 1, range(5))
+assert len(tuple(even)) == 3
+assert len(tuple(odd)) == 2
+print('more_itertools installed correctly')
