@@ -35,6 +35,7 @@ jobs:
           echo ::set-output name=branches::${SERVICES}
 
   pull-request:
+    if: ${{ fromJSON(needs.get_branches.outputs.branches) != '[]' }}
     runs-on: ubuntu-latest
     needs:
       - get_branches
@@ -43,7 +44,6 @@ jobs:
       fail-fast: false
       matrix:
         branches: ${{ fromJSON(needs.get_branches.outputs.branches) }}
-      if: env.branches
     steps:
     - uses: actions/checkout@v2
     - name: pull-request
