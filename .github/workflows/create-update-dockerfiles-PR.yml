@@ -1,8 +1,9 @@
 name: Create update dockerfiles PR
 
 on:
-  schedule:
-    - cron: '0 0 * * *'
+  workflow_run:
+    workflows: [Update external base images, Update internal base images]
+    types: completed
   workflow_dispatch:
 
 jobs:
