@@ -1,0 +1,33 @@
+name: Update verify script
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  update_verify_script:
+    runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]' && contains(github.event.pull_request.title, 'autoupdate') == false && github.repository == 'demisto/dockerFiles'
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v35
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.11"
+      - name: Run update_verify_script Script.
+        env:
+          CHANGED_FILES: "${{ steps.changed-files.outputs.all_changed_files }}"
+        run: |
+          echo "==== $(date): Starting environment setup... ===="
+          python -m pip install --upgrade pip
+          pwd
+          cd "$GITHUB_WORKSPACE/.github/workflows/update-verify-script"
+          echo "==== $(date): Running validator... ===="
+          python ./update_verify_script.py -c "$CHANGED_FILES"
+
+
