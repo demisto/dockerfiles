@@ -1,7 +1,11 @@
+# Last modified: 2023-01-04T00:13:10.301105+00:00
 FROM circleci/python:3.10.1
 
-# Setup pyenv and install extra python versions
+# Setup pyenv + poetry and install extra python versions
 RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
+  && curl -sSL https://install.python-poetry.org | python3 \
+  && poetry --version \
+  && poetry self add poetry-plugin-export \
   && echo 'export PATH="/home/circleci/.pyenv/bin:$PATH"' >> ~/.bashrc \
   && echo 'eval "$(pyenv init -)"' >> ~/.bashrc \
   && echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.bashrc

@@ -1,0 +1,1 @@
+../../taxii2/verify.py

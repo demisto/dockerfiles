@@ -1,5 +1,5 @@
 
-FROM demisto/python3-deb:3.10.7.35175
+FROM demisto/python3-deb:3.10.9.46022
 
 RUN apt-get update \
 && apt-get install -y --no-install-recommends \
