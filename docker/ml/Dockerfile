@@ -12,7 +12,7 @@ RUN unzip /distilled_bert_base_uncased_tokenizer.zip -d /ml \
   && chmod -R 775 /ml
 
 FROM demisto/python3-deb:3.10.9.40424
-
+ENV TRANSFORMERS_CACHE /ml/.cache
 COPY requirements.txt .
 
 RUN apt-get update \
