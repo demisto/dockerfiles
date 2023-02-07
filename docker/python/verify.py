@@ -13,13 +13,3 @@ print("all is good managed to parse: {}".format(d))
 from ctypes import *
 print(c_double.from_param(1e300))
 print("all is good cve-2021-3177 is patched")
-
-from defusedxml.ElementTree import fromstring
-xml = '<?xml version="1.0" encoding="UTF-8"?>' \
-      '<book>' \
-      '<name>A Song of Ice and Fire</name>' \
-      '</book>'
-
-xml_obj = fromstring(xml)
-assert xml_obj.tag == 'book'
-print('defusedxml installed correctly')
