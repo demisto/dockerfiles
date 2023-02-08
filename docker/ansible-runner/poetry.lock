@@ -499,20 +499,20 @@ msrestazure = ">=0.4.27,<2.0.0"
 
 [[package]]
 name = "azure-mgmt-cdn"
-version = "3.0.0"
+version = "11.0.0"
 description = "Microsoft Azure CDN Management Client Library for Python"
 category = "main"
 optional = false
 python-versions = "*"
 files = [
-    {file = "azure-mgmt-cdn-3.0.0.zip", hash = "sha256:069774eb4b59b76ff9bd01708be0c8f9254ed40237b48368c3bb173f298755dd"},
-    {file = "azure_mgmt_cdn-3.0.0-py2.py3-none-any.whl", hash = "sha256:5d5fa3e3f37632e5787e73e78af37a28d7dd0206c854cc0a4d39d75b953f0c31"},
+    {file = "azure-mgmt-cdn-11.0.0.zip", hash = "sha256:28e7070001e7208cdb6c2ad253ec78851abdd73be482230d2c0874eed5bc0907"},
+    {file = "azure_mgmt_cdn-11.0.0-py2.py3-none-any.whl", hash = "sha256:92f7fbfde35891a8c6aab1f009419f92cb573f9ad9baf1f88bf35078f5b850cb"},
 ]
 
 [package.dependencies]
 azure-common = ">=1.1,<2.0"
-azure-mgmt-nspkg = ">=2.0.0"
-msrestazure = ">=0.4.27,<2.0.0"
+azure-mgmt-core = ">=1.2.0,<2.0.0"
+msrest = ">=0.5.0"
 
 [[package]]
 name = "azure-mgmt-compute"
@@ -2371,4 +2371,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "3081289fd706c1702f846ebc2c47f0e8c240e4877377f226d76b55e4edeb96b8"
+content-hash = "986f70c03858eae222fc4f471b5e936b492c5a4001efbadc3d69867c6df7455e"
