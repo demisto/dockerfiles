@@ -158,16 +158,22 @@ function docker_build {
             echo "Error: Pipfile present without Pipfile.lock. Make sure to commit your Pipfile.lock file"
             return 1
         fi
-        pipenv --rm || echo "Proceeding. It is ok that no virtualenv is available to remove"
-        pipenv install --deploy # fails if lock is outdated
-        PIPENV_YES=yes pipenv run pip freeze > requirements.txt
-        echo "Pipfile lock generated requirements.txt: "
-        echo "############ REQUIREMENTS.TXT ############"
-        cat requirements.txt
-        echo "##########################################"
-        [ ! -f requirements.txt ] && echo "WARNING: requirements.txt does not exist, this is ok if python usage is not intended."
-        [ ! -s requirements.txt ] && echo "WARNING: requirements.txt is empty"
-        # del_requirements=yes
+
+        if [[ "$(prop 'dont_generate_requirements')" ]]; then
+          echo 'Not generating requirements as dont_generate_requirements is true' # only implemented for pipenv
+        else
+          pipenv --rm || echo "Proceeding. It is ok that no virtualenv is available to remove"
+          pipenv install --deploy # fails if lock is outdated
+          PIPENV_YES=yes pipenv run pip freeze > requirements.txt
+          echo "Pipfile lock generated requirements.txt: "
+          echo "############ REQUIREMENTS.TXT ############"
+          cat requirements.txt
+          echo "##########################################"
+          [ ! -f requirements.txt ] && echo "WARNING: requirements.txt does not exist, this is ok if python usage is not intended."
+          [ ! -s requirements.txt ] && echo "WARNING: requirements.txt is empty"
+          # del_requirements=yes
+        fi
+
     fi
 
     if [ -f "pyproject.toml" -a ! -f "requirements.txt" ]; then
@@ -177,6 +183,7 @@ function docker_build {
         fi
 
       echo "starting to install dependencies from poetry..."
+      poetry --version
       poetry export -f requirements.txt --output requirements.txt --without-hashes
       echo "poetry.lock generated requirements.txt file: "
       echo "############ REQUIREMENTS.TXT ############"
@@ -251,6 +258,15 @@ function docker_build {
         docker_trust=1
         echo "using DOCKER_TRUST=${docker_trust} DOCKER_CONFIG=${DOCKER_CONFIG}"
     fi
+
+    if [ -n "$CR_REPO" ] && cr_login; then
+        docker tag ${image_full_name} ${CR_REPO}/${image_full_name}
+        docker push ${CR_REPO}/${image_full_name} > /dev/null
+        echo "Done docker push for cr: ${image_full_name}"
+    else
+        echo "Skipping docker push for cr"
+    fi
+
     if docker_login; then
         env DOCKER_CONTENT_TRUST=$docker_trust DOCKER_CONFIG="${DOCKER_CONFIG}"  docker push ${image_full_name}
         echo "Done docker push for: ${image_full_name}"
@@ -291,15 +307,6 @@ curl -L "https://output.circle-artifacts.com/output/job/${CIRCLE_WORKFLOW_JOB_ID
 --------------------------
 EOF
         fi
-    fi
-    
-
-    if [ -n "$CR_REPO" ] && cr_login; then
-        docker tag ${image_full_name} ${CR_REPO}/${image_full_name}
-        docker push ${CR_REPO}/${image_full_name} > /dev/null
-        echo "Done docker push for cr: ${image_full_name}"
-    else
-        echo "Skipping docker push for cr"
     fi
 
 }

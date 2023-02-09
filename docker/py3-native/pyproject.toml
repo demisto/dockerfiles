@@ -1,12 +1,12 @@
 [tool.poetry]
-name = "py3-master"
+name = "py3-native"
 version = "0.1.0"
 description = ""
 authors = ["Your Name <you@example.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "3.10"
 opensearch_dsl = "*"
 aiohttp = "*"
 python-magic = "*"
@@ -60,7 +60,7 @@ cymruwhois = "*"
 simplejson = "*"
 networkx = "*"
 slackclient = "*"
-regex = "==2022.3.2"  # seems to be a bug in versions > 2022.3.2 https://stackoverflow.com/questions/71496687/dateparser-throws-regex-regex-core-error
+regex = "==2021.7.6"  # seems to be a bug in versions > 2022.3.2 https://stackoverflow.com/questions/71496687/dateparser-throws-regex-regex-core-error
 dpkt = "*"
 aiodns = "*"
 pysocks = "^1.7.0"  # must be 1.7.0 or above, cause 1.6.8 doesn't work on python 3.10

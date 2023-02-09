@@ -1,4 +1,4 @@
-FROM demisto/py3-tools-ubi:1.0.0.40638
+FROM demisto/py3-tools-ubi:1.0.0.47375
 
 COPY requirements.txt .
 COPY chromium/download_chromedriver.sh .
@@ -50,6 +50,10 @@ RUN dnf update --nodocs -y  \
     && rm -rf /var/cache/dnf
 
 
+ARG LIBRE_OFFICE_FULL_VERSION=7.4.4
+ARG LIBRE_OFFICE_INSTALLATION_FILE_NAME=LibreOffice_${LIBRE_OFFICE_FULL_VERSION}_Linux_x86-64_rpm
+# libre-office mirrors are taken from here - http://download.documentfoundation.org/libreoffice/stable/
+
 # handles os dependancies for: crypto + readpdf + parse-emails + docxpy + sklearn + pandas + ippysocks-py3 + oauthlib
 # unzip + py3ews + taxii2 + pan-os-python + slackv3 + google-api-py3 + boto3py3
 # pyjwt3 + joe-security + slack + office-utils
@@ -68,18 +72,19 @@ RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git poppler popp
         && python -c "import nltk; nltk.download('wordnet', download_dir='/ml/nltk_data'); nltk.download('stopwords', download_dir='/ml/nltk_data'); nltk.download('punkt', download_dir='/ml/nltk_data')" \
         && chown -R demisto:demisto /ml && chmod -R 775 /ml \
         && dnf install -y --nodocs java-11-openjdk-headless cairo libX11-xcb \
-        && wget -O LibreOffice_Linux_x86-64_rpm.tar.gz http://download.documentfoundation.org/libreoffice/stable/7.4.3/rpm/x86_64/LibreOffice_7.4.3_Linux_x86-64_rpm.tar.gz \
-        && tar -xzvf LibreOffice_Linux_x86-64_rpm.tar.gz \
-        && dnf localinstall -y LibreOffice_7.4.3.2_Linux_x86-64_rpm/RPMS/*.rpm \
-        && rm -rf LibreOffice_Linux_x86-64_rpm.tar.gz LibreOffice_7.4.3.2_Linux_x86-64_rpm \
+        && wget https://mirror.isoc.org.il/pub/tdf/libreoffice/stable/${LIBRE_OFFICE_FULL_VERSION}/rpm/x86_64/${LIBRE_OFFICE_INSTALLATION_FILE_NAME}.tar.gz \
+        && tar -xzvf ${LIBRE_OFFICE_INSTALLATION_FILE_NAME}.tar.gz --one-top-level=${LIBRE_OFFICE_INSTALLATION_FILE_NAME} --strip-components 1 \
+        && dnf localinstall -y ${LIBRE_OFFICE_INSTALLATION_FILE_NAME}/RPMS/*.rpm \
+        && rm -rf ${LIBRE_OFFICE_INSTALLATION_FILE_NAME}.tar.gz ${LIBRE_OFFICE_INSTALLATION_FILE_NAME} \
         && dnf remove -y python3-devel rust cargo libffi-devel openssl-devel gcc gcc-c++ make git platform-python-pip \
         && dnf clean all \
         && rm -rf /var/cache/dnf \
         && rm -rf /root/.cargo \
         && pip uninstall -y pcodedmp
 
-ARG LIBRE_OFFICE_VERSION=7.4
+
+ARG LIBRE_OFFICE_MAJOR_VERSION=7.4
 
 # add libreoffice to path
-ENV PATH=$PATH:/opt/libreoffice$LIBRE_OFFICE_VERSION/program
+ENV PATH=$PATH:/opt/libreoffice$LIBRE_OFFICE_MAJOR_VERSION/program
 ENV NLTK_DATA='/ml/nltk_data'
