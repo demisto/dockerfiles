@@ -145,6 +145,7 @@ function docker_build {
     VERSION="${VERSION}.${REVISION}"
     echo "${image_name}: using version: ${VERSION}"
     image_full_name="${DOCKER_ORG}/${image_name}:${VERSION}"
+    echo "${image_full_name}" >> "${CIRCLE_ARTIFACTS}/image_full_name.txt"
 
     if [[ "$(prop 'deprecated')" ]]; then
         echo "${DOCKER_ORG_DEMISTO}/${image_name} image is deprecated, checking whether the image is listed in the deprecated list or not"
@@ -395,6 +396,7 @@ for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | so
         count=$((count+1))
         echo "=============== `date`: Starting docker build in dir: ${docker_dir} ($count of $total) ==============="
         docker_build ${docker_dir}
+        echo "${docker_dir}" >> "${CIRCLE_ARTIFACTS}/docker_dirs.txt"
         cd ${CURRENT_DIR}
         echo ">>>>>>>>>>>>>>> `date`: Done docker build <<<<<<<<<<<<<"
     fi

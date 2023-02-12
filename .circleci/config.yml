@@ -44,6 +44,10 @@ jobs:
       - store_artifacts:
           path: artifacts
           destination: ironbank_docker_images
+      - run:
+          name: Lint on Native Image
+          command: |
+            ./docker/run_lint_on_native_changes.sh
 workflows:
   version: 2
   full_build:
