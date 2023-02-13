@@ -402,8 +402,9 @@ for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | so
         fi
         count=$((count+1))
         echo "=============== `date`: Starting docker build in dir: ${docker_dir} ($count of $total) ==============="
-        docker_build ${docker_dir}
+        touch "${CIRCLE_ARTIFACTS}/docker_dirs.txt"
         echo "${docker_dir}" >> "${CIRCLE_ARTIFACTS}/docker_dirs.txt"
+        docker_build ${docker_dir}
         cd ${CURRENT_DIR}
         echo ">>>>>>>>>>>>>>> `date`: Done docker build <<<<<<<<<<<<<"
     fi
