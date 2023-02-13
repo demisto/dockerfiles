@@ -12,6 +12,11 @@ if [[ "${DOCKER_SRC_DIR}" != /* ]]; then
 fi
 DOCKERFILES_TRUST_DIR="${DOCKER_SRC_DIR}/../dockerfiles-trust"
 
+CIRCLE_ARTIFACTS="artifacts"
+if [[ ! -d $CIRCLE_ARTIFACTS ]]; then
+  mkdir $CIRCLE_ARTIFACTS
+fi
+
 # parse a propty form build.conf file in current dir
 # param $1: property name
 # param $2: default value
@@ -377,10 +382,6 @@ fi
 echo "DOCKER_ORG: ${DOCKER_ORG}, DIFF_COMPARE: [${DIFF_COMPARE}], SCRIPT_DIR: [${SCRIPT_DIR}], CIRCLE_BRANCH: ${CIRCLE_BRANCH}, PWD: [${CURRENT_DIR}]"
 
 # echo to bash env to be used in future steps
-CIRCLE_ARTIFACTS="artifacts"
-if [[ ! -d $CIRCLE_ARTIFACTS ]]; then
-  mkdir $CIRCLE_ARTIFACTS
-fi
 echo $DIFF_COMPARE > $CIRCLE_ARTIFACTS/diff_compare.txt
 echo $SCRIPT_DIR > $CIRCLE_ARTIFACTS/script_dir.txt
 echo $CURRENT_DIR > $CIRCLE_ARTIFACTS/current_dir.txt
