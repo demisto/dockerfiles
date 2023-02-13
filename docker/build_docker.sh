@@ -12,11 +12,6 @@ if [[ "${DOCKER_SRC_DIR}" != /* ]]; then
 fi
 DOCKERFILES_TRUST_DIR="${DOCKER_SRC_DIR}/../dockerfiles-trust"
 
-CIRCLE_ARTIFACTS="artifacts"
-if [[ ! -d $CIRCLE_ARTIFACTS ]]; then
-  mkdir $CIRCLE_ARTIFACTS
-fi
-
 # parse a propty form build.conf file in current dir
 # param $1: property name
 # param $2: default value
@@ -150,11 +145,6 @@ function docker_build {
     VERSION="${VERSION}.${REVISION}"
     echo "${image_name}: using version: ${VERSION}"
     image_full_name="${DOCKER_ORG}/${image_name}:${VERSION}"
-    if [[ ! -d $CIRCLE_ARTIFACTS ]]; then
-      mkdir $CIRCLE_ARTIFACTS
-    fi
-    touch "${CIRCLE_ARTIFACTS}/image_full_name.txt"
-    echo "${image_full_name}" >> "${CIRCLE_ARTIFACTS}/image_full_name.txt"
 
     if [[ "$(prop 'deprecated')" ]]; then
         echo "${DOCKER_ORG_DEMISTO}/${image_name} image is deprecated, checking whether the image is listed in the deprecated list or not"
@@ -385,6 +375,10 @@ fi
 echo "DOCKER_ORG: ${DOCKER_ORG}, DIFF_COMPARE: [${DIFF_COMPARE}], SCRIPT_DIR: [${SCRIPT_DIR}], CIRCLE_BRANCH: ${CIRCLE_BRANCH}, PWD: [${CURRENT_DIR}]"
 
 # echo to bash env to be used in future steps
+CIRCLE_ARTIFACTS="artifacts"
+if [[ ! -d $CIRCLE_ARTIFACTS ]]; then
+  mkdir $CIRCLE_ARTIFACTS
+fi
 echo $DIFF_COMPARE > $CIRCLE_ARTIFACTS/diff_compare.txt
 echo $SCRIPT_DIR > $CIRCLE_ARTIFACTS/script_dir.txt
 echo $CURRENT_DIR > $CIRCLE_ARTIFACTS/current_dir.txt
@@ -406,6 +400,7 @@ for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | so
         echo "${docker_dir}" >> "${CIRCLE_ARTIFACTS}/docker_dirs.txt"
         docker_build ${docker_dir}
         cd ${CURRENT_DIR}
+        echo "${image_full_name}" >> "${CIRCLE_ARTIFACTS}/image_full_name.txt"
         echo ">>>>>>>>>>>>>>> `date`: Done docker build <<<<<<<<<<<<<"
     fi
 done
