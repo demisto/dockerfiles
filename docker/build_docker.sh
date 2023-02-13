@@ -150,6 +150,9 @@ function docker_build {
     VERSION="${VERSION}.${REVISION}"
     echo "${image_name}: using version: ${VERSION}"
     image_full_name="${DOCKER_ORG}/${image_name}:${VERSION}"
+    if [[ ! -d $CIRCLE_ARTIFACTS ]]; then
+      mkdir $CIRCLE_ARTIFACTS
+    fi
     touch "${CIRCLE_ARTIFACTS}/image_full_name.txt"
     echo "${image_full_name}" >> "${CIRCLE_ARTIFACTS}/image_full_name.txt"
 
