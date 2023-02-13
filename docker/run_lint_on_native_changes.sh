@@ -2,11 +2,11 @@
 
 # exit on errors
 set -e
+echo "Started Run Lint on Native Changes"
 
 CONTENT_REPO="https://github.com/demisto/content.git"
 NATIVE_DEV_IMAGE="native:dev"
 
-# clone content
 function clone_content {
   mkdir content
   git clone --depth 1 ${CONTENT_REPO} content
@@ -32,9 +32,10 @@ CIRCLE_ARTIFACTS="artifacts"
 # NATIVE_IMAGE_NAME="py3-native"
 NATIVE_IMAGE_NAME="testimage"
 
-native_image_line=$(cat "${CIRCLE_ARTIFACTS}/docker_dirs.txt" | grep "^${NATIVE_IMAGE_NAME}$")
+native_image_line=$(grep "^./docker/${NATIVE_IMAGE_NAME}$" "${CIRCLE_ARTIFACTS}/docker_dirs.txt" || true)
+echo "checking docker dir ${native_image_line}"
 
-if [[ "${native_image_line}" == "${NATIVE_IMAGE_NAME}" ]]; then
+if [[ "${native_image_line}" == "./docker/${NATIVE_IMAGE_NAME}" ]]; then
   echo "Found changes in native image ${NATIVE_IMAGE_NAME}. Getting current version."
   full_image_name=$(cat "${CIRCLE_ARTIFACTS}/image_full_name.txt" | grep "${NATIVE_IMAGE_NAME}")
   echo "Found current native image version ${full_image_name}"
@@ -42,8 +43,10 @@ if [[ "${native_image_line}" == "${NATIVE_IMAGE_NAME}" ]]; then
 
   echo "Cloning Content Repo"
   clone_content
+  echo "Done Cloning Content Repo"
+  echo "Installing demisto-sdk"
   install_demisto_sdk
-
+  echo "Done"
 else
   echo "No changes in native image ${NATIVE_IMAGE_NAME}. Skipping."
 fi
