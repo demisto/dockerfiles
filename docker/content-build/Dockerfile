@@ -1,4 +1,4 @@
-FROM cimg/python:3.10.6-node
+FROM cimg/python:3.10.10-node
 
 ENV PATH $HOME/.local/bin:$PATH
 ENV NEO4J_CONF_FILE /etc/neo4j/neo4j.conf
@@ -15,7 +15,6 @@ RUN sudo apt-get update && sudo apt-get install apt-transport-https ca-certifica
   && echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list \
   && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - \
   && sudo apt-get update && sudo apt-get install google-cloud-sdk \
-  && sudo curl -sSL https://install.python-poetry.org | python3 - \
   && wget -O - https://debian.neo4j.com/neotechnology.gpg.key | sudo apt-key add -\
   && echo 'deb https://debian.neo4j.com stable 4.4' | sudo tee -a /etc/apt/sources.list.d/neo4j.list \
   && sudo apt-get update \
