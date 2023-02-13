@@ -3,8 +3,6 @@
 # exit on errors
 set -e
 
-# if native image changes clone content, install sdk like content, run lint
-
 CONTENT_REPO="https://github.com/demisto/content.git"
 NATIVE_DEV_IMAGE="native:dev"
 
