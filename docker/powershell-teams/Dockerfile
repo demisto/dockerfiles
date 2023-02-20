@@ -1,4 +1,4 @@
 
-FROM demisto/powershell-ubuntu:7.3.0.48974
+FROM demisto/powershell-ubuntu:7.3.0.49009
 
 RUN pwsh -c "Install-Module MicrosoftTeams -Force"
