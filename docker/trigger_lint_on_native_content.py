@@ -122,4 +122,4 @@ if __name__ == "__main__":
     logging.getLogger().addHandler(logging.StreamHandler())
     logging.getLogger().setLevel(logging.INFO)
     logging.info("Starting trigger lint on native content script")
-    main(target_image=args.target_image, circle_token=args.circle_token, docker_dirs=args.docker_dirs)
+    testing_main(target_image=args.target_image, circle_token=args.circle_token, docker_dirs=args.docker_dirs)

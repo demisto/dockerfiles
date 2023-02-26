@@ -48,7 +48,7 @@ jobs:
           name: Lint on Native Image
           command: |
             CIRCLE_CONTENT_TOKEN="temp"
-            ./docker/trigger_lint_on_native_content.py --target-image $(cat "${CIRCLE_ARTIFACTS}/image_full_name.txt") --circle-token "${CIRCLE_CONTENT_TOKEN}" --docker-dirs $(cat "${CIRCLE_ARTIFACTS}/docker_dirs.txt")
+            python ./docker/trigger_lint_on_native_content.py --target-image $(cat "${CIRCLE_ARTIFACTS}/image_full_name.txt") --circle-token "${CIRCLE_CONTENT_TOKEN}" --docker-dirs $(cat "${CIRCLE_ARTIFACTS}/docker_dirs.txt")
 workflows:
   version: 2
   full_build:
