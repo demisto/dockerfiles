@@ -1,4 +1,4 @@
-FROM demisto/opencv:1.0.0.47916
+FROM demisto/opencv:1.0.0.49362
 
 COPY requirements.txt .
 
