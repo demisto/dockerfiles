@@ -2,6 +2,7 @@
 FROM demisto/python3-deb:3.10.10.49238
 
 COPY requirements.txt .
+# see: https://github.com/rakyll/hey
 ADD https://hey-release.s3.us-east-2.amazonaws.com/hey_linux_amd64 /usr/bin/hey
 RUN chmod +x /usr/bin/hey
 RUN apt-get update && apt-get install -y --no-install-recommends \
