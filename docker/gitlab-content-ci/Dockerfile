@@ -26,9 +26,9 @@ RUN apt-get update  && apt-get upgrade -y \
     # install neo4j
     && echo "deb http://httpredir.debian.org/debian stretch-backports main" | tee -a /etc/apt/sources.list.d/stretch-backports.list \
     && wget -O - https://debian.neo4j.com/neotechnology.gpg.key | apt-key add - \
-    && echo 'deb https://debian.neo4j.com stable 4.4' | tee -a /etc/apt/sources.list.d/neo4j.list \
+    && echo 'deb https://debian.neo4j.com stable 5' | tee -a /etc/apt/sources.list.d/neo4j.list \
     && mkdir -p /var/lib/neo4j/plugins \
-    && wget -O /var/lib/neo4j/plugins/apoc-4.4.0.8-all.jar https://github.com/neo4j-contrib/neo4j-apoc-procedures/releases/download/4.4.0.8/apoc-4.4.0.8-all.jar \
+    && wget -O /var/lib/neo4j/plugins/apoc-5.5.0-core.jar https://github.com/neo4j/apoc/releases/download/5.5.0/apoc-5.5.0-core.jar \
     && apt-get update && apt-get install google-cloud-sdk docker-ce-cli kubectl openjdk-11-jre neo4j -y \
     && neo4j_conf_file="/etc/neo4j/neo4j.conf" \
     && echo "dbms.security.procedures.unrestricted=apoc.*" >> $NEO4J_CONF_FILE \
