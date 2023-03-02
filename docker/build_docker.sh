@@ -383,8 +383,8 @@ echo $DIFF_COMPARE > $CIRCLE_ARTIFACTS/diff_compare.txt
 echo $SCRIPT_DIR > $CIRCLE_ARTIFACTS/script_dir.txt
 echo $CURRENT_DIR > $CIRCLE_ARTIFACTS/current_dir.txt
 echo $DOCKER_INCLUDE_GREP > $CIRCLE_ARTIFACTS/docker_include_grep.txt
-touch "${CIRCLE_ARTIFACTS}/image_full_name.txt"
-touch "${CIRCLE_ARTIFACTS}/docker_dirs.txt"
+touch "/tmp/image_full_name.txt"
+touch "/tmp/docker_dirs.txt"
 
 total=$(find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | wc -l)
 count=0
@@ -396,11 +396,11 @@ for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | so
         fi
         count=$((count+1))
         echo "=============== `date`: Starting docker build in dir: ${docker_dir} ($count of $total) ==============="
-        touch "${CIRCLE_ARTIFACTS}/docker_dirs.txt"
-        echo "${docker_dir}" >> "${CIRCLE_ARTIFACTS}/docker_dirs.txt"
+        touch "/tmp/docker_dirs.txt"
+        echo "${docker_dir}" >> "/tmp/docker_dirs.txt"
         docker_build ${docker_dir}
         cd ${CURRENT_DIR}
-        echo "${image_full_name}" >> "${CIRCLE_ARTIFACTS}/image_full_name.txt"
+        echo "${image_full_name}" >> "/tmp/image_full_name.txt"
         echo ">>>>>>>>>>>>>>> `date`: Done docker build <<<<<<<<<<<<<"
     fi
 done
