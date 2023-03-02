@@ -5,13 +5,15 @@ import sys
 import requests
 import json
 
+# TODO: change NATIVE_IMAGE_NAME when done testing
 # NATIVE_IMAGE_NAME = "py3-native"
 NATIVE_IMAGE_NAME = "testimage"
-CIRCLE_ADDRESS = ""
-API_PROJECT_URL = ""
-PIPELINE_URL_PREFIX = ""
+NATIVE_IMAGE_DIR_NAME = "./docker/testimage"
+CIRCLE_ADDRESS = "https://circleci.com"
+API_PROJECT_URL = "api/v2/project/github/demisto/content"
+PIPELINE_URL_PREFIX = "https://app.circleci.com/pipelines/github/demisto/content"
 
-GET_PIPELINES_MAX_RETRIES = 5
+GET_PIPELINES_MAX_RETRIES = 360  # maximum build time 6 hours
 
 
 parser = argparse.ArgumentParser("Trigger lint on native supported content in content repo.")
@@ -22,16 +24,16 @@ parser.add_argument('-dd', '--docker-dirs', help='The docker dirs that were chan
 
 def trigger_pipeline(target_image: str, circle_token: str):
 
-    #payload = f'{{\"branch\":\"master\",\"parameters\":{{\"docker_image_target\":\"{target_image}\"}}}}'
-    payload = f'{{\"branch\":\"add_dockerfiles_lint_trigger\",\"parameters\":{{\"docker_image_target\":\"{target_image}\"}}}}'
+    # TODO: when done testing change to master
+    payload = f'{{\"branch\":\"add_dockerfiles_lint_trigger\",' \
+              f'\"parameters\":{{\"docker_image_target\":\"{target_image}\"}}}}'
 
     headers = {
-        'content-type': "application/json",
+        'Content-Type': "application/json",
         'Circle-Token': circle_token
     }
 
-    # res = requests.post(f"{CIRCLE_ADDRESS}/{API_PROJECT_URL}/pipeline", data=payload, headers=headers)
-    res = requests.post(f"{CIRCLE_ADDRESS}/{API_PROJECT_URL}/pipeline", data=payload, headers=headers, verify=False)
+    res = requests.post(f"{CIRCLE_ADDRESS}/{API_PROJECT_URL}/pipeline", data=payload, headers=headers)
 
     data = res.text
 
@@ -39,14 +41,16 @@ def trigger_pipeline(target_image: str, circle_token: str):
         pipeline_data = json.loads(data)
     except Exception as err:
         logging.error(f'Could not parse circle response: {str(err)}')
+        logging.error(f'\nRaw Response:\n {data}')
         raise err
 
     pipeline_number = pipeline_data.get("number")
+    pipeline_id = pipeline_data.get("id")
 
     if not pipeline_number:
         raise Exception(f"Could not trigger pipeline: {pipeline_data.get('message')}")
 
-    return pipeline_number
+    return pipeline_number, pipeline_id
 
 
 def get_pipeline_state(pipeline_num: str, circle_token: str):
@@ -54,8 +58,7 @@ def get_pipeline_state(pipeline_num: str, circle_token: str):
         'Circle-Token': circle_token
     }
 
-    # res = requests.get(f"{CIRCLE_ADDRESS}/{API_PROJECT_URL}/pipeline/{pipeline_num}", headers=headers)
-    res = requests.get(f"{CIRCLE_ADDRESS}/{API_PROJECT_URL}/pipeline/{pipeline_num}", headers=headers, verify=False)
+    res = requests.get(f"{CIRCLE_ADDRESS}/{API_PROJECT_URL}/pipeline/{pipeline_num}", headers=headers)
 
     data = res.text
 
@@ -73,27 +76,54 @@ def get_pipeline_state(pipeline_num: str, circle_token: str):
     return pipeline_state
 
 
-def get_pipeline_url(pipeline_num: str):
-    return f"{PIPELINE_URL_PREFIX}/{pipeline_num}"
+def get_pipeline_workflow_status(pipeline_id: str, circle_token: str):
+    headers = {
+        'Circle-Token': circle_token
+    }
+
+    res = requests.get(f"{CIRCLE_ADDRESS}/api/v2/pipeline/{pipeline_id}/workflow", headers=headers)
+
+    data = res.text
+
+    try:
+        pipeline_data = json.loads(data)
+    except Exception as err:
+        logging.error(f'Could not parse circle status response: {str(err)}')
+        raise err
+
+    workflow_state = None
+    for workflow in pipeline_data.get('items'):
+        if workflow.get('name') == 'native_image_lint_trigger':
+            workflow_state = workflow.get('status')
+
+    if not workflow_state:
+        raise Exception(f"Could not poll pipeline status: {pipeline_data}")
+
+    return workflow_state
 
 
 def main(target_image: str, circle_token: str, docker_dirs: str):
     logging.info(f'Checking if changed dockerfiles are of native image')
     docker_dirs_list = docker_dirs.split("\n")
     logging.info(f'Changed docker dirs found: {docker_dirs_list}')
-    if NATIVE_IMAGE_NAME not in docker_dirs_list:
+    if NATIVE_IMAGE_DIR_NAME not in docker_dirs_list:
         logging.info(f'No changes were found to native image. Not Running.')
         sys.exit(0)
 
     logging.info(f'Triggering lint for native supported content with target image {target_image}')
-    triggered, pipeline_num = trigger_pipeline(target_image, circle_token)
-    pipeline_url = get_pipeline_url(pipeline_num)
+    pipeline_num, pipeline_id = trigger_pipeline(target_image, circle_token)
+    pipeline_url = f"{PIPELINE_URL_PREFIX}/{pipeline_num}"
     logging.info(f'------ Pipeline Created At: {pipeline_url} ------')
     get_pipeline_retry_number = 0
 
+    while get_pipeline_state(pipeline_num, circle_token) != 'created':
+        logging.info('Waiting for pipeline to be created...')
+        time.sleep(5)
+
     while get_pipeline_retry_number < GET_PIPELINES_MAX_RETRIES:
-        logging.info('Getting pipeline status...')
-        state = get_pipeline_state(pipeline_num, circle_token)
+        logging.info(f'Getting pipeline status...')
+        state = get_pipeline_workflow_status(pipeline_id, circle_token)
+        logging.info(f'Getting pipeline status...{state}')
         if state == "success":
             logging.info('Pipeline Finished Successfully')
             logging.info(f'Pipeline url: {pipeline_url}')
@@ -105,16 +135,12 @@ def main(target_image: str, circle_token: str, docker_dirs: str):
             sys.exit(1)
 
         get_pipeline_retry_number += 1
-        # wait 5 seconds before next polling.
-        time.sleep(5)
+        # wait 1 minute before next polling.
+        time.sleep(60)
 
     logging.error(f'Maximum timeout reached for Pipeline. Abandoning Build.')
     logging.error(f'Pipeline url: {pipeline_url}')
     sys.exit(1)
-
-
-def testing_main(target_image: str, circle_token: str, docker_dirs: str):
-    logging.info(f"target_image {target_image}, docker_dirs {docker_dirs}")
 
 
 if __name__ == "__main__":
@@ -122,4 +148,4 @@ if __name__ == "__main__":
     logging.getLogger().addHandler(logging.StreamHandler())
     logging.getLogger().setLevel(logging.INFO)
     logging.info("Starting trigger lint on native content script")
-    testing_main(target_image=args.target_image, circle_token=args.circle_token, docker_dirs=args.docker_dirs)
+    main(target_image=args.target_image, circle_token=args.circle_token, docker_dirs=args.docker_dirs)
