@@ -31,3 +31,13 @@ even, odd = more_itertools.partition(lambda num: num % 2 == 1, range(5))
 assert len(tuple(even)) == 3
 assert len(tuple(odd)) == 2
 print('more_itertools installed correctly')
+
+from defusedxml.ElementTree import fromstring
+xml = '<?xml version="1.0" encoding="UTF-8"?>' \
+      '<book>' \
+      '<name>A Song of Ice and Fire</name>' \
+      '</book>'
+
+xml_obj = fromstring(xml)
+assert xml_obj.tag == 'book'
+print('defusedxml installed correctly')

@@ -686,6 +686,10 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: pip
+    directory: /docker/datadog-api-client
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
     directory: /docker/testimage
     schedule:
      interval: daily
