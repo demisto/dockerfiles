@@ -1,3 +1,13 @@
+"""
+This script is meant to assist in finding docker images that are not being used by content, and could therefore be
+deprecated or marked devonly.
+This script makes the assumption that the dockerfiles and content repositories are sister directories under the same
+folder, if this isnt the case, modify the content_repo constant below.
+
+This script takes no input argument
+"""
+
+
 import functools
 import os
 import re
