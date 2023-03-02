@@ -5,10 +5,8 @@ import sys
 import requests
 import json
 
-# TODO: change NATIVE_IMAGE_NAME when done testing
-# NATIVE_IMAGE_NAME = "py3-native"
-NATIVE_IMAGE_NAME = "testimage"
-NATIVE_IMAGE_DIR_NAME = "./docker/testimage"
+NATIVE_IMAGE_NAME = "py3-native"
+NATIVE_IMAGE_DIR_NAME = "./docker/py3-native"
 CIRCLE_ADDRESS = "https://circleci.com"
 API_PROJECT_URL = "api/v2/project/github/demisto/content"
 PIPELINE_URL_PREFIX = "https://app.circleci.com/pipelines/github/demisto/content"
@@ -23,9 +21,7 @@ parser.add_argument('-dd', '--docker-dirs', help='The docker dirs that were chan
 
 
 def trigger_pipeline(target_image: str, circle_token: str):
-
-    # TODO: when done testing change to master
-    payload = f'{{\"branch\":\"add_dockerfiles_lint_trigger\",' \
+    payload = f'{{\"branch\":\"master\",' \
               f'\"parameters\":{{\"docker_image_target\":\"{target_image}\"}}}}'
 
     headers = {
