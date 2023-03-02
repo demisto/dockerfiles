@@ -49,7 +49,11 @@ jobs:
           command: |
             CIRCLE_CONTENT_TOKEN="temp"
             ARTIFACTS_DIR="artifacts/docker_images"
-            python ./docker/trigger_lint_on_native_content.py --target-image $(cat "/tmp/image_full_name.txt") --circle-token "${CIRCLE_CONTENT_TOKEN}" --docker-dirs $(cat "/tmp/docker_dirs.txt")
+            if [[$(cat "/tmp/image_full_name.txt") != ""]]; then
+              python ./docker/trigger_lint_on_native_content.py --target-image $(cat "/tmp/image_full_name.txt") --circle-token "${CIRCLE_CONTENT_TOKEN}" --docker-dirs $(cat "/tmp/docker_dirs.txt")
+            else
+              echo "No docker images found, skipping."
+            fi
       - store_artifacts:
           path: artifacts
 workflows:

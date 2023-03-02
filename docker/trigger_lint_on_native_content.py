@@ -15,9 +15,9 @@ GET_PIPELINES_MAX_RETRIES = 360  # maximum build time 6 hours
 
 
 parser = argparse.ArgumentParser("Trigger lint on native supported content in content repo.")
-parser.add_argument('-ti', '--target-image', help='The image to run lint with', required=False)
+parser.add_argument('-ti', '--target-image', help='The image to run lint with', required=True)
 parser.add_argument('-ct', '--circle-token', help='The token to trigger circle pipelines with', required=True)
-parser.add_argument('-dd', '--docker-dirs', help='The docker dirs that were changed', required=False)
+parser.add_argument('-dd', '--docker-dirs', help='The docker dirs that were changed', required=True)
 
 
 def trigger_pipeline(target_image: str, circle_token: str):
