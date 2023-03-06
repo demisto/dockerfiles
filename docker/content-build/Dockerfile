@@ -1,4 +1,4 @@
-FROM cimg/python:3.10.8-node
+FROM cimg/python:3.10-node
 
 ENV DEBIAN_FRONTEND noninteractive
 # install gcloud see: https://cloud.google.com/sdk/docs/downloads-apt-get
