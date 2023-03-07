@@ -143,14 +143,14 @@ lxml = ["lxml"]
 
 [[package]]
 name = "certifi"
-version = "2022.9.24"
+version = "2022.12.7"
 description = "Python package for providing Mozilla's CA Bundle."
 category = "main"
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "certifi-2022.9.24-py3-none-any.whl", hash = "sha256:90c1a32f1d68f940488354e36370f6cca89f0f106db09518524c88d6ed83f382"},
-    {file = "certifi-2022.9.24.tar.gz", hash = "sha256:0d9c601124e5a6ba9712dbc60d9c53c21e34f5f641fe83002317394311bdce14"},
+    {file = "certifi-2022.12.7-py3-none-any.whl", hash = "sha256:4ad3232f5e926d6718ec31cfc1fcadfde020920e278684144551c91769c7bc18"},
+    {file = "certifi-2022.12.7.tar.gz", hash = "sha256:35824b4c3a97115964b408844d64aa14db1cc518f6562e8d7261699d1350a9e3"},
 ]
 
 [[package]]
@@ -268,14 +268,14 @@ requests = ["requests (>=2.4.0,<3.0.0)"]
 
 [[package]]
 name = "elasticsearch-dsl"
-version = "7.4.0"
+version = "7.4.1"
 description = "Python client for Elasticsearch"
 category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 files = [
-    {file = "elasticsearch-dsl-7.4.0.tar.gz", hash = "sha256:c4a7b93882918a413b63bed54018a1685d7410ffd8facbc860ee7fd57f214a6d"},
-    {file = "elasticsearch_dsl-7.4.0-py2.py3-none-any.whl", hash = "sha256:046ea10820b94c075081b528b4526c5bc776bda4226d702f269a5f203232064b"},
+    {file = "elasticsearch-dsl-7.4.1.tar.gz", hash = "sha256:07ee9c87dc28cc3cae2daa19401e1e18a172174ad9e5ca67938f752e3902a1d5"},
+    {file = "elasticsearch_dsl-7.4.1-py2.py3-none-any.whl", hash = "sha256:97f79239a252be7c4cce554c29e64695d7ef6a4828372316a5e5ff815e7a7498"},
 ]
 
 [package.dependencies]
@@ -684,24 +684,26 @@ signedtoken = ["cryptography (>=3.0.0)", "pyjwt (>=2.0.0,<3)"]
 
 [[package]]
 name = "opensearch-py"
-version = "2.1.1"
-description = "Python low-level client for OpenSearch"
+version = "2.2.0"
+description = "Python client for OpenSearch"
 category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, <4"
 files = [
-    {file = "opensearch-py-2.1.1.tar.gz", hash = "sha256:dd54a50c6771bc2582741bfdcf629b8d7eed409ae7fc2722249e53f9a10de0d8"},
-    {file = "opensearch_py-2.1.1-py2.py3-none-any.whl", hash = "sha256:3e7085bf25487979581416f4ab195c2fe62e90f1f07f393091f8233cbea032eb"},
+    {file = "opensearch-py-2.2.0.tar.gz", hash = "sha256:109fe8d2e1e8f419a22358eb901025f51e6ad2f50014c8962e23796b2a23cb67"},
+    {file = "opensearch_py-2.2.0-py2.py3-none-any.whl", hash = "sha256:595dcebe42e21cdf945add0b5dbaecccace1a8a5ba65d60314813767b564263c"},
 ]
 
 [package.dependencies]
-certifi = "*"
+certifi = ">=2022.12.07"
+python-dateutil = "*"
 requests = ">=2.4.0,<3.0.0"
+six = "*"
 urllib3 = ">=1.21.1,<2"
 
 [package.extras]
 async = ["aiohttp (>=3,<4)"]
-develop = ["black", "botocore", "coverage", "jinja2", "mock", "myst-parser", "pytest", "pytest-cov", "pyyaml", "requests (>=2.0.0,<3.0.0)", "sphinx", "sphinx-copybutton", "sphinx-rtd-theme"]
+develop = ["black", "botocore", "coverage (<7.0.0)", "jinja2", "mock", "myst-parser", "pytest (>=3.0.0)", "pytest-cov", "pytest-mock (<4.0.0)", "pytz", "pyyaml", "requests (>=2.0.0,<3.0.0)", "sphinx", "sphinx-copybutton", "sphinx-rtd-theme"]
 docs = ["myst-parser", "sphinx", "sphinx-copybutton", "sphinx-rtd-theme"]
 kerberos = ["requests-kerberos"]
 
@@ -1351,21 +1353,14 @@ test = ["coverage", "pytest", "pytest-cov", "responses", "tox"]
 
 [[package]]
 name = "tld"
-version = "0.12.7"
+version = "0.13"
 description = "Extract the top-level domain (TLD) from the URL given."
 category = "main"
 optional = false
-python-versions = ">=2.7, <4"
+python-versions = ">=3.7, <4"
 files = [
-    {file = "tld-0.12.7-py27-none-any.whl", hash = "sha256:d1130e050e1de92b24928246d36847dadb8106fd9455f1903f2712d23ed654f3"},
-    {file = "tld-0.12.7-py310-none-any.whl", hash = "sha256:728083653341819d7c1a76e3aaeb6bfc4bafebfaa3336384762a998320f14d1e"},
-    {file = "tld-0.12.7-py311-none-any.whl", hash = "sha256:7e3d4c856c0d62484117f527f278bb5583849d71961d4fd062bcac0773b0984c"},
-    {file = "tld-0.12.7-py35-none-any.whl", hash = "sha256:da090e9a8706fa9107e451162c31f391c082b30c60b3f1afe94811daf559b0ae"},
-    {file = "tld-0.12.7-py36-none-any.whl", hash = "sha256:982e1e35895e32b04777eba704d26d9aeb7cc31d10efc69466a346fac295d7aa"},
-    {file = "tld-0.12.7-py37-none-any.whl", hash = "sha256:f8efb8d883398aa9ada8995a5a13f8e8d8e6694696dc7dda3e37dc7170b625e4"},
-    {file = "tld-0.12.7-py38-none-any.whl", hash = "sha256:d16d2475383f0a78bc4faa2fa2c23417fe494d9b73081a0670dc4a1e5a32fba8"},
-    {file = "tld-0.12.7-py39-none-any.whl", hash = "sha256:2157f36502c88e538c73e991fffbd2fb905fb8d87bbeef0feb7b24b03335c180"},
-    {file = "tld-0.12.7.tar.gz", hash = "sha256:b6f7729e19ce0ebc77ba0a65b70d6213aeb952c01ff605e1299aae5fb7621c5e"},
+    {file = "tld-0.13-py2.py3-none-any.whl", hash = "sha256:f75b2be080f767ed17c2338a339eaa4fab5792586319ca819119da252f9f3749"},
+    {file = "tld-0.13.tar.gz", hash = "sha256:93dde5e1c04bdf1844976eae440706379d21f4ab235b73c05d7483e074fb5629"},
 ]
 
 [[package]]
@@ -1450,14 +1445,14 @@ files = [
 
 [[package]]
 name = "vertica-python"
-version = "1.3.0"
+version = "1.3.1"
 description = "Official native Python client for the Vertica database."
 category = "main"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "vertica-python-1.3.0.tar.gz", hash = "sha256:502f11919091a1db0ae035743e79f68d4a2133ba4d8aa196adb8d6943aa7ef62"},
-    {file = "vertica_python-1.3.0-py3-none-any.whl", hash = "sha256:47b4b5544e293d60209602935cfb0cc2a2e7c8d52f0c80da510e14c4714eef1b"},
+    {file = "vertica-python-1.3.1.tar.gz", hash = "sha256:26eeed6a51764f2cfa3f9d577d579adb678a33fc0350fdee81c0168f6b41e020"},
+    {file = "vertica_python-1.3.1-py3-none-any.whl", hash = "sha256:e12e3ad605114f12fae9ed434f703a605f97535416fcdddc75a358d5646fc0c1"},
 ]
 
 [package.dependencies]
