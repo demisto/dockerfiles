@@ -1,8 +1,7 @@
 
-FROM demisto/python3:3.10.10.48392
+FROM demisto/python3-deb:3.10.10.49238
 
 COPY requirements.txt .
 
-RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git \
-  && pip install --no-cache-dir -r requirements.txt \
-  && apk del .build-dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends gcc \
+  && pip install --no-cache-dir -r requirements.txt
