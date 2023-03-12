@@ -80,8 +80,7 @@ RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git poppler popp
         && dnf clean all \
         && rm -rf /var/cache/dnf \
         && rm -rf /root/.cargo \
-        && pip uninstall -y pcodedmp \
-        && pip uninstall -y pip
+        && pip uninstall -y pcodedmp
 
 
 # add libreoffice to path
