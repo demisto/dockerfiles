@@ -81,6 +81,7 @@ RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git poppler popp
         && rm -rf /var/cache/dnf \
         && rm -rf /root/.cargo \
         && pip uninstall -y pcodedmp
+        && pip uninstall -y pip
 
 
 ARG LIBRE_OFFICE_MAJOR_VERSION=7.4
