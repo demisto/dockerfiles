@@ -84,7 +84,7 @@ RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git poppler popp
         && pip uninstall -y pip
 
 
-ARG LIBRE_OFFICE_MAJOR_VERSION=7.4
+ARG LIBRE_OFFICE_MAJOR_VERSION=7.5
 
 # add libreoffice to path
 ENV PATH=$PATH:/opt/libreoffice$LIBRE_OFFICE_MAJOR_VERSION/program
