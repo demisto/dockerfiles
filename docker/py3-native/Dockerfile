@@ -1,4 +1,4 @@
-FROM demisto/py3-tools-ubi:1.0.0.49111
+FROM demisto/py3-tools-ubi:1.0.0.49714
 
 COPY requirements.txt .
 COPY chromium/download_chromedriver.sh .
@@ -49,8 +49,8 @@ RUN dnf update --nodocs -y  \
     && dnf clean all \
     && rm -rf /var/cache/dnf
 
-
-ARG LIBRE_OFFICE_FULL_VERSION=7.4.4
+ARG LIBRE_OFFICE_MAJOR_VERSION=7.5
+ARG LIBRE_OFFICE_FULL_VERSION=${LIBRE_OFFICE_MAJOR_VERSION}.1
 ARG LIBRE_OFFICE_INSTALLATION_FILE_NAME=LibreOffice_${LIBRE_OFFICE_FULL_VERSION}_Linux_x86-64_rpm
 # libre-office mirrors are taken from here - http://download.documentfoundation.org/libreoffice/stable/
 
@@ -82,8 +82,6 @@ RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git poppler popp
         && rm -rf /root/.cargo \
         && pip uninstall -y pcodedmp
 
-
-ARG LIBRE_OFFICE_MAJOR_VERSION=7.4
 
 # add libreoffice to path
 ENV PATH=$PATH:/opt/libreoffice$LIBRE_OFFICE_MAJOR_VERSION/program
