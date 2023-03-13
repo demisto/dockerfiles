@@ -1,5 +1,5 @@
 
-FROM demisto/powershell-ubuntu:7.3.0.49009
+FROM demisto/powershell-ubuntu:7.3.0.49844
 
 RUN pwsh -c "Set-PSRepository -Name PSGallery -InstallationPolicy Trusted -ErrorAction Stop"
 RUN pwsh -c "Install-Module -Name ExchangeOnlineManagement -RequiredVersion 3.0.0 -AllowPrerelease -Scope AllUsers -Force -ErrorAction Stop"
