@@ -1,0 +1,14 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+opencv-python = "==4.5.5.64"  # using this version until fixed https://github.com/opencv/opencv-python/issues/676
+Pillow = "*"
+numpy = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.10"

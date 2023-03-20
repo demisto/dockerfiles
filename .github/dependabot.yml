@@ -689,3 +689,9 @@ updates:
     directory: /docker/datadog-api-client
     schedule:
      interval: daily
+  - package-ecosystem: pip
+    directory: /docker/processing-image-file
+    schedule:
+     interval: daily
+    ignore:
+      - dependency-name: "opencv-python"
