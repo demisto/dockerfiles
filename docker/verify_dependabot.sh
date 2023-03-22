@@ -17,7 +17,7 @@ for d in `find "$DOCKER_SRC_DIR" -maxdepth 1 -mindepth 1 -type d`; do
     echo "Verifying dir: $d"
     name=`basename $d`
     dir=`dirname $d`
-    if [[ ! $(grep -E '^devonly=true' $d/build.conf) ]]; then # skip devonly images
+    if [[ ! $(grep -E '^devonly=true' $d/build.conf) && ! $(grep -E '^deprecated=true' $d/build.conf) ]]; then # skip devonly and deprecated images
         if [ -f "$d/Pipfile" -o -f "$d/requirements.txt" ]; then
             if [[ ! $(grep -B 1 "/docker/${name}\$" "$DEPENDABOT_CONFIG" | grep "package-ecosystem: pip") ]]; then
                 echo "=============================="
