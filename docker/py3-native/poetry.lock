@@ -1697,23 +1697,23 @@ full = ["XLMMacroDeobfuscator"]
 
 [[package]]
 name = "opensearch-dsl"
-version = "2.0.1"
+version = "2.1.0"
 description = "Python client for OpenSearch"
 category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 files = [
-    {file = "opensearch-dsl-2.0.1.tar.gz", hash = "sha256:8226381665073f110ef3d3a5027e625255df55d91d302044999c590b4d662539"},
-    {file = "opensearch_dsl-2.0.1-py2.py3-none-any.whl", hash = "sha256:c233a9b6f35b401db3755dd3430e7a38b989433a50e7ceee2958521a9abf56a7"},
+    {file = "opensearch-dsl-2.1.0.tar.gz", hash = "sha256:e54ad0d754358233503e0c08e85b77dbe07d6c00babeae62c81d8cee11965ae6"},
+    {file = "opensearch_dsl-2.1.0-py2.py3-none-any.whl", hash = "sha256:31559b738b48ed5abe87b357205a040fa1dc64042a6454ad2d6854050d911ba0"},
 ]
 
 [package.dependencies]
-opensearch-py = ">=2.0.0"
+opensearch-py = ">=2.2.0"
 python-dateutil = "*"
 six = "*"
 
 [package.extras]
-develop = ["coverage (<5.0.0)", "mock", "pytest (>=3.0.0)", "pytest-cov", "pytest-mock (<3.0.0)", "pytz", "sphinx", "sphinx-rtd-theme"]
+develop = ["coverage (<7.0.0)", "mock", "pytest (>=3.0.0)", "pytest-cov", "pytest-mock (<4.0.0)", "pytz", "sphinx", "sphinx-rtd-theme"]
 
 [[package]]
 name = "opensearch-py"
