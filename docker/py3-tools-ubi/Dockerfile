@@ -1,4 +1,4 @@
-FROM demisto/python3-ubi:3.10.8.49264
+FROM demisto/python3-ubi:3.10.8.50715
 
 COPY requirements.txt .
 
