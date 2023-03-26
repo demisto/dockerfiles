@@ -14,6 +14,7 @@ RUN dnf upgrade -y --nodocs && \
        openssl-devel \
        sqlite-devel \
        wget \
+       zlib-devel \
        xz-devel && \
     dnf clean all && \
     rm -rf /var/cache/dnf
