@@ -79,6 +79,17 @@ RUN cd /usr/local/bin && \
     ldconfig
 
 
+# Handling the issue described here https://knowledgebase.paloaltonetworks.com/KCSArticleDetail?id=kA10g000000POJ0CAO&lang=en_US%E2%80%A9
+# by enabling UnsafeLegacyRenegotiation
+RUN echo -e "openssl_conf = openssl_init\n\
+[openssl_init]\n\
+ssl_conf = ssl_configuration\n\
+[ssl_configuration]\n\
+system_default = system_default_sect\n\
+[system_default_sect]\n\
+CipherString = DEFAULT:@SECLEVEL=2\n\
+Options = UnsafeLegacyRenegotiation" >> /etc/pki/tls/openssl.cnf
+
 RUN groupadd -g 4000 demisto && \
     useradd -u 4000 -g demisto demisto -s /bin/sh
 
