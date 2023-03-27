@@ -4,10 +4,11 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-parse-emails = "*"
+parse-emails = {git = "https://github.com/demisto/parse-emails.git", rev = "add_chinese_japanese_encodings"}
 rtfde = "*"
 
 [dev-packages]
 
 [requires]
 python_version = "3.10"
+
