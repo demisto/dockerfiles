@@ -1,4 +1,4 @@
-FROM demisto/crypto:1.0.0.51288
+FROM demisto/crypto:1.0.0.51452
 
 COPY requirements.txt .
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget \
