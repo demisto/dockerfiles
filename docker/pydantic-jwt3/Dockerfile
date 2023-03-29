@@ -1,5 +1,5 @@
 
-FROM demisto/pyjwt3:1.0.0.51584
+FROM demisto/pyjwt3:1.0.0.52151
 
 COPY requirements.txt .
 
