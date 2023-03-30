@@ -6,20 +6,27 @@ COPY repos /repos
 
 ARG LEPTONICA_VERSION=1.82.0
 ARG TESSERACT_VERSION=5.2.0
+ARG ROCKY_BASE=rocky-base
+ARG ROCKY_RELEASE=rocky-release
+ARG FEDORA_EPEL=fedora-epel
 
 # handles chromium + tesseract
 # for tesseract - followed instructions from here: https://computingforgeeks.com/install-tesseract-ocr-on-rocky-almalinux/
+# note: linux_signing_key.pub is using sha1 for verification which is not supported in ubi 9+, hence need to update crypto policies, more info at https://www.redhat.com/en/blog/rhel-security-sha-1-package-signatures-distrusted-rhel-9
+# this is not linux_signing_key.pub from google that is not based on sha1
 RUN dnf update --nodocs -y  \
     && dnf upgrade -y --nodocs \
     && dnf install --nodocs -y wget git \
-    && wget https://dl.google.com/linux/linux_signing_key.pub \
-    && wget https://www.centos.org/keys/RPM-GPG-KEY-CentOS-Official \
+    && wget https://dl-ssl.google.com/linux/linux_signing_key.pub \
+    && update-crypto-policies --set DEFAULT:SHA1 \
     && rpm --import linux_signing_key.pub \
+    && update-crypto-policies --set DEFAULT \
+    && wget https://www.centos.org/keys/RPM-GPG-KEY-CentOS-Official \
     && rpm --import RPM-GPG-KEY-CentOS-Official \
     && mv repos/* /etc/yum.repos.d/ \
     && dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git unzip llvm-libs libXpm \
-    && dnf install -y --nodocs --enablerepo=rocky8-base --enablerepo=rocky8-release tigervnc-server-minimal xorg-x11-utils google-chrome-stable \
-    && dnf install -y --nodocs --enablerepo=rocky8-base --enablerepo=rocky8-release --enablerepo=fedora-epel ImageMagick \
+    && dnf install -y --nodocs --enablerepo=$ROCKY_BASE --enablerepo=$ROCKY_RELEASE tigervnc-server-minimal xorg-x11-utils google-chrome-stable \
+    && dnf install -y --nodocs --enablerepo=$ROCKY_BASE --enablerepo=$ROCKY_RELEASE --enablerepo=$FEDORA_EPEL ImageMagick \
     && ./download_chromedriver.sh \
     && unzip chromedriver_linux64.zip \
     && mv chromedriver /usr/bin/chromedriver \
@@ -65,7 +72,7 @@ RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git poppler popp
         rust cargo libxml2-devel libxslt-devel \
         libffi-devel openssl-devel curl libffi libSM mesa-libGL \
         openssh ca-certificates openssl less rsync libpng-devel freetype-devel gcc-gfortran openblas unzip libstdc++ \
-        && dnf install -y --nodocs --enablerepo=fedora-epel p7zip unrar \
+        && dnf install -y --nodocs --enablerepo=$FEDORA_EPEL p7zip unrar \
         && ln -s /usr/bin/7za /usr/bin/7z \
         && pip install --no-cache-dir -r requirements.txt \
         && mkdir /ml \
