@@ -83,6 +83,9 @@ RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git poppler popp
         && tar -xzvf ${LIBRE_OFFICE_INSTALLATION_FILE_NAME}.tar.gz --one-top-level=${LIBRE_OFFICE_INSTALLATION_FILE_NAME} --strip-components 1 \
         && dnf localinstall -y ${LIBRE_OFFICE_INSTALLATION_FILE_NAME}/RPMS/*.rpm \
         && rm -rf ${LIBRE_OFFICE_INSTALLATION_FILE_NAME}.tar.gz ${LIBRE_OFFICE_INSTALLATION_FILE_NAME} \
+        && sed -i 's/##legacy = legacy_sect/legacy = legacy_sect/' /etc/pki/tls/openssl.cnf \
+        && sed -i 's/##\[legacy_sect\]/\[legacy_sect\]/' /etc/pki/tls/openssl.cnf \
+        && sed -i 's/##activate = 1/activate = 1/' /etc/pki/tls/openssl.cnf
         && dnf remove -y python3-devel rust cargo libffi-devel openssl-devel gcc gcc-c++ make git platform-python-pip \
         && dnf clean all \
         && rm -rf /var/cache/dnf \
