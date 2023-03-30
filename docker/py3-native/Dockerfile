@@ -13,7 +13,7 @@ ARG FEDORA_EPEL=fedora-epel
 # handles chromium + tesseract
 # for tesseract - followed instructions from here: https://computingforgeeks.com/install-tesseract-ocr-on-rocky-almalinux/
 # note: linux_signing_key.pub is using sha1 for verification which is not supported in ubi 9+, hence need to update crypto policies, more info at https://www.redhat.com/en/blog/rhel-security-sha-1-package-signatures-distrusted-rhel-9
-# this is not linux_signing_key.pub from google that is not based on sha1
+# there is not linux_signing_key.pub from google that is not based on sha1
 RUN dnf update --nodocs -y  \
     && dnf upgrade -y --nodocs \
     && dnf install --nodocs -y wget git \
