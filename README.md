@@ -175,7 +175,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 ### Poetry quick start:
 If you want to use poetry, make sure you have poetry installed by running `poetry --version` or install it by running`curl -sSL https://install.python-poetry.org | python3`. Then Follow:
 * In the relevant folder initialize the poetry environment using `poetry init`.
-* Install dependencies using: `poetry add <dependency>`. For example: `poetry install requests`
+* Install dependencies using: `poetry add <dependency>`. For example: `poetry add requests`
 * Make sure to commit both `pyproject.toml` and `poetry.lock` files
 * To see the locked dependencies run: `poetry export -f requirements.txt --output requirements.txt --without-hashes` 
 
