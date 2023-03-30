@@ -8,6 +8,7 @@ ARG LEPTONICA_VERSION=1.82.0
 ARG TESSERACT_VERSION=5.2.0
 ARG ROCKY_BASE=rocky-base
 ARG ROCKY_RELEASE=rocky-release
+ARG ROCKY_DEVEL=rocky-devel
 ARG FEDORA_EPEL=fedora-epel
 
 # handles chromium + tesseract
@@ -33,8 +34,7 @@ RUN dnf update --nodocs -y  \
     && rm -rf chromedriver_linux64.zip \
     && google-chrome --version \
     && chromedriver --version \
-    && dnf install -y --nodocs git automake make autoconf libtool clang zlib zlib-devel libjpeg libjpeg-devel libwebp libwebp-devel libtiff libtiff-devel libpng libpng-devel pango giflib \
-    && dnf install -y https://vault.centos.org/centos/8/PowerTools/x86_64/os/Packages/giflib-devel-5.1.4-3.el8.x86_64.rpm \
+    && dnf install -y --enablerepo=$ROCKY_DEVEL --nodocs git automake make autoconf libtool clang zlib zlib-devel libjpeg libjpeg-devel libwebp libwebp-devel libtiff libtiff-devel libpng libpng-devel pango giflib giflib-devel \
     && git clone --depth 1 -b $LEPTONICA_VERSION https://github.com/DanBloomberg/leptonica \
     && cd leptonica \
     && ./autogen.sh && ./configure && make && make install && ldconfig \
