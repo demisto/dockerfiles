@@ -68,6 +68,7 @@ ARG LIBRE_OFFICE_INSTALLATION_FILE_NAME=LibreOffice_${LIBRE_OFFICE_FULL_VERSION}
 # line 6 - since in ubi its 7za --> need to make it to run as 7z like our script
 # lines 8-10 is the configuration for sklearn
 # linex 11-14 - install LibreOffice for the office-utils image
+# lines 16-18 - enable more hashing alrogithms such as md4 for example for py3ews
 RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git poppler poppler-utils \
         rust cargo libxml2-devel libxslt-devel \
         libffi-devel openssl-devel libffi libSM mesa-libGL \
@@ -85,7 +86,7 @@ RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git poppler popp
         && rm -rf ${LIBRE_OFFICE_INSTALLATION_FILE_NAME}.tar.gz ${LIBRE_OFFICE_INSTALLATION_FILE_NAME} \
         && sed -i 's/##legacy = legacy_sect/legacy = legacy_sect/' /etc/pki/tls/openssl.cnf \
         && sed -i 's/##\[legacy_sect\]/\[legacy_sect\]/' /etc/pki/tls/openssl.cnf \
-        && sed -i 's/##activate = 1/activate = 1/' /etc/pki/tls/openssl.cnf
+        && sed -i 's/##activate = 1/activate = 1/' /etc/pki/tls/openssl.cnf \
         && dnf remove -y python3-devel rust cargo libffi-devel openssl-devel gcc gcc-c++ make git platform-python-pip \
         && dnf clean all \
         && rm -rf /var/cache/dnf \
