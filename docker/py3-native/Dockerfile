@@ -34,7 +34,8 @@ RUN dnf update --nodocs -y  \
     && rm -rf chromedriver_linux64.zip \
     && google-chrome --version \
     && chromedriver --version \
-    && dnf install -y --enablerepo=$ROCKY_DEVEL --nodocs git automake make autoconf libtool clang zlib zlib-devel libjpeg libjpeg-devel libwebp libwebp-devel libtiff libtiff-devel libpng libpng-devel pango giflib giflib-devel \
+    && dnf install -y --enablerepo=$ROCKY_DEVEL --enablerepo=$ROCKY_BASE --nodocs git automake make autoconf libtool clang zlib zlib-devel libjpeg libjpeg-devel libwebp libwebp-devel \
+    libtiff libtiff-devel libpng libpng-devel pango giflib giflib-devel dejavu-sans-mono-fonts \
     && git clone --depth 1 -b $LEPTONICA_VERSION https://github.com/DanBloomberg/leptonica \
     && cd leptonica \
     && ./autogen.sh && ./configure && make && make install && ldconfig \
