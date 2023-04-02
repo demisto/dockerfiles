@@ -11,4 +11,6 @@ RUN sudo apt-get update \
   && sudo curl -sSL https://install.python-poetry.org | python3 - \
   && gcloud --version \
   && gsutil --version  \
-  && poetry --version
+  && poetry --version \
+  && sudo apt-get purge docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-ce-rootless-extras \
+  && sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-ce-rootless-extras \
