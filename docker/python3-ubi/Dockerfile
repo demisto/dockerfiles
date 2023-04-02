@@ -81,8 +81,8 @@ RUN cd /usr/local/bin && \
 
 # Handling the issue described here https://knowledgebase.paloaltonetworks.com/KCSArticleDetail?id=kA10g000000POJ0CAO&lang=en_US%E2%80%A9
 # by enabling UnsafeLegacyRenegotiation
-RUN cp /etc/pki/tls/openssl.cnf /etc/pki/tls/openssl.cnf.org && \
-echo -e 'ssl_conf = ssl_sect\n\
+RUN cp /etc/pki/tls/openssl.cnf /etc/pki/tls/openssl.cnf.org \
+    && echo -e 'ssl_conf = ssl_sect\n\
 [ssl_sect]\n\
 system_default = system_default_sect\n\
 \n\
