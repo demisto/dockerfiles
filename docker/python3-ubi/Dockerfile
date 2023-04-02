@@ -88,9 +88,9 @@ system_default = system_default_sect\n\
 \n\
 [system_default_sect]\n\
 Options = UnsafeLegacyRenegotiation\n' > /tmp/ssl.cnf \
-&& sed -i '/providers = provider_sect/r /tmp/ssl.cnf' /etc/pki/tls/openssl.cnf \
-&& rm /tmp/ssl.cnf \
-&& grep -C 10 'Options = UnsafeLegacyRenegotiation' /etc/pki/tls/openssl.cnf
+    && sed -i '/providers = provider_sect/r /tmp/ssl.cnf' /etc/pki/tls/openssl.cnf \
+    && rm /tmp/ssl.cnf \
+    && grep -C 10 'Options = UnsafeLegacyRenegotiation' /etc/pki/tls/openssl.cnf
 
 RUN groupadd -g 4000 demisto && \
     useradd -u 4000 -g demisto demisto -s /bin/sh
