@@ -321,13 +321,15 @@ files = [
 
 [[package]]
 name = "parse-emails"
-version = "0.1.7"
+version = "0.1.8"
 description = "Parses an email message file and extracts the data from it."
 category = "main"
 optional = false
-python-versions = "^3.7"
-files = []
-develop = false
+python-versions = ">=3.7,<4.0"
+files = [
+    {file = "parse_emails-0.1.8-py3-none-any.whl", hash = "sha256:b70f1897ec5234d60b30cd335db8c505e0da76d1eca205af9377bf0a19398ad4"},
+    {file = "parse_emails-0.1.8.tar.gz", hash = "sha256:79b4a9673d3ccf9e724bf97d0af44e16a5a9d84b962fd482519de713170b7d03"},
+]
 
 [package.dependencies]
 chardet = "*"
@@ -339,12 +341,6 @@ pyopenssl = "*"
 pytest = "*"
 python-magic = "*"
 RTFDE = "*"
-
-[package.source]
-type = "git"
-url = "https://github.com/demisto/parse-emails.git"
-reference = "add_chinese_japanese_encodings"
-resolved_reference = "3e39616581da0e15dd8d20e9dcfb469f5dda09ef"
 
 [[package]]
 name = "pcodedmp"
@@ -592,4 +588,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "3.10"
-content-hash = "1c4e4cc4d9b819210f8272dfa13b2f8de463ddbc3c4e46168337a2887994358e"
+content-hash = "4e7e643a8193d10deea7e44e6b329c10cd92209d01cbdbb6cd644348bb28ee93"
