@@ -191,8 +191,7 @@ def main():
                         choices=['internal', 'external'], default='external')
     parser.add_argument("-tu", "--no-timestamp-updates",
                         help="Should disable timestamp based updates",
-                        action="store_true",
-                        type=argparse.BooleanOptionalAction)
+                        action="store_true")
     args = parser.parse_args()
     repo = Repo(search_parent_directories=True)
     repo.config_writer().set_value("pull", "rebase", "false").release()
