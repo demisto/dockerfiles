@@ -1,3 +1,6 @@
+import os
+
+
 import argparse
 
 from get_dockerfiles import get_docker_files
@@ -9,6 +12,9 @@ import re
 from get_dockerfiles import LAST_MODIFIED_REGEX
 from datetime import datetime, timezone
 from functools import reduce
+
+
+DISABLE_TIMESTAMP_AUTOUPDATES = os.environ.get('DISABLE_TIMESTAMP_AUTOUPDATES', 'false').lower()
 
 AUTO_UPDATE_CONF_VERSION = ('python3', 'python3-deb')
 PYTHON3_REGEX = r'3\.\d{1,2}(?:\.\d+)?'
@@ -30,10 +36,11 @@ def is_docker_file_outdated(dockerfile: Dict, latest_tag: str, last_updated: str
     current_tag = dockerfile['tag']
     current_tag_version = parse_versions(current_tag)
     latest_tag_version = parse_versions(latest_tag)
+    print(f'{DISABLE_TIMESTAMP_AUTOUPDATES=}')
     if current_tag_version < latest_tag_version:
         return True
-    elif current_tag == latest_tag_version:
-        if last_updated and dateutil.parser.parse(last_updated) > dockerfile.get('last_modified'):
+    elif current_tag == latest_tag and DISABLE_TIMESTAMP_AUTOUPDATES != 'true':
+        if last_updated and dateutil.parser.parse(last_updated) > dateutil.parser.parse(dockerfile.get('last_modified')):
             # if the latest tag update date is newer than the dockerfile
             return True
 
