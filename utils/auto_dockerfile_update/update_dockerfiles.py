@@ -1,5 +1,7 @@
 import os
 
+DISABLE_TIMESTAMP_AUTOUPDATES = os.environ.get('DISABLE_TIMESTAMP_AUTOUPDATES', 'false').lower()
+
 import argparse
 
 from get_dockerfiles import get_docker_files
@@ -32,9 +34,10 @@ def is_docker_file_outdated(dockerfile: Dict, latest_tag: str, last_updated: str
     current_tag = dockerfile['tag']
     current_tag_version = parse_versions(current_tag)
     latest_tag_version = parse_versions(latest_tag)
+    print(f'{DISABLE_TIMESTAMP_AUTOUPDATES=}')
     if current_tag_version < latest_tag_version:
         return True
-    elif current_tag == latest_tag and os.environ.get('DISABLE_TIMESTAMP_AUTOUPDATES', 'false').lower() != 'true':
+    elif current_tag == latest_tag and DISABLE_TIMESTAMP_AUTOUPDATES != 'true':
         if last_updated and dateutil.parser.parse(last_updated) > dateutil.parser.parse(dockerfile.get('last_modified')):
             # if the latest tag update date is newer than the dockerfile
             return True
