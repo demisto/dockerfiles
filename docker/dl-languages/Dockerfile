@@ -1,4 +1,4 @@
-FROM demisto/ml:1.0.0.52666
+FROM demisto/ml:1.0.0.54723
 
 RUN python -m spacy download fr_core_news_sm
 
