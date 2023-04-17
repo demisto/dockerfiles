@@ -2,6 +2,7 @@
 FROM devdemisto/python3:3.10.11.55127
 
 COPY requirements.txt .
+COPY requirements.txt .
 
 
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git libffi-dev \
