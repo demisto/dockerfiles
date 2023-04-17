@@ -1,4 +1,4 @@
-FROM demisto/py3-tools-ubi:1.0.0.53610
+FROM demisto/py3-tools-ubi:1.0.0.54711
 
 COPY requirements.txt .
 COPY chromium/download_chromedriver.sh .
