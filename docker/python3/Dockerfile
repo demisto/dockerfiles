@@ -24,7 +24,9 @@ echo -e 'ssl_conf = ssl_sect\n\
 system_default = system_default_sect\n\
 \n\
 [system_default_sect]\n\
-Options = UnsafeLegacyRenegotiation\n' > /tmp/ssl.cnf \
+Options = UnsafeLegacyRenegotiation\n\
+MinProtocol = TLSv1.0\n\
+CipherString = DEFAULT@SECLEVEL=1\n' > /tmp/ssl.cnf \
 && sed -i '/providers = provider_sect/r /tmp/ssl.cnf' /etc/ssl/openssl.cnf \
 && rm /tmp/ssl.cnf \
 && grep -C 10 'Options = UnsafeLegacyRenegotiation' /etc/ssl/openssl.cnf
