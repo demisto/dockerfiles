@@ -3,6 +3,11 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 name = "pypi"
 
+[[source]]
+name = "pytorch"
+url = "https://download.pytorch.org/whl/cpu"
+verify_ssl = true
+
 [packages]
 fasttext = "*"
 numpy = "*"
@@ -21,7 +26,7 @@ langdetect = "*"
 onnx = "*"
 onnxruntime = "*"
 transformers = "*"
-torch = { version = "*", extra = "cpu" }
+torch = { version = "*", index="pytorch"}
 
 [dev-packages]
 
