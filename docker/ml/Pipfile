@@ -7,6 +7,7 @@ name = "pypi"
 name = "pytorch"
 url = "https://download.pytorch.org/whl/cpu"
 verify_ssl = true
+default = false
 
 [packages]
 fasttext = "*"
@@ -26,7 +27,7 @@ langdetect = "*"
 onnx = "*"
 onnxruntime = "*"
 transformers = "*"
-torch = { version = "*", index="pytorch"}
+torch = { version = "==1.12.1", sys_platform="+cpu", index="pytorch"}
 
 [dev-packages]
 
