@@ -1,1 +1,1 @@
-python --version | grep -o -E '3\.[0-9]{1,2}(\.[0-9]+)?'
+../python3/dynamic_version.sh
