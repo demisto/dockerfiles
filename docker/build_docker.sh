@@ -217,6 +217,9 @@ function docker_build {
 
       # add the last layer and rebuild. Everything shuld be cached besides this layer
       echo "ENV DOCKER_IMAGE=$image_full_name" >> "$tmp_dir/Dockerfile"
+
+      echo "running docker build again with tag $image_full_name"
+
       docker build -f "$tmp_dir/Dockerfile" . -t ${image_full_name} \
         --label "org.opencontainers.image.authors=Demisto <containers@demisto.com>" \
         --label "org.opencontainers.image.version=${VERSION}" \
