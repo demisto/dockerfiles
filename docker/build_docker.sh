@@ -207,7 +207,26 @@ function docker_build {
         --label "org.opencontainers.image.authors=Demisto <containers@demisto.com>" \
         --label "org.opencontainers.image.version=${VERSION}" \
         --label "org.opencontainers.image.revision=${CIRCLE_SHA1}"
+
+    if [[ -e "dynamic_version.sh" ]]; then
+      echo "dynamic_version.sh file was found"
+      dynamic_version=$(docker run --rm -i "$image_full_name" sh < dynamic_version.sh)
+      echo "dynamic_version $dynamic_version"
+      VERSION="${dynamic_version}.${REVISION}"
+      image_full_name="${DOCKER_ORG}/${image_name}:${VERSION}"
+
+      # add the last layer and rebuild. Everything shuld be cached besides this layer
+      echo "ENV DOCKER_IMAGE=$image_full_name" >> "$tmp_dir/Dockerfile"
+
+      echo "running docker build again with tag $image_full_name"
+
+      docker build -f "$tmp_dir/Dockerfile" . -t ${image_full_name} \
+        --label "org.opencontainers.image.authors=Demisto <containers@demisto.com>" \
+        --label "org.opencontainers.image.version=${VERSION}" \
+        --label "org.opencontainers.image.revision=${CIRCLE_SHA1}"
+    fi
     rm -rf "$tmp_dir"
+
     if [ ${del_requirements} = "yes" ]; then
         rm requirements.txt
     fi
