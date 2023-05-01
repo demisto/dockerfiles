@@ -33,7 +33,7 @@ def is_docker_file_outdated(dockerfile: Dict, latest_tag: str, last_updated: str
     if current_tag_version < latest_tag_version:
         return True
     elif current_tag == latest_tag and not no_timestamp_updates:
-        print(f'{dateutil.parser.parse(last_updated)=}, {dateutil.parser.parse(dockerfile.get("last_modified"))=}')
+        print(f'{dateutil.parser.parse(last_updated)=}, {dateutil.parser.parse(dockerfile.get("last_modified"))=}, {dockerfile=}')
         if last_updated and dateutil.parser.parse(last_updated) > dateutil.parser.parse(
                 dockerfile.get('last_modified')):
             # if the latest tag update date is newer than the dockerfile
