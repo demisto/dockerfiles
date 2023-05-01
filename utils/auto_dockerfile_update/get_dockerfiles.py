@@ -49,26 +49,43 @@ def parse_base_image(full_base_image_name: str) -> (str, str, str):
     return repository, image_name, tag
 
 
-def is_dev_only(dockerfile_path=str) -> bool:
+def read_build_conf(dockerfile_path: str) -> str:
+    """
+    Reads the build conf and return its content
+    """
+    build_conf_path = f"{dockerfile_path}/build.conf"
+    try:
+        with open(build_conf_path) as f:
+            return f.read()
+    except FileNotFoundError:
+        print(f'Could not find the file {build_conf_path}')
+        return ''
+
+
+def is_dev_only(build_conf_content: str) -> bool:
     """
     Check the build.conf for "devonly" flag.
+
     Args:
-        dockerfile_path (str): the dockerfile's path
+        build_conf_content (str): build conf content
 
     Returns:
-
+        bool: True if the docker is dev only, False if not.
     """
-    path = f"{dockerfile_path}/build.conf"
-    try:
-        with open(path) as f:
-            content = f.read()
-            if "devonly=true" in content:
-                return True
+    return "devonly=true" in build_conf_content
 
-    except FileNotFoundError:
-        return False
 
-    return False
+def is_docker_deprecated(build_conf_content: str):
+    """
+    Check the build.conf for "deprecated" flag.
+
+    Args:
+        build_conf_content (str): build conf content
+
+    Returns:
+        bool: True if the docker is deprecated, False if not.
+    """
+    return "deprecated=true" in build_conf_content
 
 
 def filter_ignored_files(files_list):
@@ -89,6 +106,7 @@ def filter_ignored_files(files_list):
 def get_docker_files(base_path="docker/", devonly=False, external=False, internal=False) -> List[Dict]:
     """
     Get all the relevant dockerfiles from the repository.
+
     Args:
         base_path (str): base path for docker files
         devonly (bool): whether or not to get devonly images
@@ -103,8 +121,14 @@ def get_docker_files(base_path="docker/", devonly=False, external=False, interna
 
     for path in dockerfiles_paths:
         dockerfile_dir_path = path.replace("/Dockerfile", "")
-        if is_dev_only(dockerfile_dir_path) and not devonly:
+        build_conf_content = read_build_conf(dockerfile_dir_path)  # if does not exist will default to empty string
+
+        if is_docker_deprecated(build_conf_content):
+            print(f"docker {dockerfile_dir_path} is deprecated")
             continue
+
+        if is_dev_only(build_conf_content) and not devonly:
+            print(f"docker {dockerfile_dir_path} is dev-only")
 
         with open(path) as f:
             docker_file_content = f.read()
