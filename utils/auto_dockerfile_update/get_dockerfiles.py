@@ -106,7 +106,7 @@ def filter_ignored_files(files_list):
 def get_docker_files(base_path="docker/", devonly=False, external=False, internal=False) -> List[Dict]:
     """
     Get all the relevant dockerfiles from the repository.
-    
+
     Args:
         base_path (str): base path for docker files
         devonly (bool): whether or not to get devonly images
@@ -122,12 +122,9 @@ def get_docker_files(base_path="docker/", devonly=False, external=False, interna
     for path in dockerfiles_paths:
         dockerfile_dir_path = path.replace("/Dockerfile", "")
         build_conf_content = read_build_conf(dockerfile_dir_path)  # if does not exist will default to empty string
-        if is_dev_only(build_conf_content) and not devonly:
+        if (is_dev_only(build_conf_content) and not devonly) or is_docker_deprecated(build_conf_content):
             continue
-
-        if is_docker_deprecated(build_conf_content):
-            continue
-
+            
         with open(path) as f:
             docker_file_content = f.read()
             base_image = re.search(BASE_IMAGE_REGEX, docker_file_content)
