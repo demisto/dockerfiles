@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM ubuntu:14.10
 
 RUN apt-get update && apt-get upgrade -y
 
