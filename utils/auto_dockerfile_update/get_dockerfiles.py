@@ -122,9 +122,14 @@ def get_docker_files(base_path="docker/", devonly=False, external=False, interna
     for path in dockerfiles_paths:
         dockerfile_dir_path = path.replace("/Dockerfile", "")
         build_conf_content = read_build_conf(dockerfile_dir_path)  # if does not exist will default to empty string
-        if (is_dev_only(build_conf_content) and not devonly) or is_docker_deprecated(build_conf_content):
+
+        if is_docker_deprecated(build_conf_content):
+            print(f"docker {dockerfile_dir_path} is deprecated")
             continue
-            
+
+        if is_dev_only(build_conf_content) and not devonly:
+            print(f"docker {dockerfile_dir_path} is dev-only")
+
         with open(path) as f:
             docker_file_content = f.read()
             base_image = re.search(BASE_IMAGE_REGEX, docker_file_content)
