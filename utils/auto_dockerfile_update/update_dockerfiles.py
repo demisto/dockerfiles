@@ -1,3 +1,5 @@
+import os
+
 import argparse
 
 from get_dockerfiles import get_docker_files
@@ -10,19 +12,17 @@ from get_dockerfiles import LAST_MODIFIED_REGEX
 from datetime import datetime, timezone
 from functools import reduce
 
-AUTO_UPDATE_CONF_VERSION = ('python3', 'python3-deb')
-PYTHON3_REGEX = r'3\.\d{1,2}(?:\.\d+)?'
-VERSION_CONF_REGEX = fr'version ?= ?{PYTHON3_REGEX}'
 BATCH_SIZE = 1
 
 
-def is_docker_file_outdated(dockerfile: Dict, latest_tag: str, last_updated: str = "") -> bool:
+def is_docker_file_outdated(dockerfile: Dict, latest_tag: str, last_updated: str = "", no_timestamp_updates=True) -> bool:
     """
     Check if the dockerfile has the latest tag and if there is a new version of it.
     Args:
         dockerfile (Dict): docker file dict
         latest_tag (str): latest tag string
         last_updated (str): last update string
+        no_timestamp_updates: whether to disable updates
     Returns:
         True if the latest tag is newer or the latest tag is the same but new updates
     """
@@ -32,8 +32,9 @@ def is_docker_file_outdated(dockerfile: Dict, latest_tag: str, last_updated: str
     latest_tag_version = parse_versions(latest_tag)
     if current_tag_version < latest_tag_version:
         return True
-    elif current_tag == latest_tag_version:
-        if last_updated and dateutil.parser.parse(last_updated) > dockerfile.get('last_modified'):
+    elif current_tag == latest_tag and not no_timestamp_updates:
+        if last_updated and dateutil.parser.parse(last_updated) > dateutil.parser.parse(
+                dockerfile.get('last_modified')):
             # if the latest tag update date is newer than the dockerfile
             return True
 
@@ -63,28 +64,18 @@ def update_dockerfile(dockerfile: Dict, latest_tag: str) -> None:
         new_last_modified_string = f"# Last modified: {now.isoformat()}"
         new_dockerfile = new_dockerfile.replace(last_modified_string, new_last_modified_string)
 
-    if dockerfile['name'] in AUTO_UPDATE_CONF_VERSION:
-        build_conf_path = dockerfile['path'].replace("/Dockerfile", "/build.conf")
-        if match := re.search(PYTHON3_REGEX, new_base_image):
-            with open(build_conf_path) as f:
-                data = f.read()
-            new_data = re.sub(VERSION_CONF_REGEX, f'version={match[0]}', data)
-            with open(build_conf_path, 'w') as f:
-                f.write(new_data)
-        else:
-            print(f'Could not find updated py3 version in image {new_base_image} for {dockerfile["name"]}')
     with open(dockerfile['path'], "w") as f:
         f.write(new_dockerfile)
 
     dockerfile['content'] = new_dockerfile
 
 
-def update_external_base_dockerfiles(git_repo: Repo) -> None:
+def update_external_base_dockerfiles(git_repo: Repo, no_timestamp_updates=True) -> None:
     """
     Update all the dockerfile with external base image
     Args:
         git_repo (Repo): current git repo
-
+        no_timestamp_updates: whether to disable timestamp based updates
     Returns:
         None
     """
@@ -94,7 +85,7 @@ def update_external_base_dockerfiles(git_repo: Repo) -> None:
         latest_tag_name = latest_tag['name']
         latest_tag_last_updated = latest_tag.get('last_updated', '')
 
-        if is_docker_file_outdated(file, latest_tag_name, latest_tag_last_updated):
+        if is_docker_file_outdated(file, latest_tag_name, latest_tag_last_updated, no_timestamp_updates):
             branch_name = fr"autoupdate/Update_{file['repo']}_{file['image_name']}_from_{file['tag']}_to_{latest_tag_name}"
             update_and_push_dockerfiles(git_repo, branch_name, [file], latest_tag_name)
             print(f"Updated {file['path']}")
@@ -185,13 +176,17 @@ def main():
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("-t", "--type", help="Specify type of dockerfiles to update",
                         choices=['internal', 'external'], default='external')
+    parser.add_argument("-tu", "--no-timestamp-updates",
+                        help="Should disable timestamp based updates",
+                        action="store_true")
     args = parser.parse_args()
     repo = Repo(search_parent_directories=True)
     repo.config_writer().set_value("pull", "rebase", "false").release()
     if args.type == "internal":
         update_internal_base_dockerfile(repo)
     elif args.type == "external":
-        update_external_base_dockerfiles(repo)
+        print(f'{args.no_timestamp_updates=}')
+        update_external_base_dockerfiles(repo, args.no_timestamp_updates)
 
 
 if __name__ == "__main__":
