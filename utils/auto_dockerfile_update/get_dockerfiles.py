@@ -129,6 +129,7 @@ def get_docker_files(base_path="docker/", devonly=False, external=False, interna
 
         if is_dev_only(build_conf_content) and not devonly:
             print(f"docker {dockerfile_dir_path} is dev-only, hence not updating it")
+            continue
 
         with open(path) as f:
             docker_file_content = f.read()
