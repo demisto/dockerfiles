@@ -26,7 +26,7 @@ def is_docker_file_outdated(dockerfile: Dict, latest_tag: str, last_updated: str
     Returns:
         True if the latest tag is newer or the latest tag is the same but new updates
     """
-    print(f'checking if dockerfile {dockerfile.get("path")} is outdated')
+    print(f'Checking if dockerfile {dockerfile.get("path")} is outdated')
     current_tag = dockerfile['tag']
     current_tag_version = parse_versions(current_tag)
     latest_tag_version = parse_versions(latest_tag)
@@ -87,7 +87,7 @@ def update_external_base_dockerfiles(git_repo: Repo, no_timestamp_updates=True) 
 
         if is_docker_file_outdated(file, latest_tag_name, latest_tag_last_updated, no_timestamp_updates):
             branch_name = fr"autoupdate/Update_{file['repo']}_{file['image_name']}_from_{file['tag']}_to_{latest_tag_name}"
-            # update_and_push_dockerfiles(git_repo, branch_name, [file], latest_tag_name)
+            update_and_push_dockerfiles(git_repo, branch_name, [file], latest_tag_name)
             print(f"Updated {file['path']}")
 
 
@@ -134,7 +134,7 @@ def update_internal_base_dockerfile(git_repo: Repo) -> None:
         for batch_slice in batch(outdated_files, BATCH_SIZE):
             image_names = reduce(lambda a, b: f"{a}-{b}", [file['name'] for file in batch_slice])
             branch_name = fr"autoupdate/{base_image}_{image_names}_{latest_tag_name}"
-            # update_and_push_dockerfiles(git_repo, branch_name, batch_slice, latest_tag_name)
+            update_and_push_dockerfiles(git_repo, branch_name, batch_slice, latest_tag_name)
 
 
 def update_and_push_dockerfiles(git_repo: Repo, branch_name: str, files: List[Dict], latest_tag_name: str) -> None:
