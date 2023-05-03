@@ -15,6 +15,9 @@ import tweepy
 # pycryptodome
 from Crypto.Hash import MD4
 
+# chardet
+import chardet
+
 print("All good, and you look amazing.")
 
 
