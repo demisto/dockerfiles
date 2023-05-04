@@ -1,19 +1,22 @@
 [[source]]
+name = "pypi"
 url = "https://pypi.org/simple"
 verify_ssl = true
-name = "pypi"
+
+[dev-packages]
 
 [packages]
+exchangelib = "*"
+chardet = "*"
+dateparser = "*"
 asn1crypto = "*"
 cached-property = "*"
 certifi = "*"
 cffi = "*"
-chardet = "*"
 cryptography = "*"
 defusedxml = "*"
 dnspython = "*"
 enum34 = "*"
-exchangelib = "==1.12.0"
 future = "*"
 idna = "*"
 ipaddress = "*"
@@ -31,9 +34,6 @@ requests-ntlm = "*"
 six = "*"
 tzlocal = "*"
 urllib3 = "*"
-dateparser = "*"
-
-[dev-packages]
 
 [requires]
-python_version = "2.7"
+python_version = "3.10"
