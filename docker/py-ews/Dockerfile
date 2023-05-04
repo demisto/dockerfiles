@@ -22,6 +22,11 @@ RUN set -eux; \
 		libbluetooth-dev \
 		tk-dev \
         wget \
+        gpg \
+        gcc \
+        make  \
+        gpg-agent \
+        dirmngr \
 		uuid-dev \
 	; \
 	rm -rf /var/lib/apt/lists/*
