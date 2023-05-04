@@ -21,11 +21,12 @@ RUN set -eux; \
 	apt-get install -y --no-install-recommends \
 		libbluetooth-dev \
 		tk-dev \
-        libffi-dev openssl-dev  \
+        libffi-dev libssl-dev  \
         wget \
         gpg \
         gcc \
-        make  \
+        make \
+        build-essential  \
         gpg-agent \
         dirmngr \
 		uuid-dev \
