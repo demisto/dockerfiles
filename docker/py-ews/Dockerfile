@@ -7,7 +7,6 @@ FROM demisto/powershell-ubuntu:7.3.0.49844
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM buildpack-deps:bullseye
 
 # ensure local python is preferred over distribution python
 ENV PATH /usr/local/bin:$PATH
@@ -22,6 +21,7 @@ RUN set -eux; \
 	apt-get install -y --no-install-recommends \
 		libbluetooth-dev \
 		tk-dev \
+        wget \
 		uuid-dev \
 	; \
 	rm -rf /var/lib/apt/lists/*
@@ -167,6 +167,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   git \
   wget \
   libffi-dev \
+  wget \
   libxml2-dev \
   libssl-dev \
   libkrb5-dev \
