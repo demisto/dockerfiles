@@ -109,7 +109,7 @@ def get_docker_files(base_path="docker/", devonly=False, external=False, interna
 
     for path in dockerfiles_paths:
         dockerfile_dir_path = path.replace("/Dockerfile", "")
-        build_conf_content = read_build_conf(dockerfile_dir_path)  # if does not exist will default to empty string
+        build_conf_content = read_build_conf(dockerfile_dir_path)  # if does not exist will default to empty dict
 
         # skip if the docker is deprecated
         if build_conf_content.get('deprecated') == 'true':
