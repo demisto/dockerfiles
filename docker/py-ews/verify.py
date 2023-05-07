@@ -8,7 +8,7 @@ from multiprocessing import Process
 import lxml
 import dateparser
 import exchangelib
-from cStringIO import StringIO
+from io import StringIO
 from exchangelib import (BASIC, DELEGATE, DIGEST, IMPERSONATION, NTLM, Account,
                          Body, Build, Configuration, Credentials, EWSDateTime,
                          EWSTimeZone, FileAttachment, Folder, HTMLBody,
