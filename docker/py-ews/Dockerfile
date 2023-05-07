@@ -154,6 +154,7 @@ COPY requirements.txt .
 #Install tools for building binary deps (will be reomved later on)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
+	heimdal-dev
     python-dev \
     build-essential \
     wget \
