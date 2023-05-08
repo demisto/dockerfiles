@@ -58,7 +58,7 @@ RUN dnf update --nodocs -y  \
     && rm -rf /var/cache/dnf
 
 ARG LIBRE_OFFICE_MAJOR_VERSION=7.5
-ARG LIBRE_OFFICE_FULL_VERSION=${LIBRE_OFFICE_MAJOR_VERSION}.1
+ARG LIBRE_OFFICE_FULL_VERSION=${LIBRE_OFFICE_MAJOR_VERSION}.3
 ARG LIBRE_OFFICE_INSTALLATION_FILE_NAME=LibreOffice_${LIBRE_OFFICE_FULL_VERSION}_Linux_x86-64_rpm
 # libre-office mirrors are taken from here - http://download.documentfoundation.org/libreoffice/stable/
 

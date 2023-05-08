@@ -1,6 +1,7 @@
 # py3-native Changelog
 
 ## Unreleased
+* Updated the *LibreOffice* to the following version: **7.5.3**
 
 ## 8.2.0
 * Updated py3-native to be based on ubi-9.1.
