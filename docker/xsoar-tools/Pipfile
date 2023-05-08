@@ -5,7 +5,7 @@ name = "pypi"
 
 [packages]
 demisto-py = "*"
-demisto-sdk = {ref = "move_init", git = "https://github.com/demisto/demisto-sdk.git"}
+demisto-sdk = "==1.14.*" # this package should be updated manually. No reason this is locked
 
 [dev-packages]
 
