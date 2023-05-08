@@ -95,10 +95,16 @@ DOCKER_ORG=mytest DOCKER_INCLUDE_GREP=/python$ docker/build_docker.sh
 ## Build configuration
 The build script will check for a `build.conf` file in the target image directory and will read from it `name=value` properties. Supported properties:
 
-* **version**: The version to use for tagging. Default: `1.0.0`. Note: that additionally, the CircleCI build number is always appended to the version as a revision (for example: `1.0.0.15519`) to create a unique version per build.
+* **version**: The version to use for tagging. Default: `1.0.0`. See [Dynamic Versioning](#dynamic-versioning) for non-static versions. #Note: that additionally, the CircleCI build number is always appended to the version as a revision (for example: `1.0.0.15519`) to create a unique version per build.
 * **devonly**: If set the image will be pushed only to the `devdemisto` org in docker hub and will not be pushed to the `demisto` org. Should be used for images which are for development purposes only (such as the image used in CircleCI to build this project).
 * **deprecated**: If set the image will be listed as deprecated in the deprecated_images.json file and the image will be forbidden form using in the integrations/automations.
 * **deprecated_reason**: Free text that explain the deprecation reason.
+
+## Dynamic Versioning
+It can be convenient to set the version of the docker image dynamically, instead of as an entry in build.conf.
+For example, if the docker image is meant to track a particular package, the version of the image should always be the same as that package. Dependabot relocking the dependencies can cause the real package number and the entry in build.conf to fall out of sync.
+
+As a solution to this, you can add a `dynamic_version.sh` file to the image's folder. This will be run in the built docker container, and the result will be used to set the image's version in dockerhub. See [here](https://github.com/demisto/dockerfiles/blob/master/docker/demisto-sdk/dynamic_version.sh) for an example.
 
 ## Base Python Images
 There are 4 base python images which should be used when building a new image which is based upon python:

@@ -12,9 +12,6 @@ from get_dockerfiles import LAST_MODIFIED_REGEX
 from datetime import datetime, timezone
 from functools import reduce
 
-AUTO_UPDATE_CONF_VERSION = ('python3', 'python3-deb')
-PYTHON3_REGEX = r'3\.\d{1,2}(?:\.\d+)?'
-VERSION_CONF_REGEX = fr'version ?= ?{PYTHON3_REGEX}'
 BATCH_SIZE = 1
 
 
@@ -29,7 +26,7 @@ def is_docker_file_outdated(dockerfile: Dict, latest_tag: str, last_updated: str
     Returns:
         True if the latest tag is newer or the latest tag is the same but new updates
     """
-
+    print(f'Checking if dockerfile {dockerfile.get("path")} is outdated')
     current_tag = dockerfile['tag']
     current_tag_version = parse_versions(current_tag)
     latest_tag_version = parse_versions(latest_tag)
@@ -67,16 +64,6 @@ def update_dockerfile(dockerfile: Dict, latest_tag: str) -> None:
         new_last_modified_string = f"# Last modified: {now.isoformat()}"
         new_dockerfile = new_dockerfile.replace(last_modified_string, new_last_modified_string)
 
-    if dockerfile['name'] in AUTO_UPDATE_CONF_VERSION:
-        build_conf_path = dockerfile['path'].replace("/Dockerfile", "/build.conf")
-        if match := re.search(PYTHON3_REGEX, new_base_image):
-            with open(build_conf_path) as f:
-                data = f.read()
-            new_data = re.sub(VERSION_CONF_REGEX, f'version={match[0]}', data)
-            with open(build_conf_path, 'w') as f:
-                f.write(new_data)
-        else:
-            print(f'Could not find updated py3 version in image {new_base_image} for {dockerfile["name"]}')
     with open(dockerfile['path'], "w") as f:
         f.write(new_dockerfile)
 
@@ -162,7 +149,7 @@ def update_and_push_dockerfiles(git_repo: Repo, branch_name: str, files: List[Di
     Returns:
 
     """
-    print(f"Creating new branch: {branch_name}")
+    print(f"Trying to create new branch: {branch_name}")
     original_branch = git_repo.active_branch
     if branch_name in git_repo.git.branch("--all"):
         print("Branch already exits.")
@@ -177,6 +164,7 @@ def update_and_push_dockerfiles(git_repo: Repo, branch_name: str, files: List[Di
         git_repo.git.add("*")
         git_repo.git.commit(m=f"Update Dockerfiles")
         git_repo.git.push('--set-upstream', 'origin', branch)
+        print(f'Created branch {branch_name} successfully')
     except GitCommandError as e:
         print(f"Error creating {branch_name}")
         print(e)
