@@ -1,4 +1,4 @@
-FROM demisto/python3-deb:3.10.11.57265
+FROM demisto/python3-deb:3.10.11.57890
 RUN apt-get update && apt-get upgrade -y && apt-get -t bullseye-backports install gcc g++ wget git pkg-config \
 make autoconf automake libtool libpng-dev libjpeg-dev libtiff5-dev zlib1g-dev libleptonica-dev libicu-dev libpango1.0-dev liblept5 -y \
 && mkdir /build && cd /build && git clone --depth 1 https://github.com/tesseract-ocr/tesseract.git \
