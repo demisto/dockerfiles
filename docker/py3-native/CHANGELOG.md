@@ -1,7 +1,7 @@
 # py3-native Changelog
 
 ## Unreleased
-* Removed clang from the image.
+* Removed *clang* package from the image.
 * Updated the *LibreOffice* to the following version: **7.5.3**
 
 ## 8.2.0
