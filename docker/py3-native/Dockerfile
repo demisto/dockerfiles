@@ -17,7 +17,7 @@ ARG FEDORA_EPEL=fedora-epel
 # there is not linux_signing_key.pub from google that is not based on sha1
 RUN dnf update --nodocs -y  \
     && dnf upgrade -y --nodocs \
-    && dnf install --nodocs -y wget git iproute \
+    && dnf install --nodocs -y wget git \
     && wget https://dl-ssl.google.com/linux/linux_signing_key.pub \
     && update-crypto-policies --set DEFAULT:SHA1 \
     && rpm --import linux_signing_key.pub \
@@ -70,7 +70,7 @@ ARG LIBRE_OFFICE_INSTALLATION_FILE_NAME=LibreOffice_${LIBRE_OFFICE_FULL_VERSION}
 # lines 8-10 is the configuration for sklearn
 # linex 11-14 - install LibreOffice for the office-utils image
 # lines 16-18 - enable more hashing alrogithms such as md4 for example for py3ews
-RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git poppler poppler-utils \
+RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git poppler poppler-utils iproute \
         rust cargo libxml2-devel libxslt-devel \
         libffi-devel openssl-devel libffi libSM mesa-libGL \
         openssh ca-certificates openssl less rsync libpng-devel freetype-devel gcc-gfortran openblas unzip libstdc++ \
