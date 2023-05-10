@@ -76,6 +76,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN sed -i s/DEFAULT@SECLEVEL=2/DEFAULT@SECLEVEL=1/g /etc/ssl/openssl.cnf \
   && sed -i s/TLSv1.2/TLSv1/g /etc/ssl/openssl.cnf
 
-# Copy kerberos configuration files from host
-COPY krb5.con[f] /etc/krb5.conf
-COPY $USER.keyta[b] /etc/$USER.keytab
+# Install kerberos
+RUN apt-get install -y --no-install-recommends \
+krb5-user
