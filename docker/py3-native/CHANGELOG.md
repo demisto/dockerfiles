@@ -1,7 +1,8 @@
 # py3-native Changelog
 
 ## Unreleased
-* Removed *clang* package from the image.
+* Locked the installation of the *clang* package to version 14 due to dependency conflicts with the *tigervnc-server-minimal* package.
+* Locked the installation of the *rust* package to version 1.62 due to dependency conflicts with the *tigervnc-server-minimal* package.
 * Updated the *LibreOffice* to the following version: **7.5.3**
 
 ## 8.2.0
