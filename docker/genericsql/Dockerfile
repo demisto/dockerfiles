@@ -77,5 +77,5 @@ RUN sed -i s/DEFAULT@SECLEVEL=2/DEFAULT@SECLEVEL=1/g /etc/ssl/openssl.cnf \
   && sed -i s/TLSv1.2/TLSv1/g /etc/ssl/openssl.cnf
 
 # Copy kerberos configuration files from host
-ADD krb5.conf /etc/krb5.conf
-ADD $USER.keytab /etc/$USER.keytab
+COPY krb5.con[f] /etc/krb5.conf
+COPY $USER.keyta[b] /etc/$USER.keytab
