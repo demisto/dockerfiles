@@ -110,7 +110,7 @@ That is done in order to keep updated with the python dependencies the original 
 
 
 ## OS Dependencies for each supported docker image
-* **tesseract:** git automake make autoconf libtool clang zlib zlib-devel libjpeg libjpeg-devel libwebp libwebp-devel libtiff libtiff-devel libpng libpng-devel pango giflib giflib-devel leptonica 
+* **tesseract:** git automake make autoconf libtool zlib zlib-devel libjpeg libjpeg-devel libwebp libwebp-devel libtiff libtiff-devel libpng libpng-devel pango giflib giflib-devel leptonica 
 * **chromium:** python3-devel gcc gcc-c++ make wget git unzip llvm-libs libXpm tigervnc-server-minimal xorg-x11-utils google-chrome-stable ImageMagick dejavu-sans-mono-fonts
 * **crypto:** python3-devel gcc gcc-c++ make wget git rust cargo libffi-devel openssl-devel
 * **readpdf:** poppler poppler-utils
