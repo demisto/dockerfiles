@@ -26,7 +26,7 @@ def is_docker_file_outdated(dockerfile: Dict, latest_tag: str, last_updated: str
     Returns:
         True if the latest tag is newer or the latest tag is the same but new updates
     """
-
+    print(f'Checking if dockerfile {dockerfile.get("path")} is outdated')
     current_tag = dockerfile['tag']
     current_tag_version = parse_versions(current_tag)
     latest_tag_version = parse_versions(latest_tag)
@@ -149,7 +149,7 @@ def update_and_push_dockerfiles(git_repo: Repo, branch_name: str, files: List[Di
     Returns:
 
     """
-    print(f"Creating new branch: {branch_name}")
+    print(f"Trying to create new branch: {branch_name}")
     original_branch = git_repo.active_branch
     if branch_name in git_repo.git.branch("--all"):
         print("Branch already exits.")
@@ -164,6 +164,7 @@ def update_and_push_dockerfiles(git_repo: Repo, branch_name: str, files: List[Di
         git_repo.git.add("*")
         git_repo.git.commit(m=f"Update Dockerfiles")
         git_repo.git.push('--set-upstream', 'origin', branch)
+        print(f'Created branch {branch_name} successfully')
     except GitCommandError as e:
         print(f"Error creating {branch_name}")
         print(e)
