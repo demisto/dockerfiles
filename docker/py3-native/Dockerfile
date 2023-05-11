@@ -70,13 +70,8 @@ ARG LIBRE_OFFICE_INSTALLATION_FILE_NAME=LibreOffice_${LIBRE_OFFICE_FULL_VERSION}
 # lines 8-10 is the configuration for sklearn
 # linex 11-14 - install LibreOffice for the office-utils image
 # lines 16-18 - enable more hashing alrogithms such as md4 for example for py3ews
-<<<<<<< HEAD
-RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git poppler poppler-utils iproute \
+RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git poppler poppler-utils \
         rust cargo libxml2-devel libxslt-devel \
-=======
-RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE python3-devel gcc gcc-c++ make wget git poppler poppler-utils \
-        rust-1.62.1-1.el9.x86_64 cargo libxml2-devel libxslt-devel \
->>>>>>> 027e08a3777910366f08c0d77432a766947348ef
         libffi-devel openssl-devel libffi libSM mesa-libGL \
         openssh ca-certificates openssl less rsync libpng-devel freetype-devel gcc-gfortran openblas unzip libstdc++ \
         && dnf install -y --nodocs --enablerepo=$FEDORA_EPEL p7zip unrar \
