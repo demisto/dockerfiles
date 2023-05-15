@@ -67,10 +67,10 @@ The above command will create a directory `docker/ldap` with all relevant files 
 
 **Note:** for image names we use [kebab-case](https://www.theserverside.com/definition/Kebab-case) naming convention.
 
-## Building Locally a Test Build
+## Building a docker image locally
 It is possible to run a local build to verify that the build process is working. Requirements:
 * Local install of docker
-* Local install of pipenv (if building an image which is managing packages via pipenv - recommended)
+* Local install of pipenv or poetry (if building an image which is managing packages via these build tools - recommended)
 
 
 If you want to test how the script detects commit changes: Make sure you are working on a branch and the changes are committed. If you haven't committed the changes and want to run a local build you can run the script with a image name (which corresponds to a directory name) to the run the build on. For example:
@@ -95,10 +95,16 @@ DOCKER_ORG=mytest DOCKER_INCLUDE_GREP=/python$ docker/build_docker.sh
 ## Build configuration
 The build script will check for a `build.conf` file in the target image directory and will read from it `name=value` properties. Supported properties:
 
-* **version**: The version to use for tagging. Default: `1.0.0`. Note: that additionally, the CircleCI build number is always appended to the version as a revision (for example: `1.0.0.15519`) to create a unique version per build.
+* **version**: The version to use for tagging. Default: `1.0.0`. See [Dynamic Versioning](#dynamic-versioning) for non-static versions. #Note: that additionally, the CircleCI build number is always appended to the version as a revision (for example: `1.0.0.15519`) to create a unique version per build.
 * **devonly**: If set the image will be pushed only to the `devdemisto` org in docker hub and will not be pushed to the `demisto` org. Should be used for images which are for development purposes only (such as the image used in CircleCI to build this project).
 * **deprecated**: If set the image will be listed as deprecated in the deprecated_images.json file and the image will be forbidden form using in the integrations/automations.
 * **deprecated_reason**: Free text that explain the deprecation reason.
+
+## Dynamic Versioning
+It can be convenient to set the version of the docker image dynamically, instead of as an entry in build.conf.
+For example, if the docker image is meant to track a particular package, the version of the image should always be the same as that package. Dependabot relocking the dependencies can cause the real package number and the entry in build.conf to fall out of sync.
+
+As a solution to this, you can add a `dynamic_version.sh` file to the image's folder. This will be run in the built docker container, and the result will be used to set the image's version in dockerhub. See [here](https://github.com/demisto/dockerfiles/blob/master/docker/demisto-sdk/dynamic_version.sh) for an example.
 
 ## Base Python Images
 There are 4 base python images which should be used when building a new image which is based upon python:
@@ -112,10 +118,12 @@ There are 4 base python images which should be used when building a new image wh
 
 If you are using pure python dependencies then choose the alpine image with the proper python version which fits your needs (two or three). The alpine based images are smaller and recommended for use. If you require installing binaries or pre-compiled binary python dependencies ([manylinux](https://github.com/pypa/manylinux)), you are probably best choosing the debian based images. See the following link: https://github.com/docker-library/docs/issues/904 .
 
-If you are using the python [cryptography](https://pypi.org/project/cryptography/) package we recommend using [demisto/crypto](https://github.com/demisto/dockerfiles/blob/repository-info/demisto/crypto/last.md) as a base image. This base image takes care of properly installing the `cryptography` package. There is no need to include in the Pipenv file the `cryptography` package when using this image as a base.
+If you are using the python [cryptography](https://pypi.org/project/cryptography/) package we recommend using [demisto/crypto](https://github.com/demisto/dockerfiles/blob/repository-info/demisto/crypto/last.md) as a base image. This base image takes care of properly installing the `cryptography` package. There is no need to include the `cryptography` package in the Pipenv file when using this image as a base.
 
 ## Adding a `verify.py` script
 As part of the build we support running a `verify.py` script in the created image. This allows you to add logic which tests and checks that the docker image built is matching what you expect. 
+
+Adding this file is **highly** recommended.
 
 Simply create a file named: `vefify.py`. It may contain any python code and all it needs is to exit with status 0 as a sign for success. Once the docker image is built, if the script is present it will be run within the image using the following command:
 ```bash
@@ -143,7 +151,7 @@ There are 3 base PowerShell images which should be used when building a new imag
 We recommend using the default Alpine based image. The Debian and Ubuntu images are provided mainly for cases that there is need to install additional OS packages.
 
 ### Adding a `verify.ps1` script
-Similar to the the `verify.py` script for Python images, you can add a `verify.ps1` script to test and check the image you created. 
+Similar to the `verify.py` script for Python images, you can add a `verify.ps1` script to test and check the image you created. 
 
 Once the docker image is built, if the script is present it will be run within the image using the following command:
 ```bash
@@ -160,14 +168,25 @@ If you are contributing (**thank you!!**) via an external fork, then the image b
 Once merged into master, CircleCI will run another build and create a `production` ready docker image which will be deployed at Docker Hub under the [demisto](https://hub.docker.com/u/demisto) organization. A bot will add a comment to the original PR about the production deployment and the image will then be fully available for usage. An example `production` comment added to a PR can be seen [here](https://github.com/demisto/dockerfiles/pull/462#issuecomment-533150059).
 
 ## Advanced
-### Support for Pipenv (Pipfile)
-Our recommendation is to use [Pipenv](https://pipenv.readthedocs.io/en/latest/) to manage python dependencies as it ensures that the build produces a deterministic list of python dependencies.
 
-If a `Pipfile` is detected and a requirements.txt file is not present, the `Pipfile` will be used to generate a requirements.txt file before invoking `docker build`. The file is generated by running: `pipenv lock -r`. This allows the build process in the Dockerfile to simply install python dependencies via: 
+### Support for Pipenv (Pipfile) and Poetry (pyproject.toml)
+It is recommended to use [Pipenv](https://pipenv.readthedocs.io/en/latest/) or [Poetry](https://python-poetry.org/docs/) to manage python dependencies as they ensure that the build produces a deterministic list of python dependencies.
+
+If a `Pipfile` or `pyproject.toml` file is detected and a requirements.txt file is not present, the file will be used to generate a requirements.txt file before invoking `docker build`. The file is generated by running: `pipenv lock -r` for pipenv, or `poetry export -f requirements.txt --output requirements.txt --without-hashes` for poetry. This allows the build process in the Dockerfile to simply install python dependencies via: 
 ```docker
 RUN pip install --no-cache-dir -r requirements.txt
 ``` 
-**Note**: build will fail if a `Pipfile` is detected without a corresponding `Pipfile.lock` file.
+
+If the requirements should'nt be generated before docker build, for example if you need system requirements installed in order to successfully install the dependencies, you can add **dont_generate_requirements=true** to the build.conf file, and the file will not be generated by the build.
+
+**Note**: build will fail if a `Pipfile` is detected without a corresponding `Pipfile.lock` file or `pyproject.toml` file is found without a corresponding `poetry.lock`.
+
+### Poetry quick start:
+If you want to use poetry, make sure you have poetry installed by running `poetry --version` or install it by running`curl -sSL https://install.python-poetry.org | python3`. Then Follow:
+* In the relevant folder initialize the poetry environment using `poetry init`.
+* Install dependencies using: `poetry add <dependency>`. For example: `poetry add requests`
+* Make sure to commit both `pyproject.toml` and `poetry.lock` files
+* To see the locked dependencies run: `poetry export -f requirements.txt --output requirements.txt --without-hashes` 
 
 ### Pipenv quick start:
 If you want to use pipenv manually make sure you first have the pre-requisites installed as specified in [Getting Started](#getting-started). Then follow:
@@ -228,3 +247,11 @@ To mark an image as deprecated please follow the following steps:
   * DEPRECATED_IMAGE=true
   * DEPRECATED_REASON="the same text as deprecated_reason key from the build.conf file"
 * 3- commit all chnaged files including the deprecated_image.json and create a new PR
+
+### The Native Image Docker Validator and *native image approved* label
+
+In the event that you've updated a native-image-supported dockerimage, you need to make sure that you take the necessary steps to ensure that native image is running smoothly in our build.
+If such docker is being updated, then the validation will fail to alarm the user that the native docker might need updates according to the changes done to the supported updated docker.
+For example, if you added a new package to the image, chances are you will need to add the same package to the native image.  
+The user should Check if the native image is already compatible with this change. If it is, great. Otherwise, the user should add compatibility, and add the relevant integration to the ignore conf. as necessary.
+After the required changes are done in this repository and in the content repository, the reviewer should add the 'native image approved' label which will re-trigger the workflow and pass the validation.

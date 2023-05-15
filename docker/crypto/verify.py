@@ -1,5 +1,6 @@
 from cryptography.fernet import Fernet
 import msal
+import OpenSSL.crypto
 from bs4 import BeautifulSoup
 # Make sure cryptograph works
 key = Fernet.generate_key()

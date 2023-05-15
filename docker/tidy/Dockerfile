@@ -1,12 +1,12 @@
 
-FROM demisto/crypto:1.0.0.28507
+FROM demisto/crypto:1.0.0.58768
 
 COPY requirements.txt .
 COPY ansible /home/demisto/ansible
 COPY ansible.cfg /etc/ansible/ansible.cfg
 
 RUN apk --update add --no-cache --virtual .build-dependencies \
-     libressl-dev musl-dev libffi-dev openssl-dev build-base \
+    musl-dev libffi-dev openssl-dev build-base \
     && pip install --no-cache-dir -r requirements.txt \
     && apk del .build-dependencies
 RUN apk --update add --no-cache openssl ca-certificates sshpass openssh-client rsync

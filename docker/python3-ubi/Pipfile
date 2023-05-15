@@ -1,0 +1,20 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+requests = {extras = ["socks"],version = "*"}
+olefile = "*"
+python-dateutil = "*"
+dateparser = "*"
+pyyaml = "*"
+funcy = "*"
+tldextract = "*"
+more-itertools = "*"
+defusedxml = "*"
+
+[requires]
+python_version = "3.10"

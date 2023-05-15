@@ -1,4 +1,4 @@
-FROM demisto/python3:3.10.4.29342
+FROM demisto/python3:3.10.11.58677
 
 COPY requirements.txt .
 

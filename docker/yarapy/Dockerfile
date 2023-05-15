@@ -1,9 +1,9 @@
 
-FROM demisto/python3-deb:3.9.6.24019
+FROM demisto/python3-deb:3.10.11.57890
 
 COPY requirements.txt .
 
-RUN apt-get update && apt-get -t buster-backports install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y --no-install-recommends \
   yara \
   && rm -rf /var/lib/apt/lists/*
 

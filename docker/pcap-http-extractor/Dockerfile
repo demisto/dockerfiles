@@ -1,5 +1,5 @@
 
-FROM demisto/python3-deb:3.9.6.22912
+FROM demisto/python3-deb:3.10.11.57890
 
 COPY requirements.txt .
 
@@ -12,6 +12,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   python-dev \
 && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
   tshark \
 && rm -rf /var/lib/apt/lists/*

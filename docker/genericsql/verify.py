@@ -5,7 +5,7 @@ import psycopg2
 import cx_Oracle
 
 assert 'FreeTDS' in pyodbc.drivers()
-assert 'ODBC Driver 17 for SQL Server' in pyodbc.drivers()
+assert 'ODBC Driver 18 for SQL Server' in pyodbc.drivers(), pyodbc.drivers()
 
 try:
     # make sure oracle manages to load tns client libraries.

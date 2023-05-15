@@ -1,0 +1,1 @@
+../../pan-os-python/verify.py

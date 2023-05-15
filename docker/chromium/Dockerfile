@@ -1,9 +1,10 @@
-# Last modified: Wed, 06 Jul 2022 18:05:52 +0000
-FROM demisto/python3-deb:3.10.4.27798
+# Last modified: 2023-04-27T16:38:21.412665+00:00
+FROM demisto/python3-deb:3.10.11.56078
+
 
 COPY requirements.txt .
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
   python3-dev \
   wget \
   libxss1 \
@@ -39,6 +40,7 @@ RUN apt-get update && apt-get -t bullseye-backports install -y --no-install-reco
 && curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
 && echo "deb [arch=amd64]  http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
 && apt-get -y update && apt-get install -y google-chrome-stable \
+&& apt-get install -y tigervnc-standalone-server x11-utils imagemagick \
 && ./download_chromedriver.sh \
 && unzip chromedriver_linux64.zip \
 && mv chromedriver /usr/bin/chromedriver \

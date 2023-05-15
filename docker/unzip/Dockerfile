@@ -1,13 +1,21 @@
 
-FROM demisto/python3:3.9.6.22912
+FROM demisto/python3-deb:3.10.11.57890
 
 COPY requirements.txt .
 
-RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git \
-  && pip install --no-cache-dir -r requirements.txt \
-  && apk del .build-dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  gcc \
+  python3-dev \
+&& pip install --no-cache-dir -r requirements.txt \
+&& apt-get purge -y --auto-remove \
+  gcc \
+  python3-dev \
+&& rm -rf /var/lib/apt/lists/*
 
-RUN apk --update add --no-cache p7zip
+RUN apt-get update && apt-get install -y --no-install-recommends p7zip-full \
+  && rm -rf /var/lib/apt/lists/*
 
-# installs unrar
-RUN apk --update add --no-cache unrar
+# installs unrar requires non-free repo
+RUN sed -i.org 's/bullseye[^ ]* main$/& contrib non-free/g' /etc/apt/sources.list \
+  && apt-get update && apt-get install -y --no-install-recommends unrar \
+  && rm -rf /var/lib/apt/lists/*
