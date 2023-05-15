@@ -25,7 +25,7 @@ RUN dnf update --nodocs -y  \
     && wget https://www.centos.org/keys/RPM-GPG-KEY-CentOS-Official \
     && rpm --import RPM-GPG-KEY-CentOS-Official \
     && mv repos/* /etc/yum.repos.d/ \
-    && dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git unzip llvm-libs libXpm \
+    && dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git unzip llvm-libs libXpm iproute \
     && dnf install -y --nodocs --enablerepo=$ROCKY_BASE --enablerepo=$ROCKY_RELEASE tigervnc-server-minimal xorg-x11-utils google-chrome-stable \
     && dnf install -y --nodocs --enablerepo=$ROCKY_BASE --enablerepo=$ROCKY_RELEASE --enablerepo=$FEDORA_EPEL ImageMagick \
     && ./download_chromedriver.sh \
