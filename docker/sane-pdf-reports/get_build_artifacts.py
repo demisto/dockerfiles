@@ -76,12 +76,12 @@ def download_artifacts(artifacts):
 
 
 def main():
-    logging.basicConfig(format='%(message)s', level=logging.INFO)
-    args = get_args()
-    project = args["project"]
-    branch = args["branch"]
-    filter = args["filter"]
-    org = args["organization"]
+    # logging.basicConfig(format='%(message)s', level=logging.INFO)
+    # args = get_args()
+    project = 'dockerfiles'
+    branch = 'mirroring_gitlab_test'
+    filter = ''
+    org = 'demisto'
 
     base_url = '{}/{}/{}'.format(API_URL, org, project)
 
