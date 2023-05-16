@@ -5,6 +5,7 @@
 This repository's `master` branch tracks images pushed to the official Demisto Docker Hub organization at: https://hub.docker.com/u/demisto/. Other branches` images are pushed to [devdemisto](https://hub.docker.com/u/devdemisto).
 
 **Note:** We generate nightly information about packages and os dependencies used in each of Demisto's docker images. Checkout the `dockerfiles-info` project [README](https://github.com/demisto/dockerfiles-info/blob/master/README.md) for a full listing.
+
 ## Contributing
 Contributions are welcome and appreciated. To contribute follow the [Getting Started](#getting-started) section and submit a PR. 
 
