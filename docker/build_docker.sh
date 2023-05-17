@@ -401,8 +401,7 @@ CIRCLE_ARTIFACTS="artifacts"
 if [[ ! -d $CIRCLE_ARTIFACTS ]]; then
   mkdir $CIRCLE_ARTIFACTS
 fi
-echo $PUSHED_DOCKERS
-echo $PUSHED_DOCKERS > $CIRCLE_ARTIFACTS/pushed_dockers.txt
+
 echo $DIFF_COMPARE > $CIRCLE_ARTIFACTS/diff_compare.txt
 echo $SCRIPT_DIR > $CIRCLE_ARTIFACTS/script_dir.txt
 echo $CURRENT_DIR > $CIRCLE_ARTIFACTS/current_dir.txt
@@ -423,3 +422,5 @@ for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | so
         echo ">>>>>>>>>>>>>>> `date`: Done docker build <<<<<<<<<<<<<"
     fi
 done
+echo "Successfully pushed $PUSHED_DOCKERS"
+echo $PUSHED_DOCKERS > $CIRCLE_ARTIFACTS/pushed_dockers.txt
