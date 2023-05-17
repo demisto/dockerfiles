@@ -77,9 +77,9 @@ RUN sed -i s/DEFAULT@SECLEVEL=2/DEFAULT@SECLEVEL=1/g /etc/ssl/openssl.cnf \
   && sed -i s/TLSv1.2/TLSv1/g /etc/ssl/openssl.cnf
 
 # Install kerberos
-RUN apt-get update && apt-get install -y --no-install-recommends \
-krb5-user
+# RUN apt-get update && apt-get install -y --no-install-recommends \
+# krb5-user
 
 # Copy kerberos configuration files
 COPY copy_kerberos_conf_files.sh .
-ENTRYPOINT ["./copy_kerberos_conf_files.sh"]
+ENTRYPOINT ["sh", "./copy_kerberos_conf_files.sh"]

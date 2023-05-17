@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cp krb5.conf /etc/krb5.conf
-cp $USER.keytab /etc/$USER.keytab
+cp /etc/krb5.conf /etc/krb5.conf
+cp /etc/$USER.keytab /etc/$USER.keytab
 
 exec "$@"
