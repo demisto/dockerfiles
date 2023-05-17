@@ -44,7 +44,7 @@ RUN \
   add-apt-repository --remove ppa:openjdk-r/ppa
 
 RUN \
-  export GOROlolOT=/usr/local/go && export PATH=$PATH:$GOROOT/bin && \
+  export GOROOT=/usr/local/go && export PATH=$PATH:$GOROOT/bin && \
   curl -o go.tar.gz https://storage.googleapis.com/golang/go1.16.linux-amd64.tar.gz && \
   tar -C /usr/local -xzf go.tar.gz
 
