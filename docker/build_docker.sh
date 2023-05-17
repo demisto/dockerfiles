@@ -4,6 +4,7 @@
 set -e
 
 REVISION=${CIRCLE_BUILD_NUM:-`date +%s`}
+PUSHED_DOCKERS=''
 CURRENT_DIR=`pwd`
 SCRIPT_DIR=$(dirname ${BASH_SOURCE})
 DOCKER_SRC_DIR=${SCRIPT_DIR}
@@ -289,6 +290,8 @@ function docker_build {
     if docker_login; then
         env DOCKER_CONTENT_TRUST=$docker_trust DOCKER_CONFIG="${DOCKER_CONFIG}"  docker push ${image_full_name}
         echo "Done docker push for: ${image_full_name}"
+        PUSHED_DOCKERS="$PUSHED_DOCKERS,${image_full_name}"
+        echo "debug pushed_dockers $PUSHED_DOCKERS"
         if [[ "$docker_trust" == "1" ]]; then
             commit_dockerfiles_trust
         fi
@@ -398,6 +401,7 @@ CIRCLE_ARTIFACTS="artifacts"
 if [[ ! -d $CIRCLE_ARTIFACTS ]]; then
   mkdir $CIRCLE_ARTIFACTS
 fi
+echo $PUSHED_DOCKERS > $CIRCLE_ARTIFACTS/pushed_dockers.txt
 echo $DIFF_COMPARE > $CIRCLE_ARTIFACTS/diff_compare.txt
 echo $SCRIPT_DIR > $CIRCLE_ARTIFACTS/script_dir.txt
 echo $CURRENT_DIR > $CIRCLE_ARTIFACTS/current_dir.txt
