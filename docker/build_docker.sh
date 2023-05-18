@@ -422,5 +422,5 @@ for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | so
         echo ">>>>>>>>>>>>>>> `date`: Done docker build <<<<<<<<<<<<<"
     fi
 done
-echo "Successfully pushed $PUSHED_DOCKERS"
 echo $PUSHED_DOCKERS > $CIRCLE_ARTIFACTS/pushed_dockers.txt
+echo "Successfully pushed $PUSHED_DOCKERS"
