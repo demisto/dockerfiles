@@ -1,4 +1,4 @@
-FROM alpine:3.17.2 as files-src
+FROM alpine:3.17.3 as files-src
 RUN mkdir /ml
 COPY ./encrypted_model.b /ml/encrypted_model.b
 
@@ -11,18 +11,18 @@ RUN unzip /distilled_bert_base_uncased_tokenizer.zip -d /ml \
   && rm /distilled_bert_base_uncased_tokenizer.zip \
   && chmod -R 775 /ml
 
-FROM demisto/python3-deb:3.10.9.40424
+FROM demisto/python3-deb:3.10.10.49238
 ENV TRANSFORMERS_CACHE /ml/.cache
-COPY requirements.txt .
+COPY Pipfile Pipfile
+COPY Pipfile.lock Pipfile.lock
 
 RUN apt-get update \
 && apt-get install -y --no-install-recommends \
   gcc \
-  python3-dev gfortran wget git g++ pkg-config libhdf5-dev \
-&& pip install --no-cache-dir -r requirements.txt \
-&& pip install torch -f https://download.pytorch.org/whl/torch_stable.html\
+  python3-dev pipenv gfortran wget git g++ pkg-config libhdf5-dev \
+&& pipenv install --system \
 && apt-get purge -y --auto-remove gcc \
-  python3-dev gfortran wget git g++ pkg-config libhdf5-dev
+  python3-dev gfortran wget git g++ pkg-config libhdf5-dev pipenv
 COPY demisto_ml-0.2.tar.gz .
 RUN pip install demisto_ml-0.2.tar.gz
 RUN rm -rf /var/lib/apt/lists/*

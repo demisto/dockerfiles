@@ -212,29 +212,29 @@ aliyun-python-sdk-core = ">=2.11.5"
 
 [[package]]
 name = "ansible"
-version = "7.1.0"
+version = "7.5.0"
 description = "Radically simple IT automation"
 category = "main"
 optional = false
 python-versions = ">=3.9"
 files = [
-    {file = "ansible-7.1.0-py3-none-any.whl", hash = "sha256:dd6d24dab08793e416eb1564ea716c586caeb104d4abbcada05bed94f9cd01cc"},
-    {file = "ansible-7.1.0.tar.gz", hash = "sha256:1e47238c4aa9e68c0c5367a3fd707ba6c3949b4aaf912b06440ad78dd2bf018d"},
+    {file = "ansible-7.5.0-py3-none-any.whl", hash = "sha256:a2deadeb8a199abfbd7c1960bc126697be517ac4310b2f59eb2190706e6a2637"},
+    {file = "ansible-7.5.0.tar.gz", hash = "sha256:4f08ca25bb29005c1afc4125e837882ad7a2c67ff0cc9d1a361b89ad09cf8c44"},
 ]
 
 [package.dependencies]
-ansible-core = ">=2.14.1,<2.15.0"
+ansible-core = ">=2.14.5,<2.15.0"
 
 [[package]]
 name = "ansible-core"
-version = "2.14.1"
+version = "2.14.5"
 description = "Radically simple IT automation"
 category = "main"
 optional = false
 python-versions = ">=3.9"
 files = [
-    {file = "ansible-core-2.14.1.tar.gz", hash = "sha256:589257f2560fffd5d4465352cd4504e2cbfc418ba49e0c4265cd54e16070c938"},
-    {file = "ansible_core-2.14.1-py3-none-any.whl", hash = "sha256:06e136c8eda4d8695251995d3c3efa612ebb3ac66948bf42492d4c7b46a75ff2"},
+    {file = "ansible-core-2.14.5.tar.gz", hash = "sha256:8c4eed76ce458b4a37334a0802df29488ecf9f8af38c3111069c96b17b205530"},
+    {file = "ansible_core-2.14.5-py3-none-any.whl", hash = "sha256:bc1755f43bdddac574607e959010f98256ff87068ca7e23be5a9d335f6ebf01e"},
 ]
 
 [package.dependencies]
@@ -358,21 +358,15 @@ portalocker = ">=1.6,<3"
 
 [[package]]
 name = "azure-common"
-version = "1.1.11"
+version = "1.1.28"
 description = "Microsoft Azure Client Library for Python (Common)"
 category = "main"
 optional = false
 python-versions = "*"
 files = [
-    {file = "azure-common-1.1.11.zip", hash = "sha256:a60e37117684a168022af2c5e537448ad878d4ad8e45f147512eae2102f856af"},
-    {file = "azure_common-1.1.11-py2.py3-none-any.whl", hash = "sha256:9f158d0b1d4500af829b46dab238b52b32f3978c4ed269b9fead6554ebba4876"},
+    {file = "azure-common-1.1.28.zip", hash = "sha256:4ac0cd3214e36b6a1b6a442686722a5d8cc449603aa833f3f0f40bda836704a3"},
+    {file = "azure_common-1.1.28-py2.py3-none-any.whl", hash = "sha256:5c12d3dcf4ec20599ca6b0d3e09e86e146353d443e7fcc050c9a19c1f9df20ad"},
 ]
-
-[package.dependencies]
-azure-nspkg = ">=2.0.0"
-
-[package.extras]
-autorest = ["msrestazure (>=0.4.0,<2.0.0)"]
 
 [[package]]
 name = "azure-core"
@@ -1008,20 +1002,20 @@ msrestazure = ">=0.4.32,<2.0.0"
 
 [[package]]
 name = "azure-mgmt-trafficmanager"
-version = "0.50.0"
+version = "0.51.0"
 description = "Microsoft Azure Traffic Manager Client Library for Python"
 category = "main"
 optional = false
 python-versions = "*"
 files = [
-    {file = "azure-mgmt-trafficmanager-0.50.0.zip", hash = "sha256:126167eaa82b443b5b71394050ec292f45074701232bdbdda71f636e9b46516b"},
-    {file = "azure_mgmt_trafficmanager-0.50.0-py2.py3-none-any.whl", hash = "sha256:65796588ffbeac45bf73668977131c317b64d6a3f32faecdc5cbf9683d48132c"},
+    {file = "azure-mgmt-trafficmanager-0.51.0.zip", hash = "sha256:fc8ae77022cfe52fda4379a2f31e0b857574d536e41291a7b569b5c0f4104186"},
+    {file = "azure_mgmt_trafficmanager-0.51.0-py2.py3-none-any.whl", hash = "sha256:672f909459e70d41eb8d7bc619839cd60eb2cea2fd20dc7924b7e9670ea8aedf"},
 ]
 
 [package.dependencies]
 azure-common = ">=1.1,<2.0"
-azure-mgmt-nspkg = ">=2.0.0"
-msrestazure = ">=0.4.27,<2.0.0"
+msrest = ">=0.5.0"
+msrestazure = ">=0.4.32,<2.0.0"
 
 [[package]]
 name = "azure-mgmt-web"
@@ -1266,6 +1260,8 @@ files = [
     {file = "cryptography-39.0.1-cp36-abi3-win32.whl", hash = "sha256:fe913f20024eb2cb2f323e42a64bdf2911bb9738a15dba7d3cce48151034e3a8"},
     {file = "cryptography-39.0.1-cp36-abi3-win_amd64.whl", hash = "sha256:ced4e447ae29ca194449a3f1ce132ded8fcab06971ef5f618605aacaa612beac"},
     {file = "cryptography-39.0.1-pp38-pypy38_pp73-macosx_10_12_x86_64.whl", hash = "sha256:807ce09d4434881ca3a7594733669bd834f5b2c6d5c7e36f8c00f691887042ad"},
+    {file = "cryptography-39.0.1-pp38-pypy38_pp73-manylinux_2_28_aarch64.whl", hash = "sha256:c5caeb8188c24888c90b5108a441c106f7faa4c4c075a2bcae438c6e8ca73cef"},
+    {file = "cryptography-39.0.1-pp38-pypy38_pp73-manylinux_2_28_x86_64.whl", hash = "sha256:4789d1e3e257965e960232345002262ede4d094d1a19f4d3b52e48d4d8f3b885"},
     {file = "cryptography-39.0.1-pp38-pypy38_pp73-win_amd64.whl", hash = "sha256:96f1157a7c08b5b189b16b47bc9db2332269d6680a196341bf30046330d15388"},
     {file = "cryptography-39.0.1-pp39-pypy39_pp73-macosx_10_12_x86_64.whl", hash = "sha256:e422abdec8b5fa8462aa016786680720d78bdce7a30c652b7fadf83a4ba35336"},
     {file = "cryptography-39.0.1-pp39-pypy39_pp73-manylinux_2_17_aarch64.manylinux2014_aarch64.manylinux_2_24_aarch64.whl", hash = "sha256:b0afd054cd42f3d213bf82c629efb1ee5f22eba35bf0eec88ea9ea7304f511a2"},
@@ -1291,22 +1287,24 @@ tox = ["tox"]
 
 [[package]]
 name = "dnspython"
-version = "2.1.0"
+version = "2.3.0"
 description = "DNS toolkit"
 category = "main"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7,<4.0"
 files = [
-    {file = "dnspython-2.1.0-py3-none-any.whl", hash = "sha256:95d12f6ef0317118d2a1a6fc49aac65ffec7eb8087474158f42f26a639135216"},
-    {file = "dnspython-2.1.0.zip", hash = "sha256:e4a87f0b573201a0f3727fa18a516b055fd1107e0e5477cded4a2de497df1dd4"},
+    {file = "dnspython-2.3.0-py3-none-any.whl", hash = "sha256:89141536394f909066cabd112e3e1a37e4e654db00a25308b0f130bc3152eb46"},
+    {file = "dnspython-2.3.0.tar.gz", hash = "sha256:224e32b03eb46be70e12ef6d64e0be123a64e621ab4c0822ff6d450d52a540b9"},
 ]
 
 [package.extras]
-curio = ["curio (>=1.2)", "sniffio (>=1.1)"]
-dnssec = ["cryptography (>=2.6)"]
-doh = ["requests", "requests-toolbelt"]
-idna = ["idna (>=2.1)"]
-trio = ["sniffio (>=1.1)", "trio (>=0.14.0)"]
+curio = ["curio (>=1.2,<2.0)", "sniffio (>=1.1,<2.0)"]
+dnssec = ["cryptography (>=2.6,<40.0)"]
+doh = ["h2 (>=4.1.0)", "httpx (>=0.21.1)", "requests (>=2.23.0,<3.0.0)", "requests-toolbelt (>=0.9.1,<0.11.0)"]
+doq = ["aioquic (>=0.9.20)"]
+idna = ["idna (>=2.1,<4.0)"]
+trio = ["trio (>=0.14,<0.23)"]
+wmi = ["wmi (>=1.5.1,<2.0.0)"]
 
 [[package]]
 name = "docutils"
@@ -1372,14 +1370,14 @@ reauth = ["pyu2f (>=0.1.5)"]
 
 [[package]]
 name = "hcloud"
-version = "1.18.2"
+version = "1.19.0"
 description = "Official Hetzner Cloud python library"
 category = "main"
 optional = false
 python-versions = ">3.5"
 files = [
-    {file = "hcloud-1.18.2-py2.py3-none-any.whl", hash = "sha256:fcd73c7aab1d6e729333697e5214b26727775eccdbfb50effd1863c3424caa59"},
-    {file = "hcloud-1.18.2.tar.gz", hash = "sha256:37bd5ba56387e3c491c5babd3e08ab91d5f0390cd5e880e4dfea19e21681bc9e"},
+    {file = "hcloud-1.19.0-py2.py3-none-any.whl", hash = "sha256:5b7c99f7dca8e52e124a4ced3368afdaefc0740df7c5f7894879b6be1aac0e79"},
+    {file = "hcloud-1.19.0.tar.gz", hash = "sha256:20a80af1441854f57cce6d30aa6572143791bf487dfb58b0277221eb2ad720e3"},
 ]
 
 [package.dependencies]
@@ -2371,4 +2369,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "3081289fd706c1702f846ebc2c47f0e8c240e4877377f226d76b55e4edeb96b8"
+content-hash = "2c4e76a327c1c665e4b9d4cdc1f6d8b258e3c33309ad7fd31dd6783e62d4501d"
