@@ -2,7 +2,7 @@
 # NOTE: THIS DOCKERFILE IS BASED ON: https://raw.githubusercontent.com/docker-library/python/f1e613f48eb4fc88748b36787f5ed74c14914636/2.7/buster/slim/Dockerfile
 # We only change to use the latest debian version. 
 
-# Last modified: 2023-05-04T00:12:35.039225+00:00
+# Last modified: 2023-05-24T00:12:20.162914+00:00
 FROM debian:bullseye-slim
 
 # ensure local python is preferred over distribution python
