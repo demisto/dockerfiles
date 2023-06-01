@@ -1,4 +1,4 @@
-import M2Crypto
+import syslogmp
 
 
-print("All is good. M2Crypto imported successfully")
+print("All is good. syslogmp imported successfully from commvault image.")
