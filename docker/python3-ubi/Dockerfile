@@ -1,7 +1,7 @@
 ARG BASE_UBI_TAG=ubi-minimal:9.2
 ARG BASE_UBI_VERSION=ubi9
 
-FROM registry.access.redhat.com/${BASE_UBI_VERSION}:${BASE_UBI_TAG} as build
+FROM registry.access.redhat.com/${BASE_UBI_VERSION}/${BASE_UBI_TAG} as build
 
 RUN microdnf upgrade -y --nodocs && \
     microdnf install -y --nodocs \
