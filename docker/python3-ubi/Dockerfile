@@ -1,10 +1,10 @@
-ARG BASE_UBI_TAG=ubi-minimal:9.2
+ARG BASE_UBI_TAG=9.1
 ARG BASE_UBI_VERSION=ubi9
 
-FROM registry.access.redhat.com/${BASE_UBI_VERSION}/${BASE_UBI_TAG} as build
+FROM registry.access.redhat.com/${BASE_UBI_VERSION}:${BASE_UBI_TAG} as build
 
-RUN microdnf upgrade -y --nodocs && \
-    microdnf install -y --nodocs \
+RUN dnf upgrade -y --nodocs && \
+    dnf install -y --nodocs \
        bzip2-devel \
        expat-devel \
        gcc \
@@ -16,8 +16,8 @@ RUN microdnf upgrade -y --nodocs && \
        wget \
        zlib-devel \
        xz-devel && \
-    microdnf clean all && \
-    rm -rf /var/cache/dnf /var/cache/microdnf
+    dnf clean all && \
+    rm -rf /var/cache/dnf
 
 # install python3
 RUN wget https://www.python.org/ftp/python/3.10.8/Python-3.10.8.tgz && \
@@ -49,10 +49,10 @@ RUN pip3.10 install -r requirements.txt
 
 FROM registry.access.redhat.com/${BASE_UBI_VERSION}:${BASE_UBI_TAG}
 
-RUN microdnf update -y --nodocs && \
-    microdnf install -y --nodocs procps-ng && \
-    microdnf clean all && \
-    rm -rf /var/cache/dnf /var/cache/microdnf
+RUN dnf update -y --nodocs && \
+    dnf install -y --nodocs procps-ng && \
+    dnf clean all && \
+    rm -rf /var/cache/dnf
 
 ENV PATH /usr/local/bin:/home/python/.local/bin:$PATH
 
