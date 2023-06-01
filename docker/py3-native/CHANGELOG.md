@@ -1,6 +1,8 @@
 # py3-native Changelog
 
 ## Unreleased
+
+## 8.3.0
 * Updated the *LibreOffice* to the following version: **7.5.3**
 * Added the *iproute* library to allow support for the **DockerHardeningCheck** script.
 
