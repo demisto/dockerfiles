@@ -1,4 +1,4 @@
-ARG BASE_UBI_TAG=9.1
+ARG BASE_UBI_TAG=9.2
 ARG BASE_UBI_VERSION=ubi9
 
 FROM registry.access.redhat.com/${BASE_UBI_VERSION}:${BASE_UBI_TAG} as build
