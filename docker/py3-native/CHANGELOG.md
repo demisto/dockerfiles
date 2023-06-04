@@ -1,6 +1,11 @@
 # py3-native Changelog
 
 ## Unreleased
+* Updated py3-native to be based on ubi-9.2.
+
+## 8.3.0
+* Updated the *LibreOffice* to the following version: **7.5.3**
+* Added the *iproute* library to allow support for the **DockerHardeningCheck** script.
 
 ## 8.2.0
 * Updated py3-native to be based on ubi-9.1.
