@@ -82,7 +82,7 @@ if CIRCLE_PULL_REQUEST will try to get issue id from last commit comment
         "Get started by pulling the image:\n" +
         "```\n" +
         "docker pull {}\n".format(args.docker_image) +
-        "```\n\n" +
+        "```\n" +
         docker_info
     )
     print("Going to post comment:\n\n{}".format(message))
