@@ -59,10 +59,7 @@ if CIRCLE_PULL_REQUEST will try to get issue id from last commit comment
         print("Issue id found from last commit comment: " + issue_id)
         post_url = "https://api.github.com/repos/demisto/dockerfiles/issues/{}/comments".format(issue_id)
     inspect_format = '''
-{{ range $env := .Config.Env }}
-{{ if eq $env "DEPRECATED_IMAGE" }}
-## 🔴 IMPORTANT: This image is deprecated 🔴
-{{ end }}{{ end }}
+{{ range $env := .Config.Env }}{{ if eq $env "DEPRECATED_IMAGE=true" }}## 🔴 IMPORTANT: This image is deprecated 🔴{{ end }}{{ end }}
 ## Docker Metadata
 - Image ID: `{{ .Id }}`
 - Created: `{{ .Created }}`
