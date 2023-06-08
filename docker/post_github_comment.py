@@ -58,14 +58,17 @@ if CIRCLE_PULL_REQUEST will try to get issue id from last commit comment
         issue_id = m.group(1)
         print("Issue id found from last commit comment: " + issue_id)
         post_url = "https://api.github.com/repos/demisto/dockerfiles/issues/{}/comments".format(issue_id)
-    inspect_format = '''
-- Image ID: `{{ .Id }}`
-- Created: `{{ .Created }}`
-- Arch: `{{ .Os }}`/`{{ .Architecture }}`
-{{ if .Config.Entrypoint }}- Entrypoint: `{{ json .Config.Entrypoint }}`
-{{ end }}{{ if .Config.Cmd }}- Command: `{{ json .Config.Cmd }}`
-{{ end }}- Environment:{{ range .Config.Env }}{{ "\\n" }}  - `{{ . }}`{{ end }}
-- Labels:{{ range $key, $value := .ContainerConfig.Labels }}{{ "\\n" }}  - `{{ $key }}:{{ $value }}`{{ end }}
+    inspect_format = f'''
+{{{{ range $env := .Config.Env }}}}{{{{ if eq $env "DEPRECATED_IMAGE=true" }}}}## 🔴 IMPORTANT: This image is deprecated 🔴{{{{ end }}}}{{{{ end }}}}
+## Docker Metadata
+- Image Size: `{get_docker_image_size(args.docker_image)}`
+- Image ID: `{{{{ .Id }}}}`
+- Created: `{{{{ .Created }}}}`
+- Arch: `{{{{ .Os }}}}`/`{{{{ .Architecture }}}}`
+{{{{ if .Config.Entrypoint }}}}- Entrypoint: `{{{{ json .Config.Entrypoint }}}}`
+{{{{ end }}}}{{{{ if .Config.Cmd }}}}- Command: `{{{{ json .Config.Cmd }}}}`
+{{{{ end }}}}- Environment:{{{{ range .Config.Env }}}}{{{{ "\\n" }}}}  - `{{{{ . }}}}`{{{{ end }}}}
+- Labels:{{{{ range $key, $value := .ContainerConfig.Labels }}}}{{{{ "\\n" }}}}  - `{{{{ $key }}}}:{{{{ $value }}}}`{{{{ end }}}}
 '''
     docker_info = subprocess.check_output(["docker", "inspect", "-f", inspect_format, args.docker_image]).decode()
     base_name = args.docker_image.split(':')[0]
@@ -79,9 +82,7 @@ if CIRCLE_PULL_REQUEST will try to get issue id from last commit comment
         "Get started by pulling the image:\n" +
         "```\n" +
         "docker pull {}\n".format(args.docker_image) +
-        "```\n\n" +
-        "## Docker Metadata\n" +
-        "- Image Size: `{}`\n".format(get_docker_image_size((args.docker_image))) +
+        "```\n" +
         docker_info
     )
     print("Going to post comment:\n\n{}".format(message))
