@@ -1,5 +1,6 @@
 
-FROM demisto/powershell-ubuntu:7.1.3.22925
+FROM demisto/powershell-ubuntu:7.3.0.49844
+
 # ensure local python is preferred over distribution python
 ENV PATH /usr/local/bin:$PATH
 
@@ -10,7 +11,7 @@ ENV LANG C.UTF-8
 ENV PYTHONIOENCODING UTF-8
 
 # runtime dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
 		ca-certificates \
 		netbase \
 	&& rm -rf /var/lib/apt/lists/*

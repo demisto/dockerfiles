@@ -1,5 +1,5 @@
 
-FROM demisto/python3-deb:3.9.6.24019
+FROM demisto/python3-deb:3.10.12.62632
 
 COPY requirements.txt .
 COPY odbcinst.ini /etc/odbcinst.ini
@@ -47,11 +47,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Install the Microsoft ODBC driver for SQL Server (Linux)
 RUN apt-get update \
-&& apt-get install -y --allow-downgrades gpgv=2.2.12-1+deb10u1 gnupg2 curl apt-utils \
+&& apt-get install -y --allow-downgrades gpgv gnupg2 curl apt-utils \
 && curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
-&& curl https://packages.microsoft.com/config/debian/10/prod.list > /etc/apt/sources.list.d/mssql-release.list \
+&& curl https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list \
 && apt-get update \
-&& ACCEPT_EULA=Y apt-get install msodbcsql17 \
+&& ACCEPT_EULA=Y apt-get install msodbcsql18 \
 && apt-get install -y unixodbc-dev libgssapi-krb5-2
 
 # install python packages

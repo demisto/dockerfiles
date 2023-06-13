@@ -1,9 +1,9 @@
 
-FROM demisto/python3:3.9.6.22912
-
+FROM demisto/python3:3.10.12.62631
+ENV DEMISTO_SDK_IGNORE_CONTENT_WARNING true
 COPY requirements.txt .
 
-RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget \
+RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base libffi-dev openssl-dev wget \
   && apk add --no-cache git  \
   && apk add --no-cache libstdc++  \
   && apk add --no-cache --upgrade grep  \

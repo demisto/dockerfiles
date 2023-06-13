@@ -1,7 +1,7 @@
 jobs:
   docker_build:
     docker:
-      - image: devdemisto/dockerbuild:1.0.0.14172
+      - image: devdemisto/dockerbuild:1.0.0.43365
     steps:
       - checkout
       - run:
@@ -11,10 +11,10 @@ jobs:
           name: Validate Dependabot Config
           command: ./docker/verify_dependabot.sh
       - setup_remote_docker:
-          version: 20.10.6
+          version: 20.10.17
       - add_ssh_keys:
           fingerprints:
-            - 46:c2:72:91:9d:0e:2d:3c:93:d6:6c:12:31:df:8e:db
+            - 14:9b:f7:c3:6a:d7:bd:34:8d:d6:3f:a7:68:d1:d6:af
       - run:
           name: Run Ironabnk Unit Tests
           command: |
@@ -33,6 +33,7 @@ jobs:
           name: Build Docker Images
           command: |
             ./docker/build_docker.sh
+          no_output_timeout: 60m
       - store_artifacts:
           path: artifacts
           destination: docker_images

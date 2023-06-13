@@ -1,8 +1,8 @@
 
-FROM demisto/crypto:1.0.0.23151
+FROM demisto/crypto:1.0.0.62834
 
 COPY requirements.txt .
 
-RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git \
+RUN apk --update add --no-cache --virtual .build-dependencies python3-dev libffi-dev gcc build-base wget git \
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies

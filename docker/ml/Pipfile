@@ -3,6 +3,12 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 name = "pypi"
 
+[[source]]
+name = "pytorch"
+url = "https://download.pytorch.org/whl/cpu/"
+verify_ssl = true
+default = false
+
 [packages]
 fasttext = "*"
 numpy = "*"
@@ -11,15 +17,19 @@ pandas = "*"
 nltk = "*"
 lime = "*"
 tabulate = "*"
-pycrypto = "*"
+pycryptodome = "*"
 spacy = "*"
 fsspec = "*"
 dill = "*"
 catboost = "*"
 eli5 = "*"
 langdetect = "*"
+onnx = "*"
+onnxruntime = "*"
+transformers = "*"
+torch = {version = "*", extras = ["cpu"], index="pytorch"}
 
 [dev-packages]
 
 [requires]
-python_version = "3.8"
+python_version = "3.10"

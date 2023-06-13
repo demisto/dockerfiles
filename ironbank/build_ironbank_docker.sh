@@ -74,10 +74,13 @@ function build_hardening_manifest {
     echo "Docker image is $DOCKER_IMAGE"
     docker pull $DOCKER_IMAGE
     DOCKER_PACKAGES_METADATA_PATH="$OUTPUT_PATH/docker_packages_metadata.txt"
-    REQUIREMENTS="$(cat $1/requirements.txt)"
 
-    # trim the string output
-    REQUIREMENTS="${REQUIREMENTS#"${REQUIREMENTS%%[![:space:]]*}"}"
+    if [[ -f  "$1/requirements.txt" ]]; then
+      REQUIREMENTS="$(cat $1/requirements.txt)"
+
+      # trim the string output
+      REQUIREMENTS="${REQUIREMENTS#"${REQUIREMENTS%%[![:space:]]*}"}"
+    fi
 
     # Run the base image docker container only when requirements.txt exists
     if [[ ! $REQUIREMENTS ]] || [[ $REQUIREMENTS = "-i https://pypi.org/simple" ]]; then

@@ -4,6 +4,7 @@
 set -e
 
 REVISION=${CIRCLE_BUILD_NUM:-`date +%s`}
+PUSHED_DOCKERS=''
 CURRENT_DIR=`pwd`
 SCRIPT_DIR=$(dirname ${BASH_SOURCE})
 DOCKER_SRC_DIR=${SCRIPT_DIR}
@@ -131,7 +132,8 @@ function commit_dockerfiles_trust {
 # build docker. 
 # Param $1: docker dir with all relevant files
 function docker_build {
-    DOCKER_ORG=${DOCKER_ORG:-devdemisto}    
+    DOCKER_ORG=${DOCKER_ORG:-devdemisto}
+    DOCKER_ORG_DEMISTO=demisto
     image_name=$(basename $1)
     echo "Starting build for dir: $1, image: ${image_name}, pwd: $(pwd)"
     cd $1        
@@ -139,31 +141,93 @@ function docker_build {
         echo "== skipping image [${image_name}] as it is marked devonly =="
         return 0
     fi
+    
     VERSION=$(prop 'version' '1.0.0')    
     VERSION="${VERSION}.${REVISION}"
     echo "${image_name}: using version: ${VERSION}"
     image_full_name="${DOCKER_ORG}/${image_name}:${VERSION}"
+
+    if [[ "$(prop 'deprecated')" ]]; then
+        echo "${DOCKER_ORG_DEMISTO}/${image_name} image is deprecated, checking whether the image is listed in the deprecated list or not"
+        reason=$(prop 'deprecated_reason')        
+        ${PY3CMD} "${DOCKER_SRC_DIR}"/add_image_to_deprecated_or_internal_list.py "${DOCKER_ORG_DEMISTO}"/"${image_name}" "${reason}" "${DOCKER_SRC_DIR}"/deprecated_images.json
+    fi
+
     del_requirements=no
     if [ -f "Pipfile" -a ! -f "requirements.txt" ]; then
         if [ ! -f "Pipfile.lock" ]; then
             echo "Error: Pipfile present without Pipfile.lock. Make sure to commit your Pipfile.lock file"
             return 1
         fi
-        pipenv --rm || echo "Proceeding. It is ok that no virtualenv is available to remove"
-        PIPENV_YES=yes pipenv lock -r > requirements.txt
-        echo "Pipfile lock generated requirements.txt: "
-        cat requirements.txt
-        # del_requirements=yes
+
+        if [[ "$(prop 'dont_generate_requirements')" ]]; then
+          echo 'Not generating requirements as dont_generate_requirements is true' # only implemented for pipenv
+        else
+          pipenv --rm || echo "Proceeding. It is ok that no virtualenv is available to remove"
+          pipenv install --deploy # fails if lock is outdated
+          PIPENV_YES=yes pipenv run pip freeze > requirements.txt
+          echo "Pipfile lock generated requirements.txt: "
+          echo "############ REQUIREMENTS.TXT ############"
+          cat requirements.txt
+          echo "##########################################"
+          [ ! -f requirements.txt ] && echo "WARNING: requirements.txt does not exist, this is ok if python usage is not intended."
+          [ ! -s requirements.txt ] && echo "WARNING: requirements.txt is empty"
+          # del_requirements=yes
+        fi
+
     fi
+
+    if [ -f "pyproject.toml" -a ! -f "requirements.txt" ]; then
+       if [ ! -f "poetry.lock" ]; then
+            echo "Error: pyproject.toml present without poetry.lock. Make sure to commit your poetry.lock file"
+            return 1
+        fi
+
+      echo "starting to install dependencies from poetry..."
+      poetry --version
+      poetry export -f requirements.txt --output requirements.txt --without-hashes
+      echo "poetry.lock generated requirements.txt file: "
+      echo "############ REQUIREMENTS.TXT ############"
+      cat requirements.txt
+      echo "##########################################"
+
+    fi
+
     tmp_dir=$(mktemp -d)
     cp Dockerfile "$tmp_dir/Dockerfile"
     echo "" >> "$tmp_dir/Dockerfile"
     echo "ENV DOCKER_IMAGE=$image_full_name" >> "$tmp_dir/Dockerfile"
+    
+    if [[ "$(prop 'deprecated')" ]]; then
+        echo "ENV DEPRECATED_IMAGE=true" >> "$tmp_dir/Dockerfile"
+        reason=$(prop 'deprecated_reason')
+        echo "ENV DEPRECATED_REASON=\"$reason\"" >> "$tmp_dir/Dockerfile"
+    fi
+    
     docker build -f "$tmp_dir/Dockerfile" . -t ${image_full_name} \
         --label "org.opencontainers.image.authors=Demisto <containers@demisto.com>" \
         --label "org.opencontainers.image.version=${VERSION}" \
         --label "org.opencontainers.image.revision=${CIRCLE_SHA1}"
+
+    if [[ -e "dynamic_version.sh" ]]; then
+      echo "dynamic_version.sh file was found"
+      dynamic_version=$(docker run --rm -i "$image_full_name" sh < dynamic_version.sh)
+      echo "dynamic_version $dynamic_version"
+      VERSION="${dynamic_version}.${REVISION}"
+      image_full_name="${DOCKER_ORG}/${image_name}:${VERSION}"
+
+      # add the last layer and rebuild. Everything shuld be cached besides this layer
+      echo "ENV DOCKER_IMAGE=$image_full_name" >> "$tmp_dir/Dockerfile"
+
+      echo "running docker build again with tag $image_full_name"
+
+      docker build -f "$tmp_dir/Dockerfile" . -t ${image_full_name} \
+        --label "org.opencontainers.image.authors=Demisto <containers@demisto.com>" \
+        --label "org.opencontainers.image.version=${VERSION}" \
+        --label "org.opencontainers.image.revision=${CIRCLE_SHA1}"
+    fi
     rm -rf "$tmp_dir"
+
     if [ ${del_requirements} = "yes" ]; then
         rm requirements.txt
     fi
@@ -184,6 +248,7 @@ function docker_build {
             return 1
         fi
     fi
+    
     if [[ "$(prop 'devonly')" ]]; then
         echo "Skipping license verification for devonly image"
     else
@@ -195,11 +260,13 @@ function docker_build {
         fi
         $PY3CMD ${DOCKER_SRC_DIR}/verify_licenses.py ${image_full_name}
     fi
-    if [ -f "verify.py" ]; then
-        echo "==========================="            
-        echo "Verifying docker image by running the python script verify.py within the docker image"
-        cat verify.py | docker run --rm -i ${image_full_name} python '-'
-    fi
+
+    for filename in `find . -name "*verify.py"`; do
+      echo "==========================="
+      echo "Verifying docker image by running the python script $filename within the docker image"
+      cat $filename | docker run --rm -i ${image_full_name} python '-'
+    done
+
     if [ -f "verify.ps1" ]; then
         echo "==========================="            
         echo "Verifying docker image by running the pwsh script verify.ps1 within the docker image"
@@ -211,13 +278,32 @@ function docker_build {
         docker_trust=1
         echo "using DOCKER_TRUST=${docker_trust} DOCKER_CONFIG=${DOCKER_CONFIG}"
     fi
+
+    if [ -n "$CR_REPO" ] && cr_login; then
+        docker tag ${image_full_name} ${CR_REPO}/${image_full_name}
+        docker push ${CR_REPO}/${image_full_name} > /dev/null
+        echo "Done docker push for cr: ${image_full_name}"
+    else
+        echo "Skipping docker push for cr"
+    fi
+
     if docker_login; then
         env DOCKER_CONTENT_TRUST=$docker_trust DOCKER_CONFIG="${DOCKER_CONFIG}"  docker push ${image_full_name}
         echo "Done docker push for: ${image_full_name}"
+        PUSHED_DOCKERS="${image_full_name},$PUSHED_DOCKERS"
+        echo "debug pushed_dockers $PUSHED_DOCKERS"
         if [[ "$docker_trust" == "1" ]]; then
             commit_dockerfiles_trust
         fi
-        ${DOCKER_SRC_DIR}/post_github_comment.py ${image_full_name}        
+        if ! ${DOCKER_SRC_DIR}/post_github_comment.py ${image_full_name}; then 
+            echo "Failed post_github_comment.py. Will stop build only if not on master"
+            if [ "$CIRCLE_BRANCH" == "master" ]; then
+                echo "Continuing as we are on master branch..."
+            else
+                echo "failing build!!"
+                exit 5
+            fi
+        fi
     else
         echo "Skipping docker push"
         if [ -n "$CI" ]; then
@@ -232,26 +318,17 @@ function docker_build {
 -------------------------
 
 Docker image [$image_full_name] has been saved as an artifact. It is available at the following link: 
-https://${REVISION}-161347705-gh.circle-artifacts.com/0/docker_images/$IMAGENAMESAVE.gz
+https://output.circle-artifacts.com/output/job/${CIRCLE_WORKFLOW_JOB_ID}/artifacts/0/docker_images/$IMAGENAMESAVE.gz
 
 Load it locally into docker by running:
 
 \`\`\`
-curl -L "https://${REVISION}-161347705-gh.circle-artifacts.com/0/docker_images/$IMAGENAMESAVE.gz" | gunzip | docker load
+curl -L "https://output.circle-artifacts.com/output/job/${CIRCLE_WORKFLOW_JOB_ID}/artifacts/0/docker_images/$IMAGENAMESAVE.gz" | gunzip | docker load
 \`\`\`
 
 --------------------------
 EOF
         fi
-    fi
-    
-
-    if [ -n "$CR_REPO" ] && cr_login; then
-        docker tag ${image_full_name} ${CR_REPO}/${image_full_name}
-        docker push ${CR_REPO}/${image_full_name} > /dev/null
-        echo "Done docker push for cr: ${image_full_name}"
-    else
-        echo "Skipping docker push for cr"
     fi
 
 }
@@ -324,6 +401,7 @@ CIRCLE_ARTIFACTS="artifacts"
 if [[ ! -d $CIRCLE_ARTIFACTS ]]; then
   mkdir $CIRCLE_ARTIFACTS
 fi
+
 echo $DIFF_COMPARE > $CIRCLE_ARTIFACTS/diff_compare.txt
 echo $SCRIPT_DIR > $CIRCLE_ARTIFACTS/script_dir.txt
 echo $CURRENT_DIR > $CIRCLE_ARTIFACTS/current_dir.txt
@@ -344,3 +422,5 @@ for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | so
         echo ">>>>>>>>>>>>>>> `date`: Done docker build <<<<<<<<<<<<<"
     fi
 done
+echo $PUSHED_DOCKERS > $CIRCLE_ARTIFACTS/pushed_dockers.txt
+echo "Successfully pushed $PUSHED_DOCKERS"

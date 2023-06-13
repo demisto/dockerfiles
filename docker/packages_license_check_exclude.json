@@ -37,7 +37,9 @@
         },
         "pylint": {
             "docker_images": [
-                "xsoar-tools"
+                "xsoar-tools",
+                "xsoar-tools-hf",
+                "demisto-sdk"
             ],
             "notes": "Used only for executing lint as a utility via cmd interface"
         }

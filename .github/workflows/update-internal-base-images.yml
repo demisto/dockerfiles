@@ -1,0 +1,29 @@
+name: Update internal base images
+
+on:
+  schedule:
+    - cron: '30 0,4,8,12,16,20 * * *'
+  workflow_dispatch:
+
+jobs:
+  update-docker-files:
+    if: ${{ github.repository == 'demisto/dockerFiles' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: run
+        run: |
+            git config --global user.email ""
+            git config --global user.name "auto dockerfiles update"
+            echo "==== $(date): Starting pipenv setup... ===="
+            python -m pip install --upgrade pip
+            pip install pipenv
+            pipenv install
+            echo "==== Finished ===="
+            pipenv run python ./utils/auto_dockerfile_update/update_dockerfiles.py -t internal
+            echo "Done!"

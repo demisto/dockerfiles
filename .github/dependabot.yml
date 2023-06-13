@@ -38,10 +38,6 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: pip
-    directory: /docker/archer
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
     directory: /docker/pykafka
     schedule:
       interval: daily
@@ -62,10 +58,6 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: pip
-    directory: /docker/ldap
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
     directory: /docker/powershell-core
     schedule:
       interval: daily
@@ -82,10 +74,6 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: pip
-    directory: /docker/stix2
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
     directory: /docker/snowflake
     schedule:
       interval: daily
@@ -95,10 +83,6 @@ updates:
       interval: daily
   - package-ecosystem: pip
     directory: /docker/duoadmin
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/pymongo
     schedule:
       interval: daily
   - package-ecosystem: pip
@@ -131,10 +115,6 @@ updates:
       interval: daily
   - package-ecosystem: pip
     directory: /docker/boto3py3
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/vertica
     schedule:
       interval: daily
   - package-ecosystem: pip
@@ -190,14 +170,6 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: pip
-    directory: /docker/elasticsearch
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/circleci
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
     directory: /docker/m2crypto
     schedule:
       interval: daily
@@ -215,10 +187,6 @@ updates:
       interval: daily
   - package-ecosystem: pip
     directory: /docker/google-kms
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/geopy
     schedule:
       interval: daily
   - package-ecosystem: pip
@@ -250,10 +218,6 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: pip
-    directory: /docker/jmespath
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
     directory: /docker/matplotlib
     schedule:
       interval: daily
@@ -274,10 +238,6 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: pip
-    directory: /docker/xlrd-py3
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
     directory: /docker/genericsql
     schedule:
       interval: daily
@@ -286,23 +246,11 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: pip
-    directory: /docker/algorithmia
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
     directory: /docker/py42
     schedule:
       interval: daily
   - package-ecosystem: pip
-    directory: /docker/tld
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
     directory: /docker/python_pancloud_v2
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/threatconnect-sdk
     schedule:
       interval: daily
   - package-ecosystem: pip
@@ -314,19 +262,11 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: pip
-    directory: /docker/aiohttp
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
     directory: /docker/splunksdk
     schedule:
       interval: daily
   - package-ecosystem: pip
     directory: /docker/taxii2
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/zabbix
     schedule:
       interval: daily
   - package-ecosystem: pip
@@ -338,15 +278,7 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: pip
-    directory: /docker/emoji
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
     directory: /docker/pyotrs
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/python_zipfile
     schedule:
       interval: daily
   - package-ecosystem: pip
@@ -390,10 +322,6 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: pip
-    directory: /docker/gql
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
     directory: /docker/smartsheet
     schedule:
       interval: daily
@@ -411,10 +339,6 @@ updates:
       interval: daily
   - package-ecosystem: pip
     directory: /docker/unzip
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/imap
     schedule:
       interval: daily
   - package-ecosystem: pip
@@ -474,15 +398,7 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: pip
-    directory: /docker/cloudshare
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
     directory: /docker/py2-exchangelib
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/feed-parser
     schedule:
       interval: daily
   - package-ecosystem: pip
@@ -514,23 +430,13 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: pip
-    directory: /docker/cyjax
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
     directory: /docker/xsoar-tools
     schedule:
       interval: daily
+    ignore:
+      - dependency-name: "demisto-sdk"
   - package-ecosystem: pip
     directory: /docker/opencv
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/pyjarm
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/paho-mqtt
     schedule:
       interval: daily
   - package-ecosystem: pip
@@ -562,10 +468,6 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: pip
-    directory: /docker/asana
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
     directory: /docker/reversinglabs-sdk-py3
     schedule:
       interval: daily
@@ -575,10 +477,6 @@ updates:
       interval: daily
   - package-ecosystem: pip
     directory: /docker/carbon-black-cloud
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/minio
     schedule:
       interval: daily
   - package-ecosystem: pip
@@ -595,10 +493,6 @@ updates:
       interval: daily
   - package-ecosystem: pip
     directory: /docker/stix
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/sendgrid
     schedule:
       interval: daily
   - package-ecosystem: pip
@@ -630,22 +524,6 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: pip
-    directory: /docker/intezer
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/feed-parser-html
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/python3-arrow
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/tweepy
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
     directory: /docker/jq
     schedule:
       interval: daily
@@ -655,18 +533,6 @@ updates:
       interval: daily
   - package-ecosystem: pip
     directory: /docker/bs4-py3
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/stomp
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/exifread
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/langdetect
     schedule:
       interval: daily
   - package-ecosystem: pip
@@ -696,7 +562,7 @@ updates:
   - package-ecosystem: pip
     directory: /docker/syslog
     schedule:
-     interval: daily
+      interval: daily
   - package-ecosystem: pip
     directory: /docker/accessdata
     schedule:
@@ -713,3 +579,131 @@ updates:
     directory: /docker/py3-tools
     schedule:
       interval: daily
+  - package-ecosystem: pip
+    directory: /docker/py3-tools-ubi
+    schedule:
+      interval: daily
+  - package-ecosystem: pip
+    directory: /docker/pan-os-python
+    schedule:
+      interval: daily
+  - package-ecosystem: pip
+    directory: /docker/parse-emails
+    schedule:
+      interval: daily
+  - package-ecosystem: pip
+    directory: /docker/demisto-sdk
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/ibm-db2
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/rubrik-polaris-sdk-py3
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/opnsense
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/glpi
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/gdetect
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/pydantic-jwt3
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/duoadmin3
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/pycountry
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/exodusintelligence
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/xsoar-tools-hf
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/bottle
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/ippysocks-py3
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/joe-security
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/armorblox
+    schedule:
+      interval: daily
+  - package-ecosystem: pip
+    directory: /docker/keeper-ksm
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/cymruwhois
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/octoxlabs
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/aquatone
+    schedule:
+      interval: daily
+  - package-ecosystem: pip
+    directory: /docker/panw-iot
+    schedule:
+      interval: daily
+  - package-ecosystem: pip
+    directory: /docker/illumio
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/python3-ubi
+    schedule:
+      interval: daily
+  - package-ecosystem: pip
+    directory: /docker/py3-native
+    schedule:
+      interval: daily
+  - package-ecosystem: pip
+    directory: /docker/splunksdk-py3
+    schedule:
+      interval: daily  
+  - package-ecosystem: pip
+    directory: /docker/datadog-api-client
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/processing-image-file
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/oci
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/privx-api
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/xpanse-ml-ev2
+    schedule:
+     interval: daily

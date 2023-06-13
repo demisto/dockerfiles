@@ -1,5 +1,9 @@
 
-FROM demisto/python3:3.9.6.22912
+FROM demisto/python3:3.10.12.62631
+
+RUN mkdir /opt/scripts
+
+COPY scripts /opt/scripts
 
 COPY requirements.txt .
 

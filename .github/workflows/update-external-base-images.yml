@@ -1,0 +1,36 @@
+name: Update external base images
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+  
+
+jobs:
+  update-docker-files:
+    if: github.repository == 'demisto/dockerFiles'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: run
+        run: |
+            git config --global user.email ""
+            git config --global user.name "auto dockerfiles update"
+            echo "==== $(date): Starting pipenv setup... ===="
+            python -m pip install --upgrade pip
+            pip install pipenv
+            pipenv install
+            echo "==== Finished ===="
+            [[ ${{ vars.DISABLE_TIMESTAMP_AUTOUPDATES }} = 'true' ]] && tu_flag="--no-timestamp-updates"
+            echo tu_flag being passed is $tu_flag
+            pipenv run python ./utils/auto_dockerfile_update/update_dockerfiles.py $tu_flag
+            echo "Done!"
+
+
+

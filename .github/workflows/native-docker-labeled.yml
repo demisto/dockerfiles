@@ -1,0 +1,37 @@
+name: Native docker validator
+on:
+  pull_request:
+    branches:
+      - master
+    types: [opened, reopened, synchronize, labeled, unlabeled]
+
+jobs:
+  native_docker_image_labeled:
+    runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]' && contains(github.event.pull_request.title, 'autoupdate') == false && github.repository == 'demisto/dockerFiles'
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v35
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.11"
+      - name: Run native_docker_labeled Script
+        if: contains(github.event.pull_request.labels.*.name, 'native image approved') == false
+        env:
+          CHANGED_FILES: "${{ steps.changed-files.outputs.all_changed_files }}"
+        run: |
+          echo "==== $(date): Starting pipenv setup... ===="
+          python -m pip install --upgrade pip
+          pip install pipenv
+          pwd
+          cd "$GITHUB_WORKSPACE/.github/workflows/native-docker-labeled"
+          pipenv install
+          echo "==== $(date): Running validator... ===="
+          pipenv run ./native_docker_labeled.py -c "$CHANGED_FILES"
+
+
