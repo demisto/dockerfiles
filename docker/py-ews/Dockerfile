@@ -30,6 +30,7 @@ RUN set -eux; \
         gpg-agent \
         dirmngr \
 		uuid-dev \
+		libsqlite3-dev \
 	; \
 	rm -rf /var/lib/apt/lists/*
 
