@@ -23,22 +23,21 @@ RUN apt-get install apt-transport-https ca-certificates gnupg gpgv -y --allow-do
     && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - \
     && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
     && add-apt-repository "deb https://download.docker.com/linux/ubuntu bionic stable"
-# install neo4j
-RUN echo "deb http://httpredir.debian.org/debian stable-backports main" | tee -a /etc/apt/sources.list.d/stable-backports.list \
-    && wget -O - https://debian.neo4j.com/neotechnology.gpg.key | apt-key add - \
-    && echo 'deb https://debian.neo4j.com stable 5' | tee -a /etc/apt/sources.list.d/neo4j.list \
-    && mkdir -p /var/lib/neo4j/plugins \
-    && wget -O /var/lib/neo4j/plugins/apoc-5.5.0-core.jar https://github.com/neo4j/apoc/releases/download/5.5.0/apoc-5.5.0-core.jar
 # installations
 RUN apt-get update
 RUN apt-get install google-cloud-sdk -y && source ~/.bashrc && gsutil --version && gcloud --version
 RUN apt-get install docker-ce-cli -y && source ~/.bashrc && docker --version
 RUN apt-get install kubectl -y && source ~/.bashrc && ! kubectl version --output yaml
 RUN apt-get install openjdk-11-jre && source ~/.bashrc && java -version
-RUN apt-get install neo4j -y && source ~/.bashrc && neo4j --version && neo4j-admin --version
 RUN curl -sSL https://install.python-poetry.org | python3 - && source ~/.bashrc && poetry --version
-# config neo4j
-RUN neo4j_conf_file="/etc/neo4j/neo4j.conf" \
+# install neo4j
+RUN echo "deb http://httpredir.debian.org/debian stable-backports main" | tee -a /etc/apt/sources.list.d/stable-backports.list \
+    && wget -O - https://debian.neo4j.com/neotechnology.gpg.key | apt-key add - \
+    && echo 'deb https://debian.neo4j.com stable 5' | tee -a /etc/apt/sources.list.d/neo4j.list \
+    && mkdir -p /var/lib/neo4j/plugins \
+    && wget -O /var/lib/neo4j/plugins/apoc-5.5.0-core.jar https://github.com/neo4j/apoc/releases/download/5.5.0/apoc-5.5.0-core.jar \
+    && apt-get install neo4j -y && source ~/.bashrc && neo4j --version && neo4j-admin --version \
+    && neo4j_conf_file="/etc/neo4j/neo4j.conf" \
     && echo "dbms.security.procedures.unrestricted=apoc.*" >> $NEO4J_CONF_FILE \
     && echo "dbms.security.procedures.allowlist=apoc.*" >> $NEO4J_CONF_FILE \
     && apoc_conf_file="/etc/neo4j/apoc.conf" \
