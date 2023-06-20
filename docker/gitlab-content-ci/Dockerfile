@@ -17,19 +17,24 @@ RUN curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash 
     && nvm install $NODE_VERSION \
     && nvm alias default $NODE_VERSION \
     && nvm use default
-# Installing the gsutil and docker cli
+
+# Installing the gsutil cli
 RUN apt-get install apt-transport-https ca-certificates gnupg gpgv -y --allow-downgrades\
     && echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" |  tee -a /etc/apt/sources.list.d/google-cloud-sdk.list \
     && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - \
-    && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
-    && add-apt-repository "deb https://download.docker.com/linux/ubuntu bionic stable"
-# installations
-RUN apt-get update
-RUN apt-get install google-cloud-sdk -y && source ~/.bashrc && gsutil --version && gcloud --version
-RUN apt-get install docker-ce-cli -y && source ~/.bashrc && docker --version
+    && apt-get update && apt-get install google-cloud-sdk -y && source ~/.bashrc && gsutil --version && gcloud --version
+
+# Installing the docker cli
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
+    && add-apt-repository "deb https://download.docker.com/linux/ubuntu bionic stable" \
+    && apt-get update \
+    && apt-get install docker-ce-cli -y && source ~/.bashrc && docker --version
 RUN apt-get install kubectl -y && source ~/.bashrc && ! kubectl version --output yaml
+
+# installations
 RUN apt-get install openjdk-11-jre && source ~/.bashrc && java -version
 RUN curl -sSL https://install.python-poetry.org | python3 - && source ~/.bashrc && poetry --version
+
 # install neo4j
 RUN echo "deb http://httpredir.debian.org/debian stable-backports main" | tee -a /etc/apt/sources.list.d/stable-backports.list \
     && wget -O - https://debian.neo4j.com/neotechnology.gpg.key | apt-key add - \
