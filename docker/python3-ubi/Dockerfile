@@ -95,7 +95,7 @@ Options = UnsafeLegacyRenegotiation\n' > /tmp/ssl.cnf \
     && grep -C 10 'Options = UnsafeLegacyRenegotiation' /etc/pki/tls/openssl.cnf
 
 RUN microdnf update -y --nodocs && \
-    microdnf install -y --nodocs shadow-utils && \
+    microdnf install -y --nodocs shadow-utils which && \
     groupadd -g 4000 demisto && \
     useradd -u 4000 -g demisto demisto -s /bin/sh
 
