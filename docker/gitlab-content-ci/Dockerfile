@@ -39,6 +39,7 @@ RUN curl -sSL https://install.python-poetry.org | python3 - && source ~/.bashrc 
 RUN echo "deb http://httpredir.debian.org/debian stable-backports main" | tee -a /etc/apt/sources.list.d/stable-backports.list \
     && wget -O - https://debian.neo4j.com/neotechnology.gpg.key | apt-key add - \
     && echo 'deb https://debian.neo4j.com stable 5' | tee -a /etc/apt/sources.list.d/neo4j.list \
+    && apt-get update \
     && mkdir -p /var/lib/neo4j/plugins \
     && wget -O /var/lib/neo4j/plugins/apoc-5.5.0-core.jar https://github.com/neo4j/apoc/releases/download/5.5.0/apoc-5.5.0-core.jar \
     && apt-get install neo4j -y && source ~/.bashrc && neo4j --version && neo4j-admin --version \
