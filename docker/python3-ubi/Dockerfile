@@ -6,6 +6,7 @@ FROM registry.access.redhat.com/${BASE_UBI_VERSION}/${BASE_UBI_TAG} as build
 RUN microdnf upgrade -y --nodocs && \
     microdnf install -y --nodocs \
        tar \
+       shadow-utils \
        findutils \
        bzip2-devel \
        expat-devel \
