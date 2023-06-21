@@ -6,7 +6,6 @@ FROM registry.access.redhat.com/${BASE_UBI_VERSION}/${BASE_UBI_TAG} as build
 RUN microdnf upgrade -y --nodocs && \
     microdnf install -y --nodocs \
        tar \
-       shadow-utils \
        findutils \
        bzip2-devel \
        expat-devel \
@@ -95,7 +94,9 @@ Options = UnsafeLegacyRenegotiation\n' > /tmp/ssl.cnf \
     && rm /tmp/ssl.cnf \
     && grep -C 10 'Options = UnsafeLegacyRenegotiation' /etc/pki/tls/openssl.cnf
 
-RUN groupadd -g 4000 demisto && \
+RUN microdnf update -y --nodocs && \
+    microdnf install -y --nodocs shadow-utils && \
+    groupadd -g 4000 demisto && \
     useradd -u 4000 -g demisto demisto -s /bin/sh
 
 CMD ["python3"]
