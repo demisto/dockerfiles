@@ -32,7 +32,7 @@ RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
 RUN apt-get install kubectl -y && source ~/.bashrc && ! kubectl version --output yaml
 
 # installations
-RUN apt-get install openjdk-11-jre && source ~/.bashrc && java -version
+RUN apt-get install openjdk-11-jre -y && source ~/.bashrc && java -version
 RUN curl -sSL https://install.python-poetry.org | python3 - && source ~/.bashrc && poetry --version
 
 # install neo4j
