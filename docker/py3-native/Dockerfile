@@ -17,7 +17,7 @@ ARG FEDORA_EPEL=fedora-epel
 # there is not linux_signing_key.pub from google that is not based on sha1
 RUN microdnf update --nodocs -y  \
     && microdnf upgrade -y --nodocs \
-    && microdnf install --nodocs -y wget git \
+    && microdnf install --nodocs -y wget git crypto-policies-scripts \
     && wget https://dl-ssl.google.com/linux/linux_signing_key.pub \
     && update-crypto-policies --set DEFAULT:SHA1 \
     && rpm --import linux_signing_key.pub \
