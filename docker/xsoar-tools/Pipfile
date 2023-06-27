@@ -4,8 +4,8 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-demisto-sdk = "*"
 demisto-py = "*"
+demisto-sdk = "==1.14.3" # this package should be updated manually. No reason this is locked
 
 [dev-packages]
 

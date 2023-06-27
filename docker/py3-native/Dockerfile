@@ -1,4 +1,4 @@
-FROM demisto/py3-tools-ubi:1.0.0.50431
+FROM demisto/py3-tools-ubi:1.0.0.64130
 
 COPY requirements.txt .
 COPY chromium/download_chromedriver.sh .
@@ -6,28 +6,36 @@ COPY repos /repos
 
 ARG LEPTONICA_VERSION=1.82.0
 ARG TESSERACT_VERSION=5.2.0
+ARG ROCKY_BASE=rocky-base
+ARG ROCKY_RELEASE=rocky-release
+ARG ROCKY_DEVEL=rocky-devel
+ARG FEDORA_EPEL=fedora-epel
 
 # handles chromium + tesseract
 # for tesseract - followed instructions from here: https://computingforgeeks.com/install-tesseract-ocr-on-rocky-almalinux/
+# note: linux_signing_key.pub is using sha1 for verification which is not supported in ubi 9+, hence need to update crypto policies, more info at https://www.redhat.com/en/blog/rhel-security-sha-1-package-signatures-distrusted-rhel-9
+# there is not linux_signing_key.pub from google that is not based on sha1
 RUN dnf update --nodocs -y  \
     && dnf upgrade -y --nodocs \
     && dnf install --nodocs -y wget git \
-    && wget https://dl.google.com/linux/linux_signing_key.pub \
-    && wget https://www.centos.org/keys/RPM-GPG-KEY-CentOS-Official \
+    && wget https://dl-ssl.google.com/linux/linux_signing_key.pub \
+    && update-crypto-policies --set DEFAULT:SHA1 \
     && rpm --import linux_signing_key.pub \
+    && update-crypto-policies --set DEFAULT \
+    && wget https://www.centos.org/keys/RPM-GPG-KEY-CentOS-Official \
     && rpm --import RPM-GPG-KEY-CentOS-Official \
     && mv repos/* /etc/yum.repos.d/ \
-    && dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git unzip llvm-libs libXpm \
-    && dnf install -y --nodocs --enablerepo=rocky8-base --enablerepo=rocky8-release tigervnc-server-minimal xorg-x11-utils google-chrome-stable \
-    && dnf install -y --nodocs --enablerepo=rocky8-base --enablerepo=rocky8-release --enablerepo=fedora-epel ImageMagick \
+    && dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git unzip llvm-libs libXpm iproute \
+    && dnf install -y --nodocs --enablerepo=$ROCKY_BASE --enablerepo=$ROCKY_RELEASE tigervnc-server-minimal xorg-x11-utils google-chrome-stable \
+    && dnf install -y --nodocs --enablerepo=$ROCKY_BASE --enablerepo=$ROCKY_RELEASE --enablerepo=$FEDORA_EPEL ImageMagick \
     && ./download_chromedriver.sh \
     && unzip chromedriver_linux64.zip \
     && mv chromedriver /usr/bin/chromedriver \
     && rm -rf chromedriver_linux64.zip \
     && google-chrome --version \
     && chromedriver --version \
-    && dnf install -y --nodocs git automake make autoconf libtool clang zlib zlib-devel libjpeg libjpeg-devel libwebp libwebp-devel libtiff libtiff-devel libpng libpng-devel pango giflib \
-    && dnf install -y https://vault.centos.org/centos/8/PowerTools/x86_64/os/Packages/giflib-devel-5.1.4-3.el8.x86_64.rpm \
+    && dnf install -y --enablerepo=$ROCKY_DEVEL --enablerepo=$ROCKY_BASE --nodocs git automake make autoconf libtool zlib clang zlib-devel libjpeg libjpeg-devel libwebp libwebp-devel \
+    libtiff libtiff-devel libpng libpng-devel pango giflib giflib-devel dejavu-sans-mono-fonts \
     && git clone --depth 1 -b $LEPTONICA_VERSION https://github.com/DanBloomberg/leptonica \
     && cd leptonica \
     && ./autogen.sh && ./configure && make && make install && ldconfig \
@@ -50,7 +58,7 @@ RUN dnf update --nodocs -y  \
     && rm -rf /var/cache/dnf
 
 ARG LIBRE_OFFICE_MAJOR_VERSION=7.5
-ARG LIBRE_OFFICE_FULL_VERSION=${LIBRE_OFFICE_MAJOR_VERSION}.1
+ARG LIBRE_OFFICE_FULL_VERSION=${LIBRE_OFFICE_MAJOR_VERSION}.4
 ARG LIBRE_OFFICE_INSTALLATION_FILE_NAME=LibreOffice_${LIBRE_OFFICE_FULL_VERSION}_Linux_x86-64_rpm
 # libre-office mirrors are taken from here - http://download.documentfoundation.org/libreoffice/stable/
 
@@ -61,11 +69,12 @@ ARG LIBRE_OFFICE_INSTALLATION_FILE_NAME=LibreOffice_${LIBRE_OFFICE_FULL_VERSION}
 # line 6 - since in ubi its 7za --> need to make it to run as 7z like our script
 # lines 8-10 is the configuration for sklearn
 # linex 11-14 - install LibreOffice for the office-utils image
-RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git poppler poppler-utils \
+# lines 16-18 - enable more hashing alrogithms such as md4 for example for py3ews
+RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE python3-devel gcc gcc-c++ make wget git poppler poppler-utils \
         rust cargo libxml2-devel libxslt-devel \
-        libffi-devel openssl-devel curl libffi libSM mesa-libGL \
+        libffi-devel openssl-devel libffi libSM mesa-libGL \
         openssh ca-certificates openssl less rsync libpng-devel freetype-devel gcc-gfortran openblas unzip libstdc++ \
-        && dnf install -y --nodocs --enablerepo=fedora-epel p7zip unrar \
+        && dnf install -y --nodocs --enablerepo=$FEDORA_EPEL p7zip unrar \
         && ln -s /usr/bin/7za /usr/bin/7z \
         && pip install --no-cache-dir -r requirements.txt \
         && mkdir /ml \
@@ -76,6 +85,9 @@ RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git poppler popp
         && tar -xzvf ${LIBRE_OFFICE_INSTALLATION_FILE_NAME}.tar.gz --one-top-level=${LIBRE_OFFICE_INSTALLATION_FILE_NAME} --strip-components 1 \
         && dnf localinstall -y ${LIBRE_OFFICE_INSTALLATION_FILE_NAME}/RPMS/*.rpm \
         && rm -rf ${LIBRE_OFFICE_INSTALLATION_FILE_NAME}.tar.gz ${LIBRE_OFFICE_INSTALLATION_FILE_NAME} \
+        && sed -i 's/##legacy = legacy_sect/legacy = legacy_sect/' /etc/pki/tls/openssl.cnf \
+        && sed -i 's/##\[legacy_sect\]/\[legacy_sect\]/' /etc/pki/tls/openssl.cnf \
+        && sed -i 's/##activate = 1/activate = 1/' /etc/pki/tls/openssl.cnf \
         && dnf remove -y python3-devel rust cargo libffi-devel openssl-devel gcc gcc-c++ make git platform-python-pip \
         && dnf clean all \
         && rm -rf /var/cache/dnf \

@@ -433,6 +433,8 @@ updates:
     directory: /docker/xsoar-tools
     schedule:
       interval: daily
+    ignore:
+      - dependency-name: "demisto-sdk"
   - package-ecosystem: pip
     directory: /docker/opencv
     schedule:
@@ -691,5 +693,17 @@ updates:
      interval: daily
   - package-ecosystem: pip
     directory: /docker/processing-image-file
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/oci
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/privx-api
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/xpanse-ml-ev2
     schedule:
      interval: daily
