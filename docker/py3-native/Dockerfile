@@ -21,7 +21,7 @@ RUN microdnf update --nodocs -y  \
     && wget https://dl-ssl.google.com/linux/linux_signing_key.pub \
     && update-crypto-policies --set DEFAULT:SHA1 \
     && rpm --import linux_signing_key.pub \
-    && chmod +r linux_signing_key.pub \
+    && mv linux_signing_key.pub /etc/pki/rpm-gpg/linux_signing_key.pub
     && update-crypto-policies --set DEFAULT \
     && wget https://www.centos.org/keys/RPM-GPG-KEY-CentOS-Official \
     && rpm --import RPM-GPG-KEY-CentOS-Official \
