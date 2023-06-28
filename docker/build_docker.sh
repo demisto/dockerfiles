@@ -104,7 +104,7 @@ function commit_dockerfiles_trust {
         echo "dockerfiles-trust: found modified/new files to commit"
         git status --short
         git stash
-        git pull
+        git pull --no-rebase
         git checkout stash -- .
         echo "starting commit loop..."
         git add .
