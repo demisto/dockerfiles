@@ -58,7 +58,7 @@ RUN git clone https://github.com/syndbg/goenv.git ~/.goenv \
     && echo 'export PATH="$GOROOT/bin:$PATH"' >> ~/.bashrc \
     && echo 'export PATH="$PATH:$GOPATH/bin"' >> ~/.bashrc
 RUN source ~/.bashrc \
-    && goenv install 1.13.8 \
-    && goenv global 1.13.8 \
+    && goenv install 1.16.7 \
+    && goenv global 1.16.7 \
     && source ~/.bashrc
 RUN curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.46.2
