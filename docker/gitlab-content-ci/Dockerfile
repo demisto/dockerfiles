@@ -7,7 +7,7 @@ ENV NEO4J_CONF_FILE /etc/neo4j/neo4j.conf
 ENV APOC_CONF_FILE /etc/neo4j/apoc.conf
 
 # Currently sh is linked to dash, linking it to /bin/bash instead.
-RUN rm /bin/sh && ln -s /bin/bash /bin/sh && cat ~/.profile /etc/.profile
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh && cat ~/.profile >> /etc/.profile
 
 RUN apt-get update
 RUN apt-get upgrade -y
