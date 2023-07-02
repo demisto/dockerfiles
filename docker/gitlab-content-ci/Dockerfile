@@ -7,7 +7,7 @@ ENV NEO4J_CONF_FILE /etc/neo4j/neo4j.conf
 ENV APOC_CONF_FILE /etc/neo4j/apoc.conf
 
 # Currently sh is linked to dash, linking it to /bin/bash instead.
-RUN rm /bin/sh && ln -s /bin/bash /bin/sh && cp ~/.profile ~/.bash_profile
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh && cat ~/.profile /etc/.profile
 
 RUN apt-get update
 RUN apt-get upgrade -y
@@ -51,14 +51,14 @@ RUN mkdir -p /var/lib/neo4j/plugins \
     && echo "apoc.import.file.enabled=true" >> $APOC_CONF_FILE \
     && echo "apoc.import.file.use_neo4j_config=true" >> $APOC_CONF_FILE
 # Installing goenv
-RUN git clone https://github.com/syndbg/goenv.git ~/.goenv \
-    && echo 'export GOENV_ROOT="$HOME/.goenv"' >> ~/.bashrc \
-    && echo 'export PATH="$GOENV_ROOT/bin:$PATH"' >> ~/.bashrc \
-    && echo 'export PATH="$GOROOT/bin:$PATH"' >> ~/.bashrc \
-    && echo 'export PATH="$PATH:$GOPATH/bin"' >> ~/.bashrc
-RUN source ~/.bashrc \
+RUN git clone https://github.com/syndbg/goenv.git --depth 1 ~/.goenv
+RUN echo 'export GOENV_ROOT="$HOME/.goenv"' >> ~/.bashrc \
+    && echo 'export PATH="$GOENV_ROOT/bin:$PATH"' >> ~/.bashrc \ 
+    && source ~/.bashrc \
     && goenv install 1.20.5 \
     && goenv global 1.20.5 \
     && echo 'eval "$(goenv init -)"' >> ~/.bashrc \
+    && echo 'export PATH="$GOROOT/bin:$PATH"' >> ~/.bashrc \
+    && echo 'export PATH="$PATH:$GOPATH/bin"' >> ~/.bashrc \
     && source ~/.bashrc
 RUN curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.53.3
