@@ -61,4 +61,4 @@ RUN source ~/.bashrc \
     && goenv global 1.20.5 \
     && echo 'eval "$(goenv init -)"' >> ~/.bashrc \
     && source ~/.bashrc
-RUN curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.47.3 
+RUN curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.51.2
