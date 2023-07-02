@@ -54,11 +54,11 @@ RUN mkdir -p /var/lib/neo4j/plugins \
 RUN git clone https://github.com/syndbg/goenv.git ~/.goenv \
     && echo 'export GOENV_ROOT="$HOME/.goenv"' >> ~/.bashrc \
     && echo 'export PATH="$GOENV_ROOT/bin:$PATH"' >> ~/.bashrc \
-    && echo 'eval "$(goenv init -)"' >> ~/.bashrc \
     && echo 'export PATH="$GOROOT/bin:$PATH"' >> ~/.bashrc \
     && echo 'export PATH="$PATH:$GOPATH/bin"' >> ~/.bashrc
 RUN source ~/.bashrc \
     && goenv install 1.20.5 \
     && goenv global 1.20.5 \
+    && echo 'eval "$(goenv init -)"' >> ~/.bashrc \
     && source ~/.bashrc
 RUN curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.47.3 
