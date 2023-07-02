@@ -1,6 +1,6 @@
 FROM demisto/python3-deb:3.10.11.61745
 
-ENV NODE_VERSION 14.14.0
+ENV NODE_VERSION 14.16.0
 ENV NVM_DIR /root/.nvm
 ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:/root/.local/bin:$PATH
 ENV NEO4J_CONF_FILE /etc/neo4j/neo4j.conf
