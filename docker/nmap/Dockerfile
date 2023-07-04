@@ -1,5 +1,5 @@
 
-FROM demisto/python3:3.10.12.62631
+FROM demisto/python3:3.10.12.63474
 
 RUN mkdir /opt/scripts
 
