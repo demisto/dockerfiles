@@ -84,7 +84,7 @@ RUN microdnf install -y --nodocs --enablerepo=$ROCKY_RELEASE python3-devel gcc g
         && microdnf install -y --nodocs java-11-openjdk-headless cairo libX11-xcb \
         && wget https://mirror.isoc.org.il/pub/tdf/libreoffice/stable/${LIBRE_OFFICE_FULL_VERSION}/rpm/x86_64/${LIBRE_OFFICE_INSTALLATION_FILE_NAME}.tar.gz \
         && tar -xzvf ${LIBRE_OFFICE_INSTALLATION_FILE_NAME}.tar.gz --one-top-level=${LIBRE_OFFICE_INSTALLATION_FILE_NAME} --strip-components 1 \
-        && cd ${LIBRE_OFFICE_INSTALLATION_FILE_NAME}/RPMS/*.rpm  \
+        && cd ${LIBRE_OFFICE_INSTALLATION_FILE_NAME}/RPMS  \
         && rpm -ivh *.rpm \
         && cd -
         && rm -rf ${LIBRE_OFFICE_INSTALLATION_FILE_NAME}.tar.gz ${LIBRE_OFFICE_INSTALLATION_FILE_NAME} \
