@@ -70,6 +70,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   libffi-dev \
   python3-dev \
   unixodbc-dev \
+  curl \
 && rm -rf /var/lib/apt/lists/*
 
 # Handling the issue described here https://github.com/mkleehammer/pyodbc/issues/610#issuecomment-534920201 by using TLS v1
