@@ -35,7 +35,7 @@ RUN microdnf update --nodocs -y  \
     && rm -rf chromedriver_linux64.zip \
     && google-chrome --version \
     && chromedriver --version \
-    && microdnf install -y --enablerepo=$ROCKY_DEVEL --enablerepo=$ROCKY_BASE --nodocs git automake make autoconf libtool zlib clang gcc-c++ zlib-devel libjpeg libjpeg-devel libwebp libwebp-devel \
+    && microdnf install -y --enablerepo=$ROCKY_DEVEL --enablerepo=$ROCKY_BASE --nodocs git automake make autoconf libtool zlib clang zlib-devel libjpeg libjpeg-devel libwebp libwebp-devel \
     libtiff libtiff-devel libpng libpng-devel pango giflib giflib-devel dejavu-sans-mono-fonts \
     && git clone --depth 1 -b $LEPTONICA_VERSION https://github.com/DanBloomberg/leptonica \
     && cd leptonica \
@@ -54,7 +54,7 @@ RUN microdnf update --nodocs -y  \
     do python tessdata_downloader/tessdata_downloader.py -o /usr/local/share/tessdata/ -l $lang; done \
     && tesseract --version --list-langs \
     && rm -rf tessdata_downloader leptonica tesseract download_chromedriver.sh repos \
-    && microdnf remove -y python3-devel gcc gcc-c++ make platform-python-pip unzip git make autoconf automake libtool libpng-devel libjpeg-devel libtiff-devel zlib-devel giflib-devel \
+    && microdnf remove -y python3-devel platform-python-pip unzip autoconf automake libtool libpng-devel libjpeg-devel libtiff-devel zlib-devel giflib-devel \
     && microdnf clean all \
     && rm -rf /var/cache/microdnf
 
