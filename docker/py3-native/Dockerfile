@@ -54,7 +54,7 @@ RUN microdnf update --nodocs -y  \
     do python tessdata_downloader/tessdata_downloader.py -o /usr/local/share/tessdata/ -l $lang; done \
     && tesseract --version --list-langs \
     && rm -rf tessdata_downloader leptonica tesseract download_chromedriver.sh repos \
-    && microdnf remove -y python3-devel platform-python-pip unzip autoconf automake libtool libpng-devel libjpeg-devel libtiff-devel zlib-devel giflib-devel \
+    && microdnf remove -y python3-devel gcc gcc-c++ make platform-python-pip unzip git autoconf automake libtool libpng-devel libjpeg-devel libtiff-devel zlib-devel giflib-devel clang gcc-toolset perl-Git \
     && microdnf clean all \
     && rm -rf /var/cache/microdnf
 
@@ -91,7 +91,7 @@ RUN microdnf install -y --nodocs --enablerepo=$ROCKY_RELEASE python3-devel gcc g
         && sed -i 's/##legacy = legacy_sect/legacy = legacy_sect/' /etc/pki/tls/openssl.cnf \
         && sed -i 's/##\[legacy_sect\]/\[legacy_sect\]/' /etc/pki/tls/openssl.cnf \
         && sed -i 's/##activate = 1/activate = 1/' /etc/pki/tls/openssl.cnf \
-        && microdnf remove -y python3-devel cargo openssl-devel platform-python-pip \
+        && microdnf remove -y python3-devel cargo openssl-devel platform-python-pip gcc-toolset perl-Git gcc gcc-c++ make git \
         && microdnf clean all \
         && rm -rf /var/cache/microdnf \
         && rm -rf /root/.cargo \
