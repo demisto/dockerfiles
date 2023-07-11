@@ -38,3 +38,6 @@ RUN python get_build_artifacts.py --project sane-reports --branch master --filte
 
 # Update permissions and ownership on /app dir
 RUN chown -R root:demisto /app/ && chmod 775 /app/ && chmod 775 /app/dist
+
+RUN apt-get purge -y --auto-remove git npm \
+    && rm -rf /var/lib/apt/lists/*

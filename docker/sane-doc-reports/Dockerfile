@@ -29,5 +29,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 && pip install --no-cache-dir -r requirements.txt \
 && apt-get purge -y --auto-remove \
   gcc \
+  git \
+  npm \
   python3-dev \
 && rm -rf /var/lib/apt/lists/* 
