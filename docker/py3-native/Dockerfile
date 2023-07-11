@@ -1,4 +1,4 @@
-FROM demisto/py3-tools-ubi:1.0.0.56368
+FROM demisto/py3-tools-ubi:1.0.0.64758
 
 COPY requirements.txt .
 COPY chromium/download_chromedriver.sh .
@@ -25,7 +25,7 @@ RUN dnf update --nodocs -y  \
     && wget https://www.centos.org/keys/RPM-GPG-KEY-CentOS-Official \
     && rpm --import RPM-GPG-KEY-CentOS-Official \
     && mv repos/* /etc/yum.repos.d/ \
-    && dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git unzip llvm-libs libXpm \
+    && dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git unzip llvm-libs libXpm iproute \
     && dnf install -y --nodocs --enablerepo=$ROCKY_BASE --enablerepo=$ROCKY_RELEASE tigervnc-server-minimal xorg-x11-utils google-chrome-stable \
     && dnf install -y --nodocs --enablerepo=$ROCKY_BASE --enablerepo=$ROCKY_RELEASE --enablerepo=$FEDORA_EPEL ImageMagick \
     && ./download_chromedriver.sh \
@@ -34,7 +34,7 @@ RUN dnf update --nodocs -y  \
     && rm -rf chromedriver_linux64.zip \
     && google-chrome --version \
     && chromedriver --version \
-    && dnf install -y --enablerepo=$ROCKY_DEVEL --enablerepo=$ROCKY_BASE --nodocs git automake make autoconf libtool clang zlib zlib-devel libjpeg libjpeg-devel libwebp libwebp-devel \
+    && dnf install -y --enablerepo=$ROCKY_DEVEL --enablerepo=$ROCKY_BASE --nodocs git automake make autoconf libtool zlib clang zlib-devel libjpeg libjpeg-devel libwebp libwebp-devel \
     libtiff libtiff-devel libpng libpng-devel pango giflib giflib-devel dejavu-sans-mono-fonts \
     && git clone --depth 1 -b $LEPTONICA_VERSION https://github.com/DanBloomberg/leptonica \
     && cd leptonica \
@@ -58,7 +58,7 @@ RUN dnf update --nodocs -y  \
     && rm -rf /var/cache/dnf
 
 ARG LIBRE_OFFICE_MAJOR_VERSION=7.5
-ARG LIBRE_OFFICE_FULL_VERSION=${LIBRE_OFFICE_MAJOR_VERSION}.3
+ARG LIBRE_OFFICE_FULL_VERSION=${LIBRE_OFFICE_MAJOR_VERSION}.4
 ARG LIBRE_OFFICE_INSTALLATION_FILE_NAME=LibreOffice_${LIBRE_OFFICE_FULL_VERSION}_Linux_x86-64_rpm
 # libre-office mirrors are taken from here - http://download.documentfoundation.org/libreoffice/stable/
 
@@ -70,7 +70,7 @@ ARG LIBRE_OFFICE_INSTALLATION_FILE_NAME=LibreOffice_${LIBRE_OFFICE_FULL_VERSION}
 # lines 8-10 is the configuration for sklearn
 # linex 11-14 - install LibreOffice for the office-utils image
 # lines 16-18 - enable more hashing alrogithms such as md4 for example for py3ews
-RUN dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git poppler poppler-utils \
+RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE python3-devel gcc gcc-c++ make wget git poppler poppler-utils \
         rust cargo libxml2-devel libxslt-devel \
         libffi-devel openssl-devel libffi libSM mesa-libGL \
         openssh ca-certificates openssl less rsync libpng-devel freetype-devel gcc-gfortran openblas unzip libstdc++ \
