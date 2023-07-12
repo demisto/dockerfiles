@@ -1,4 +1,4 @@
-FROM demisto/python3-deb:3.10.11.57890
+FROM demisto/python3-deb:3.10.12.64531
 WORKDIR "/app"
 
 SHELL ["/bin/bash", "-c"]
@@ -29,5 +29,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 && pip install --no-cache-dir -r requirements.txt \
 && apt-get purge -y --auto-remove \
   gcc \
+  git \
+  npm \
   python3-dev \
 && rm -rf /var/lib/apt/lists/* 
