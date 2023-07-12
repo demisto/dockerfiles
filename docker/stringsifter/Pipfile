@@ -11,19 +11,5 @@ joblib = ">=0.13.2,<0.17"
 fasttext = "*"
 stringsifter= "~= 2.0"
 
-[dev-packages]
-pytest = "*"
-setuptools = "*"
-twine = "*"
-wheel = "*"
-
 [requires]
 python_version = "3.8"
-
-[scripts]
-rank_strings = "python -m stringsifter.rank_strings"
-flarestrings = "python -m stringsifter.flarestrings"
-tests = "python -m pytest"
-build = "python setup.py sdist bdist_wheel"
-upload_test = "python -m twine upload --repository testpypi dist/*"
-upload = "python -m twine upload dist/*"
