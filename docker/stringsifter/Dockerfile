@@ -4,6 +4,6 @@ COPY requirements.txt .
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends python3-dev make gcc g++ wget git libgomp1 \
   &&  sudo curl -sSL https://install.python-poetry.org | python3 \
-  && pip install -r requirements.txt \
+  && pip install stringsifter \
   && apt-get purge -y --auto-remove gcc g++ make python3-dev
 
