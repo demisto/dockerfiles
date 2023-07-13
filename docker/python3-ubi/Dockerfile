@@ -98,7 +98,7 @@ RUN microdnf update -y --nodocs && \
     microdnf install -y --nodocs shadow-utils which expat && \
     groupadd -g 4000 demisto && \
     useradd -u 4000 -g demisto demisto -s /bin/sh && \
-    microdnf remove -y shadow-utils expat && \
+    microdnf remove -y shadow-utils && \
     microdnf -y clean all && \
     rm -rf /var/cache
 
