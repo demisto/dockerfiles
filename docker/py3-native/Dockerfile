@@ -54,7 +54,7 @@ RUN microdnf update --nodocs -y  \
     do python tessdata_downloader/tessdata_downloader.py -o /usr/local/share/tessdata/ -l $lang; done \
     && tesseract --version --list-langs \
     && rm -rf tessdata_downloader leptonica tesseract download_chromedriver.sh repos \
-    && microdnf remove -y python3-devel gcc gcc-c++ make platform-python-pip unzip git autoconf automake libtool libpng-devel libjpeg-devel libtiff-devel zlib-devel giflib-devel clang gcc-toolset perl-Git \
+    && microdnf remove -y python3-devel gcc gcc-c++ make platform-python-pip unzip git autoconf automake libtool libpng-devel libjpeg-devel libtiff-devel zlib-devel giflib-devel clang perl-Git \
     && microdnf clean all \
     && rm -rf /var/cache/microdnf
 
