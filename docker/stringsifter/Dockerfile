@@ -4,7 +4,8 @@ COPY pyproject.toml .
 COPY poetry.lock .
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends curl python3-dev make gcc g++ wget git libgomp1 \
-  && curl -sSL https://install.python-poetry.org | python3 - && poetry config virtualenvs.create false \
+  && curl -sSL https://install.python-poetry.org | python3 - && export PATH="/root/.local/bin:$PATH" \
+  && poetry config virtualenvs.create false \
   && poetry install --no-interaction \
   && curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python - --uninstall \
   && rm -rf /root/.cache/pypoetry && apt-get purge -y --auto-remove gcc g++ make python3-dev curl
