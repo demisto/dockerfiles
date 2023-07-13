@@ -1,9 +1,9 @@
 FROM demisto/python3-deb:3.10.5.31873
 
-COPY Pipfile Pipfile
+COPY requirements.txt .
 
-RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends python3-dev pipenv make gcc g++ wget git libgomp1 \
-  && pipenv lock \
-  && pipenv install --system \
-  && apt-get purge -y --auto-remove gcc g++ pipenv make python3-dev
+RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends python3-dev make gcc g++ wget git libgomp1 \
+  && pip install pipenv \
+  && pip install -r requirements.txt \
+  && apt-get purge -y --auto-remove gcc g++ make python3-dev
 
