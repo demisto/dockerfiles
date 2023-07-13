@@ -103,7 +103,7 @@ function commit_dockerfiles_trust {
     if [[ $(git status --short) ]]; then
         echo "dockerfiles-trust: found modified/new files to commit"
         git status --short
-        git add .
+        git add -A
         git stash
         echo "stashed"
         git pull --no-rebase
