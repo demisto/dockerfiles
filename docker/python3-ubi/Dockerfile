@@ -19,7 +19,7 @@ RUN microdnf upgrade -y --nodocs && \
        zlib-devel \
        xz-devel && \
     microdnf clean all && \
-    rm -rf /var/cache/microdnf
+    rm -rf /var/cache
 
 # install python3
 RUN wget https://www.python.org/ftp/python/3.10.8/Python-3.10.8.tgz && \
@@ -54,7 +54,7 @@ FROM registry.access.redhat.com/${BASE_UBI_VERSION}/${BASE_UBI_TAG}
 RUN microdnf update -y --nodocs && \
     microdnf install -y --nodocs procps-ng && \
     microdnf clean all && \
-    rm -rf /var/cache/microdnf
+    rm -rf /var/cache
 
 ENV PATH /usr/local/bin:/home/python/.local/bin:$PATH
 
@@ -97,7 +97,10 @@ Options = UnsafeLegacyRenegotiation\n' > /tmp/ssl.cnf \
 RUN microdnf update -y --nodocs && \
     microdnf install -y --nodocs shadow-utils which expat && \
     groupadd -g 4000 demisto && \
-    useradd -u 4000 -g demisto demisto -s /bin/sh
+    useradd -u 4000 -g demisto demisto -s /bin/sh && \
+    microdnf remove -y shadow-utils which expat && \
+    microdnf -y clean all && \
+    rm -rf /var/cache
 
 CMD ["python3"]
 
