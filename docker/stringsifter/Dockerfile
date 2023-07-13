@@ -18,7 +18,7 @@ COPY pyproject.toml pyproject.toml
 COPY poetry.lock poetry.lock
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends python3-dev make gcc g++ wget git libgomp1 \
-  && /usr/bin/poetry config virtualenvs.create false \
+  && poetry config virtualenvs.create false \
   && poetry install --no-interaction \
   && rm -rf /root/.cache/pypoetry \
   && apt-get purge -y --auto-remove gcc g++ make python3-dev
