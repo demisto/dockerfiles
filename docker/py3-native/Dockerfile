@@ -56,7 +56,7 @@ RUN microdnf update --nodocs -y  \
     && rm -rf tessdata_downloader leptonica tesseract download_chromedriver.sh repos \
     && microdnf remove -y python3-devel gcc gcc-c++ make platform-python-pip unzip git autoconf automake libtool libpng-devel libjpeg-devel libtiff-devel zlib-devel giflib-devel clang perl-Git gcc-toolset-12-gcc gcc-toolset-12-gcc-c++ clang-libs \
     && microdnf clean all \
-    && rm -rf /var/cache/microdnf
+    && rm -rf /var/cache
 
 ARG LIBRE_OFFICE_MAJOR_VERSION=7.5
 ARG LIBRE_OFFICE_FULL_VERSION=${LIBRE_OFFICE_MAJOR_VERSION}.4
@@ -93,7 +93,7 @@ RUN microdnf install -y --nodocs --enablerepo=$ROCKY_RELEASE python3-devel gcc g
         && sed -i 's/##activate = 1/activate = 1/' /etc/pki/tls/openssl.cnf \
         && microdnf remove -y python3-devel cargo openssl-devel platform-python-pip perl-Git gcc gcc-c++ make git gcc-gfortran libquadmath-devel rust rust-std-static \
         && microdnf clean all \
-        && rm -rf /var/cache/microdnf \
+        && rm -rf /var/cache \
         && rm -rf /root/.cargo \
         && pip uninstall -y pcodedmp
 
