@@ -105,7 +105,9 @@ function commit_dockerfiles_trust {
         git status --short
         git add .
         git stash
+        echo "stashed"
         git pull --no-rebase
+        echo "done pulling"
         git stash apply
         echo "starting commit loop..."
         git commit -m "`date`: trust update from PR: ${CIRCLE_PULL_REQUEST}"
