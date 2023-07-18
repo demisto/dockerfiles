@@ -102,14 +102,12 @@ function commit_dockerfiles_trust {
     cd "${DOCKERFILES_TRUST_DIR}"
     if [[ $(git status --short) ]]; then
         echo "dockerfiles-trust: found modified/new files to commit"
-        git status --short
         git stash
         git pull --no-rebase
-        echo "done pulling"
-        git stash apply
+        git stash list | grep -q 'stash' && git checkout stash -- .
         git add -A
         echo "starting commit loop..."
-        git commit -m "`date`: trust update from PR: ${CIRCLE_PULL_REQUEST}"
+        git commit -m "$(date): trust update from PR: ${CIRCLE_PULL_REQUEST}"
         COMMIT_DONE=no
         for i in 1 2 3 4 5; do
             if git push; then
