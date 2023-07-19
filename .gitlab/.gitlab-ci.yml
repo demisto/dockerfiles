@@ -3,7 +3,7 @@ variables:
   GH_COMMIT: $CI_COMMIT_SHA
 trigger_job:
   except:
-    - dontrunmast
+    - master
   trigger:
     strategy: depend
     project: xsoar/Dockerfiles-CICD
