@@ -1,5 +1,5 @@
 # Last modified: 2023-07-05T00:16:00.625130+00:00
-FROM python:3.10.12-slim-bullseye
+FROM docker-infosec.art.code.pan.run/secure-base-image-debian:latest-python310
 
 RUN echo 'deb http://deb.debian.org/debian bullseye-backports main' >> /etc/apt/sources.list
 
@@ -30,3 +30,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN groupadd --gid 4000 demisto \
   && useradd --uid 4000 --gid demisto --shell /bin/bash --create-home demisto
+
+RUN cp /etc/ssl/openssl.cnf /etc/ssl/openssl.cnf.org && \
+echo -e 'ssl_conf = ssl_sect\n\
+[ssl_sect]\n\
+system_default = system_default_sect\n\
+\n\
+[system_default_sect]\n\
+Options = UnsafeLegacyRenegotiation\n' > /tmp/ssl.cnf \
+&& sed -i '/providers = provider_sect/r /tmp/ssl.cnf' /etc/ssl/openssl.cnf \
+&& rm /tmp/ssl.cnf \
+&& grep -C 10 'Options = UnsafeLegacyRenegotiation' /etc/ssl/openssl.cnf

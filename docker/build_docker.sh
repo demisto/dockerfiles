@@ -307,6 +307,10 @@ function docker_build {
         fi
     else
         echo "Skipping docker push"
+        if [ "$CIRCLE_BRANCH" == "master" ]; then
+          echo "Did not push image on master. Failing build"
+          exit 1
+        fi
         if [ -n "$CI" ]; then
             echo "Creating artifact of docker image..."
             ARTDIR="${DOCKER_SRC_DIR}/../artifacts"
