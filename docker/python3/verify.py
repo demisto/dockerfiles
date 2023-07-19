@@ -16,7 +16,7 @@ print(c_double.from_param(1e300))
 print("all is good cve-2021-3177 is patched")
 
 import ssl
-if ssl.OPENSSL_VERSION_INFOssl.OPENSSL_VERSION_INFO >= (3,0,0,0,0):
+if ssl.OPENSSL_VERSION_INFO >= (3,0,0,0,0):
     if os.path.exists("/etc/ssl/openssl.cnf"):
         # in python3 (alpine) the path to openssl conf is /etc/ssl/openssl.cnf
         ssl_cnf_file_path = "/etc/ssl/openssl.cnf"
