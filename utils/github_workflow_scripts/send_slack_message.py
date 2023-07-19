@@ -74,10 +74,10 @@ def create_slack_section(key: str, value: str) -> dict:
         Returns:
             (dict): section entry for the slack block-kit
     """
-    return ({
+    return {
         "type": "section",
         "text": create_slack_markdown(f'```{key}: {value}\n```')
-    })
+    }
 
 
 def create_individual_pack_segment(metadata_obj: dict) -> List[dict]:
@@ -89,19 +89,14 @@ def create_individual_pack_segment(metadata_obj: dict) -> List[dict]:
         Returns:
             (List): List of slack blocks representing the pack information
     """
-    pack_name: str = metadata_obj.get('name', '')
     version: str = metadata_obj.get('currentVersion', '')
-    support: str = metadata_obj.get('support', '')
 
-    pack_details = [
-        create_slack_section('Pack Name', pack_name),
-        create_slack_section('Support Type', support),
+    return [
         create_slack_section('Version', version),
         {
             "type": "divider"
         }
     ]
-    return pack_details
 
 
 def create_packs_segment(metadata_files: list) -> List[dict]:
@@ -152,7 +147,7 @@ def create_pr_title(pr: PullRequest.PullRequest) -> List[dict]:
         Returns:
             (List): List containing a dictionary which represents the message title
     """
-    header = [{
+    return [{
         "type": "header",
         "text": {
             "type": "plain_text",
@@ -160,7 +155,6 @@ def create_pr_title(pr: PullRequest.PullRequest) -> List[dict]:
             "emoji": True
         }
     }]
-    return header
 
 
 def slack_post_message(client: WebClient, message_blocks: List):
