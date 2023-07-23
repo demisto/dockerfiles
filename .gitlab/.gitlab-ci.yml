@@ -2,6 +2,8 @@ variables:
   GH_BRANCH: $CI_COMMIT_BRANCH
   GH_COMMIT: $CI_COMMIT_SHA
 trigger_job:
+  except:
+    - master
   trigger:
     strategy: depend
     project: xsoar/Dockerfiles-CICD
