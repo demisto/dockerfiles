@@ -1,5 +1,5 @@
-# Last modified: 2023-05-13T04:34:00.995222+00:00
-FROM demisto/iputils:1.0.0.58800
+# Last modified: 2023-07-25T16:36:19.155118+00:00
+FROM demisto/iputils:1.0.0.66587
 
 COPY requirements.txt .
 

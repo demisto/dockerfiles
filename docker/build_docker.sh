@@ -4,6 +4,7 @@
 set -e
 
 REVISION=${CIRCLE_BUILD_NUM:-`date +%s`}
+PUSHED_DOCKERS=''
 CURRENT_DIR=`pwd`
 SCRIPT_DIR=$(dirname ${BASH_SOURCE})
 DOCKER_SRC_DIR=${SCRIPT_DIR}
@@ -101,11 +102,12 @@ function commit_dockerfiles_trust {
     cd "${DOCKERFILES_TRUST_DIR}"
     if [[ $(git status --short) ]]; then
         echo "dockerfiles-trust: found modified/new files to commit"
-        git status --short
-        git pull
+        git stash
+        git pull --no-rebase
+        git stash list | grep -q 'stash' && git checkout stash -- .
+        git add -A
         echo "starting commit loop..."
-        git add .
-        git commit -m "`date`: trust update from PR: ${CIRCLE_PULL_REQUEST}"
+        git commit -m "$(date): trust update from PR: ${CIRCLE_PULL_REQUEST}"
         COMMIT_DONE=no
         for i in 1 2 3 4 5; do
             if git push; then
@@ -289,6 +291,8 @@ function docker_build {
     if docker_login; then
         env DOCKER_CONTENT_TRUST=$docker_trust DOCKER_CONFIG="${DOCKER_CONFIG}"  docker push ${image_full_name}
         echo "Done docker push for: ${image_full_name}"
+        PUSHED_DOCKERS="${image_full_name},$PUSHED_DOCKERS"
+        echo "debug pushed_dockers $PUSHED_DOCKERS"
         if [[ "$docker_trust" == "1" ]]; then
             commit_dockerfiles_trust
         fi
@@ -303,6 +307,10 @@ function docker_build {
         fi
     else
         echo "Skipping docker push"
+        if [ "$CIRCLE_BRANCH" == "master" ]; then
+          echo "Did not push image on master. Failing build"
+          exit 1
+        fi
         if [ -n "$CI" ]; then
             echo "Creating artifact of docker image..."
             ARTDIR="${DOCKER_SRC_DIR}/../artifacts"
@@ -398,6 +406,7 @@ CIRCLE_ARTIFACTS="artifacts"
 if [[ ! -d $CIRCLE_ARTIFACTS ]]; then
   mkdir $CIRCLE_ARTIFACTS
 fi
+
 echo $DIFF_COMPARE > $CIRCLE_ARTIFACTS/diff_compare.txt
 echo $SCRIPT_DIR > $CIRCLE_ARTIFACTS/script_dir.txt
 echo $CURRENT_DIR > $CIRCLE_ARTIFACTS/current_dir.txt
@@ -418,3 +427,5 @@ for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | so
         echo ">>>>>>>>>>>>>>> `date`: Done docker build <<<<<<<<<<<<<"
     fi
 done
+echo $PUSHED_DOCKERS > $CIRCLE_ARTIFACTS/pushed_dockers.txt
+echo "Successfully pushed $PUSHED_DOCKERS"
