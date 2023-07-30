@@ -22,14 +22,16 @@ fi
 
 echo "using GOOGLE_CHROME_VERSION: $GOOGLE_CHROME_VERSION"
 
-echo "downloading chromedriver list..."
-wget -O chromedriver.list.xml  https://chromedriver.storage.googleapis.com/ 
+echo "Finding chromedriver for given version"
 
-DRIVER_VERSION=$(grep -o -P "$GOOGLE_CHROME_VERSION\.\d+/chromedriver_linux64.zip" chromedriver.list.xml | sort -V | tail -1 | awk -F '/' '{print $1}')
+chromedriver=$(curl https://googlechromelabs.github.io/chrome-for-testing/latest-patch-versions-per-build-with-downloads.json | jq .builds.\"$GOOGLE_CHROME_VERSION\")
+DRIVER_VERSION= $(echo $chromedriver | jq .version)
 
 echo  "Using chromedriver version: $DRIVER_VERSION"
 
-wget https://chromedriver.storage.googleapis.com/${DRIVER_VERSION}/chromedriver_linux64.zip
+url=$(echo $chromedriver | jq '.downloads.chromedriver[] | select(.platform == "linux64") | .url')
+echo "url to download chromedriver is $url"
+wget $url
 
 if [ -z "$NO_CHROMEDRIVER_LIST_DELETE" ]; then
     rm chromedriver.list.xml
