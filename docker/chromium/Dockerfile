@@ -30,6 +30,7 @@ COPY download_chromedriver.sh .
 
 # Deps needed by google-chrome
 RUN apt-get update && apt-get -t bullseye-backports install -y --no-install-recommends \
+  jq \
   gnupg2 \
   libgtk-3-0 \
   libu2f-udev \
@@ -50,6 +51,7 @@ RUN apt-get update && apt-get -t bullseye-backports install -y --no-install-reco
 && apt-get purge -y --auto-remove \
   curl \
   unzip \
+  jq \
 && rm -rf /var/lib/apt/lists/*
 
 ENV CHROME_EXE="/opt/google/chrome/google-chrome"
