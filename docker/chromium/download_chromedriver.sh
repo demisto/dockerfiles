@@ -33,6 +33,3 @@ url=$(echo $chromedriver | jq -r '.downloads.chromedriver[] | select(.platform =
 echo "url to download chromedriver is $url"
 wget $url
 
-if [ -z "$NO_CHROMEDRIVER_LIST_DELETE" ]; then
-    rm chromedriver.list.xml
-fi
