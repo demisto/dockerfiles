@@ -43,9 +43,9 @@ RUN apt-get update && apt-get -t bullseye-backports install -y --no-install-reco
 && apt-get -y update && apt-get install -y google-chrome-stable \
 && apt-get install -y tigervnc-standalone-server x11-utils imagemagick \
 && ./download_chromedriver.sh \
-&& unzip chromedriver_linux64.zip \
+&& unzip chromedriver-linux64.zip \
 && mv chromedriver /usr/bin/chromedriver \
-&& rm -rf chromedriver_linux64.zip \
+&& rm -rf chromedriver-linux64.zip \
 && google-chrome --version \
 && chromedriver --version \
 && apt-get purge -y --auto-remove \

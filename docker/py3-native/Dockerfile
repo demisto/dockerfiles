@@ -30,9 +30,9 @@ RUN dnf update --nodocs -y  \
     && dnf install -y --nodocs --enablerepo=$ROCKY_BASE --enablerepo=$ROCKY_RELEASE tigervnc-server-minimal xorg-x11-utils google-chrome-stable \
     && dnf install -y --nodocs --enablerepo=$ROCKY_BASE --enablerepo=$ROCKY_RELEASE --enablerepo=$FEDORA_EPEL ImageMagick \
     && ./download_chromedriver.sh \
-    && unzip chromedriver_linux64.zip \
+    && unzip chromedriver-linux64.zip \
     && mv chromedriver /usr/bin/chromedriver \
-    && rm -rf chromedriver_linux64.zip \
+    && rm -rf chromedriver-linux64.zip \
     && google-chrome --version \
     && chromedriver --version \
     && dnf install -y --enablerepo=$ROCKY_DEVEL --enablerepo=$ROCKY_BASE --nodocs git automake make autoconf libtool zlib clang zlib-devel libjpeg libjpeg-devel libwebp libwebp-devel \
