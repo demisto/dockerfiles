@@ -30,7 +30,7 @@ COPY download_chromedriver.sh .
 
 # Deps needed by google-chrome
 RUN apt-get update && apt-get -t bullseye-backports install -y --no-install-recommends \
-  gnupg1 \
+  gnupg2 \
   libgtk-3-0 \
   libu2f-udev \
   udev \
