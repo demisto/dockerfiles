@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+#############
+# This script was copy pasted right out of the chromium directory. Dockerfiles can only copy from within their build
+# context. These files should be the same.
+#############
+
+
 # exit on errors
 set -e
 
@@ -8,7 +14,7 @@ set -e
 ###########################
 
 # for testing pruposes (outside of the container) you can set GOOGLE_CHROME_VERSION env var
-# for example: 
+# for example:
 # docker run --rm -it -v `pwd`:/work -w /work -e GOOGLE_CHROME_VERSION=91.0.4472 demisto/chromium:1.0.0.23161 docker/chromium/download_chromedriver.sh
 if [ -z "$GOOGLE_CHROME_VERSION" ]; then
     echo "Determing chrome version..."
@@ -18,19 +24,18 @@ fi
 if [ -z "$GOOGLE_CHROME_VERSION" ]; then
     echo "something went wrong with getting chrome version. Aborting!!!"
     exit 1
-fi 
+fi
 
 echo "using GOOGLE_CHROME_VERSION: $GOOGLE_CHROME_VERSION"
 
-echo "downloading chromedriver list..."
-wget -O chromedriver.list.xml  https://chromedriver.storage.googleapis.com/ 
+echo "Finding chromedriver for given version"
 
-DRIVER_VERSION=$(grep -o -P "$GOOGLE_CHROME_VERSION\.\d+/chromedriver_linux64.zip" chromedriver.list.xml | sort -V | tail -1 | awk -F '/' '{print $1}')
+chromedriver=$(curl https://googlechromelabs.github.io/chrome-for-testing/latest-patch-versions-per-build-with-downloads.json | jq .builds.\"$GOOGLE_CHROME_VERSION\")
+DRIVER_VERSION=$(echo $chromedriver | jq .version)
 
 echo  "Using chromedriver version: $DRIVER_VERSION"
 
-wget https://chromedriver.storage.googleapis.com/${DRIVER_VERSION}/chromedriver_linux64.zip
+url=$(echo $chromedriver | jq -r '.downloads.chromedriver[] | select(.platform == "linux64") | .url')
+echo "url to download chromedriver is $url"
+wget $url
 
-if [ -z "$NO_CHROMEDRIVER_LIST_DELETE" ]; then
-    rm chromedriver.list.xml
-fi
