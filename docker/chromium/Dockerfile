@@ -44,7 +44,7 @@ RUN apt-get update && apt-get -t bullseye-backports install -y --no-install-reco
 && apt-get install -y tigervnc-standalone-server x11-utils imagemagick \
 && ./download_chromedriver.sh \
 && unzip chromedriver-linux64.zip \
-&& mv chromedriver /usr/bin/chromedriver \
+&& mv chromedriver-linux64/chromedriver /usr/bin/chromedriver \
 && rm -rf chromedriver-linux64.zip \
 && rm download_chromedriver.sh \
 && google-chrome --version \

@@ -31,7 +31,7 @@ RUN dnf update --nodocs -y  \
     && dnf install -y --nodocs --enablerepo=$ROCKY_BASE --enablerepo=$ROCKY_RELEASE --enablerepo=$FEDORA_EPEL ImageMagick \
     && ./download_chromedriver.sh \
     && unzip chromedriver-linux64.zip \
-    && mv chromedriver /usr/bin/chromedriver \
+    && mv chromedriver-linux64/chromedriver /usr/bin/chromedriver \
     && rm -rf chromedriver-linux64.zip \
     && google-chrome --version \
     && chromedriver --version \
