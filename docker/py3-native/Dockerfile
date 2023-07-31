@@ -26,7 +26,7 @@ RUN dnf update --nodocs -y  \
     && wget https://www.centos.org/keys/RPM-GPG-KEY-CentOS-Official \
     && rpm --import RPM-GPG-KEY-CentOS-Official \
     && mv repos/* /etc/yum.repos.d/ \
-    && dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git unzip llvm-libs libXpm iproute \
+    && dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git unzip llvm-libs libXpm iproute jq \
     && dnf install -y --nodocs --enablerepo=$ROCKY_BASE --enablerepo=$ROCKY_RELEASE tigervnc-server-minimal xorg-x11-utils google-chrome-stable \
     && dnf install -y --nodocs --enablerepo=$ROCKY_BASE --enablerepo=$ROCKY_RELEASE --enablerepo=$FEDORA_EPEL ImageMagick \
     && ./download_chromedriver.sh \
@@ -54,7 +54,7 @@ RUN dnf update --nodocs -y  \
     do python tessdata_downloader/tessdata_downloader.py -o /usr/local/share/tessdata/ -l $lang; done \
     && tesseract --version --list-langs \
     && rm -rf tessdata_downloader leptonica tesseract download_chromedriver.sh repos \
-    && dnf remove -y python3-devel gcc gcc-c++ make platform-python-pip unzip git make autoconf automake libtool libpng-devel libjpeg-devel libtiff-devel zlib-devel giflib-devel \
+    && dnf remove -y python3-devel gcc gcc-c++ make platform-python-pip jq unzip git make autoconf automake libtool libpng-devel libjpeg-devel libtiff-devel zlib-devel giflib-devel \
     && dnf clean all \
     && rm -rf /var/cache/dnf
 
