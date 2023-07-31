@@ -26,7 +26,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
 # To see available chromedriver go to https://googlechromelabs.github.io/chrome-for-testing/ and search for the major version
 # of chrome(for  example 91.0).
 
-COPY ../chromium/download_chromedriver.sh .
+COPY download_chromedriver.sh .
 
 # Deps needed by google-chrome
 RUN apt-get update && apt-get -t bullseye-backports install -y --no-install-recommends \

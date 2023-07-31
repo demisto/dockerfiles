@@ -2,7 +2,7 @@ FROM demisto/py3-tools-ubi:1.0.0.65326
 
 
 COPY requirements.txt .
-COPY chromium/download_chromedriver.sh .
+COPY ../chromium/download_chromedriver.sh .
 COPY repos /repos
 
 ARG LEPTONICA_VERSION=1.82.0
