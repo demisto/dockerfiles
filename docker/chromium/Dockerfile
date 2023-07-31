@@ -23,10 +23,10 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
 
 # Based on instructions at: https://tecadmin.net/setup-selenium-with-chromedriver-on-debian/
 # Will install the latest version available from the chrome repo.
-# To see available chromedriver go to https://chromedriver.storage.googleapis.com/ and search for the major version
+# To see available chromedriver go to https://googlechromelabs.github.io/chrome-for-testing/ and search for the major version
 # of chrome(for  example 91.0).
 
-COPY download_chromedriver.sh .
+COPY ../chromium/download_chromedriver.sh .
 
 # Deps needed by google-chrome
 RUN apt-get update && apt-get -t bullseye-backports install -y --no-install-recommends \
