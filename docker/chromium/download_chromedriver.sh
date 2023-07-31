@@ -20,9 +20,8 @@ if [ -z "$GOOGLE_CHROME_VERSION" ]; then
     exit 1
 fi 
 
-echo "using GOOGLE_CHROME_VERSION: $GOOGLE_CHROME_VERSION"
+echo "Finding chromedriver for given google-chrome version: $GOOGLE_CHROME_VERSION"
 
-echo "Finding chromedriver for given version"
 
 chromedriver=$(curl https://googlechromelabs.github.io/chrome-for-testing/latest-patch-versions-per-build-with-downloads.json | jq .builds.\"$GOOGLE_CHROME_VERSION\")
 DRIVER_VERSION=$(echo $chromedriver | jq .version)
