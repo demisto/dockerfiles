@@ -1,1 +1,1 @@
-chromedriver --version | grep -o -E '[0-9]+\.[0-9]+.[0-9]+'
+google-chrome --version | grep -o -E '[0-9]+\.[0-9]+.[0-9]+'
