@@ -46,6 +46,7 @@ RUN apt-get update && apt-get -t bullseye-backports install -y --no-install-reco
 && unzip chromedriver-linux64.zip \
 && mv chromedriver /usr/bin/chromedriver \
 && rm -rf chromedriver-linux64.zip \
+&& rm download_chromedriver.sh \
 && google-chrome --version \
 && chromedriver --version \
 && apt-get purge -y --auto-remove \
