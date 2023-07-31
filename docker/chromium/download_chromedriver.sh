@@ -29,7 +29,7 @@ DRIVER_VERSION=$(echo $chromedriver | jq .version)
 
 echo  "Using chromedriver version: $DRIVER_VERSION"
 
-url=$(echo $chromedriver | jq '.downloads.chromedriver[] | select(.platform == "linux64") | .url')
+url=$(echo $chromedriver | jq -r '.downloads.chromedriver[] | select(.platform == "linux64") | .url')
 echo "url to download chromedriver is $url"
 wget $url
 
