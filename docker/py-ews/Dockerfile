@@ -45,5 +45,4 @@ RUN apt-get update && apt-get install -y --no-install-recommends --allow-downgra
 
 # Handling the issue described here https://askubuntu.com/questions/1233186/ubuntu-20-04-how-to-set-lower-ssl-security-level 
 # by using TLS v1 to support old exchange servers
-COPY ssl_change.diff .
-RUN patch /etc/ssl/openssl.cnf < ssl_change.diff
+RUN sed -i.bak '/MinProtocol = TLSv1\.2/{s/TLSv1\.2/TLSv1/}; /CipherString = DEFAULT@SECLEVEL=2/{s/DEFAULT@SECLEVEL=2/DEFAULT@SECLEVEL=1/}' /etc/ssl/openssl.cnf
