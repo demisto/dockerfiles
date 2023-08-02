@@ -27,7 +27,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends --allow-downgra
     libxml2-dev \
     libxslt-dev \
     libssl-dev \
-    libkrb5-dev \
+    libkrb5-dev  \
+    patch \
 && pip install --no-cache-dir -r requirements.txt \
 && apt-get purge -y --auto-remove \
   gcc \
@@ -44,16 +45,5 @@ RUN apt-get update && apt-get install -y --no-install-recommends --allow-downgra
 
 # Handling the issue described here https://askubuntu.com/questions/1233186/ubuntu-20-04-how-to-set-lower-ssl-security-level 
 # by using TLS v1 to support old exchange servers
-RUN echo 'openssl_conf = default_conf' | cat - /etc/ssl/openssl.cnf > temp-ssl.cnf \
-&& mv temp-ssl.cnf /etc/ssl/openssl.cnf \
-&& echo "\n\
-[default_conf]\n\ 
-ssl_conf = ssl_sect\n\ 
-\n\
-[ssl_sect]\n\
-system_default = system_default_sect\n\
-\n\
-[system_default_sect]\n\
-MinProtocol = TLSv1\n\
-CipherString = DEFAULT@SECLEVEL=1\n\
-" >> /etc/ssl/openssl.cnf
+COPY ssl_change.diff .
+RUN patch /etc/ssl/openssl.cnf < ssl_change.diff
