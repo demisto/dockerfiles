@@ -13,7 +13,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 COPY requirements.txt .
 
 #Install tools for building binary deps (will be reomved later on)
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y --no-install-recommends --allow-downgrades \
     gcc \
     python-dev \
     build-essential \
