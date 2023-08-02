@@ -19,6 +19,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     wget \
     git \
+    libcom-err2=1.46.2-2 \
     libxml2 \
     libxslt1.1 \
 	libkrb5-3 \
