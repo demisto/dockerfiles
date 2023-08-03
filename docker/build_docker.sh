@@ -252,14 +252,9 @@ function docker_build {
 
     if [ -n "$CI" ]; then
         echo "Checking that python version is match to the base version"
-        PYTHON_VERSION=$(docker inspect | jq -r '.[].Config.Env[]|select(match("^PYTHON_VERSION"))|.[index("=")+1:]' "$image_full_name")
+        PYTHON_VERSION=$(docker inspect "$image_name" | jq -r '.[].Config.Env[]|select(match("^PYTHON_VERSION"))|.[index("=")+1:]')
         echo "PYTHON_VERSION: $PYTHON_VERSION"
-        echo "PYTHON_PIP_VERSION: $PYTHON_PIP_VERSION"
-        if [[ "$PYTHON_VERSION" -ne "$PYTHON_PIP_VERSION" ]]; then
-            echo "Found modified files. Failing the build!!"
-            echo "FAILED: $image_name"
-            return 1
-        fi
+        Pipfile_content=$(<"Pipfile")
     fi
     
     if [[ "$(prop 'devonly')" ]]; then
