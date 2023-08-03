@@ -250,12 +250,13 @@ function docker_build {
         fi
     fi
 
-    if [ -n "$CI" ]; then
+
         echo "Checking that python version is match to the base version"
-        PYTHON_VERSION=$(docker inspect "$image_name" | jq -r '.[].Config.Env[]|select(match("^PYTHON_VERSION"))|.[index("=")+1:]')
+        if [ -n "$image_full_name" ]; then
+            PYTHON_VERSION=$(docker inspect "$image_full_name" | jq -r '.[].Config.Env[]|select(match("^PYTHON_VERSION"))|.[index("=")+1:]')
+        fi
         echo "PYTHON_VERSION: $PYTHON_VERSION"
         Pipfile_content=$(<"Pipfile")
-    fi
     
     if [[ "$(prop 'devonly')" ]]; then
         echo "Skipping license verification for devonly image"
