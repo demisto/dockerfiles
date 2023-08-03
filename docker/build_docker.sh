@@ -253,10 +253,21 @@ function docker_build {
 
         echo "Checking that python version is match to the base version"
         if [ -n "$image_full_name" ]; then
+            # Get the python version from the docker metadata.
             PYTHON_VERSION=$(docker inspect "$image_full_name" | jq -r '.[].Config.Env[]|select(match("^PYTHON_VERSION"))|.[index("=")+1:]')
         fi
         echo "PYTHON_VERSION: $PYTHON_VERSION"
-        Pipfile_content=$(<"Pipfile")
+        if [ -f "pyproject.toml" ]; then
+            Pipfile_content=$(<"Pipfile")
+            python_version=$(jq -r '.python_version' "$pipfile_path")
+            echo "PYTHON_VERSION from pip: $python_version"
+        fi
+        if [ -f "Pipfile" ]; then
+            Pipfile_content=$(<"Pipfile")
+            python_version=$(jq -r '.python_version' "$pipfile_path")
+            echo "PYTHON_VERSION from pip: $python_version"
+        fi
+
     
     if [[ "$(prop 'devonly')" ]]; then
         echo "Skipping license verification for devonly image"
