@@ -251,22 +251,32 @@ function docker_build {
     fi
 
 
-        echo "Checking that python version is match to the base version"
-        if [ -n "$image_full_name" ]; then
-            # Get the python version from the docker metadata.
-            PYTHON_VERSION=$(docker inspect "$image_full_name" | jq -r '.[].Config.Env[]|select(match("^PYTHON_VERSION"))|.[index("=")+1:]')
+    echo "Checking that python version is match to the base version"
+    # Get the python version from the docker metadata.
+    PYTHON_VERSION=$(docker inspect "$image_full_name" | jq -r '.[].Config.Env[]|select(match("^PYTHON_VERSION"))|.[index("=")+1:]')
+    PY3CMD="python3"
+    if command -v python3.7 >/dev/null 2>&1; then
+        PY3CMD="python3.7"
+    elif command -v python3.8 >/dev/null 2>&1; then
+        PY3CMD="python3.8"
+    fi
+    if [ -f "Pipfile" ]; then 
+        pattern='python_version = \"([^\"]+)\"'
+        file_content=$(<"Pipfile")
+        if [[ $file_content =~ $pattern ]]; then
+            version_from_file="${BASH_REMATCH[1]}"
         fi
-        echo "PYTHON_VERSION: $PYTHON_VERSION"
-        if [ -f "pyproject.toml" ]; then
-            Pipfile_content=$(<"Pipfile")
-            python_version=$(jq -r '.python_version' "$pipfile_path")
-            echo "PYTHON_VERSION from pip: $python_version"
+    fi
+    if [ -f "pyproject.toml" ]; then 
+        pattern='python = \"([^\"]+)\"'
+        file_content=$(<"pyproject.toml")
+        if [[ $file_content =~ $pattern ]]; then
+            version_from_file="${BASH_REMATCH[1]}"
         fi
-        if [ -f "Pipfile" ]; then
-            Pipfile_content=$(<"Pipfile")
-            python_version=$(jq -r '.python_version' "$pipfile_path")
-            echo "PYTHON_VERSION from pip: $python_version"
-        fi
+    fi
+
+    $PY3CMD ${DOCKER_SRC_DIR}/verify_version_matching.py "${PYTHON_VERSION}" "${version_from_file}" "${image_name}"
+
 
     
     if [[ "$(prop 'devonly')" ]]; then
