@@ -90,7 +90,7 @@ def main():
     file_python_version: str = args[1]
     image_name: str =  args[2]
     if parse_and_match_versions(
-        docker_python_version, file_python_version, image_name
+        docker_python_version, file_python_version
     ):
         print("[SUCCESS] Versions verification")
     else:
