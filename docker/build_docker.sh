@@ -250,8 +250,8 @@ function docker_build {
         fi
     fi
 
-
-    echo "Checking that python version is match to the base version"
+    echo "================= $(date): Starting version verifocation on image: ${image_name} ================="
+    echo "Checking that python version is match to the base version..."
     # Get the python version from the docker metadata.
     PYTHON_VERSION=$(docker inspect "$image_full_name" | jq -r '.[].Config.Env[]|select(match("^PYTHON_VERSION"))|.[index("=")+1:]')
     PY3CMD="python3"
@@ -275,8 +275,11 @@ function docker_build {
         fi
     fi
 
-    $PY3CMD ${DOCKER_SRC_DIR}/verify_version_matching.py "${PYTHON_VERSION}" "${version_from_file}" "${image_name}"
-
+    output=$($PY3CMD ${DOCKER_SRC_DIR}/verify_version_matching.py "${PYTHON_VERSION}" "${version_from_file}" "${image_name}")
+    exit_code=$?
+    if [ $exit_code -ne 0 ]; then
+        errors+=("$output (Exit code: $exit_code) image ${image_name}.")
+    fi
 
     
     if [[ "$(prop 'devonly')" ]]; then
@@ -443,6 +446,7 @@ echo $DOCKER_INCLUDE_GREP > $CIRCLE_ARTIFACTS/docker_include_grep.txt
 
 total=$(find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | wc -l)
 count=0
+errors=()
 for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | sort`; do
     if [[ ${DIFF_COMPARE} = "ALL" ]] || [[ $(git diff --name-status $DIFF_COMPARE -- ${docker_dir}) ]]; then
         if [ -n "${DOCKER_INCLUDE_GREP}" ] && [ -z "$(echo ${docker_dir} | grep -E ${DOCKER_INCLUDE_GREP})" ]; then
@@ -456,5 +460,11 @@ for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | so
         echo ">>>>>>>>>>>>>>> `date`: Done docker build <<<<<<<<<<<<<"
     fi
 done
+if [ ${#errors[@]} != 0 ]; then
+  for err in "${errors[@]}"; do
+    echo "$err"
+  done
+  exit 1
+fi
 echo $PUSHED_DOCKERS > $CIRCLE_ARTIFACTS/pushed_dockers.txt
 echo "Successfully pushed $PUSHED_DOCKERS"

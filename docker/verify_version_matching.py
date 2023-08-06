@@ -97,7 +97,8 @@ def main():
         msg = "[ERROR] Version mismatch. " \
         f"The pipfile/pyproject.toml version {file_python_version}" \
         f" does not match to the base version {docker_python_version} for {image_name}."
-        raise Exception(msg)
+        print(msg)
+        sys.exit(1)
 
 
 
