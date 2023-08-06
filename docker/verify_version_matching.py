@@ -93,14 +93,15 @@ def main():
         docker_python_version, file_python_version
     ):
         print("[SUCCESS] Versions verification")
+        return 0
     else:
         msg = "[ERROR] Version mismatch. " \
         f"The pipfile/pyproject.toml version {file_python_version}" \
         f" does not match to the base version {docker_python_version} for {image_name}."
         print(msg)
-        sys.exit(1)
+        return 1
 
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

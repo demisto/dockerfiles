@@ -274,10 +274,9 @@ function docker_build {
             version_from_file="${BASH_REMATCH[1]}"
         fi
     fi
-
-    output=$($PY3CMD ${DOCKER_SRC_DIR}/verify_version_matching.py "${PYTHON_VERSION}" "${version_from_file}" "${image_name}")
-    exit_code=$?
-    if [ $exit_code != 0 ]; then
+    set +e
+    output=$($PY3CMD "${DOCKER_SRC_DIR}"/verify_version_matching.py "${PYTHON_VERSION}" "${version_from_file}" "${image_name}")
+    if [ $? != 0 ]; then
         errors+=("$output")
     fi
 
