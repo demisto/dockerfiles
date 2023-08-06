@@ -277,8 +277,8 @@ function docker_build {
 
     output=$($PY3CMD ${DOCKER_SRC_DIR}/verify_version_matching.py "${PYTHON_VERSION}" "${version_from_file}" "${image_name}")
     exit_code=$?
-    if [ $exit_code -ne 0 ]; then
-        errors+=("$output (Exit code: $exit_code) image ${image_name}.")
+    if [ $exit_code != 0 ]; then
+        errors+=("$output")
     fi
 
     
