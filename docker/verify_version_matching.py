@@ -3,7 +3,7 @@
 import os
 import re
 import sys
-from typing import Optional, List , tuple
+from typing import Optional, List, Tuple
 import requests
 import urllib3
 
@@ -34,7 +34,7 @@ def parse_local_version(local: str) -> List[Optional[int]]:
 
 
 def compare_versions(versions_docker:List[Optional[int]],
-                     versions_file:tuple) -> bool:
+                     versions_file:Tuple) -> bool:
     """Compares the major|minor|revision versions.
     Args:
         versions_docker (List[Optional[int]]): The first parameter.
@@ -56,7 +56,7 @@ def compare_versions(versions_docker:List[Optional[int]],
     return True
 
 
-def parse_version_range(version_1: str, version_2: str) -> tuple[str, str]:
+def parse_version_range(version_1: str, version_2: str) -> Tuple[str, str]:
     """Parse the versions ranges using regex.
     Args:
         version_1 (str): The first version.
