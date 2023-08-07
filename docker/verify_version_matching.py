@@ -70,7 +70,6 @@ def parse_version_range(version_1: str,version_2: str) -> tuple[str,str]:
     low_version_boundary = None
     high_version_boundary = None
     if result_lower := re.search(r">=*(\d+.*)+|\^+(\d+.*)+",version_1):
-        print("here")
         low_version_boundary = result_lower[1] or result_lower[2]
     elif result_lower := re.search(r">=*(\d+.*)+|\^+(\d+.*)+",version_2):
         low_version_boundary = result_lower[1] or result_lower[2]
