@@ -56,7 +56,7 @@ def compare_versions(versions_docker:List[Optional[int]],
     return True
 
 
-def parse_version_range(version_1: str,version_2: str) -> tuple[str,str]:
+def parse_version_range(version_1: str, version_2: str) -> tuple[str, str]:
     """Parse the versions ranges using regex.
     Args:
         version_1 (str): The first version.
@@ -66,18 +66,22 @@ def parse_version_range(version_1: str,version_2: str) -> tuple[str,str]:
         tuple[str,str]: The return value. Tuple with lower and higher version range.
     """
     if version_1 == version_2:
-        return version_1, version_2   
+        return version_1, version_2
     low_version_boundary = None
     high_version_boundary = None
-    if result_lower := re.search(r">=*(\d+.*)+|\^+(\d+.*)+",version_1):
-        low_version_boundary = result_lower[1] or result_lower[2]
-    elif result_lower := re.search(r">=*(\d+.*)+|\^+(\d+.*)+",version_2):
-        low_version_boundary = result_lower[1] or result_lower[2]
-    if result_higher := re.search(r"<=*(\d+.*)+",version_1):
-        high_version_boundary = result_higher[1]
-    elif result_higher := re.search(r"<=*(\d+.*)+",version_2):
-        high_version_boundary = result_higher[1]  
-    return low_version_boundary,high_version_boundary
+    result_lower_version_1 = re.search(r">=*(\d+.*)+|\^+(\d+.*)+", version_1)
+    result_lower_version_2 = re.search(r">=*(\d+.*)+|\^+(\d+.*)+", version_2)
+    result_higher_version_1 = re.search(r"<=*(\d+.*)+", version_1)
+    result_higher_version_2 = re.search(r"<=*(\d+.*)+", version_2)
+    if result_lower_version_1:
+        low_version_boundary = result_lower_version_1[1] or result_lower_version_1[2]
+    elif result_lower_version_2:
+        low_version_boundary = result_lower_version_2[1] or result_lower_version_2[2]
+    if result_higher_version_1:
+        high_version_boundary = result_higher_version_1[1]
+    elif result_higher_version_2:
+        high_version_boundary = result_higher_version_2[1]
+    return low_version_boundary, high_version_boundary
             
             
 def parse_and_match_versions(docker_python_version: str,file_python_version: str)-> bool:
