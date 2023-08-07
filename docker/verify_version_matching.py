@@ -3,7 +3,7 @@
 import os
 import re
 import sys
-from typing import Optional, List
+from typing import Optional, List 
 import requests
 import urllib3
 
@@ -21,8 +21,7 @@ if os.getenv('TRUST_ANY_CERT'):
 _local_version_separators = re.compile(r"[\._-]")
 
 
-def parse_local_version(local: str) -> Optional[
-    List[Optional[int]]]:
+def parse_local_version(local: str) -> List[Optional[int]]:
     """
     Takes a string like abc.1.twelve and turns it into ("abc", 1, "twelve").
     """
@@ -31,34 +30,55 @@ def parse_local_version(local: str) -> Optional[
             int(part) if part.isnumeric() else part.lower()
             for part in _local_version_separators.split(local)
         ]
-    return None
+    return []
 
 
 def compare_versions(versions_docker:List[Optional[int]],
-                     versions_file:List[Optional[int]],
-                     is_caret: bool) -> bool:
+                     versions_file:tuple) -> bool:
     """Compares the major|minor|revision versions.
     Args:
         versions_docker (List[Optional[int]]): The first parameter.
         versions_file (List[Optional[int]]): The second parameter.
-        is_caret (bool): Indicating whether ^ appears in the version or not.
+        is_range (bool): Indicating whether ^,<,> appear in the version or not.
 
     Returns:
         bool: The return value. True for success, False otherwise.
     """
-    for i, (version_docker, version_file) in enumerate(zip(versions_docker,
-                                                           versions_file)):
-        # caret is ^
-        if is_caret:
-            # the revision should be equal or bigger 
-            if version_docker < version_file and i == 3:
-                return False
-            elif version_docker != version_file:
+    is_version_range = versions_file[0] != versions_file[1]
+    for i, (version_docker, version_file_low_boundary, version_file_high_boundary) in enumerate(
+        zip(versions_docker,versions_file[0],versions_file[1])):
+        if not is_version_range:
+            if version_docker != version_file_low_boundary:
                 return False
         else:
-            if version_docker != version_file:
+            if version_docker < version_file_low_boundary or version_docker > version_file_high_boundary:
                 return False
     return True
+
+
+def parse_version_range(version_1: str,version_2: str) -> tuple[str,str]:
+    """Parse the versions ranges using regex.
+    Args:
+        version_1 (str): The first version.
+        version_2 (str): The second version.
+
+    Returns:
+        tuple[str,str]: The return value. Tuple with lower and higher version range.
+    """
+    if version_1 == version_2:
+        return version_1, version_2   
+    low_version_boundary = None
+    high_version_boundary = None
+    if result_lower := re.search(r">=*(\d+.*)+|\^+(\d+.*)+",version_1):
+        print("here")
+        low_version_boundary = result_lower[1] or result_lower[2]
+    elif result_lower := re.search(r">=*(\d+.*)+|\^+(\d+.*)+",version_2):
+        low_version_boundary = result_lower[1] or result_lower[2]
+    if result_higher := re.search(r"<=*(\d+.*)+",version_1):
+        high_version_boundary = result_higher[1]
+    elif result_higher := re.search(r"<=*(\d+.*)+",version_2):
+        high_version_boundary = result_higher[1]  
+    return low_version_boundary,high_version_boundary
             
             
 def parse_and_match_versions(docker_python_version: str,file_python_version: str)-> bool:
@@ -70,19 +90,16 @@ def parse_and_match_versions(docker_python_version: str,file_python_version: str
     Returns:
         bool: The return value. True for success, False otherwise.
     """
-    is_caret = False
-    if "^" in file_python_version:
-        is_caret = True
-        file_python_version = file_python_version[1:]
-    if compare_versions(
-        parse_local_version(docker_python_version),
-        parse_local_version(file_python_version),
-        is_caret
-    ):
-        return True
-    return False
+    version_range = file_python_version.split(",")
+    parsed_docker_version=parse_local_version(docker_python_version)
+    is_python_verson_range = len(version_range) > 1
     
-    
+    parsed_file_version=((parse_version_range(version_range[0],version_range[1]))
+                         if is_python_verson_range 
+                         else (parse_version_range(file_python_version,file_python_version)))
+    parsed_file_version = (parse_local_version(parsed_file_version[0]),parse_local_version(parsed_file_version[1]))
+    return compare_versions(parsed_docker_version,parsed_file_version)
+
 
 def main():
     args = sys.argv[1:]
