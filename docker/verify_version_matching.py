@@ -3,7 +3,7 @@
 import os
 import re
 import sys
-from typing import Optional, List 
+from typing import Optional, List , tuple
 import requests
 import urllib3
 
