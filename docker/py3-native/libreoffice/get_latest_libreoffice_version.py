@@ -50,16 +50,15 @@ def main():
 
     major_minor_version = f'{latest_libre_version.major}.{latest_libre_version.minor}'
 
-    print(f"Setting LIBRE_OFFICE_MAJOR_VERSION environment variable to '{major_minor_version}'")
-    os.environ["LIBRE_OFFICE_MAJOR_MINOR_VERSION"] = major_minor_version
+    with open("libre_office_major_minor_version.txt", "w") as f:
+        f.write(major_minor_version)
 
-    print(f"Setting LIBRE_OFFICE_FULL_VERSION environment variable to '{latest_libre_version}'")
-    os.environ["LIBRE_OFFICE_FULL_VERSION"] = str(latest_libre_version)
+    with open("libre_office_full_version.txt", "w") as f:
+        f.write(str(latest_libre_version))
 
     file_name = f"LibreOffice_{latest_libre_version}_Linux_x86-64_rpm"
-
-    print(f"Setting LIBRE_OFFICE_INSTALLATION_FILE_NAME environment variable to '{file_name}'")
-    os.environ["LIBRE_OFFICE_INSTALLATION_FILE_NAME"] = file_name
+    with open("libre_office_installation_file_name.txt", "w") as f:
+        f.write(file_name)
 
     print(
         f'Going to install libre-office version {str(latest_libre_version)} '

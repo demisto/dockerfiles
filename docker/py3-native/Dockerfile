@@ -61,7 +61,6 @@ RUN dnf update --nodocs -y  \
 
 COPY libreoffice/get_latest_libreoffice_version.py .
 # libre-office mirrors are taken from here - https://mirror.isoc.org.il/pub/tdf/libreoffice/stable/
-# LIBRE_OFFICE_INSTALLATION_FILE_NAME, LIBRE_OFFICE_FULL_VERSION and libreoffice$LIBRE_OFFICE_MAJOR_MINOR_VERSION are set in the libreoffice/get_latest_libreoffice_version.py script
 
 # handles os dependencies for: crypto + readpdf + parse-emails + docxpy + sklearn + pandas + ippysocks-py3 + oauthlib
 # unzip + py3ews + taxii2 + pan-os-python + slackv3 + google-api-py3 + boto3py3
@@ -83,6 +82,9 @@ RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE python3-devel gcc gcc-c+
         && chown -R demisto:demisto /ml && chmod -R 775 /ml \
         && dnf install -y --nodocs java-11-openjdk-headless cairo libX11-xcb \
         && python get_latest_libreoffice_version.py \
+        && LIBRE_OFFICE_FULL_VERSION=$(cat libre_office_full_version.txt) \
+        && LIBRE_OFFICE_INSTALLATION_FILE_NAME=$(cat libre_office_installation_file_name.txt) \
+        && LIBRE_OFFICE_MAJOR_MINOR_VERSION=$(cat libre_office_major_minor_version.txt) \
         && wget https://mirror.isoc.org.il/pub/tdf/libreoffice/stable/${LIBRE_OFFICE_FULL_VERSION}/rpm/x86_64/${LIBRE_OFFICE_INSTALLATION_FILE_NAME}.tar.gz \
         && tar -xzvf ${LIBRE_OFFICE_INSTALLATION_FILE_NAME}.tar.gz --one-top-level=${LIBRE_OFFICE_INSTALLATION_FILE_NAME} --strip-components 1 \
         && dnf localinstall -y ${LIBRE_OFFICE_INSTALLATION_FILE_NAME}/RPMS/*.rpm \
