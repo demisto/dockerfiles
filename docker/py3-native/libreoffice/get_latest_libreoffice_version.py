@@ -7,7 +7,7 @@ from packaging.version import Version
 URL = "http://download.documentfoundation.org/libreoffice/stable/"
 
 DEFAULT_LIBRE_OFFICE_VERSION = "7.5.5"
-VERSION_REGEX_PATTERN = "([0-9]+\.[0-9]+\.[0-9]+)"
+VERSION_REGEX_PATTERN = r"([0-9]+\.[0-9]+\.[0-9]+)"
 
 
 def get_libre_office_html(sleep_time: int = 10, num_of_retries: int = 5) -> str:
