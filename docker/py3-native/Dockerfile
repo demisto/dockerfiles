@@ -82,7 +82,7 @@ RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE python3-devel gcc gcc-c+
         && python -c "import nltk; nltk.download('wordnet', download_dir='/ml/nltk_data'); nltk.download('stopwords', download_dir='/ml/nltk_data'); nltk.download('punkt', download_dir='/ml/nltk_data')" \
         && chown -R demisto:demisto /ml && chmod -R 775 /ml \
         && dnf install -y --nodocs java-11-openjdk-headless cairo libX11-xcb \
-        && python get_latest_libreoffice_version.py
+        && python get_latest_libreoffice_version.py \
         && wget https://mirror.isoc.org.il/pub/tdf/libreoffice/stable/${LIBRE_OFFICE_FULL_VERSION}/rpm/x86_64/${LIBRE_OFFICE_INSTALLATION_FILE_NAME}.tar.gz \
         && tar -xzvf ${LIBRE_OFFICE_INSTALLATION_FILE_NAME}.tar.gz --one-top-level=${LIBRE_OFFICE_INSTALLATION_FILE_NAME} --strip-components 1 \
         && dnf localinstall -y ${LIBRE_OFFICE_INSTALLATION_FILE_NAME}/RPMS/*.rpm \
