@@ -57,14 +57,14 @@ def main():
     print(f"Setting LIBRE_OFFICE_FULL_VERSION environment variable to '{latest_libre_version}'")
     os.environ["LIBRE_OFFICE_FULL_VERSION"] = str(latest_libre_version)
 
-    file_name = f"LibreOffice_${latest_libre_version}_Linux_x86-64_rpm"
+    file_name = f"LibreOffice_{latest_libre_version}_Linux_x86-64_rpm"
 
     print(f"Setting LIBRE_OFFICE_INSTALLATION_FILE_NAME environment variable to '{file_name}'")
     os.environ["LIBRE_OFFICE_INSTALLATION_FILE_NAME"] = file_name
 
     print(
         f'Going to install libre-office version {latest_libre_version=} '
-        f'from URL {URL}/{latest_libre_version}/rpm/x86_64/${file_name}'
+        f'from URL {URL}/{latest_libre_version}/rpm/x86_64/{file_name}'
     )
 
 
