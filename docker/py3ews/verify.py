@@ -33,6 +33,7 @@ test = tzlocal.get_localzone()
 
 # Make sure MD4 is enabled:
 hashlib.algorithms_available
+print(hashlib.algorithms_available)
 assert 'md4' in hashlib.algorithms_available
 hashlib.new('md4', b"text")
 

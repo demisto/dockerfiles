@@ -143,7 +143,7 @@ def get_latest_tag_from_list(current_version: str, tags_list: List, key: str = "
     """
     if current_version:
         current_version_regex = re.compile(get_version_regex(current_version))
-        tags_list = [element for element in tags_list if re.search(current_version_regex, element.get(key, ""))]
+        tags_list = [element for element in tags_list if re.match(current_version_regex, element.get(key, ""))]
 
     latest_tag = max(tags_list, key=parse_versions)
 

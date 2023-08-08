@@ -1,5 +1,5 @@
-# Last modified: 2023-01-23T12:47:02.375413+00:00
-FROM demisto/python3-deb:3.10.9.45313
+# Last modified: 2023-04-27T16:38:21.412665+00:00
+FROM demisto/python3-deb:3.10.12.67104
 
 
 COPY requirements.txt .
@@ -30,7 +30,8 @@ COPY download_chromedriver.sh .
 
 # Deps needed by google-chrome
 RUN apt-get update && apt-get -t bullseye-backports install -y --no-install-recommends \
-  gnupg1 \
+  jq \
+  gnupg2 \
   libgtk-3-0 \
   libu2f-udev \
   udev \
@@ -42,14 +43,16 @@ RUN apt-get update && apt-get -t bullseye-backports install -y --no-install-reco
 && apt-get -y update && apt-get install -y google-chrome-stable \
 && apt-get install -y tigervnc-standalone-server x11-utils imagemagick \
 && ./download_chromedriver.sh \
-&& unzip chromedriver_linux64.zip \
-&& mv chromedriver /usr/bin/chromedriver \
-&& rm -rf chromedriver_linux64.zip \
+&& unzip chromedriver-linux64.zip \
+&& mv chromedriver-linux64/chromedriver /usr/bin/chromedriver \
+&& rm -rf chromedriver-linux64.zip \
+&& rm download_chromedriver.sh \
 && google-chrome --version \
 && chromedriver --version \
 && apt-get purge -y --auto-remove \
   curl \
   unzip \
+  jq \
 && rm -rf /var/lib/apt/lists/*
 
 ENV CHROME_EXE="/opt/google/chrome/google-chrome"
