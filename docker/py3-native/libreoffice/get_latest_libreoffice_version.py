@@ -4,7 +4,7 @@ from time import sleep
 import os
 from packaging.version import Version
 
-URL = "http://download.documentfoundation.org/libreoffice/stable/"
+URL = "https://mirror.isoc.org.il/pub/tdf/libreoffice/stable/"
 
 DEFAULT_LIBRE_OFFICE_VERSION = "7.5.5"
 VERSION_REGEX_PATTERN = r"([0-9]+\.[0-9]+\.[0-9]+)"
@@ -62,7 +62,10 @@ def main():
     print(f"Setting LIBRE_OFFICE_INSTALLATION_FILE_NAME environment variable to '{file_name}'")
     os.environ["LIBRE_OFFICE_INSTALLATION_FILE_NAME"] = file_name
 
-    print(f'Going to install libre-office version {latest_libre_version=}')
+    print(
+        f'Going to install libre-office version {latest_libre_version=} '
+        f'from URL {URL}/{latest_libre_version}/rpm/x86_64/${file_name}'
+    )
 
 
 if __name__ in ["__builtin__", "builtins", '__main__']:

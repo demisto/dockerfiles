@@ -60,7 +60,7 @@ RUN dnf update --nodocs -y  \
 
 
 COPY libreoffice/get_latest_libreoffice_version.py .
-# libre-office mirrors are taken from here - http://download.documentfoundation.org/libreoffice/stable/
+# libre-office mirrors are taken from here - https://mirror.isoc.org.il/pub/tdf/libreoffice/stable/
 # LIBRE_OFFICE_INSTALLATION_FILE_NAME, LIBRE_OFFICE_FULL_VERSION and libreoffice$LIBRE_OFFICE_MAJOR_MINOR_VERSION are set in the libreoffice/get_latest_libreoffice_version.py script
 
 # handles os dependencies for: crypto + readpdf + parse-emails + docxpy + sklearn + pandas + ippysocks-py3 + oauthlib
