@@ -12,7 +12,7 @@ VERSION_REGEX_PATTERN = "([0-9]+\.[0-9]+\.[0-9]+)"
 
 def get_libre_office_html(sleep_time: int = 10, num_of_retries: int = 5) -> str:
     """
-    Get the raw html of the latest libre office website, returns default libre-office version if not found.
+    Get the raw html of the latest libre-office website, returns default libre-office version if not found.
     """
     for i in range(1, num_of_retries + 1):
         try:
@@ -33,6 +33,9 @@ def get_libre_office_html(sleep_time: int = 10, num_of_retries: int = 5) -> str:
 
 
 def get_libre_office_versions(html: str):
+    """
+    Returns a set of all the versions found in the raw mirror html.
+    """
     return set(map(lambda v: Version(v), set(re.findall(VERSION_REGEX_PATTERN, html))))
 
 
@@ -59,7 +62,8 @@ def main():
     print(f"Setting LIBRE_OFFICE_INSTALLATION_FILE_NAME environment variable to '{file_name}'")
     os.environ["LIBRE_OFFICE_INSTALLATION_FILE_NAME"] = file_name
 
-    print(f'Going to install version {latest_libre_version}')
+    print(f'Going to install libre-office version {latest_libre_version=}')
+
 
 if __name__ in ["__builtin__", "builtins", '__main__']:
     main()
