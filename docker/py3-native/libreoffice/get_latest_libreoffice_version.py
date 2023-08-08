@@ -63,7 +63,7 @@ def main():
 
     print(
         f'Going to install libre-office version {str(latest_libre_version)} '
-        f'from URL {URL}/{latest_libre_version}/rpm/x86_64/{file_name}'
+        f'from URL {URL}/{latest_libre_version}/rpm/x86_64/{file_name}.tar.gz'
     )
 
 

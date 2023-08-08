@@ -94,7 +94,7 @@ RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE python3-devel gcc gcc-c+
         && dnf clean all \
         && rm -rf /var/cache/dnf \
         && rm -rf /root/.cargo \
-        && rm -rf get_latest_libreoffice_version.py
+        && rm -rf get_latest_libreoffice_version.py \
         && pip uninstall -y pcodedmp
 
 
