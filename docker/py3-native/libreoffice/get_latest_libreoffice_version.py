@@ -20,7 +20,7 @@ def get_libre_office_html(sleep_time: int = 10, num_of_retries: int = 5) -> str:
             if status_code := response.status_code != 200:
                 raise Exception(f'got bad status code: {status_code} in try number {i}')
             html = response.text
-            print(f'got {html} from {URL=}')
+            print(f'got {html=} from {URL=}')
             return html
         except Exception as e:
             print(f'got error when querying {URL} URL, error: {e} in retry number {i}')
