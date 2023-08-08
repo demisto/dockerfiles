@@ -1,6 +1,7 @@
 import warnings
 import dateparser
 import tldextract
+import os
 # set warnings to throw an error
 warnings.simplefilter("error")
 d = dateparser.parse('1 day')
@@ -15,12 +16,18 @@ print(c_double.from_param(1e300))
 print("all is good cve-2021-3177 is patched")
 
 import ssl
-search_string = 'Options = UnsafeLegacyRenegotiation'
 if ssl.OPENSSL_VERSION_INFO >= (3,0,0,0,0):
-    with open("/etc/ssl/openssl.cnf") as f:
+    if os.path.exists("/etc/ssl/openssl.cnf"):
+        # in python3 (alpine) the path to openssl conf is /etc/ssl/openssl.cnf
+        ssl_cnf_file_path = "/etc/ssl/openssl.cnf"
+    else:
+        # in python3 (ubi) the path to openssl conf is /etc/pki/tls/openssl.cnf
+        ssl_cnf_file_path = "/etc/pki/tls/openssl.cnf"
+    search_string = 'Options = UnsafeLegacyRenegotiation'
+    with open(ssl_cnf_file_path) as f:
         ssl_cnf = f.read()
         if search_string not in ssl_cnf:
-            print ('openSSL version changed.\n\
+            print('openSSL version changed.\n\
 Please validate SSL Legacy renegotiation error is not an issue.\n\
 If SSL Legacy renegotiation error occurs, please refer to python3 image Dockerfile for reference.')
             exit(1)
@@ -31,3 +38,13 @@ even, odd = more_itertools.partition(lambda num: num % 2 == 1, range(5))
 assert len(tuple(even)) == 3
 assert len(tuple(odd)) == 2
 print('more_itertools installed correctly')
+
+from defusedxml.ElementTree import fromstring
+xml = '<?xml version="1.0" encoding="UTF-8"?>' \
+      '<book>' \
+      '<name>A Song of Ice and Fire</name>' \
+      '</book>'
+
+xml_obj = fromstring(xml)
+assert xml_obj.tag == 'book'
+print('defusedxml installed correctly')

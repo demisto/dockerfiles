@@ -1,5 +1,5 @@
-# Last modified: 2023-01-23T12:46:41.925055+00:00
-FROM demisto/python3-deb:3.10.9.45313
+# Last modified: 2023-08-04T16:34:52.671882+00:00
+FROM demisto/python3-deb:3.10.12.67741
 
 WORKDIR "/app"
 
@@ -38,3 +38,6 @@ RUN python get_build_artifacts.py --project sane-reports --branch master --filte
 
 # Update permissions and ownership on /app dir
 RUN chown -R root:demisto /app/ && chmod 775 /app/ && chmod 775 /app/dist
+
+RUN apt-get purge -y --auto-remove git npm \
+    && rm -rf /var/lib/apt/lists/*

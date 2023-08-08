@@ -4,8 +4,10 @@ import re
 from datetime import datetime
 from pathlib import Path
 from typing import List, Dict
-
+from configparser import ConfigParser, MissingSectionHeaderError
 from dateutil.parser import parse
+
+
 BASE_IMAGE_REGEX = re.compile(r"(?:FROM [\S]+)")
 INTERNAL_BASE_IMAGES = re.compile(r"(demisto\/|devdemisto\/)")
 LAST_MODIFIED_REGEX = re.compile(r"# Last modified: [^\n]*")
@@ -49,26 +51,29 @@ def parse_base_image(full_base_image_name: str) -> (str, str, str):
     return repository, image_name, tag
 
 
-def is_dev_only(dockerfile_path=str) -> bool:
+def read_build_conf(dockerfile_path: str) -> Dict:
     """
-    Check the build.conf for "devonly" flag.
-    Args:
-        dockerfile_path (str): the dockerfile's path
+    Reads the build conf and return its content as a dict.
 
     Returns:
-
+        dict: where the keys are the key name in conf and its value.
     """
-    path = f"{dockerfile_path}/build.conf"
+    build_conf_path = f"{dockerfile_path}/build.conf"
     try:
-        with open(path) as f:
-            content = f.read()
-            if "devonly=true" in content:
-                return True
+        with open(build_conf_path) as f:
+            build_conf_content = f.read()
+
+        build_conf_parser = ConfigParser()
+        build_conf_parser.read_string(f'[config]\n{build_conf_content}')
+        return dict(build_conf_parser['config'])
 
     except FileNotFoundError:
-        return False
+        print(f'Could not find the file {build_conf_path}')
+        return {}
 
-    return False
+    except MissingSectionHeaderError as error:
+        print(f'Could not parse {build_conf_path}, {error=}')
+        return {}
 
 
 def filter_ignored_files(files_list):
@@ -89,6 +94,7 @@ def filter_ignored_files(files_list):
 def get_docker_files(base_path="docker/", devonly=False, external=False, internal=False) -> List[Dict]:
     """
     Get all the relevant dockerfiles from the repository.
+
     Args:
         base_path (str): base path for docker files
         devonly (bool): whether or not to get devonly images
@@ -103,7 +109,16 @@ def get_docker_files(base_path="docker/", devonly=False, external=False, interna
 
     for path in dockerfiles_paths:
         dockerfile_dir_path = path.replace("/Dockerfile", "")
-        if is_dev_only(dockerfile_dir_path) and not devonly:
+        build_conf_content = read_build_conf(dockerfile_dir_path)  # if does not exist will default to empty dict
+
+        # skip if the docker is deprecated
+        if build_conf_content.get('deprecated') == 'true':
+            print(f"docker {dockerfile_dir_path} is deprecated, hence not updating it")
+            continue
+
+        # skip if the docker is only used for dev
+        if build_conf_content.get('devonly') == 'true' and not devonly:
+            print(f"docker {dockerfile_dir_path} is dev-only, hence not updating it")
             continue
 
         with open(path) as f:

@@ -433,6 +433,8 @@ updates:
     directory: /docker/xsoar-tools
     schedule:
       interval: daily
+    ignore:
+      - dependency-name: "demisto-sdk"
   - package-ecosystem: pip
     directory: /docker/opencv
     schedule:
@@ -684,4 +686,32 @@ updates:
   - package-ecosystem: pip
     directory: /docker/splunksdk-py3
     schedule:
-      interval: daily
+      interval: daily  
+  - package-ecosystem: pip
+    directory: /docker/datadog-api-client
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/processing-image-file
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/oci
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/privx-api
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/xpanse-ml-ev2
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/commvault
+    schedule:
+    interval: daily
+  - package-ecosystem: pip
+    directory: /docker/fp-smc
+    schedule:
+    interval: daily
