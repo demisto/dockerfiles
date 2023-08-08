@@ -70,11 +70,10 @@ def parse_and_match_versions(docker_python_version: str,file_python_version: str
         parsed_version,operator=get_operator_and_version(version)
         # major, minor, revision = parsed_version
         # major_docker, minor_docker, revision_docker=parsed_docker_version
-        match operator:
-            case "=":
+        if operator == "=":
                 if parsed_docker_version != parsed_version:
                     result *= False
-            case "^":
+        elif operator == "^":
                 # examples: 
                 # requirement ---> versions allowed
                 # ^1.2.3 --> >=1.2.3 <2.0.0
@@ -90,19 +89,19 @@ def parse_and_match_versions(docker_python_version: str,file_python_version: str
                         upper_limit_version[index]=0
                 if parsed_docker_version < parsed_version or parsed_docker_version > upper_limit_version:
                     result *= False
-            case "<=":
+        elif operator == "<=":
                 if parsed_docker_version > parsed_version:
                     result *= False
-            case ">=":
+        elif operator == ">=":
                 if parsed_docker_version < parsed_version:
                     result *= False 
-            case "<":
+        elif operator == "<":
                 if parsed_docker_version >= parsed_version:
                     result *= False 
-            case ">":
+        elif operator == ">":
                 if parsed_docker_version <= parsed_version:
                     result *= False  
-            case "~":
+        elif operator ==  "~":
                 # examples: 
                 # requirement ---> versions allowed
                 # ~1.2.3 --> >=1.2.3 <1.3.0
@@ -119,7 +118,7 @@ def parse_and_match_versions(docker_python_version: str,file_python_version: str
                     upper_limit_version[upper_limit_version_len-1]=parsed_version[upper_limit_version_len-1]+1
                 if parsed_docker_version < parsed_version or parsed_docker_version >= upper_limit_version:
                     result *= False
-            case "!=":
+        elif operator == "!=":
                 if parsed_docker_version == parsed_version:
                     result *= False
     return result
