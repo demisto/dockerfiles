@@ -59,6 +59,7 @@ def main():
     print(f"Setting LIBRE_OFFICE_INSTALLATION_FILE_NAME environment variable to '{file_name}'")
     os.environ["LIBRE_OFFICE_INSTALLATION_FILE_NAME"] = file_name
 
+    print(f'Going to install version {latest_libre_version}')
 
 if __name__ in ["__builtin__", "builtins", '__main__']:
     main()
