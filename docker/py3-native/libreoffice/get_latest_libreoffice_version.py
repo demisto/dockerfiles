@@ -42,7 +42,6 @@ def get_libre_office_versions(html: str):
 def main():
     html = get_libre_office_html()
 
-    print(f'got {html=} from {URL}')
     libre_versions = get_libre_office_versions(html)
     print(f'{libre_versions=}')
 
@@ -63,7 +62,7 @@ def main():
     os.environ["LIBRE_OFFICE_INSTALLATION_FILE_NAME"] = file_name
 
     print(
-        f'Going to install libre-office version {latest_libre_version=} '
+        f'Going to install libre-office version {str(latest_libre_version)} '
         f'from URL {URL}/{latest_libre_version}/rpm/x86_64/{file_name}'
     )
 
