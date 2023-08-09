@@ -264,7 +264,8 @@ function docker_build {
     elif command -v python3.10 >/dev/null 2>&1; then
         PY3CMD="python3.10"
     fi
-    if [ -f "Pipfile" ]; then 
+    if [ -f "Pipfile" ]; then
+        file_name="Pipfile"
         pattern='python_version = \"([^\"]+)\"'
         file_content=$(<"Pipfile")
         if [[ $file_content =~ $pattern ]]; then
@@ -272,6 +273,7 @@ function docker_build {
         fi
     fi
     if [ -f "pyproject.toml" ]; then 
+        file_name="pyproject.toml"
         pattern='python = \"([^\"]+)\"'
         file_content=$(<"pyproject.toml")
         if [[ $file_content =~ $pattern ]]; then
@@ -279,7 +281,7 @@ function docker_build {
         fi
     fi
     set +e
-    output=$($PY3CMD "${DOCKER_SRC_DIR}"/verify_version_matching.py "${PYTHON_VERSION}" "${version_from_file}" "${image_name}")
+    output=$($PY3CMD "${DOCKER_SRC_DIR}"/verify_version_matching.py "${PYTHON_VERSION}" "${version_from_file}" "${image_name}" "${file_name}")
     if [ $? != 0 ]; then
         errors+=("$output")
     fi
