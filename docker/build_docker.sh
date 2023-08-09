@@ -259,6 +259,10 @@ function docker_build {
         PY3CMD="python3.7"
     elif command -v python3.8 >/dev/null 2>&1; then
         PY3CMD="python3.8"
+    elif command -v python3.9 >/dev/null 2>&1; then
+        PY3CMD="python3.9"
+    elif command -v python3.10 >/dev/null 2>&1; then
+        PY3CMD="python3.10"
     fi
     if [ -f "Pipfile" ]; then 
         pattern='python_version = \"([^\"]+)\"'

@@ -1,24 +1,15 @@
 #!/usr/bin/env python3
 
-import os
 import re
 import sys
 from typing import Optional, List, Tuple
-import requests
-import urllib3
-import copy
+from packaging.specifiers import SpecifierSet, InvalidSpecifier
+from packaging.version import Version
 
-if(sys.version_info[0] < 3 or sys.version_info[1] < 7):
+if Version(sys.version_info) < Version(3.7):
     print("This script requires python version 3.7 and above. Please make sure to run with the proper version. Aborting...")
     sys.exit(1)
 
-req_session = requests.Session()
-
-if os.getenv('TRUST_ANY_CERT'):
-    req_session.verify = False
-    urllib3.disable_warnings()
-    
-  
 _local_version_separators = re.compile(r"[\._-]")
 
 
@@ -51,10 +42,46 @@ def get_operator_and_version(version) -> Tuple[List,str]:
             version  = version[operator_index+len(operator):]
             returned_operator = operator
             break
-    return parse_local_version(version),returned_operator            
+    return version,returned_operator            
 
+def create_specifier_set(version_string: str,operator: str) -> SpecifierSet:
+    """Gets the specifier set.
+    
+    Args:
+        version_string (str): The version in string representation.
+        operator (str): The operator.        
+
+    Returns:
+        SpecifierSet: A SpecifierSet.
+    """
+    version_obj = Version(version_string)
+    version_list = parse_local_version(version_string)
+    # Caret requirements allow SemVer compatible updates to a specified version.
+    # An update is allowed if the new version number does not modify the left-most
+    # non-zero digit in the major, minor, patch grouping. 
+    if operator == "^":
+        non_zero_index=next((i for i, x in enumerate(version_list) if x), len(version_list)-1)
+        if non_zero_index == 0:
+            return SpecifierSet(f">={str(version_obj)}, <{version_obj.major+1}.0.0")
+        elif non_zero_index == 1:
+            return SpecifierSet(f">={str(version_obj)}, <{version_obj.major}.{version_obj.minor+1}.0")
+        else:
+            return SpecifierSet(f">={str(version_obj)}, <{version_obj.major}.{version_obj.minor}.{version_obj.micro+1}")
+        
+    # Tilde requirements specify a minimal version with some ability to update.
+    # If you specify a major, minor, and patch version or only a major and minor version,
+    # only patch-level changes are allowed. If you only specify a major version, 
+    # then minor- and patch-level changes are allowed.
+    if operator ==  "~":
+        if version_obj.major:
+            if (version_obj.minor and version_obj.micro) or version_obj.minor:
+                return SpecifierSet(f">={str(version_obj)}, <{version_obj.major}.{version_obj.minor+1}.0")
+            # If you only specify a major version, then minor- and patch-level changes are allowed.
+            else:
+                return SpecifierSet(f">={version_obj.major}.0.0, <{version_obj.major+1}.0.0")
+    return SpecifierSet("")
  
-def parse_and_match_versions(docker_python_version: str,file_python_version: str)-> bool:
+def parse_and_match_versions(docker_python_version: str,file_python_version: str) -> bool:
     """Parse the versions and validate versions matching.
     Args:
         docker_python_version (str): The first parameter.
@@ -63,66 +90,23 @@ def parse_and_match_versions(docker_python_version: str,file_python_version: str
     Returns:
         bool: The return value. True for success, False otherwise.
     """
-    versions = file_python_version.split(",")
-    parsed_docker_version=parse_local_version(docker_python_version)
     result = True
+    versions = file_python_version.split(",")
+    docker_version = Version(docker_python_version)
     for version in versions:
-        parsed_version,operator=get_operator_and_version(version)
-        # major, minor, revision = parsed_version
-        # major_docker, minor_docker, revision_docker=parsed_docker_version
-        if operator == "=":
-                if parsed_docker_version != parsed_version:
-                    result *= False
-        elif operator == "^":
-                # examples: 
-                # requirement ---> versions allowed
-                # ^1.2.3 --> >=1.2.3 <2.0.0
-                # ^1.2 --> >=1.2.0 <2.0.0
-                # ^0.2.3 --> >=0.2.3 <0.3.0
-                upper_limit_version = copy.deepcopy(parsed_version)
-                # gets the first instance of a nonzero number in the version list.
-                first_non_zero_of_version = next((index for index, value in enumerate(upper_limit_version) if value), 0)
-                for index,version in enumerate(upper_limit_version):
-                    if index == first_non_zero_of_version:
-                        upper_limit_version[index]=parsed_version[index]+1
-                    if index > first_non_zero_of_version:
-                        upper_limit_version[index]=0
-                if parsed_docker_version < parsed_version or parsed_docker_version > upper_limit_version:
-                    result *= False
-        elif operator == "<=":
-                if parsed_docker_version > parsed_version:
-                    result *= False
-        elif operator == ">=":
-                if parsed_docker_version < parsed_version:
-                    result *= False 
-        elif operator == "<":
-                if parsed_docker_version >= parsed_version:
-                    result *= False 
-        elif operator == ">":
-                if parsed_docker_version <= parsed_version:
-                    result *= False  
-        elif operator ==  "~":
-                # examples: 
-                # requirement ---> versions allowed
-                # ~1.2.3 --> >=1.2.3 <1.3.0
-                # ~1.2 --> >=1.2.0 <1.3.0
-                # ~1 --> >=1.0.0 <2.0.0
-                upper_limit_version = copy.deepcopy(parsed_version)
-                upper_limit_version_len = len(upper_limit_version)
-                # If you specify a major, minor, and revision version or only a major and minor version, only revision-level changes are allowed.
-                if upper_limit_version_len == 3:
-                    upper_limit_version[1] = upper_limit_version[1] + 1
-                    upper_limit_version[2] = 0
-                # If you only specify a major version, then minor- and revision-level changes are allowed.
-                else:
-                    upper_limit_version[upper_limit_version_len-1]=parsed_version[upper_limit_version_len-1]+1
-                if parsed_docker_version < parsed_version or parsed_docker_version >= upper_limit_version:
-                    result *= False
-        elif operator == "!=":
-                if parsed_docker_version == parsed_version:
-                    result *= False
-    return result
-
+        try:
+            specifier = SpecifierSet(file_python_version)
+            result *= docker_version in specifier
+        except InvalidSpecifier as e:
+                # Specifier support ~=|==|!=|<=|>=|<|>|=== 
+                # we have ^ and ~ in the pyproject.toml files.
+                version,operator=get_operator_and_version(file_python_version)
+                try:
+                    specifier = create_specifier_set(version,operator)
+                    result *= docker_version in specifier
+                except InvalidSpecifier as e:
+                    raise(e)
+        return result
 
 def main():
     args = sys.argv[1:]
