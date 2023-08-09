@@ -59,21 +59,17 @@ RUN dnf update --nodocs -y  \
     && rm -rf /var/cache/dnf
 
 
-COPY libreoffice/get_latest_libreoffice_version.py .
-# libre-office mirrors are taken from here - https://mirror.isoc.org.il/pub/tdf/libreoffice/stable/
-
 # handles os dependencies for: crypto + readpdf + parse-emails + docxpy + sklearn + pandas + ippysocks-py3 + oauthlib
 # unzip + py3ews + taxii2 + pan-os-python + slackv3 + google-api-py3 + boto3py3
 # pyjwt3 + joe-security + slack + office-utils
 
 # line 6 - since in ubi its 7za --> need to make it to run as 7z like our script
 # lines 8-10 is the configuration for sklearn
-# lines 11-14 - install LibreOffice for the office-utils image
-# lines 16-18 - enable more hashing algorithms such as md4 for example for py3ews
+# lines 12-14 - ssl fixes
 RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE python3-devel gcc gcc-c++ make wget git poppler poppler-utils \
         rust cargo libxml2-devel libxslt-devel \
         libffi-devel openssl-devel libffi libSM mesa-libGL \
-        openssh ca-certificates openssl less rsync libpng-devel freetype-devel gcc-gfortran openblas unzip libstdc++ \
+        openssh ca-certificates openssl less rsync libpng-devel freetype-devel gcc-gfortran openblas unzip libstdc++ libreoffice \
         && dnf install -y --nodocs --enablerepo=$FEDORA_EPEL p7zip unrar \
         && ln -s /usr/bin/7za /usr/bin/7z \
         && pip install --no-cache-dir -r requirements.txt \
@@ -81,28 +77,13 @@ RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE python3-devel gcc gcc-c+
         && python -c "import nltk; nltk.download('wordnet', download_dir='/ml/nltk_data'); nltk.download('stopwords', download_dir='/ml/nltk_data'); nltk.download('punkt', download_dir='/ml/nltk_data')" \
         && chown -R demisto:demisto /ml && chmod -R 775 /ml \
         && dnf install -y --nodocs java-11-openjdk-headless cairo libX11-xcb \
-        && python get_latest_libreoffice_version.py \
-        && LIBRE_OFFICE_FULL_VERSION=$(cat libre_office_full_version.txt) \
-        && LIBRE_OFFICE_INSTALLATION_FILE_NAME=$(cat libre_office_installation_file_name.txt) \
-        && LIBRE_OFFICE_MAJOR_MINOR_VERSION=$(cat libre_office_major_minor_version.txt) \
-        && wget https://mirror.isoc.org.il/pub/tdf/libreoffice/stable/${LIBRE_OFFICE_FULL_VERSION}/rpm/x86_64/${LIBRE_OFFICE_INSTALLATION_FILE_NAME}.tar.gz \
-        && tar -xzvf ${LIBRE_OFFICE_INSTALLATION_FILE_NAME}.tar.gz --one-top-level=${LIBRE_OFFICE_INSTALLATION_FILE_NAME} --strip-components 1 \
-        && dnf localinstall -y ${LIBRE_OFFICE_INSTALLATION_FILE_NAME}/RPMS/*.rpm \
-        && rm -rf ${LIBRE_OFFICE_INSTALLATION_FILE_NAME}.tar.gz ${LIBRE_OFFICE_INSTALLATION_FILE_NAME} \
         && sed -i 's/##legacy = legacy_sect/legacy = legacy_sect/' /etc/pki/tls/openssl.cnf \
         && sed -i 's/##\[legacy_sect\]/\[legacy_sect\]/' /etc/pki/tls/openssl.cnf \
         && sed -i 's/##activate = 1/activate = 1/' /etc/pki/tls/openssl.cnf \
         && dnf remove -y python3-devel rust cargo libffi-devel openssl-devel gcc gcc-c++ make git platform-python-pip \
         && dnf clean all \
-        && rm -rf /var/cache/dnf \
-        && rm -rf /root/.cargo \
-        && rm -rf get_latest_libreoffice_version.py \
-        && rm -rf libre_office_full_version.txt \
-        && rm -rf libre_office_installation_file_name.txt \
-        && rm -rf libre_office_major_minor_version.txt \
+        && rm -rf /var/cache/dnf /root/.cargo
         && pip uninstall -y pcodedmp
 
 
-# add libreoffice to path
-ENV PATH=$PATH:/opt/libreoffice$LIBRE_OFFICE_MAJOR_MINOR_VERSION/program
 ENV NLTK_DATA='/ml/nltk_data'
