@@ -294,11 +294,9 @@ name = "parse-emails"
 version = "0.1.14"
 description = "Parses an email message file and extracts the data from it."
 optional = false
-python-versions = ">=3.7,<4.0"
-files = [
-    {file = "parse_emails-0.1.14-py3-none-any.whl", hash = "sha256:f552e47d5ec109db3911b3c83fb74b7bbc0e1fd0c206db704c3b6ca824aecc6a"},
-    {file = "parse_emails-0.1.14.tar.gz", hash = "sha256:b0eb79dc7be280a3122ab74fb0ae61e6318198fbe1b7b550af9e278b122f4861"},
-]
+python-versions = "^3.7"
+files = []
+develop = false
 
 [package.dependencies]
 chardet = "*"
@@ -310,6 +308,12 @@ pyopenssl = "*"
 pytest = "*"
 python-magic = "*"
 RTFDE = "*"
+
+[package.source]
+type = "git"
+url = "https://github.com/demisto/parse-emails.git"
+reference = "e5a9dea344999130966be057bd6ba952abf0613d"
+resolved_reference = "e5a9dea344999130966be057bd6ba952abf0613d"
 
 [[package]]
 name = "pcodedmp"
@@ -542,4 +546,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "d0c27b72da571dd976b2ef6f70ad7f93acc75af3089cb6b34dddd499ff0566f9"
+content-hash = "1798e35b6e24998f1b303a952bf2abdacd1cb23599a7fd5db3bbc4148f204510"
