@@ -56,7 +56,7 @@ def parse_and_match_versions(docker_python_version: str,file_python_version: str
     """
 
     
-    file_version,file_operator=get_operator_and_version(file_python_version)
+    parsed_file_version,file_operator=get_operator_and_version(file_python_version)
     docker_version,_=get_operator_and_version(docker_python_version)
     operator = "^" if file_type == "pyproject.toml" else "~="
     correct_version = ""
@@ -67,15 +67,15 @@ def parse_and_match_versions(docker_python_version: str,file_python_version: str
     
     # if we have "^3.10,<3.11" as python version.
     if len(file_python_version.split(",")) > 1:
-        return False
+        return False, correct_version
     # Define a standard to the version should be in "^X.Y" or "~=X.Y" format.
     elif file_operator != "~=" and file_operator != "^":
         return False, correct_version
     elif "*" in file_python_version:
         return False, correct_version
-    elif file_version !=correct_version:
+    elif file_python_version !=correct_version:
         return False, correct_version
-    elif file_version == correct_version:
+    elif file_python_version == correct_version:
         return True, ""
 
 
@@ -91,7 +91,7 @@ def main():
         print("[SUCCESS] Versions verification")
         return 0
     else:
-        msg = "[ERROR] Version mismatch. "\
+        msg = "[ERROR] Version mismatch or version is invalid format. "\
         f"The {file_type} version {file_python_version}"\
         f" does not match to the base version {docker_python_version}"\
         f" for {image_name}."\
