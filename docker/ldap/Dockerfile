@@ -7,5 +7,5 @@ COPY requirements.txt .
 RUN apt-get update && apt-get install -y --no-install-recommends openssl ldap-utils \
   python3-dev wget \
   && pip install --no-cache-dir -r requirements.txt \
-  && apt-get purge -y --auto-remove apt-get purge -y --auto-remove python3-dev wget \
+  && apt-get purge -y --auto-remove python3-dev wget \
   && rm -rf /var/lib/apt/lists/*
