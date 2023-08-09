@@ -82,7 +82,7 @@ RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE python3-devel gcc gcc-c+
         && sed -i 's/##activate = 1/activate = 1/' /etc/pki/tls/openssl.cnf \
         && dnf remove -y python3-devel rust cargo libffi-devel openssl-devel gcc gcc-c++ make git platform-python-pip \
         && dnf clean all \
-        && rm -rf /var/cache/dnf /root/.cargo
+        && rm -rf /var/cache/dnf /root/.cargo \
         && pip uninstall -y pcodedmp
 
 
