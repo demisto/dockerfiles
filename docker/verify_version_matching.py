@@ -31,7 +31,7 @@ def get_operator_and_version(version) -> Tuple[List,str]:
         version (str): The version.
 
     Returns:
-        Tuple[Tuple,str]: The return value. A Tuple of a list with the parsed version and the operator.
+        Tuple[Tuple,str]: A Tuple of a list with the parsed version and the operator.
     """
     operator_list = ["^","<=",">=","<",">","!=","~=", "~","===", "==", "="]
     returned_operator = ""
@@ -47,11 +47,11 @@ def parse_and_match_versions(docker_python_version: str,file_python_version: str
                              file_type:str) -> Tuple[bool,str]:
     """Parse the versions and validate versions matching.
     Args:
-        docker_python_version (str): The first parameter.
-        file_python_version (str): The second parameter.
+        docker_python_version (str): The python version from the docker image.
+        file_python_version (str): The python version from the pipfile/pyproject.toml.
 
     Returns:
-        Tuple[bool,str]: The return value. True for success, False otherwise.
+        Tuple[bool,str]: True for success, False otherwise.
         The version that should be written.
     """
 
@@ -69,13 +69,13 @@ def parse_and_match_versions(docker_python_version: str,file_python_version: str
     if len(file_python_version.split(",")) > 1:
         return False, correct_version
     # Define a standard to the version should be in "~X.Y" or "X.Y" format.
-    elif file_operator != "" and file_operator != "~":
+    elif file_operator not in ["", "~"]:
         return False, correct_version
     elif "*" in file_python_version:
         return False, correct_version
     elif file_python_version !=correct_version:
         return False, correct_version
-    elif file_python_version == correct_version:
+    else: # file_python_version == correct_version
         return True, ""
 
 

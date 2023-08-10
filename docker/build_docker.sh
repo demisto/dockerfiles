@@ -29,6 +29,15 @@ function prop {
     fi
 }
 
+# param $1: filename
+# param $2: regex pattren
+function get_version_from_file() {
+    file_content=$(<"$1")
+        if [[ $file_content =~ $2 ]]; then
+            version_from_file="${BASH_REMATCH[1]}"
+        fi
+}
+
 DOCKER_LOGIN_DONE=${DOCKER_LOGIN_DONE:-no}
 function docker_login {
     if [ "${DOCKER_LOGIN_DONE}" = "yes" ]; then
@@ -250,8 +259,8 @@ function docker_build {
         fi
     fi
 
-    echo "================= $(date): Starting version verifocation on image: ${image_name} ================="
-    echo "Checking that python version is match to the base version..."
+    echo "================= $(date): Starting version verification on image: ${image_name} ================="
+    echo "Checking that the image python version match with the Pipfile/pyproject.toml python version..."
     # Get the python version from the docker metadata.
     PYTHON_VERSION=$(docker inspect "$image_full_name" | jq -r '.[].Config.Env[]|select(match("^PYTHON_VERSION"))|.[index("=")+1:]')
     PY3CMD="python3"
@@ -265,20 +274,10 @@ function docker_build {
         PY3CMD="python3.10"
     fi
     if [ -f "Pipfile" ]; then
-        file_name="Pipfile"
-        pattern='python_version = \"([^\"]+)\"'
-        file_content=$(<"Pipfile")
-        if [[ $file_content =~ $pattern ]]; then
-            version_from_file="${BASH_REMATCH[1]}"
-        fi
+        get_version_from_file 'Pipfile' 'python_version = \"([^\"]+)\"'
     fi
     if [ -f "pyproject.toml" ]; then 
-        file_name="pyproject.toml"
-        pattern='python = \"([^\"]+)\"'
-        file_content=$(<"pyproject.toml")
-        if [[ $file_content =~ $pattern ]]; then
-            version_from_file="${BASH_REMATCH[1]}"
-        fi
+        get_version_from_file 'pyproject.toml' 'python = \"([^\"]+)\"'
     fi
     set +e
     output=$($PY3CMD "${DOCKER_SRC_DIR}"/verify_version_matching.py "${PYTHON_VERSION}" "${version_from_file}" "${image_name}" "${file_name}")
