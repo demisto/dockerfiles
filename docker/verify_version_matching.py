@@ -85,6 +85,9 @@ def main():
     file_python_version: str = args[1]
     image_name: str =  args[2]
     file_type: str = args[3]
+    # There are images without python like powershell.
+    if not docker_python_version:
+        return 1
     format: str = "~X.Y" if file_type == "pyproject.toml" else "X.Y"
     result, correct_version = parse_and_match_versions(docker_python_version, file_python_version, file_type)
     if result:
@@ -94,7 +97,7 @@ def main():
         msg = "[ERROR] Version mismatch or version is invalid format. "\
         f"The {file_type} version {file_python_version}"\
         f" does not match to the base version {docker_python_version}"\
-        f" for {image_name}."\
+        f" for {image_name}. "\
         f"Please change it to the {format} format."\
         f" Proposed change is: {correct_version}."
         print(msg)
