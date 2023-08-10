@@ -2,22 +2,7 @@
 
 import pytest
 from docker import verify_version_matching
-from packaging.specifiers import SpecifierSet
 
-test_data_parse_local_version = [("3",[3]),("3.11",[3,11]),("3.12.1",[3,12,1])]
-@pytest.mark.parametrize("version,expected_version", test_data_parse_local_version)
-def test_parse_local_version(version, expected_version):
-    """
-    Given
-        - string version in 4.5.6 format
-    When
-        - running parse_local_version
-    Then
-        - Verify parse_local_version output
-
-    """
-    results=verify_version_matching.parse_local_version(version)
-    assert results==expected_version
 
 test_get_operator_and_version = [(">=3.10",[3,10],">="),
                                  ("<=3.10",[3,10],"<="),

@@ -9,22 +9,8 @@ if(sys.version_info[0] < 3 or sys.version_info[1] < 7):
     print("This script requires python version 3.7 and above. Please make sure to run with the proper version. Aborting...")
     sys.exit(1)
 
-_local_version_separators = re.compile(r"[\._-]")
 
-
-def parse_local_version(local: str) -> List[Optional[int]]:
-    """
-    Takes a string like abc.1.twelve and turns it into ("abc", 1, "twelve").
-    """
-    if local is not None:
-        return [
-            int(part) if part.isnumeric() else part.lower()
-            for part in _local_version_separators.split(local)
-        ]
-    return []
-
-
-def get_operator_and_version(version) -> Tuple[List,str]:
+def get_operator_and_version(version: str) -> Tuple[List,str]:
     """Gets the version and the operator.
     
     Args:
@@ -41,7 +27,7 @@ def get_operator_and_version(version) -> Tuple[List,str]:
             version  = version[operator_index+len(operator):]
             returned_operator = operator
             break
-    return parse_local_version(version),returned_operator
+    return version.split("."),returned_operator
  
 def parse_and_match_versions(docker_python_version: str,file_python_version: str,
                              file_type:str) -> Tuple[bool,str]:
