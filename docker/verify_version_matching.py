@@ -33,8 +33,8 @@ def get_operator_and_version(version) -> Tuple[List,str]:
     Returns:
         Tuple[Tuple,str]: The return value. A Tuple of a list with the parsed version and the operator.
     """
-    operator_list = ["^","<=",">=","<",">","!=","~=", "~","===", "=="]
-    returned_operator = "="
+    operator_list = ["^","<=",">=","<",">","!=","~=", "~","===", "==", "="]
+    returned_operator = ""
     for operator in operator_list:
         if operator in version:
             operator_index = version.index(operator)
@@ -58,7 +58,7 @@ def parse_and_match_versions(docker_python_version: str,file_python_version: str
     
     parsed_file_version,file_operator=get_operator_and_version(file_python_version)
     docker_version,_=get_operator_and_version(docker_python_version)
-    operator = "^" if file_type == "pyproject.toml" else "~="
+    operator = "~" if file_type == "pyproject.toml" else ""
     correct_version = ""
     if len(docker_version) >= 2:
         correct_version = f"{operator}{docker_version[0]}.{docker_version[1]}"
@@ -68,8 +68,8 @@ def parse_and_match_versions(docker_python_version: str,file_python_version: str
     # if we have "^3.10,<3.11" as python version.
     if len(file_python_version.split(",")) > 1:
         return False, correct_version
-    # Define a standard to the version should be in "^X.Y" or "~=X.Y" format.
-    elif file_operator != "~=" and file_operator != "^":
+    # Define a standard to the version should be in "~X.Y" or "X.Y" format.
+    elif file_operator != "" and file_operator != "~":
         return False, correct_version
     elif "*" in file_python_version:
         return False, correct_version
@@ -85,7 +85,7 @@ def main():
     file_python_version: str = args[1]
     image_name: str =  args[2]
     file_type: str = args[3]
-    format: str = "^X.Y" if file_type == "pyproject.toml" else "~=X.Y"
+    format: str = "~X.Y" if file_type == "pyproject.toml" else "X.Y"
     result, correct_version = parse_and_match_versions(docker_python_version, file_python_version, file_type)
     if result:
         print("[SUCCESS] Versions verification")
