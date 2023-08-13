@@ -1,7 +1,7 @@
 import websockets
 from websockets.sync.client import connect
 
-with connect("ws://echo.websocket.org") as connection:
+with connect("https://www.websocket.org/echo.html") as connection:
     echo = connection.recv()
     print(echo)
     connection.close()
