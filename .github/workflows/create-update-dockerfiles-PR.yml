@@ -3,7 +3,8 @@ name: Create update dockerfiles PR
 on:
   workflow_run:
     workflows: [Update external base images test, Update internal base images test]
-    types: completed
+    types:
+      - completed
   workflow_dispatch:
 
 jobs:
@@ -22,7 +23,7 @@ jobs:
           GITHUB_TOKEN: ${{secrets.CONTENT_BOT_TOKEN}}
         run: |
           git fetch
-          branches=$(git branch -r | grep TESTautoupdate/)
+          branches=$(git branch -r | grep TESTautoTESTupdate/)
           matrix="[ "
           for branch in $(echo $branches); do
             exists=`gh pr list --state open -H ${branch#origin/}`
