@@ -1,8 +1,12 @@
-name: Update internal base images
+name: Update internal base images test
 
+# on:
+#   schedule:
+#     - cron: '30 0,4,8,12,16,20 * * *'
 on:
-  schedule:
-    - cron: '30 0,4,8,12,16,20 * * *'
+  push:
+    branches:
+      - update-dockerfile-update-workflow
   workflow_dispatch:
 
 jobs:
@@ -22,7 +26,8 @@ jobs:
             git config --global user.name "auto dockerfiles update"
             echo "==== $(date): Starting pipenv setup... ===="
             python -m pip install --upgrade pip
-            pip install pipenv
+            pip install pipenv==2023.3.18
+            pip install poetry
             pipenv install
             echo "==== Finished ===="
             pipenv run python ./utils/auto_dockerfile_update/update_dockerfiles.py -t internal

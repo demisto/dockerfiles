@@ -2,7 +2,7 @@ name: Create update dockerfiles PR
 
 on:
   workflow_run:
-    workflows: [Update external base images, Update internal base images]
+    workflows: [Update external base images test, Update internal base images test]
     types: completed
   workflow_dispatch:
 
@@ -22,7 +22,7 @@ jobs:
           GITHUB_TOKEN: ${{secrets.CONTENT_BOT_TOKEN}}
         run: |
           git fetch
-          branches=$(git branch -r | grep autoupdate/)
+          branches=$(git branch -r | grep TESTautoupdate/)
           matrix="[ "
           for branch in $(echo $branches); do
             exists=`gh pr list --state open -H ${branch#origin/}`
@@ -55,13 +55,13 @@ jobs:
         destination_branch: ""                                                    # If blank, default: master
         pr_title: "build(dockerfiles) update Dockerfile - ${{ matrix.branches }}" # Title of pull request
         pr_body: "This is automated PR to update dockerfiles base images\n${{ matrix.branches }}"
-    - name: approve and merge
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        PR_URL: ${{ steps.open-pr.outputs.pr_url }}
-      if: ${{ steps.open-pr.outputs.pr_url }}
-      run: |
-        echo "Approving and merging"
-        gh pr review --approve "$PR_URL"
-        gh pr merge --auto --squash "$PR_URL" 
+    # - name: approve and merge
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #     PR_URL: ${{ steps.open-pr.outputs.pr_url }}
+    #   if: ${{ steps.open-pr.outputs.pr_url }}
+    #   run: |
+    #     echo "Approving and merging"
+    #     gh pr review --approve "$PR_URL"
+    #     gh pr merge --auto --squash "$PR_URL" 
         
