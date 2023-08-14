@@ -151,6 +151,7 @@ def update_python_version_pyproject_or_pipfile(dockerfile: Dict, latest_tag: str
     if "python" in image_name:
         path,tag, is_exist=get_file_path_and_docker_version_if_exist(dockerfile,latest_tag)
         if is_exist:
+            print(f"[INFO] change_pyproject_or_pipfile")
             update_result, old_version = change_pyproject_or_pipfile(path,tag)
         if update_result:
             lock_result=run_lock(dockerfile['path'],path)
@@ -203,7 +204,7 @@ def update_external_base_dockerfiles(git_repo: Repo, no_timestamp_updates=True) 
         latest_tag_last_updated = latest_tag.get('last_updated', '')
 
         if is_docker_file_outdated(file, latest_tag_name, latest_tag_last_updated, no_timestamp_updates):
-            branch_name = fr"TESTautoTESTupdate/Update_{file['repo']}_{file['image_name']}_from_{file['tag']}_to_{latest_tag_name}"
+            branch_name = fr"TEST2autoTESTupdate/Update_{file['repo']}_{file['image_name']}_from_{file['tag']}_to_{latest_tag_name}"
             update_and_push_dockerfiles(git_repo, branch_name, [file], latest_tag_name)
             print(f"Updated {file['path']}")
     print("Finished to update dockerfiles")
@@ -251,7 +252,7 @@ def update_internal_base_dockerfile(git_repo: Repo) -> None:
                           is_docker_file_outdated(file, latest_tag_name, latest_tag_last_updated)]
         for batch_slice in batch(outdated_files, BATCH_SIZE):
             image_names = reduce(lambda a, b: f"{a}-{b}", [file['name'] for file in batch_slice])
-            branch_name = fr"TESTautoTESTupdate/{base_image}_{image_names}_{latest_tag_name}"
+            branch_name = fr"TEST2autoTESTupdate/{base_image}_{image_names}_{latest_tag_name}"
             update_and_push_dockerfiles(git_repo, branch_name, batch_slice, latest_tag_name)
         print("Finished to update dockerfiles")
 
@@ -281,7 +282,8 @@ def update_and_push_dockerfiles(git_repo: Repo, branch_name: str, files: List[Di
             update_python_version_pyproject_or_pipfile(file, latest_tag_name)
             update_dockerfile(file, latest_tag_name)
 
-        print(git_repo.index.diff(git_repo.head.commit))
+        changedFiles = [item.a_path for item in git_repo.index.diff(None)]
+        print(changedFiles)
         git_repo.git.add("*")
         git_repo.git.commit(m=f"Update Dockerfiles")
         git_repo.git.push('--set-upstream', 'origin', branch)

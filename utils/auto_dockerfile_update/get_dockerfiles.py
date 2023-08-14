@@ -108,8 +108,10 @@ def get_file_path_and_docker_version_if_exist(dockerfile: dict, latest_tag:str)-
         if extracted_tag_search:
             extracted_tag = extracted_tag_search.group(0)
             if pipfile_path:
+                print(f"[INFO] Got pipfile_path for: {pipfile_path}")
                 return pipfile_path[0],extracted_tag,True
             elif pyproject_path:
+                print(f"[INFO] Got pyproject_path for: {pyproject_path}")
                 return pyproject_path[0],extracted_tag,True
             else:
                 print(f"[ERROR] Can't find Pipfile/pyproject file for {dockerfile['name']}.")

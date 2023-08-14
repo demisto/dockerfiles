@@ -23,7 +23,7 @@ jobs:
           GITHUB_TOKEN: ${{secrets.CONTENT_BOT_TOKEN}}
         run: |
           git fetch
-          branches=$(git branch -r | grep TESTautoTESTupdate/)
+          branches=$(git branch -r | grep TEST2autoTESTupdate/)
           matrix="[ "
           for branch in $(echo $branches); do
             exists=`gh pr list --state open -H ${branch#origin/}`
