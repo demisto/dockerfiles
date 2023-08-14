@@ -3,11 +3,11 @@ from glob import glob
 import re
 from datetime import datetime
 from pathlib import Path
-from typing import List, Dict, Tuple
+from typing import List, Dict, Tuple, Optional
 from configparser import ConfigParser, MissingSectionHeaderError
 from dateutil.parser import parse
 
-EXTRACT_PYTHON_VERSION_REGEX = re.compile(r"\d{1,3}.\d{1,3}.\d{1,3}")
+EXTRACT_PYTHON_VERSION_REGEX = re.compile(r"3.\d{1,3}.\d{1,3}")
 BASE_IMAGE_REGEX = re.compile(r"(?:FROM [\S]+)")
 INTERNAL_BASE_IMAGES = re.compile(r"(demisto\/|devdemisto\/)")
 LAST_MODIFIED_REGEX = re.compile(r"# Last modified: [^\n]*")
@@ -91,33 +91,30 @@ def filter_ignored_files(files_list):
         print(f'could not read ignored config {str(e)}')
         return files_list
 
-def get_file_path_and_docker_version_if_exist(dockerfile: dict, latest_tag:str)-> Tuple:
+def get_file_path_and_docker_version_if_exist(dockerfile: dict, docker_latest_tag:str)-> Optional[Tuple]:
         """Gets the Pipfile or the pyproject.toml file path 
            and the docker version from the Dockerfile.
         Args:
             dockerfile (str): A dict that represents the docker file.
-            latest_tag (str): latest tag string.
+            docker_latest_tag (str): latest tag string.
         Returns:
-            Tuple[str,str,bool]: The file path, The docker file tag, if exists.
+            Tuple[str,str]: The file path, The docker file tag.
         """
         base_path = dockerfile["path"]
         base_path=base_path.replace("/Dockerfile", "")
         pipfile_path = glob(f"{base_path}/Pipfile", recursive=True)
         pyproject_path = glob(f"{base_path}/pyproject.toml", recursive=True)
-        extracted_tag_search = re.search(EXTRACT_PYTHON_VERSION_REGEX, latest_tag)
-        if extracted_tag_search:
-            extracted_tag = extracted_tag_search.group(0)
-            if pipfile_path:
-                print(f"[INFO] Got pipfile_path for: {pipfile_path}")
-                return pipfile_path[0],extracted_tag,True
-            elif pyproject_path:
-                print(f"[INFO] Got pyproject_path for: {pyproject_path}")
-                return pyproject_path[0],extracted_tag,True
+        extracted_python_version = re.search(EXTRACT_PYTHON_VERSION_REGEX, docker_latest_tag)
+        if extracted_python_version:
+            extracted_version = extracted_python_version.group(0)
+            if path := pipfile_path or pyproject_path:
+                print(f"[INFO] Got path for: {pipfile_path}")
+                return path[0],extracted_version
             else:
                 print(f"[ERROR] Can't find Pipfile/pyproject file for {dockerfile['name']}.")
         else:
             print(f"[ERROR] Can't find docker tag for {dockerfile['name']}.")
-        return base_path,extracted_tag,False
+        return None
             
 def get_docker_files(base_path="docker/", devonly=False, external=False, internal=False) -> List[Dict]:
     """

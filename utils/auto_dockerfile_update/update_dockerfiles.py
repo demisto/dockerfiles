@@ -12,8 +12,8 @@ from functools import reduce
 import subprocess
 
 BATCH_SIZE = 1
-PYTHON_VERSION_PIPFILE_REGEX = re.compile(r"python_version = \"([^\"]+)\"")
-PYTHON_VERSION_PYPROJECT_REGEX = re.compile(r"python = \"([^\"]+)\"")
+PIPFILE_PYTHON_VERSION_REGEX = re.compile(r"python_version = \"([^\"]+)\"")
+PYPROJECT_PYTHON_VERSION_REGEX = re.compile(r"python = \"([^\"]+)\"")
 
 def is_docker_file_outdated(dockerfile: Dict, latest_tag: str, last_updated: str = "", no_timestamp_updates=True) -> bool:
     """
@@ -54,9 +54,9 @@ def extract_current_python_version(file_path: str)->Tuple[List,str,bool]:
         with open(file_path, "r") as f:
             file_content = f.read()
         if "Pipfile" in file_path:
-            python_version = re.search(PYTHON_VERSION_PIPFILE_REGEX, file_content)
+            python_version = re.search(PIPFILE_PYTHON_VERSION_REGEX, file_content)
         elif "pyproject.toml" in file_path:
-            python_version = re.search(PYTHON_VERSION_PYPROJECT_REGEX, file_content)   
+            python_version = re.search(PYPROJECT_PYTHON_VERSION_REGEX, file_content)   
     except Exception as e:
         print(f"{e}: Can't read file {file_path}")
     if python_version:
@@ -79,14 +79,13 @@ def replace_python_version(file_path: str, version: List,
     to_replace = False
     with open(file_path, "r") as f:
         file_content = f.read()
-        if "Pipfile" in file_path:
-            if full_str_python_version != f"python_version = \"{version[0]}.{version[1]}\"":
-                file_content=file_content.replace(full_str_python_version,f"python_version = \"{version[0]}.{version[1]}\"")
+        python_version = (f"python_version = \"{version[0]}.{version[1]}\"" 
+                          if "Pipfile" in file_path 
+                          else f"python = \"~{version[0]}.{version[1]}\"")
+        if full_str_python_version != python_version:
+                print(f"[INFO] change {file_path}")
+                file_content=file_content.replace(full_str_python_version,python_version)
                 to_replace = True
-        elif "pyproject.toml" in file_path:
-            if full_str_python_version != f"python = \"~{version[0]}.{version[1]}\"":
-                file_content=file_content.replace(full_str_python_version,f"python = \"~{version[0]}.{version[1]}\"")
-                to_replace= True
         if to_replace:
             with open(file_path, "w") as f:
                 f.write(file_content)
@@ -139,7 +138,7 @@ def run_lock(base_path_docker:str,pipfile_or_pyproject_path:str)->bool:
     os.chdir(current_directory)
     return True
 
-def update_python_version_pyproject_or_pipfile(dockerfile: Dict, latest_tag: str)-> None:
+def update_python_version_pyproject_or_pipfile(dockerfile: Dict, latest_tag: str) -> None:
     """
     Updating dockerfile content with the latest tag
     Args:
@@ -151,15 +150,16 @@ def update_python_version_pyproject_or_pipfile(dockerfile: Dict, latest_tag: str
     update_result = False
     image_name = dockerfile['image_name']
     if "python" in image_name:
-        path,tag, is_exist=get_file_path_and_docker_version_if_exist(dockerfile,latest_tag)
-        if is_exist:
-            print(f"[INFO] change_pyproject_or_pipfile")
-            update_result, old_version = change_pyproject_or_pipfile(path,tag)
-        if update_result:
-            lock_result=run_lock(dockerfile['path'],path)
-            if not lock_result:
-                print(f"[ERROR] Got Error with lock for: {image_name} revert pipfile/pyproject.toml changes")
-                change_pyproject_or_pipfile(path,old_version)
+        if result_tuple := get_file_path_and_docker_version_if_exist(
+            dockerfile, latest_tag
+        ):
+            path,docker_version = result_tuple
+            update_result, old_version = change_pyproject_or_pipfile(path,docker_version)
+            if update_result:
+                lock_result=run_lock(dockerfile['path'],path)
+                if not lock_result:
+                    print(f"[ERROR] Got Error with lock for: {image_name} revert pipfile/pyproject.toml changes")
+                    change_pyproject_or_pipfile(path,old_version)
 
 def update_dockerfile(dockerfile: Dict, latest_tag: str) -> None:
     """
@@ -206,7 +206,7 @@ def update_external_base_dockerfiles(git_repo: Repo, no_timestamp_updates=True) 
         latest_tag_last_updated = latest_tag.get('last_updated', '')
 
         if is_docker_file_outdated(file, latest_tag_name, latest_tag_last_updated, no_timestamp_updates):
-            branch_name = fr"TEST2autoTESTupdate/Update_{file['repo']}_{file['image_name']}_from_{file['tag']}_to_{latest_tag_name}"
+            branch_name = fr"TEST2auTESTtoTESTupdate/Update_{file['repo']}_{file['image_name']}_from_{file['tag']}_to_{latest_tag_name}"
             update_and_push_dockerfiles(git_repo, branch_name, [file], latest_tag_name)
             print(f"Updated {file['path']}")
     print("Finished to update dockerfiles")
@@ -254,9 +254,9 @@ def update_internal_base_dockerfile(git_repo: Repo) -> None:
                           is_docker_file_outdated(file, latest_tag_name, latest_tag_last_updated)]
         for batch_slice in batch(outdated_files, BATCH_SIZE):
             image_names = reduce(lambda a, b: f"{a}-{b}", [file['name'] for file in batch_slice])
-            branch_name = fr"TEST2autoTESTupdate/{base_image}_{image_names}_{latest_tag_name}"
+            branch_name = fr"TEST2auTESTtoTESTupdate/{base_image}_{image_names}_{latest_tag_name}"
             update_and_push_dockerfiles(git_repo, branch_name, batch_slice, latest_tag_name)
-        print("Finished to update dockerfiles")
+    print("Finished to update dockerfiles")
 
 
 def update_and_push_dockerfiles(git_repo: Repo, branch_name: str, files: List[Dict], latest_tag_name: str) -> None:
