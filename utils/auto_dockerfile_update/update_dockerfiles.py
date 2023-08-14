@@ -9,7 +9,6 @@ import re
 from get_dockerfiles import LAST_MODIFIED_REGEX
 from datetime import datetime, timezone
 from functools import reduce
-from packaging.version import Version
 import subprocess
 
 BATCH_SIZE = 1
@@ -41,14 +40,14 @@ def is_docker_file_outdated(dockerfile: Dict, latest_tag: str, last_updated: str
 
     return False
 
-def extract_current_python_version(file_path: str)->Tuple[Version,str]:
+def extract_current_python_version(file_path: str)->Tuple[List,str,bool]:
     """Extract the current python version from Pipfile or the pyproject.toml.
     
         Args:
             file_path (str): The file path to the Pipfile or the pyproject.toml file.
 
         Returns:
-            Tuple[Version,str, bool]: The python version in Version object and str.
+            Tuple[List,str, bool]: The python version in list and str.
     """
     python_version = ""
     try:
@@ -68,25 +67,25 @@ def extract_current_python_version(file_path: str)->Tuple[Version,str]:
         print(f"can't extract python version form:{file_path}")
         return "","",False
 
-def replace_python_version(file_path: str, version: Version,
+def replace_python_version(file_path: str, version: List,
                            full_str_python_version:str)->bool:
     """Replace the current python version in the Pipfile or the pyproject.toml.
     
         Args:
             file_path (str): The file path to the Pipfile or the pyproject.toml file.
-            version (Version): The updated version.
+            version (List): The updated version.
             full_str_python_version (str): The older version.
     """
     to_replace = False
     with open(file_path, "r") as f:
         file_content = f.read()
         if "Pipfile" in file_path:
-            if full_str_python_version != f"python_version = \"{version.major}.{version.minor}\"":
-                file_content=file_content.replace(full_str_python_version,f"python_version = \"{version.major}.{version.minor}\"")
+            if full_str_python_version != f"python_version = \"{version[0]}.{version[1]}\"":
+                file_content=file_content.replace(full_str_python_version,f"python_version = \"{version[0]}.{version[1]}\"")
                 to_replace = True
         elif "pyproject.toml" in file_path:
-            if full_str_python_version != f"python = \"~{version.major}.{version.minor}\"":
-                file_content=file_content.replace(full_str_python_version,f"python = \"~{version.major}.{version.minor}\"")
+            if full_str_python_version != f"python = \"~{version[0]}.{version[1]}\"":
+                file_content=file_content.replace(full_str_python_version,f"python = \"~{version[0]}.{version[1]}\"")
                 to_replace= True
         if to_replace:
             with open(file_path, "w") as f:
@@ -94,20 +93,20 @@ def replace_python_version(file_path: str, version: Version,
             return True
         return False
 
-def update_pyproject_or_pipfile(file_path, str_version) -> Tuple[bool,str]:
+def change_pyproject_or_pipfile(file_path, str_version) -> Tuple[bool,str]:
     """Replace the current python version in the Pipfile or the pyproject.toml.
     
         Args:
             file_path (str): The file path to the Pipfile or the pyproject.toml file.
-            version (Version): The updated version.
+            version (List): The updated version.
             full_str_python_version (str): The older version.
     """
-    version = Version(str_version)
+    version = str_version.split(".")
     current_version, full_str_python_version, success_extraction=extract_current_python_version(file_path)
     if success_extraction:
         result=replace_python_version(file_path, version, full_str_python_version)
         return result,current_version
-    return False, Version()
+    return False, []
 
 def run_lock(base_path_docker:str,pipfile_or_pyproject_path:str)->bool:
     """Runs poetry lock --no-update or pipfile lock --keep-outdated.
@@ -152,11 +151,11 @@ def update_python_version_pyproject_or_pipfile(dockerfile: Dict, latest_tag: str
     if "python3" in image_name or "python" in image_name:
         path,tag, is_exist=get_file_path_and_docker_version_if_exist(dockerfile,latest_tag)
         if is_exist:
-            update_result, old_version = update_pyproject_or_pipfile(path,tag)
+            update_result, old_version = change_pyproject_or_pipfile(path,tag)
         if update_result:
             lock_result=run_lock(dockerfile['path'],path)
             if not lock_result:
-                update_pyproject_or_pipfile(path,old_version)
+                change_pyproject_or_pipfile(path,old_version)
                 print("Got Error with lock")
 
 def update_dockerfile(dockerfile: Dict, latest_tag: str) -> None:
