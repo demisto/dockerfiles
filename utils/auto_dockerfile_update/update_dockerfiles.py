@@ -62,9 +62,9 @@ def extract_current_python_version(file_path: str)->Tuple[List,str,bool]:
     if python_version:
         full_str_python_version = python_version.group(0)
         string_version_number=python_version.group(1)
-        return string_version_number,full_str_python_version,False
+        return string_version_number,full_str_python_version,True
     else:
-        print(f"can't extract python version form:{file_path}")
+        print(f"[ERROR] can't extract python version form:{file_path}")
         return "","",False
 
 def replace_python_version(file_path: str, version: List,
@@ -106,6 +106,8 @@ def change_pyproject_or_pipfile(file_path, str_version) -> Tuple[bool,str]:
     if success_extraction:
         result=replace_python_version(file_path, version, full_str_python_version)
         return result,current_version
+    else:
+        print(f"[ERROR] can't extract python version form:{file_path}")
     return False, []
 
 def run_lock(base_path_docker:str,pipfile_or_pyproject_path:str)->bool:
