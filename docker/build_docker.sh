@@ -264,15 +264,6 @@ function docker_build {
     # Get the python version from the docker metadata.
     PYTHON_VERSION=$(docker inspect "$image_full_name" | jq -r '.[].Config.Env[]|select(match("^PYTHON_VERSION"))|.[index("=")+1:]')
     PY3CMD="python3"
-    if command -v python3.7 >/dev/null 2>&1; then
-        PY3CMD="python3.7"
-    elif command -v python3.8 >/dev/null 2>&1; then
-        PY3CMD="python3.8"
-    elif command -v python3.9 >/dev/null 2>&1; then
-        PY3CMD="python3.9"
-    elif command -v python3.10 >/dev/null 2>&1; then
-        PY3CMD="python3.10"
-    fi
     if [ -f "Pipfile" ]; then
         file_name="Pipfile"
         get_version_from_file 'Pipfile' 'python_version = \"([^\"]+)\"'
@@ -282,7 +273,7 @@ function docker_build {
         get_version_from_file 'pyproject.toml' 'python = \"([^\"]+)\"'
     fi
     set +e
-    output=$($PY3CMD "${DOCKER_SRC_DIR}"/verify_version_matching.py "${PYTHON_VERSION}" "${version_from_file}" "${image_name}" "${file_name}")
+    $PY3CMD "${DOCKER_SRC_DIR}"/verify_version_matching.py "${PYTHON_VERSION}" "${version_from_file}" "${image_name}" "${file_name}"
     if [ $? != 0 ]; then
         errors+=("$output")
     fi

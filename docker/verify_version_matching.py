@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
-
-import re
 import sys
-from typing import Optional, List, Tuple
-
+from typing import List, Tuple
+import argparse
 
 if(sys.version_info[0] < 3 or sys.version_info[1] < 7):
     print("This script requires python version 3.7 and above. Please make sure to run with the proper version. Aborting...")
@@ -52,32 +50,36 @@ def parse_and_match_versions(docker_python_version: str,file_python_version: str
         correct_version = f"{operator}{docker_version[0]}.0"
     
     # if we have "^3.10,<3.11" as python version.
-    if len(file_python_version.split(",")) > 1:
-        return False, correct_version
-    # Define a standard to the version should be in "~X.Y" or "X.Y" format.
-    elif file_operator not in ["", "~"]:
-        return False, correct_version
-    elif "*" in file_python_version:
-        return False, correct_version
-    elif file_python_version !=correct_version:
+     # Define a standard to the version should be in "~X.Y" or "X.Y" format.
+    if (len(file_python_version.split(",")) > 1 or
+    file_operator not in ["", "~"] or
+    "*" in file_python_version or
+    file_python_version !=correct_version):
         return False, correct_version
     else: # file_python_version == correct_version
         return True, ""
 
 
 def main():
-    args = sys.argv[1:]
-    docker_python_version: str = args[0]
-    file_python_version: str = args[1]
-    image_name: str =  args[2]
-    file_type: str = args[3]
+    parser = argparse.ArgumentParser()
+    parser.add_argument('docker_python_version')
+    parser.add_argument('file_python_version')
+    parser.add_argument('image_name')
+    parser.add_argument('file_type')
+    args = parser.parse_args()
+    print(args)
+    docker_python_version: str = args.docker_python_version
+    file_python_version: str = args.file_python_version
+    image_name: str =  args.image_name
+    file_type: str = args.file_type
+
     # There are images without python like powershell.
     if not docker_python_version:
         return 1
     format: str = "~X.Y" if file_type == "pyproject.toml" else "X.Y"
     result, correct_version = parse_and_match_versions(docker_python_version, file_python_version, file_type)
     if result:
-        print("[SUCCESS] Versions verification")
+        print(f"[SUCCESS] Versions verification. The base version {docker_python_version} is Corresponding to the {file_type} version {file_python_version}")
         return 0
     else:
         msg = "[ERROR] Version mismatch or version is invalid format. "\
