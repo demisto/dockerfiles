@@ -107,8 +107,8 @@ def get_file_path_and_docker_version_if_exist(dockerfile: dict, docker_latest_ta
         extracted_python_version = re.search(EXTRACT_PYTHON_VERSION_REGEX, docker_latest_tag)
         if extracted_python_version:
             extracted_version = extracted_python_version.group(0)
-            if path := pipfile_path or pyproject_path:
-                print(f"[INFO] Got path for: {pipfile_path}")
+            if path := (pipfile_path or pyproject_path):
+                print(f"[INFO] Got path for: {path[0]}")
                 return path[0],extracted_version
             else:
                 print(f"[ERROR] Can't find Pipfile/pyproject file for {dockerfile['name']}.")
