@@ -145,15 +145,19 @@ def run_lock(base_path_docker:str,pipfile_or_pyproject_path:str)->bool:
         elif "pyproject.toml" in pipfile_or_pyproject_path:
             completed_process = subprocess.run(["poetry", "lock", "--no-update"], check=True)
             if completed_process.returncode != 0 :
+                os.chdir(current_directory)
                 return False
     except subprocess.CalledProcessError as e:
         print(f"[ERROR] Lock failed with error: {e}")
+        os.chdir(current_directory)
         return False
     except TimeoutError as e:
         print(f"[ERROR] Got time out error: {e} for {base_path_docker}")
+        os.chdir(current_directory)
         return False
     except Exception as e:
         print(f"[ERROR] {e}: for {base_path_docker}")
+        os.chdir(current_directory)
         return False
     os.chdir(current_directory)
     return True
