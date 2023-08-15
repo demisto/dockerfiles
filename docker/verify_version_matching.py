@@ -73,9 +73,10 @@ def main():
     image_name: str =  args.image_name
     file_type: str = args.file_type
 
-    # There are images without python like powershell.
+    # There are images without python like powershell
+    # py3-tools-ubi is without python version.
     if not docker_python_version:
-        return 1
+        return 0
     format: str = "~X.Y" if file_type == "pyproject.toml" else "X.Y"
     result, correct_version = parse_and_match_versions(docker_python_version, file_python_version, file_type)
     if result:

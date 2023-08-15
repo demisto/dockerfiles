@@ -272,12 +272,14 @@ function docker_build {
         file_name="pyproject.toml"
         get_version_from_file 'pyproject.toml' 'python = \"([^\"]+)\"'
     fi
-    set +e
-    $PY3CMD "${DOCKER_SRC_DIR}"/verify_version_matching.py "${PYTHON_VERSION}" "${version_from_file}" "${image_name}" "${file_name}"
-    if [ $? != 0 ]; then
-        errors+=("$output")
+    if [ -f "Pipfile" ] || [ -f "pyproject.toml" ]; then
+        set +e
+        output=$($PY3CMD "${DOCKER_SRC_DIR}"/verify_version_matching.py "${PYTHON_VERSION}" "${version_from_file}" "${image_name}" "${file_name}")
+        if [ $? -ne 0 ]; then
+            errors+=("$output")
+        fi
     fi
-    set -e
+
     
     if [[ "$(prop 'devonly')" ]]; then
         echo "Skipping license verification for devonly image"
