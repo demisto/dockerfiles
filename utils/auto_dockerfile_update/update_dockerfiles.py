@@ -139,11 +139,15 @@ def run_lock(base_path_docker:str,pipfile_or_pyproject_path:str)->bool:
     try:
         if "Pipfile" in pipfile_or_pyproject_path:
             # waits for the process to end.
-            completed_process = subprocess.run(["pipenv", "lock", "--keep-outdated"], capture_output=True,check=True)
+            completed_process = subprocess.run(["pipenv", "lock", "--keep-outdated"], 
+                                               capture_output=True,check=True,
+                                               stdout=subprocess.DEVNULL)
             if completed_process.returncode != 0 :
                 return False
         elif "pyproject.toml" in pipfile_or_pyproject_path:
-            completed_process = subprocess.run(["poetry", "lock", "--no-update"], capture_output=True,check=True)
+            completed_process = subprocess.run(["poetry", "lock", "--no-update"],
+                                               capture_output=True,check=True,
+                                               stdout=subprocess.DEVNULL)
             if completed_process.returncode != 0 :
                 os.chdir(current_directory)
                 return False
@@ -230,7 +234,7 @@ def update_external_base_dockerfiles(git_repo: Repo, no_timestamp_updates=True) 
         latest_tag_last_updated = latest_tag.get('last_updated', '')
 
         if is_docker_file_outdated(file, latest_tag_name, latest_tag_last_updated, no_timestamp_updates):
-            branch_name = fr"TEST12auTESTtoTESTupdate/Update_{file['repo']}_{file['image_name']}_from_{file['tag']}_to_{latest_tag_name}"
+            branch_name = fr"TEST13auTESTtoTESTupdate/Update_{file['repo']}_{file['image_name']}_from_{file['tag']}_to_{latest_tag_name}"
             update_and_push_dockerfiles(git_repo, branch_name, [file], latest_tag_name)
             print(f"Updated {file['path']}")
     print("Finished to update dockerfiles")
@@ -278,7 +282,7 @@ def update_internal_base_dockerfile(git_repo: Repo) -> None:
                           is_docker_file_outdated(file, latest_tag_name, latest_tag_last_updated)]
         for batch_slice in batch(outdated_files, BATCH_SIZE):
             image_names = reduce(lambda a, b: f"{a}-{b}", [file['name'] for file in batch_slice])
-            branch_name = fr"TEST12auTESTtoTESTupdate/{base_image}_{image_names}_{latest_tag_name}"
+            branch_name = fr"TEST13auTESTtoTESTupdate/{base_image}_{image_names}_{latest_tag_name}"
             update_and_push_dockerfiles(git_repo, branch_name, batch_slice, latest_tag_name)
     print("Finished to update dockerfiles")
 
