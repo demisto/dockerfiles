@@ -32,10 +32,13 @@ function prop {
 # param $1: filename
 # param $2: regex pattren
 function get_version_from_file() {
-    file_content=$(<"$1")
-        if [[ $file_content =~ $2 ]]; then
-            version_from_file="${BASH_REMATCH[1]}"
+    while IFS= read -r line
+    do
+        if [[ $line =~ $2 ]]; then
+             version_from_file="${BASH_REMATCH[1]}"
         fi
+    done < $1
+
 }
 
 DOCKER_LOGIN_DONE=${DOCKER_LOGIN_DONE:-no}

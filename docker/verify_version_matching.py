@@ -67,7 +67,6 @@ def main():
     parser.add_argument('image_name')
     parser.add_argument('file_type')
     args = parser.parse_args()
-    print(args)
     docker_python_version: str = args.docker_python_version
     file_python_version: str = args.file_python_version
     image_name: str =  args.image_name
