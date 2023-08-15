@@ -82,12 +82,10 @@ def main():
         print(f"[SUCCESS] Versions verification. The base version {docker_python_version} is Corresponding to the {file_type} version {file_python_version}")
         return 0
     else:
-        msg = "[ERROR] Version mismatch or version is invalid format. "\
+        msg = f"[ERROR] {image_name.capitalize()}: Version mismatch or version is invalid format. "\
         f"The {file_type} version {file_python_version}"\
-        f" does not match to the base version {docker_python_version}"\
-        f" for {image_name}. "\
-        f"Please change it to the {format} format."\
-        f" Proposed change is: {correct_version}."
+        f" does not match to the base version {docker_python_version}."\
+        f"Change it to the {format} format."
         print(msg)
         return 1
 

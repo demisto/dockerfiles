@@ -39,6 +39,11 @@ function get_version_from_file() {
         fi
     done < $1
 
+
+}
+
+red_error() {
+    echo -e "\033[0;31m$1\033[0m"
 }
 
 DOCKER_LOGIN_DONE=${DOCKER_LOGIN_DONE:-no}
@@ -273,7 +278,7 @@ function docker_build {
     fi
     if [ -f "pyproject.toml" ]; then 
         file_name="pyproject.toml"
-        get_version_from_file 'pyproject.toml' 'python = \"([^\"]+)\"'
+        get_version_from_file 'pyproject.toml' '^python = \"([^\"]+)\"'
     fi
     if [ -f "Pipfile" ] || [ -f "pyproject.toml" ]; then
         set +e
@@ -281,6 +286,7 @@ function docker_build {
         if [ $? -ne 0 ]; then
             errors+=("$output")
         fi
+        set -e
     fi
 
     
@@ -464,7 +470,7 @@ for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | so
 done
 if [ ${#errors[@]} != 0 ]; then
   for err in "${errors[@]}"; do
-    echo "$err"
+    red_error "$err"
   done
   exit 1
 fi
