@@ -67,21 +67,39 @@ def extract_current_python_version(file_path: str)->Tuple[str,str,bool]:
         print(f"[ERROR] can't extract python version form:{file_path}")
         return "","",False
 
-def replace_python_version(file_path: str, version: List,
+def get_version_to_replace_with(version: str, file_path: str)->str:
+    """Gets the correct version to replace from the version string.
+    
+        Args:
+            file_path (str): The file path to the Pipfile or the pyproject.toml file.
+            version (str): The updated/old version.
+    """
+    version_array = version.split(".")
+    is_numeric_version=all(version.isnumeric() for version in version_array)
+    # if we get the docker image version it is only numeric so we want to add it ~ to pyproject.
+    # if we get numeric version it should be only for replace it in the pyproject after lock failure.
+    if is_numeric_version:
+        if "pyproject" in file_path:
+            return f"~{version_array[0]}.{version_array[1]}"     
+        return f"{version_array[0]}.{version_array[1]}"   
+    return version
+
+def replace_python_version(file_path: str, version: str,
                            full_str_python_version:str)->bool:
     """Replace the current python version in the Pipfile or the pyproject.toml.
     
         Args:
             file_path (str): The file path to the Pipfile or the pyproject.toml file.
-            version (List): The updated version.
+            version (str): The updated/old version.
             full_str_python_version (str): The older version.
     """
+    version_to_replace = get_version_to_replace_with(version,file_path)
     to_replace = False
     with open(file_path, "r") as f:
         file_content = f.read()
-        python_version = (f"python_version = \"{version[0]}.{version[1]}\"" 
+        python_version = (f"python_version = \"{version_to_replace}\"" 
                           if "Pipfile" in file_path 
-                          else f"python = \"~{version[0]}.{version[1]}\"")
+                          else f"python = \"{version_to_replace}\"")
         if full_str_python_version != python_version:
                 print(f"[INFO] change {file_path}")
                 file_content=file_content.replace(full_str_python_version,python_version)
@@ -92,18 +110,17 @@ def replace_python_version(file_path: str, version: List,
             return True
         return False
 
-def change_pyproject_or_pipfile(file_path, str_version) -> Tuple[bool,str]:
+def change_pyproject_or_pipfile(file_path:str, str_version:str) -> Tuple[bool,str]:
     """Replace the current python version in the Pipfile or the pyproject.toml.
     
         Args:
             file_path (str): The file path to the Pipfile or the pyproject.toml file.
-            version (List): The updated version.
+            version (str): The version.
             full_str_python_version (str): The older version.
     """
-    version = str_version.split(".")
     current_version, full_str_python_version, success_extraction=extract_current_python_version(file_path)
     if success_extraction:
-        result=replace_python_version(file_path, version, full_str_python_version)
+        result=replace_python_version(file_path, str_version, full_str_python_version)
         return result,current_version
     else:
         print(f"[ERROR] can't extract python version form:{file_path}")
@@ -131,10 +148,13 @@ def run_lock(base_path_docker:str,pipfile_or_pyproject_path:str)->bool:
                 return False
     except subprocess.CalledProcessError as e:
         print(f"[ERROR] Lock failed with error: {e}")
+        return False
     except TimeoutError as e:
         print(f"[ERROR] Got time out error: {e} for {base_path_docker}")
+        return False
     except Exception as e:
         print(f"[ERROR] {e}: for {base_path_docker}")
+        return False
     os.chdir(current_directory)
     return True
 
@@ -206,7 +226,7 @@ def update_external_base_dockerfiles(git_repo: Repo, no_timestamp_updates=True) 
         latest_tag_last_updated = latest_tag.get('last_updated', '')
 
         if is_docker_file_outdated(file, latest_tag_name, latest_tag_last_updated, no_timestamp_updates):
-            branch_name = fr"TEST7auTESTtoTESTupdate/Update_{file['repo']}_{file['image_name']}_from_{file['tag']}_to_{latest_tag_name}"
+            branch_name = fr"TEST8auTESTtoTESTupdate/Update_{file['repo']}_{file['image_name']}_from_{file['tag']}_to_{latest_tag_name}"
             update_and_push_dockerfiles(git_repo, branch_name, [file], latest_tag_name)
             print(f"Updated {file['path']}")
     print("Finished to update dockerfiles")
@@ -254,7 +274,7 @@ def update_internal_base_dockerfile(git_repo: Repo) -> None:
                           is_docker_file_outdated(file, latest_tag_name, latest_tag_last_updated)]
         for batch_slice in batch(outdated_files, BATCH_SIZE):
             image_names = reduce(lambda a, b: f"{a}-{b}", [file['name'] for file in batch_slice])
-            branch_name = fr"TEST7auTESTtoTESTupdate/{base_image}_{image_names}_{latest_tag_name}"
+            branch_name = fr"TEST8auTESTtoTESTupdate/{base_image}_{image_names}_{latest_tag_name}"
             update_and_push_dockerfiles(git_repo, branch_name, batch_slice, latest_tag_name)
     print("Finished to update dockerfiles")
 
