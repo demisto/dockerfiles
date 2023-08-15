@@ -148,17 +148,14 @@ def run_lock(base_path_docker:str,pipfile_or_pyproject_path:str)->bool:
                 os.chdir(current_directory)
                 return False
     except subprocess.CalledProcessError as e:
-        print(f"[ERROR] Lock failed with error: {e}")
-        print(e.stderr)
-        print(e.stdout)
-        os.chdir(current_directory)
+        print(f"[ERROR] Lock failed with error: {e.stderr} for {base_path_docker}")
         return False
     except TimeoutError as e:
         print(f"[ERROR] Got time out error: {e} for {base_path_docker}")
         os.chdir(current_directory)
         return False
     except Exception as e:
-        print(f"[ERROR] {e}: for {base_path_docker}")
+        print(f"[ERROR] {e}: for {base_path_docker} for {base_path_docker}")
         os.chdir(current_directory)
         return False
     finally:
@@ -233,7 +230,7 @@ def update_external_base_dockerfiles(git_repo: Repo, no_timestamp_updates=True) 
         latest_tag_last_updated = latest_tag.get('last_updated', '')
 
         if is_docker_file_outdated(file, latest_tag_name, latest_tag_last_updated, no_timestamp_updates):
-            branch_name = fr"TEST10auTESTtoTESTupdate/Update_{file['repo']}_{file['image_name']}_from_{file['tag']}_to_{latest_tag_name}"
+            branch_name = fr"TEST12auTESTtoTESTupdate/Update_{file['repo']}_{file['image_name']}_from_{file['tag']}_to_{latest_tag_name}"
             update_and_push_dockerfiles(git_repo, branch_name, [file], latest_tag_name)
             print(f"Updated {file['path']}")
     print("Finished to update dockerfiles")
@@ -282,7 +279,7 @@ def update_internal_base_dockerfile(git_repo: Repo) -> None:
         for batch_slice in batch(outdated_files, BATCH_SIZE):
             if batch_slice[0]["name"] == "ansible-runner":
                 image_names = reduce(lambda a, b: f"{a}-{b}", [file['name'] for file in batch_slice])
-                branch_name = fr"TEST11auTESTtoTESTupdate/{base_image}_{image_names}_{latest_tag_name}"
+                branch_name = fr"TEST12auTESTtoTESTupdate/{base_image}_{image_names}_{latest_tag_name}"
                 update_and_push_dockerfiles(git_repo, branch_name, batch_slice, latest_tag_name)
     print("Finished to update dockerfiles")
 
@@ -336,7 +333,6 @@ def main():
     args = parser.parse_args()
     repo = Repo(search_parent_directories=True)
     repo.config_writer().set_value("pull", "rebase", "false").release()
-    args.type = "internal"
     if args.type == "internal":
         update_internal_base_dockerfile(repo)
     elif args.type == "external":
