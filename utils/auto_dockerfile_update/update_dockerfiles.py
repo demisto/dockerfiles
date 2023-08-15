@@ -140,13 +140,14 @@ def run_lock(base_path_docker:str,pipfile_or_pyproject_path:str)->bool:
         if "Pipfile" in pipfile_or_pyproject_path:
             # waits for the process to end.
             completed_process = subprocess.run(["pipenv", "lock", "--keep-outdated"], 
-                                               capture_output=True,check=True,
-                                               stdout=subprocess.DEVNULL)
+                                               check=True,
+                                               stdout=subprocess.DEVNULL,
+                                               stderr=subprocess.PIPE)
             if completed_process.returncode != 0 :
                 return False
         elif "pyproject.toml" in pipfile_or_pyproject_path:
             completed_process = subprocess.run(["poetry", "lock", "--no-update"],
-                                               capture_output=True,check=True,
+                                               stderr=subprocess.PIPE,check=True,
                                                stdout=subprocess.DEVNULL)
             if completed_process.returncode != 0 :
                 os.chdir(current_directory)
@@ -281,9 +282,10 @@ def update_internal_base_dockerfile(git_repo: Repo) -> None:
         outdated_files = [file for file in dependency_list if
                           is_docker_file_outdated(file, latest_tag_name, latest_tag_last_updated)]
         for batch_slice in batch(outdated_files, BATCH_SIZE):
-            image_names = reduce(lambda a, b: f"{a}-{b}", [file['name'] for file in batch_slice])
-            branch_name = fr"TEST13auTESTtoTESTupdate/{base_image}_{image_names}_{latest_tag_name}"
-            update_and_push_dockerfiles(git_repo, branch_name, batch_slice, latest_tag_name)
+            if batch_slice[0]["name"] == "ansible-runner" or batch_slice[0]["name"] == "parse-emails":
+                image_names = reduce(lambda a, b: f"{a}-{b}", [file['name'] for file in batch_slice])
+                branch_name = fr"TEST13auTESTtoTESTupdate/{base_image}_{image_names}_{latest_tag_name}"
+                update_and_push_dockerfiles(git_repo, branch_name, batch_slice, latest_tag_name)
     print("Finished to update dockerfiles")
 
 
@@ -336,6 +338,7 @@ def main():
     args = parser.parse_args()
     repo = Repo(search_parent_directories=True)
     repo.config_writer().set_value("pull", "rebase", "false").release()
+    args.type = "internal"
     if args.type == "internal":
         update_internal_base_dockerfile(repo)
     elif args.type == "external":
