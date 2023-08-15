@@ -1,6 +1,5 @@
 ARG BASE_UBI_TAG=9.2
 ARG BASE_UBI_VERSION=ubi9
-ARG PYTHON_VER=3.10.8
 
 FROM registry.access.redhat.com/${BASE_UBI_VERSION}:${BASE_UBI_TAG} as build
 
@@ -20,11 +19,13 @@ RUN dnf upgrade -y --nodocs && \
     dnf clean all && \
     rm -rf /var/cache/dnf
 
-# install python3
-RUN wget https://www.python.org/ftp/python/$PYTHON_VER/Python-$PYTHON_VER.tgz && \
+ARG PYTHON_VER=3.10.8
+
+# install python3.10.8
+RUN wget https://www.python.org/ftp/python/${PYTHON_VER}/Python-${PYTHON_VER}.tgz && \
     mkdir -p /usr/local/src/python && \
-    tar -zxf Python-$PYTHON_VER.tgz -C /usr/local/src/python --strip-components=1 && \
-    rm -rf Python-$PYTHON_VER.tgz && \
+    tar -zxf Python-${PYTHON_VER}.tgz -C /usr/local/src/python --strip-components=1 && \
+    rm -rf Python-${PYTHON_VER}.tgz && \
     cd /usr/local/src/python && \
     ./configure \
       --enable-loadable-sqlite-extensions \
@@ -99,7 +100,7 @@ Options = UnsafeLegacyRenegotiation\n' > /tmp/ssl.cnf \
 RUN groupadd -g 4000 demisto && \
     useradd -u 4000 -g demisto demisto -s /bin/sh
 
-ENV PYTHON_VERSION=$PYTHON_VER
+ENV PYTHON_VERSION=${PYTHON_VER}
 
 CMD ["python3"]
 
