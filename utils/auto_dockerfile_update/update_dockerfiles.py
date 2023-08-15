@@ -277,10 +277,9 @@ def update_internal_base_dockerfile(git_repo: Repo) -> None:
         outdated_files = [file for file in dependency_list if
                           is_docker_file_outdated(file, latest_tag_name, latest_tag_last_updated)]
         for batch_slice in batch(outdated_files, BATCH_SIZE):
-            if batch_slice[0]["name"] == "ansible-runner":
-                image_names = reduce(lambda a, b: f"{a}-{b}", [file['name'] for file in batch_slice])
-                branch_name = fr"TEST12auTESTtoTESTupdate/{base_image}_{image_names}_{latest_tag_name}"
-                update_and_push_dockerfiles(git_repo, branch_name, batch_slice, latest_tag_name)
+            image_names = reduce(lambda a, b: f"{a}-{b}", [file['name'] for file in batch_slice])
+            branch_name = fr"TEST12auTESTtoTESTupdate/{base_image}_{image_names}_{latest_tag_name}"
+            update_and_push_dockerfiles(git_repo, branch_name, batch_slice, latest_tag_name)
     print("Finished to update dockerfiles")
 
 
