@@ -148,8 +148,9 @@ def run_lock(base_path_docker:str,pipfile_or_pyproject_path:str)->bool:
                 os.chdir(current_directory)
                 return False
     except subprocess.CalledProcessError as e:
-        print(completed_process.stderr)
         print(f"[ERROR] Lock failed with error: {e}")
+        print(e.stderr)
+        print(e.stdout)
         os.chdir(current_directory)
         return False
     except TimeoutError as e:
