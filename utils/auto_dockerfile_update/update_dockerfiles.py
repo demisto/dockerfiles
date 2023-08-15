@@ -157,7 +157,6 @@ def run_lock(base_path_docker:str,pipfile_or_pyproject_path:str)->bool:
         os.chdir(current_directory)
         return False
     except Exception as e:
-        print(completed_process.stderr)
         print(f"[ERROR] {e}: for {base_path_docker}")
         os.chdir(current_directory)
         return False
@@ -282,7 +281,7 @@ def update_internal_base_dockerfile(git_repo: Repo) -> None:
         for batch_slice in batch(outdated_files, BATCH_SIZE):
             if batch_slice[0]["name"] == "ansible-runner":
                 image_names = reduce(lambda a, b: f"{a}-{b}", [file['name'] for file in batch_slice])
-                branch_name = fr"TEST10auTESTtoTESTupdate/{base_image}_{image_names}_{latest_tag_name}"
+                branch_name = fr"TEST11auTESTtoTESTupdate/{base_image}_{image_names}_{latest_tag_name}"
                 update_and_push_dockerfiles(git_repo, branch_name, batch_slice, latest_tag_name)
     print("Finished to update dockerfiles")
 
