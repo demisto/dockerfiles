@@ -21,7 +21,7 @@ RUN dnf upgrade -y --nodocs && \
     rm -rf /var/cache/dnf
 
 # install python3
-RUN wget https://www.python.org/ftp/python/$PYTHON_VER/Python$PYTHON_VER.tgz && \
+RUN wget https://www.python.org/ftp/python/$PYTHON_VER/Python-$PYTHON_VER.tgz && \
     mkdir -p /usr/local/src/python && \
     tar -zxf Python-$PYTHON_VER.tgz -C /usr/local/src/python --strip-components=1 && \
     rm -rf Python-$PYTHON_VER.tgz && \
