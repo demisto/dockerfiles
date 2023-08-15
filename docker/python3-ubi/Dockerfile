@@ -98,7 +98,7 @@ Options = UnsafeLegacyRenegotiation\n' > /tmp/ssl.cnf \
 RUN groupadd -g 4000 demisto && \
     useradd -u 4000 -g demisto demisto -s /bin/sh
 
-ENV PYTHON_VERSION=$(python3 -c 'import platform; print(platform.python_version())')
+ENV PYTHON_VERSION=python3 -c 'import platform; print(platform.python_version())'
 
 CMD ["python3"]
 
