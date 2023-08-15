@@ -100,7 +100,7 @@ Options = UnsafeLegacyRenegotiation\n' > /tmp/ssl.cnf \
 RUN groupadd -g 4000 demisto && \
     useradd -u 4000 -g demisto demisto -s /bin/sh
 
-ENV PYTHON_VERSION=${PYTHON_VER}
+ENV PYTHON_VERSION="3.10.8"
 
 CMD ["python3"]
 
