@@ -1,8 +1,12 @@
 name: Update verify script
+# on:
+#   pull_request:
+#     branches:
+#       - master
 on:
-  pull_request:
+  push:
     branches:
-      - master
+      - update-dockerfile-update-workflow
 
 jobs:
   update_verify_script:

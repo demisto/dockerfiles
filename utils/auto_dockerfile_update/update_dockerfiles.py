@@ -94,7 +94,6 @@ def replace_python_version(file_path: str, version: str,
             full_str_python_version (str): The older version.
     """
     version_to_replace = get_version_to_replace_with(version,file_path)
-    to_replace = False
     with open(file_path, "r") as f:
         file_content = f.read()
         python_version = (f"python_version = \"{version_to_replace}\"" 
@@ -102,12 +101,10 @@ def replace_python_version(file_path: str, version: str,
                           else f"python = \"{version_to_replace}\"")
         if full_str_python_version != python_version:
                 print(f"[INFO] change {file_path}")
-                file_content=file_content.replace(full_str_python_version,python_version)
-                to_replace = True
-        if to_replace:
-            with open(file_path, "w") as f:
-                f.write(file_content)
-            return True
+                file_content = file_content.replace(full_str_python_version,python_version)
+                with open(file_path, "w") as f:
+                    f.write(file_content)
+                return True
         return False
 
 def change_pyproject_or_pipfile(file_path:str, str_version:str) -> Tuple[bool,str]:
@@ -124,7 +121,7 @@ def change_pyproject_or_pipfile(file_path:str, str_version:str) -> Tuple[bool,st
         return result,current_version
     else:
         print(f"[ERROR] can't extract python version form: {file_path}")
-    return False, []
+    return False, ""
 
 def run_lock(base_path_docker:str,pipfile_or_pyproject_path:str)->bool:
     """Runs poetry lock --no-update or pipfile lock --keep-outdated.
