@@ -29,8 +29,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 && rm -rf /var/lib/apt/lists/*
 
 
-COPY enable_sslrenegotiation.sh .
-RUN chmod +x enable_sslrenegotiation.sh && ./enable_sslrenegotiation.sh && rm enable_sslrenegotiation.sh
+RUN cp /etc/ssl/openssl.cnf /etc/ssl/openssl.cnf.org && \
+echo -e 'ssl_conf = ssl_sect\n\
+[ssl_sect]\n\
+system_default = system_default_sect\n\
+\n\
+[system_default_sect]\n\
+Options = UnsafeLegacyRenegotiation\n' > /tmp/ssl.cnf \
+&& sed -i '/providers = provider_sect/r /tmp/ssl.cnf' /etc/ssl/openssl.cnf \
+&& rm /tmp/ssl.cnf \
+&& grep -C 10 'Options = UnsafeLegacyRenegotiation' /etc/ssl/openssl.cnf
 
 RUN groupadd --gid 4000 demisto \
   && useradd --uid 4000 --gid demisto --shell /bin/bash --create-home demisto
