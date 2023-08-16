@@ -19,4 +19,4 @@ RUN addgroup -g 4000 demisto \
 # by enabling UnsafeLegacyRenegotiation
 # We add to the openssl_init section after the last element "providers = provider_sect"
 COPY enable_sslrenegotiation.sh .
-RUN ./enable_sslrenegotiation.sh && rm enable_sslrenegotiation.sh
+RUN chmod +x enable_sslrenegotiation.sh && ./enable_sslrenegotiation.sh && rm enable_sslrenegotiation.sh

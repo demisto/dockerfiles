@@ -30,7 +30,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 
 COPY enable_sslrenegotiation.sh .
-RUN ./enable_sslrenegotiation.sh && rm enable_sslrenegotiation.sh
+RUN chmod +x enable_sslrenegotiation.sh && ./enable_sslrenegotiation.sh && rm enable_sslrenegotiation.sh
 
 RUN groupadd --gid 4000 demisto \
   && useradd --uid 4000 --gid demisto --shell /bin/bash --create-home demisto
