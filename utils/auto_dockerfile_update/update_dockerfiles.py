@@ -123,7 +123,7 @@ def change_pyproject_or_pipfile(file_path:str, str_version:str) -> Tuple[bool,st
         result=replace_python_version(file_path, str_version, full_str_python_version)
         return result,current_version
     else:
-        print(f"[ERROR] can't extract python version form:{file_path}")
+        print(f"[ERROR] can't extract python version form: {file_path}")
     return False, []
 
 def run_lock(base_path_docker:str,pipfile_or_pyproject_path:str)->bool:
@@ -153,7 +153,7 @@ def run_lock(base_path_docker:str,pipfile_or_pyproject_path:str)->bool:
                 os.chdir(current_directory)
                 return False
     except subprocess.CalledProcessError as e:
-        print(f"[ERROR] Lock failed with error: {e.stderr} for {base_path_docker}")
+        print(f"[ERROR] Lock failed with error: {str(e.stderr)} for {base_path_docker}")
         return False
     except TimeoutError as e:
         print(f"[ERROR] Got time out error: {e} for {base_path_docker}")
@@ -187,7 +187,7 @@ def update_python_version_pyproject_or_pipfile(dockerfile: Dict, latest_tag: str
             if update_result:
                 lock_result=run_lock(dockerfile['path'],path)
                 if not lock_result:
-                    print(f"[ERROR] Got Error with lock for: {image_name} revert pipfile/pyproject.toml changes")
+                    print(f"[ERROR] Got Error with lock for: {dockerfile['path']} revert pipfile/pyproject.toml changes")
                     change_pyproject_or_pipfile(path,old_version)
 
 def update_dockerfile(dockerfile: Dict, latest_tag: str) -> None:
@@ -235,7 +235,7 @@ def update_external_base_dockerfiles(git_repo: Repo, no_timestamp_updates=True) 
         latest_tag_last_updated = latest_tag.get('last_updated', '')
 
         if is_docker_file_outdated(file, latest_tag_name, latest_tag_last_updated, no_timestamp_updates):
-            branch_name = fr"TEST15auTESTtoTESTupdate/Update_{file['repo']}_{file['image_name']}_from_{file['tag']}_to_{latest_tag_name}"
+            branch_name = fr"TEST16auTESTtoTESTupdate/Update_{file['repo']}_{file['image_name']}_from_{file['tag']}_to_{latest_tag_name}"
             update_and_push_dockerfiles(git_repo, branch_name, [file], latest_tag_name)
             print(f"Updated {file['path']}")
     print("Finished to update dockerfiles")
@@ -282,10 +282,9 @@ def update_internal_base_dockerfile(git_repo: Repo) -> None:
         outdated_files = [file for file in dependency_list if
                           is_docker_file_outdated(file, latest_tag_name, latest_tag_last_updated)]
         for batch_slice in batch(outdated_files, BATCH_SIZE):
-            if batch_slice[0]["name"] == "ansible-runner" or batch_slice[0]["name"] == "parse-emails":
-                image_names = reduce(lambda a, b: f"{a}-{b}", [file['name'] for file in batch_slice])
-                branch_name = fr"TEST15auTESTtoTESTupdate/{base_image}_{image_names}_{latest_tag_name}"
-                update_and_push_dockerfiles(git_repo, branch_name, batch_slice, latest_tag_name)
+            image_names = reduce(lambda a, b: f"{a}-{b}", [file['name'] for file in batch_slice])
+            branch_name = fr"TEST16auTESTtoTESTupdate/{base_image}_{image_names}_{latest_tag_name}"
+            update_and_push_dockerfiles(git_repo, branch_name, batch_slice, latest_tag_name)
     print("Finished to update dockerfiles")
 
 
@@ -315,7 +314,7 @@ def update_and_push_dockerfiles(git_repo: Repo, branch_name: str, files: List[Di
             update_dockerfile(file, latest_tag_name)
 
         changedFiles = [item.a_path for item in git_repo.index.diff(None)]
-        print(changedFiles)
+        print(f"[INFO] changed files are: {','.join(changedFiles)}")
         git_repo.git.add("*")
         git_repo.git.commit(m=f"Update Dockerfiles")
         git_repo.git.push('--set-upstream', 'origin', branch)
@@ -338,7 +337,6 @@ def main():
     args = parser.parse_args()
     repo = Repo(search_parent_directories=True)
     repo.config_writer().set_value("pull", "rebase", "false").release()
-    args.type = "internal"
     if args.type == "internal":
         update_internal_base_dockerfile(repo)
     elif args.type == "external":
