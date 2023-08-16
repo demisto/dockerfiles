@@ -1,5 +1,9 @@
-name: Docker Available
-on: status
+# name: Docker Available
+# on: status
+on:
+  push:
+    branches:
+      - update-dockerfile-update-workflow
   
 jobs:
   check:
