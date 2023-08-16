@@ -29,8 +29,8 @@ jobs:
             git config --global user.name "auto dockerfiles update"
             echo "==== $(date): Starting pipenv setup... ===="
             python -m pip install --upgrade pip
+            echo "==== HERE ===="
             pip install pipenv==2023.3.18
-            pip install poetry
             pipenv install
             echo "==== Finished ===="
             [[ ${{ vars.DISABLE_TIMESTAMP_AUTOUPDATES }} = 'true' ]] && tu_flag="--no-timestamp-updates"
