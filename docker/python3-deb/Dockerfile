@@ -28,5 +28,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   python3-dev \
 && rm -rf /var/lib/apt/lists/*
 
+
+COPY enable_sslrenegotiation.sh .
+RUN ./enable_sslrenegotiation.sh && rm enable_sslrenegotiation.sh
+
 RUN groupadd --gid 4000 demisto \
   && useradd --uid 4000 --gid demisto --shell /bin/bash --create-home demisto
