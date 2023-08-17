@@ -55,13 +55,13 @@ jobs:
         destination_branch: ""                                                    # If blank, default: master
         pr_title: "build(dockerfiles) update Dockerfile - ${{ matrix.branches }}" # Title of pull request
         pr_body: "This is automated PR to update dockerfiles base images\n${{ matrix.branches }}"
-    - name: approve and merge
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        PR_URL: ${{ steps.open-pr.outputs.pr_url }}
-      if: ${{ steps.open-pr.outputs.pr_url }}
-      run: |
-        echo "Approving and merging"
-        gh pr review --approve "$PR_URL"
-        gh pr merge --auto --squash "$PR_URL" 
+    # - name: approve and merge
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #     PR_URL: ${{ steps.open-pr.outputs.pr_url }}
+    #   if: ${{ steps.open-pr.outputs.pr_url }}
+    #   run: |
+    #     echo "Approving and merging"
+    #     gh pr review --approve "$PR_URL"
+    #     gh pr merge --auto --squash "$PR_URL" 
         
