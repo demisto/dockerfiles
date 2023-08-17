@@ -29,7 +29,7 @@ jobs:
             git config --global user.name "auto dockerfiles update"
             echo "==== $(date): Starting pipenv setup... ===="
             python -m pip install --upgrade pip
-            pip install pipenv
+            pip install pipenv==2023.3.18
             pipenv install
             echo "==== Finished ===="
             pipenv run python ./utils/auto_dockerfile_update/update_dockerfiles.py -t internal
