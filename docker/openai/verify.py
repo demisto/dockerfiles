@@ -6,5 +6,6 @@ import pdf2image
 import pypdf
 import unstructured
 import layoutparser
+import onnxruntime
 
 print('openai is good!!!')
