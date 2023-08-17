@@ -1,14 +1,9 @@
-name: Update internal base images test
-
-# on:
-#   schedule:
-#     - cron: '30 0,4,8,12,16,20 * * *'
-#   workflow_dispatch:
+name: Update internal base images
 
 on:
-  push:
-    branches:
-      - update-dockerfile-update-workflow
+  schedule:
+    - cron: '30 0,4,8,12,16,20 * * *'
+  workflow_dispatch:
 
 jobs:
   update-docker-files:

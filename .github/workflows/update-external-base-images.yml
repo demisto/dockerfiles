@@ -1,15 +1,9 @@
-name: Update external base images test
-
-# on:
-#   schedule:
-#     - cron: '0 0 * * *'
-#   workflow_dispatch:
+name: Update external base images
 
 on:
-  push:
-    branches:
-      - update-dockerfile-update-workflow
-  
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
 
 jobs:
   update-docker-files:
