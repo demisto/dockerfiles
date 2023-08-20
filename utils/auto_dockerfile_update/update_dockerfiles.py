@@ -177,7 +177,7 @@ def run_lock(base_path_docker: str, pipfile_or_pyproject_path: str) -> bool:
         print(f"[ERROR] Lock failed with error: {str(e.stderr)} for {base_path_docker}")
         return False
     except Exception as e:
-        print(f"[ERROR] {e}: for {base_path_docker} for {base_path_docker}")
+        print(f"[ERROR] {e}: for {base_path_docker}")
         os.chdir(current_directory)
         return False
     finally:
@@ -198,22 +198,23 @@ def update_python_version_pyproject_or_pipfile(
     """
     update_result = False
     image_name = dockerfile["image_name"]
-    if "python" in image_name:
-        if result_tuple := get_file_path_and_docker_version_if_exist(
-            dockerfile, latest_tag
+    if "python" not in image_name:
+        return
+    if result_tuple := get_file_path_and_docker_version_if_exist(
+        dockerfile, latest_tag
         ):
-            path, docker_version = result_tuple
-            update_result, old_version = change_python_version(
-                path, docker_version
-            )
-            if update_result:
-                lock_result = run_lock(dockerfile["path"], path)
-                if not lock_result:
-                    print(
+        path, docker_version = result_tuple
+        update_result, old_version = change_python_version(
+            path, docker_version
+        )
+        if update_result:
+            lock_result = run_lock(dockerfile["path"], path)
+            if not lock_result:
+                print(
                         f"[ERROR] Got Error with lock for: {dockerfile['path']} " \
                         "revert pipfile/pyproject.toml changes"
-                    )
-                    change_python_version(path, old_version)
+                )
+                change_python_version(path, old_version)
 
 
 def update_dockerfile(dockerfile: Dict, latest_tag: str) -> None:
