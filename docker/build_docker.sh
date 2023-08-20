@@ -29,6 +29,23 @@ function prop {
     fi
 }
 
+# param $1: filename
+# param $2: regex pattren
+function get_version_from_file() {
+    while IFS= read -r line
+    do
+        if [[ $line =~ $2 ]]; then
+             version_from_file="${BASH_REMATCH[1]}"
+        fi
+    done < $1
+
+
+}
+
+red_error() {
+    echo -e "\033[0;31m$1\033[0m"
+}
+
 DOCKER_LOGIN_DONE=${DOCKER_LOGIN_DONE:-no}
 function docker_login {
     if [ "${DOCKER_LOGIN_DONE}" = "yes" ]; then
@@ -249,6 +266,29 @@ function docker_build {
             return 1
         fi
     fi
+
+    echo "================= $(date): Starting version verification on image: ${image_name} ================="
+    echo "Checking that the image python version match with the Pipfile/pyproject.toml python version..."
+    # Get the python version from the docker metadata.
+    PYTHON_VERSION=$(docker inspect "$image_full_name" | jq -r '.[].Config.Env[]|select(match("^PYTHON_VERSION"))|.[index("=")+1:]')
+    PY3CMD="python3"
+    if [ -f "Pipfile" ]; then
+        file_name="Pipfile"
+        get_version_from_file 'Pipfile' 'python_version = \"([^\"]+)\"'
+    fi
+    if [ -f "pyproject.toml" ]; then 
+        file_name="pyproject.toml"
+        get_version_from_file 'pyproject.toml' '^python = \"([^\"]+)\"'
+    fi
+    if [ -f "Pipfile" ] || [ -f "pyproject.toml" ]; then
+        set +e
+        output=$($PY3CMD "${DOCKER_SRC_DIR}"/verify_version_matching.py "${PYTHON_VERSION}" "${version_from_file}" "${image_name}" "${file_name}")
+        if [ $? -ne 0 ]; then
+            errors+=("$output")
+        fi
+        set -e
+    fi
+
     
     if [[ "$(prop 'devonly')" ]]; then
         echo "Skipping license verification for devonly image"
@@ -414,6 +454,7 @@ echo $DOCKER_INCLUDE_GREP > $CIRCLE_ARTIFACTS/docker_include_grep.txt
 
 total=$(find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | wc -l)
 count=0
+errors=()
 for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | sort`; do
     if [[ ${DIFF_COMPARE} = "ALL" ]] || [[ $(git diff --name-status $DIFF_COMPARE -- ${docker_dir}) ]]; then
         if [ -n "${DOCKER_INCLUDE_GREP}" ] && [ -z "$(echo ${docker_dir} | grep -E ${DOCKER_INCLUDE_GREP})" ]; then
@@ -427,5 +468,11 @@ for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | so
         echo ">>>>>>>>>>>>>>> `date`: Done docker build <<<<<<<<<<<<<"
     fi
 done
+if [ ${#errors[@]} != 0 ]; then
+  for err in "${errors[@]}"; do
+    red_error "$err"
+  done
+  exit 1
+fi
 echo $PUSHED_DOCKERS > $CIRCLE_ARTIFACTS/pushed_dockers.txt
 echo "Successfully pushed $PUSHED_DOCKERS"
