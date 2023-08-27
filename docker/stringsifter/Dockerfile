@@ -1,4 +1,4 @@
-FROM demisto/python3-deb:3.10.12.68715
+FROM demisto/python3-deb:3.10.12.71830
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends python3-dev  \
     make gcc g++ wget git libgomp1 \
