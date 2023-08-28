@@ -14,5 +14,5 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   wget \
   && rm -rf /var/lib/apt/lists/*
 
-RUN python3 -c "import nltk; nltk.download('punkt')" && \
-  python3 -c "import nltk; nltk.download('averaged_perceptron_tagger')"
+# RUN python3 -c "import nltk; nltk.download('punkt')" && \
+#   python3 -c "import nltk; nltk.download('averaged_perceptron_tagger')"
