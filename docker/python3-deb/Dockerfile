@@ -1,5 +1,6 @@
-# Last modified: 2023-08-27T00:14:50.407408+00:00
-FROM python:3.10.12-slim-bookworm
+
+# Last modified: 2023-08-28T00:12:30.649840+00:00
+FROM python:3.10.13-slim-bullseye
 
 RUN echo 'deb http://deb.debian.org/debian bookworm-backports main' >> /etc/apt/sources.list
 
