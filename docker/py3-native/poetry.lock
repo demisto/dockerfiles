@@ -2767,27 +2767,6 @@ files = [
 ]
 
 [[package]]
-name = "pywinrm"
-version = "0.4.3"
-description = "Python library for Windows Remote Management"
-optional = false
-python-versions = "*"
-files = [
-    {file = "pywinrm-0.4.3-py2.py3-none-any.whl", hash = "sha256:c476c1e20dd0875da6fe4684c4d8e242dd537025907c2f11e1990c5aee5c9526"},
-    {file = "pywinrm-0.4.3.tar.gz", hash = "sha256:995674bf5ac64b2562c9c56540473109e530d36bde10c262d5a5296121ad5565"},
-]
-
-[package.dependencies]
-requests = ">=2.9.1"
-requests-ntlm = ">=1.1.0"
-six = "*"
-xmltodict = "*"
-
-[package.extras]
-credssp = ["requests-credssp (>=1.0.0)"]
-kerberos = ["pykerberos (>=1.2.1,<2.0.0)", "winkerberos (>=0.5.0)"]
-
-[[package]]
 name = "pyzipper"
 version = "0.3.6"
 description = "AES encryption for zipfile."
@@ -3714,17 +3693,6 @@ files = [
 h11 = ">=0.9.0,<1"
 
 [[package]]
-name = "xmltodict"
-version = "0.13.0"
-description = "Makes working with XML feel like you are working with JSON"
-optional = false
-python-versions = ">=3.4"
-files = [
-    {file = "xmltodict-0.13.0-py2.py3-none-any.whl", hash = "sha256:aa89e8fd76320154a40d19a0df04a4695fb9dc5ba977cbb68ab3e4eb225e7852"},
-    {file = "xmltodict-0.13.0.tar.gz", hash = "sha256:341595a488e3e01a85a9d8911d8912fd922ede5fecc4dce437eb4b6c8d037e56"},
-]
-
-[[package]]
 name = "yarl"
 version = "1.9.2"
 description = "Yet another URL library"
@@ -3861,4 +3829,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "67393b07052e9ad4d0704aad4db2f62d706572e4ec7ab0acfbab7b2147517e6b"
+content-hash = "a2ba3e2f9aeb907cb8704bc06f58fe099924455bf56d570ba4f817aa0033ec26"
