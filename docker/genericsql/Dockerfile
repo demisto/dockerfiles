@@ -29,9 +29,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   libc-dev \
   libssl-dev \
   unixodbc-dev \
-&& wget ftp://ftp.freetds.org/pub/freetds/stable/freetds-1.1.39.tar.gz \
-&& tar -xzf freetds-1.1.39.tar.gz \
-&& cd freetds-1.1.39 \
+&& wget ftp://ftp.freetds.org/pub/freetds/stable/freetds-1.3.20.tar.gz \
+&& tar -xzf freetds-1.3.20.tar.gz \
+&& cd freetds-1.3.20 \
 && ./configure --with-openssl --with-unixodbc=/usr --enable-msdblib \
 && make \
 && make install \
@@ -42,8 +42,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   unixodbc-dev \
 && rm -rf /var/lib/apt/lists/* \
 && cd .. \
-&& rm freetds-1.1.39.tar.gz \
-&& rm -rf freetds-1.1.39
+&& rm freetds-1.3.20.tar.gz \
+&& rm -rf freetds-1.3.20
 
 # Install the Microsoft ODBC driver for SQL Server (Linux)
 RUN apt-get update \
