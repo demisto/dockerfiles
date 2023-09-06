@@ -7,6 +7,5 @@ import jwt
 from pydantic import BaseConfig, BaseModel, AnyUrl
 from requests_oauthlib import OAuth2Session
 from oauthlib.oauth2 import BackendApplicationClient
-from requests_ntlm import HttpNtlmAuth
 
 print("auth-utils docker image verified")
