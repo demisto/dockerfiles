@@ -101,6 +101,7 @@ This README purpose is to clarify the following:
 * joe-security
 * slack
 * office-utils
+* auth-utils
 
 
 ## Verifiers Folder
