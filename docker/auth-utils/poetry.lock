@@ -457,20 +457,6 @@ pyasn1 = ">=0.1.1"
 PyOpenSSL = "*"
 
 [[package]]
-name = "ntlm-auth"
-version = "1.5.0"
-description = "Creates NTLM authentication structures"
-optional = false
-python-versions = ">=2.6,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*"
-files = [
-    {file = "ntlm-auth-1.5.0.tar.gz", hash = "sha256:c9667d361dc09f6b3750283d503c689070ff7d89f2f6ff0d38088d5436ff8543"},
-    {file = "ntlm_auth-1.5.0-py2.py3-none-any.whl", hash = "sha256:f1527c581dbf149349134fc2d789d50af2a400e193206956fa0ab456ccc5a8ba"},
-]
-
-[package.extras]
-cryptography = ["cryptography", "cryptography (<2.2)"]
-
-[[package]]
 name = "oauthlib"
 version = "3.2.2"
 description = "A generic, spec-compliant, thorough implementation of the OAuth request-signing logic"
@@ -734,6 +720,36 @@ docs = ["sphinx (!=5.2.0,!=5.2.0.post0)", "sphinx-rtd-theme"]
 test = ["flaky", "pretend", "pytest (>=3.0.1)"]
 
 [[package]]
+name = "pyspnego"
+version = "0.9.2"
+description = "Windows Negotiate Authentication Client and Server"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "pyspnego-0.9.2-cp310-cp310-win32.whl", hash = "sha256:dc9664a32ff1d7b9942573b9568216876d582612f12f9ec7bba312fb0065252d"},
+    {file = "pyspnego-0.9.2-cp310-cp310-win_amd64.whl", hash = "sha256:b9ecc00b23eb1cfb0fe2cd10c5819751c9294895fe7c03a176768a51d0b78277"},
+    {file = "pyspnego-0.9.2-cp311-cp311-win32.whl", hash = "sha256:c3ad732037b46ed3e8a001884510323167aee15ad8c80feb5c324f4dd46c511c"},
+    {file = "pyspnego-0.9.2-cp311-cp311-win_amd64.whl", hash = "sha256:efa3a5edf2fd5343fdc1d3fbfe02a7166f0747e3c63800a2f241320b78e3fb1d"},
+    {file = "pyspnego-0.9.2-cp312-cp312-win32.whl", hash = "sha256:e68fa2cdd7dcc1e4d0b2b42c23ba3a8d2daef2e02f88ecff3fb7c1e6351c8fec"},
+    {file = "pyspnego-0.9.2-cp312-cp312-win_amd64.whl", hash = "sha256:075fd5950d69dd2fca8aa41ecfb1d54cb155228000cb1f9e76916df2dee7812b"},
+    {file = "pyspnego-0.9.2-cp37-cp37m-win32.whl", hash = "sha256:bd020e1d5b761aa668c066917e1af7a039bbe5985aeb2119ba3e2956f52ec12d"},
+    {file = "pyspnego-0.9.2-cp37-cp37m-win_amd64.whl", hash = "sha256:b696b07564492db7b80533a79e298fb4fcf8ca35cad520c595fef7045507cb51"},
+    {file = "pyspnego-0.9.2-cp38-cp38-win32.whl", hash = "sha256:e41c415953c0beea0bc1493121e1d2c7d08ccc10a8d28eaa1a3c6420e2917a07"},
+    {file = "pyspnego-0.9.2-cp38-cp38-win_amd64.whl", hash = "sha256:e38d0563433cdea0e88b00c20f7f7ace84778d3c5c7ea3e22acd71cc1e56a284"},
+    {file = "pyspnego-0.9.2-cp39-cp39-win32.whl", hash = "sha256:0fb120259c58b8cc6371908980f7cfa6c7ffc187ac43b782a4112bda8a06163b"},
+    {file = "pyspnego-0.9.2-cp39-cp39-win_amd64.whl", hash = "sha256:964749e145b66d5dbba6419960f6a1f23661daf96175f69f9583fb2b3ad7b699"},
+    {file = "pyspnego-0.9.2-py3-none-any.whl", hash = "sha256:866f140d5e8f57d1a9d1c1a24ea142ff94f9c8dfc3018219204b0999844f1ebe"},
+    {file = "pyspnego-0.9.2.tar.gz", hash = "sha256:0e16cb331f1bd9c85f9b80e2be04bb5da2ecaff678cc0342f68b45e4667d7966"},
+]
+
+[package.dependencies]
+cryptography = "*"
+
+[package.extras]
+kerberos = ["gssapi (>=1.6.0)", "krb5 (>=0.3.0)"]
+yaml = ["ruamel.yaml"]
+
+[[package]]
 name = "python-dateutil"
 version = "2.8.2"
 description = "Extensions to the standard Python datetime module"
@@ -816,18 +832,18 @@ use-chardet-on-py3 = ["chardet (>=3.0.2,<6)"]
 
 [[package]]
 name = "requests-ntlm"
-version = "1.1.0"
+version = "1.2.0"
 description = "This package allows for HTTP NTLM authentication using the requests library."
 optional = false
-python-versions = "*"
+python-versions = ">=3.7"
 files = [
-    {file = "requests_ntlm-1.1.0-py2.py3-none-any.whl", hash = "sha256:1eb43d1026b64d431a8e0f1e8a8c8119ac698e72e9b95102018214411a8463ea"},
-    {file = "requests_ntlm-1.1.0.tar.gz", hash = "sha256:9189c92e8c61ae91402a64b972c4802b2457ce6a799d658256ebf084d5c7eb71"},
+    {file = "requests_ntlm-1.2.0-py3-none-any.whl", hash = "sha256:b7781090c647308a88b55fb530c7b3705cef45349e70a83b8d6731e7889272a6"},
+    {file = "requests_ntlm-1.2.0.tar.gz", hash = "sha256:33c285f5074e317cbdd338d199afa46a7c01132e5c111d36bd415534e9b916a8"},
 ]
 
 [package.dependencies]
 cryptography = ">=1.3"
-ntlm-auth = ">=1.0.2"
+pyspnego = ">=0.1.6"
 requests = ">=2.0.0"
 
 [[package]]
@@ -941,4 +957,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10"
-content-hash = "fc530a91114560e637e3051bb6a2605c76c643c09949fab380d716afb73b7f6e"
+content-hash = "c7e3a0ece5ae9ef3e6fca981e81340d18a5cc2bdb6d63e694e83d60b8ec8d87d"
