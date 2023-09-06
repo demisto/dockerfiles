@@ -2577,6 +2577,16 @@ docs = ["sphinx (>=4.5.0,<5.0.0)", "sphinx-rtd-theme", "zope.interface"]
 tests = ["coverage[toml] (==5.0.4)", "pytest (>=6.0.0,<7.0.0)"]
 
 [[package]]
+name = "pykerberos"
+version = "1.2.4"
+description = "High-level interface to Kerberos"
+optional = false
+python-versions = "*"
+files = [
+    {file = "pykerberos-1.2.4.tar.gz", hash = "sha256:9d701ebd8fc596c99d3155d5ba45813bd5908d26ef83ba0add250edb622abed4"},
+]
+
+[[package]]
 name = "pyopenssl"
 version = "23.2.0"
 description = "Python wrapper module around the OpenSSL library"
@@ -2812,6 +2822,29 @@ files = [
     {file = "pywin32-306-cp39-cp39-win32.whl", hash = "sha256:e25fd5b485b55ac9c057f67d94bc203f3f6595078d1fb3b458c9c28b7153a802"},
     {file = "pywin32-306-cp39-cp39-win_amd64.whl", hash = "sha256:39b61c15272833b5c329a2989999dcae836b1eed650252ab1b7bfbe1d59f30f4"},
 ]
+
+[[package]]
+name = "pywinrm"
+version = "0.4.3"
+description = "Python library for Windows Remote Management"
+optional = false
+python-versions = "*"
+files = [
+    {file = "pywinrm-0.4.3-py2.py3-none-any.whl", hash = "sha256:c476c1e20dd0875da6fe4684c4d8e242dd537025907c2f11e1990c5aee5c9526"},
+    {file = "pywinrm-0.4.3.tar.gz", hash = "sha256:995674bf5ac64b2562c9c56540473109e530d36bde10c262d5a5296121ad5565"},
+]
+
+[package.dependencies]
+pykerberos = {version = ">=1.2.1,<2.0.0", optional = true, markers = "sys_platform != \"win32\" and extra == \"kerberos\""}
+requests = ">=2.9.1"
+requests-ntlm = ">=1.1.0"
+six = "*"
+winkerberos = {version = ">=0.5.0", optional = true, markers = "sys_platform == \"win32\" and extra == \"kerberos\""}
+xmltodict = "*"
+
+[package.extras]
+credssp = ["requests-credssp (>=1.0.0)"]
+kerberos = ["pykerberos (>=1.2.1,<2.0.0)", "winkerberos (>=0.5.0)"]
 
 [[package]]
 name = "pyzipper"
@@ -3727,6 +3760,32 @@ files = [
 ]
 
 [[package]]
+name = "winkerberos"
+version = "0.9.1"
+description = "High level interface to SSPI for Kerberos client auth"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+files = [
+    {file = "winkerberos-0.9.1-cp27-cp27m-win32.whl", hash = "sha256:aba3190d8c1f1bb876f398346ff7d7c2e173046a1653086dad638dc3b16cccdf"},
+    {file = "winkerberos-0.9.1-cp27-cp27m-win_amd64.whl", hash = "sha256:53c5109e95b9cf0a80198ee6953d6263b0c8d254cc3815e9091cff4544ab4697"},
+    {file = "winkerberos-0.9.1-cp310-cp310-win32.whl", hash = "sha256:4565476111ec30a9def8f4c31bb937e165ab9862ad11ffa700f431f0d4941030"},
+    {file = "winkerberos-0.9.1-cp310-cp310-win_amd64.whl", hash = "sha256:59499e9682961ea784fa41b85af499b699f2ff5f3a07fde30a51ce33d509fa96"},
+    {file = "winkerberos-0.9.1-cp311-cp311-win32.whl", hash = "sha256:26716c91900f19c8990d6e77026e1b1686e5bdb22ac829c87781ff80eba4603d"},
+    {file = "winkerberos-0.9.1-cp311-cp311-win_amd64.whl", hash = "sha256:60e47a551db0431a2e98b46ef9d9b59a70df0c0c450af0172747da7083573122"},
+    {file = "winkerberos-0.9.1-cp35-cp35m-win32.whl", hash = "sha256:044b7358cd34de6ae34c76aa48a40607e6f63835ff319516662c1c65f84f2feb"},
+    {file = "winkerberos-0.9.1-cp35-cp35m-win_amd64.whl", hash = "sha256:630cb3a5789532e3adac03ab51bc2fc2288cae70d39259a6bdd409d2a3c8b936"},
+    {file = "winkerberos-0.9.1-cp36-cp36m-win32.whl", hash = "sha256:45cf5084640888ad025a6f6f9e1fb313e03d626101c1bcca6e82214d7e9c5ee3"},
+    {file = "winkerberos-0.9.1-cp36-cp36m-win_amd64.whl", hash = "sha256:bf3e4aab04673660a8731fab527c4a838cfdfa935deada6cef0df8f8e9a6cd4d"},
+    {file = "winkerberos-0.9.1-cp37-cp37m-win32.whl", hash = "sha256:024657b9861f057a90f10fcc94de2ac7bf1d2d84b7f51386f68f1d77c99f58c7"},
+    {file = "winkerberos-0.9.1-cp37-cp37m-win_amd64.whl", hash = "sha256:773ba1ef924de8ad9c8c1dc24bfaa40e1182f9978e46d2dcb98856c4ab069ce4"},
+    {file = "winkerberos-0.9.1-cp38-cp38-win32.whl", hash = "sha256:167d0c58741d5624518aa94694e079831a9b1de1b99b1f901330c18c785d00f7"},
+    {file = "winkerberos-0.9.1-cp38-cp38-win_amd64.whl", hash = "sha256:fb29dd36c0d7fd66c6abefe7871aecbd1fda00cb38e972fad668a9558e531a12"},
+    {file = "winkerberos-0.9.1-cp39-cp39-win32.whl", hash = "sha256:484a23369cf461fdfa6d88d8c238e7129a469f7c961f257c8f5668536d9c2df9"},
+    {file = "winkerberos-0.9.1-cp39-cp39-win_amd64.whl", hash = "sha256:9842854fa5527b72720e2911f1b6008736baacaf3df1a60bfe62a0aaf0f037ff"},
+    {file = "winkerberos-0.9.1.zip", hash = "sha256:02ec925c2aa4fe4f7656792a76e346d8fab13e12ced2732354a21958adfe92c6"},
+]
+
+[[package]]
 name = "wsproto"
 version = "1.2.0"
 description = "WebSockets state-machine based protocol implementation"
@@ -3739,6 +3798,17 @@ files = [
 
 [package.dependencies]
 h11 = ">=0.9.0,<1"
+
+[[package]]
+name = "xmltodict"
+version = "0.13.0"
+description = "Makes working with XML feel like you are working with JSON"
+optional = false
+python-versions = ">=3.4"
+files = [
+    {file = "xmltodict-0.13.0-py2.py3-none-any.whl", hash = "sha256:aa89e8fd76320154a40d19a0df04a4695fb9dc5ba977cbb68ab3e4eb225e7852"},
+    {file = "xmltodict-0.13.0.tar.gz", hash = "sha256:341595a488e3e01a85a9d8911d8912fd922ede5fecc4dce437eb4b6c8d037e56"},
+]
 
 [[package]]
 name = "yarl"
@@ -3883,4 +3953,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10"
-content-hash = "84dc964b17f1171d336de8dc56ecbb56142f846a04ac0f8f027524218b5e9134"
+content-hash = "af35c41d40990dcd9a1f89b7b8363065bf83a2074580c33be44000b6a1a4e4c0"
