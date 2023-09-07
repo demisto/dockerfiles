@@ -103,6 +103,7 @@ RUN groupadd -g 4000 demisto && \
 
 # when changing it make sure to change also PYTHON_VERSION_TO_INSTALL env var in line 23
 ENV PYTHON_VERSION="3.10.8"
+ENV LANG="C.UTF-8"
 
 CMD ["python3"]
 
