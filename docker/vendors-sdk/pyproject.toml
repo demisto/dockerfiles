@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "dockerfiles"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "~3.10"
+cloakensdk = "*"
+confluent-kafka = "==1.7.0" # https://github.com/confluentinc/confluent-kafka-python/issues/180
+fp-ngfw-smc-python = "*"
+pydantic = "*"
+duo-client = "*"
+pycti = "*"
+pyhcl = "*"
+cymruwhois = "*"
+jbxapi = "*"
+domaintools-api = "*"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
