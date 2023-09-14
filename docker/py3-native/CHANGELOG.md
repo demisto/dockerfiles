@@ -4,6 +4,7 @@
 * Added *jq* as a build dependency and updated chromedriver download script to be in line with chromium.
 * Updated py3-native to be based on ubi-9.2.
 * Downgraded the *LibreOffice* to the following version: **7.1.8** to avoid installing it directly from the source.
+* Added support for the **netutils** image.
 
 ## 8.3.0
 * Updated the *LibreOffice* to the following version: **7.5.3**
