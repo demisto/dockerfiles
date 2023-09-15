@@ -9,8 +9,6 @@ variables:
 
 trigger_job:
   stage: triggers
-  except:
-    - master
   trigger:
     strategy: depend
     project: xsoar/Dockerfiles-CICD
