@@ -3,7 +3,6 @@ on:
 jobs:
   docker_build:
       runs-on: ubuntu-latest
-      container: devdemisto/dockerbuild:1.0.0.43365
       steps:
         - uses: actions/checkout@v4
         - run:  python -m jsonschema -i docker/approved_licenses.json docker/approved_licenses.schema.json
