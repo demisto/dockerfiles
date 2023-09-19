@@ -2,6 +2,8 @@ on:
   push:
 jobs:
   docker_build:
+      env:
+        BRANCH_NAME: ${{github.ref_name}}
       runs-on: ubuntu-latest
       steps:
         - uses: actions/checkout@v4

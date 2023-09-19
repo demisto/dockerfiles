@@ -154,7 +154,7 @@ function docker_build {
     image_name=$(basename $1)
     echo "Starting build for dir: $1, image: ${image_name}, pwd: $(pwd)"
     cd $1        
-    if  [[ "$CIRCLE_BRANCH" == "master" ]] && [[ "$(prop 'devonly')" ]]; then
+    if  [[ "$BRANCH_NAME" == "master" ]] && [[ "$(prop 'devonly')" ]]; then
         echo "== skipping image [${image_name}] as it is marked devonly =="
         return 0
     fi
@@ -337,7 +337,7 @@ function docker_build {
         fi
         if ! ${DOCKER_SRC_DIR}/post_github_comment.py ${image_full_name}; then 
             echo "Failed post_github_comment.py. Will stop build only if not on master"
-            if [ "$CIRCLE_BRANCH" == "master" ]; then
+            if [ "$BRANCH_NAME" == "master" ]; then
                 echo "Continuing as we are on master branch..."
             else
                 echo "failing build!!"
@@ -346,7 +346,7 @@ function docker_build {
         fi
     else
         echo "Skipping docker push"
-        if [ "$CIRCLE_BRANCH" == "master" ]; then
+        if [ "$BRANCH_NAME" == "master" ]; then
           echo "Did not push image on master. Failing build"
           exit 1
         fi
@@ -378,14 +378,14 @@ EOF
 }
 
 # default compare circle branch against master
-DIFF_COMPARE=origin/master...${CIRCLE_BRANCH}
+DIFF_COMPARE=origin/master...${BRANCH_NAME}
 
 if [ -z "$CIRCLE_SHA1" ]; then
     echo "CIRCLE_SHA1 not set. Assuming local testing."
     CIRCLE_SHA1=testing
     DOCKER_ORG=${DOCKER_ORG:-devtesting}
     
-    if [ -z "$CIRCLE_BRANCH" ]; then
+    if [ -z "$BRANCH_NAME" ]; then
         # simply compare against origin/master
         DIFF_COMPARE=origin/master
     fi
@@ -421,7 +421,7 @@ if [[ -n "$1" ]]; then
     DOCKER_INCLUDE_GREP="/${1}$"
 fi
 
-if [ "$CIRCLE_BRANCH" == "master" ]; then
+if [ "$BRANCH_NAME" == "master" ]; then
     # on master we use the range obtained from CIRCLE_COMPARE_URL
     # example of comapre url: https://github.com/demisto/content/compare/62f0bd03be73...1451bf0f3c2a
     # if there wasn't a successful build CIRCLE_COMPARE_URL is empty. We set diff compare to special ALL
@@ -438,7 +438,7 @@ if [ "$CIRCLE_BRANCH" == "master" ]; then
     DOCKER_ORG=demisto
 fi
 
-echo "DOCKER_ORG: ${DOCKER_ORG}, DIFF_COMPARE: [${DIFF_COMPARE}], SCRIPT_DIR: [${SCRIPT_DIR}], CIRCLE_BRANCH: ${CIRCLE_BRANCH}, PWD: [${CURRENT_DIR}]"
+echo "DOCKER_ORG: ${DOCKER_ORG}, DIFF_COMPARE: [${DIFF_COMPARE}], SCRIPT_DIR: [${SCRIPT_DIR}], BRANCH_NAME: ${BRANCH_NAME}, PWD: [${CURRENT_DIR}]"
 
 # echo to bash env to be used in future steps
 CIRCLE_ARTIFACTS="artifacts"
