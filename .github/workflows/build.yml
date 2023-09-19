@@ -5,19 +5,13 @@ jobs:
       runs-on: ubuntu-latest
       steps:
         - uses: actions/checkout@v4
-        - run:  python -m jsonschema -i docker/approved_licenses.json docker/approved_licenses.schema.json
-          name: Validate Approved Licenses File
+        - name: Validate Approved Licenses File
+          run:  python -m jsonschema -i docker/approved_licenses.json docker/approved_licenses.schema.json
+        - name: Validate Dependabot Config
+          run: ./docker/verify_dependabot.sh
+        - name: Build Docker Images
+          run: ./docker/build_docker.sh
 
-      # - run:
-      #     name: Validate Approved Licenses File
-      #     command: python -m jsonschema -i docker/approved_licenses.json docker/approved_licenses.schema.json
-      # - run:
-      #     name: Validate Dependabot Config
-      #     command: ./docker/verify_dependabot.sh
-      # - run:
-      #     name: Build Docker Images
-      #     command: |
-      #       ./docker/build_docker.sh
       #     no_output_timeout: 60m
       # - store_artifacts:
       #     path: artifacts
