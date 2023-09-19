@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "dockerfiles"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "~3.10"
+cloakensdk = "*"
+confluent-kafka = "==1.7.0" # need specific version of os package, see CIAC-8412
+fp-ngfw-smc-python = "*"
+pydantic = "*"
+duo-client = "*"
+pycti = "==5.9.6" # bug when using the version 5.10.1 see CIAC-8395
+pyhcl = "*"
+cymruwhois = "*"
+jbxapi = "*"
+domaintools-api = "*"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
