@@ -1,0 +1,28 @@
+on:
+  push:
+jobs:
+  docker_build:
+      runs-on: ubuntu-latest
+      container: devdemisto/dockerbuild:1.0.0.43365
+      steps:
+        - uses: actions/checkout@v4
+        - run:  python -m jsonschema -i docker/approved_licenses.json docker/approved_licenses.schema.json
+          name: Validate Approved Licenses File
+
+      # - run:
+      #     name: Validate Approved Licenses File
+      #     command: python -m jsonschema -i docker/approved_licenses.json docker/approved_licenses.schema.json
+      # - run:
+      #     name: Validate Dependabot Config
+      #     command: ./docker/verify_dependabot.sh
+      # - run:
+      #     name: Build Docker Images
+      #     command: |
+      #       ./docker/build_docker.sh
+      #     no_output_timeout: 60m
+      # - store_artifacts:
+      #     path: artifacts
+      #     destination: docker_images
+  # workflows:
+  # version: 2
+  # full_build:
