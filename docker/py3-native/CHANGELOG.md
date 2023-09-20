@@ -1,7 +1,7 @@
 # py3-native Changelog
 
 ## Unreleased
-
+* Added support for the **auth-utils** image.
 ## 8.4.0
 * Added *jq* as a build dependency and updated chromedriver download script to be in line with chromium.
 * Updated py3-native to be based on ubi-9.2.
