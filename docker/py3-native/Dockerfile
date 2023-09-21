@@ -1,4 +1,4 @@
-FROM demisto/py3-tools-ubi:1.0.0.74145
+FROM demisto/py3-tools-ubi:1.0.0.74991
 
 
 COPY requirements.txt .
@@ -74,9 +74,9 @@ RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE python3-devel gcc gcc-c+
         && dnf install -y --nodocs --enablerepo=$FEDORA_EPEL p7zip unrar \
         && ln -s /usr/bin/7za /usr/bin/7z \
         && pip install --no-cache-dir -r requirements.txt \
-        && mkdir /ml \
-        && python -c "import nltk; nltk.download('wordnet', download_dir='/ml/nltk_data'); nltk.download('stopwords', download_dir='/ml/nltk_data'); nltk.download('punkt', download_dir='/ml/nltk_data')" \
-        && chown -R demisto:demisto /ml && chmod -R 775 /ml \
+        && mkdir /etc/ml \
+        && python -c "import nltk; nltk.download('wordnet', download_dir='/etc/ml/nltk_data'); nltk.download('stopwords', download_dir='/etc/ml/nltk_data'); nltk.download('punkt', download_dir='/etc/ml/nltk_data')" \
+        && chown -R demisto:demisto /etc/ml && chmod -R 775 /etc/ml \
         && dnf install -y --nodocs java-11-openjdk-headless cairo libX11-xcb \
         && sed -i 's/##legacy = legacy_sect/legacy = legacy_sect/' /etc/pki/tls/openssl.cnf \
         && sed -i 's/##\[legacy_sect\]/\[legacy_sect\]/' /etc/pki/tls/openssl.cnf \
@@ -87,4 +87,4 @@ RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE python3-devel gcc gcc-c+
         && pip uninstall -y pcodedmp
 
 
-ENV NLTK_DATA='/ml/nltk_data'
+ENV NLTK_DATA='/etc/ml/nltk_data'
