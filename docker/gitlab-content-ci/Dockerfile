@@ -55,8 +55,8 @@ RUN git clone https://github.com/syndbg/goenv.git --depth 1 ~/.goenv
 RUN echo 'export GOENV_ROOT="$HOME/.goenv"' >> ~/.bashrc \
     && echo 'export PATH="$GOENV_ROOT/bin:$PATH"' >> ~/.bashrc \ 
     && source ~/.bashrc \
-    && goenv install 1.20.5 \
-    && goenv global 1.20.5 \
+    && goenv install 1.21.1 \
+    && goenv global 1.21.1 \
     && echo 'eval "$(goenv init -)"' >> ~/.bashrc \
     && echo 'export PATH="$GOROOT/bin:$PATH"' >> ~/.bashrc \
     && echo 'export PATH="$PATH:$GOPATH/bin"' >> ~/.bashrc \
