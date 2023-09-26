@@ -13,6 +13,22 @@ jobs:
           run: ./docker/verify_dependabot.sh
         - name: Build Docker Images
           run: ./docker/build_docker.sh
+        
+        - name: Step 1 - Create a temporary artifact downloads folder
+          run: mkdir downloads
+          
+        - name: step 2 - Add artifacts to publish to the temp folder
+          run: |
+            cd downloads
+            echo 'alpha'    > alpha.html
+            echo 'bravo'    > bravo.html
+            echo 'charlie'  > charlie.html
+            cd ..
+      
+        - name: Step 3 - Use the Upload Artifact GitHub Action
+          uses: actions/upload-artifact@v2
+          with: 
+            name: assets-for-download
 
       #     no_output_timeout: 60m
       # - store_artifacts:
