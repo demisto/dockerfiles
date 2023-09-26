@@ -14,9 +14,6 @@ jobs:
         - name: Build Docker Images
           run: ./docker/build_docker.sh
         
-        - name: Step 1 - Create a temporary artifact downloads folder
-          run: mkdir artifacts
-          
         - name: step 2 - Add artifacts to publish to the temp folder
           run: |
             cd artifacts
