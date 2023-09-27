@@ -6,7 +6,7 @@ authors = ["Your Name <you@example.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">=3.10,<3.11"
+python = "~3.10"
 cloudshare = "*"
 intezer-sdk = "*"
 emoji = "*"
@@ -52,6 +52,8 @@ elasticsearch = "*"
 opensearch-py = "*"
 elasticsearch-dsl = "*"
 pycryptodome = "*"
+requests-toolbelt = "*"
+certifi = "*"
 
 [build-system]
 requires = ["poetry-core"]

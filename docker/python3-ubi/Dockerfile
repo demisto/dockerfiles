@@ -19,11 +19,14 @@ RUN dnf upgrade -y --nodocs && \
     dnf clean all && \
     rm -rf /var/cache/dnf
 
-# install python3
-RUN wget https://www.python.org/ftp/python/3.10.8/Python-3.10.8.tgz && \
+# when changing it make sure to change also PYTHON_VERSION env var in line 105
+ARG PYTHON_VERSION_TO_INSTALL=3.10.8
+
+# install python3.10.8
+RUN wget https://www.python.org/ftp/python/${PYTHON_VERSION_TO_INSTALL}/Python-${PYTHON_VERSION_TO_INSTALL}.tgz && \
     mkdir -p /usr/local/src/python && \
-    tar -zxf Python-3.10.8.tgz -C /usr/local/src/python --strip-components=1 && \
-    rm -rf Python-3.10.8.tgz && \
+    tar -zxf Python-${PYTHON_VERSION_TO_INSTALL}.tgz -C /usr/local/src/python --strip-components=1 && \
+    rm -rf Python-${PYTHON_VERSION_TO_INSTALL}.tgz && \
     cd /usr/local/src/python && \
     ./configure \
       --enable-loadable-sqlite-extensions \
@@ -31,7 +34,10 @@ RUN wget https://www.python.org/ftp/python/3.10.8/Python-3.10.8.tgz && \
       --enable-option-checking=fatal \
       --with-system-expat \
       --with-ensurepip \
+      --with-lto \
+      --with-computed-gotos \
       --enable-shared LDFLAGS="-Wl,-rpath /usr/local/lib" \
+      --with-system-ffi \
       --prefix=/usr/local && \
     make && \
     make altinstall
@@ -94,6 +100,10 @@ Options = UnsafeLegacyRenegotiation\n' > /tmp/ssl.cnf \
 
 RUN groupadd -g 4000 demisto && \
     useradd -u 4000 -g demisto demisto -s /bin/sh
+
+# when changing it make sure to change also PYTHON_VERSION_TO_INSTALL env var in line 23
+ENV PYTHON_VERSION="3.10.8"
+ENV LANG="C.UTF-8"
 
 CMD ["python3"]
 
