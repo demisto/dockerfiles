@@ -25,6 +25,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   python3-dev \
 && pip install --no-cache-dir -r requirements.txt
 
+RUN cp /etc/ssl/openssl.cnf /etc/ssl/openssl.cnf.org && \
+printf 'ssl_conf = ssl_sect\n[ssl_sect]\nsystem_default = system_default_sect\n\n[system_default_sect]\nOptions = UnsafeLegacyRenegotiation\n' > /tmp/ssl.cnf \
+&& sed -i '/providers = provider_sect/r /tmp/ssl.cnf' /etc/ssl/openssl.cnf \
+&& rm /tmp/ssl.cnf \
+&& grep -C 10 'Options = UnsafeLegacyRenegotiation' /etc/ssl/openssl.cnf
 
 RUN groupadd --gid 4000 demisto \
   && useradd --uid 4000 --gid demisto --shell /bin/bash --create-home demisto
