@@ -1,8 +1,8 @@
 
 # Last modified: 2023-09-22T00:12:46.073415+00:00
-FROM python:3.10.13-slim-bullseye
+FROM python:3.10.13-slim-bookworm
 
-RUN echo 'deb http://deb.debian.org/debian bullseye-backports main' >> /etc/apt/sources.list
+RUN echo 'deb http://deb.debian.org/debian bookworm-backports main' >> /etc/apt/sources.list
 
 # Basic linux utilities
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -22,12 +22,8 @@ COPY requirements.txt .
 #Install tools for building binary deps (will be reomved later on)
 RUN apt-get update && apt-get install -y --no-install-recommends \
   gcc \
-  python3-dev \ 
-&& pip install --no-cache-dir -r requirements.txt \
-&& apt-get purge -y --auto-remove \
-  gcc \
   python3-dev \
-&& rm -rf /var/lib/apt/lists/*
+&& pip install --no-cache-dir -r requirements.txt
 
 
 RUN groupadd --gid 4000 demisto \
