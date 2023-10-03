@@ -16,10 +16,9 @@ jobs:
         - name: Upload Artifacts
           uses: actions/upload-artifact@v3
           with:
-            name: artifacts
+            name: docker_images
             path: artifacts
-            destination: docker_images
-            no_output_timeout: 60m  #default is 360m (6 hours)
+            retention-days: 1
 
 
       #     no_output_timeout: 60m
