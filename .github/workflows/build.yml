@@ -13,20 +13,13 @@ jobs:
           run: ./docker/verify_dependabot.sh
         - name: Build Docker Images
           run: ./docker/build_docker.sh
-        
-        - name: step 2 - Add artifacts to publish to the temp folder
-          run: |
-            cd artifacts
-            echo 'alpha'    > alpha.html
-            echo 'bravo'    > bravo.html
-            echo 'charlie'  > charlie.html
-            cd ..
-      
-        - name: Step 3 - Use the Upload Artifact GitHub Action
+        - name: Upload Artifacts
           uses: actions/upload-artifact@v3
           with:
             name: artifacts
             path: artifacts
+            destination: docker_images
+            no_output_timeout: 60m  #default is 360m (6 hours)
 
 
       #     no_output_timeout: 60m
