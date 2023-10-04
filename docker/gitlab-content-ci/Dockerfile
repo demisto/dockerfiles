@@ -46,6 +46,7 @@ RUN mkdir -p /var/lib/neo4j/plugins \
     && neo4j_conf_file="/etc/neo4j/neo4j.conf" \
     && echo "dbms.security.procedures.unrestricted=apoc.*" >> $NEO4J_CONF_FILE \
     && echo "dbms.security.procedures.allowlist=apoc.*" >> $NEO4J_CONF_FILE \
+    && echo "dbms.memory.transaction.total.max=600m" >> $NEO4J_CONF_FILE \
     && apoc_conf_file="/etc/neo4j/apoc.conf" \
     && echo "apoc.export.file.enabled=true" > $APOC_CONF_FILE \
     && echo "apoc.import.file.enabled=true" >> $APOC_CONF_FILE \
