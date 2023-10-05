@@ -6,7 +6,7 @@ RUN echo 'deb http://deb.debian.org/debian bookworm-backports main' >> /etc/apt/
 
 # Basic linux utilities
 RUN apt-get update && apt-get install -y --no-install-recommends \
-  procps \
+  procps strace \
 && rm -rf /var/lib/apt/lists/*
 
 # Upgrade all packages to latest
