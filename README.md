@@ -33,10 +33,10 @@ After opening a Pull Request, and in order for the reviewer to understand the co
 #### Prequisites
 Make sure you meet the following prerequisites:
 * An active GitHub account.
-* A [fork](https://docs.github.com/en/get-started/quickstart/fork-a-repo) of the repository.
+* A [fork](https://docs.github.com/en/get-started/quickstart/fork-a-repo) of the repository cloned on local machine or in a Codespace.
 * Python 3, `git`, Docker Engine and [`pipenv`](https://pipenv.pypa.io/en/latest/) or [`poetry`](https://python-poetry.org/docs/#installation) installed locally or in a Codespace.
 
-Once all prerequisites have been met, create a new branch to hold the proposed work:
+In the cloned repository of the fork, create a new branch to hold the proposed work:
 
 ```bash
 git checkout -b my_new_branch
@@ -49,32 +49,24 @@ To create a new Docker Image, you can either:
   <summary><b>Use the helper script <code>docker/create_new_docker_image.py</code></b></summary>
 
   <pre>
-./docker/create_new_docker_image.py
+❯ python docker/create_new_docker_image.py --help
 
-usage: create_new_docker_image.py [-h] [-t {python,powershell}]
-                                    [-p {two,three}] [-l {alpine,debian,ubuntu}]
-                                    [--pkg PKG]
-                                    name
+usage: create_new_docker_image.py [-h] [-t {python,powershell}] [-p {two,three}] [-l {alpine,debian}] [--pkg PKG] name
 
-  Create a new docker image
+Create a new docker image
 
-  positional arguments:
-    name                  The image name to use without the organization prefix.
-                          For example: ldap3. We use kebab-case naming
-                          convention.
+positional arguments:
+  name                  The image name to use without the organization prefix. For example: ldap3. We use kebab-case naming convention.
 
-  optional arguments:
-    -h, --help            show this help message and exit
-    -t {python,powershell}, --type {python,powershell}
-                          Specify type of image to create (default: python)
-    -p {two,three}, --python {two,three}
-                          Specify python version to use (default: three)
-    -l {alpine,debian,ubuntu}, --linux {alpine,debian,ubuntu}
-                          Specify linux distro to use (default: alpine)
-    --pkg PKG             Specify a package/module to install. Can be specified
-                          multiple times. Each package needs to be specified
-                          with --pkg. For example: --pkg google-cloud-storage
-                          --pkg oath2client (default: None)
+options:
+  -h, --help            show this help message and exit
+  -t {python,powershell}, --type {python,powershell}
+                        Specify type of image to create (default: python)
+  -p {two,three}, --python {two,three}
+                        Specify python version to use (default: three)
+  -l {alpine,debian}, --linux {alpine,debian}
+                        Specify linux distro to use (default: alpine)
+  --pkg PKG             Specify a package to install. Can be specified multiple times. Each package needs to be specified with --pkg. For example: --pkg google-cloud-storage --pkg oath2client (default: None)
 </pre>
   <br>
   For example to create a new image named <code>ldap</code> using Python 3 and with the Python package <code>ldap3</code> run the following:
@@ -170,9 +162,9 @@ The above command will create a directory `docker/pwsh-azure` with all relevant 
 ### Base PowerShell Images
 There are 3 base PowerShell images which should be used when building a new image which is based upon PowerShell:
 
-* [powershell](https://github.com/demisto/dockerfiles/blob/repository-info/demisto/powershell/last.md): PowerShell image based upon Alpine (default)
-* [powershell-deb](https://github.com/demisto/dockerfiles/blob/repository-info/demisto/powershell-deb/last.md): PowerShell image based upon Debian
-* [powershell-ubuntu](https://github.com/demisto/dockerfiles/blob/repository-info/demisto/powershell-ubuntu/last.md): PowerShell image based upon Ubuntu
+* [powershell](https://hub.docker.com/r/demisto/powershell/tags): PowerShell image based upon Alpine (default).
+* [powershell-deb](https://hub.docker.com/r/demisto/powershell-deb/tags): PowerShell image based upon Debian.
+* [powershell-ubuntu](https://hub.docker.com/r/demisto/powershell-ubuntu/tags): PowerShell image based upon Ubuntu.
 
 We recommend using the default Alpine based image. The Debian and Ubuntu images are provided mainly for cases that there is need to install additional OS packages.
 
