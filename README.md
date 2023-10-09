@@ -1,10 +1,10 @@
-# Demisto's Dockerfiles and Image Build Management
+# Cortex XSOAR Dockerfiles and Image Build Management
 
 [![CircleCI](https://circleci.com/gh/demisto/dockerfiles.svg?style=svg)](https://circleci.com/gh/demisto/dockerfiles)
 
-This repository's `master` branch tracks images pushed to the official Demisto Docker Hub organization at: https://hub.docker.com/u/demisto/. Other branches` images are pushed to [devdemisto](https://hub.docker.com/u/devdemisto).
+This repository's `master` branch tracks images pushed to [the official Demisto Docker Hub organization](https://hub.docker.com/u/demisto/). Other branches` images are pushed to [devdemisto](https://hub.docker.com/u/devdemisto).
 
-**Note:** We generate nightly information about packages and os dependencies used in each of Demisto's docker images. Checkout the `dockerfiles-info` project [README](https://github.com/demisto/dockerfiles-info/blob/master/README.md) for a full listing.
+**Note:** We generate nightly information about packages and OS dependencies used in each of Demisto's Docker images. Checkout the `dockerfiles-info` project [README](https://github.com/demisto/dockerfiles-info/blob/master/README.md) for a full listing.
 
 ## Contributing
 Contributions are welcome and appreciated.
