@@ -19,17 +19,6 @@ You can contribute in the following ways:
 
 * **Documentation:** Documentation is crucial. If you find gaps or errors in our documentation, please help us improve it. You can suggest clarifications or additions to make it more user-friendly.
 
-### CLA Licenses
-All contributors are required to sign a contributor license agreement (CLA) to ensure that the community is free to use your contributions.
-
-When opening a new pull request, a bot will evaluate whether you have signed the CLA. If required, the bot will comment on the Pull Request, including a link to accept the agreement. The CLA document is also available for review as a [PDF](https://github.com/demisto/content/blob/master/docs/cla.pdf).
-Visit our [Frequently Asked Questions](https://xsoar.pan.dev/docs/concepts/faq#cla-is-pending-even-though-i-signed-the-agreement) article for CLA related issues.
-
-After opening a Pull Request, and in order for the reviewer to understand the context, make sure to link to the corresponding Pull Request from the [Content](https://github.com/demisto/content) repo where this Docker image will be used.
-
-
-### How to Contribute
-
 #### Prequisites
 Make sure you meet the following prerequisites:
 * An active GitHub account.
@@ -109,7 +98,15 @@ Example for running with an org name of `mytest` and a `grep` extended expressio
 
 ```bash
 DOCKER_ORG=mytest DOCKER_INCLUDE_GREP=/python$ docker/build_docker.sh 
-``` 
+```
+
+### CLA Licenses
+All contributors are required to sign a contributor license agreement (CLA) to ensure that the community is free to use your contributions.
+
+When opening a new pull request, a bot will evaluate whether you have signed the CLA. If required, the bot will comment on the Pull Request, including a link to accept the agreement. The CLA document is also available for review as a [PDF](https://github.com/demisto/content/blob/master/docs/cla.pdf).
+Visit our [Frequently Asked Questions](https://xsoar.pan.dev/docs/concepts/faq#cla-is-pending-even-though-i-signed-the-agreement) article for CLA related issues.
+
+After opening a Pull Request, and in order for the reviewer to understand the context, make sure to link to the corresponding Pull Request from the [Content](https://github.com/demisto/content) repo where this Docker image will be used.
 
 
 ## Build configuration
