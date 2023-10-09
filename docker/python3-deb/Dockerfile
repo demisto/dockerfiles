@@ -1,5 +1,6 @@
-# Last modified: 2023-07-29T00:13:09.671197+00:00
-FROM python:3.10.12-slim-bullseye
+
+# Last modified: 2023-09-22T00:12:46.073415+00:00
+FROM python:3.10.13-slim-bullseye
 
 RUN echo 'deb http://deb.debian.org/debian bullseye-backports main' >> /etc/apt/sources.list
 
@@ -27,6 +28,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   gcc \
   python3-dev \
 && rm -rf /var/lib/apt/lists/*
+
 
 RUN groupadd --gid 4000 demisto \
   && useradd --uid 4000 --gid demisto --shell /bin/bash --create-home demisto
