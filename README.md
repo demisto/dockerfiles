@@ -33,7 +33,7 @@ After opening a Pull Request, and in order for the reviewer to understand the co
 #### Prequisites
 Make sure you meet the following prerequisites:
 * An active GitHub account.
-* A [clone](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) or a [fork](https://docs.github.com/en/get-started/quickstart/fork-a-repo) of the repository. The main difference is that if the contribution is done from a fork, the development Docker image created during the Pull Request build will not be deployed to DockerHub whereas opening a Pull Request from a clone will deploy the image.
+* A [fork](https://docs.github.com/en/get-started/quickstart/fork-a-repo) of the repository.
 * Python 3, `git`, Docker Engine and [`pipenv`](https://pipenv.pypa.io/en/latest/) or [`poetry`](https://python-poetry.org/docs/#installation) installed locally or in a Codespace.
 
 Once all prerequisites have been met, create a new branch to hold the proposed work:
@@ -45,11 +45,13 @@ git checkout -b my_new_branch
 ### Create a new Docker Image
 To create a new Docker Image, you can either:
 
-* **Use the helper script**
-  ```bash
-  ./docker/create_new_docker_image.py
+<details>
+  <summary><b>Use the helper script <code>docker/create_new_docker_image.py</code></b></summary>
 
-  usage: create_new_docker_image.py [-h] [-t {python,powershell}]
+  <pre>
+./docker/create_new_docker_image.py
+
+usage: create_new_docker_image.py [-h] [-t {python,powershell}]
                                     [-p {two,three}] [-l {alpine,debian,ubuntu}]
                                     [--pkg PKG]
                                     name
@@ -73,18 +75,23 @@ To create a new Docker Image, you can either:
                           multiple times. Each package needs to be specified
                           with --pkg. For example: --pkg google-cloud-storage
                           --pkg oath2client (default: None)
-  ```
-  For example to create a new image named `ldap` using Python 3 and with the Python package `ldap3` run the following:
-  ```bash
-  ./docker/create_new_docker_image.py -p three --pkg ldap3 ldap
-  ```
+</pre>
+  <br>
+  For example to create a new image named <code>ldap</code> using Python 3 and with the Python package <code>ldap3</code> run the following:
+
+<pre>
+./docker/create_new_docker_image.py -p three --pkg ldap3 ldap
+</pre>
+
   The above command will create a directory `docker/ldap` with all relevant files all setup for building a docker image. You can now build the image locally by following: [Building Locally a Test Build](#building-locally-a-test-build).
+</details>
 
-* **Manually**
-
-  All image directories are located under the `docker` directory. Each Docker image is managed in its own directory under the `docker` directory. The image directory should be named the same as the image name (without the organization prefix). We use the [kebab-case](https://www.theserverside.com/definition/Kebab-case) naming convention for image names.  For example, to create a Docker image named `hello-world`, you would create a new directory, `docker/hello-world`. 
+<details>
+  <summary><b>Manually</b></summary>
+  All image directories are located under the <code>docker</code> directory. Each Docker image is managed in its own directory under the <code>docker</code> directory. The image directory should be named the same as the image name (without the organization prefix). We use the <a src="https://www.theserverside.com/definition/Kebab-case">kebab-case</a> naming convention for image names.  For example, to create a Docker image named <code>hello-world</code>, you would create a new directory, <code>docker/hello-world</code>. 
 
   The image directory should contain a `Dockerfile` which will be used for building the Docker image. When an image is built, it is tagged with the commit hash and version.
+</details>
 
 
 ## Building a Docker Image locally
@@ -208,6 +215,9 @@ If you want to use poetry, make sure you have poetry installed by running `poetr
 * To see the locked dependencies run: `poetry export -f requirements.txt --output requirements.txt --without-hashes` 
 
 ### `pipenv` quick start:
+
+The preferred tool to manage Python dependencies is [Poetry](https://python-poetry.org/docs/). However, `pipenv`` is also supported.
+
 If you want to use `pipenv` manually make sure you first meet the pre-requisites installed as specified in the [Prerequesites section](#prequisites). Then follow:
 * In the relevant folder initialize the pipenv environment:
   ```bash
