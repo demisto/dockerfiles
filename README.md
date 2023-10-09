@@ -13,14 +13,14 @@ You can contribute in the following ways:
 
 * [**Create a new Docker Image**](#create-a-new-docker-image) for use in an [XSOAR/XSIAM integration or script](https://xsoar.pan.dev/docs/integrations/docker#scriptintegration-configuration).
 
-* **Update existing Docker Images:** If you encounter issues or security concerns in our `Dockerfiles`, feel free to open a Pull Request. 
+* **Update existing Docker Images:** to fix issues or security concerns in our `Dockerfiles`. 
 
-* **Enhancements:** Feel free to submit Pull Requests with your proposed changes. Enhancements can include optimizations, helper scripts, or improved configurations.
+* **Enhancements:**  such as optimizations, helper scripts, or improved configurations.
 
-* **Documentation:** Documentation is crucial. If you find gaps or errors in our documentation, submit PRs to help us improve it. You can also suggest clarifications or additions to make it more user-friendly.
+* **Documentation:** Documentation is crucial. If you find gaps or errors in our documentation, please help us improve it. You can suggest clarifications or additions to make it more user-friendly.
 
-### Licenses
-In order to conntribute, we will need all contributors to sign a contributor license agreement (CLA). By signing a contributor license agreement, we ensure that the community is free to use your contributions.
+### CLA Licenses
+All contributors are required to sign a contributor license agreement (CLA) to ensure that the community is free to use your contributions.
 
 When opening a new pull request, a bot will evaluate whether you have signed the CLA. If required, the bot will comment on the Pull Request, including a link to accept the agreement. The CLA document is also available for review as a [PDF](https://github.com/demisto/content/blob/master/docs/cla.pdf).
 Visit our [Frequently Asked Questions](https://xsoar.pan.dev/docs/concepts/faq#cla-is-pending-even-though-i-signed-the-agreement) article for CLA related issues.
