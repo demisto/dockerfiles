@@ -2713,16 +2713,18 @@ six = ">=1.5"
 
 [[package]]
 name = "python-docx"
-version = "0.8.11"
-description = "Create and update Microsoft Word .docx files."
+version = "1.0.1"
+description = "Create, read, and update Microsoft Word .docx files."
 optional = false
-python-versions = "*"
+python-versions = ">=3.7"
 files = [
-    {file = "python-docx-0.8.11.tar.gz", hash = "sha256:1105d233a0956dd8dd1e710d20b159e2d72ac3c301041b95f4d4ceb3e0ebebc4"},
+    {file = "python-docx-1.0.1.tar.gz", hash = "sha256:255148e15a4414244ec75f50e92d19864e52a7416768c65491707a7414659524"},
+    {file = "python_docx-1.0.1-py3-none-any.whl", hash = "sha256:851340c49b36f917a1838a44c602a5a0702c0c3507b9890969545732dc10d2d1"},
 ]
 
 [package.dependencies]
-lxml = ">=2.3.2"
+lxml = ">=3.1.0"
+typing-extensions = "*"
 
 [[package]]
 name = "python-dotenv"
