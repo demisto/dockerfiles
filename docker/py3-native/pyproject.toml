@@ -78,6 +78,7 @@ pydantic = ">=2.0.0"
 pem = "*"
 azure-kusto-data = "*"
 pywinrm = {extras = ["kerberos"],version = "*"}
+sklearn = "<1.3" # must be lower to support "eli5"
 
 [build-system]
 requires = ["poetry-core"]
