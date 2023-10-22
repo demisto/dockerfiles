@@ -13,5 +13,6 @@ import pycti
 import hcl
 import cymruwhois
 import jbxapi
+import pytmv1
 
 print('Verify of vendors-sdk image passed!')
