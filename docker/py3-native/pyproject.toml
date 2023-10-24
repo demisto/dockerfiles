@@ -47,11 +47,10 @@ pyjwt = {extras = ["crypto"],version = "*"}
 google-api-python-client = "*"
 exchangelib = "*"
 requests-oauthlib = "*"
-oauthlib = "*"
+oauthlib = {extras = ["signedtoken"], version = "*"}
 requests-ntlm = "*"
 oauth2client = "*"
 dill = "*"
-eli5 = "*"
 packaging = "*"
 rtfde = "*"
 webdriver-manager = "*"
@@ -69,6 +68,15 @@ python-whois = "*"
 ipwhois = "*"
 edgegrid-python = "*"
 tldextract = "*"
+requests = {extras = ["socks"],version = "*"}
+netaddr = "*"
+python-libnmap = "*"
+websockets = "*"
+dnspython = "*"
+pydantic = ">=2.0.0"
+pem = "*"
+azure-kusto-data = "*"
+pywinrm = {extras = ["kerberos"],version = "*"}
 
 [build-system]
 requires = ["poetry-core"]

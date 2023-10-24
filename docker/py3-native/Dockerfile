@@ -1,4 +1,5 @@
-FROM demisto/py3-tools-ubi:1.0.0.73431
+FROM demisto/py3-tools-ubi:1.0.0.79416
+
 
 
 COPY requirements.txt .
@@ -27,7 +28,7 @@ RUN dnf update --nodocs -y  \
     && rpm --import RPM-GPG-KEY-CentOS-Official \
     && mv repos/* /etc/yum.repos.d/ \
     && dnf install -y --nodocs python3-devel gcc gcc-c++ make wget git unzip llvm-libs libXpm iproute jq \
-    && dnf install -y --nodocs --enablerepo=$ROCKY_BASE --enablerepo=$ROCKY_RELEASE tigervnc-server-minimal xorg-x11-utils google-chrome-stable \
+    && dnf install -y --nodocs --enablerepo=$ROCKY_BASE --enablerepo=$ROCKY_RELEASE tigervnc-server-minimal xorg-x11-utils google-chrome-stable iputils nmap bind-utils \
     && dnf install -y --nodocs --enablerepo=$ROCKY_BASE --enablerepo=$ROCKY_RELEASE --enablerepo=$FEDORA_EPEL ImageMagick \
     && ./download_chromedriver.sh \
     && unzip chromedriver-linux64.zip \
@@ -37,6 +38,7 @@ RUN dnf update --nodocs -y  \
     && chromedriver --version \
     && dnf install -y --enablerepo=$ROCKY_DEVEL --enablerepo=$ROCKY_BASE --nodocs git automake make autoconf libtool zlib clang zlib-devel libjpeg libjpeg-devel libwebp libwebp-devel \
     libtiff libtiff-devel libpng libpng-devel pango giflib giflib-devel dejavu-sans-mono-fonts \
+    krb5-pkinit krb5-server krb5-server-ldap krb5-libs \
     && git clone --depth 1 -b $LEPTONICA_VERSION https://github.com/DanBloomberg/leptonica \
     && cd leptonica \
     && ./autogen.sh && ./configure && make && make install && ldconfig \
@@ -61,29 +63,29 @@ RUN dnf update --nodocs -y  \
 
 # handles os dependencies for: crypto + readpdf + parse-emails + docxpy + sklearn + pandas + ippysocks-py3 + oauthlib
 # unzip + py3ews + taxii2 + pan-os-python + slackv3 + google-api-py3 + boto3py3
-# pyjwt3 + joe-security + slack + office-utils
+# pyjwt3 + joe-security + slack + office-utils + auth-utils
 
 # line 6 - since in ubi its 7za --> need to make it to run as 7z like our script
 # lines 8-10 is the configuration for sklearn
 # lines 12-14 - ssl fixes
 RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE python3-devel gcc gcc-c++ make wget git poppler poppler-utils \
-        rust cargo libxml2-devel libxslt-devel \
+        rust cargo libxml2-devel libxslt-devel krb5-devel \
         libffi-devel openssl-devel libffi libSM mesa-libGL \
         openssh ca-certificates openssl less rsync libpng-devel freetype-devel gcc-gfortran openblas unzip libstdc++ libreoffice \
         && dnf install -y --nodocs --enablerepo=$FEDORA_EPEL p7zip unrar \
         && ln -s /usr/bin/7za /usr/bin/7z \
         && pip install --no-cache-dir -r requirements.txt \
-        && mkdir /ml \
-        && python -c "import nltk; nltk.download('wordnet', download_dir='/ml/nltk_data'); nltk.download('stopwords', download_dir='/ml/nltk_data'); nltk.download('punkt', download_dir='/ml/nltk_data')" \
-        && chown -R demisto:demisto /ml && chmod -R 775 /ml \
+        && mkdir /etc/ml \
+        && python -c "import nltk; nltk.download('wordnet', download_dir='/etc/ml/nltk_data'); nltk.download('stopwords', download_dir='/etc/ml/nltk_data'); nltk.download('punkt', download_dir='/etc/ml/nltk_data')" \
+        && chown -R demisto:demisto /etc/ml && chmod -R 775 /etc/ml \
         && dnf install -y --nodocs java-11-openjdk-headless cairo libX11-xcb \
         && sed -i 's/##legacy = legacy_sect/legacy = legacy_sect/' /etc/pki/tls/openssl.cnf \
         && sed -i 's/##\[legacy_sect\]/\[legacy_sect\]/' /etc/pki/tls/openssl.cnf \
         && sed -i 's/##activate = 1/activate = 1/' /etc/pki/tls/openssl.cnf \
-        && dnf remove -y python3-devel rust cargo libffi-devel openssl-devel gcc gcc-c++ make git platform-python-pip \
+        && dnf remove -y python3-devel rust cargo libffi-devel openssl-devel gcc gcc-c++ make git platform-python-pip krb5-devel \
         && dnf clean all \
         && rm -rf /var/cache/dnf /root/.cargo \
         && pip uninstall -y pcodedmp
 
 
-ENV NLTK_DATA='/ml/nltk_data'
+ENV NLTK_DATA='/etc/ml/nltk_data'

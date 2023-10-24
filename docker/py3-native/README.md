@@ -101,6 +101,8 @@ This README purpose is to clarify the following:
 * joe-security
 * slack
 * office-utils
+* netutils
+* auth-utils
 
 
 ## Verifiers Folder
@@ -131,6 +133,8 @@ That is done in order to keep updated with the python dependencies the original 
 * **joe-security:** python3-devel gcc gcc-c++ make wget git
 * **slack:** python3-devel gcc gcc-c++ make wget git libffi
 * **office-utils:** LibreOffice_Linux_x86-64_rpm java-11-openjdk-headless cairo libSM libX11-xcb
+* **netutils:** curl bind-utils openssl iputils nmap
+* **auth-utils:** krb5-pkinit krb5-server krb5-server-ldap krb5-libs krb5-devel
 
 ## Good To Know
 * The packages that are being removed by `dnf remove` at the end are packages that are required **only** during the installation of python dependencies, once the python packages are installed they can be removed.

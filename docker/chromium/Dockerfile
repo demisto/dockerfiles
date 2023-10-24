@@ -1,6 +1,6 @@
-# Last modified: 2023-09-08T00:50:23.955285+00:00
-FROM demisto/python3-deb:3.10.13.73572
 
+# Last modified: 2023-10-20T00:51:39.505945+00:00
+FROM demisto/python3-deb:3.10.13.78625
 
 COPY requirements.txt .
 
@@ -29,7 +29,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
 COPY download_chromedriver.sh .
 
 # Deps needed by google-chrome
-RUN apt-get update && apt-get -t bookworm-backports install -y --no-install-recommends \
+RUN apt-get update && apt-get -t bullseye-backports install -y --no-install-recommends \
   jq \
   gnupg2 \
   libgtk-3-0 \
