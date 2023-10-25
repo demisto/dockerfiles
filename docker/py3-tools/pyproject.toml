@@ -1,9 +1,12 @@
-[[source]]
-url = "https://pypi.org/simple"
-verify_ssl = true
-name = "pypi"
+[tool.poetry]
+name = "py3-tools"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
 
-[packages]
+[tool.poetry.dependencies]
+python = "~3.10"
 cloudshare = "*"
 intezer-sdk = "*"
 emoji = "*"
@@ -38,22 +41,20 @@ gql = "*"
 minio = "*"
 ldap3 = "*"
 pymongo = "*"
-cyjax-cti = "*"
 pyzabbix = "*"
 jmespath = "*"
 tldextract = "*"
 stix2 = "*"
 taxii2-client = "*"
 xlrd = "==1.2.0"
-elasticsearch = "*"
 opensearch-py = "*"
-elasticsearch-dsl = "*"
 opensearch_dsl = "*"
 aiohttp = "*"
 pycryptodome = "*"
 requests-toolbelt = "*"
+urllib3 = "^2.0.7"
+[tool.poetry.group.dev.dependencies]
 
-[dev-packages]
-
-[requires]
-python_version = "3.10"
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
