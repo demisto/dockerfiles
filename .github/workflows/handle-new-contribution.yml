@@ -21,20 +21,11 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
-      - name: Setup Poetry
-        uses: Gr1N/setup-poetry@v8
       - name: Print Context
         run: |
           echo "$GITHUB_CONTEXT"
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
-      - uses: actions/cache@v3
-        with:
-          path: .venv
-          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
-      - name: Install Python Dependencies
-        run: |
-          poetry install
       - name: Add assignee and a Contribution label
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
