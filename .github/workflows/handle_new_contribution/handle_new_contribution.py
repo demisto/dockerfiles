@@ -6,7 +6,7 @@ def main():
     parser.add_argument('dictionary', help='A dictionary that contains the content_roles')
     args = parser.parse_args()
     print(f'{args=}')
-    content_roles = args.dictionary
+    content_roles = json.loads(args.dictionary)
     print(f'{content_roles=}')
     save_contrib_tl(content_roles)
 
