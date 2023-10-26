@@ -38,7 +38,7 @@ jobs:
           
           echo "Getting the contribution TL"
           cd utils/handle_new_contribution
-          poetry run python ./handle_new_contribution.py
+          pipenv run python ./handle_new_contribution.py
           contrib_tl=$( cat contrib_tl.txt )
           echo "$contrib_tl"
           find . -name "contrib_tl.txt" -type f -delete
