@@ -47,7 +47,7 @@ jobs:
           echo "$content_roles"
           
           echo "Getting the contribution TL"
-          cd .github/workflows/handle-new-contrib
+          cd utils/handle_new_contribution
           poetry run python ./handle_new_contribution.py
           contrib_tl=$( cat contrib_tl.txt )
           echo "$contrib_tl"
