@@ -5,7 +5,7 @@ def main():
     parser = argparse.ArgumentParser(description='Deploy a pack from a contribution PR to a branch')
     parser.add_argument('-c', '--$content_roles', help='A dictionary that contains the content_roles')
     args = parser.parse_args()
-    content_roles = args.changed_files
+    content_roles = args.content_roles
     print(f'{content_roles=}')
     save_contrib_tl(content_roles)
 
