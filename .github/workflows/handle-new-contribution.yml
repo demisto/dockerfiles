@@ -44,7 +44,7 @@ jobs:
           pipenv install
           
           echo "Getting the contribution TL"
-          pipenv run python ./handle_new_contribution.py -c "$content_roles"
+          pipenv run python ./handle_new_contribution.py "$content_roles"
           contrib_tl=$( cat contrib_tl.txt )
           echo "$contrib_tl"
           find . -name "contrib_tl.txt" -type f -delete
