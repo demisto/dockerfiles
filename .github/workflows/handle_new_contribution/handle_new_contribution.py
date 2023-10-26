@@ -3,10 +3,10 @@ import argparse
 
 def main():
     parser = argparse.ArgumentParser(description='Deploy a pack from a contribution PR to a branch')
-    parser.add_argument('-c', '--$content_roles', help='A dictionary that contains the content_roles')
+    parser.add_argument('dictionary', help='A dictionary that contains the content_roles')
     args = parser.parse_args()
     print(f'{args=}')
-    content_roles = args.content_roles
+    content_roles = args.dictionary
     print(f'{content_roles=}')
     save_contrib_tl(content_roles)
 
