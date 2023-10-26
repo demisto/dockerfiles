@@ -6,7 +6,7 @@ def main():
     parser.add_argument('-c', '--$content_roles', help='A dictionary that contains the content_roles')
     args = parser.parse_args()
     content_roles = args.changed_files
-    print(content_roles)
+    print(f'{content_roles=}')
     save_contrib_tl(content_roles)
 
 
