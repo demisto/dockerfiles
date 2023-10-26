@@ -36,8 +36,14 @@ jobs:
           content_roles=$( cat content/.github/content_roles.json )
           echo "$content_roles"
           
+          echo "==== $(date): Starting pipenv setup... ===="
+          python -m pip install --upgrade pip
+          pip install pipenv
+          pwd
+          cd "$GITHUB_WORKSPACE/.github/workflows/handle_new_contribution"
+          pipenv install
+          
           echo "Getting the contribution TL"
-          cd utils/handle_new_contribution
           pipenv run python ./handle_new_contribution.py -c "$content_roles"
           contrib_tl=$( cat contrib_tl.txt )
           echo "$contrib_tl"
