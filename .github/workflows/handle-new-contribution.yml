@@ -37,7 +37,6 @@ jobs:
           echo "Finished retrieving the contribution TL username"
           
           if [[ -z "$contrib_tl" ]]
-          then
             echo "Add an assignee and a Contribution label"
             gh pr edit --add-assignee "$contrib_tl" --add-label Contribution "$PR_URL"
           else
