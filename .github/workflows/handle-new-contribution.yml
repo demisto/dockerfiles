@@ -32,21 +32,8 @@ jobs:
           PR_URL: ${{github.event.pull_request.html_url}}
         run: |
           echo "get content_roles.json using curl"
-          content_roles=$( curl https://raw.githubusercontent.com/demisto/content/master/.github/content_roles.json )
-          echo "$content_roles"
-          
-          echo "==== $(date): Starting pipenv setup... ===="
-          python -m pip install --upgrade pip
-          pip install pipenv
-          pwd
-          cd "$GITHUB_WORKSPACE/.github/workflows/handle_new_contribution"
-          pipenv install
-          
-          echo "Getting the contribution TL"
-          pipenv run python ./handle_new_contribution.py "$content_roles"
-          contrib_tl=$( cat contrib_tl.txt )
-          echo "$contrib_tl"
-          find . -name "contrib_tl.txt" -type f -delete
+          contrib_tl=$( curl https://raw.githubusercontent.com/demisto/content/master/.github/content_roles.json | jq .CONTRIBUTION_TL -r )
+          echo "contrib_tl"
           echo "Finished retrieving the contribution TL username"
           
           echo "Add an assignee and a Contribution label"
