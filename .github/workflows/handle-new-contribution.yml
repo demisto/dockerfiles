@@ -31,9 +31,8 @@ jobs:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
           PR_URL: ${{github.event.pull_request.html_url}}
         run: |
-          echo "clone content in order to get the content_roles.json"
-          git clone https://github.com/demisto/content.git
-          content_roles=$( cat content/.github/content_roles.json )
+          echo "get content_roles.json using curl"
+          content_roles=$( curl https://raw.githubusercontent.com/demisto/content/master/.github/content_roles.json )
           echo "$content_roles"
           
           echo "==== $(date): Starting pipenv setup... ===="
