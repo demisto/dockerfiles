@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  assign:
+  assign_and_label:
     runs-on: ubuntu-latest
     if: github.event.pull_request.head.repo.fork == true
     steps:
