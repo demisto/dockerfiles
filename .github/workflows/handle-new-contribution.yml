@@ -33,8 +33,13 @@ jobs:
         run: |
           echo "get content_roles.json using curl"
           contrib_tl=$( curl https://raw.githubusercontent.com/demisto/content/master/.github/content_roles.json | jq .CONTRIBUTION_TL -r )
-          echo "contrib_tl"
+          echo "$contrib_tl"
           echo "Finished retrieving the contribution TL username"
           
-          echo "Add an assignee and a Contribution label"
-          gh pr edit --add-assignee "$contrib_tl" --add-label Contribution "$PR_URL"
+          if -z contrib_tl
+          then
+            echo "Add an assignee and a Contribution label"
+            gh pr edit --add-assignee "$contrib_tl" --add-label Contribution "$PR_URL"
+          else
+            echo "There was a problem with retrieving the GitHub user name of the contribution TL."
+          fi
