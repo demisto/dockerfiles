@@ -4,9 +4,7 @@ on:
   pull_request_target:
     types: [opened, ready_for_review]
 
-permissions:
-  pull-requests: write
-  contents: write
+permissions: write-all
 
 jobs:
   assign_and_label:
