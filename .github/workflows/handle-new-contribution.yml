@@ -13,19 +13,6 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.pull_request.head.repo.fork == true
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 2
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
-      - name: Print Context
-        run: |
-          echo "$GITHUB_CONTEXT"
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
       - name: Add an assignee and a Contribution label
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
@@ -38,7 +25,7 @@ jobs:
           
           if [ $contrib_tl ]; then
             echo "Add an assignee and a Contribution label"
-            gh pr edit --add-assignee "$contrib_tl" --add-label Contribution "$PR_URL"
+            gh pr edit --add-assignee "$contrib_tl" --add-label Contribution "$PR_URL" --add-reviewer "$contrib_tl"
           else
             echo "There was a problem with retrieving the GitHub user name of the contribution TL."
           fi
