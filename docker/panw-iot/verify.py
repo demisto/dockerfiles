@@ -4,6 +4,7 @@ from requests_oauthlib import OAuth2Session
 import websocket as wsc
 from websocket import WebSocketApp
 import snap7
+import pandas
 
 snap7client = snap7.client.Client()
 
