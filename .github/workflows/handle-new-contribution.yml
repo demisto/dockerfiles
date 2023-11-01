@@ -5,7 +5,9 @@ on:
     types: [opened, ready_for_review]
 
 permissions:
+  contents: write
   pull-requests: write
+  repository-projects: write
 
 jobs:
   assign_and_label:
@@ -14,7 +16,7 @@ jobs:
     steps:
       - name: Add an assignee and a Contribution label
         env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          GITHUB_TOKEN: ${{secrets.CONTENT_BOT_TOKEN}}
           PR_URL: ${{github.event.pull_request.html_url}}
         run: |
           echo "get content_roles.json using curl"
