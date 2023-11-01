@@ -603,6 +603,9 @@ updates:
     directory: /docker/panw-iot
     schedule:
       interval: daily
+    ignore:
+      - dependency-name: "pyasn1"
+      # Ignore all updates for pyasn1
   - package-ecosystem: pip
     directory: /docker/illumio
     schedule:
@@ -663,7 +666,11 @@ updates:
     directory: /docker/confluent-kafka
     schedule:
      interval: daily
+<<<<<<< HEAD
   - package-ecosystem: pip
     directory: /docker/pytmv1
     schedule:
      interval: daily
+=======
+  
+>>>>>>> a0f10e4f7 (adding more packages to panw-iot docker)
