@@ -603,6 +603,9 @@ updates:
     directory: /docker/panw-iot
     schedule:
       interval: daily
+    ignore:
+      - dependency-name: "pyasn1"
+      # Ignore all updates for pyasn1
   - package-ecosystem: pip
     directory: /docker/illumio
     schedule:
