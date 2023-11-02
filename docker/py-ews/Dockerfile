@@ -193,6 +193,7 @@ ssl_conf = ssl_sect\n\
 system_default = system_default_sect\n\
 \n\
 [system_default_sect]\n\
-MinProtocol = TLSv1\n\
+MinProtocol = TLSv1.2\n\
 CipherString = DEFAULT@SECLEVEL=1\n\
+Options = UnsafeLegacyRenegotiation\n\
 " >> /etc/ssl/openssl.cnf
