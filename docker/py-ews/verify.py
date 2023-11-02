@@ -43,3 +43,6 @@ res.raise_for_status()
 
 # verify dateaparser works. We had a case that it failed with timezone issues
 dateparser.parse("10 minutes")
+
+# verify that requests work with TLS 1.0
+requests.get("http://tls-v1-0.badssl.com/")
