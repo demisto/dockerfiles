@@ -45,4 +45,5 @@ res.raise_for_status()
 dateparser.parse("10 minutes")
 
 # verify that requests work with TLS 1.0
-requests.get("https://tls-v1-0.badssl.com:1010/")
+res = requests.get("https://tls-v1-0.badssl.com:1010/", verify=False)
+res.raise_for_status()
