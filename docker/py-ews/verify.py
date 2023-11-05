@@ -48,6 +48,6 @@ command = "openssl s_client -connect github.com:443 -tls1"
 result = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
 if "TLS 1.0" in result.stdout:
-    print(f"Client supports TLS 1.0: {result.stdout}")
+    print(f"Docker image supports TLS 1.0: {result.stdout}")
 else:
     raise Exception("Docker image does not support TLS 1.0")
