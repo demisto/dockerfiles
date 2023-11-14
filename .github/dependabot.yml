@@ -134,6 +134,10 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: pip
+    directory: /docker/chromium-headless
+    schedule:
+      interval: daily
+  - package-ecosystem: pip
     directory: /docker/google-vision-api
     schedule:
       interval: daily
