@@ -1,11 +1,11 @@
-FROM demisto/python3:3.10.8.37753
+FROM demisto/python3:3.10.13.80014
 
 COPY requirements.txt .
 
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git g++ python3-dev\
         openssh curl ca-certificates openssl less htop \
 		make  rsync \
-        libpng-dev freetype-dev libexecinfo-dev lapack-dev \
+        libpng-dev freetype-dev lapack-dev \
         gfortran \
         musl-dev openblas-dev\
   && apk add --no-cache libstdc++  \
