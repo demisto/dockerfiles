@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "dockerfiles"
+version = "0.1.0"
+description = ""
+authors = ["Judah Schwartz"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pymisp = { version = "*", extras = ["email"] }
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
