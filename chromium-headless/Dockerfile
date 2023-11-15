@@ -5,5 +5,3 @@ COPY start_headless.sh start_chrome_headless.sh /
 RUN    chmod +x ./start_headless.sh \
     && chmod +x ./start_chrome_headless.sh \
     && pip install -U pychrome
-
-CMD /start_headless.sh
