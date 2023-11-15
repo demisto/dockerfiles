@@ -2,7 +2,9 @@
 # Last modified: 2023-10-20T00:51:39.505945+00:00
 FROM demisto/python3-deb:3.10.13.78625
 
+COPY start_chrome_headless.sh /
 COPY requirements.txt .
+
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
   python3-dev \
@@ -12,6 +14,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
   fonts-noto-cjk \
   fonts-noto-core \
   zlib1g-dev \
+  pychrome \
 && wget http://http.us.debian.org/debian/pool/main/liba/libappindicator/libappindicator1_0.4.92-7_amd64.deb -O /tmp/libappindicator1_0.4.92-7_amd64.deb \
 && wget http://http.us.debian.org/debian/pool/main/libi/libindicator/libindicator7_0.5.0-4_amd64.deb -O /tmp/libindicator7_0.5.0-4_amd64.deb \
 && apt-get install -y  /tmp/libindicator7_0.5.0-4_amd64.deb /tmp/libappindicator1_0.4.92-7_amd64.deb \
@@ -19,7 +22,9 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
 && apt-get purge -y --auto-remove \
   python3-dev \
   zlib1g-dev \
-&& rm -rf /var/lib/apt/lists/*
+&& rm -rf /var/lib/apt/lists/* \
+&& chmod +x ./start_headless.sh \
+&& chmod +x ./start_chrome_headless.sh
 
 # Based on instructions at: https://tecadmin.net/setup-selenium-with-chromedriver-on-debian/
 # Will install the latest version available from the chrome repo.
