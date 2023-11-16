@@ -22,7 +22,6 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
   python3-dev \
   zlib1g-dev \
 && rm -rf /var/lib/apt/lists/* \
-&& chmod +x ./start_headless.sh \
 && chmod +x ./start_chrome_headless.sh
 
 # Based on instructions at: https://tecadmin.net/setup-selenium-with-chromedriver-on-debian/
