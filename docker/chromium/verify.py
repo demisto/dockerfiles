@@ -22,8 +22,10 @@ assert chrome_version_arr == driver_version_arr
 print(f'Using pychrome version {pychrome.__version__}')
 
 try:
-    command = ['bash', '/start_chrome_headless.sh']
-    result = subprocess.call(command, stdout=subprocess.PIPE)
+    result = subprocess.run('/start_chrome_headless.sh',
+                            shell=True, stdout=subprocess.PIPE
+                            )
+
     assert "Chrome is running" in result.stdout
 except Exception as ex:
     print(f'Exception running chrome headless, {ex}')
