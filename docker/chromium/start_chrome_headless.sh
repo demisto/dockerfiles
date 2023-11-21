@@ -1,10 +1,10 @@
 #!/bin/bash
 
-ignore_certificate_errors=""
+ignore_certificate_errors="--ignore-certificate-errors"
 
 while [[ "$#" -gt 0 ]]; do
   case "${1}" in
-    --ignore-certificate-errors) ignore_certificate_errors="--ignore-certificate-errors"
+    --validate-certificates) ignore_certificate_errors=""
       shift;;
     *)  # unknown option.
       shift
