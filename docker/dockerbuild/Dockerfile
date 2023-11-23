@@ -1,6 +1,9 @@
 # Last modified: 2023-11-23T00:13:10.301105+00:00
 FROM python:3.10.13-slim-bookworm
 
+RUN addgroup -g 4000 dockerbuilder \
+  && adduser -u 4000 -G dockerbuilder -D demisto -s /bin/sh \
+USER dockerbuilder
 COPY localtime /etc/localtime
 RUN set -ex; apt-get update; apt-get install -y --no-install-recommends autoconf automake bzip2 dpkg-dev file g++ gcc  \
     imagemagick libbz2-dev libc6-dev libcurl4-openssl-dev libdb-dev libevent-dev libffi-dev libgdbm-dev libglib2.0-dev \
