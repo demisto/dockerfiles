@@ -6,7 +6,7 @@ jobs:
       - checkout
       - run:
           name: Validate Approved Licenses File
-          command: pyenv shell 3.10.0 && python -m jsonschema -i docker/approved_licenses.json docker/approved_licenses.schema.json
+          command: bash -c 'pyenv shell 3.10.0 && python -m jsonschema -i docker/approved_licenses.json docker/approved_licenses.schema.json'
       - run:
           name: Validate Dependabot Config
           command: ./docker/verify_dependabot.sh
