@@ -4,7 +4,7 @@ FROM python:3.10.13-slim-bookworm
 COPY localtime /etc/localtime
 
 RUN apt-get update && apt-get install -y git mercurial xvfb apt locales sudo openssh-client ca-certificates tar gzip  \
-    parallel net-tools netcat unzip zip bzip2 gnupg curl wget make jq docker docker-compose libgbm1
+    parallel net-tools unzip zip bzip2 gnupg curl wget make jq docker docker-compose libgbm1
 # Setup pyenv + poetry and install extra python versions
 RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
   && curl -sSL https://install.python-poetry.org | python3 \
