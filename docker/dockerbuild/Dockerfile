@@ -1,9 +1,6 @@
 # Last modified: 2023-11-23T00:13:10.301105+00:00
 FROM python:3.10.13-slim-bookworm
 
-RUN addgroup -g 4000 dockerbuilder \
-  && adduser -u 4000 -G dockerbuilder -D demisto -s /bin/sh \
-USER dockerbuilder
 COPY localtime /etc/localtime
 RUN set -ex; apt-get update; apt-get install -y --no-install-recommends autoconf automake bzip2 dpkg-dev file g++ gcc  \
     imagemagick libbz2-dev libc6-dev libcurl4-openssl-dev libdb-dev libevent-dev libffi-dev libgdbm-dev libglib2.0-dev \
@@ -20,15 +17,14 @@ RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-instal
   && echo 'eval "$(pyenv init -)"' >> ~/.bashrc \
   && echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.bashrc
 
-RUN pyenv install 2.7.18 && pyenv versions | grep 2.7.18
-RUN pyenv install 3.9.0 && pyenv versions | grep 3.9.0
-RUN pyenv install 3.10.0 && pyenv versions | grep 3.10.0
-RUN pyenv install 3.11.0 && pyenv versions | grep 3.11.0
-RUN pyenv install 3.12.0 && pyenv versions | grep 3.12.0
+RUN bash -i -c 'pyenv install 2.7.18 && pyenv versions | grep 2.7.18'
+RUN bash -i -c 'pyenv install 3.9.0 && pyenv versions | grep 3.9.0'
+RUN bash -i -c 'pyenv install 3.10.0 && pyenv versions | grep 3.10.0'
+RUN bash -i -c 'pyenv install 3.11.0 && pyenv versions | grep 3.11.0'
+RUN bash -i -c 'pyenv install 3.12.0 && pyenv versions | grep 3.12.0'
 
 COPY requirements.txt .
 
-RUN pip install --user --no-cache-dir -r requirements.txt
-RUN pip3 install --no-cache-dir -r requirements.txt \
-    && poetry --version && pipenv --version
+RUN bash -i -c 'pyenv shell 3.10.0 && pyenv exec pip3 install --no-cache-dir -r requirements.txt && poetry --version && pipenv --version'
+
 RUN rm -rf /var/lib/apt/lists/*
