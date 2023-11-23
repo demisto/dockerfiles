@@ -17,11 +17,11 @@ RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-instal
   && echo 'eval "$(pyenv init -)"' >> ~/.bashrc \
   && echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.bashrc
 
-RUN bash -i -c 'pyenv install 2.7.18 && pyenv versions | grep 2.7.18'
-RUN bash -i -c 'pyenv install 3.9.0 && pyenv versions | grep 3.9.0'
-RUN bash -i -c 'pyenv install 3.10.0 && pyenv versions | grep 3.10.0'
-RUN bash -i -c 'pyenv install 3.11.0 && pyenv versions | grep 3.11.0'
-RUN bash -i -c 'pyenv install 3.12.0 && pyenv versions | grep 3.12.0'
+RUN pyenv install 2.7.18 && pyenv versions | grep 2.7.18
+RUN pyenv install 3.9.0 && pyenv versions | grep 3.9.0
+RUN pyenv install 3.10.0 && pyenv versions | grep 3.10.0
+RUN pyenv install 3.11.0 && pyenv versions | grep 3.11.0
+RUN pyenv install 3.12.0 && pyenv versions | grep 3.12.0
 
 COPY requirements.txt .
 
