@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y git mercurial xvfb apt locales sudo ope
 # Setup pyenv + poetry and install extra python versions
 RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
   && curl -sSL https://install.python-poetry.org | python3 \
+  && export PATH="/root/.local/bin:$PATH
   && poetry --version \
   && poetry self add poetry-plugin-export \
   && echo 'export PATH="/home/circleci/.pyenv/bin:$PATH"' >> ~/.bashrc \
