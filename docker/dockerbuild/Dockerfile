@@ -10,7 +10,13 @@ RUN set -ex; apt-get update; apt-get install -y --no-install-recommends autoconf
     $( if apt-cache show 'default-libmysqlclient-dev' 2>/dev/null | grep -q '^Version:';  \
     then echo 'default-libmysqlclient-dev'; else echo 'libmysqlclient-dev'; fi )
 RUN  apt-get install -y git mercurial xvfb apt locales sudo openssh-client ca-certificates tar gzip  \
-    parallel net-tools unzip zip bzip2 gnupg curl wget build-essential jq docker docker-compose libgbm1
+    parallel net-tools unzip zip bzip2 gnupg curl wget build-essential jq libgbm1
+#install docker
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg && \
+    chmod a+r /etc/apt/keyrings/docker.gpg && echo \
+  "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null && apt-get update && \
+    apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 # Setup pyenv + poetry and install extra python versions
 RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
   && echo 'export PYENV_ROOT="$HOME/.pyenv" && export PATH="$HOME/.pyenv/bin:$PATH"' >> ~/.bashrc \
