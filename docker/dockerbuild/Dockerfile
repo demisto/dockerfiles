@@ -7,7 +7,6 @@ RUN apt-get update && apt-get install -y git mercurial xvfb apt locales sudo ope
     parallel net-tools unzip zip bzip2 gnupg curl wget make jq docker docker-compose libgbm1
 # Setup pyenv + poetry and install extra python versions
 RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
-  && poetry self add poetry-plugin-export \
   && echo 'export PATH="/home/circleci/.pyenv/bin:$PATH"' >> ~/.bashrc \
   && echo 'eval "$(pyenv init -)"' >> ~/.bashrc \
   && echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.bashrc
@@ -21,5 +20,5 @@ RUN bash -i -c 'pyenv install 3.12.0 && pyenv versions | grep 3.12.0'
 COPY requirements.txt .
 
 RUN pip install --user --no-cache-dir -r requirements.txt
-RUN pip3 install --no-cache-dir -r requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt && poetry self add poetry-plugin-export
 RUN rm -rf /var/lib/apt/lists/*
