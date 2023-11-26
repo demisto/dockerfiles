@@ -21,18 +21,20 @@ RUN curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /
 RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
   && echo 'export PYENV_ROOT="$HOME/.pyenv" && export PATH="$HOME/.pyenv/bin:$PATH"' >> ~/.bashrc \
   && echo 'eval "$(pyenv init -)"' >> ~/.bashrc \
-  && echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.bashrc
+  && echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.bashrc \
 
-RUN bash -i -c 'pyenv install 2.7.18 && pyenv versions | grep 2.7.18'
-RUN bash -i -c 'pyenv install 3.9.0 && pyenv versions | grep 3.9.0'
-RUN bash -i -c 'pyenv install 3.10.0 && pyenv versions | grep 3.10.0'
-RUN bash -i -c 'pyenv install 3.11.0 && pyenv versions | grep 3.11.0'
-RUN bash -i -c 'pyenv install 3.12.0 && pyenv versions | grep 3.12.0'
+CMD ["/bin/bash", "-i", "-c"]
+SHELL ["/bin/bash", "-i", "-c"]
+
+RUN pyenv install 2.7.18 && pyenv versions | grep 2.7.18
+RUN pyenv install 3.9.0 && pyenv versions | grep 3.9.0
+RUN pyenv install 3.10.0 && pyenv versions | grep 3.10.0
+RUN pyenv install 3.11.0 && pyenv versions | grep 3.11.0
+RUN pyenv install 3.12.0 && pyenv versions | grep 3.12.0
 
 COPY requirements.txt .
 
-RUN bash -i -c 'pyenv shell 3.10.0 && pyenv exec pip3 install --no-cache-dir -r requirements.txt && poetry --version && pipenv --version'
+RUN pyenv shell 3.10.0 && pyenv exec pip3 install --no-cache-dir -r requirements.txt && poetry --version && pipenv --version
 
 RUN rm -rf /var/lib/apt/lists/*
-SHELL ["/bin/bash", "-c"]
-CMD /bin/bash
+
