@@ -34,7 +34,6 @@ RUN pyenv install 3.12.0 && pyenv versions | grep 3.12.0
 
 COPY requirements.txt .
 
-RUN pyenv shell 3.10.0 && pyenv exec pip3 install --no-cache-dir -r requirements.txt && poetry --version && pipenv --version
-
+RUN pyenv global 3.10.0 && sudo -H pip3 install --no-cache-dir -r requirements.txt && poetry --version && pipenv --version
 RUN rm -rf /var/lib/apt/lists/*
 
