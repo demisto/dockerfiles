@@ -293,11 +293,6 @@ function docker_build {
         echo "Skipping license verification for devonly image"
     else
         PY3CMD="python3"
-        if command -v python3.7 >/dev/null 2>&1; then
-            PY3CMD="python3.7"
-        elif command -v python3.8 >/dev/null 2>&1; then
-            PY3CMD="python3.8"
-        fi
         $PY3CMD ${DOCKER_SRC_DIR}/verify_licenses.py ${image_full_name}
     fi
 
