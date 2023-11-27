@@ -5,10 +5,8 @@ COPY localtime /etc/localtime
 RUN set -ex; apt-get update; apt-get install -y --no-install-recommends autoconf automake bzip2 dpkg-dev file g++ gcc  \
     imagemagick libbz2-dev libc6-dev libcurl4-openssl-dev libdb-dev libevent-dev libffi-dev libgdbm-dev libglib2.0-dev \
     libgmp-dev libjpeg-dev libkrb5-dev liblzma-dev libmagickcore-dev libmagickwand-dev libmaxminddb-dev libncurses5-dev  \
-    libncursesw5-dev libpng-dev libpq-dev libreadline-dev libsqlite3-dev libssl-dev libtool libwebp-dev libxml2-dev  \
-    libxslt-dev libyaml-dev make patch unzip xz-utils zlib1g-dev \
-    $( if apt-cache show 'default-libmysqlclient-dev' 2>/dev/null | grep -q '^Version:';  \
-    then echo 'default-libmysqlclient-dev'; else echo 'libmysqlclient-dev'; fi )
+    libncursesw5-dev libpng-dev libreadline-dev libssl-dev libtool libwebp-dev libxml2-dev  \
+    libxslt-dev libyaml-dev make patch unzip xz-utils zlib1g-dev
 RUN  apt-get install -y git mercurial xvfb apt locales sudo openssh-client ca-certificates tar gzip  \
     parallel net-tools unzip zip bzip2 gnupg curl wget build-essential jq libgbm1
 # install docker
@@ -16,14 +14,16 @@ RUN curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /
     chmod a+r /etc/apt/keyrings/docker.gpg && echo \
   "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian \
   "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null && apt-get update && \
-    apt-get install -y docker-ce docker-ce-cli containerd.io && docker --version
+    apt-get install -y docker-ce docker-ce-cli containerd.io && apt-get purge -y docker-compose docker-buildx && docker --version
 # Setup pyenv + poetry and install extra python versions
 RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
   && echo 'export PYENV_ROOT="$HOME/.pyenv" && export PATH="$HOME/.pyenv/bin:$PATH"' >> ~/.bashrc \
   && echo 'eval "$(pyenv init -)"' >> ~/.bashrc \
   && echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.bashrc
 
-CMD ["/bin/bash", "-i", "-c"]
+RUN pip3 install --no-cache-dir -r requirements.txt && poetry --version && pipenv --version
+
+CMD ["/bin/bash", "-i"]
 SHELL ["/bin/bash", "-i", "-c"]
 
 RUN pyenv install 2.7.18 && pyenv versions | grep 2.7.18
@@ -34,6 +34,6 @@ RUN pyenv install 3.12.0 && pyenv versions | grep 3.12.0
 
 COPY requirements.txt .
 
-RUN pyenv global 3.10.0 && sudo -H pip3 install --no-cache-dir -r requirements.txt && poetry --version && pipenv --version
+RUN pyenv global 3.10.0 && pip3 install --no-cache-dir -r requirements.txt
 RUN rm -rf /var/lib/apt/lists/*
 
