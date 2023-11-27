@@ -1,6 +1,6 @@
 # Last modified: 2023-11-23T00:13:10.301105+00:00
 FROM python:3.10.13-slim-bookworm
-
+COPY requirements.txt .
 COPY localtime /etc/localtime
 RUN set -ex; apt-get update; apt-get install -y --no-install-recommends autoconf automake bzip2 dpkg-dev file g++ gcc  \
     imagemagick libbz2-dev libc6-dev libcurl4-openssl-dev libdb-dev libevent-dev libffi-dev libgdbm-dev libglib2.0-dev \
@@ -26,13 +26,12 @@ RUN pip3 install --no-cache-dir -r requirements.txt && poetry --version && pipen
 CMD ["/bin/bash", "-i"]
 SHELL ["/bin/bash", "-i", "-c"]
 
-RUN pyenv install 2.7.18 && pyenv versions | grep 2.7.18
-RUN pyenv install 3.9.0 && pyenv versions | grep 3.9.0
-RUN pyenv install 3.10.0 && pyenv versions | grep 3.10.0
-RUN pyenv install 3.11.0 && pyenv versions | grep 3.11.0
-RUN pyenv install 3.12.0 && pyenv versions | grep 3.12.0
+RUN pyenv install 2.7.18 && pyenv versions | grep 2.7.18 && \
+ pyenv install 3.9.0 && pyenv versions | grep 3.9.0 && \
+ pyenv install 3.10.0 && pyenv versions | grep 3.10.0 && \
+ pyenv install 3.11.0 && pyenv versions | grep 3.11.0 && \
+ pyenv install 3.12.0 && pyenv versions | grep 3.12.0
 
-COPY requirements.txt .
 
 RUN pyenv global 3.10.0 && pip3 install --no-cache-dir -r requirements.txt
 RUN rm -rf /var/lib/apt/lists/*
