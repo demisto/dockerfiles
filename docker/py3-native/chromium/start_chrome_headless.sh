@@ -2,7 +2,6 @@
 
 # Default values (consider injecting them from the outside as arguments)
 ignore_certificate_errors=true
-# TODO: insert path to chrome binary
 chrome_binary="/opt/google/chrome/google-chrome"
 remote_debugging_port=9222
 max_attempts=3
