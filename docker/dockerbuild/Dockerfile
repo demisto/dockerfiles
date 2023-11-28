@@ -17,13 +17,13 @@ FROM cimg/python:3.12
 #    apt-get install -y docker-ce docker-ce-cli containerd.io && apt-get purge -y docker-compose-plugin docker-buildx-plugin && docker --version
 # Setup pyenv + poetry and install extra python versions
 
-RUN pyenv install 2.7.18 && pyenv versions | grep 2.7.18 && \
- pyenv install 3.9.16 && pyenv versions | grep 3.9.16 && \
- pyenv install 3.10.13 && pyenv versions | grep 3.10.13 && \
- pyenv install 3.11.0 && pyenv versions | grep 3.11.0 && \
- pyenv install 3.12.0 && pyenv versions | grep 3.12.0
+RUN pyenv install -s 2.7.18 && pyenv versions | grep 2.7.18 && \
+ pyenv install -s 3.9.16 && pyenv versions | grep 3.9.16 && \
+ pyenv install -s 3.10.13 && pyenv versions | grep 3.10.13 && \
+ pyenv install -s 3.11.0 && pyenv versions | grep 3.11.0 && \
+ pyenv install -s 3.12.0 && pyenv versions | grep 3.12.0
 
 
-RUN pyenv global 3.10.0 && pip3 install --no-cache-dir -r requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt && pyenv global 3.10.0
 RUN rm -rf /var/lib/apt/lists/*
 
