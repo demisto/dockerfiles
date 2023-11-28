@@ -1,6 +1,6 @@
 
-# Last modified: 2023-10-20T00:51:39.505945+00:00
-FROM demisto/python3-deb:3.10.13.78625
+# Last modified: 2023-11-28T00:49:47.237074+00:00
+FROM demisto/python3-deb:3.10.13.81306
 
 COPY start_chrome_headless.sh /
 COPY requirements.txt .
