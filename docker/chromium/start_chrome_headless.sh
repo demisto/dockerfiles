@@ -2,8 +2,7 @@
 
 # Default values (consider injecting them from the outside as arguments)
 ignore_certificate_errors=true
-# TODO: insert path to chrome binary
-chrome_binary=""
+chrome_binary="/opt/google/chrome/google-chrome"
 remote_debugging_port=9222
 max_attempts=3
 user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36"
