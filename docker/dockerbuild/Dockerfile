@@ -24,6 +24,6 @@ RUN pyenv install -s 2.7.18 && pyenv versions | grep 2.7.18 && \
  pyenv install -s 3.12.0 && pyenv versions | grep 3.12.0
 
 
-RUN pip3 install --no-cache-dir -r requirements.txt && pyenv global 3.10.0
+RUN pip3 install --no-cache-dir -r requirements.txt && pyenv global 3.10.13
 RUN rm -rf /var/lib/apt/lists/*
 

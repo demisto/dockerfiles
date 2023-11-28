@@ -1,7 +1,7 @@
 jobs:
   docker_build:
     docker:
-      - image: devdemisto/dockerbuild:1.0.0.81123
+      - image: devdemisto/dockerbuild:1.0.0.43365
     steps:
       - checkout
       - run:
@@ -10,13 +10,6 @@ jobs:
       - run:
           name: Validate Dependabot Config
           command: ./docker/verify_dependabot.sh
-      - run:
-          name: Validate deprecated
-          command: |
-            deprecated_from_files=$(find docker -type f -exec grep -ilE 'deprecated\s*=\s*true' {} + | sed 's/\/build\.conf$//')
-            deprecated_from_config=$(jq -r '.[].image_name' ./docker/deprecated_images.json | sed 's/demisto/docker/')
-            missing_in_deprecated_from_config=$(comm -23 <(printf "%s\n" "${deprecated_from_files[@]}" | sort) <(printf "%s\n" "${deprecated_from_config[@]}" | sort))
-
       - setup_remote_docker:
           version: 20.10.17
       - add_ssh_keys:
@@ -30,7 +23,6 @@ jobs:
       - store_artifacts:
           path: artifacts
           destination: docker_images
-version: 1
 workflows:
   version: 2
   full_build:
