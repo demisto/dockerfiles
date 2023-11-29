@@ -40,7 +40,7 @@ for attempt in $(seq 1 $max_attempts); do
     echo "Attempt $attempt of $max_attempts"
 
     # Check if Chrome is already running on the specified port
-    if pgrep -f "$chrome_binary.*--headless.*--remote-debugging-port=$remote_debugging_port" ; then
+    if ps -aux | grep "chrome" | grep "headless" | grep "9222"; then
         echo "Chrome is already running on port $remote_debugging_port."
         exit 0
     fi
