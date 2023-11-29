@@ -18,16 +18,16 @@ apt-get upgrade -y docker-ce docker-ce-cli containerd.io git  \
     && apt-get purge -y docker-compose-plugin docker-buildx-plugin docker-scan-plugin git-lfs && rm -rf /var/lib/apt/lists/*  \
     && rm /usr/local/bin/docker-compose /usr/local/bin/yq /usr/local/bin/compose-switch /usr/local/lib/docker/cli-plugins/docker-compose
 
-#USER circleci
-#COPY requirements.txt .
-#
-## Setup pyenv
-#RUN pyenv install -s 2.7.18 && pyenv versions | grep 2.7.18 && \
-# pyenv install -s 3.9.16 && pyenv versions | grep 3.9.16 && \
-# pyenv install -s 3.9.16 && pyenv versions | grep 3.9.16 && \
-# pyenv install -s 3.10.13 && pyenv versions | grep 3.10.13 && \
-# pyenv install -s 3.11.0 && pyenv versions | grep 3.11.0 && \
-# pyenv install -s 3.12.0 && pyenv versions | grep 3.12.0 && \
-#pyenv global 3.10.13 && pip3 install --no-cache-dir -r requirements.txt
+USER circleci
+COPY requirements.txt .
+
+# Setup pyenv
+RUN pyenv install -s 2.7.18 && pyenv versions | grep 2.7.18 && \
+ pyenv install -s 3.9.16 && pyenv versions | grep 3.9.16 && \
+ pyenv install -s 3.9.16 && pyenv versions | grep 3.9.16 && \
+ pyenv install -s 3.10.13 && pyenv versions | grep 3.10.13 && \
+ pyenv install -s 3.11.0 && pyenv versions | grep 3.11.0 && \
+ pyenv install -s 3.12.0 && pyenv versions | grep 3.12.0 && \
+pyenv global 3.10.13 && pip3 install --no-cache-dir -r requirements.txt
 
 
