@@ -15,7 +15,7 @@ echo \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null && \
 sudo apt-get update && \
 apt-get upgrade -y docker-ce docker-ce-cli containerd.io git  \
-    && apt-get purge -y docker-compose-plugin docker-buildx-plugin docker-scan-plugin yq && rm -rf /var/lib/apt/lists/*
+    && apt-get purge -y docker-compose-plugin docker-buildx-plugin docker-scan-plugin && rm -rf /var/lib/apt/lists/*
 
 #USER circleci
 #COPY requirements.txt .
