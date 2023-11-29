@@ -15,7 +15,7 @@ start_chrome() {
     fi
 
     echo "Starting Chrome..."
-    if ! nohup "$chrome_binary" --headless --disable-gpu --no-sandbox --hide-scrollbars --disable-infobars --start-maximized --start-fullscreen $cert_errors_option --disable-dev-shm-usage --user-agent="\"$user_agent\"" --remote-debugging-port="$remote_debugging_port" &> /var/log/chrome/chrome_log.txt & disown; then
+    if ! nohup "$chrome_binary" --headless --disable-gpu --no-sandbox --hide-scrollbars --disable-infobars --start-maximized --start-fullscreen $cert_errors_option --disable-dev-shm-usage --user-agent="\"$user_agent\"" --remote-debugging-port="$remote_debugging_port" & disown; then
         echo "Failed to start Chrome."
         return 1
     fi
@@ -40,7 +40,7 @@ for attempt in $(seq 1 $max_attempts); do
     echo "Attempt $attempt of $max_attempts"
 
     # Check if Chrome is already running on the specified port
-    if pgrep -f "$chrome_binary.*--headless.*--remote-debugging-port=$remote_debugging_port" > /var/log/chrome/pgrep_log.txt; then
+    if pgrep -f "$chrome_binary.*--headless.*--remote-debugging-port=$remote_debugging_port" ; then
         echo "Chrome is already running on port $remote_debugging_port."
         exit 0
     fi
