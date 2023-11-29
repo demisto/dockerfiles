@@ -56,6 +56,8 @@ RUN apt-get update && apt-get -t bullseye-backports install -y --no-install-reco
   curl \
   unzip \
   jq \
-&& rm -rf /var/lib/apt/lists/*
+&& rm -rf /var/lib/apt/lists/* \
+&& mkdir -p /var/log/chrome \
+&& chmod 777 /var/log/chrome
 
 ENV CHROME_EXE="/opt/google/chrome/google-chrome"

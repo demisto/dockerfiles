@@ -60,7 +60,9 @@ RUN dnf update --nodocs -y  \
     && rm -rf tessdata_downloader leptonica tesseract download_chromedriver.sh repos \
     && dnf remove -y python3-devel gcc gcc-c++ make platform-python-pip jq unzip git make autoconf automake libtool libpng-devel libjpeg-devel libtiff-devel zlib-devel giflib-devel \
     && dnf clean all \
-    && rm -rf /var/cache/dnf
+    && rm -rf /var/cache/dnf \
+    && mkdir -p /var/log/chrome \
+    && chmod 777 /var/log/chrome
 
 
 # handles os dependencies for: crypto + readpdf + parse-emails + docxpy + sklearn + pandas + ippysocks-py3 + oauthlib
