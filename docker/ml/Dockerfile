@@ -1,5 +1,6 @@
 FROM alpine:3.17.5 as files-src
 RUN mkdir /ml
+
 COPY ./encrypted_model.b /ml/encrypted_model.b
 
 COPY ./distilledbert-base-uncased /distilledbert-base-uncased
