@@ -23,7 +23,7 @@ COPY requirements.txt /tmp/requirements.txt
 
 # Setup pyenv
 RUN pyenv install -s 2.7.18 && pyenv versions | grep 2.7.18 && \
- pyenv install -s 3.9.16 && pyenv versions | grep 3.9.16 && \
+ pyenv install -s 3.8.15 && pyenv versions | grep 3.8.15 && \
  pyenv install -s 3.9.16 && pyenv versions | grep 3.9.16 && \
  pyenv install -s 3.10.13 && pyenv versions | grep 3.10.13 && \
  pyenv install -s 3.11.0 && pyenv versions | grep 3.11.0 && \
