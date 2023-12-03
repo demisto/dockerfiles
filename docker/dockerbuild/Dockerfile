@@ -1,23 +1,33 @@
-# Last modified: 2023-01-04T00:13:10.301105+00:00
-FROM circleci/python:3.10.1
+# Last modified: 2023-11-23T00:13:10.301105+00:00
+FROM cimg/python:3.12
 
-# Setup pyenv + poetry and install extra python versions
-RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
-  && curl -sSL https://install.python-poetry.org | python3 \
-  && poetry --version \
-  && poetry self add poetry-plugin-export \
-  && echo 'export PATH="/home/circleci/.pyenv/bin:$PATH"' >> ~/.bashrc \
-  && echo 'eval "$(pyenv init -)"' >> ~/.bashrc \
-  && echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.bashrc
+USER root
+# install docker
 
-RUN bash -i -c 'pyenv install 2.7.18 && pyenv versions | grep 2.7.18'
-RUN bash -i -c 'pyenv install 3.7.6 && pyenv versions | grep 3.7.6'
-RUN bash -i -c 'pyenv install 3.8.1 && pyenv versions | grep 3.8.1'
-RUN bash -i -c 'pyenv install 3.6.10 && pyenv versions | grep 3.6.10'
-RUN bash -i -c 'pyenv install 3.9.0 && pyenv versions | grep 3.9.0'
-RUN bash -i -c 'pyenv install 3.10.0 && pyenv versions | grep 3.10.0'
+RUN sudo apt-get update  && \
+sudo apt-get install ca-certificates curl gnupg && \
+sudo install -m 0755 -d /etc/apt/keyrings && \
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg && \
+sudo chmod a+r /etc/apt/keyrings/docker.gpg && \
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null && \
+sudo apt-get update && \
+apt-get upgrade -y docker-ce docker-ce-cli containerd.io git  \
+    && apt-get purge -y docker-compose-plugin docker-buildx-plugin docker-scan-plugin git-lfs && rm -rf /var/lib/apt/lists/*  \
+    && rm /usr/local/bin/docker-compose /usr/local/bin/yq /usr/local/bin/compose-switch /usr/local/lib/docker/cli-plugins/docker-compose
 
-COPY requirements.txt .
+USER circleci
+COPY requirements.txt /tmp/requirements.txt
 
-RUN pip install --user --no-cache-dir -r requirements.txt
-RUN bash -i -c 'pyenv shell 3.7.6 && pyenv exec pip3 install --no-cache-dir -r requirements.txt'
+# Setup pyenv
+RUN pyenv install -s 2.7.18 && pyenv versions | grep 2.7.18 && \
+ pyenv install -s 3.8.15 && pyenv versions | grep 3.8.15 && \
+ pyenv install -s 3.9.16 && pyenv versions | grep 3.9.16 && \
+ pyenv install -s 3.10.13 && pyenv versions | grep 3.10.13 && \
+ pyenv install -s 3.11.0 && pyenv versions | grep 3.11.0 && \
+ pyenv install -s 3.12.0 && pyenv versions | grep 3.12.0 && \
+pyenv global 3.10.13 && pip3 install --no-cache-dir -r /tmp/requirements.txt
+
+
