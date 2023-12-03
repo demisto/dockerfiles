@@ -1,7 +1,7 @@
 jobs:
   docker_build:
     docker:
-      - image: devdemisto/dockerbuild:1.0.0.43365
+      - image: devdemisto/dockerbuild:1.0.0.81963
     steps:
       - checkout
       - run:
@@ -23,6 +23,7 @@ jobs:
       - store_artifacts:
           path: artifacts
           destination: docker_images
+version: 2.1
 workflows:
   version: 2
   full_build:
