@@ -155,7 +155,7 @@ COPY requirements.txt .
 #Install tools for building binary deps (will be reomved later on)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
-    python-dev \
+    python3-dev \
     build-essential \
     wget \
     git \
@@ -170,7 +170,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 && pip install --no-cache-dir -r requirements.txt \
 && apt-get purge -y --auto-remove \
   gcc \
-  python-dev \
+  python3-dev \
   build-essential \
   git \
   wget \
