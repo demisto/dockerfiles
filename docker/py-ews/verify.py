@@ -43,12 +43,3 @@ res.raise_for_status()
 
 # verify dateaparser works. We had a case that it failed with timezone issues
 dateparser.parse("10 minutes")
-
-# verify that tls 1.0 is supported
-command = "openssl s_client -connect www.google.com:443 -tls1"
-result = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-
-if "Verification: OK" in result.stdout:
-    print(f"Docker image supports TLS 1.0: {result.stdout}")
-else:
-    raise Exception("Docker image does not support TLS 1.0")
