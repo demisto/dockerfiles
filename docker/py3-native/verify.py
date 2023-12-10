@@ -10,6 +10,3 @@ subprocess.check_output(["ip", "route", "list"], text=True, stderr=subprocess.ST
 
 import pychrome
 print(f'Using pychrome version {pychrome.__version__}')
-
-import psutil
-print(f'Using psutil version {psutil.__version__}')

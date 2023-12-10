@@ -22,6 +22,4 @@ assert chrome_version_arr == driver_version_arr
 
 print(f'Using pychrome version {pychrome.__version__}')
 
-print(f'Using psutil version {psutil.__version__}')
-
 print('All is good!!!')
