@@ -213,13 +213,13 @@ msal-extensions = ">=0.3.0,<2.0.0"
 
 [[package]]
 name = "azure-kusto-data"
-version = "4.2.0"
+version = "4.3.0"
 description = "Kusto Data Client"
 optional = false
 python-versions = "*"
 files = [
-    {file = "azure-kusto-data-4.2.0.tar.gz", hash = "sha256:eddfa325a02527e19744f11a9c33215d336e18b38fb0653167c6a4928c38ba8e"},
-    {file = "azure_kusto_data-4.2.0-py2.py3-none-any.whl", hash = "sha256:982df82518e08721f981c4e9e1c29009bebc9ae90340f71599f1230fe1c65f61"},
+    {file = "azure-kusto-data-4.3.0.tar.gz", hash = "sha256:6d438f7df42eeccd84e24231cdc5246033db628efe0c51983d3a36c87eed8eaf"},
+    {file = "azure_kusto_data-4.3.0-py2.py3-none-any.whl", hash = "sha256:6c8e527073c002d25891f063d75c5ceb66f56997db5ed6629020c0c2923a8a84"},
 ]
 
 [package.dependencies]
@@ -231,7 +231,7 @@ python-dateutil = ">=2.8.0"
 requests = ">=2.13.0"
 
 [package.extras]
-aio = ["aiohttp (>=3.4.4,<4)", "asgiref (>=3.2.3,<4)"]
+aio = ["aiohttp (>=3.8.0,<4)", "asgiref (>=3.2.3,<4)"]
 pandas = ["pandas"]
 
 [[package]]
@@ -254,17 +254,17 @@ lxml = ["lxml"]
 
 [[package]]
 name = "boto3"
-version = "1.33.11"
+version = "1.33.12"
 description = "The AWS SDK for Python"
 optional = false
 python-versions = ">= 3.7"
 files = [
-    {file = "boto3-1.33.11-py3-none-any.whl", hash = "sha256:8d54fa3a9290020f9a7f488f9cbe821029de0af05a677751b12973a5f726a5e2"},
-    {file = "boto3-1.33.11.tar.gz", hash = "sha256:620f1eb3e18e780be58383b4a4e10db003d2314131190514153996032c8d932d"},
+    {file = "boto3-1.33.12-py3-none-any.whl", hash = "sha256:475efcff30401041e9c348e20613eca90ab14a224e2f978ca80de98ba3499435"},
+    {file = "boto3-1.33.12.tar.gz", hash = "sha256:2225edaea2fa17274f62707c12d9f7803c998af7089fe8a1ec8e4f1ebf47677e"},
 ]
 
 [package.dependencies]
-botocore = ">=1.33.11,<1.34.0"
+botocore = ">=1.33.12,<1.34.0"
 jmespath = ">=0.7.1,<2.0.0"
 s3transfer = ">=0.8.2,<0.9.0"
 
@@ -273,13 +273,13 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.33.11"
+version = "1.33.12"
 description = "Low-level, data-driven core of boto 3."
 optional = false
 python-versions = ">= 3.7"
 files = [
-    {file = "botocore-1.33.11-py3-none-any.whl", hash = "sha256:b46227eb3fa9cfdc8f5a83920ef347e67adea8095830ed265a3373b13b54421f"},
-    {file = "botocore-1.33.11.tar.gz", hash = "sha256:b14b328f902d120de0a09eaa657a9a701c0ceeb711197c2f01ef0523f855086c"},
+    {file = "botocore-1.33.12-py3-none-any.whl", hash = "sha256:48b9cfb9c5f7f9634a71782f16a324acb522b65856ad46be69efe04c3322b23c"},
+    {file = "botocore-1.33.12.tar.gz", hash = "sha256:067c94fa88583c04ae897d48a11d2be09f280363b8e794b82d78d631d3a3e910"},
 ]
 
 [package.dependencies]
