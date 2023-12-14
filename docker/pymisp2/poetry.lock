@@ -316,22 +316,22 @@ files = [
 
 [[package]]
 name = "extract-msg"
-version = "0.46.2"
+version = "0.47.0"
 description = "Extracts emails and attachments saved in Microsoft Outlook's .msg files"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "extract_msg-0.46.2-py2.py3-none-any.whl", hash = "sha256:f49e530d16ac3e89c1d954d03b9bf03e2703a86fdd640fc3c56f1b41024c74f6"},
-    {file = "extract_msg-0.46.2.tar.gz", hash = "sha256:1ccc852881bba973a1f2e2b65e72138aaf2b5784dddc13be34d65af1c410e8ab"},
+    {file = "extract_msg-0.47.0-py2.py3-none-any.whl", hash = "sha256:ab177546d6ebbea7818e9acb352f6f8cce3821e39319405e6a873808238564a5"},
+    {file = "extract_msg-0.47.0.tar.gz", hash = "sha256:d3ed5fdc8cdff3567421d7e4183511905eb3c83d2605e6c9335c653efa6cfb41"},
 ]
 
 [package.dependencies]
 beautifulsoup4 = ">=4.11.1,<4.13"
 compressed-rtf = ">=1.0.6,<2"
 ebcdic = ">=1.1.1,<2"
-olefile = "0.46"
+olefile = "0.47"
 red-black-tree-mod = "1.20"
-RTFDE = ">=0.1.0,<0.2"
+RTFDE = ">=0.1.1,<0.2"
 tzlocal = ">=4.2,<6"
 
 [package.extras]
@@ -354,13 +354,13 @@ files = [
 
 [[package]]
 name = "jsonschema"
-version = "4.19.2"
+version = "4.20.0"
 description = "An implementation of JSON Schema validation for Python"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "jsonschema-4.19.2-py3-none-any.whl", hash = "sha256:eee9e502c788e89cb166d4d37f43084e3b64ab405c795c03d343a4dbc2c810fc"},
-    {file = "jsonschema-4.19.2.tar.gz", hash = "sha256:c9ff4d7447eed9592c23a12ccee508baf0dd0d59650615e847feb6cdca74f392"},
+    {file = "jsonschema-4.20.0-py3-none-any.whl", hash = "sha256:ed6231f0429ecf966f5bc8dfef245998220549cbbcf140f913b7464c52c3b6b3"},
+    {file = "jsonschema-4.20.0.tar.gz", hash = "sha256:4f614fd46d8d61258610998997743ec5492a648b33cf478c1ddc23ed4598a5fa"},
 ]
 
 [package.dependencies]
@@ -389,17 +389,18 @@ referencing = ">=0.28.0"
 
 [[package]]
 name = "lark"
-version = "1.1.5"
+version = "1.1.8"
 description = "a modern parsing library"
 optional = false
-python-versions = "*"
+python-versions = ">=3.6"
 files = [
-    {file = "lark-1.1.5-py3-none-any.whl", hash = "sha256:8476f9903e93fbde4f6c327f74d79e9b4bd0ed9294c5dfa3164ab8c581b5de2a"},
-    {file = "lark-1.1.5.tar.gz", hash = "sha256:4b534eae1f9af5b4ea000bea95776350befe1981658eea3820a01c37e504bb4d"},
+    {file = "lark-1.1.8-py3-none-any.whl", hash = "sha256:7d2c221a66a8165f3f81aacb958d26033d40d972fdb70213ab0a2e0627e29c86"},
+    {file = "lark-1.1.8.tar.gz", hash = "sha256:7ef424db57f59c1ffd6f0d4c2b705119927f566b68c0fe1942dddcc0e44391a5"},
 ]
 
 [package.extras]
 atomic-cache = ["atomicwrites"]
+interegular = ["interegular (>=0.3.1,<0.4.0)"]
 nearley = ["js2py"]
 regex = ["regex"]
 
@@ -420,13 +421,17 @@ olefile = ">=0.46"
 
 [[package]]
 name = "olefile"
-version = "0.46"
+version = "0.47"
 description = "Python package to parse, read and write Microsoft OLE2 files (Structured Storage or Compound Document, Microsoft Office)"
 optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 files = [
-    {file = "olefile-0.46.zip", hash = "sha256:133b031eaf8fd2c9399b78b8bc5b8fcbe4c31e85295749bb17a87cba8f3c3964"},
+    {file = "olefile-0.47-py2.py3-none-any.whl", hash = "sha256:543c7da2a7adadf21214938bb79c83ea12b473a4b6ee4ad4bf854e7715e13d1f"},
+    {file = "olefile-0.47.zip", hash = "sha256:599383381a0bf3dfbd932ca0ca6515acd174ed48870cbf7fee123d698c192c1c"},
 ]
+
+[package.extras]
+tests = ["pytest", "pytest-cov"]
 
 [[package]]
 name = "oletools"
@@ -467,13 +472,13 @@ win-unicode-console = {version = "*", markers = "platform_system == \"Windows\" 
 
 [[package]]
 name = "publicsuffixlist"
-version = "0.10.0.20231122"
+version = "0.10.0.20231214"
 description = "publicsuffixlist implement"
 optional = false
 python-versions = ">=2.6"
 files = [
-    {file = "publicsuffixlist-0.10.0.20231122-py2.py3-none-any.whl", hash = "sha256:ce47acf7fb7e817fba8397b43896fcb4b4307d41e2c9d2f63418b3e65c7f15cb"},
-    {file = "publicsuffixlist-0.10.0.20231122.tar.gz", hash = "sha256:d02ac754fa104d2dc8f593ef7ffe305905f8bd89f9bc079653135a9e39db17ad"},
+    {file = "publicsuffixlist-0.10.0.20231214-py2.py3-none-any.whl", hash = "sha256:10e227902e3b2acefb604b5de8a8a7d3df237f2885f06762d47fdbc9e0528b67"},
+    {file = "publicsuffixlist-0.10.0.20231214.tar.gz", hash = "sha256:76a2ed46814f091ea867fb40a6c20c142a437af7aae7ac8eb425ddc464bcb8e1"},
 ]
 
 [package.extras]
@@ -493,32 +498,32 @@ files = [
 
 [[package]]
 name = "pymisp"
-version = "2.4.179"
+version = "2.4.182"
 description = "Python API for MISP."
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "pymisp-2.4.179-py3-none-any.whl", hash = "sha256:f42904a1fe3d47bee9f595aade9e15856d3995804938da994189b7890711a717"},
-    {file = "pymisp-2.4.179.tar.gz", hash = "sha256:1b676a769dc8415e9393426a13148a9b89bc83a00e1cd9a229f9d98c863e36a5"},
+    {file = "pymisp-2.4.182-py3-none-any.whl", hash = "sha256:8c33602c3cccc0af3d331b6d80f2dd517545c867dada661e0c6a786effdd3a83"},
+    {file = "pymisp-2.4.182.tar.gz", hash = "sha256:888e848494e04148c8ff5887f04154a2b40f3065c53d93f9cec65f7ca7171362"},
 ]
 
 [package.dependencies]
 deprecated = ">=1.2.14,<2.0.0"
-extract_msg = {version = ">=0.46.2,<0.47.0", optional = true, markers = "extra == \"email\""}
-jsonschema = ">=4.17.3"
+extract_msg = {version = ">=0.47.0,<0.48.0", optional = true, markers = "extra == \"email\""}
+jsonschema = ">=4.20.0,<5.0.0"
 oletools = {version = ">=0.60.1,<0.61.0", optional = true, markers = "extra == \"email\""}
-publicsuffixlist = ">=0.10.0.20231122,<0.11.0.0"
+publicsuffixlist = ">=0.10.0.20231214,<0.11.0.0"
 python-dateutil = ">=2.8.2,<3.0.0"
 requests = ">=2.31.0,<3.0.0"
-RTFDE = {version = ">=0.1.0,<0.2.0", optional = true, markers = "extra == \"email\""}
+RTFDE = {version = ">=0.1.1,<0.2.0", optional = true, markers = "extra == \"email\""}
 
 [package.extras]
 brotli = ["urllib3[brotli]"]
 docs = ["Sphinx (<7.2)", "Sphinx (>=7.2,<8.0)", "recommonmark (>=0.7.1,<0.8.0)", "sphinx-autodoc-typehints (>=1.25.2,<2.0.0)"]
-email = ["RTFDE (>=0.1.0,<0.2.0)", "extract_msg (>=0.46.2,<0.47.0)", "oletools (>=0.60.1,<0.61.0)"]
+email = ["RTFDE (>=0.1.1,<0.2.0)", "extract_msg (>=0.47.0,<0.48.0)", "oletools (>=0.60.1,<0.61.0)"]
 fileobjects = ["lief (>=0.13.2,<0.14.0)", "pydeep2 (>=0.5.1,<0.6.0)", "python-magic (>=0.4.27,<0.5.0)"]
 openioc = ["beautifulsoup4 (>=4.12.2,<5.0.0)"]
-pdfexport = ["reportlab (>=4.0.7,<5.0.0)"]
+pdfexport = ["reportlab (>=4.0.8,<5.0.0)"]
 url = ["pyfaup (>=1.2,<2.0)"]
 virustotal = ["validators (>=0.22.0,<0.23.0)"]
 
@@ -703,17 +708,17 @@ files = [
 
 [[package]]
 name = "rtfde"
-version = "0.1.0"
+version = "0.1.1"
 description = "A library for extracting HTML content from RTF encapsulated HTML as commonly found in the exchange MSG email format."
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.8"
 files = [
-    {file = "RTFDE-0.1.0-py3-none-any.whl", hash = "sha256:a110dbef435803f3fba717d51a7b9c7a92695c2461637cc6eaf36a9f54386e26"},
-    {file = "RTFDE-0.1.0.tar.gz", hash = "sha256:12215ee59856208010b9200c19afe0f9fa13a3fb39f44015979299c248cbacd7"},
+    {file = "RTFDE-0.1.1-py3-none-any.whl", hash = "sha256:ea7ab0e0b9d4af08415f5017ecff91d74e24216a5e4e4682155cedc478035e99"},
+    {file = "RTFDE-0.1.1.tar.gz", hash = "sha256:9e43485e79b2dd1018127735d8134f65d2a9d73af314d2a101f10346333b241e"},
 ]
 
 [package.dependencies]
-lark = "1.1.5"
+lark = "1.1.8"
 oletools = ">=0.56"
 
 [package.extras]
