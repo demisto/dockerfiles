@@ -6,4 +6,4 @@ trigger_job:
     - master
   trigger:
     strategy: depend
-    project: xsoar/Dockerfiles-CICD
+    project: $CI_PROJECT_NAMESPACE/Dockerfiles-CICD
