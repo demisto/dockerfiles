@@ -155,7 +155,7 @@ COPY requirements.txt .
 #Install tools for building binary deps (will be reomved later on)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
-    python-dev \
+    python3-dev \
     build-essential \
     wget \
     git \
@@ -170,7 +170,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 && pip install --no-cache-dir -r requirements.txt \
 && apt-get purge -y --auto-remove \
   gcc \
-  python-dev \
+  python3-dev \
   build-essential \
   git \
   wget \
@@ -180,8 +180,3 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   libssl-dev \
   libkrb5-dev \
 && rm -rf /var/lib/apt/lists/*
-
-# Handling the issue described here https://askubuntu.com/questions/1233186/ubuntu-20-04-how-to-set-lower-ssl-security-level 
-# by using TLS v1 to support old exchange servers
-RUN sed -i 's/MinProtocol = TLSv1.2/MinProtocol = TLSv1.0/' "/etc/ssl/openssl.cnf"
-RUN sed -i 's/CipherString = DEFAULT@SECLEVEL=2/CipherString = DEFAULT@SECLEVEL=1/' "/etc/ssl/openssl.cnf"
