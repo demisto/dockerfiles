@@ -4,6 +4,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get -t bullseye-backports instal
     make autoconf automake libtool libpng-dev  \
     libjpeg-dev libtiff5-dev zlib1g-dev libleptonica-dev  \
     libicu-dev libpango1.0-dev liblept5 -y \
+&& apt-get install -y pngcheck \
 && mkdir /build && cd /build && git clone --depth 1 https://github.com/tesseract-ocr/tesseract.git \
 && cd tesseract  \
 && ./autogen.sh && ./configure && gmake && make install && ldconfig \
