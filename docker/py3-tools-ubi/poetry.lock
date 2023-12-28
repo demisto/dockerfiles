@@ -682,13 +682,13 @@ six = ">=1.15,<2"
 
 [[package]]
 name = "minio"
-version = "7.2.1"
+version = "7.2.2"
 description = "MinIO Python SDK for Amazon S3 Compatible Cloud Storage"
 optional = false
 python-versions = "*"
 files = [
-    {file = "minio-7.2.1-py3-none-any.whl", hash = "sha256:65fb962f7f8dad68da197d118cb0e1039a420f6b858f7960cbc5ed816935c05f"},
-    {file = "minio-7.2.1.tar.gz", hash = "sha256:d195fd6cc09a403635534215aaf231f0e2b82ac072444a39a7bc3f0ea6a4ba91"},
+    {file = "minio-7.2.2-py3-none-any.whl", hash = "sha256:3c50a5ff5cded4472c8196ad5deadbfaf6601d6aad88b9694953349e475d276a"},
+    {file = "minio-7.2.2.tar.gz", hash = "sha256:7ed4e08825fdd395dbc934f5178a41b0db04afeaa54504728d2e6621791ab96b"},
 ]
 
 [package.dependencies]
@@ -696,7 +696,7 @@ argon2-cffi = "*"
 certifi = "*"
 pycryptodome = "*"
 typing-extensions = "*"
-urllib3 = "*"
+urllib3 = ">=2.0"
 
 [[package]]
 name = "multidict"
