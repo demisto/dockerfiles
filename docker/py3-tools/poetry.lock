@@ -261,18 +261,20 @@ test = ["dateparser (==1.*)", "pre-commit", "pytest", "pytest-cov", "pytest-mock
 
 [[package]]
 name = "asana"
-version = "3.2.2"
-description = "Asana API client"
+version = "5.0.3"
+description = "Asana"
 optional = false
 python-versions = "*"
 files = [
-    {file = "asana-3.2.2-py2.py3-none-any.whl", hash = "sha256:e8426ae5f5cda2c27d29874145acb589b91e673a84e3fbd45404679499d9604a"},
-    {file = "asana-3.2.2.tar.gz", hash = "sha256:3a0c64ad5baaa8c52465fe400cedbc873b2127a77df135af518fd8da1af8d6b9"},
+    {file = "asana-5.0.3-py3-none-any.whl", hash = "sha256:fe311dd07f8940b633e05ec6754eb375b1206f506e1dcc63a7064e9513fe04e6"},
+    {file = "asana-5.0.3.tar.gz", hash = "sha256:62518f736d4600c56d30d0f9a2f840bb55f653e9c69dd9760510b4927ac9714f"},
 ]
 
 [package.dependencies]
-requests = ">=2.20.0,<3.dev0"
-requests-oauthlib = ">=0.8.0,<2.0"
+certifi = ">=2017.4.17"
+python-dateutil = ">=2.1"
+six = ">=1.10"
+urllib3 = ">=1.23"
 
 [[package]]
 name = "async-timeout"
