@@ -12,6 +12,7 @@ ADD requirements.txt .
 RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get install \
     git \ 
     gcc \
+    nodejs \
     npm \
     ca-certificates \
     curl \
