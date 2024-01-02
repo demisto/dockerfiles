@@ -42,7 +42,7 @@ def main():
     arg_parser.add_argument('--exclude', default='')
     arg_parser.add_argument('--deprecated_path', default='docker/deprecated_images.json')
     arg_parser.add_argument('--docker_dir', default='docker')
-    arg_parser.add_argument('--fix', action='store_true', default=False)
+    arg_parser.add_argument('--fix', action='store_true', default=False, help='If flag is set will output the file fixed according to the build.conf files')
     args = arg_parser.parse_args()
     excluded = args.exclude.split(',')
     with open(args.deprecated_path) as f:
