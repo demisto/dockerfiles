@@ -1,5 +1,4 @@
-
-FROM demisto/python3:3.10.13.83255
+FROM demisto/m2crypto:1.0.0.83380
 
 COPY requirements.txt .
 
