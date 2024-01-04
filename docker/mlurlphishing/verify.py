@@ -7,7 +7,4 @@ import tldextract
 import dill
 import catboost
 from PIL import Image
-
-from cv2 import (
-     cv2
-)
+from cv2 import cv2

@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "gitlab docker ci"
+description = ""
+version = "0.1.0"
+authors = ["Judah Schwartz <juschwartz@paloaltonetworks.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "~3.10"
+demisto-sdk = "*"
+slack-sdk = "*"
+Jinja2 = "*"
+packaging = "==21.3" 
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
