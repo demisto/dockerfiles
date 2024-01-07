@@ -1,9 +1,10 @@
-FROM demisto/py3-tools-ubi:1.0.0.79680
+FROM demisto/py3-tools-ubi:1.0.0.84240
 
 
 
 COPY requirements.txt .
 COPY chromium/download_chromedriver.sh .
+COPY chromium/start_chrome_headless.sh /
 COPY repos /repos
 
 ARG LEPTONICA_VERSION=1.82.0
@@ -31,6 +32,7 @@ RUN dnf update --nodocs -y  \
     && dnf install -y --nodocs --enablerepo=$ROCKY_BASE --enablerepo=$ROCKY_RELEASE tigervnc-server-minimal xorg-x11-utils google-chrome-stable iputils nmap bind-utils \
     && dnf install -y --nodocs --enablerepo=$ROCKY_BASE --enablerepo=$ROCKY_RELEASE --enablerepo=$FEDORA_EPEL ImageMagick \
     && ./download_chromedriver.sh \
+    && chmod +x ./start_chrome_headless.sh \
     && unzip chromedriver-linux64.zip \
     && mv chromedriver-linux64/chromedriver /usr/bin/chromedriver \
     && rm -rf chromedriver-linux64.zip \

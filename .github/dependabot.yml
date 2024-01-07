@@ -453,6 +453,7 @@ updates:
     directory: /docker/py-ews
     ignore:
       - dependency-name: "requests-ntlm"
+      - dependency-name: "exchangelib"
     schedule:
       interval: daily
   - package-ecosystem: pip
@@ -523,6 +524,8 @@ updates:
     directory: /docker/mlurlphishing
     schedule:
       interval: daily
+    ignore:
+      - dependency-name: scikit-learn
   - package-ecosystem: pip
     directory: /docker/py3-tools
     schedule:
@@ -603,6 +606,9 @@ updates:
     directory: /docker/panw-iot
     schedule:
       interval: daily
+    ignore:
+      - dependency-name: "pyasn1"
+      # Ignore all updates for pyasn1
   - package-ecosystem: pip
     directory: /docker/illumio
     schedule:
