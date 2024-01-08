@@ -282,52 +282,48 @@ files = [
 
 [[package]]
 name = "argcomplete"
-version = "1.12.3"
+version = "3.1.6"
 description = "Bash tab completion for argparse"
 optional = false
-python-versions = "*"
+python-versions = ">=3.8"
 files = [
-    {file = "argcomplete-1.12.3-py2.py3-none-any.whl", hash = "sha256:291f0beca7fd49ce285d2f10e4c1c77e9460cf823eef2de54df0c0fec88b0d81"},
-    {file = "argcomplete-1.12.3.tar.gz", hash = "sha256:2c7dbffd8c045ea534921e63b0be6fe65e88599990d8dc408ac8c542b72a5445"},
+    {file = "argcomplete-3.1.6-py3-none-any.whl", hash = "sha256:71f4683bc9e6b0be85f2b2c1224c47680f210903e23512cfebfe5a41edfd883a"},
+    {file = "argcomplete-3.1.6.tar.gz", hash = "sha256:3b1f07d133332547a53c79437527c00be48cca3807b1d4ca5cab1b26313386a6"},
 ]
 
 [package.extras]
-test = ["coverage", "flake8", "pexpect", "wheel"]
+test = ["coverage", "mypy", "pexpect", "ruff", "wheel"]
 
 [[package]]
 name = "azure-cli-core"
-version = "2.11.1"
+version = "2.55.0"
 description = "Microsoft Azure Command-Line Tools Core Module"
 optional = false
-python-versions = "*"
+python-versions = ">=3.8.0"
 files = [
-    {file = "azure-cli-core-2.11.1.tar.gz", hash = "sha256:5a56ede2326b9d579611d7436fd53463d956409d49e1b2f3c9e03e9f1fe7e28a"},
-    {file = "azure_cli_core-2.11.1-py3-none-any.whl", hash = "sha256:8d854d1008fb436468842d361b206f446fecabf6b2b587471085f2f3f9c58a46"},
+    {file = "azure-cli-core-2.55.0.tar.gz", hash = "sha256:46ee5af06f8cfe565ed28b0415ebe69d75350c62b29c909eee2870550a0805c2"},
+    {file = "azure_cli_core-2.55.0-py3-none-any.whl", hash = "sha256:fd663b36d9baf6950925888edf373f3e55853f709832bee6d8f650921a8b12f2"},
 ]
 
 [package.dependencies]
-adal = ">=1.2.3,<1.3.0"
-argcomplete = ">=1.8,<2.0"
-azure-cli-telemetry = "*"
-azure-mgmt-core = "1.2.0"
-azure-mgmt-resource = "10.2.0"
-colorama = ">=0.4.1,<0.5.0"
-humanfriendly = ">=4.7,<9.0"
+argcomplete = ">=3.1.1,<3.2.0"
+azure-cli-telemetry = "==1.1.0.*"
+azure-mgmt-core = ">=1.2.0,<2"
+cryptography = "*"
+distro = {version = "*", markers = "sys_platform == \"linux\""}
+humanfriendly = ">=10.0,<11.0"
 jmespath = "*"
-knack = "0.7.2"
-msal = ">=1.0.0,<1.1.0"
-msal-extensions = ">=0.1.3,<0.2.0"
-msrest = ">=0.4.4"
-msrestazure = ">=0.6.3"
-paramiko = ">=2.0.8,<3.0.0"
+knack = ">=0.11.0,<0.12.0"
+msal = {version = "1.24.0b2", extras = ["broker"]}
+msal-extensions = ">=1.0.0,<1.1.0"
+msrestazure = ">=0.6.4,<0.7.0"
+packaging = ">=20.9"
+paramiko = ">=2.0.8,<4.0.0"
 pkginfo = ">=1.5.0.1"
-PyJWT = "*"
+psutil = {version = ">=5.9,<6.0", markers = "sys_platform != \"cygwin\""}
+PyJWT = ">=2.1.0"
 pyopenssl = ">=17.1.0"
-requests = ">=2.22,<3.0"
-six = ">=1.12,<2.0"
-
-[package.extras]
-test = ["mock"]
+requests = {version = "*", extras = ["socks"]}
 
 [[package]]
 name = "azure-cli-nspkg"
@@ -1252,17 +1248,6 @@ files = [
 ]
 
 [[package]]
-name = "colorama"
-version = "0.4.6"
-description = "Cross-platform colored terminal text."
-optional = false
-python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*,!=3.6.*,>=2.7"
-files = [
-    {file = "colorama-0.4.6-py2.py3-none-any.whl", hash = "sha256:4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6"},
-    {file = "colorama-0.4.6.tar.gz", hash = "sha256:08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44"},
-]
-
-[[package]]
 name = "crcmod"
 version = "1.7"
 description = "CRC Generator"
@@ -1316,6 +1301,17 @@ sdist = ["build"]
 ssh = ["bcrypt (>=3.1.5)"]
 test = ["pretend", "pytest (>=6.2.0)", "pytest-benchmark", "pytest-cov", "pytest-xdist"]
 test-randomorder = ["pytest-randomly"]
+
+[[package]]
+name = "distro"
+version = "1.9.0"
+description = "Distro - an OS platform information API"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "distro-1.9.0-py3-none-any.whl", hash = "sha256:7bffd925d65168f85027d8da9af6bddab658135b840670a223589bc0c8ef02b2"},
+    {file = "distro-1.9.0.tar.gz", hash = "sha256:2fa77c6fd8940f116ee1d6b94a2f90b13b5ea8d019b98bc8bafdcabcdd9bdbed"},
+]
 
 [[package]]
 name = "dnspython"
@@ -1431,17 +1427,17 @@ test = ["coverage (>=7.4,<7.5)", "mypy (>=1.8,<1.9)", "pylint (>=3,<3.1)", "pyte
 
 [[package]]
 name = "humanfriendly"
-version = "8.2"
+version = "10.0"
 description = "Human friendly output for text interfaces using Python"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 files = [
-    {file = "humanfriendly-8.2-py2.py3-none-any.whl", hash = "sha256:e78960b31198511f45fd455534ae7645a6207d33e512d2e842c766d15d9c8080"},
-    {file = "humanfriendly-8.2.tar.gz", hash = "sha256:bf52ec91244819c780341a3438d5d7b09f431d3f113a475147ac9b7b167a3d12"},
+    {file = "humanfriendly-10.0-py2.py3-none-any.whl", hash = "sha256:1697e1a8a8f550fd43c2865cd84542fc175a61dcb779b6fee18cf6b6ccba1477"},
+    {file = "humanfriendly-10.0.tar.gz", hash = "sha256:6b0b831ce8f15f7300721aa49829fc4e83921a9a301cc7f606be6686a2288ddc"},
 ]
 
 [package.dependencies]
-pyreadline = {version = "*", markers = "sys_platform == \"win32\""}
+pyreadline3 = {version = "*", markers = "sys_platform == \"win32\" and python_version >= \"3.8\""}
 
 [[package]]
 name = "idna"
@@ -1498,22 +1494,21 @@ files = [
 
 [[package]]
 name = "knack"
-version = "0.7.2"
+version = "0.11.0"
 description = "A Command-Line Interface framework"
 optional = false
 python-versions = "*"
 files = [
-    {file = "knack-0.7.2-py3-none-any.whl", hash = "sha256:d86a669f45e875fc5e49a85ac90e57c85338be89cb281cb99a9adb87f563761d"},
-    {file = "knack-0.7.2.tar.gz", hash = "sha256:dfc6aef6760ea9a9620577e01540617678d78cab3111a0f03e8b9f987d0f08ca"},
+    {file = "knack-0.11.0-py3-none-any.whl", hash = "sha256:6704c867840978a119a193914a90e2e98c7be7dff764c8fcd8a2286c5a978d00"},
+    {file = "knack-0.11.0.tar.gz", hash = "sha256:eb6568001e9110b1b320941431c51033d104cc98cda2254a5c2b09ba569fd494"},
 ]
 
 [package.dependencies]
 argcomplete = "*"
-colorama = "*"
 jmespath = "*"
+packaging = "*"
 pygments = "*"
 pyyaml = "*"
-six = "*"
 tabulate = "*"
 
 [[package]]
@@ -1624,33 +1619,41 @@ files = [
 
 [[package]]
 name = "msal"
-version = "1.0.0"
-description = "The Microsoft Authentication Library (MSAL) for Python library enables your app to access the Microsoft Cloud by supporting authentication of users with Microsoft Azure Active Directory accounts (AAD) and Microsoft Accounts (MSA) using industry standard OAuth2 and OpenID Connect."
+version = "1.24.0b2"
+description = "The Microsoft Authentication Library (MSAL) for Python library"
 optional = false
-python-versions = "*"
+python-versions = ">=2.7"
 files = [
-    {file = "msal-1.0.0-py2.py3-none-any.whl", hash = "sha256:c944b833bf686dfbc973e9affdef94b77e616cb52ab397e76cde82e26b8a3373"},
-    {file = "msal-1.0.0.tar.gz", hash = "sha256:ecbe3f5ac77facad16abf08eb9d8562af3bc7184be5d4d90c9ef4db5bde26340"},
+    {file = "msal-1.24.0b2-py2.py3-none-any.whl", hash = "sha256:008d4bc3e456f6878ea1722ab6aa0a1ca3da77cc22bef324a261eafcffe8ddda"},
+    {file = "msal-1.24.0b2.tar.gz", hash = "sha256:a0e6e3f1b099ed29a39e167e83a069ab84d9a7712627f72950030b56791b7cbc"},
 ]
 
 [package.dependencies]
-PyJWT = {version = ">=1.0.0,<2", extras = ["crypto"]}
+cryptography = ">=0.6,<44"
+PyJWT = {version = ">=1.0.0,<3", extras = ["crypto"]}
+pymsalruntime = {version = ">=0.13.2,<0.14", optional = true, markers = "python_version >= \"3.6\" and platform_system == \"Windows\" and extra == \"broker\""}
 requests = ">=2.0.0,<3"
+
+[package.extras]
+broker = ["pymsalruntime (>=0.13.2,<0.14)"]
 
 [[package]]
 name = "msal-extensions"
-version = "0.1.3"
-description = ""
+version = "1.0.0"
+description = "Microsoft Authentication Library extensions (MSAL EX) provides a persistence API that can save your data on disk, encrypted on Windows, macOS and Linux. Concurrent data access will be coordinated by a file lock mechanism."
 optional = false
 python-versions = "*"
 files = [
-    {file = "msal-extensions-0.1.3.tar.gz", hash = "sha256:59e171a9a4baacdbf001c66915efeaef372fb424421f1a4397115a3ddd6205dc"},
-    {file = "msal_extensions-0.1.3-py2.py3-none-any.whl", hash = "sha256:c5a32b8e1dce1c67733dcdf8aa8bebcff5ab123e779ef7bc14e416bd0da90037"},
+    {file = "msal-extensions-1.0.0.tar.gz", hash = "sha256:c676aba56b0cce3783de1b5c5ecfe828db998167875126ca4b47dc6436451354"},
+    {file = "msal_extensions-1.0.0-py2.py3-none-any.whl", hash = "sha256:91e3db9620b822d0ed2b4d1850056a0f133cba04455e62f11612e40f5502f2ee"},
 ]
 
 [package.dependencies]
 msal = ">=0.4.1,<2.0.0"
-portalocker = ">=1.0,<2.0"
+portalocker = [
+    {version = ">=1.0,<3", markers = "python_version >= \"3.5\" and platform_system != \"Windows\""},
+    {version = ">=1.6,<3", markers = "python_version >= \"3.5\" and platform_system == \"Windows\""},
+]
 
 [[package]]
 name = "msrest"
@@ -1965,22 +1968,45 @@ windows-terminal = ["colorama (>=0.4.6)"]
 
 [[package]]
 name = "pyjwt"
-version = "1.7.1"
+version = "2.8.0"
 description = "JSON Web Token implementation in Python"
 optional = false
-python-versions = "*"
+python-versions = ">=3.7"
 files = [
-    {file = "PyJWT-1.7.1-py2.py3-none-any.whl", hash = "sha256:5c6eca3c2940464d106b99ba83b00c6add741c9becaec087fb7ccdefea71350e"},
-    {file = "PyJWT-1.7.1.tar.gz", hash = "sha256:8d59a976fb773f3e6a39c85636357c4f0e242707394cadadd9814f5cbaa20e96"},
+    {file = "PyJWT-2.8.0-py3-none-any.whl", hash = "sha256:59127c392cc44c2da5bb3192169a91f429924e17aff6534d70fdc02ab3e04320"},
+    {file = "PyJWT-2.8.0.tar.gz", hash = "sha256:57e28d156e3d5c10088e0c68abb90bfac3df82b40a71bd0daa20c65ccd5c23de"},
 ]
 
 [package.dependencies]
-cryptography = {version = ">=1.4", optional = true, markers = "extra == \"crypto\""}
+cryptography = {version = ">=3.4.0", optional = true, markers = "extra == \"crypto\""}
 
 [package.extras]
-crypto = ["cryptography (>=1.4)"]
-flake8 = ["flake8", "flake8-import-order", "pep8-naming"]
-test = ["pytest (>=4.0.1,<5.0.0)", "pytest-cov (>=2.6.0,<3.0.0)", "pytest-runner (>=4.2,<5.0.0)"]
+crypto = ["cryptography (>=3.4.0)"]
+dev = ["coverage[toml] (==5.0.4)", "cryptography (>=3.4.0)", "pre-commit", "pytest (>=6.0.0,<7.0.0)", "sphinx (>=4.5.0,<5.0.0)", "sphinx-rtd-theme", "zope.interface"]
+docs = ["sphinx (>=4.5.0,<5.0.0)", "sphinx-rtd-theme", "zope.interface"]
+tests = ["coverage[toml] (==5.0.4)", "pytest (>=6.0.0,<7.0.0)"]
+
+[[package]]
+name = "pymsalruntime"
+version = "0.13.12"
+description = "The MSALRuntime Python Interop Package"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "pymsalruntime-0.13.12-cp310-cp310-win32.whl", hash = "sha256:5b001ad7a4d8d7acb183e4368dac5ee0d1fdee008e1eab87b3d2e7fdaf98855a"},
+    {file = "pymsalruntime-0.13.12-cp310-cp310-win_amd64.whl", hash = "sha256:407c08814ebf0a06c2fb289da02464b0cbea63e36100ea09ec6406c87b05e5d1"},
+    {file = "pymsalruntime-0.13.12-cp311-cp311-win32.whl", hash = "sha256:1777ff9fc8f181639f03c3c105f9c27005d906cfd08ff55204e4e9f46d5345a5"},
+    {file = "pymsalruntime-0.13.12-cp311-cp311-win_amd64.whl", hash = "sha256:8edd915a9e2f2d6ad40f9a93c5b63b0901951e7d64a9573e1ff5dc74ee561191"},
+    {file = "pymsalruntime-0.13.12-cp36-cp36m-win32.whl", hash = "sha256:ef39c28de18af7ec268cf3d4bbe6677ecc5d52440fefa1580aca7721817fc46d"},
+    {file = "pymsalruntime-0.13.12-cp36-cp36m-win_amd64.whl", hash = "sha256:20d6420aed2ec6c1d0935d80e08c78e4ad1996cf1a153c2b6714786cdfaa0f6c"},
+    {file = "pymsalruntime-0.13.12-cp37-cp37m-win32.whl", hash = "sha256:de528d2d2a4b63883872f879df82c807c8321fdcb698087c9d2ccf2cd40c81da"},
+    {file = "pymsalruntime-0.13.12-cp37-cp37m-win_amd64.whl", hash = "sha256:41ffc763510c5ce40f8c9c840ea1fb799d1ec1783aaaa5e5377aa6f4d389b36d"},
+    {file = "pymsalruntime-0.13.12-cp38-cp38-win32.whl", hash = "sha256:2af8f66accb4603a0b8bdd2a77f663440e5afe232ca139b209e97777873da766"},
+    {file = "pymsalruntime-0.13.12-cp38-cp38-win_amd64.whl", hash = "sha256:20f4e5c219a6b041e6e27797f0b8604cbedddc418d705a06c5c77bee7afb76e0"},
+    {file = "pymsalruntime-0.13.12-cp39-cp39-win32.whl", hash = "sha256:71c58a2bad23190e207bdee9e392b51d985436b4173d8c8b4e7c09dc6e231681"},
+    {file = "pymsalruntime-0.13.12-cp39-cp39-win_amd64.whl", hash = "sha256:9d34b98acc4910d73cccb244186f3e1a3f2799c0c5cc381f02f3e82838cf7180"},
+    {file = "pymsalruntime-0.13.12.tar.gz", hash = "sha256:16f13f8c1a1f1bd995108c86ffce05367afde28b82b4f299ab35acf484547218"},
+]
 
 [[package]]
 name = "pynacl"
@@ -2027,13 +2053,26 @@ docs = ["sphinx (!=5.2.0,!=5.2.0.post0,!=7.2.5)", "sphinx-rtd-theme"]
 test = ["flaky", "pretend", "pytest (>=3.0.1)"]
 
 [[package]]
-name = "pyreadline"
-version = "2.1"
-description = "A python implmementation of GNU readline."
+name = "pyreadline3"
+version = "3.4.1"
+description = "A python implementation of GNU readline."
 optional = false
 python-versions = "*"
 files = [
-    {file = "pyreadline-2.1.zip", hash = "sha256:4530592fc2e85b25b1a9f79664433da09237c1a270e4d78ea5aa3a2c7229e2d1"},
+    {file = "pyreadline3-3.4.1-py3-none-any.whl", hash = "sha256:b0efb6516fd4fb07b45949053826a62fa4cb353db5be2bbb4a7aa1fdd1e345fb"},
+    {file = "pyreadline3-3.4.1.tar.gz", hash = "sha256:6f3d1f7b8a31ba32b73917cefc1f28cc660562f39aea8646d30bd6eff21f7bae"},
+]
+
+[[package]]
+name = "pysocks"
+version = "1.7.1"
+description = "A Python SOCKS client module. See https://github.com/Anorov/PySocks for more information."
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+files = [
+    {file = "PySocks-1.7.1-py27-none-any.whl", hash = "sha256:08e69f092cc6dbe92a0fdd16eeb9b9ffbc13cadfe5ca4c7bd92ffb078b293299"},
+    {file = "PySocks-1.7.1-py3-none-any.whl", hash = "sha256:2725bd0a9925919b9b51739eea5f9e2bae91e83288108a9ad338b2e3a4435ee5"},
+    {file = "PySocks-1.7.1.tar.gz", hash = "sha256:3f8804571ebe159c380ac6de37643bb4685970655d3bba243530d6558b799aa0"},
 ]
 
 [[package]]
@@ -2216,6 +2255,7 @@ files = [
 certifi = ">=2017.4.17"
 charset-normalizer = ">=2,<4"
 idna = ">=2.5,<4"
+PySocks = {version = ">=1.5.6,<1.5.7 || >1.5.7", optional = true, markers = "extra == \"socks\""}
 urllib3 = ">=1.21.1,<3"
 
 [package.extras]
@@ -2406,4 +2446,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10"
-content-hash = "ea72300dc9e0a406df4f608e390b9d7577c7bed08d5d5137bc43072ca5136299"
+content-hash = "31fa5822389cc7a37dff4808f2f526aca0b0dcc793867a1cc5ef1be72ac0741e"
