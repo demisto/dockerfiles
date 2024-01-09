@@ -468,19 +468,19 @@ msrestazure = ">=0.4.32,<2.0.0"
 
 [[package]]
 name = "azure-mgmt-batch"
-version = "5.0.1"
+version = "17.2.0"
 description = "Microsoft Azure Batch Management Client Library for Python"
 optional = false
-python-versions = "*"
+python-versions = ">=3.7"
 files = [
-    {file = "azure-mgmt-batch-5.0.1.zip", hash = "sha256:6e375ecdd5966ee9ee45b29c90a806388c27ceacc2cbd6dd406ff311b5d7da72"},
-    {file = "azure_mgmt_batch-5.0.1-py2.py3-none-any.whl", hash = "sha256:d942e225180d07aae07a43e489ae0acbacd92651be3a019f4eb330a587028161"},
+    {file = "azure-mgmt-batch-17.2.0.tar.gz", hash = "sha256:8a15e38a37d6e4ece29573de808c5a89276c99f2520ea1f352b86a704c89858d"},
+    {file = "azure_mgmt_batch-17.2.0-py3-none-any.whl", hash = "sha256:73e34bfd8cdf917b15119c6d043d223a0ba22d916d95510d582475a4694af479"},
 ]
 
 [package.dependencies]
 azure-common = ">=1.1,<2.0"
-azure-mgmt-nspkg = ">=2.0.0"
-msrestazure = ">=0.4.27,<2.0.0"
+azure-mgmt-core = ">=1.3.2,<2.0.0"
+isodate = ">=0.6.1,<1.0.0"
 
 [[package]]
 name = "azure-mgmt-cdn"
@@ -564,17 +564,17 @@ msrestazure = ">=0.4.32,<2.0.0"
 
 [[package]]
 name = "azure-mgmt-core"
-version = "1.2.0"
+version = "1.4.0"
 description = "Microsoft Azure Management Core Library for Python"
 optional = false
-python-versions = "*"
+python-versions = ">=3.7"
 files = [
-    {file = "azure-mgmt-core-1.2.0.zip", hash = "sha256:8fe3b59446438f27e34f7b24ea692a982034d9e734617ca1320eedeee1939998"},
-    {file = "azure_mgmt_core-1.2.0-py2.py3-none-any.whl", hash = "sha256:6966226111e92dff26d984aa1c76f227ce0e8b2069c45c72cfb67f160c452444"},
+    {file = "azure-mgmt-core-1.4.0.zip", hash = "sha256:d195208340094f98e5a6661b781cde6f6a051e79ce317caabd8ff97030a9b3ae"},
+    {file = "azure_mgmt_core-1.4.0-py3-none-any.whl", hash = "sha256:81071675f186a585555ef01816f2774d49c1c9024cb76e5720c3c0f6b337bb7d"},
 ]
 
 [package.dependencies]
-azure-core = ">=1.7.0.dev,<2.0.0"
+azure-core = ">=1.26.2,<2.0.0"
 
 [[package]]
 name = "azure-mgmt-cosmosdb"
@@ -2446,4 +2446,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10"
-content-hash = "31fa5822389cc7a37dff4808f2f526aca0b0dcc793867a1cc5ef1be72ac0741e"
+content-hash = "e4c5bea3709500ad61708c0d750fb409e974c67e5912430a58cc05b1153f2759"
