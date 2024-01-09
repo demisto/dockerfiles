@@ -8,7 +8,9 @@ from notify import (
 	get_tar_url,
 	post_comment,
 	GITHUB_API_POST_COMMENT_ENDPOINT,
-	GITHUB_API_REPLACE_COMMENT_ENDPOINT
+	GITHUB_API_REPLACE_COMMENT_ENDPOINT,
+	CIRCLECI_API_V2_GET_JOB_ARTIFACTS_ENDPOINT,
+	main
 )
 
 CURRENT_DIR = Path(__file__).resolve().parent
@@ -112,3 +114,25 @@ class TestPostComment:
 		requests_mock.patch(GITHUB_API_REPLACE_COMMENT_ENDPOINT.format(1760602050), json={})
 
 		post_comment(self.docker_image_url, self.pr_number)
+
+class TestNotify:
+
+	def test_notify(self, capsys, mocker, requests_mock):
+
+		event_path = TEST_FILES_PATH / self.__class__.__name__ / "gh_event.json"
+		artifacts_response = json.loads((TEST_FILES_PATH / "TestGetTarUrl" / "get_build_artifacts.json").read_text("utf-8"))
+		comments_response = TEST_FILES_PATH / "TestPostComment" / "get_pr_comments.json"
+
+		mocker.patch.dict(os.environ, {"GITHUB_TOKEN": "strongpwd"})
+		requests_mock.get(CIRCLECI_API_V2_GET_JOB_ARTIFACTS_ENDPOINT.format('5542'), json=artifacts_response)
+		requests_mock.get(GITHUB_API_POST_COMMENT_ENDPOINT.format(TestPostComment.pr_number), json=json.loads(comments_response.read_text("utf-8")))
+		requests_mock.post(GITHUB_API_POST_COMMENT_ENDPOINT.format(TestPostComment.pr_number), json={})
+
+		main(["--event", str(event_path)])
+		captured = capsys.readouterr()
+
+		output = captured[0].splitlines()
+
+		assert len(output) == 2
+		assert output[0] == "target_url: mock://circleci.com/gh/org/repo/5542"
+		assert output[1] == "circleci build: 5542"

@@ -96,11 +96,11 @@ def check_docker_build(event_file):
         print(f"No Docker image archive was found in build {CIRCLECI_API_V2_GET_JOB_ARTIFACTS_ENDPOINT.format(build_num)}")
 
 
-def main():
+def main(argv=None):
     parser = argparse.ArgumentParser(description='Deploy Docs',
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("-e", "--event", help="Github event data file which triggered the workflow", required=True)
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     check_docker_build(args.event)
 
 
