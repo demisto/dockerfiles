@@ -33,9 +33,10 @@ def compare_deprecated_images(deprecated_json_file, deprecated_json_from_configs
     names_should_be_in_config = names_in_file - names_in_configs
     if names_should_be_in_file or names_should_be_in_config:
         raise ValueError(
-            f'The deprecated_images.json file is not valid. Did you deprecate an image in this pr? Add it to docker/deprecated_images.json. You can use util/validate_deprecated_dockers_json.py --fix to do so.'
-            f'Set of items that are deprecated according to their build.conf but not in the deprecated_images.json: {names_should_be_in_file}\n'
-            f'Set of items that are in the file but not deprecated according to the build.conf {names_should_be_in_config}')
+            f"The deprecated_images.json file is not valid. Did you deprecate an image in this pr? Add it to docker/deprecated_images.json. You can use util/validate_deprecated_dockers_json.py --fix to do so."
+            f"Set of items that are deprecated according to their build.conf but not in the deprecated_images.json: {names_should_be_in_file}\n"
+            f"Set of items that are in the file but not deprecated according to the build.conf {names_should_be_in_config}"
+        )
 
 
 def main():
