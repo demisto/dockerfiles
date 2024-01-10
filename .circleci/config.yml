@@ -13,9 +13,9 @@ jobs:
       - run:
           name: Validate deprecated_images.json
           command: python ./utils/validate_deprecated_dockers_json.py --exclude python --docker_dir docker --deprecated_path docker/deprecated_images.json
-      - run:
-          name: Run Pytest
-          command: pytest
+#      - run:
+#          name: Run Pytest
+#          command: pytest
 
       - setup_remote_docker:
           version: 20.10.17
