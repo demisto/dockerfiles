@@ -1,8 +1,7 @@
 
-# Last modified: 2023-12-20T00:48:27.176984+00:00
-FROM demisto/python3-deb:3.10.13.83732
+# Last modified: 2024-01-09T16:38:03.891015+00:00
+FROM demisto/python3-deb:3.10.13.84406
 
-COPY start_chrome_headless.sh /
 COPY requirements.txt .
 
 
@@ -22,7 +21,12 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
   python3-dev \
   zlib1g-dev \
 && rm -rf /var/lib/apt/lists/* \
-&& chmod +x ./start_chrome_headless.sh
+&& touch /var/chrome_headless.log \
+&& chmod 777 /var/chrome_headless.log \
+&& touch /var/port.txt \
+&& chmod 777 /var/port.txt \
+&& touch /var/rasterizations_counter.txt \
+&& chmod 777 /var/rasterizations_counter.txt
 
 # Based on instructions at: https://tecadmin.net/setup-selenium-with-chromedriver-on-debian/
 # Will install the latest version available from the chrome repo.
