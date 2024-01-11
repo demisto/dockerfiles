@@ -30,7 +30,7 @@ def test_get_operator_and_version(version, expected_version, expected_operator):
     version, operator = verify_version_matching.get_operator_and_version(version)
     assert version == expected_version
     assert operator == expected_operator
-    # assert False
+    assert False
 
 
 test_data_parse_and_match_versions = [
