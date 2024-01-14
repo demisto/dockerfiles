@@ -36,7 +36,7 @@ jobs:
       - name: Run Notify Script
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        working-directory: "$GITHUB_WORKSPACE/.github/workflows/notify-docker-available"
         run: |
           echo "==== $(date): Running notify... ===="
+          cd "$GITHUB_WORKSPACE/.github/workflows/notify-docker-available"
           pipenv run ./notify.py -e "$GITHUB_EVENT_PATH"
