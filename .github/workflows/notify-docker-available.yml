@@ -1,32 +1,24 @@
 name: Docker Available
-
-on:
-  pull_request:
-    types:
-      - opened
-      - synchronize
-
+on: status
+  
 jobs:
   check:
     runs-on: ubuntu-latest
-
-    # Run only only external PRs
-    if: |
-      github.event_name == 'pull_request' &&
-      github.event.pull_request.head.repo.fork
-
     steps:
       - name: Dump Github context        
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
       - name: Checkout
+        if: endsWith(github.event.context, 'docker_build') && github.event.state == 'success'
         uses: actions/checkout@v2
       - name: Setup Python
+        if: endsWith(github.event.context, 'docker_build') && github.event.state == 'success'
         uses: actions/setup-python@v1
         with:
           python-version: '3.7'
       - name: Run Notify Script
+        if: endsWith(github.event.context, 'docker_build') && github.event.state == 'success'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
