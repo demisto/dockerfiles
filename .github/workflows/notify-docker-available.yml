@@ -22,21 +22,19 @@ jobs:
         run: echo "$GITHUB_CONTEXT"
       - name: Checkout
         uses: actions/checkout@v2
-      
-      # Setup Python
-      # Taken from https://github.com/actions/setup-python/blob/main/docs/advanced-usage.md#caching-packages
-      - uses: actions/setup-python@v5
+      - name: Setup Python
+        uses: actions/setup-python@v1
         with:
-          python-version: '3.10'
-          cache: 'pipenv'
-      - name: Install pipenv
-        run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
-      - run: pipenv install
-        
+          python-version: '3.7'
       - name: Run Notify Script
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "==== $(date): Running notify... ===="
+          echo "==== $(date): Starting pipenv setup... ===="
+          python -m pip install --upgrade pip
+          pip install pipenv
+          pwd
           cd "$GITHUB_WORKSPACE/.github/workflows/notify-docker-available"
+          pipenv install
+          echo "==== $(date): Running notify... ===="
           pipenv run ./notify.py -e "$GITHUB_EVENT_PATH"
