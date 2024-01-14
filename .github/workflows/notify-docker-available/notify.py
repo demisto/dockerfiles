@@ -5,6 +5,7 @@
 
 import json
 import argparse
+from pathlib import Path
 from typing import Any, Optional
 import requests
 import os
@@ -23,7 +24,6 @@ def get_tar_url(artifacts: dict[str, Any]) -> Optional[str]:
     """
     Helper function to retrieve the URL to the compressed archive of the Docker image.
 
-
     Arguments:
     - `artifacts` (``dict[str, Any]``): The Circle CI artifacts V2.
 
@@ -33,7 +33,8 @@ def get_tar_url(artifacts: dict[str, Any]) -> Optional[str]:
     tar_url = None
 
     for item in artifacts.get("items", []):
-        if item.get("path", "") and item.get("path", "").endswith(".tar.gz"):
+        artifact_path = Path(item.get("path"))
+        if "tar.gz" in artifact_path.name:
             tar_url = item.get("url")
             break
 
@@ -67,8 +68,7 @@ def post_comment(docker_image_url: str, pr_num):
                 print(f'replacing comment: {c}')
                 break
     if replace_comment_id:
-        comments_url = GITHUB_API_REPLACE_COMMENT_ENDPOINT.format(replace_comment_id)
-        res = requests.patch(comments_url, json={"body": message}, headers=headers, verify=VERIFY_SSL)
+        res = requests.patch(GITHUB_API_REPLACE_COMMENT_ENDPOINT.format(replace_comment_id), json={"body": message}, headers=headers, verify=VERIFY_SSL)
     else:
         res = requests.post(GITHUB_API_POST_COMMENT_ENDPOINT.format(pr_num), json={"body": message}, headers=headers, verify=VERIFY_SSL)
     res.raise_for_status()
