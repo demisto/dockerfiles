@@ -1,32 +1,42 @@
 name: Docker Available
-on: status
-  
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
 jobs:
   check:
     runs-on: ubuntu-latest
+
+    # Run only only external PRs
+    if: |
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.head.repo.fork
+
     steps:
       - name: Dump Github context        
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
       - name: Checkout
-        if: endsWith(github.event.context, 'docker_build') && github.event.state == 'success'
         uses: actions/checkout@v2
-      - name: Setup Python
-        if: endsWith(github.event.context, 'docker_build') && github.event.state == 'success'
-        uses: actions/setup-python@v1
+      
+      # Setup Python
+      # Taken from https://github.com/actions/setup-python/blob/main/docs/advanced-usage.md#caching-packages
+      - uses: actions/setup-python@v5
         with:
-          python-version: '3.7'
+          python-version: '3.10'
+          cache: 'pipenv'
+      - name: Install pipenv
+        run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
+      - run: pipenv install
+        
       - name: Run Notify Script
-        if: endsWith(github.event.context, 'docker_build') && github.event.state == 'success'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        working-directory: "$GITHUB_WORKSPACE/.github/workflows/notify-docker-available"
         run: |
-          echo "==== $(date): Starting pipenv setup... ===="
-          python -m pip install --upgrade pip
-          pip install pipenv
-          pwd
-          cd "$GITHUB_WORKSPACE/.github/workflows/notify-docker-available"
-          pipenv install
           echo "==== $(date): Running notify... ===="
           pipenv run ./notify.py -e "$GITHUB_EVENT_PATH"
