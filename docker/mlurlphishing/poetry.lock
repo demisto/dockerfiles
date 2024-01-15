@@ -437,7 +437,10 @@ files = [
 ]
 
 [package.dependencies]
-numpy = {version = ">=1.21.2", markers = "python_version >= \"3.10\" or python_version >= \"3.9\" and platform_system == \"Darwin\" and platform_machine == \"arm64\""}
+numpy = [
+    {version = ">=1.21.2", markers = "python_version >= \"3.9\" and platform_system == \"Darwin\" and platform_machine == \"arm64\""},
+    {version = ">=1.19.3", markers = "python_version >= \"3.8\" and platform_system == \"Linux\" and platform_machine == \"aarch64\" or python_version >= \"3.9\" and platform_system != \"Darwin\" or python_version >= \"3.9\" and platform_machine != \"arm64\""},
+]
 
 [[package]]
 name = "packaging"
@@ -487,7 +490,7 @@ files = [
 ]
 
 [package.dependencies]
-numpy = {version = ">=1.21.0", markers = "python_version >= \"3.10\""}
+numpy = {version = ">=1.20.3", markers = "python_version < \"3.10\""}
 python-dateutil = ">=2.8.1"
 pytz = ">=2020.1"
 
@@ -757,5 +760,5 @@ files = [
 
 [metadata]
 lock-version = "2.0"
-python-versions = "~3.10"
-content-hash = "db09a7edba871361210e2b8b35390589aaf760856e740092f9a177bf43e6a89d"
+python-versions = "~3.9"
+content-hash = "0f3d29088d7f266089412377058505d551c299c80b16aae64bfe35d1625a0537"
