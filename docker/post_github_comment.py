@@ -39,6 +39,8 @@ if CIRCLE_PULL_REQUEST will try to get issue id from last commit comment
     parser = argparse.ArgumentParser(description=desc,
                                      formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument("docker_image", help="The docker image with tag version to use. For example: devdemisto/python3:1.5.0.27")
+    parser.add_argument("--is_contribution", help="Whether the PR is a contribution or not", action="store_true", default=False)
+
     args = parser.parse_args()
     if not os.environ.get('GITHUB_KEY'):
         print("No github key set. Will not post a message!")
@@ -75,16 +77,29 @@ if CIRCLE_PULL_REQUEST will try to get issue id from last commit comment
     mode = "Dev"
     if base_name.startswith('demisto/'):
         mode = "Production"
-    message = (
-        "# Docker Image Ready - {}\n\n".format(mode) +
-        "Docker automatic build at CircleCI has deployed your docker image: {}\n".format(args.docker_image) +
-        "It is available now on docker hub at: https://hub.docker.com/r/{}/tags\n".format(base_name) +
-        "Get started by pulling the image:\n" +
-        "```\n" +
-        "docker pull {}\n".format(args.docker_image) +
-        "```\n" +
-        docker_info
-    )
+    
+    title = f"# Docker Image Ready - {mode}\n\n"
+    if not args.is_contribution:
+        message = (
+            title +
+            "Docker automatic build at CircleCI has deployed your docker image: {}\n".format(args.docker_image) +
+            "It is available now on docker hub at: https://hub.docker.com/r/{}/tags\n".format(base_name) +
+            "Get started by pulling the image:\n" +
+            "```\n" +
+            "docker pull {}\n".format(args.docker_image) +
+            "```\n" +
+            docker_info
+        )
+    elif os.environ.get('CIRCLE_WORKFLOW_JOB_ID'):
+        circleci_docker_image_url = f"https://output.circle-artifacts.com/output/job/${os.environ.get('CIRCLE_WORKFLOW_JOB_ID')}/artifacts/0/docker_images/{args.docker_image}.tar.gz"
+        message = (
+            title +
+            "Docker automatic build at CircleCI has completed. The Docker image is available as an artifact of the build.\n\n" +
+            "To download it and load it locally run the following command:\n" + 
+            "```bash\n" +
+            f"curl -L '{circleci_docker_image_url}' | gunzip | docker load\n" + 
+            "```\n"
+        )
     print("Going to post comment:\n\n{}".format(message))
     res = requests.post(post_url, json={"body": message}, auth=(os.environ['GITHUB_KEY'], 'x-oauth-basic'))
     try:
