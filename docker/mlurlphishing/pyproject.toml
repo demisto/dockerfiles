@@ -7,6 +7,14 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "~3.9"
+requests = "*"
+python-dateutil = "*"
+dateparser = "*"
+pyyaml = "*"
+funcy = "*"
+tldextract = "*"
+more-itertools = "*"
+defusedxml = "*"
 opencv-python = "==4.5.5.64"  # using previous version until fixed https://github.com/opencv/opencv-python/issues/676
 scikit-learn = "==1.0.2"   # cannot upgrade, the newer versions are not BC with the training model. 
 pandas = "*"
