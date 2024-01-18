@@ -91,7 +91,7 @@ if CIRCLE_PULL_REQUEST will try to get issue id from last commit comment
             docker_info
         )
     elif os.environ.get('CIRCLE_WORKFLOW_JOB_ID'):
-        circleci_docker_image_url = f"https://output.circle-artifacts.com/output/job/${os.environ.get('CIRCLE_WORKFLOW_JOB_ID')}/artifacts/0/docker_images/{args.docker_image}.tar.gz"
+        circleci_docker_image_url = f"https://output.circle-artifacts.com/output/job/{os.environ.get('CIRCLE_WORKFLOW_JOB_ID')}/artifacts/0/docker_images/{args.docker_image}.tar.gz"
         message = (
             title +
             "Docker automatic build at CircleCI has completed. The Docker image is available as an artifact of the build.\n\n" +
