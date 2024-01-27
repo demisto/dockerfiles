@@ -8,10 +8,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   python3-dev \
   libzbar0 \
   zbar-tools \
+  libzbar-dev \
 && pip install --no-cache-dir -r requirements.txt \
 && apt-get purge -y --auto-remove \
   gcc \
   python3-dev \
   libzbar0 \
   zbar-tools \
+  libzbar-dev \
 && rm -rf /var/lib/apt/lists/*
