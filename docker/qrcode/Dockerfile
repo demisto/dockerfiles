@@ -17,3 +17,4 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   zbar-tools \
   libzbar-dev \
 && rm -rf /var/lib/apt/lists/*
+
