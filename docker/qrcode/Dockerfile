@@ -7,8 +7,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   python3-dev \
   libzbar0 \
   build-essential \
-  zbar-tools \
-  libzbar-dev \
   pipenv \
 && pipenv install --system \
 && apt-get purge -y --auto-remove \
