@@ -1,5 +1,5 @@
 
-FROM demisto/python3-deb:3.10.13.85666
+FROM demisto/opencv:1.0.0.85821
 COPY Pipfile.lock .
 COPY Pipfile .
 RUN apt-get update && apt-get install -y --no-install-recommends \
