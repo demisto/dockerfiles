@@ -1,5 +1,5 @@
 
-FROM demisto/powershell-ubuntu:7.3.0.49844
+FROM demisto/powershell-deb:7.3.0.49844
 
 #
 # NOTE: THIS DOCKERFILE IS GENERATED VIA "apply-templates.sh"
@@ -155,7 +155,7 @@ COPY requirements.txt .
 #Install tools for building binary deps (will be reomved later on)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
-    python-dev \
+    python3-dev \
     build-essential \
     wget \
     git \
@@ -170,7 +170,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 && pip install --no-cache-dir -r requirements.txt \
 && apt-get purge -y --auto-remove \
   gcc \
-  python-dev \
+  python3-dev \
   build-essential \
   git \
   wget \
@@ -180,19 +180,3 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   libssl-dev \
   libkrb5-dev \
 && rm -rf /var/lib/apt/lists/*
-
-# Handling the issue described here https://askubuntu.com/questions/1233186/ubuntu-20-04-how-to-set-lower-ssl-security-level 
-# by using TLS v1 to support old exchange servers
-RUN echo 'openssl_conf = default_conf' | cat - /etc/ssl/openssl.cnf > temp-ssl.cnf \
-&& mv temp-ssl.cnf /etc/ssl/openssl.cnf \
-&& echo "\n\
-[default_conf]\n\ 
-ssl_conf = ssl_sect\n\ 
-\n\
-[ssl_sect]\n\
-system_default = system_default_sect\n\
-\n\
-[system_default_sect]\n\
-MinProtocol = TLSv1\n\
-CipherString = DEFAULT@SECLEVEL=1\n\
-" >> /etc/ssl/openssl.cnf

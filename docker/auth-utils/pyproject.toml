@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "dockerfiles"
+version = "1.0.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "~3.10"
+pydantic = "*"
+requests-oauthlib = "*"
+pyjwt = {extras = ["crypto"],version = "*"}
+oauthlib = {extras = ["signedtoken"], version = "*"}
+edgegrid-python = "*"
+pem = "*"
+azure-kusto-data = "*"
+pywinrm = {extras = ["kerberos"],version = "*"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

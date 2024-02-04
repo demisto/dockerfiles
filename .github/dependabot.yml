@@ -54,10 +54,6 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: pip
-    directory: /docker/hashicorp
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
     directory: /docker/powershell-core
     schedule:
       interval: daily
@@ -86,10 +82,6 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: pip
-    directory: /docker/iputils
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
     directory: /docker/zeep
     schedule:
       interval: daily
@@ -107,10 +99,6 @@ updates:
       interval: daily
   - package-ecosystem: pip
     directory: /docker/python3-deb
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/cloaken
     schedule:
       interval: daily
   - package-ecosystem: pip
@@ -134,23 +122,11 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: pip
-    directory: /docker/uptycs
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
     directory: /docker/nltk
     schedule:
       interval: daily
   - package-ecosystem: pip
     directory: /docker/teams
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/pyjwt3
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/oauthlib
     schedule:
       interval: daily
   - package-ecosystem: pip
@@ -174,10 +150,6 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: pip
-    directory: /docker/nmap
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
     directory: /docker/devo
     schedule:
       interval: daily
@@ -198,10 +170,6 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: pip
-    directory: /docker/winrm
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
     directory: /docker/dxl
     schedule:
       interval: daily
@@ -211,10 +179,6 @@ updates:
       interval: daily
   - package-ecosystem: pip
     directory: /docker/google-cloud-translate
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/akamai
     schedule:
       interval: daily
   - package-ecosystem: pip
@@ -298,10 +262,6 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: pip
-    directory: /docker/dnspython
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
     directory: /docker/py3ews
     schedule:
       interval: daily
@@ -331,6 +291,8 @@ updates:
       interval: daily
   - package-ecosystem: pip
     directory: /docker/ntlm
+    ignore:
+      - dependency-name: "requests-ntlm"
     schedule:
       interval: daily
   - package-ecosystem: pip
@@ -362,10 +324,6 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: pip
-    directory: /docker/ssl-analyze
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
     directory: /docker/xslxwriter
     schedule:
       interval: daily
@@ -381,6 +339,8 @@ updates:
     directory: /docker/ml
     schedule:
       interval: daily
+    ignore:
+      - dependency-name: scikit-learn
   - package-ecosystem: pip
     directory: /docker/fastapi
     schedule:
@@ -452,10 +412,6 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: pip
-    directory: /docker/opencti-v4
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
     directory: /docker/xgboost
     schedule:
       interval: daily
@@ -497,6 +453,9 @@ updates:
       interval: daily
   - package-ecosystem: pip
     directory: /docker/py-ews
+    ignore:
+      - dependency-name: "requests-ntlm"
+      - dependency-name: "exchangelib"
     schedule:
       interval: daily
   - package-ecosystem: pip
@@ -552,14 +511,6 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: pip
-    directory: /docker/azure-kusto-data
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/confluent-kafka
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
     directory: /docker/syslog
     schedule:
       interval: daily
@@ -575,6 +526,8 @@ updates:
     directory: /docker/mlurlphishing
     schedule:
       interval: daily
+    ignore:
+      - dependency-name: scikit-learn
   - package-ecosystem: pip
     directory: /docker/py3-tools
     schedule:
@@ -616,14 +569,6 @@ updates:
     schedule:
      interval: daily
   - package-ecosystem: pip
-    directory: /docker/pydantic-jwt3
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
-    directory: /docker/duoadmin3
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
     directory: /docker/pycountry
     schedule:
      interval: daily
@@ -644,19 +589,11 @@ updates:
     schedule:
      interval: daily
   - package-ecosystem: pip
-    directory: /docker/joe-security
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
     directory: /docker/armorblox
     schedule:
       interval: daily
   - package-ecosystem: pip
     directory: /docker/keeper-ksm
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
-    directory: /docker/cymruwhois
     schedule:
      interval: daily
   - package-ecosystem: pip
@@ -671,6 +608,9 @@ updates:
     directory: /docker/panw-iot
     schedule:
       interval: daily
+    ignore:
+      - dependency-name: "pyasn1"
+      # Ignore all updates for pyasn1
   - package-ecosystem: pip
     directory: /docker/illumio
     schedule:
@@ -712,14 +652,32 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: pip
-    directory: /docker/fp-smc
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/websockets
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
     directory: /docker/ldap
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/auth-utils
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/cyjax
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/elasticsearch
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/confluent-kafka
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/pytmv1
+    ignore:
+      - dependency-name: "pytmv1"
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/qrcode
     schedule:
      interval: daily

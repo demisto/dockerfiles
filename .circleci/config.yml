@@ -1,7 +1,7 @@
 jobs:
   docker_build:
     docker:
-      - image: devdemisto/dockerbuild:1.0.0.43365
+      - image: devdemisto/dockerbuild:1.0.0.84796
     steps:
       - checkout
       - run:
@@ -10,6 +10,12 @@ jobs:
       - run:
           name: Validate Dependabot Config
           command: ./docker/verify_dependabot.sh
+      - run:
+          name: Validate deprecated_images.json
+          command: python ./utils/validate_deprecated_dockers_json.py --exclude python --docker_dir docker --deprecated_path docker/deprecated_images.json
+      - run:
+          name: Run Pytest
+          command: export PYTHONPATH=$(pwd) && pytest
       - setup_remote_docker:
           version: 20.10.17
       - add_ssh_keys:
@@ -23,6 +29,7 @@ jobs:
       - store_artifacts:
           path: artifacts
           destination: docker_images
+version: 2.1
 workflows:
   version: 2
   full_build:

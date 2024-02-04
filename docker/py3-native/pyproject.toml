@@ -6,7 +6,7 @@ authors = ["Your Name <you@example.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "~3.10"
 opensearch_dsl = "*"
 aiohttp = "*"
 python-magic = "*"
@@ -47,11 +47,10 @@ pyjwt = {extras = ["crypto"],version = "*"}
 google-api-python-client = "*"
 exchangelib = "*"
 requests-oauthlib = "*"
-oauthlib = "*"
+oauthlib = {extras = ["signedtoken"], version = "*"}
 requests-ntlm = "*"
 oauth2client = "*"
 dill = "*"
-eli5 = "*"
 packaging = "*"
 rtfde = "*"
 webdriver-manager = "*"
@@ -69,6 +68,16 @@ python-whois = "*"
 ipwhois = "*"
 edgegrid-python = "*"
 tldextract = "*"
+requests = {extras = ["socks"],version = "*"}
+netaddr = "*"
+python-libnmap = "*"
+websockets = "*"
+dnspython = "*"
+pydantic = ">=2.0.0"
+pem = "*"
+azure-kusto-data = "*"
+pywinrm = {extras = ["kerberos"],version = "*"}
+pychrome = "*"
 
 [build-system]
 requires = ["poetry-core"]

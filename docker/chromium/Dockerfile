@@ -1,8 +1,9 @@
-# Last modified: 2023-08-28T14:19:57.672275+00:00
-FROM demisto/python3-deb:3.10.13.72520
 
+# Last modified: 2024-02-02T00:48:28.654750+00:00
+FROM demisto/python3-deb:3.10.13.86718
 
 COPY requirements.txt .
+
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
   python3-dev \
@@ -19,7 +20,13 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
 && apt-get purge -y --auto-remove \
   python3-dev \
   zlib1g-dev \
-&& rm -rf /var/lib/apt/lists/*
+&& rm -rf /var/lib/apt/lists/* \
+&& touch /var/chrome_headless.log \
+&& chmod 777 /var/chrome_headless.log \
+&& touch /var/port.txt \
+&& chmod 777 /var/port.txt \
+&& touch /var/rasterizations_counter.txt \
+&& chmod 777 /var/rasterizations_counter.txt
 
 # Based on instructions at: https://tecadmin.net/setup-selenium-with-chromedriver-on-debian/
 # Will install the latest version available from the chrome repo.
@@ -29,7 +36,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
 COPY download_chromedriver.sh .
 
 # Deps needed by google-chrome
-RUN apt-get update && apt-get -t bookworm-backports install -y --no-install-recommends \
+RUN apt-get update && apt-get -t bullseye-backports install -y --no-install-recommends \
   jq \
   gnupg2 \
   libgtk-3-0 \

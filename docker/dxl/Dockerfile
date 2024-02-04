@@ -1,5 +1,5 @@
-# Last modified: 2023-08-27T10:22:32.865722+00:00
-FROM python:3.9.18-alpine3.18
+# Last modified: 2024-01-28T00:13:45.741146+00:00
+FROM python:3.9.18-alpine3.19
 
 # Upgrade all packages to latest
 RUN apk --update --no-cache upgrade
