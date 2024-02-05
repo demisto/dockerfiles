@@ -3,6 +3,7 @@ import psycopg2
 import pyodbc
 import psycopg2
 import cx_Oracle
+import teradatasqlalchemy
 
 assert 'FreeTDS' in pyodbc.drivers()
 assert 'ODBC Driver 18 for SQL Server' in pyodbc.drivers(), pyodbc.drivers()
@@ -21,5 +22,8 @@ try:
     engine.execute('select 1 as [Result]')
 except Exception as ex:
     assert "Can't open lib" not in str(ex), "Failed because of missing lib: " + str(ex)
+
+# teradata test: raises sqlalchemy.exc.NoSuchModuleError if the plugin is not installed
+eng = sqlalchemy.create_engine('teradatasql://guest:foo@bar') 
 
 print("All is good. All imported successfully")
