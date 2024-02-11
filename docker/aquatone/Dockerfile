@@ -1,5 +1,5 @@
-# Last modified: 2024-01-12T00:49:06.893261+00:00
-FROM demisto/python3-deb:3.10.13.84933
+# Last modified: 2024-02-08T00:48:30.794291+00:00
+FROM demisto/python3-deb:3.10.13.87157
 
 RUN apt-get update \
 && apt-get install -y --no-install-recommends \
