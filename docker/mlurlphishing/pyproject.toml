@@ -20,8 +20,8 @@ scikit-learn = "==1.3.0"   # cannot upgrade, the newer versions are not BC with 
 pandas = "*"
 beautifulsoup4 = "*"
 dill = "==0.3.4"
-catboost = "==1.2.2"
-
+catboost = "*"
+pillow == "10.0.1"  # cannot upgrade, the newer versions needs new license.
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
