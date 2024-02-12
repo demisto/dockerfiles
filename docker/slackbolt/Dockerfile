@@ -1,5 +1,5 @@
 
-FROM demisto/python3:3.10.13.86272
+FROM demisto/demisto-sdk:1.26.2.87554
 
 COPY requirements.txt .
 
