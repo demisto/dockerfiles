@@ -21,7 +21,7 @@ pandas = "*"
 beautifulsoup4 = "*"
 dill = "*"
 catboost = "*"
-pillow = "10.0.1"  # cannot upgrade, the newer versions needs new license.
+pillow = "==10.0.1"  # cannot upgrade, the newer versions needs new license.
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
