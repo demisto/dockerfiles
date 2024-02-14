@@ -454,13 +454,13 @@ files = [
 
 [[package]]
 name = "pymisp"
-version = "2.4.184.2"
+version = "2.4.184.3"
 description = "Python API for MISP."
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "pymisp-2.4.184.2-py3-none-any.whl", hash = "sha256:4e6d4eb00e8943a28fe5acf415421e72420e3107d2d600a3eefba39b64320cc7"},
-    {file = "pymisp-2.4.184.2.tar.gz", hash = "sha256:f85341b903cd32aca89d44f29522d0c02ee3d8404be0336c1b2cd9ca299af80a"},
+    {file = "pymisp-2.4.184.3-py3-none-any.whl", hash = "sha256:2a38fa2b7b90d1b75f1d8a25b998a3eae05c6de14c8093e4563f677478fefe91"},
+    {file = "pymisp-2.4.184.3.tar.gz", hash = "sha256:9aad64fca479a4fc18f0922e0b80d095e2857e9f2ab96bfb5d65b1e1d1959c73"},
 ]
 
 [package.dependencies]
@@ -474,11 +474,11 @@ RTFDE = {version = ">=0.1.1,<0.2.0", optional = true, markers = "extra == \"emai
 
 [package.extras]
 brotli = ["urllib3[brotli]"]
-docs = ["Sphinx (<7.2)", "Sphinx (>=7.2,<8.0)", "recommonmark (>=0.7.1,<0.8.0)", "sphinx-autodoc-typehints (>=1.25.3,<2.0.0)"]
+docs = ["Sphinx (<7.2)", "Sphinx (>=7.2,<8.0)", "recommonmark (>=0.7.1,<0.8.0)", "sphinx-autodoc-typehints (>=2.0.0,<3.0.0)"]
 email = ["RTFDE (>=0.1.1,<0.2.0)", "extract_msg (>=0.47.0,<0.48.0)", "oletools (>=0.60.1,<0.61.0)"]
-fileobjects = ["lief (>=0.14,<0.15)", "pydeep2 (>=0.5.1,<0.6.0)", "python-magic (>=0.4.27,<0.5.0)"]
+fileobjects = ["lief (>=0.14.1,<0.15.0)", "pydeep2 (>=0.5.1,<0.6.0)", "python-magic (>=0.4.27,<0.5.0)"]
 openioc = ["beautifulsoup4 (>=4.12.3,<5.0.0)"]
-pdfexport = ["reportlab (>=4.0.9,<5.0.0)"]
+pdfexport = ["reportlab (>=4.1.0,<5.0.0)"]
 url = ["pyfaup (>=1.2,<2.0)"]
 virustotal = ["validators (>=0.22.0,<0.23.0)"]
 
