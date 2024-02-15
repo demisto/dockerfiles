@@ -422,10 +422,10 @@ files = [
 
 [package.dependencies]
 numpy = [
+    {version = ">=1.21.2", markers = "python_version >= \"3.10\" or python_version >= \"3.6\" and platform_system == \"Darwin\" and platform_machine == \"arm64\""},
     {version = ">=1.19.3", markers = "python_version >= \"3.6\" and platform_system == \"Linux\" and platform_machine == \"aarch64\" or python_version >= \"3.9\""},
     {version = ">=1.14.5", markers = "python_version >= \"3.7\""},
     {version = ">=1.17.3", markers = "python_version >= \"3.8\""},
-    {version = ">=1.21.2", markers = "python_version >= \"3.6\" and platform_system == \"Darwin\" and platform_machine == \"arm64\""},
 ]
 
 [[package]]
@@ -479,11 +479,7 @@ files = [
 ]
 
 [package.dependencies]
-numpy = [
-    {version = ">=1.17.3", markers = "platform_machine != \"aarch64\" and platform_machine != \"arm64\" and python_version < \"3.10\""},
-    {version = ">=1.19.2", markers = "platform_machine == \"aarch64\" and python_version < \"3.10\""},
-    {version = ">=1.20.0", markers = "platform_machine == \"arm64\" and python_version < \"3.10\""},
-]
+numpy = {version = ">=1.21.0", markers = "python_version >= \"3.10\""}
 python-dateutil = ">=2.7.3"
 pytz = ">=2017.3"
 
@@ -955,5 +951,5 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 
 [metadata]
 lock-version = "2.0"
-python-versions = "~3.9"
-content-hash = "4944577d365a95e7b29963f5a80062cd619f2d05f34ce216532aa14f17de6e6b"
+python-versions = "~3.10"
+content-hash = "7349f73c05ee4ea9897e358d357a8cca76f10bf52809e2a53b064e41433f51cd"
