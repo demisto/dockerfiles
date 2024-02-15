@@ -254,17 +254,17 @@ lxml = ["lxml"]
 
 [[package]]
 name = "boto3"
-version = "1.34.40"
+version = "1.34.42"
 description = "The AWS SDK for Python"
 optional = false
 python-versions = ">= 3.8"
 files = [
-    {file = "boto3-1.34.40-py3-none-any.whl", hash = "sha256:49eb215e4142d441e26eedaf5d0b43065200f0849d82c904bc9a62d1328016cd"},
-    {file = "boto3-1.34.40.tar.gz", hash = "sha256:81d026ed8c8305b880c71f9f287f9b745b52bd358a91cfc133844c907db4d7ee"},
+    {file = "boto3-1.34.42-py3-none-any.whl", hash = "sha256:5069b2c647c73c8428378e88b32bd23f568001f897a6f01179fae25de72a7ca6"},
+    {file = "boto3-1.34.42.tar.gz", hash = "sha256:2ed136f9cf79e783e12424db23e970d1c50e65a8d7a9077efa71cbf8496fb7a3"},
 ]
 
 [package.dependencies]
-botocore = ">=1.34.40,<1.35.0"
+botocore = ">=1.34.42,<1.35.0"
 jmespath = ">=0.7.1,<2.0.0"
 s3transfer = ">=0.10.0,<0.11.0"
 
@@ -273,13 +273,13 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.34.40"
+version = "1.34.42"
 description = "Low-level, data-driven core of boto 3."
 optional = false
 python-versions = ">= 3.8"
 files = [
-    {file = "botocore-1.34.40-py3-none-any.whl", hash = "sha256:a3edd774653a61a1b211e4ea88cdb1c2655ffcc7660ba77b41a4027b097d145d"},
-    {file = "botocore-1.34.40.tar.gz", hash = "sha256:cb794bdb5b3d41845749a182ec93cb1453560e52b97ae0ab43ace81deb011f6d"},
+    {file = "botocore-1.34.42-py3-none-any.whl", hash = "sha256:93755c3ede4bd9f6180b3118f6b607acca8b633fd2668226794a543ce79a2434"},
+    {file = "botocore-1.34.42.tar.gz", hash = "sha256:cf4fad50d09686f03e44418fcae9dd24369658daa556357cedc0790cfcd6fdac"},
 ]
 
 [package.dependencies]
@@ -923,13 +923,13 @@ grpcio-gcp = ["grpcio-gcp (>=0.2.2,<1.0.dev0)"]
 
 [[package]]
 name = "google-api-python-client"
-version = "2.117.0"
+version = "2.118.0"
 description = "Google API Client Library for Python"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "google-api-python-client-2.117.0.tar.gz", hash = "sha256:b38cd1477ee3c341a0d2f7427326499b416f36c44e9b20d1da229df8be0c596e"},
-    {file = "google_api_python_client-2.117.0-py2.py3-none-any.whl", hash = "sha256:bd6d393d0eaa7ea1fa13aefb44be787d1ebdc068ab8255f1c3f1d8b486f46afd"},
+    {file = "google-api-python-client-2.118.0.tar.gz", hash = "sha256:ebf4927a3f5184096647be8f705d090e7f06d48ad82b0fa431a2fe80c2cbe182"},
+    {file = "google_api_python_client-2.118.0-py2.py3-none-any.whl", hash = "sha256:9d83b178496b180e058fd206ebfb70ea1afab49f235dd326f557513f56f496d5"},
 ]
 
 [package.dependencies]
@@ -1467,14 +1467,17 @@ PyOpenSSL = "*"
 
 [[package]]
 name = "netaddr"
-version = "1.0.0"
+version = "1.1.0"
 description = "A network address manipulation library for Python"
 optional = false
-python-versions = "*"
+python-versions = ">=3.7"
 files = [
-    {file = "netaddr-1.0.0-py3-none-any.whl", hash = "sha256:0dbf1263166c8daec9a6c990a9ae32804657963a1bba1387a755a4edf5ef93bc"},
-    {file = "netaddr-1.0.0.tar.gz", hash = "sha256:eb046b55354e7a5bf801c04902ae923bd699190242d89b099e896f9b2724b4d3"},
+    {file = "netaddr-1.1.0-py3-none-any.whl", hash = "sha256:d542c37909f1624665ec7f59ea2e388a20eb678188f1b0c4cb50fdd600f89264"},
+    {file = "netaddr-1.1.0.tar.gz", hash = "sha256:eabeba62193525757ed3ab4aacc4ab8089f84e57059fd41fde58df95c128a26d"},
 ]
+
+[package.extras]
+shell = ["ipython"]
 
 [[package]]
 name = "networkx"
