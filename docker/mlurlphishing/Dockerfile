@@ -1,4 +1,4 @@
-FROM python:3.9.18-slim-bullseye
+FROM python:3.10.13-slim-bullseye
 
 RUN echo 'deb http://deb.debian.org/debian bullseye-backports main' >> /etc/apt/sources.list
 
