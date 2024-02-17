@@ -61,16 +61,16 @@ RUN pdftoppm -v
 # RUN wget https://poppler.freedesktop.org/poppler-24.02.0.tar.xz --no-check-certificate -v
 RUN curl -k https://poppler.freedesktop.org/poppler-24.02.0.tar.xz --output poppler-24.02.0.tar.xz
 RUN apt-get update
-RUN apt-get install xz-utils -v
+RUN apt-get install -v -y xz-utils
 RUN tar -xf ./poppler-24.02.0.tar.xz
 RUN cd poppler-24.02.0
 RUN mkdir -p build
 RUN cd build
 RUN git clone git://git.freedesktop.org/git/poppler/test
-RUN apt-get install libfreetype-dev libfontconfig-dev libboost-dev libpng-dev zlib1g-dev liblcms2-dev libcurl4 libcurl4-gnutls-dev
-RUN apt-get install libjpeg-dev libcairo-dev libopenjp2-7-dev libtiff-dev libcurl4-gnutls-dev libnss3-dev
-RUN apt-get install build-essential
-RUN apt-get install libnss3-dev libgpgmepp-dev qtbase5-dev libcairo2-dev libboost-dev
+RUN apt-get install -v -y libfreetype-dev libfontconfig-dev libboost-dev libpng-dev zlib1g-dev liblcms2-dev libcurl4 libcurl4-gnutls-dev
+RUN apt-get install -v -y libjpeg-dev libcairo-dev libopenjp2-7-dev libtiff-dev libcurl4-gnutls-dev libnss3-dev
+RUN apt-get install -v -y build-essential
+RUN apt-get install -v -y libnss3-dev libgpgmepp-dev qtbase5-dev libcairo2-dev libboost-dev
 RUN cmake -DCMAKE_INSTALL_MANDIR:PATH=/usr/local/share/man -DENABLE_GPGME=OFF ..
 RUN cd /poppler-24.02.0
 RUN make install
