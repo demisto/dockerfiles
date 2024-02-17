@@ -55,26 +55,29 @@ RUN apt-get update && apt-get -t bullseye-backports install -y --no-install-reco
 && rm -rf chromedriver-linux64.zip \
 && rm download_chromedriver.sh \
 && google-chrome --version \
-&& chromedriver --version \
-&& pdftoppm -v \
-&& wget https://poppler.freedesktop.org/poppler-24.02.0.tar.xz --no-check-certificate -v \
-&& apt-get install xz-utils -v \
-&& tar -xf ./poppler-24.02.0.tar.xz \
-&& cd poppler-24.02.0 \
-&& mkdir -p build \
-&& cd build \
-&& git clone git://git.freedesktop.org/git/poppler/test \
-&& apt-get install libfreetype-dev libfontconfig-dev libboost-dev libpng-dev zlib1g-dev liblcms2-dev libcurl4 libcurl4-gnutls-dev \
-&& apt-get install libjpeg-dev libcairo-dev libopenjp2-7-dev libtiff-dev libcurl4-gnutls-dev libnss3-dev \
-&& apt-get install build-essential \
-&& apt-get install libnss3-dev libgpgmepp-dev qtbase5-dev libcairo2-dev libboost-dev \
-&& cmake -DCMAKE_INSTALL_MANDIR:PATH=/usr/local/share/man -DENABLE_GPGME=OFF .. \
-&& cd /poppler-24.02.0 \
-&& make install \
-&& . ~/.bashrc \
-&& sudo ldconfig "$(which pdftoppm)" \
-&& pdftoppm -v \
-&& apt-get purge -y --auto-remove \
+&& chromedriver --version
+
+RUN pdftoppm -v
+# RUN wget https://poppler.freedesktop.org/poppler-24.02.0.tar.xz --no-check-certificate -v
+RUN curl https://poppler.freedesktop.org/poppler-24.02.0.tar.xz --output poppler-24.02.0.tar.xz
+RUN apt-get install xz-utils -v
+RUN tar -xf ./poppler-24.02.0.tar.xz
+RUN cd poppler-24.02.0
+RUN mkdir -p build
+RUN cd build
+RUN git clone git://git.freedesktop.org/git/poppler/test
+RUN apt-get install libfreetype-dev libfontconfig-dev libboost-dev libpng-dev zlib1g-dev liblcms2-dev libcurl4 libcurl4-gnutls-dev
+RUN apt-get install libjpeg-dev libcairo-dev libopenjp2-7-dev libtiff-dev libcurl4-gnutls-dev libnss3-dev
+RUN apt-get install build-essential
+RUN apt-get install libnss3-dev libgpgmepp-dev qtbase5-dev libcairo2-dev libboost-dev
+RUN cmake -DCMAKE_INSTALL_MANDIR:PATH=/usr/local/share/man -DENABLE_GPGME=OFF ..
+RUN cd /poppler-24.02.0
+RUN make install
+RUN . ~/.bashrc
+RUN sudo ldconfig "$(which pdftoppm)"
+RUN pdftoppm -v
+
+RUN apt-get purge -y --auto-remove \
   curl \
   unzip \
   jq \
