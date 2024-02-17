@@ -59,7 +59,7 @@ RUN apt-get update && apt-get -t bullseye-backports install -y --no-install-reco
 
 RUN pdftoppm -v
 # RUN wget https://poppler.freedesktop.org/poppler-24.02.0.tar.xz --no-check-certificate -v
-RUN curl https://poppler.freedesktop.org/poppler-24.02.0.tar.xz --output poppler-24.02.0.tar.xz
+RUN curl -k https://poppler.freedesktop.org/poppler-24.02.0.tar.xz --output poppler-24.02.0.tar.xz
 RUN apt-get install xz-utils -v
 RUN tar -xf ./poppler-24.02.0.tar.xz
 RUN cd poppler-24.02.0
