@@ -80,7 +80,7 @@ RUN tar -xf ./poppler-24.02.0.tar.xz \
 && echo "making install" \
 && make install
 RUN . ~/.bashrc
-RUN sudo ldconfig "$(which pdftoppm)"
+RUN ldconfig "$(which pdftoppm)"
 RUN pdftoppm -v
 
 # TODO: Clean all poppler related installations and build directories
