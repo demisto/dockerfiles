@@ -62,7 +62,8 @@ RUN ls -lt
 # RUN wget https://poppler.freedesktop.org/poppler-24.02.0.tar.xz --no-check-certificate -v
 RUN curl -k https://poppler.freedesktop.org/poppler-24.02.0.tar.xz --output poppler-24.02.0.tar.xz
 RUN ls -lt
-RUN apt-get update && apt-get install -v -y xz-utils
+RUN apt-get update
+RUN apt-get install xz-utils
 RUN tar -xf ./poppler-24.02.0.tar.xz
 RUN cd poppler-24.02.0
 RUN mkdir -p build
