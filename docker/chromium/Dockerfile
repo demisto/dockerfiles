@@ -4,6 +4,7 @@ FROM demisto/python3-deb:3.10.13.87666
 
 COPY requirements.txt .
 
+ARG POPPLER_VERSION=24.02.0
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
   python3-dev \
@@ -63,10 +64,10 @@ RUN apt-get install -y libjpeg-dev libcairo-dev libopenjp2-7-dev libtiff-dev lib
 RUN apt-get install -y build-essential
 RUN apt-get install -y libgpgmepp-dev qtbase5-dev libcairo2-dev
 RUN apt-get install -y xz-utils cmake
-RUN wget https://poppler.freedesktop.org/poppler-24.02.0.tar.xz --no-check-certificate -v
-RUN tar -xf ./poppler-24.02.0.tar.xz \
+RUN wget https://poppler.freedesktop.org/poppler-${POPPLER_VERSION}.tar.xz --no-check-certificate -v
+RUN tar -xf ./poppler-${POPPLER_VERSION}.tar.xz \
 && pwd \
-&& cd poppler-24.02.0 \
+&& cd poppler-${POPPLER_VERSION} \
 && pwd \
 && mkdir -p build \
 && cd build \
