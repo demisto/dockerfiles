@@ -65,13 +65,18 @@ RUN apt-get install -y libgpgmepp-dev qtbase5-dev libcairo2-dev
 RUN apt-get install -y xz-utils cmake
 RUN wget https://poppler.freedesktop.org/poppler-24.02.0.tar.xz --no-check-certificate -v
 RUN tar -xf ./poppler-24.02.0.tar.xz \
+&& pwd \
 && cd poppler-24.02.0 \
+&& pwd \
 && mkdir -p build \
 && cd build \
+&& pwd \
 && apt-get install -y git \
 && git clone git://git.freedesktop.org/git/poppler/test \
 && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DTESTDATADIR=$PWD/testfiles -DENABLE_QT6=OFF -DENABLE_UNSTABLE_API_ABI_HEADERS=ON -DENABLE_GPGME=OFF .. \
-&& cd .. \
+&& pwd \
+&& cd /build/poppler-24.02.0 \
+&& pwd \
 && make install
 RUN . ~/.bashrc
 RUN sudo ldconfig "$(which pdftoppm)"
