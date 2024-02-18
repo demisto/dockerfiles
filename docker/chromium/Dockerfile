@@ -76,6 +76,7 @@ RUN pdftoppm -v \
 && . ~/.bashrc \
 && ldconfig "$(which pdftoppm)" \
 && pdftoppm -v \
+&& cd ../.. \
 && rm poppler-24.02.0.tar.xz \
 && rm -rf poppler-24.02.0/
 
