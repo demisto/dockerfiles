@@ -71,7 +71,7 @@ RUN tar -xf ./poppler-24.02.0.tar.xz \
 && apt-get install -y git \
 && git clone git://git.freedesktop.org/git/poppler/test \
 && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DTESTDATADIR=$PWD/testfiles -DENABLE_QT6=OFF -DENABLE_UNSTABLE_API_ABI_HEADERS=ON -DENABLE_GPGME=OFF .. \
-&& cd /poppler-24.02.0 \
+&& cd .. \
 && make install
 RUN . ~/.bashrc
 RUN sudo ldconfig "$(which pdftoppm)"
