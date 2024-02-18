@@ -68,6 +68,7 @@ RUN tar -xf ./poppler-24.02.0.tar.xz
 RUN cd poppler-24.02.0
 RUN mkdir -p build
 RUN cd build
+RUN apt-get install -y git
 RUN git clone git://git.freedesktop.org/git/poppler/test
 RUN apt-get install -v -y libfreetype-dev libfontconfig-dev libboost-dev libpng-dev zlib1g-dev liblcms2-dev libcurl4 libcurl4-gnutls-dev
 RUN apt-get install -v -y libjpeg-dev libcairo-dev libopenjp2-7-dev libtiff-dev libcurl4-gnutls-dev libnss3-dev
