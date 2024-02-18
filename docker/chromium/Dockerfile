@@ -58,33 +58,26 @@ RUN apt-get update && apt-get -t bullseye-backports install -y --no-install-reco
 && google-chrome --version \
 && chromedriver --version
 
-RUN pdftoppm -v
-RUN apt-get install -y libfreetype-dev libfontconfig-dev libboost-dev libpng-dev zlib1g-dev liblcms2-dev libcurl4 libcurl4-gnutls-dev
-RUN apt-get install -y libjpeg-dev libcairo-dev libopenjp2-7-dev libtiff-dev libnss3-dev
-RUN apt-get install -y build-essential
-RUN apt-get install -y libgpgmepp-dev qtbase5-dev libcairo2-dev
-RUN apt-get install -y xz-utils cmake
-RUN wget https://poppler.freedesktop.org/poppler-${POPPLER_VERSION}.tar.xz --no-check-certificate -v
-RUN tar -xf ./poppler-${POPPLER_VERSION}.tar.xz \
-&& pwd \
+RUN pdftoppm -v \
+&& apt-get install -y libfreetype-dev libfontconfig-dev libboost-dev libpng-dev zlib1g-dev liblcms2-dev libcurl4 libcurl4-gnutls-dev \
+&& apt-get install -y libjpeg-dev libcairo-dev libopenjp2-7-dev libtiff-dev libnss3-dev \
+&& apt-get install -y build-essential \
+&& apt-get install -y libgpgmepp-dev qtbase5-dev libcairo2-dev \
+&& apt-get install -y xz-utils cmake \
+&& wget https://poppler.freedesktop.org/poppler-${POPPLER_VERSION}.tar.xz --no-check-certificate -v \
+&& tar -xf ./poppler-${POPPLER_VERSION}.tar.xz \
 && cd poppler-${POPPLER_VERSION} \
-&& pwd \
 && mkdir -p build \
 && cd build \
-&& pwd \
 && apt-get install -y git \
 && git clone git://git.freedesktop.org/git/poppler/test \
 && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DTESTDATADIR=$PWD/testfiles -DENABLE_QT6=OFF -DENABLE_UNSTABLE_API_ABI_HEADERS=ON -DENABLE_GPGME=OFF .. \
-&& echo "cmake finished" \
-&& pwd \
-&& ls -l \
-&& echo "making install" \
-&& make install
-RUN . ~/.bashrc
-RUN ldconfig "$(which pdftoppm)"
-RUN pdftoppm -v
-
-# TODO: Clean all poppler related installations and build directories
+&& make install \
+&& . ~/.bashrc \
+&& ldconfig "$(which pdftoppm)" \
+&& pdftoppm -v \
+&& rm poppler-24.02.0.tar.xz \
+&& rm -rf poppler-24.02.0/
 
 RUN apt-get purge -y --auto-remove \
   curl \
