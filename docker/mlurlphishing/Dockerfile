@@ -32,4 +32,7 @@ python3-dev \
 && apt-get purge -y --auto-remove \
   gcc \
   python3-dev \
+  libxrender-dev \
 && rm -rf /var/lib/apt/lists/*
+
+
