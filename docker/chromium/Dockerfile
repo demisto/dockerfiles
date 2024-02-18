@@ -58,13 +58,13 @@ RUN apt-get update && apt-get -t bullseye-backports install -y --no-install-reco
 && chromedriver --version
 
 RUN pdftoppm -v
-RUN apt-get install -y libfreetype-dev libfontconfig-dev libboost-dev libpng-dev zlib1g-dev liblcms2-dev libcurl4 libcurl4-gnutls-dev
-RUN apt-get install -y libjpeg-dev libcairo-dev libopenjp2-7-dev libtiff-dev libcurl4-gnutls-dev libnss3-dev
+RUN apt-get install -y libfreetype-dev libfontconfig-dev libboost-dev libpng-dev zlib1g-dev liblcms2-dev
+REM RUN apt-get install -y libcurl4 libcurl4-gnutls-dev
+RUN apt-get install -y libjpeg-dev libcairo-dev libopenjp2-7-dev libtiff-dev libnss3-dev
 RUN apt-get install -y build-essential
-RUN apt-get install -y libnss3-dev libgpgmepp-dev qtbase5-dev libcairo2-dev libboost-dev
+RUN apt-get install -y libgpgmepp-dev qtbase5-dev libcairo2-dev
 RUN apt-get install -y xz-utils cmake
 RUN wget https://poppler.freedesktop.org/poppler-24.02.0.tar.xz --no-check-certificate -v
-# RUN curl -k https://poppler.freedesktop.org/poppler-24.02.0.tar.xz --output poppler-24.02.0.tar.xz
 RUN tar -xf ./poppler-24.02.0.tar.xz \
 && cd poppler-24.02.0 \
 && mkdir -p build \
