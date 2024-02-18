@@ -70,11 +70,11 @@ RUN mkdir -p build
 RUN cd build
 RUN apt-get install -y git
 RUN git clone git://git.freedesktop.org/git/poppler/test
-RUN apt-get install -v -y libfreetype-dev libfontconfig-dev libboost-dev libpng-dev zlib1g-dev liblcms2-dev libcurl4 libcurl4-gnutls-dev
-RUN apt-get install -v -y libjpeg-dev libcairo-dev libopenjp2-7-dev libtiff-dev libcurl4-gnutls-dev libnss3-dev
-RUN apt-get install -v -y build-essential
-RUN apt-get install -v -y libnss3-dev libgpgmepp-dev qtbase5-dev libcairo2-dev libboost-dev
-RUN apt-get install -v -y cmake
+RUN apt-get install -y libfreetype-dev libfontconfig-dev libboost-dev libpng-dev zlib1g-dev liblcms2-dev libcurl4 libcurl4-gnutls-dev
+RUN apt-get install -y libjpeg-dev libcairo-dev libopenjp2-7-dev libtiff-dev libcurl4-gnutls-dev libnss3-dev
+RUN apt-get install -y build-essential
+RUN apt-get install -y libnss3-dev libgpgmepp-dev qtbase5-dev libcairo2-dev libboost-dev
+RUN apt-get install -y cmake
 RUN cmake -DCMAKE_INSTALL_MANDIR:PATH=/usr/local/share/man -DENABLE_GPGME=OFF ..
 RUN cd /poppler-24.02.0
 RUN make install
