@@ -77,9 +77,6 @@ RUN tar -xf ./poppler-24.02.0.tar.xz \
 && echo "cmake finished" \
 && pwd \
 && ls -l \
-&& cd .. \
-&& pwd \
-&& ls -l \
 && echo "making install" \
 && make install
 RUN . ~/.bashrc
