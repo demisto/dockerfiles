@@ -75,7 +75,8 @@ RUN apt-get install -y libjpeg-dev libcairo-dev libopenjp2-7-dev libtiff-dev lib
 RUN apt-get install -y build-essential
 RUN apt-get install -y libnss3-dev libgpgmepp-dev qtbase5-dev libcairo2-dev libboost-dev
 RUN apt-get install -y cmake
-RUN cmake -DCMAKE_INSTALL_MANDIR:PATH=/usr/local/share/man -DENABLE_GPGME=OFF ..
+# RUN cmake -DCMAKE_INSTALL_MANDIR:PATH=/usr/local/share/man -DENABLE_GPGME=OFF ..
+RUN cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DTESTDATADIR=$PWD/testfiles -DENABLE_QT6=OFF -DENABLE_UNSTABLE_API_ABI_HEADERS=ON ..
 RUN cd /poppler-24.02.0
 RUN make install
 RUN . ~/.bashrc
