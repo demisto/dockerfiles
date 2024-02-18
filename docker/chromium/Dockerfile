@@ -76,8 +76,11 @@ RUN tar -xf ./poppler-24.02.0.tar.xz \
 && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DTESTDATADIR=$PWD/testfiles -DENABLE_QT6=OFF -DENABLE_UNSTABLE_API_ABI_HEADERS=ON -DENABLE_GPGME=OFF .. \
 && echo "cmake finished" \
 && pwd \
+&& ls -l \
 && cd .. \
 && pwd \
+&& ls -l \
+&& echo "making install" \
 && make install
 RUN . ~/.bashrc
 RUN sudo ldconfig "$(which pdftoppm)"
