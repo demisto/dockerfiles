@@ -58,27 +58,22 @@ RUN apt-get update && apt-get -t bullseye-backports install -y --no-install-reco
 && chromedriver --version
 
 RUN pdftoppm -v
-RUN ls -lt
-# RUN wget https://poppler.freedesktop.org/poppler-24.02.0.tar.xz --no-check-certificate -v
-RUN curl -k https://poppler.freedesktop.org/poppler-24.02.0.tar.xz --output poppler-24.02.0.tar.xz
-RUN ls -lt
-RUN apt-get update
-RUN apt-get install xz-utils
-RUN tar -xf ./poppler-24.02.0.tar.xz
-RUN cd poppler-24.02.0
-RUN mkdir -p build
-RUN cd build
-RUN apt-get install -y git
-RUN git clone git://git.freedesktop.org/git/poppler/test
 RUN apt-get install -y libfreetype-dev libfontconfig-dev libboost-dev libpng-dev zlib1g-dev liblcms2-dev libcurl4 libcurl4-gnutls-dev
 RUN apt-get install -y libjpeg-dev libcairo-dev libopenjp2-7-dev libtiff-dev libcurl4-gnutls-dev libnss3-dev
 RUN apt-get install -y build-essential
 RUN apt-get install -y libnss3-dev libgpgmepp-dev qtbase5-dev libcairo2-dev libboost-dev
-RUN apt-get install -y cmake
-# RUN cmake -DCMAKE_INSTALL_MANDIR:PATH=/usr/local/share/man -DENABLE_GPGME=OFF ..
-RUN cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DTESTDATADIR=$PWD/testfiles -DENABLE_QT6=OFF -DENABLE_UNSTABLE_API_ABI_HEADERS=ON ..
-RUN cd /poppler-24.02.0
-RUN make install
+RUN apt-get install -y xz-utils cmake
+RUN wget https://poppler.freedesktop.org/poppler-24.02.0.tar.xz --no-check-certificate -v
+# RUN curl -k https://poppler.freedesktop.org/poppler-24.02.0.tar.xz --output poppler-24.02.0.tar.xz
+RUN tar -xf ./poppler-24.02.0.tar.xz \
+&& cd poppler-24.02.0 \
+&& mkdir -p build \
+&& cd build \
+&& apt-get install -y git \
+&& git clone git://git.freedesktop.org/git/poppler/test \
+&& cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DTESTDATADIR=$PWD/testfiles -DENABLE_QT6=OFF -DENABLE_UNSTABLE_API_ABI_HEADERS=ON .. \
+&& cd /poppler-24.02.0 \
+&& make install
 RUN . ~/.bashrc
 RUN sudo ldconfig "$(which pdftoppm)"
 RUN pdftoppm -v
