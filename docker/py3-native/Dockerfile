@@ -12,7 +12,6 @@ ARG ROCKY_BASE=rocky-base
 ARG ROCKY_RELEASE=rocky-release
 ARG ROCKY_DEVEL=rocky-devel
 ARG FEDORA_EPEL=fedora-epel
-ARG POPPLER_VERSION=24.02.0
 
 # handles chromium + tesseract
 # for tesseract - followed instructions from here: https://computingforgeeks.com/install-tesseract-ocr-on-rocky-almalinux/
