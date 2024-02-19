@@ -78,8 +78,8 @@ RUN pdftoppm -v \
 && ldconfig "$(which pdftoppm)" \
 && pdftoppm -v \
 && cd ../.. \
-&& rm poppler-24.02.0.tar.xz \
-&& rm -rf poppler-24.02.0/
+&& rm poppler-${POPPLER_VERSION}.tar.xz \
+&& rm -rf poppler-${POPPLER_VERSION}/
 
 RUN apt-get purge -y --auto-remove \
   curl \
