@@ -67,26 +67,6 @@ RUN dnf update --nodocs -y  \
     && dnf clean all \
     && rm -rf /var/cache/dnf
 
-# Install latest Poppler
-RUN dnf install -y libfreetype-dev libfontconfig-dev libboost-dev libpng-dev zlib1g-dev liblcms2-dev libcurl4 libcurl4-gnutls-dev \
-&& dnf install -y libjpeg-dev libcairo-dev libopenjp2-7-dev libtiff-dev libnss3-dev \
-&& dnf install -y build-essential \
-&& dnf install -y libgpgmepp-dev qtbase5-dev libcairo2-dev \
-&& dnf install -y xz-utils cmake \
-&& wget https://poppler.freedesktop.org/poppler-${POPPLER_VERSION}.tar.xz --no-check-certificate -v \
-&& tar -xf ./poppler-${POPPLER_VERSION}.tar.xz \
-&& cd poppler-${POPPLER_VERSION} \
-&& mkdir -p build \
-&& cd build \
-&& dnf install -y git \
-&& git clone git://git.freedesktop.org/git/poppler/test \
-&& cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DTESTDATADIR=$PWD/testfiles -DENABLE_QT6=OFF -DENABLE_UNSTABLE_API_ABI_HEADERS=ON -DENABLE_GPGME=OFF .. \
-&& make install \
-&& . ~/.bashrc \
-&& cd ../.. \
-&& rm poppler-24.02.0.tar.xz \
-&& rm -rf poppler-24.02.0/
-
 
 # handles os dependencies for: crypto + readpdf + parse-emails + docxpy + sklearn + pandas + ippysocks-py3 + oauthlib
 # unzip + py3ews + taxii2 + pan-os-python + slackv3 + google-api-py3 + boto3py3
