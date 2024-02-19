@@ -58,6 +58,7 @@ RUN apt-get update && apt-get -t bullseye-backports install -y --no-install-reco
 && google-chrome --version \
 && chromedriver --version
 
+# Install latest Poppler
 RUN pdftoppm -v \
 && apt-get install -y libfreetype-dev libfontconfig-dev libboost-dev libpng-dev zlib1g-dev liblcms2-dev libcurl4 libcurl4-gnutls-dev \
 && apt-get install -y libjpeg-dev libcairo-dev libopenjp2-7-dev libtiff-dev libnss3-dev \

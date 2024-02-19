@@ -12,6 +12,7 @@ ARG ROCKY_BASE=rocky-base
 ARG ROCKY_RELEASE=rocky-release
 ARG ROCKY_DEVEL=rocky-devel
 ARG FEDORA_EPEL=fedora-epel
+ARG POPPLER_VERSION=24.02.0
 
 # handles chromium + tesseract
 # for tesseract - followed instructions from here: https://computingforgeeks.com/install-tesseract-ocr-on-rocky-almalinux/
@@ -65,6 +66,29 @@ RUN dnf update --nodocs -y  \
     && dnf remove -y python3-devel gcc gcc-c++ make platform-python-pip jq unzip git make autoconf automake libtool libpng-devel libjpeg-devel libtiff-devel zlib-devel giflib-devel \
     && dnf clean all \
     && rm -rf /var/cache/dnf
+
+# Install latest Poppler
+RUN pdftoppm -v \
+&& apt-get install -y libfreetype-dev libfontconfig-dev libboost-dev libpng-dev zlib1g-dev liblcms2-dev libcurl4 libcurl4-gnutls-dev \
+&& apt-get install -y libjpeg-dev libcairo-dev libopenjp2-7-dev libtiff-dev libnss3-dev \
+&& apt-get install -y build-essential \
+&& apt-get install -y libgpgmepp-dev qtbase5-dev libcairo2-dev \
+&& apt-get install -y xz-utils cmake \
+&& wget https://poppler.freedesktop.org/poppler-${POPPLER_VERSION}.tar.xz --no-check-certificate -v \
+&& tar -xf ./poppler-${POPPLER_VERSION}.tar.xz \
+&& cd poppler-${POPPLER_VERSION} \
+&& mkdir -p build \
+&& cd build \
+&& apt-get install -y git \
+&& git clone git://git.freedesktop.org/git/poppler/test \
+&& cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DTESTDATADIR=$PWD/testfiles -DENABLE_QT6=OFF -DENABLE_UNSTABLE_API_ABI_HEADERS=ON -DENABLE_GPGME=OFF .. \
+&& make install \
+&& . ~/.bashrc \
+&& ldconfig "$(which pdftoppm)" \
+&& pdftoppm -v \
+&& cd ../.. \
+&& rm poppler-24.02.0.tar.xz \
+&& rm -rf poppler-24.02.0/
 
 
 # handles os dependencies for: crypto + readpdf + parse-emails + docxpy + sklearn + pandas + ippysocks-py3 + oauthlib
