@@ -65,7 +65,7 @@ RUN pdftoppm -v \
 && apt-get install -y build-essential \
 && apt-get install -y libgpgmepp-dev qtbase5-dev libcairo2-dev \
 && apt-get install -y xz-utils cmake \
-&& wget https://poppler.freedesktop.org/poppler-${POPPLER_VERSION}.tar.xz --no-check-certificate -v \
+&& wget https://poppler.freedesktop.org/poppler-${POPPLER_VERSION}.tar.xz -v \
 && tar -xf ./poppler-${POPPLER_VERSION}.tar.xz \
 && cd poppler-${POPPLER_VERSION} \
 && mkdir -p build \
