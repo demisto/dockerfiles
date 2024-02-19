@@ -11,5 +11,5 @@ subprocess.check_output(["ip", "route", "list"], text=True, stderr=subprocess.ST
 import pychrome
 print(f'Using pychrome version {pychrome.__version__}')
 
-from pdf2image import *  # noqa: F405
-print(f'Using poppler version: {pdf2image._get_poppler_version("pdftocairo")}')
+import pdf2image
+print(f'Using poppler version: {pdf2image.pdf2image._get_poppler_version("pdftocairo")}')
