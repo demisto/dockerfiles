@@ -10,7 +10,6 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
   python3-dev \
   wget \
   libxss1 \
-  poppler-utils \
   fonts-noto-cjk \
   fonts-noto-core \
   zlib1g-dev \
