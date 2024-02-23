@@ -1327,22 +1327,22 @@ source = ["Cython (>=3.0.7)"]
 
 [[package]]
 name = "msal"
-version = "1.26.0"
+version = "1.27.0"
 description = "The Microsoft Authentication Library (MSAL) for Python library enables your app to access the Microsoft Cloud by supporting authentication of users with Microsoft Azure Active Directory accounts (AAD) and Microsoft Accounts (MSA) using industry standard OAuth2 and OpenID Connect."
 optional = false
 python-versions = ">=2.7"
 files = [
-    {file = "msal-1.26.0-py2.py3-none-any.whl", hash = "sha256:be77ba6a8f49c9ff598bbcdc5dfcf1c9842f3044300109af738e8c3e371065b5"},
-    {file = "msal-1.26.0.tar.gz", hash = "sha256:224756079fe338be838737682b49f8ebc20a87c1c5eeaf590daae4532b83de15"},
+    {file = "msal-1.27.0-py2.py3-none-any.whl", hash = "sha256:572d07149b83e7343a85a3bcef8e581167b4ac76befcbbb6eef0c0e19643cdc0"},
+    {file = "msal-1.27.0.tar.gz", hash = "sha256:3109503c038ba6b307152b0e8d34f98113f2e7a78986e28d0baf5b5303afda52"},
 ]
 
 [package.dependencies]
-cryptography = ">=0.6,<44"
+cryptography = ">=0.6,<45"
 PyJWT = {version = ">=1.0.0,<3", extras = ["crypto"]}
 requests = ">=2.0.0,<3"
 
 [package.extras]
-broker = ["pymsalruntime (>=0.13.2,<0.14)"]
+broker = ["pymsalruntime (>=0.13.2,<0.15)"]
 
 [[package]]
 name = "msal-extensions"
@@ -1465,7 +1465,7 @@ name = "ndg-httpsclient"
 version = "0.5.1"
 description = "Provides enhanced HTTPS support for httplib and urllib2 using PyOpenSSL"
 optional = false
-python-versions = ">=2.7,<3.0.0 || >=3.4.0"
+python-versions = ">=2.7,<3.0.dev0 || >=3.4.dev0"
 files = [
     {file = "ndg_httpsclient-0.5.1-py2-none-any.whl", hash = "sha256:d2c7225f6a1c6cf698af4ebc962da70178a99bcde24ee6d1961c4f3338130d57"},
     {file = "ndg_httpsclient-0.5.1-py3-none-any.whl", hash = "sha256:dd174c11d971b6244a891f7be2b32ca9853d3797a72edb34fa5d7b07d8fff7d4"},
