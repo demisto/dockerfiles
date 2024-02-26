@@ -33,7 +33,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && python3 -m pip install --no-cache-dir -r requirements.txt \
     && npm ci \
     && npm install -g jsdoc-to-markdown@5.0.3 \
-    && demisto-sdk --version
+    # && demisto-sdk --version
 
 # Default demisto-sdk help
 CMD ["demisto-sdk", "--help"]
