@@ -254,17 +254,17 @@ lxml = ["lxml"]
 
 [[package]]
 name = "boto3"
-version = "1.34.47"
+version = "1.34.50"
 description = "The AWS SDK for Python"
 optional = false
 python-versions = ">= 3.8"
 files = [
-    {file = "boto3-1.34.47-py3-none-any.whl", hash = "sha256:1de708665cbf156e76ca67e376d6cabc5f9a06d7213f925a510cb818a15340a6"},
-    {file = "boto3-1.34.47.tar.gz", hash = "sha256:7574afd70c767fdbb19726565a67b47291e1e35ec792c9fbb8ee63cb3f630d45"},
+    {file = "boto3-1.34.50-py3-none-any.whl", hash = "sha256:8d709365231234bc4f0ca98fdf33a25eeebf78072853c6aa3d259f0f5cf09877"},
+    {file = "boto3-1.34.50.tar.gz", hash = "sha256:290952be7899560039cb0042e8a2354f61a7dead0d0ca8bea6ba901930df0468"},
 ]
 
 [package.dependencies]
-botocore = ">=1.34.47,<1.35.0"
+botocore = ">=1.34.50,<1.35.0"
 jmespath = ">=0.7.1,<2.0.0"
 s3transfer = ">=0.10.0,<0.11.0"
 
@@ -273,13 +273,13 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.34.47"
+version = "1.34.50"
 description = "Low-level, data-driven core of boto 3."
 optional = false
 python-versions = ">= 3.8"
 files = [
-    {file = "botocore-1.34.47-py3-none-any.whl", hash = "sha256:8f0c989d12cfceb06b005808492ec1ff6ae90fab1fc4bf7ac8e825ac86bc8a0b"},
-    {file = "botocore-1.34.47.tar.gz", hash = "sha256:29f1d6659602c5d79749eca7430857f7a48dd02e597d0ea4a95a83c47847993e"},
+    {file = "botocore-1.34.50-py3-none-any.whl", hash = "sha256:fda510559dbe796eefdb59561cc81be1b99afba3dee53fd23db9a3d587adc0ab"},
+    {file = "botocore-1.34.50.tar.gz", hash = "sha256:33ab82cb96c4bb684f0dbafb071808e4817d83debc88b223e7d988256370c6d7"},
 ]
 
 [package.dependencies]
@@ -1465,7 +1465,7 @@ name = "ndg-httpsclient"
 version = "0.5.1"
 description = "Provides enhanced HTTPS support for httplib and urllib2 using PyOpenSSL"
 optional = false
-python-versions = ">=2.7,<3.0.0 || >=3.4.0"
+python-versions = ">=2.7,<3.0.dev0 || >=3.4.dev0"
 files = [
     {file = "ndg_httpsclient-0.5.1-py2-none-any.whl", hash = "sha256:d2c7225f6a1c6cf698af4ebc962da70178a99bcde24ee6d1961c4f3338130d57"},
     {file = "ndg_httpsclient-0.5.1-py3-none-any.whl", hash = "sha256:dd174c11d971b6244a891f7be2b32ca9853d3797a72edb34fa5d7b07d8fff7d4"},
