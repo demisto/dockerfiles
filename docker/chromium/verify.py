@@ -1,12 +1,13 @@
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException, InvalidArgumentException
 from PyPDF2 import PdfFileReader
-from pdf2image import convert_from_path
+import pdf2image
 import numpy as np
 from PIL import Image
 import sys
 import base64
 import subprocess
+import pychrome
 
 # verify the google-chrome and chromedriver have the same version (exluding patch level)
 chrome_version = subprocess.check_output(["google-chrome", "--version"], text=True).split()[2]
@@ -17,5 +18,9 @@ chrome_version_arr = chrome_version.split('.')[:3]
 driver_version_arr = driver_version.split('.')[:3]
 print(f'Comparing  versions without patch: {chrome_version_arr} to: {driver_version_arr}')
 assert chrome_version_arr == driver_version_arr
+
+print(f'Using pychrome version {pychrome.__version__}')
+
+print(f'Using poppler version: {pdf2image.pdf2image._get_poppler_version("pdftocairo")}')
 
 print('All is good!!!')

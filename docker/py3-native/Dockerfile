@@ -1,4 +1,5 @@
-FROM demisto/py3-tools-ubi:1.0.0.75631
+FROM demisto/py3-tools-ubi:1.0.0.88282
+
 
 
 COPY requirements.txt .
@@ -30,6 +31,12 @@ RUN dnf update --nodocs -y  \
     && dnf install -y --nodocs --enablerepo=$ROCKY_BASE --enablerepo=$ROCKY_RELEASE tigervnc-server-minimal xorg-x11-utils google-chrome-stable iputils nmap bind-utils \
     && dnf install -y --nodocs --enablerepo=$ROCKY_BASE --enablerepo=$ROCKY_RELEASE --enablerepo=$FEDORA_EPEL ImageMagick \
     && ./download_chromedriver.sh \
+    && touch /var/chrome_headless.log \
+    && chmod 777 /var/chrome_headless.log \
+    && touch /var/port.txt \
+    && chmod 777 /var/port.txt \
+    && touch /var/rasterizations_counter.txt \
+    && chmod 777 /var/rasterizations_counter.txt \
     && unzip chromedriver-linux64.zip \
     && mv chromedriver-linux64/chromedriver /usr/bin/chromedriver \
     && rm -rf chromedriver-linux64.zip \

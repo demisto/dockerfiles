@@ -1,14 +1,15 @@
 
-# Last modified: 2023-09-18T08:46:53.630649+00:00
-FROM demisto/python3-deb:3.10.13.74173
+# Last modified: 2024-02-14T00:49:05.078289+00:00
+FROM demisto/python3-deb:3.10.13.87666
 
 COPY requirements.txt .
+
+ARG POPPLER_VERSION=24.02.0
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
   python3-dev \
   wget \
   libxss1 \
-  poppler-utils \
   fonts-noto-cjk \
   fonts-noto-core \
   zlib1g-dev \
@@ -19,7 +20,13 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
 && apt-get purge -y --auto-remove \
   python3-dev \
   zlib1g-dev \
-&& rm -rf /var/lib/apt/lists/*
+&& rm -rf /var/lib/apt/lists/* \
+&& touch /var/chrome_headless.log \
+&& chmod 777 /var/chrome_headless.log \
+&& touch /var/port.txt \
+&& chmod 777 /var/port.txt \
+&& touch /var/rasterizations_counter.txt \
+&& chmod 777 /var/rasterizations_counter.txt
 
 # Based on instructions at: https://tecadmin.net/setup-selenium-with-chromedriver-on-debian/
 # Will install the latest version available from the chrome repo.
@@ -48,8 +55,31 @@ RUN apt-get update && apt-get -t bullseye-backports install -y --no-install-reco
 && rm -rf chromedriver-linux64.zip \
 && rm download_chromedriver.sh \
 && google-chrome --version \
-&& chromedriver --version \
-&& apt-get purge -y --auto-remove \
+&& chromedriver --version
+
+# Install latest Poppler
+RUN apt-get install -y libfreetype-dev libfontconfig-dev libboost-dev libpng-dev zlib1g-dev liblcms2-dev libcurl4 libcurl4-gnutls-dev \
+&& apt-get install -y libjpeg-dev libcairo-dev libopenjp2-7-dev libtiff-dev libnss3-dev \
+&& apt-get install -y build-essential \
+&& apt-get install -y libgpgmepp-dev qtbase5-dev libcairo2-dev \
+&& apt-get install -y xz-utils cmake \
+&& wget https://poppler.freedesktop.org/poppler-${POPPLER_VERSION}.tar.xz -v \
+&& tar -xf ./poppler-${POPPLER_VERSION}.tar.xz \
+&& cd poppler-${POPPLER_VERSION} \
+&& mkdir -p build \
+&& cd build \
+&& apt-get install -y git \
+&& git clone git://git.freedesktop.org/git/poppler/test \
+&& cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DTESTDATADIR=$PWD/testfiles -DENABLE_QT6=OFF -DENABLE_UNSTABLE_API_ABI_HEADERS=ON -DENABLE_GPGME=OFF .. \
+&& make install \
+&& . ~/.bashrc \
+&& ldconfig "$(which pdftoppm)" \
+&& pdftoppm -v \
+&& cd ../.. \
+&& rm poppler-${POPPLER_VERSION}.tar.xz \
+&& rm -rf poppler-${POPPLER_VERSION}/
+
+RUN apt-get purge -y --auto-remove \
   curl \
   unzip \
   jq \
