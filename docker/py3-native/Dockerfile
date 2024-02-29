@@ -77,7 +77,8 @@ RUN dnf update --nodocs -y  \
 RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE python3-devel gcc gcc-c++ make wget git poppler poppler-utils \
         rust cargo libxml2-devel libxslt-devel krb5-devel \
         libffi-devel openssl-devel libffi libSM mesa-libGL \
-        openssh ca-certificates openssl less rsync libpng-devel freetype-devel gcc-gfortran openblas unzip libstdc++ libreoffice --exclude=postgresql-jdbc \
+        openssh ca-certificates openssl less rsync libpng-devel freetype-devel gcc-gfortran openblas unzip libstdc++ \
+        && dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE libreoffice --exclude=postgresql-jdbc --skip-broken \
         && dnf install -y --nodocs --enablerepo=$FEDORA_EPEL p7zip unrar \
         && ln -s /usr/bin/7za /usr/bin/7z \
         && pip install --no-cache-dir -r requirements.txt \
