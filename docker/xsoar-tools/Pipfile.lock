@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "404c3a5636da78c7c37be815f171b5093cb4222bc329cc00484fe1a80e940b57"
+            "sha256": "d44e30cf04d9a5fd8c7f4b3a96bfb8ed77efe83c55840213816de858e7a4ca72"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -429,8 +429,9 @@
             "version": "==3.2.14"
         },
         "demisto-sdk": {
+            "editable": true,
             "git": "https://github.com/demisto/demisto-sdk",
-            "ref": "CIAC-9671/contribute-Incident-type-to-marketplace"
+            "ref": "dd4e5c385fee5caa3e852703469a929b0a8433c1"
         },
         "dictdiffer": {
             "hashes": [
@@ -1350,7 +1351,7 @@
                 "sha256:37dd54208da7e1cd875388217d5e00ebd4179249f90fb72437e91a35459a0ad3",
                 "sha256:a8b2bc7bffae282281c8140a97d3aa9c14da0b136dfe83f850eea9a5f7470427"
             ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2'",
             "version": "==2.9.0.post0"
         },
         "python-dotenv": {
@@ -1722,7 +1723,7 @@
                 "sha256:f481f16baec5290e45aebdc2a5168ebc6d35189ae6fea7a58787613a25f6e875",
                 "sha256:fff3573c2db359f091e1589c3d7c5fc2f86f5bdb6f24252c2d8e539d4e45f412"
             ],
-            "markers": "python_version < '3.13' and platform_python_implementation == 'CPython'",
+            "markers": "platform_python_implementation == 'CPython' and python_version < '3.13'",
             "version": "==0.2.8"
         },
         "setuptools": {
@@ -1745,7 +1746,7 @@
                 "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926",
                 "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"
             ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2'",
             "version": "==1.16.0"
         },
         "slack-sdk": {
@@ -1801,7 +1802,7 @@
                 "sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b",
                 "sha256:b3bda1d108d5dd99f4a20d24d9c348e91c4db7ab1b749200bded2f839ccbe68f"
             ],
-            "markers": "python_version >= '2.6' and python_version not in '3.0, 3.1, 3.2, 3.3'",
+            "markers": "python_version >= '2.6' and python_version not in '3.0, 3.1, 3.2'",
             "version": "==0.10.2"
         },
         "tomli": {
