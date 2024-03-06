@@ -45,9 +45,6 @@ red_error() {
     echo -e "\033[0;31m$1\033[0m"
 }
 
-# TODO rm after debug, force docker_login to fail
-unset DOCKERHUB_USER
-
 DOCKER_LOGIN_DONE=${DOCKER_LOGIN_DONE:-no}
 function docker_login {
     if [ "${DOCKER_LOGIN_DONE}" = "yes" ]; then
@@ -356,11 +353,8 @@ function docker_build {
             IMAGESAVE=${ARTDIR}/$IMAGENAMESAVE
             docker save -o "$IMAGESAVE" ${image_full_name}
             gzip "$IMAGESAVE"
-            # TODO rm after debug
-            echo "DEBUG: Finding absolute path to '$IMAGESAVE'..."
-            ls -R $ARTDIR
             ${DOCKER_SRC_DIR}/post_github_comment.py ${image_full_name} "--is_contribution"
-            cat << EOF
+                        cat << EOF
 -------------------------
 
 Docker image [$image_full_name] has been saved as an artifact. It is available at the following link: 

@@ -10,15 +10,17 @@ import time
 
 CIRCLECI_DEFAULT_WORKSPACE_DIR = "/home/circleci/project"
 
+
 def get_docker_image_size(docker_image, is_contribution: bool = False) -> str:
-    """Get the size of the image form docker hub
+    """Get the size of the image from docker hub or CircleCI worker depending
+    if we're contributing or not.
 
     Arguments:
         docker_image {string} -- the full name of hthe image
         is_contribution {bool} -- flag whether we should get the image size from Dockerhub or CircleCI artifacts
 
     Returns:
-    - `str` containing the Docker image in MB.
+    - `str` containing the Docker image in MB, eg. '12.34 MB'.
     """
     size = "N/A"
     if not is_contribution:
@@ -46,7 +48,7 @@ def get_docker_image_size(docker_image, is_contribution: bool = False) -> str:
 
 def convert_docker_image_tar(docker_image: str) -> Path:
     """
-    Helper function to convert the Docker image to valid path. For example:
+    Helper function to convert the Docker image to valid path on CircleCI worker. For example:
     `devdemisto/bottle2:1.0.0.89478.tar.gz` -> `devdemisto_bottle2:1.0.0.89478.tar.gz`.
 
     Arguments:
