@@ -57,6 +57,7 @@ def convert_docker_image_tar(docker_image: str) -> Path:
 
     return Path(f"{docker_image.replace('/', '_')}.tar.gz")
 
+
 def main():
     desc = """Post a message to github about the created image. Relies on environment variables:
 GITHUB_KEY: api key of user to use for posting
@@ -95,7 +96,6 @@ if CIRCLE_PULL_REQUEST will try to get issue id from last commit comment
         issue_id = m.group(1)
         print("Issue id found from last commit comment: " + issue_id)
         post_url = "https://api.github.com/repos/demisto/dockerfiles/issues/{}/comments".format(issue_id)
-    # FIXME get_docker_image_size fails in case Docker image not deployed to Dockerhub
     inspect_format = f'''
 {{{{ range $env := .Config.Env }}}}{{{{ if eq $env "DEPRECATED_IMAGE=true" }}}}## 🔴 IMPORTANT: This image is deprecated 🔴{{{{ end }}}}{{{{ end }}}}
 ## Docker Metadata

@@ -356,6 +356,9 @@ function docker_build {
             IMAGESAVE=${ARTDIR}/$IMAGENAMESAVE
             docker save -o "$IMAGESAVE" ${image_full_name}
             gzip "$IMAGESAVE"
+            # TODO rm after debug
+            echo "DEBUG: Finding absolute path to '$IMAGESAVE'..."
+            find / -name "$IMAGESAVE"
             ${DOCKER_SRC_DIR}/post_github_comment.py ${image_full_name} "--is_contribution"
             cat << EOF
 -------------------------
