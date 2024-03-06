@@ -99,7 +99,7 @@ if CIRCLE_PULL_REQUEST will try to get issue id from last commit comment
             docker_info
         )
     elif args.job_id:
-        saved_docker_image = f"{args.docker_image.replace("/", "_")}.tar.gz"
+        saved_docker_image = f"{args.docker_image.replace('/', '_')}.tar.gz"
         circleci_docker_image_url = f"https://output.circle-artifacts.com/output/job/{args.job_id}/artifacts/{os.environ.get('CIRCLE_NODE_INDEX', '0')}/docker_images/{saved_docker_image}"
         message = (
             title +
