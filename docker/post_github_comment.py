@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import argparse
+from pathlib import Path
 import requests
 import subprocess
 import os
@@ -8,27 +9,53 @@ import re
 import time
 
 
-def get_docker_image_size(docker_image):
+def get_docker_image_size(docker_image, is_contribution: bool = False) -> str:
     """Get the size of the image form docker hub
 
     Arguments:
         docker_image {string} -- the full name of hthe image
+        is_contribution {bool} -- flag whether we should get the image size from Dockerhub or CircleCI artifacts
+
+    Returns:
+    - `str` containing the Docker image in MB.
     """
-    size = "failed querying size"
-    for i in (1, 2, 3):
-        try:
-            name, tag = docker_image.split(':')
-            res = requests.get('https://hub.docker.com/v2/repositories/{}/tags/{}/'.format(name, tag))
-            res.raise_for_status()
-            size_bytes = res.json()['images'][0]['size']
+    size = "N/A"
+    if not is_contribution:
+        for i in (1, 2, 3):
+            try:
+                name, tag = docker_image.split(':')
+                res = requests.get('https://hub.docker.com/v2/repositories/{}/tags/{}/'.format(name, tag))
+                res.raise_for_status()
+                size_bytes = res.json()['images'][0]['size']
+                size = '{0:.2f} MB'.format(float(size_bytes)/1024/1024)
+            except Exception as ex:
+                print("[{}] failed getting image size for image: {}. Err: {}".format(i, docker_image, ex))
+                if i != 3:
+                    print("Sleeping 5 seconds and trying again...")
+                    time.sleep(5)
+    else:
+        docker_image_tar = convert_docker_image_tar(docker_image)
+        if docker_image_tar.exists():
+            size_bytes = docker_image_tar.stat().st_size
             size = '{0:.2f} MB'.format(float(size_bytes)/1024/1024)
-        except Exception as ex:
-            print("[{}] failed getting image size for image: {}. Err: {}".format(i, docker_image, ex))
-            if i != 3:
-                print("Sleeping 5 seconds and trying again...")
-                time.sleep(5)
+        else:
+            print(f"Docker image '{docker_image_tar}' doesn't exist in filesystem")
     return size
 
+
+def convert_docker_image_tar(docker_image: str) -> Path:
+    """
+    Helper function to convert the Docker image to valid path. For example:
+    `devdemisto/bottle2:1.0.0.89478.tar.gz` -> `devdemisto_bottle2:1.0.0.89478.tar.gz`.
+
+    Arguments:
+    - `docker_image` (``str``): The docker image filename.
+
+    Returns:
+    - `Path` of the fixed Docker image TAR.
+    """
+
+    return Path(f"{docker_image.replace('/', '_')}.tar.gz")
 
 def main():
     desc = """Post a message to github about the created image. Relies on environment variables:
@@ -72,7 +99,7 @@ if CIRCLE_PULL_REQUEST will try to get issue id from last commit comment
     inspect_format = f'''
 {{{{ range $env := .Config.Env }}}}{{{{ if eq $env "DEPRECATED_IMAGE=true" }}}}## 🔴 IMPORTANT: This image is deprecated 🔴{{{{ end }}}}{{{{ end }}}}
 ## Docker Metadata
-- Image Size: `{get_docker_image_size(args.docker_image)}`
+- Image Size: `{get_docker_image_size(args.docker_image, is_contribution=args.is_contribution)}`
 - Image ID: `{{{{ .Id }}}}`
 - Created: `{{{{ .Created }}}}`
 - Arch: `{{{{ .Os }}}}`/`{{{{ .Architecture }}}}`
@@ -99,7 +126,7 @@ if CIRCLE_PULL_REQUEST will try to get issue id from last commit comment
             docker_info
         )
     elif args.job_id:
-        saved_docker_image = f"{args.docker_image.replace('/', '_')}.tar.gz"
+        saved_docker_image = convert_docker_image_tar(args.docker_image).name
         circleci_docker_image_url = f"https://output.circle-artifacts.com/output/job/{args.job_id}/artifacts/{os.environ.get('CIRCLE_NODE_INDEX', '0')}/docker_images/{saved_docker_image}"
         message = (
             title +
@@ -107,7 +134,8 @@ if CIRCLE_PULL_REQUEST will try to get issue id from last commit comment
             "To download it and load it locally run the following command:\n" +
             "```bash\n" +
             f"curl -L '{circleci_docker_image_url}' | gunzip | docker load\n" +
-            "```\n"
+            "```\n" +
+            docker_info
         )
     print("Going to post comment:\n\n{}".format(message))
     res = requests.post(post_url, json={"body": message}, auth=(os.environ['GITHUB_KEY'], 'x-oauth-basic'))
