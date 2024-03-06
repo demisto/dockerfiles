@@ -56,7 +56,7 @@ def convert_docker_image_tar(docker_image: str) -> Path:
     - `Path` of the fixed Docker image TAR.
     """
 
-    circleci_root_path = os.environ.get("CIRCLE_WORKING_DIRECTORY", CIRCLECI_DEFAULT_WORKSPACE_DIR)
+    circleci_root_path = Path(os.environ.get("CIRCLE_WORKING_DIRECTORY", CIRCLECI_DEFAULT_WORKSPACE_DIR))
     artifacts_path = circleci_root_path / "artifacts"
 
     return artifacts_path / f"{docker_image.replace('/', '_')}.tar.gz"
