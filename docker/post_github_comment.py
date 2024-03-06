@@ -68,6 +68,7 @@ if CIRCLE_PULL_REQUEST will try to get issue id from last commit comment
         issue_id = m.group(1)
         print("Issue id found from last commit comment: " + issue_id)
         post_url = "https://api.github.com/repos/demisto/dockerfiles/issues/{}/comments".format(issue_id)
+    # FIXME get_docker_image_size fails in case Docker image not deployed to Dockerhub
     inspect_format = f'''
 {{{{ range $env := .Config.Env }}}}{{{{ if eq $env "DEPRECATED_IMAGE=true" }}}}## 🔴 IMPORTANT: This image is deprecated 🔴{{{{ end }}}}{{{{ end }}}}
 ## Docker Metadata
@@ -98,7 +99,8 @@ if CIRCLE_PULL_REQUEST will try to get issue id from last commit comment
             docker_info
         )
     elif args.job_id:
-        circleci_docker_image_url = f"https://output.circle-artifacts.com/output/job/{args.job_id}/artifacts/{os.environ.get('CIRCLE_NODE_INDEX', '0')}/docker_images/{args.docker_image}.tar.gz"
+        saved_docker_image = f"{args.docker_image.replace("/", "_")}.tar.gz"
+        circleci_docker_image_url = f"https://output.circle-artifacts.com/output/job/{args.job_id}/artifacts/{os.environ.get('CIRCLE_NODE_INDEX', '0')}/docker_images/{saved_docker_image}"
         message = (
             title +
             "Docker automatic build at CircleCI has completed. The Docker image is available as an artifact of the build.\n\n" +
