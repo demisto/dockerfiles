@@ -349,6 +349,11 @@ function docker_build {
             echo "Creating artifact of docker image..."
             ARTDIR="${DOCKER_SRC_DIR}/../artifacts"
             mkdir -p "${ARTDIR}"
+
+            # TODO DEBUG START
+            echo "Debug"
+            ls -R "/home/circleci/project/"
+            # TODO DEBUG END
             IMAGENAMESAVE=`echo ${image_full_name} | tr / _`.tar
             IMAGESAVE=${ARTDIR}/$IMAGENAMESAVE
             docker save -o "$IMAGESAVE" ${image_full_name}
