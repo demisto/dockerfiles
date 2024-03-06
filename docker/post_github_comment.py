@@ -8,6 +8,7 @@ import os
 import re
 import time
 
+CIRCLECI_DEFAULT_WORKSPACE_DIR = "/home/circleci/project"
 
 def get_docker_image_size(docker_image, is_contribution: bool = False) -> str:
     """Get the size of the image form docker hub
@@ -55,7 +56,10 @@ def convert_docker_image_tar(docker_image: str) -> Path:
     - `Path` of the fixed Docker image TAR.
     """
 
-    return Path(f"{docker_image.replace('/', '_')}.tar.gz")
+    circleci_root_path = os.environ.get("CIRCLE_WORKING_DIRECTORY", CIRCLECI_DEFAULT_WORKSPACE_DIR)
+    artifacts_path = circleci_root_path / "artifacts"
+
+    return artifacts_path / f"{docker_image.replace('/', '_')}.tar.gz"
 
 
 def main():
