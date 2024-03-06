@@ -40,6 +40,14 @@ if CIRCLE_PULL_REQUEST will try to get issue id from last commit comment
                                      formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument("docker_image", help="The docker image with tag version to use. For example: devdemisto/python3:1.5.0.27")
     parser.add_argument("--is_contribution", help="Whether the PR is a contribution or not", action="store_true", default=False)
+    parser.add_argument(
+        "-j",
+        "--job-id",
+        help="The CircleCI workflow job ID. Default is the environmental variable CIRCLE_WORKFLOW_JOB_ID",
+        default=os.environ.get('CIRCLE_WORKFLOW_JOB_ID', ""),
+        required=False,
+        dest="job_id"
+    )
 
     args = parser.parse_args()
     if not os.environ.get('GITHUB_KEY'):
@@ -77,7 +85,6 @@ if CIRCLE_PULL_REQUEST will try to get issue id from last commit comment
     mode = "Dev"
     if base_name.startswith('demisto/'):
         mode = "Production"
-    
     title = f"# Docker Image Ready - {mode}\n\n"
     if not args.is_contribution:
         message = (
@@ -90,14 +97,14 @@ if CIRCLE_PULL_REQUEST will try to get issue id from last commit comment
             "```\n" +
             docker_info
         )
-    elif os.environ.get('CIRCLE_WORKFLOW_JOB_ID'):
-        circleci_docker_image_url = f"https://output.circle-artifacts.com/output/job/{os.environ.get('CIRCLE_WORKFLOW_JOB_ID')}/artifacts/{os.environ.get('CIRCLE_NODE_INDEX')}/docker_images/{args.docker_image}.tar.gz"
+    elif args.job_id:
+        circleci_docker_image_url = f"https://output.circle-artifacts.com/output/job/{args.job_id}/artifacts/{os.environ.get('CIRCLE_NODE_INDEX', '0')}/docker_images/{args.docker_image}.tar.gz"
         message = (
             title +
             "Docker automatic build at CircleCI has completed. The Docker image is available as an artifact of the build.\n\n" +
-            "To download it and load it locally run the following command:\n" + 
+            "To download it and load it locally run the following command:\n" +
             "```bash\n" +
-            f"curl -L '{circleci_docker_image_url}' | gunzip | docker load\n" + 
+            f"curl -L '{circleci_docker_image_url}' | gunzip | docker load\n" +
             "```\n"
         )
     print("Going to post comment:\n\n{}".format(message))

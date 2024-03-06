@@ -45,6 +45,9 @@ red_error() {
     echo -e "\033[0;31m$1\033[0m"
 }
 
+# TODO rm after debug, force docker_login to fail
+unset DOCKERHUB_USER
+
 DOCKER_LOGIN_DONE=${DOCKER_LOGIN_DONE:-no}
 function docker_login {
     if [ "${DOCKER_LOGIN_DONE}" = "yes" ]; then
@@ -340,7 +343,7 @@ function docker_build {
             fi
         fi
     else
-        echo "Skipping docker push"
+        echo "Skipping docker push, saving Docker image '$image_full_name' to CircleCI artifacts..."
         if [ "$CIRCLE_BRANCH" == "master" ]; then
           echo "Did not push image on master. Failing build"
           exit 1
@@ -349,11 +352,6 @@ function docker_build {
             echo "Creating artifact of docker image..."
             ARTDIR="${DOCKER_SRC_DIR}/../artifacts"
             mkdir -p "${ARTDIR}"
-
-            # TODO DEBUG START
-            echo "Debug"
-            ls -R "/home/circleci/project/"
-            # TODO DEBUG END
             IMAGENAMESAVE=`echo ${image_full_name} | tr / _`.tar
             IMAGESAVE=${ARTDIR}/$IMAGENAMESAVE
             docker save -o "$IMAGESAVE" ${image_full_name}
