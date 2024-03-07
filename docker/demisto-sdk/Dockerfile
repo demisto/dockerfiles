@@ -34,8 +34,8 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && apt-get update && apt-get install docker-ce-cli -y \
     && python3 -m pip install --no-cache-dir -r requirements.txt \
     && npm ci \
-    && npm install \
     && npm install -g jsdoc-to-markdown@5.0.3 \
+    && npm list \
     && demisto-sdk --version
 
 # Default demisto-sdk help
