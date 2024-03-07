@@ -10,10 +10,8 @@ ADD requirements.txt .
 
 
 RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get install \
-    git \ 
+    git \
     gcc \
-    nodejs \
-    npm \
     ca-certificates \
     curl \
     gnupg \
@@ -25,6 +23,10 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     xz-utils tk-dev libffi-dev liblzma-dev zsh \
     libffi-dev python3-dev gfortran g++ pkg-config libhdf5-dev \
     -y \
+    # install node - node distributions: https://github.com/nodesource/distributions
+    && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt update \
+    && apt-get install -y nodejs \
     # install docker
     && curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg \
     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian \
