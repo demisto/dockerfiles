@@ -254,17 +254,17 @@ lxml = ["lxml"]
 
 [[package]]
 name = "boto3"
-version = "1.34.56"
+version = "1.34.58"
 description = "The AWS SDK for Python"
 optional = false
 python-versions = ">= 3.8"
 files = [
-    {file = "boto3-1.34.56-py3-none-any.whl", hash = "sha256:300888f0c1b6f32f27f85a9aa876f50f46514ec619647af7e4d20db74d339714"},
-    {file = "boto3-1.34.56.tar.gz", hash = "sha256:b26928f9a21cf3649cea20a59061340f3294c6e7785ceb6e1a953eb8010dc3ba"},
+    {file = "boto3-1.34.58-py3-none-any.whl", hash = "sha256:d213a6fea9db6d537b1e65924133d8279ada79a40bc840d4930e1b64be869d4c"},
+    {file = "boto3-1.34.58.tar.gz", hash = "sha256:09e3d17c718bc938a76774f31bc557b20733c0f5f9135a3e7782b55f3459cbdd"},
 ]
 
 [package.dependencies]
-botocore = ">=1.34.56,<1.35.0"
+botocore = ">=1.34.58,<1.35.0"
 jmespath = ">=0.7.1,<2.0.0"
 s3transfer = ">=0.10.0,<0.11.0"
 
@@ -273,13 +273,13 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.34.56"
+version = "1.34.58"
 description = "Low-level, data-driven core of boto 3."
 optional = false
 python-versions = ">= 3.8"
 files = [
-    {file = "botocore-1.34.56-py3-none-any.whl", hash = "sha256:fff66e22a5589c2d58fba57d1d95c334ce771895e831f80365f6cff6453285ec"},
-    {file = "botocore-1.34.56.tar.gz", hash = "sha256:bffeb71ab21d47d4ecf947d9bdb2fbd1b0bbd0c27742cea7cf0b77b701c41d9f"},
+    {file = "botocore-1.34.58-py3-none-any.whl", hash = "sha256:8086a6ea27d0f658505ac81e6d7314e013561469c40db9b5a4692127eb5c97cf"},
+    {file = "botocore-1.34.58.tar.gz", hash = "sha256:d75216952886dc513ea1b5e2979a6af08feed2f537e3fc102e4a0a2ead563a35"},
 ]
 
 [package.dependencies]
@@ -786,13 +786,13 @@ test = ["pytest (>=6)"]
 
 [[package]]
 name = "exchangelib"
-version = "5.1.0"
+version = "5.2.0"
 description = "Client for Microsoft Exchange Web Services (EWS)"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "exchangelib-5.1.0-py2.py3-none-any.whl", hash = "sha256:28f492df84c3d74b1183d535d34daa8c7d7a80fe69cf6b35041770824781f4b0"},
-    {file = "exchangelib-5.1.0.tar.gz", hash = "sha256:f835c14d380839dc74f53664f091cafc978a158855877a510c0c5554b85cdbac"},
+    {file = "exchangelib-5.2.0-py3-none-any.whl", hash = "sha256:01415aaaaeb7a254d6865ee10f966d3d9c4beb4c077f83417bd16b7a48c30068"},
+    {file = "exchangelib-5.2.0.tar.gz", hash = "sha256:c14403aa704230bafe570b7bbf21fc97228f382c16aef5230afef3df106d861c"},
 ]
 
 [package.dependencies]
@@ -803,7 +803,7 @@ isodate = "*"
 lxml = ">3.0"
 oauthlib = "*"
 pygments = "*"
-requests = ">=2.7"
+requests = ">=2.31.0"
 requests-ntlm = ">=0.2.0"
 requests-oauthlib = "*"
 tzdata = "*"
