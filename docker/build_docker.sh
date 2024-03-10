@@ -354,7 +354,7 @@ function docker_build {
             docker save -o "$IMAGESAVE" ${image_full_name}
             gzip "$IMAGESAVE"
             ${DOCKER_SRC_DIR}/post_github_comment.py ${image_full_name} "--is_contribution"
-                        cat << EOF
+            cat << EOF
 -------------------------
 
 Docker image [$image_full_name] has been saved as an artifact. It is available at the following link: 
