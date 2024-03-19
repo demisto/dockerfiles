@@ -1,4 +1,4 @@
-FROM demisto/py3-tools-ubi:1.0.0.89843
+FROM demisto/py3-tools-ubi:1.0.0.90132
 
 
 
