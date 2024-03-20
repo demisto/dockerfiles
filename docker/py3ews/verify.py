@@ -11,7 +11,6 @@ import subprocess
 import email
 from requests.exceptions import ConnectionError
 from collections import deque
-
 from multiprocessing import Process
 import exchangelib
 from exchangelib.errors import ErrorItemNotFound, ResponseMessageError, TransportError, RateLimitError, \
@@ -28,6 +27,10 @@ from exchangelib.version import EXCHANGE_2007, EXCHANGE_2010, EXCHANGE_2010_SP2,
 from exchangelib.protocol import BaseProtocol, NoVerifyHTTPAdapter
 import tzlocal
 import hashlib
+import dnspython
+import future
+import requests-ntlm 
+import ntlm-auth
 
 test = tzlocal.get_localzone()
 
@@ -37,4 +40,4 @@ print(hashlib.algorithms_available)
 assert 'md4' in hashlib.algorithms_available
 hashlib.new('md4', b"text")
 
-print('all good, `get_localzone() -> {}` is working'.format(test))
+print('all is good, `get_localzone() -> {}` is working'.format(test))
