@@ -43,5 +43,3 @@ res.raise_for_status()
 
 # verify dateaparser works. We had a case that it failed with timezone issues
 dateparser.parse("10 minutes")
-
-print('all good')
