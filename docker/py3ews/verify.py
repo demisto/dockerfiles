@@ -37,4 +37,4 @@ print(hashlib.algorithms_available)
 assert 'md4' in hashlib.algorithms_available
 hashlib.new('md4', b"text")
 
-print('all is good, `get_localzone() -> {}` is working'.format(test))
+print('all good, `get_localzone() -> {}` is working'.format(test))
