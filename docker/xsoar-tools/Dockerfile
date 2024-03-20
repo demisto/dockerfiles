@@ -3,6 +3,7 @@ FROM demisto/python3:3.10.13.89873
 ENV DEMISTO_SDK_IGNORE_CONTENT_WARNING true
 COPY requirements.txt .
 
+
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base libffi-dev openssl-dev wget \
   && apk add --no-cache git  \
   && apk add --no-cache libstdc++  \
@@ -15,3 +16,5 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
   && wget -P /home/demisto https://raw.githubusercontent.com/demisto/content/master/Tests/demistomock/demistomock.py \
   && wget -P /home/demisto https://raw.githubusercontent.com/demisto/content/master/Tests/demistomock/demistomock.ps1 \
   && wget -P /home/demisto https://raw.githubusercontent.com/demisto/content/master/Tests/scripts/dev_envs/pytest/conftest.py
+
+RUN chmod -R 777 .demisto-sdk
