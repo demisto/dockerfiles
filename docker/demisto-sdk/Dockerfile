@@ -36,7 +36,6 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && npm ci \
     && npm install -g jsdoc-to-markdown@5.0.3 \
     && npm list \
-    && npm update -g ip \
     && demisto-sdk --version
 
 # Default demisto-sdk help
