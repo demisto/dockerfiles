@@ -29,8 +29,8 @@ import tzlocal
 import hashlib
 import dnspython
 import future
-import requests-ntlm 
-import ntlm-auth
+import requests_ntlm
+import ntlm_auth
 
 test = tzlocal.get_localzone()
 
