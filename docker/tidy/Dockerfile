@@ -1,5 +1,5 @@
 
-FROM demisto/crypto:1.0.0.89958
+FROM demisto/crypto:1.0.0.90929
 
 COPY requirements.txt .
 COPY ansible /home/demisto/ansible
