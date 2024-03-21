@@ -1534,6 +1534,20 @@ tgrep = ["pyparsing"]
 twitter = ["twython"]
 
 [[package]]
+name = "ntlm-auth"
+version = "1.5.0"
+description = "Creates NTLM authentication structures"
+optional = false
+python-versions = ">=2.6,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*"
+files = [
+    {file = "ntlm-auth-1.5.0.tar.gz", hash = "sha256:c9667d361dc09f6b3750283d503c689070ff7d89f2f6ff0d38088d5436ff8543"},
+    {file = "ntlm_auth-1.5.0-py2.py3-none-any.whl", hash = "sha256:f1527c581dbf149349134fc2d789d50af2a400e193206956fa0ab456ccc5a8ba"},
+]
+
+[package.extras]
+cryptography = ["cryptography", "cryptography (<2.2)"]
+
+[[package]]
 name = "numpy"
 version = "1.26.4"
 description = "Fundamental package for array computing in Python"
@@ -3848,4 +3862,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10"
-content-hash = "8693b796d805704cd3b3c7efbb2a343579398ffbc5d049361e910560fda4a996"
+content-hash = "7b13d4fe07b04fb6ccf901e0100a62fc845a854f627cf3012fa8751a627a9435"
