@@ -2587,19 +2587,20 @@ XlsxWriter = ">=0.5.7"
 
 [[package]]
 name = "python-whois"
-version = "0.8.0"
+version = "0.9.0"
 description = "Whois querying and parsing of domain registration information."
 optional = false
 python-versions = "*"
 files = [
-    {file = "python-whois-0.8.0.tar.gz", hash = "sha256:dd336d3517eace2a7689406db7bb96ada3c5e74327423151aeee3e64225f6220"},
+    {file = "python-whois-0.9.0.tar.gz", hash = "sha256:74714734c8efc8a823ee2232a4d4c1207f7389401a3a745603d42adf3e52e621"},
+    {file = "python_whois-0.9.0-py3-none-any.whl", hash = "sha256:255afd8291903a4f8c0b4038ee091dcacb56919d0b8f7efb48c5ed897163dfb8"},
 ]
 
 [package.dependencies]
 future = "*"
 
 [package.extras]
-"better date conversion" = ["python-dateutil"]
+better-date-conversion = ["python-dateutil"]
 
 [[package]]
 name = "pytz"
