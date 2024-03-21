@@ -27,7 +27,6 @@ from exchangelib.version import EXCHANGE_2007, EXCHANGE_2010, EXCHANGE_2010_SP2,
 from exchangelib.protocol import BaseProtocol, NoVerifyHTTPAdapter
 import tzlocal
 import hashlib
-import dnspython
 import future
 import requests_ntlm
 import ntlm_auth
