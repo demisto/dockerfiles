@@ -1,5 +1,5 @@
 
-FROM demisto/powershell-deb:7.3.0.49844
+FROM demisto/powershell-deb:7.3.48323
 
 #
 # NOTE: THIS DOCKERFILE IS GENERATED VIA "apply-templates.sh"
