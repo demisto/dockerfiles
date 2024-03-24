@@ -11,7 +11,6 @@ import subprocess
 import email
 from requests.exceptions import ConnectionError
 from collections import deque
-
 from multiprocessing import Process
 import exchangelib
 from exchangelib.errors import ErrorItemNotFound, ResponseMessageError, TransportError, RateLimitError, \
@@ -28,6 +27,9 @@ from exchangelib.version import EXCHANGE_2007, EXCHANGE_2010, EXCHANGE_2010_SP2,
 from exchangelib.protocol import BaseProtocol, NoVerifyHTTPAdapter
 import tzlocal
 import hashlib
+import future
+import requests_ntlm
+import ntlm_auth
 
 test = tzlocal.get_localzone()
 
