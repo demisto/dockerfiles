@@ -454,13 +454,13 @@ files = [
 
 [[package]]
 name = "pymisp"
-version = "2.4.187"
+version = "2.4.188"
 description = "Python API for MISP."
 optional = false
-python-versions = ">=3.8,<4.0"
+python-versions = "<4.0,>=3.8"
 files = [
-    {file = "pymisp-2.4.187-py3-none-any.whl", hash = "sha256:0931bb1e4a693863ef35e6451ab2284c56fef5a41358bd55020cf0662b689810"},
-    {file = "pymisp-2.4.187.tar.gz", hash = "sha256:6880aa07cc6ed08f6d99df74c310839bce229e2031e1aa24311c74d8b01937f3"},
+    {file = "pymisp-2.4.188-py3-none-any.whl", hash = "sha256:454746ee717841cd1a9425ec6cffdaf99de595d8672685e0a61b7a233659480a"},
+    {file = "pymisp-2.4.188.tar.gz", hash = "sha256:c2313d059a9f4d1221243fcda64fb8ae11603c1745e92d57c4071aad04336696"},
 ]
 
 [package.dependencies]
@@ -480,7 +480,7 @@ fileobjects = ["lief (>=0.14.1,<0.15.0)", "pydeep2 (>=0.5.1,<0.6.0)", "python-ma
 openioc = ["beautifulsoup4 (>=4.12.3,<5.0.0)"]
 pdfexport = ["reportlab (>=4.1.0,<5.0.0)"]
 url = ["pyfaup (>=1.2,<2.0)"]
-virustotal = ["validators (>=0.22.0,<0.23.0)"]
+virustotal = ["validators (>=0.23.0,<0.24.0)"]
 
 [[package]]
 name = "pyparsing"
