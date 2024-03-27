@@ -1,10 +1,9 @@
-FROM demisto/py3-tools-ubi:1.0.0.83876
+FROM demisto/py3-tools-ubi:1.0.0.91505
 
 
 
 COPY requirements.txt .
 COPY chromium/download_chromedriver.sh .
-COPY chromium/start_chrome_headless.sh /
 COPY repos /repos
 
 ARG LEPTONICA_VERSION=1.82.0
@@ -32,7 +31,12 @@ RUN dnf update --nodocs -y  \
     && dnf install -y --nodocs --enablerepo=$ROCKY_BASE --enablerepo=$ROCKY_RELEASE tigervnc-server-minimal xorg-x11-utils google-chrome-stable iputils nmap bind-utils \
     && dnf install -y --nodocs --enablerepo=$ROCKY_BASE --enablerepo=$ROCKY_RELEASE --enablerepo=$FEDORA_EPEL ImageMagick \
     && ./download_chromedriver.sh \
-    && chmod +x ./start_chrome_headless.sh \
+    && touch /var/chrome_headless.log \
+    && chmod 777 /var/chrome_headless.log \
+    && touch /var/port.txt \
+    && chmod 777 /var/port.txt \
+    && touch /var/rasterizations_counter.txt \
+    && chmod 777 /var/rasterizations_counter.txt \
     && unzip chromedriver-linux64.zip \
     && mv chromedriver-linux64/chromedriver /usr/bin/chromedriver \
     && rm -rf chromedriver-linux64.zip \
@@ -73,7 +77,9 @@ RUN dnf update --nodocs -y  \
 RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE python3-devel gcc gcc-c++ make wget git poppler poppler-utils \
         rust cargo libxml2-devel libxslt-devel krb5-devel \
         libffi-devel openssl-devel libffi libSM mesa-libGL \
-        openssh ca-certificates openssl less rsync libpng-devel freetype-devel gcc-gfortran openblas unzip libstdc++ libreoffice \
+        openssh ca-certificates openssl less rsync libpng-devel freetype-devel gcc-gfortran openblas unzip libstdc++ \
+        && dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE libreoffice \
+        && dnf remove -y postgresql-jdbc --noautoremove \
         && dnf install -y --nodocs --enablerepo=$FEDORA_EPEL p7zip unrar \
         && ln -s /usr/bin/7za /usr/bin/7z \
         && pip install --no-cache-dir -r requirements.txt \

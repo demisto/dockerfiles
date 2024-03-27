@@ -1,7 +1,7 @@
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException, InvalidArgumentException
 from PyPDF2 import PdfFileReader
-from pdf2image import convert_from_path
+import pdf2image
 import numpy as np
 from PIL import Image
 import sys
@@ -20,5 +20,7 @@ print(f'Comparing  versions without patch: {chrome_version_arr} to: {driver_vers
 assert chrome_version_arr == driver_version_arr
 
 print(f'Using pychrome version {pychrome.__version__}')
+
+print(f'Using poppler version: {pdf2image.pdf2image._get_poppler_version("pdftocairo")}')
 
 print('All is good!!!')
