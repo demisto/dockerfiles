@@ -725,3 +725,9 @@ updates:
     directory: /docker/qrcode
     schedule:
      interval: daily
+  - package-ecosystem: pip
+    directory: /docker/stringsifter
+    ignore:
+      - dependency-name: "scikit-learn "
+    schedule:
+      interval: daily
