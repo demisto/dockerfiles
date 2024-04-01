@@ -20,6 +20,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
 && apt-get purge -y --auto-remove \
   python3-dev \
   zlib1g-dev \
+&& shot-scraper install \
 && rm -rf /var/lib/apt/lists/* \
 && touch /var/chrome_headless.log \
 && chmod 777 /var/chrome_headless.log \
