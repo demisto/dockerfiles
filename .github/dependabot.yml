@@ -263,6 +263,9 @@ updates:
       interval: daily
   - package-ecosystem: pip
     directory: /docker/py3ews
+    ignore:
+      - dependency-name: "requests-ntlm"
+      - dependency-name: "exchangelib"
     schedule:
       interval: daily
   - package-ecosystem: pip
@@ -659,6 +662,9 @@ updates:
       interval: daily
   - package-ecosystem: pip
     directory: /docker/py3-native
+    ignore:
+      - dependency-name: "requests-ntlm"
+      - dependency-name: "exchangelib"
     schedule:
       interval: daily
   - package-ecosystem: pip
@@ -719,3 +725,9 @@ updates:
     directory: /docker/qrcode
     schedule:
      interval: daily
+  - package-ecosystem: pip
+    directory: /docker/stringsifter
+    ignore:
+      - dependency-name: scikit-learn
+    schedule:
+      interval: daily

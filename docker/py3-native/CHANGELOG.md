@@ -1,5 +1,10 @@
 # py3-native Changelog
 
+## Unreleased
+* Updated the library ***exchangelib*** to version ***5.0.3*** to allow support for the **EWSv2**  intgration.
+* Added the library ***ntlm_auth*** to allow support for the **EWSv2**  intgration.
+
+
 ## 8.6.0
 * Added support for the **auth-utils** image.
 ## 8.4.0
