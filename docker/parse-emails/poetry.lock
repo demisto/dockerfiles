@@ -163,13 +163,13 @@ test-randomorder = ["pytest-randomly"]
 
 [[package]]
 name = "datetime"
-version = "5.4"
+version = "5.5"
 description = "This package provides a DateTime data type, as known from Zope. Unless you need to communicate with Zope APIs, you're probably better off using Python's built-in datetime module."
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "DateTime-5.4-py3-none-any.whl", hash = "sha256:88caf4d2441fe479038f4740a1071953686f7c1ed6c9e8c7df9ebe84e592f0c6"},
-    {file = "DateTime-5.4.tar.gz", hash = "sha256:568ea851d40773d846c0b5efe260aecb717c2b933c052a3c13b712809c16b57d"},
+    {file = "DateTime-5.5-py3-none-any.whl", hash = "sha256:0abf6c51cb4ba7cee775ca46ccc727f3afdde463be28dbbe8803631fefd4a120"},
+    {file = "DateTime-5.5.tar.gz", hash = "sha256:21ec6331f87a7fcb57bd7c59e8a68bfffe6fcbf5acdbbc7b356d6a9a020191d3"},
 ]
 
 [package.dependencies]
@@ -296,11 +296,9 @@ name = "parse-emails"
 version = "0.1.21"
 description = "Parses an email message file and extracts the data from it."
 optional = false
-python-versions = ">=3.7,<4.0"
-files = [
-    {file = "parse_emails-0.1.21-py3-none-any.whl", hash = "sha256:630f4756f061755a532727b49497a212356cf301381d164ea4a5ea6f442f25af"},
-    {file = "parse_emails-0.1.21.tar.gz", hash = "sha256:830b7ef8c31a0043c4eb894ef1ba21b267f6f56d6b4584e26f9f4c67ced3d26f"},
-]
+python-versions = "^3.7"
+files = []
+develop = false
 
 [package.dependencies]
 chardet = "*"
@@ -312,6 +310,12 @@ pyopenssl = "*"
 pytest = "*"
 python-magic = "*"
 RTFDE = "*"
+
+[package.source]
+type = "git"
+url = "https://github.com/demisto/parse-emails.git"
+reference = "more-logs-2"
+resolved_reference = "9262c4c6277a4c35c108bce16c4dda1c230a74f4"
 
 [[package]]
 name = "pcodedmp"
@@ -356,13 +360,13 @@ testing = ["pytest", "pytest-benchmark"]
 
 [[package]]
 name = "pycparser"
-version = "2.21"
+version = "2.22"
 description = "C parser in Python"
 optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+python-versions = ">=3.8"
 files = [
-    {file = "pycparser-2.21-py2.py3-none-any.whl", hash = "sha256:8ee45429555515e1f6b185e78100aea234072576aa43ab53aefcae078162fca9"},
-    {file = "pycparser-2.21.tar.gz", hash = "sha256:e644fdec12f7872f86c58ff790da456218b10f863970249516d60a5eaca77206"},
+    {file = "pycparser-2.22-py3-none-any.whl", hash = "sha256:c3702b6d3dd8c7abc1afa565d7e63d53a1d0bd86cdc24edd75470f4de499cfcc"},
+    {file = "pycparser-2.22.tar.gz", hash = "sha256:491c8be9c040f5390f5bf44a5b07752bd07f56edf992381b05c701439eec10f6"},
 ]
 
 [[package]]
@@ -550,4 +554,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10"
-content-hash = "c2dd6bc75fb19daf915444a5a02cbd46400b39dd51a35027689a6f340b4e2639"
+content-hash = "5b66204d6eaadacb0b82ac69e90cbb51680f06790012c3ed0e1092defee6630a"
