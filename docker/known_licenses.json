@@ -1,2 +1,149 @@
-[{"Type": 1, "ContentsFormat": "json", "Contents": {"ID": "1c9120f9-c54e-46dd-a3d0-c03023652d48", "Status": "wait"}, "HumanReadable": "Search ID: 1c9120f9-c54e-46dd-a3d0-c03023652d48", "EntryContext": {"QRadar.SearchEvents(val.ID && val.ID == obj.ID)": {"ID": "1c9120f9-c54e-46dd-a3d0-c03023652d48", "Status": "wait"}}, "IndicatorTimeline": [], "IgnoreAutoExtract": false, "Note": false, "Relationships": [], "PollingCommand": "qradar-search-retrieve-events", "NextRun": "30", "PollingArgs": {"search_id": "1c9120f9-c54e-46dd-a3d0-c03023652d48", "interval_in_seconds": 30, "offense_id": "207", "timeout": "600"}, "PollingItemsRemaining": 0}]}
-{"type": "log", "command": "info", "args": {"args": ["cURL:\ncurl -X GET https://ec2-54-155-52-85.eu-west-1.compute.amazonaws.com/api/siem/offenses/207 -H \"Accept: */*\" -H \"Version: 17.0\" -H \"Authorization: <XX_REPLACED>\" --noproxy \"*\" -k "]}}
+{
+    "description": "Document specifies packages which pypi doesn't have a clear license and we've mapped out the license manually. Format should be: License :: ...",
+    "packages": {
+        "SelfSignedCertificate": {
+            "license": "License :: MIT License",
+            "url": "https://github.com/rjmholt/SelfSignedCertificate/blob/master/LICENSE.txt"
+        },
+        "dnspython": {
+            "license": "License :: ISC License",
+            "url": "https://github.com/rthalley/dnspython/blob/master/LICENSE"
+        },
+        "requests-kerberos": {
+            "license": "License :: ISC License",
+            "url": "https://github.com/requests/requests-kerberos/blob/master/LICENSE"
+        },
+        "SOAPpy": {
+            "license": "License :: BSD 3-Clause License",
+            "url": "https://github.com/kiorky/SOAPpy/blob/develop/LICENSE"
+        },
+        "pyvim": {
+            "license": "License :: BSD 3-Clause License",
+            "url": "https://github.com/prompt-toolkit/pyvim/blob/master/LICENSE"
+        },
+        "docxpy": {
+            "license": "License :: MIT License",
+            "url": "https://github.com/badbye/docxpy/blob/master/LICENSE.txt"
+        },
+        "uuid": {
+            "license": "License :: Python Software Foundation License",
+            "url": "http://zesty.ca/python/uuid.README.txt"
+        },
+        "tld": {
+            "license": "License :: GNU Lesser General Public License v2 or Later (LGPLv2+)",
+            "url": "https://github.com/barseghyanartur/tld/issues/46"
+        },
+        "kiwisolver": {
+            "license": "License :: BSD 3-Clause License",
+            "url": "https://github.com/nucleic/kiwi/blob/master/LICENSE"
+        },
+        "Pillow": {
+            "license": "License :: BSD 3-Clause License Modified (PIL Software License)",
+            "url": "https://github.com/python-pillow/Pillow/blob/master/LICENSE"
+        },
+        "text-unidecode": {
+            "license": "License :: Artistic License",
+            "url": "https://github.com/kmike/text-unidecode/blob/master/LICENSE"
+        },
+        "edgegrid-python": {
+            "license": "License :: Apache License 2.0",
+            "url": "https://github.com/akamai/AkamaiOPEN-edgegrid-python/blob/master/LICENSE"
+        },
+        "algorithmia": {
+            "license": "License :: MIT License",
+            "url": "https://github.com/algorithmiaio/algorithmia-python/blob/master/LICENSE"
+        },
+        "algorithmia-api-client": {
+            "license": "License :: MIT License",
+            "url": "https://github.com/algorithmiaio/algorithmia-python/blob/master/LICENSE"
+        },
+        "orderedmultidict": {
+            "license": "License :: Unlicense",
+            "url": "https://github.com/gruns/orderedmultidict/blob/master/LICENSE.md"
+        },
+        "stix-validator": {
+            "license": "License :: BSD 3-Clause License",
+            "url": "https://github.com/STIXProject/stix-validator/blob/master/LICENSE"
+        },
+        "pefile": {
+            "license": "License :: MIT License",
+            "url": "https://github.com/erocarrera/pefile/blob/master/LICENSE"
+        },
+        "cloudshare": {
+            "license": "License :: Apache License 2.0",
+            "url": "https://github.com/cloudshare/cloudshare-py-sdk/blob/master/LICENSE.txt"
+        },
+        "imutils": {
+            "license": "License :: MIT License",
+            "url": "https://github.com/jrosebr1/imutils/blob/master/LICENSE.txt"
+        },
+        "MicrosoftTeams": {
+            "license": "License :: MIT License",
+            "url": "https://raw.githubusercontent.com/MicrosoftDocs/office-docs-powershell/master/teams/LICENSE.txt"
+        },
+        "PSWSMan": {
+            "license": "License :: MIT License",
+            "url": "https://github.com/jborean93/omi/blob/master/LICENSE"
+        },
+        "msal-extensions": {
+            "license": "License :: MIT License",
+            "url": "https://github.com/AzureAD/microsoft-authentication-library-for-python/blob/dev/LICENSE"
+        },
+        "ansible-runner": {
+            "license": "License :: Apache License 2.0",
+            "url": "https://github.com/ansible/ansible-runner/blob/devel/LICENSE.md"
+        },
+        "nsx-policy-python-sdk": {
+            "license": "License :: MIT License",
+            "url": "https://github.com/vmware/vsphere-automation-sdk-python/blob/master/LICENSE"
+        },
+        "nsx-python-sdk": {
+            "license": "License :: MIT License",
+            "url": "https://github.com/vmware/vsphere-automation-sdk-python/blob/master/LICENSE"
+        },
+        "nsx-policy-python-sdk": {
+            "license": "License :: MIT License",
+            "url": "https://github.com/vmware/vsphere-automation-sdk-python/blob/master/LICENSE"
+        },
+        "vapi-client-bindings": {
+            "license": "License :: MIT License",
+            "url": "https://github.com/vmware/vsphere-automation-sdk-python/blob/master/LICENSE"
+        },
+        "vmc-client-bindings": {
+            "license": "License :: MIT License",
+            "url": "https://github.com/vmware/vsphere-automation-sdk-python/blob/master/LICENSE"
+        },
+        "vmc-draas-client-bindings": {
+            "license": "License :: MIT License",
+            "url": "https://github.com/vmware/vsphere-automation-sdk-python/blob/master/LICENSE"
+        },
+        "vapi-runtime": {
+            "license": "License :: MIT License",
+            "url": "https://github.com/vmware/vsphere-automation-sdk-python/blob/master/LICENSE"
+        },
+        "nsx-python-sdk": {
+            "license": "License :: MIT License",
+            "url": "https://github.com/vmware/vsphere-automation-sdk-python/blob/master/LICENSE"
+        },
+        "nsx-policy-python-sdk": {
+            "license": "License :: MIT License",
+            "url": "https://github.com/vmware/vsphere-automation-sdk-python/blob/master/LICENSE"
+        },
+        "nsx-vmc-policy-python-sdk": {
+            "license": "License :: MIT License",
+            "url": "https://github.com/vmware/vsphere-automation-sdk-python/blob/master/LICENSE"
+        },
+        "nsx-vmc-aws-integration-python-sdk": {
+            "license": "License :: MIT License",
+            "url": "https://github.com/vmware/vsphere-automation-sdk-python/blob/master/LICENSE"
+        },
+        "vapi-common-client": {
+            "license": "License :: MIT License",
+            "url": "https://github.com/vmware/vsphere-automation-sdk-python/blob/master/LICENSE"
+        },
+        "portalocker": {
+            "license": "License :: PSF license",
+            "url": "https://github.com/WoLpH/portalocker/blob/develop/LICENSE"
+        }
+    }
+}
