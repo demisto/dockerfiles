@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "test-kube-docker"
+version = "0.1.0"
+description = "Requirements to use the Kubernetes python client"
+authors = ["Christopher Scogin <mrcoggsworth@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+kubernetes = "^29.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
