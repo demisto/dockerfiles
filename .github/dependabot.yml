@@ -665,12 +665,13 @@ updates:
     ignore:
       - dependency-name: "requests-ntlm"
       - dependency-name: "exchangelib"
+      - dependency-name: "intezer-sdk"
     schedule:
       interval: daily
   - package-ecosystem: pip
     directory: /docker/splunksdk-py3
     schedule:
-      interval: daily  
+      interval: daily
   - package-ecosystem: pip
     directory: /docker/datadog-api-client
     schedule:
