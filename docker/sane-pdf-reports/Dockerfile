@@ -1,4 +1,4 @@
-# Last modified: 2024-04-01T12:00:00.000000+00:00
+# Last modified: 2024-04-02T12:00:00.000000+00:00
 FROM demisto/python3-deb:3.10.13.88602
 
 WORKDIR "/app"
@@ -33,7 +33,7 @@ RUN apt-get update -y -q && \
 
 RUN npm i puppeteer@5.3.1 && ln -s /app/node_modules/puppeteer/.local-chromium/linux-*/chrome-linux/chrome /usr/bin/chromium-browser
 
-RUN python get_build_artifacts.py --project sane-reports --branch master --filter "sane-report$" \
+RUN python get_build_artifacts.py --project sane-reports --branch test-logo-path --filter "sane-report$" \
     && mv sane-report sane-report.tar && tar -xvf sane-report.tar && rm -f sane-report.tar
 
 # Update permissions and ownership on /app dir
