@@ -6,5 +6,5 @@ COPY amazon.redshiftodbc.ini /etc/amazon.redshiftodbc.ini
 RUN yum -y install unixODBC && yum -y --nogpgcheck localinstall redshift.rpm
 
 ENV AMAZONREDSHIFTODBCINI=/etc/amazon.redshiftodbc.ini
-ENV ODBCSYSINI=/etc/odbc
-ENV ODBCINI=/etc/odbc/odbc.ini
+ENV ODBCSYSINI=/etc
+ENV ODBCINI=/etc/odbcinst.ini
