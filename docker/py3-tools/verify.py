@@ -6,8 +6,8 @@ import geopy
 import jarm
 
 # paho-mqtt
-import paho.mqtt as mqtt
-mqttc = mqtt.client.Client(mqtt.CallbackAPIVersion.VERSION1) # argument is v2.0.0 requirement, see https://eclipse.dev/paho/files/paho.mqtt.python/html/migrations.html
+from paho.mqtt.client import Client as mqtt_client
+mqttc = mqtt_client(mqtt_client.CallbackAPIVersion.VERSION1) # argument is v2.0.0 requirement, see https://eclipse.dev/paho/files/paho.mqtt.python/html/migrations.html
 
 # tweepy
 import tweepy
