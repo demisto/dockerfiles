@@ -577,6 +577,8 @@ updates:
     directory: /docker/py3-tools-ubi
     schedule:
       interval: daily
+    ignore:
+      - dependency-name: paho-mqtt
   - package-ecosystem: pip
     directory: /docker/pan-os-python
     schedule:
