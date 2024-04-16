@@ -43,7 +43,7 @@ hashlib.new('md4', b"text")
 print('all is good, `get_localzone() -> {}` is working'.format(test))
 
 
-search_string = 'Options = SSL_OP_IGNORE_UNEXPECTED_EOF'
+search_string = 'Options |= SSL_OP_IGNORE_UNEXPECTED_EOF'
 if ssl.OPENSSL_VERSION_INFO >= (3,0,0,0,0):
     with open("/etc/ssl/openssl.cnf") as f:
         ssl_cnf = f.read()
