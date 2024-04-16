@@ -1,11 +1,11 @@
-FROM demisto/crypto:1.0.0.91402
+FROM demisto/python3-deb:3.10.14.91136
 
 COPY requirements.txt .
 
-RUN apk --update add --no-cache libxslt-dev \
-  && apk --update add --no-cache --virtual .build-dependencies python3-dev gcc build-base wget git libffi-dev openssl-dev python3-dev libxml2-dev \
-  && pip install --no-cache-dir -r requirements.txt \
-  && apk del .build-dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+ libxslt-dev python3-dev gcc build-base wget git libffi-dev python3-dev libxml2-dev \
+&& pip install --no-cache-dir -r requirements.txt \
+&& apt-get purge -y --auto-remove wget git
 
 # Handling the issue described here: https://github.com/ecederstrand/exchangelib/issues/608
 # by activating the legacy sect in openssl.cnf (re-enableing md4 to hashlib)
@@ -15,18 +15,7 @@ RUN cp /etc/ssl/openssl.cnf /etc/ssl/openssl.cnf.org \
 && sed -i '/\[default_sect\]/r /tmp/ssl.cnf' /etc/ssl/openssl.cnf \
 && sed -i '/# activate = 1/d' /etc/ssl/openssl.cnf \
 && rm /tmp/ssl.cnf \
-&& grep 'legacy_sect' /etc/ssl/openssl.cnf
+&& grep 'legacy_sect' /etc/ssl/openssl.cnf \
+&& rm -rf /var/lib/apt/lists/*
 
-# Handling the issue described here https://knowledgebase.paloaltonetworks.com/KCSArticleDetail?id=kA10g000000POJ0CAO&lang=en_US%E2%80%A9
-# by enabling UnsafeLegacyRenegotiation
-# We add to the openssl_init section after the last element "providers = provider_sect"
-RUN cp /etc/ssl/openssl.cnf /etc/ssl/openssl.cnf.org && \ 
-echo -e 'ssl_conf = ssl_sect\n\
-[ssl_sect]\n\
-system_default = system_default_sect\n\
-\n\
-[system_default_sect]\n\
-Options |= SSL_OP_IGNORE_UNEXPECTED_EOF\n' > /tmp/ssl.cnf \
-&& sed -i '/providers = provider_sect/r /tmp/ssl.cnf' /etc/ssl/openssl.cnf \
-&& rm /tmp/ssl.cnf \
-&& grep -C 10 'Options |= SSL_OP_IGNORE_UNEXPECTED_EOF' /etc/ssl/openssl.cnf
+
