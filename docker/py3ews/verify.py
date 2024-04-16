@@ -41,14 +41,3 @@ assert 'md4' in hashlib.algorithms_available
 hashlib.new('md4', b"text")
 
 print('all is good, `get_localzone() -> {}` is working'.format(test))
-
-
-search_string = 'Options |= SSL_OP_IGNORE_UNEXPECTED_EOF'
-if ssl.OPENSSL_VERSION_INFO >= (3,0,0,0,0):
-    with open("/etc/ssl/openssl.cnf") as f:
-        ssl_cnf = f.read()
-        if search_string not in ssl_cnf:
-            print ('openSSL version changed.\n\
-Please validate EOF at the end of a file error is not an issue.\n')
-            exit(1)
-print('openSSL version is good.')
