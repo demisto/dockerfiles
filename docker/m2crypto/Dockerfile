@@ -1,5 +1,5 @@
-# Last modified: 2024-03-26T00:48:57.797595+00:00
-FROM demisto/python3:3.10.14.91134 AS base
+# Last modified: 2024-04-17T08:08:40.881691+00:00
+FROM demisto/python3:3.10.14.92207 AS base
 
 RUN apk --update add --no-cache swig
 
