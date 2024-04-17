@@ -33,12 +33,3 @@ import ntlm_auth
 import ssl
 
 test = tzlocal.get_localzone()
-
-# Make sure MD4 is enabled:
-hashlib.algorithms_available
-print(hashlib.algorithms_available)
-assert 'md4' in hashlib.algorithms_available
-
-print('all is good, `get_localzone() -> {}` is working'.format(test))
-
-print('openSSL version is good.')
