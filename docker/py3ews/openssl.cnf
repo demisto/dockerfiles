@@ -62,7 +62,6 @@ Options = UnsafeLegacyRenegotiation SSL_OP_IGNORE_UNEXPECTED_EOF
 # List of providers to load
 [provider_sect]
 default = default_sect
-legacy = legacy_sect
 # The fips section name should match the section name inside the
 # included fipsmodule.cnf.
 # fips = fips_sect
@@ -75,7 +74,8 @@ legacy = legacy_sect
 # becomes unavailable in openssl.  As a consequence applications depending on
 # OpenSSL may not work correctly which could lead to significant system
 # problems including inability to remotely access the system.
- 
+[default_sect]
+# activate = 1
 
 
 ####################################################################
