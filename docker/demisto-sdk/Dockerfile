@@ -1,4 +1,4 @@
-FROM demisto/python3-deb:3.10.14.92213
+FROM demisto/python3-deb:3.10.14.92461
 
 WORKDIR /content
 
