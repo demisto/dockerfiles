@@ -2,7 +2,7 @@ FROM demisto/python3-deb:3.10.14.91136
 
 
 # Copy requirements file
-COPY requirements.txt
+COPY requirements.txt .
 
 # Handling the issue described here: https://github.com/ecederstrand/exchangelib/issues/608
 # by activating the legacy sect in openssl.cnf (re-enableing md4 to hashlib)
