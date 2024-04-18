@@ -2,13 +2,7 @@ FROM demisto/python3-deb:3.10.14.91136
 
 
 # Copy requirements file
-COPY requirements.txt .
-
-# Install Python dependencies
-# Install system dependencies
-  
-RUN pip install --no-cache-dir pipenv && \
-  pipenv install --system --deploy --ignore-pipfile
+COPY requirements.txt
 
 # Handling the issue described here: https://github.com/ecederstrand/exchangelib/issues/608
 # by activating the legacy sect in openssl.cnf (re-enableing md4 to hashlib)
