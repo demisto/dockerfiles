@@ -1,6 +1,15 @@
-FROM demisto/powershell-deb:7.3.0.49844
+FROM demisto/python3-deb:3.10.14.91136
 
+# Basic linux utilities
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  procps \
+&& rm -rf /var/lib/apt/lists/*
 
+# Upgrade all packages to latest
+RUN apt-get update && apt-get -y --no-install-recommends upgrade \
+&& rm -rf /var/lib/apt/lists/*
+
+#RUN rm CVE-2021-3177.diff
 COPY requirements.txt .
 
 #Install tools for building binary deps (will be reomved later on)
