@@ -1,9 +1,6 @@
 FROM demisto/powershell-deb:7.3.0.49844
 
 
-
-# END Docker file from https://raw.githubusercontent.com/docker-library/python/331890ef059fae05f84c652520b78c340526dc71/3.10/bullseye/Dockerfile
-
 # Basic linux utilities
 RUN apt-get update && apt-get install -y --no-install-recommends \
   procps \
