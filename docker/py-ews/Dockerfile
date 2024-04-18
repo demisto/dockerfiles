@@ -1,42 +1,42 @@
 FROM demisto/python3-deb:3.10.14.91136
 
-# Basic linux utilities
 RUN apt-get update && apt-get install -y --no-install-recommends \
-  procps \
-&& rm -rf /var/lib/apt/lists/*
-
-# Upgrade all packages to latest
-RUN apt-get update && apt-get -y --no-install-recommends upgrade \
-&& rm -rf /var/lib/apt/lists/*
-
-#RUN rm CVE-2021-3177.diff
-COPY requirements.txt .
-
-#Install tools for building binary deps (will be reomved later on)
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    gcc \
+    libxslt-dev \
     python3-dev \
+    gcc \
     build-essential \
     wget \
     git \
-    libxml2 \
-    libxslt1.1 \
-	libkrb5-3 \
+    libffi-dev \
+    libssl-dev \
+    libxml2-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements file
+COPY requirements.txt .
+
+# Install Python dependencies
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    libkrb5-dev \
     libffi-dev \
     libxml2-dev \
     libxslt-dev \
     libssl-dev \
-    libkrb5-dev \
-&& pip install --no-cache-dir -r requirements.txt \
-&& apt-get purge -y --auto-remove \
-  gcc \
-  python3-dev \
-  build-essential \
-  git \
-  wget \
-  libffi-dev \
-  wget \
-  libxml2-dev \
-  libssl-dev \
-  libkrb5-dev \
-&& rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/*
+  
+RUN pip install --no-cache-dir pipenv && \
+  pipenv install --system --deploy --ignore-pipfile
+
+
+
+# Handling the issue described here: https://github.com/ecederstrand/exchangelib/issues/608
+# by activating the legacy sect in openssl.cnf (re-enableing md4 to hashlib)
+RUN cp /etc/ssl/openssl.cnf /etc/ssl/openssl.cnf.org \
+&& sed -i '/default = default_sect/a legacy = legacy_sect' /etc/ssl/openssl.cnf \
+&& echo -e 'activate = 1\n\n[legacy_sect]\nactivate = 1\n' > /tmp/ssl.cnf \
+&& sed -i '/\[default_sect\]/r /tmp/ssl.cnf' /etc/ssl/openssl.cnf \
+&& sed -i '/# activate = 1/d' /etc/ssl/openssl.cnf \
+&& rm /tmp/ssl.cnf \
+&& grep 'legacy_sect' /etc/ssl/openssl.cnf
