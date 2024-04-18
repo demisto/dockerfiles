@@ -4,7 +4,8 @@ FROM demisto/py3-tools:1.0.0.92689
 COPY requirements.txt .
 
 
-RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git libffi-dev \
+# Locking zlib version due to an issue with pyminizip. The issue: https://github.com/smihica/pyminizip/issues/53
+RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git libffi-dev zlib=1.2.13-r0 \
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies
 
