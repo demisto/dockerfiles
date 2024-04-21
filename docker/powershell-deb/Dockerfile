@@ -1,7 +1,7 @@
 # Last modified: 2024-03-22T00:12:32.871263+00:00
 FROM mcr.microsoft.com/powershell:7.4-debian-bullseye-slim
 
-RUN echo 'deb http://deb.debian.org/debian buster-backports main' >> /etc/apt/sources.list
+RUN echo 'deb http://deb.debian.org/debian bullseye-backports main' >> /etc/apt/sources.list
 
 # Basic linux utilities
 RUN apt-get update && apt-get install -y --no-install-recommends \
