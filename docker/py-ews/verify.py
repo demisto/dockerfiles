@@ -1,3 +1,14 @@
+import email
+import hashlib
+import subprocess
+import warnings
+from collections import deque
+from multiprocessing import Process
+
+import lxml
+import dateparser
+import exchangelib
+from io import StringIO
 from exchangelib import (BASIC, DELEGATE, DIGEST, IMPERSONATION, NTLM, Account,
                          Body, Build, Configuration, Credentials, EWSDateTime,
                          EWSTimeZone, FileAttachment, Folder, HTMLBody,
@@ -19,17 +30,6 @@ from exchangelib.version import (EXCHANGE_2007, EXCHANGE_2010,
                                  EXCHANGE_2010_SP2, EXCHANGE_2013,
                                  EXCHANGE_2016, EXCHANGE_2019)
 from future import utils as future_utils
-import email
-import hashlib
-import subprocess
-import warnings
-from collections import deque
-from multiprocessing import Process
-
-import dateparser
-import exchangelib
-from io import StringIO
-
 from requests.exceptions import ConnectionError
 from _sqlite3 import *
 # verify that we support dh 1024

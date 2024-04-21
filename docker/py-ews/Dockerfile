@@ -1,26 +1,43 @@
-FROM demisto/python3-deb:3.10.14.91136
 
+FROM demisto/python3-deb:3.10.14.92461
 
-# Copy requirements file
+# Basic linux utilities
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  procps \
+&& rm -rf /var/lib/apt/lists/*
+
+# Upgrade all packages to latest
+RUN apt-get update && apt-get -y --no-install-recommends upgrade \
+&& rm -rf /var/lib/apt/lists/*
+
+#RUN rm CVE-2021-3177.diff
 COPY requirements.txt .
 
+#Install tools for building binary deps (will be reomved later on)
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libxslt-dev \
-    python3-dev \
     gcc \
+    python3-dev \
     build-essential \
     wget \
     git \
+    libxml2 \
+    libxslt1.1 \
+	libkrb5-3 \
     libffi-dev \
-    libssl-dev \
     libxml2-dev \
-    && rm -rf /var/lib/apt/lists/* \
-    && pip install --no-cache-dir -r requirements.txt \
-    && apt-get purge -y --auto-remove \
-    python3-dev \
-    gcc \
-    build-essential \
-    wget \
-    libffi-dev \
+    libxslt-dev \
     libssl-dev \
-    && rm -rf /var/cache/apt/*
+    libkrb5-dev \
+&& pip install --no-cache-dir -r requirements.txt \
+&& apt-get purge -y --auto-remove \
+  gcc \
+  python3-dev \
+  build-essential \
+  git \
+  wget \
+  libffi-dev \
+  wget \
+  libxml2-dev \
+  libssl-dev \
+  libkrb5-dev \
+&& rm -rf /var/lib/apt/lists/*
