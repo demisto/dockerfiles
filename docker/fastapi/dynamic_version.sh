@@ -1,1 +1,1 @@
-pip freeze | grep demisto-sdk | grep -o -E '[0-9]{1,2}\.[0-9]{1,2}(\.[0-9]+)?'
+pip freeze | grep fastapi | grep -o -E '[0-9]{1,2}\.[0-9]{1,2}(\.[0-9]+)?'
