@@ -1,5 +1,5 @@
 
-FROM demisto/py3-tools:1.0.0.93565
+FROM demisto/py3-tools:1.0.0.93577
 
 COPY requirements.txt .
 
