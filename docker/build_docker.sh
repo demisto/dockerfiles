@@ -238,12 +238,10 @@ function docker_build {
 
       echo "running docker build again with tag $image_full_name"
 
-      cat "$tmp_dir/Dockerfile"
       docker build -f "$tmp_dir/Dockerfile" . -t ${image_full_name} \
         --label "org.opencontainers.image.authors=Demisto <containers@demisto.com>" \
         --label "org.opencontainers.image.version=${VERSION}" \
         --label "org.opencontainers.image.revision=${CIRCLE_SHA1}"
-      echo "done docker build"
     fi
     rm -rf "$tmp_dir"
 
