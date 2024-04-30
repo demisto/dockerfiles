@@ -6,7 +6,7 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-exchangelib = "*"
+exchangelib = {editable = false, ref = "master", git = "https://github.com/ecederstrand/exchangelib.git"}
 chardet = "*"
 dateparser = "*"
 asn1crypto = "*"
