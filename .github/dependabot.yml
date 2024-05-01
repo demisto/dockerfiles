@@ -573,10 +573,14 @@ updates:
     directory: /docker/py3-tools
     schedule:
       interval: daily
+    ignore:
+      - dependency-name: "intezer-sdk"
   - package-ecosystem: pip
     directory: /docker/py3-tools-ubi
     schedule:
       interval: daily
+    ignore:
+      - dependency-name: "intezer-sdk"
   - package-ecosystem: pip
     directory: /docker/pan-os-python
     schedule:
@@ -665,12 +669,13 @@ updates:
     ignore:
       - dependency-name: "requests-ntlm"
       - dependency-name: "exchangelib"
+      - dependency-name: "intezer-sdk"
     schedule:
       interval: daily
   - package-ecosystem: pip
     directory: /docker/splunksdk-py3
     schedule:
-      interval: daily  
+      interval: daily
   - package-ecosystem: pip
     directory: /docker/datadog-api-client
     schedule:
