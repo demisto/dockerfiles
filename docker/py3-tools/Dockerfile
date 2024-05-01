@@ -1,5 +1,5 @@
 
-FROM demisto/python3:3.10.14.91134
+FROM demisto/py3-tools:1.0.0.93618
 
 COPY requirements.txt .
 
@@ -17,4 +17,3 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
 # paho-mqtt, python3-arrow, vertica, sendgrid, circleci, archer  85mb
 # tweepy, tld, feed-parser, langdetect, gql, minio, ldap, pymongo 100mb
 # cyjax, zabbix, jmespath, xlrd-py3, elasticsearch, aiohttp, stix2 120mb
-
