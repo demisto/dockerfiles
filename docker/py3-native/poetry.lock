@@ -692,23 +692,21 @@ profile = ["gprof2dot (>=2022.7.29)"]
 
 [[package]]
 name = "dnspython"
-version = "2.6.1"
+version = "2.0.0"
 description = "DNS toolkit"
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.6"
 files = [
-    {file = "dnspython-2.6.1-py3-none-any.whl", hash = "sha256:5ef3b9680161f6fa89daf8ad451b5f1a33b18ae8a1c6778cdf4b43f08c0a6e50"},
-    {file = "dnspython-2.6.1.tar.gz", hash = "sha256:e8f0f9c23a7b7cb99ded64e6c3a6f3e701d78f50c55e002b839dea7225cff7cc"},
+    {file = "dnspython-2.0.0-py3-none-any.whl", hash = "sha256:40bb3c24b9d4ec12500f0124288a65df232a3aa749bb0c39734b782873a2544d"},
+    {file = "dnspython-2.0.0.zip", hash = "sha256:044af09374469c3a39eeea1a146e8cac27daec951f1f1f157b1962fc7cb9d1b7"},
 ]
 
 [package.extras]
-dev = ["black (>=23.1.0)", "coverage (>=7.0)", "flake8 (>=7)", "mypy (>=1.8)", "pylint (>=3)", "pytest (>=7.4)", "pytest-cov (>=4.1.0)", "sphinx (>=7.2.0)", "twine (>=4.0.0)", "wheel (>=0.42.0)"]
-dnssec = ["cryptography (>=41)"]
-doh = ["h2 (>=4.1.0)", "httpcore (>=1.0.0)", "httpx (>=0.26.0)"]
-doq = ["aioquic (>=0.9.25)"]
-idna = ["idna (>=3.6)"]
-trio = ["trio (>=0.23)"]
-wmi = ["wmi (>=1.5.1)"]
+curio = ["curio (>=1.2)", "sniffio (>=1.1)"]
+dnssec = ["cryptography (>=2.6)"]
+doh = ["requests", "requests-toolbelt"]
+idna = ["idna (>=2.1)"]
+trio = ["sniffio (>=1.1)", "trio (>=0.14.0)"]
 
 [[package]]
 name = "dpkt"
@@ -790,24 +788,24 @@ test = ["pytest (>=6)"]
 
 [[package]]
 name = "exchangelib"
-version = "5.3.0"
+version = "5.0.3"
 description = "Client for Microsoft Exchange Web Services (EWS)"
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.7"
 files = [
-    {file = "exchangelib-5.3.0-py3-none-any.whl", hash = "sha256:aa712a0b06ff29df31f86c844e6853cf8dd24ebda0fec5edfcfa208104d78f94"},
-    {file = "exchangelib-5.3.0.tar.gz", hash = "sha256:caf96f3e3b651b7ddcf76b7667ac2308c6a9fe32d28e864a76a53448b924ec35"},
+    {file = "exchangelib-5.0.3-py2.py3-none-any.whl", hash = "sha256:00a7666099aeca5e32ded089e612a6d5a9c9aa412ff41f385bbd12d27a248976"},
+    {file = "exchangelib-5.0.3.tar.gz", hash = "sha256:b254154fa543a0d9ff47762f4cdd718327971987fff444522849aa1f4017b7fd"},
 ]
 
 [package.dependencies]
 cached-property = "*"
 defusedxml = ">=0.6.0"
-dnspython = ">=2.2.0"
+dnspython = ">=2.0.0"
 isodate = "*"
 lxml = ">3.0"
 oauthlib = "*"
 pygments = "*"
-requests = ">=2.31.0"
+requests = ">=2.7"
 requests-ntlm = ">=0.2.0"
 requests-oauthlib = "*"
 tzdata = "*"
@@ -1245,17 +1243,17 @@ files = [
 
 [[package]]
 name = "ipwhois"
-version = "1.1.0"
+version = "1.2.0"
 description = "Retrieve and parse whois data for IPv4 and IPv6 addresses."
 optional = false
 python-versions = "*"
 files = [
-    {file = "ipwhois-1.1.0-py2.py3-none-any.whl", hash = "sha256:1f01f7cf4b4d667df6859e9f52d0971aac830d1e602946b4c02f477a393cb585"},
-    {file = "ipwhois-1.1.0.tar.gz", hash = "sha256:904efbd8d5fbb3319fc7e3aa33923fdd272bb81fd5a04bd56fd9125be6437a71"},
+    {file = "ipwhois-1.2.0-py2.py3-none-any.whl", hash = "sha256:9f14dfafb5d9eb7c7f56ab34cfad9868b5e453ab4161a90d69fb714fe712056a"},
+    {file = "ipwhois-1.2.0.tar.gz", hash = "sha256:831e3fef3b8041201a048e9456e3b80f45c6c8b7174f34ed211f66b596c84bbe"},
 ]
 
 [package.dependencies]
-dnspython = "*"
+dnspython = "<=2.0.0"
 
 [[package]]
 name = "isodate"
@@ -1424,6 +1422,7 @@ files = [
     {file = "lxml-5.2.1-cp37-cp37m-musllinux_1_2_x86_64.whl", hash = "sha256:9e2addd2d1866fe112bc6f80117bcc6bc25191c5ed1bfbcf9f1386a884252ae8"},
     {file = "lxml-5.2.1-cp37-cp37m-win32.whl", hash = "sha256:f51969bac61441fd31f028d7b3b45962f3ecebf691a510495e5d2cd8c8092dbd"},
     {file = "lxml-5.2.1-cp37-cp37m-win_amd64.whl", hash = "sha256:b0b58fbfa1bf7367dde8a557994e3b1637294be6cf2169810375caf8571a085c"},
+    {file = "lxml-5.2.1-cp38-cp38-macosx_10_9_universal2.whl", hash = "sha256:3e183c6e3298a2ed5af9d7a356ea823bccaab4ec2349dc9ed83999fd289d14d5"},
     {file = "lxml-5.2.1-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:804f74efe22b6a227306dd890eecc4f8c59ff25ca35f1f14e7482bbce96ef10b"},
     {file = "lxml-5.2.1-cp38-cp38-manylinux_2_12_i686.manylinux2010_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:08802f0c56ed150cc6885ae0788a321b73505d2263ee56dad84d200cab11c07a"},
     {file = "lxml-5.2.1-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:0f8c09ed18ecb4ebf23e02b8e7a22a05d6411911e6fabef3a36e4f371f4f2585"},
@@ -1652,7 +1651,7 @@ name = "ndg-httpsclient"
 version = "0.5.1"
 description = "Provides enhanced HTTPS support for httplib and urllib2 using PyOpenSSL"
 optional = false
-python-versions = ">=2.7,<3.0.0 || >=3.4.0"
+python-versions = ">=2.7,<3.0.dev0 || >=3.4.dev0"
 files = [
     {file = "ndg_httpsclient-0.5.1-py2-none-any.whl", hash = "sha256:d2c7225f6a1c6cf698af4ebc962da70178a99bcde24ee6d1961c4f3338130d57"},
     {file = "ndg_httpsclient-0.5.1-py3-none-any.whl", hash = "sha256:dd174c11d971b6244a891f7be2b32ca9853d3797a72edb34fa5d7b07d8fff7d4"},
@@ -4183,4 +4182,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10"
-content-hash = "2bda47a1bd5f6af593ea9ce9499df520781f514db2de95fd1e18a2cc51f6d82a"
+content-hash = "7b13d4fe07b04fb6ccf901e0100a62fc845a854f627cf3012fa8751a627a9435"
