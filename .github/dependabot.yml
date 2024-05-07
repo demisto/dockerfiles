@@ -345,6 +345,8 @@ updates:
       - dependency-name: scikit-learn
   - package-ecosystem: pip
     directory: /docker/fastapi
+    ignore:
+      - dependency-name: pydantic
     schedule:
       interval: daily
   - package-ecosystem: pip
