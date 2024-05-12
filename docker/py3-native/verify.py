@@ -13,3 +13,5 @@ print(f'Using pychrome version {pychrome.__version__}')
 
 import pdf2image
 print(f'Using poppler version: {pdf2image.pdf2image._get_poppler_version("pdftocairo")}')
+
+import pyzipper

@@ -7,6 +7,7 @@ import jarm
 
 # paho-mqtt
 import paho.mqtt.client as mqtt
+import pyzipper
 mqttc = mqtt.Client()
 
 # tweepy
