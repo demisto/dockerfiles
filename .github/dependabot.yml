@@ -263,6 +263,8 @@ updates:
       interval: daily
   - package-ecosystem: pip
     directory: /docker/py3ews
+    ignore:
+      - dependency-name: "requests-ntlm"
     schedule:
       interval: daily
   - package-ecosystem: pip
@@ -343,6 +345,8 @@ updates:
       - dependency-name: scikit-learn
   - package-ecosystem: pip
     directory: /docker/fastapi
+    ignore:
+      - dependency-name: pydantic
     schedule:
       interval: daily
   - package-ecosystem: pip
@@ -455,7 +459,6 @@ updates:
     directory: /docker/py-ews
     ignore:
       - dependency-name: "requests-ntlm"
-      - dependency-name: "exchangelib"
     schedule:
       interval: daily
   - package-ecosystem: pip
@@ -570,10 +573,14 @@ updates:
     directory: /docker/py3-tools
     schedule:
       interval: daily
+    ignore:
+      - dependency-name: "intezer-sdk"
   - package-ecosystem: pip
     directory: /docker/py3-tools-ubi
     schedule:
       interval: daily
+    ignore:
+      - dependency-name: "intezer-sdk"
   - package-ecosystem: pip
     directory: /docker/pan-os-python
     schedule:
@@ -659,12 +666,15 @@ updates:
       interval: daily
   - package-ecosystem: pip
     directory: /docker/py3-native
+    ignore:
+      - dependency-name: "requests-ntlm"
+      - dependency-name: "intezer-sdk"
     schedule:
       interval: daily
   - package-ecosystem: pip
     directory: /docker/splunksdk-py3
     schedule:
-      interval: daily  
+      interval: daily
   - package-ecosystem: pip
     directory: /docker/datadog-api-client
     schedule:
@@ -717,5 +727,15 @@ updates:
      interval: daily
   - package-ecosystem: pip
     directory: /docker/qrcode
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/stringsifter
+    ignore:
+      - dependency-name: scikit-learn
+    schedule:
+      interval: daily
+  - package-ecosystem: pip
+    directory: /docker/kubernetespy
     schedule:
      interval: daily
