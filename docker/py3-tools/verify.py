@@ -16,6 +16,9 @@ import tweepy
 # pycryptodome
 from Crypto.Hash import MD4
 
+# pyzipper
+import pyzipper
+
 print("All good, and you look amazing.")
 
 
