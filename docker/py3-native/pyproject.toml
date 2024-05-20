@@ -45,7 +45,7 @@ parse-emails = "*"
 slack-sdk = {extras = ["optional"], version = "*"}
 pyjwt = {extras = ["crypto"],version = "*"}
 google-api-python-client = "*"
-exchangelib = "*"
+exchangelib = "<=5.0.3"
 requests-oauthlib = "*"
 oauthlib = {extras = ["signedtoken"], version = "*"}
 requests-ntlm = "*"
@@ -78,6 +78,11 @@ pem = "*"
 azure-kusto-data = "*"
 pywinrm = {extras = ["kerberos"],version = "*"}
 pychrome = "*"
+openpyxl = "^3.1.2"
+python-pptx = "^0.6.23"
+ntlm-auth = "^1.5.0"
+yara-python = "^4.5.0"
+plyara = "^2.1.1"
 
 [build-system]
 requires = ["poetry-core"]

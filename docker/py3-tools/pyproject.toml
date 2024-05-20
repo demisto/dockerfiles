@@ -8,7 +8,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "~3.10"
 cloudshare = "*"
-intezer-sdk = "*"
+intezer-sdk = "^1.19.9"
 emoji = "*"
 exifread = "*"
 "stomp.py" = "*"
@@ -23,6 +23,7 @@ imap-tools = "*"
 imapclient = "*"
 pyjarm = "*"
 pyminizip = "*"
+pyzipper = "*"
 paho-mqtt = "*"
 arrow = "*"
 pytz = "*"
@@ -52,7 +53,9 @@ opensearch_dsl = "*"
 aiohttp = "*"
 pycryptodome = "*"
 requests-toolbelt = "*"
-urllib3 = "^2.2.0"
+urllib3 = "^2.2.1"
+pydantic = ">=2.7.1"
+
 [tool.poetry.group.dev.dependencies]
 
 [build-system]

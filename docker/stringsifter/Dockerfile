@@ -1,6 +1,8 @@
-FROM demisto/python3-deb:3.10.13.86718
+FROM demisto/python3-deb:3.10.14.93258
+
+COPY requirements.txt .
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends python3-dev  \
     make gcc g++ wget git libgomp1 \
-  && pip install stringsifter==3.20230711 \
-  && apt-get purge -y --auto-remove gcc g++ make python3-dev wget git
+    && pip install --no-cache-dir -r requirements.txt \
+    && apt-get purge -y --auto-remove gcc g++ make python3-dev wget git

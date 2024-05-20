@@ -1,33 +1,67 @@
 #!/usr/bin/env python
 
 import argparse
+from pathlib import Path
 import requests
 import subprocess
 import os
 import re
 import time
 
+CIRCLECI_DEFAULT_WORKSPACE_DIR = "/home/circleci/project"
 
-def get_docker_image_size(docker_image):
-    """Get the size of the image form docker hub
+
+def get_docker_image_size(docker_image, is_contribution: bool = False) -> str:
+    """Get the size of the image from docker hub or CircleCI worker depending
+    if we're contributing or not.
 
     Arguments:
         docker_image {string} -- the full name of hthe image
+        is_contribution {bool} -- flag whether we should get the image size from Dockerhub or CircleCI artifacts
+
+    Returns:
+    - `str` containing the Docker image in MB, eg. '12.34 MB'.
     """
-    size = "failed querying size"
-    for i in (1, 2, 3):
-        try:
-            name, tag = docker_image.split(':')
-            res = requests.get('https://hub.docker.com/v2/repositories/{}/tags/{}/'.format(name, tag))
-            res.raise_for_status()
-            size_bytes = res.json()['images'][0]['size']
+    size = "N/A"
+    if not is_contribution:
+        for i in (1, 2, 3):
+            try:
+                name, tag = docker_image.split(':')
+                res = requests.get('https://hub.docker.com/v2/repositories/{}/tags/{}/'.format(name, tag))
+                res.raise_for_status()
+                size_bytes = res.json()['images'][0]['size']
+                size = '{0:.2f} MB'.format(float(size_bytes)/1024/1024)
+            except Exception as ex:
+                print("[{}] failed getting image size for image: {}. Err: {}".format(i, docker_image, ex))
+                if i != 3:
+                    print("Sleeping 5 seconds and trying again...")
+                    time.sleep(5)
+    else:
+        docker_image_tar = convert_docker_image_tar(docker_image)
+        if docker_image_tar.exists():
+            size_bytes = docker_image_tar.stat().st_size
             size = '{0:.2f} MB'.format(float(size_bytes)/1024/1024)
-        except Exception as ex:
-            print("[{}] failed getting image size for image: {}. Err: {}".format(i, docker_image, ex))
-            if i != 3:
-                print("Sleeping 5 seconds and trying again...")
-                time.sleep(5)
+        else:
+            print(f"Docker image '{docker_image_tar}' doesn't exist in filesystem")
     return size
+
+
+def convert_docker_image_tar(docker_image: str) -> Path:
+    """
+    Helper function to convert the Docker image to valid path on CircleCI worker. For example:
+    `devdemisto/bottle2:1.0.0.89478.tar.gz` -> `devdemisto_bottle2:1.0.0.89478.tar.gz`.
+
+    Arguments:
+    - `docker_image` (``str``): The docker image filename.
+
+    Returns:
+    - `Path` of the fixed Docker image TAR.
+    """
+
+    circleci_root_path = Path(os.environ.get("CIRCLE_WORKING_DIRECTORY", CIRCLECI_DEFAULT_WORKSPACE_DIR))
+    artifacts_path = circleci_root_path / "artifacts"
+
+    return artifacts_path / f"{docker_image.replace('/', '_')}.tar.gz"
 
 
 def main():
@@ -39,6 +73,16 @@ if CIRCLE_PULL_REQUEST will try to get issue id from last commit comment
     parser = argparse.ArgumentParser(description=desc,
                                      formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument("docker_image", help="The docker image with tag version to use. For example: devdemisto/python3:1.5.0.27")
+    parser.add_argument("--is_contribution", help="Whether the PR is a contribution or not", action="store_true", default=False)
+    parser.add_argument(
+        "-j",
+        "--job-id",
+        help="The CircleCI workflow job ID. Default is the environmental variable CIRCLE_WORKFLOW_JOB_ID",
+        default=os.environ.get('CIRCLE_WORKFLOW_JOB_ID', ""),
+        required=False,
+        dest="job_id"
+    )
+
     args = parser.parse_args()
     if not os.environ.get('GITHUB_KEY'):
         print("No github key set. Will not post a message!")
@@ -61,7 +105,7 @@ if CIRCLE_PULL_REQUEST will try to get issue id from last commit comment
     inspect_format = f'''
 {{{{ range $env := .Config.Env }}}}{{{{ if eq $env "DEPRECATED_IMAGE=true" }}}}## 🔴 IMPORTANT: This image is deprecated 🔴{{{{ end }}}}{{{{ end }}}}
 ## Docker Metadata
-- Image Size: `{get_docker_image_size(args.docker_image)}`
+- Image Size: `{get_docker_image_size(args.docker_image, is_contribution=args.is_contribution)}`
 - Image ID: `{{{{ .Id }}}}`
 - Created: `{{{{ .Created }}}}`
 - Arch: `{{{{ .Os }}}}`/`{{{{ .Architecture }}}}`
@@ -75,16 +119,30 @@ if CIRCLE_PULL_REQUEST will try to get issue id from last commit comment
     mode = "Dev"
     if base_name.startswith('demisto/'):
         mode = "Production"
-    message = (
-        "# Docker Image Ready - {}\n\n".format(mode) +
-        "Docker automatic build at CircleCI has deployed your docker image: {}\n".format(args.docker_image) +
-        "It is available now on docker hub at: https://hub.docker.com/r/{}/tags\n".format(base_name) +
-        "Get started by pulling the image:\n" +
-        "```\n" +
-        "docker pull {}\n".format(args.docker_image) +
-        "```\n" +
-        docker_info
-    )
+    title = f"# Docker Image Ready - {mode}\n\n"
+    if not args.is_contribution:
+        message = (
+            title +
+            "Docker automatic build at CircleCI has deployed your docker image: {}\n".format(args.docker_image) +
+            "It is available now on docker hub at: https://hub.docker.com/r/{}/tags\n".format(base_name) +
+            "Get started by pulling the image:\n" +
+            "```\n" +
+            "docker pull {}\n".format(args.docker_image) +
+            "```\n" +
+            docker_info
+        )
+    elif args.job_id:
+        saved_docker_image = convert_docker_image_tar(args.docker_image).name
+        circleci_docker_image_url = f"https://output.circle-artifacts.com/output/job/{args.job_id}/artifacts/{os.environ.get('CIRCLE_NODE_INDEX', '0')}/docker_images/{saved_docker_image}"
+        message = (
+            title +
+            "Docker automatic build at CircleCI has completed. The Docker image is available as an artifact of the build.\n\n" +
+            "To download it and load it locally run the following command:\n" +
+            "```bash\n" +
+            f"curl -L '{circleci_docker_image_url}' | gunzip | docker load\n" +
+            "```\n" +
+            docker_info
+        )
     print("Going to post comment:\n\n{}".format(message))
     res = requests.post(post_url, json={"body": message}, auth=(os.environ['GITHUB_KEY'], 'x-oauth-basic'))
     try:

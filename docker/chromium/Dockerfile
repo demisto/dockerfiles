@@ -1,15 +1,15 @@
 
-# Last modified: 2024-02-02T00:48:28.654750+00:00
-FROM demisto/python3-deb:3.10.13.86718
+# Last modified: 2024-04-25T00:49:03.772037+00:00
+FROM demisto/python3-deb:3.10.14.93258
 
 COPY requirements.txt .
 
+ARG POPPLER_VERSION=24.02.0
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
   python3-dev \
   wget \
   libxss1 \
-  poppler-utils \
   fonts-noto-cjk \
   fonts-noto-core \
   zlib1g-dev \
@@ -55,8 +55,31 @@ RUN apt-get update && apt-get -t bullseye-backports install -y --no-install-reco
 && rm -rf chromedriver-linux64.zip \
 && rm download_chromedriver.sh \
 && google-chrome --version \
-&& chromedriver --version \
-&& apt-get purge -y --auto-remove \
+&& chromedriver --version
+
+# Install latest Poppler
+RUN apt-get install -y libfreetype-dev libfontconfig-dev libboost-dev libpng-dev zlib1g-dev liblcms2-dev libcurl4 libcurl4-gnutls-dev \
+&& apt-get install -y libjpeg-dev libcairo-dev libopenjp2-7-dev libtiff-dev libnss3-dev \
+&& apt-get install -y build-essential \
+&& apt-get install -y libgpgmepp-dev qtbase5-dev libcairo2-dev \
+&& apt-get install -y xz-utils cmake \
+&& wget https://poppler.freedesktop.org/poppler-${POPPLER_VERSION}.tar.xz -v \
+&& tar -xf ./poppler-${POPPLER_VERSION}.tar.xz \
+&& cd poppler-${POPPLER_VERSION} \
+&& mkdir -p build \
+&& cd build \
+&& apt-get install -y git \
+&& git clone git://git.freedesktop.org/git/poppler/test \
+&& cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DTESTDATADIR=$PWD/testfiles -DENABLE_QT6=OFF -DENABLE_UNSTABLE_API_ABI_HEADERS=ON -DENABLE_GPGME=OFF .. \
+&& make install \
+&& . ~/.bashrc \
+&& ldconfig "$(which pdftoppm)" \
+&& pdftoppm -v \
+&& cd ../.. \
+&& rm poppler-${POPPLER_VERSION}.tar.xz \
+&& rm -rf poppler-${POPPLER_VERSION}/
+
+RUN apt-get purge -y --auto-remove \
   curl \
   unzip \
   jq \
