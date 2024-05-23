@@ -3,8 +3,6 @@ FROM demisto/python3-deb:3.10.14.93258
 
 WORKDIR "/app"
 
-COPY ./get_build_artifacts.py .
-
 SHELL ["/bin/bash", "-c"]
 RUN apt-get update -y -q && \
     apt-get install -y -q nodejs \
