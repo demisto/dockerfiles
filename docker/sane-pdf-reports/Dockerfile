@@ -33,7 +33,7 @@ RUN npm i puppeteer@5.3.1 && ln -s /app/node_modules/puppeteer/.local-chromium/l
 
 RUN apt-get update -y -q && apt-get install -y -q apt-transport-https ca-certificates gnupg curl \
     && echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list \
-    && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg && apt-get update -y && apt-get install google-cloud-sdk -y
+    && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg && apt-get update -y && apt-get install google-cloud-sdk -y
 
 
 RUN gsutil cp -r $(gsutil ls gs://sane-reports-artifacts | sort | tail -n 1)sane-report.tar .  \
