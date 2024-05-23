@@ -36,7 +36,8 @@ RUN apt-get update -y -q && apt-get install -y -q apt-transport-https ca-certifi
     && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg && apt-get update -y && apt-get install google-cloud-sdk -y
 
 
-RUN gsutil cp -r $(gsutil ls gs://sane-reports-artifacts | sort | tail -n 1)sane-report.tar .  \
+RUN artifact=$(gsutil ls gs://sane-reports-artifacts | sort | tail -n 1) && echo "artifact found $artifact" && \
+    gsutil cp -r $(artifact)sane-report.tar . \
     && tar -xvf sane-report.tar && rm -f sane-report.tar
 
 # Update permissions and ownership on /app dir
