@@ -441,6 +441,8 @@ updates:
       interval: daily
   - package-ecosystem: pip
     directory: /docker/polyswarm
+    ignore:
+      - dependency-name: "polyswarm"
     schedule:
       interval: daily
   - package-ecosystem: pip
