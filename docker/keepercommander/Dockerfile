@@ -1,11 +1,13 @@
 
-FROM demisto/python3:3.10.14.95956
+FROM demisto/python3-deb:3.10.14.95528
 
 COPY requirements.txt .
 
-# verify_licenses.py needs the latest pip
-RUN pip3 install --no-cache-dir --upgrade pip
-
-RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git \
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  gcc \
+  python3-dev \
   && pip install --no-cache-dir -r requirements.txt \
-  && apk del .build-dependencies
+  && apt-get purge -y --auto-remove \
+  gcc \
+  python3-dev \
+  && rm -rf /var/lib/apt/lists/*
