@@ -23,8 +23,8 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
 && rm -rf /var/lib/apt/lists/* \
 && touch /var/chrome_headless.log \
 && chmod 777 /var/chrome_headless.log \
-&& touch /var/port.txt \
-&& chmod 777 /var/port.txt \
+&& touch /var/chrome_instances.tsv \
+&& chmod 777 /var/chrome_instances.tsv \
 && touch /var/rasterizations_counter.txt \
 && chmod 777 /var/rasterizations_counter.txt
 
