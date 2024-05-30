@@ -468,19 +468,19 @@ msrestazure = ">=0.4.32,<2.0.0"
 
 [[package]]
 name = "azure-mgmt-batch"
-version = "5.0.1"
+version = "17.3.0"
 description = "Microsoft Azure Batch Management Client Library for Python"
 optional = false
-python-versions = "*"
+python-versions = ">=3.7"
 files = [
-    {file = "azure-mgmt-batch-5.0.1.zip", hash = "sha256:6e375ecdd5966ee9ee45b29c90a806388c27ceacc2cbd6dd406ff311b5d7da72"},
-    {file = "azure_mgmt_batch-5.0.1-py2.py3-none-any.whl", hash = "sha256:d942e225180d07aae07a43e489ae0acbacd92651be3a019f4eb330a587028161"},
+    {file = "azure-mgmt-batch-17.3.0.tar.gz", hash = "sha256:fc94881a6acdb8a9533f371b6f7b2d3eaea1789eb955014b24a908d6dfe75991"},
+    {file = "azure_mgmt_batch-17.3.0-py3-none-any.whl", hash = "sha256:8cd70837831c2681a6fa2d0b3232bbec9df69627283c6abe1c336fd230249a12"},
 ]
 
 [package.dependencies]
 azure-common = ">=1.1,<2.0"
-azure-mgmt-nspkg = ">=2.0.0"
-msrestazure = ">=0.4.27,<2.0.0"
+azure-mgmt-core = ">=1.3.2,<2.0.0"
+isodate = ">=0.6.1,<1.0.0"
 
 [[package]]
 name = "azure-mgmt-cdn"
@@ -2456,4 +2456,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10"
-content-hash = "e35ae5b4563d6e56cb181b64f7260aa477ffcfe5d564c0cbb6071a8806ae1407"
+content-hash = "831d36cd4dbd28800da6ca52958a300a82dd4e761ced7b12710f3b0e457a5dd2"
