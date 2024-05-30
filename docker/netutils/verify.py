@@ -16,7 +16,5 @@ subprocess.check_output(
 # verify netutils
 import netaddr
 
-# verify aiohttp, fastapi, uvicorn
+# verify aiohttp
 import aiohttp
-import fastapi
-import uvicorn
