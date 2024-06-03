@@ -282,13 +282,13 @@ files = [
 
 [[package]]
 name = "argcomplete"
-version = "3.1.6"
+version = "3.3.0"
 description = "Bash tab completion for argparse"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "argcomplete-3.1.6-py3-none-any.whl", hash = "sha256:71f4683bc9e6b0be85f2b2c1224c47680f210903e23512cfebfe5a41edfd883a"},
-    {file = "argcomplete-3.1.6.tar.gz", hash = "sha256:3b1f07d133332547a53c79437527c00be48cca3807b1d4ca5cab1b26313386a6"},
+    {file = "argcomplete-3.3.0-py3-none-any.whl", hash = "sha256:c168c3723482c031df3c207d4ba8fa702717ccb9fc0bfe4117166c1f537b4a54"},
+    {file = "argcomplete-3.3.0.tar.gz", hash = "sha256:fd03ff4a5b9e6580569d34b273f741e85cd9e072f3feeeee3eba4891c70eda62"},
 ]
 
 [package.extras]
@@ -296,17 +296,17 @@ test = ["coverage", "mypy", "pexpect", "ruff", "wheel"]
 
 [[package]]
 name = "azure-cli-core"
-version = "2.55.0"
+version = "2.61.0"
 description = "Microsoft Azure Command-Line Tools Core Module"
 optional = false
 python-versions = ">=3.8.0"
 files = [
-    {file = "azure-cli-core-2.55.0.tar.gz", hash = "sha256:46ee5af06f8cfe565ed28b0415ebe69d75350c62b29c909eee2870550a0805c2"},
-    {file = "azure_cli_core-2.55.0-py3-none-any.whl", hash = "sha256:fd663b36d9baf6950925888edf373f3e55853f709832bee6d8f650921a8b12f2"},
+    {file = "azure_cli_core-2.61.0-py3-none-any.whl", hash = "sha256:a6e9fb1eb8dc56e5cde46a810de5cbe62c9bb015a1a7eb37e1143a8bcfe90ae7"},
+    {file = "azure_cli_core-2.61.0.tar.gz", hash = "sha256:faf3b771a46fec387783acacf95f44964d6a798119a45e5e2250cce5f9fc088a"},
 ]
 
 [package.dependencies]
-argcomplete = ">=3.1.1,<3.2.0"
+argcomplete = ">=3.3.0,<3.4.0"
 azure-cli-telemetry = "==1.1.0.*"
 azure-mgmt-core = ">=1.2.0,<2"
 cryptography = "*"
@@ -314,8 +314,8 @@ distro = {version = "*", markers = "sys_platform == \"linux\""}
 humanfriendly = ">=10.0,<11.0"
 jmespath = "*"
 knack = ">=0.11.0,<0.12.0"
-msal = {version = "1.24.0b2", extras = ["broker"]}
-msal-extensions = ">=1.0.0,<1.1.0"
+msal = {version = "1.28.0", extras = ["broker"]}
+msal-extensions = "1.2.0b1"
 msrestazure = ">=0.6.4,<0.7.0"
 packaging = ">=20.9"
 paramiko = ">=2.0.8,<4.0.0"
@@ -1628,41 +1628,38 @@ files = [
 
 [[package]]
 name = "msal"
-version = "1.24.0b2"
-description = "The Microsoft Authentication Library (MSAL) for Python library"
+version = "1.28.0"
+description = "The Microsoft Authentication Library (MSAL) for Python library enables your app to access the Microsoft Cloud by supporting authentication of users with Microsoft Azure Active Directory accounts (AAD) and Microsoft Accounts (MSA) using industry standard OAuth2 and OpenID Connect."
 optional = false
-python-versions = ">=2.7"
+python-versions = ">=3.7"
 files = [
-    {file = "msal-1.24.0b2-py2.py3-none-any.whl", hash = "sha256:008d4bc3e456f6878ea1722ab6aa0a1ca3da77cc22bef324a261eafcffe8ddda"},
-    {file = "msal-1.24.0b2.tar.gz", hash = "sha256:a0e6e3f1b099ed29a39e167e83a069ab84d9a7712627f72950030b56791b7cbc"},
+    {file = "msal-1.28.0-py3-none-any.whl", hash = "sha256:3064f80221a21cd535ad8c3fafbb3a3582cd9c7e9af0bb789ae14f726a0ca99b"},
+    {file = "msal-1.28.0.tar.gz", hash = "sha256:80bbabe34567cb734efd2ec1869b2d98195c927455369d8077b3c542088c5c9d"},
 ]
 
 [package.dependencies]
-cryptography = ">=0.6,<44"
+cryptography = ">=0.6,<45"
 PyJWT = {version = ">=1.0.0,<3", extras = ["crypto"]}
-pymsalruntime = {version = ">=0.13.2,<0.14", optional = true, markers = "python_version >= \"3.6\" and platform_system == \"Windows\" and extra == \"broker\""}
+pymsalruntime = {version = ">=0.13.2,<0.15", optional = true, markers = "python_version >= \"3.6\" and platform_system == \"Windows\" and extra == \"broker\""}
 requests = ">=2.0.0,<3"
 
 [package.extras]
-broker = ["pymsalruntime (>=0.13.2,<0.14)"]
+broker = ["pymsalruntime (>=0.13.2,<0.15)"]
 
 [[package]]
 name = "msal-extensions"
-version = "1.0.0"
+version = "1.2.0b1"
 description = "Microsoft Authentication Library extensions (MSAL EX) provides a persistence API that can save your data on disk, encrypted on Windows, macOS and Linux. Concurrent data access will be coordinated by a file lock mechanism."
 optional = false
-python-versions = "*"
+python-versions = ">=3.7"
 files = [
-    {file = "msal-extensions-1.0.0.tar.gz", hash = "sha256:c676aba56b0cce3783de1b5c5ecfe828db998167875126ca4b47dc6436451354"},
-    {file = "msal_extensions-1.0.0-py2.py3-none-any.whl", hash = "sha256:91e3db9620b822d0ed2b4d1850056a0f133cba04455e62f11612e40f5502f2ee"},
+    {file = "msal_extensions-1.2.0b1-py3-none-any.whl", hash = "sha256:217f391bb549de11b19abe8029a8375fe3ca0556aa8cce004b2083f00a569b71"},
+    {file = "msal_extensions-1.2.0b1.tar.gz", hash = "sha256:3658b3814cd6a7759e83cb0ec145f30330ee249a92444adaf9aa4eb4f5bbcbbc"},
 ]
 
 [package.dependencies]
-msal = ">=0.4.1,<2.0.0"
-portalocker = [
-    {version = ">=1.0,<3", markers = "python_version >= \"3.5\" and platform_system != \"Windows\""},
-    {version = ">=1.6,<3", markers = "python_version >= \"3.5\" and platform_system == \"Windows\""},
-]
+msal = ">=1.27,<1.29"
+portalocker = ">=1.4,<3"
 
 [[package]]
 name = "msrest"
@@ -2456,4 +2453,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10"
-content-hash = "058e829a96ad52c13d6513843f8bafed919a61d5216b53a15a8d59e46e44de2f"
+content-hash = "3a4d0d448c09fd19f53b761decbb721e95ecb555e1447b1333f29f629113455b"
