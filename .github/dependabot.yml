@@ -577,12 +577,14 @@ updates:
       interval: daily
     ignore:
       - dependency-name: "intezer-sdk"
+      - dependency-name: "asana"  # lock on v3.2.1, BC in Higher version
   - package-ecosystem: pip
     directory: /docker/py3-tools-ubi
     schedule:
       interval: daily
     ignore:
       - dependency-name: "intezer-sdk"
+      - dependency-name: "asana"  # lock on v3.2.1, BC in Higher version
   - package-ecosystem: pip
     directory: /docker/pan-os-python
     schedule:
