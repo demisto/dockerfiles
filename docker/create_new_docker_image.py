@@ -126,9 +126,7 @@ def main():
         create_powershell_image(folder, base_image_last, args)
     print('Adding: {} to .github/dependabot.yml ...'.format(folder))
     
-    # Run the script using the specified path
-    ## Original script
-    #subprocess.check_call([sys.path[0] + "/add_dependabot.sh", "docker/" + args.name])
+    subprocess.check_call([sys.path[0] + "/add_dependabot.sh", "docker/" + args.name])
     print('========================================')
     print("Done creating image files in folder: " + folder)
     print("\nTo build locally the docker image run: {}/build_docker.sh {}".format(sys.path[0], args.name))
