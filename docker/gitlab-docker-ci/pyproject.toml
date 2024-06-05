@@ -7,7 +7,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "~3.10"
-demisto-sdk = "*"
+demisto-sdk = { git = "https://github.com/demisto/demisto-sdk.git", branch = "ay-fix-docker-image-export" }
 slack-sdk = "*"
 Jinja2 = "*"
 
