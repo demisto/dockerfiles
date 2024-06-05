@@ -125,7 +125,15 @@ def main():
     else:
         create_powershell_image(folder, base_image_last, args)
     print('Adding: {} to .github/dependabot.yml ...'.format(folder))
-    subprocess.check_call([sys.path[0] + "/add_dependabot.sh", "docker/" + args.name])
+    
+    ## If you're running on windows this will fuck up. Adding specifiying git bash since python is dumb. or run script manually
+
+    #BashPath = fr'"%Program Files%\Git\bin\bash.exe"'
+    BashPath = r'C:\Program Files\Git\bin\bash.exe'
+    # Run the script using the specified path
+    #subprocess.check_call([BashPath, sys.path[0] + r"\add_dependabot.sh", r"docker/" + args.name], shell=True)
+    ## Original script
+    #subprocess.check_call([sys.path[0] + "/add_dependabot.sh", "docker/" + args.name], shell=False)
     print('========================================')
     print("Done creating image files in folder: " + folder)
     print("\nTo build locally the docker image run: {}/build_docker.sh {}".format(sys.path[0], args.name))
