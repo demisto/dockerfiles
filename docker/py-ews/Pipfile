@@ -6,7 +6,7 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-exchangelib = ">=5.2.0"
+exchangelib = {editable = false, ref = "master", git = "https://github.com/ecederstrand/exchangelib.git"}
 chardet = "*"
 dateparser = "*"
 asn1crypto = "*"
@@ -28,7 +28,7 @@ pygments = "*"
 pykerberos = "*"
 python-dateutil = "*"
 pytz = "*"
-requests = "*"
+requests = ">=2.32.3"
 requests-kerberos = "*"
 requests-ntlm = "==1.1.0" # lock because of https://github.com/requests/requests-ntlm/issues/136
 six = "*"
