@@ -19,6 +19,10 @@ from Crypto.Hash import MD4
 # pyzipper
 import pyzipper
 
+# asana
+from asana import Client
+
+
 print("All good, and you look amazing.")
 
 
