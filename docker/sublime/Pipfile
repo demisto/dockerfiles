@@ -3,8 +3,10 @@ name = "pypi"
 url = "https://pypi.org/simple"
 verify_ssl = true
 
+[dev-packages]
+
 [packages]
-requests = {extras = ["socks"],version = "*"}
+requests = "*"
 olefile = "*"
 python-dateutil = "*"
 dateparser = "*"
@@ -14,8 +16,5 @@ tldextract = "*"
 more-itertools = "*"
 defusedxml = "*"
 sublime-cli = "*"
-
-[dev-packages]
-
 [requires]
 python_version = "3.10"
