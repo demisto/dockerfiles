@@ -81,6 +81,7 @@ RUN apt-get install -y libfreetype-dev libfontconfig-dev libboost-dev libpng-dev
 
 RUN apt-get purge -y --auto-remove \
   curl \
+  git \
   unzip \
   jq \
 && rm -rf /var/lib/apt/lists/*
