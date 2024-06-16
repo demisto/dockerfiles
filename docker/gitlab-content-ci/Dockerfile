@@ -1,4 +1,4 @@
-# Last modified: 2024-04-16T13:00:00.000000+00:00
+# Last modified: 2024-06-16T00:00:00.000000+00:00
 FROM devdemisto/python3-deb:3.11.9.92379
 
 ENV NODE_VERSION 14.16.0
