@@ -199,27 +199,27 @@ aliyun-python-sdk-core = ">=2.11.5"
 
 [[package]]
 name = "ansible"
-version = "9.2.0"
+version = "9.6.0"
 description = "Radically simple IT automation"
 optional = false
 python-versions = ">=3.10"
 files = [
-    {file = "ansible-9.2.0-py3-none-any.whl", hash = "sha256:39b19c252800aeed531413a626ccd07473b79615a3cea77568a1624c1aefaf7c"},
-    {file = "ansible-9.2.0.tar.gz", hash = "sha256:a207a4a00a45e5cd178a7f94ca42afe26f23c9d27be49901ea8c45d18a07b7c6"},
+    {file = "ansible-9.6.0-py3-none-any.whl", hash = "sha256:8c0ffdc8dd58a22d709a5ac567bc62f17e689fb37bbf202788548c3d226631e0"},
+    {file = "ansible-9.6.0.tar.gz", hash = "sha256:58732a4ad74a746d299ecfa48b7a91cb217e2c0bd3a44493f2d9f29af2f3ab61"},
 ]
 
 [package.dependencies]
-ansible-core = ">=2.16.3,<2.17.0"
+ansible-core = ">=2.16.7,<2.17.0"
 
 [[package]]
 name = "ansible-core"
-version = "2.16.3"
+version = "2.16.7"
 description = "Radically simple IT automation"
 optional = false
 python-versions = ">=3.10"
 files = [
-    {file = "ansible-core-2.16.3.tar.gz", hash = "sha256:76a8765a8586064ef073a299562e308fa2c180a75b5f7569bbd0f61d4171cdb3"},
-    {file = "ansible_core-2.16.3-py3-none-any.whl", hash = "sha256:50c9f33a5b2ee645470a77f4bf99cf35d1ffdefef60388910020b0c58534bec1"},
+    {file = "ansible_core-2.16.7-py3-none-any.whl", hash = "sha256:3e1b0ed76ff40d8722f1b5bf19348b95ff226ef5157f7afd720e3da1369a4a6e"},
+    {file = "ansible_core-2.16.7.tar.gz", hash = "sha256:a8c8f4facba30514571d47abec5c62a5768b86fef3d80d724911c8f20b7b34b7"},
 ]
 
 [package.dependencies]
@@ -282,13 +282,13 @@ files = [
 
 [[package]]
 name = "argcomplete"
-version = "3.1.6"
+version = "3.3.0"
 description = "Bash tab completion for argparse"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "argcomplete-3.1.6-py3-none-any.whl", hash = "sha256:71f4683bc9e6b0be85f2b2c1224c47680f210903e23512cfebfe5a41edfd883a"},
-    {file = "argcomplete-3.1.6.tar.gz", hash = "sha256:3b1f07d133332547a53c79437527c00be48cca3807b1d4ca5cab1b26313386a6"},
+    {file = "argcomplete-3.3.0-py3-none-any.whl", hash = "sha256:c168c3723482c031df3c207d4ba8fa702717ccb9fc0bfe4117166c1f537b4a54"},
+    {file = "argcomplete-3.3.0.tar.gz", hash = "sha256:fd03ff4a5b9e6580569d34b273f741e85cd9e072f3feeeee3eba4891c70eda62"},
 ]
 
 [package.extras]
@@ -296,17 +296,17 @@ test = ["coverage", "mypy", "pexpect", "ruff", "wheel"]
 
 [[package]]
 name = "azure-cli-core"
-version = "2.55.0"
+version = "2.61.0"
 description = "Microsoft Azure Command-Line Tools Core Module"
 optional = false
 python-versions = ">=3.8.0"
 files = [
-    {file = "azure-cli-core-2.55.0.tar.gz", hash = "sha256:46ee5af06f8cfe565ed28b0415ebe69d75350c62b29c909eee2870550a0805c2"},
-    {file = "azure_cli_core-2.55.0-py3-none-any.whl", hash = "sha256:fd663b36d9baf6950925888edf373f3e55853f709832bee6d8f650921a8b12f2"},
+    {file = "azure_cli_core-2.61.0-py3-none-any.whl", hash = "sha256:a6e9fb1eb8dc56e5cde46a810de5cbe62c9bb015a1a7eb37e1143a8bcfe90ae7"},
+    {file = "azure_cli_core-2.61.0.tar.gz", hash = "sha256:faf3b771a46fec387783acacf95f44964d6a798119a45e5e2250cce5f9fc088a"},
 ]
 
 [package.dependencies]
-argcomplete = ">=3.1.1,<3.2.0"
+argcomplete = ">=3.3.0,<3.4.0"
 azure-cli-telemetry = "==1.1.0.*"
 azure-mgmt-core = ">=1.2.0,<2"
 cryptography = "*"
@@ -314,8 +314,8 @@ distro = {version = "*", markers = "sys_platform == \"linux\""}
 humanfriendly = ">=10.0,<11.0"
 jmespath = "*"
 knack = ">=0.11.0,<0.12.0"
-msal = {version = "1.24.0b2", extras = ["broker"]}
-msal-extensions = ">=1.0.0,<1.1.0"
+msal = {version = "1.28.0", extras = ["broker"]}
+msal-extensions = "1.2.0b1"
 msrestazure = ">=0.6.4,<0.7.0"
 packaging = ">=20.9"
 paramiko = ">=2.0.8,<4.0.0"
@@ -564,17 +564,17 @@ msrestazure = ">=0.4.32,<2.0.0"
 
 [[package]]
 name = "azure-mgmt-core"
-version = "1.2.0"
+version = "1.4.0"
 description = "Microsoft Azure Management Core Library for Python"
 optional = false
-python-versions = "*"
+python-versions = ">=3.7"
 files = [
-    {file = "azure-mgmt-core-1.2.0.zip", hash = "sha256:8fe3b59446438f27e34f7b24ea692a982034d9e734617ca1320eedeee1939998"},
-    {file = "azure_mgmt_core-1.2.0-py2.py3-none-any.whl", hash = "sha256:6966226111e92dff26d984aa1c76f227ce0e8b2069c45c72cfb67f160c452444"},
+    {file = "azure-mgmt-core-1.4.0.zip", hash = "sha256:d195208340094f98e5a6661b781cde6f6a051e79ce317caabd8ff97030a9b3ae"},
+    {file = "azure_mgmt_core-1.4.0-py3-none-any.whl", hash = "sha256:81071675f186a585555ef01816f2774d49c1c9024cb76e5720c3c0f6b337bb7d"},
 ]
 
 [package.dependencies]
-azure-core = ">=1.7.0.dev,<2.0.0"
+azure-core = ">=1.26.2,<2.0.0"
 
 [[package]]
 name = "azure-mgmt-cosmosdb"
@@ -773,19 +773,19 @@ msrestazure = ">=0.4.27,<2.0.0"
 
 [[package]]
 name = "azure-mgmt-network"
-version = "12.0.0"
+version = "25.4.0"
 description = "Microsoft Azure Network Management Client Library for Python"
 optional = false
-python-versions = "*"
+python-versions = ">=3.8"
 files = [
-    {file = "azure-mgmt-network-12.0.0.zip", hash = "sha256:74502996a4d6c7b3b72e3f57c2ff297263cc02f18fec33363582346a29390094"},
-    {file = "azure_mgmt_network-12.0.0-py2.py3-none-any.whl", hash = "sha256:7235ddd34c4228c82edf2290220218ef551b65070a2eef412feecf27ab2d3522"},
+    {file = "azure-mgmt-network-25.4.0.tar.gz", hash = "sha256:a338e62d81fdbf050f802143c28cb965b07edd43800ef0504cdfa6b8854d7554"},
+    {file = "azure_mgmt_network-25.4.0-py3-none-any.whl", hash = "sha256:ae30f9ff25c22e14e0394d432d7aebc06ac1c5bf4de24cf226972c12bd664035"},
 ]
 
 [package.dependencies]
-azure-common = ">=1.1,<2.0"
-msrest = ">=0.5.0"
-msrestazure = ">=0.4.32,<2.0.0"
+azure-common = ">=1.1"
+azure-mgmt-core = ">=1.3.2"
+isodate = ">=0.6.1"
 
 [[package]]
 name = "azure-mgmt-nspkg"
@@ -835,19 +835,19 @@ msrestazure = ">=0.4.32,<2.0.0"
 
 [[package]]
 name = "azure-mgmt-recoveryservices"
-version = "0.4.0"
+version = "3.0.0"
 description = "Microsoft Azure Recovery Services Client Library for Python"
 optional = false
-python-versions = "*"
+python-versions = ">=3.8"
 files = [
-    {file = "azure-mgmt-recoveryservices-0.4.0.zip", hash = "sha256:e1e794760232239f8a9328d5de1740565ff70d1612a2921c9609746ba5671e6c"},
-    {file = "azure_mgmt_recoveryservices-0.4.0-py2.py3-none-any.whl", hash = "sha256:b10fc686ec4ac4a84923458b743755f83e5ad025f52728314293315012a76f35"},
+    {file = "azure-mgmt-recoveryservices-3.0.0.tar.gz", hash = "sha256:df212dfadfbcc659c31231c3e170aab7c21144d172b0f88268ab0f5ad8e95882"},
+    {file = "azure_mgmt_recoveryservices-3.0.0-py3-none-any.whl", hash = "sha256:1b6a24ec258c337082f2e2001ec5ac60b25f3a52811fe4798ae23df185154742"},
 ]
 
 [package.dependencies]
-azure-common = ">=1.1,<2.0"
-msrest = ">=0.5.0"
-msrestazure = ">=0.4.32,<2.0.0"
+azure-common = ">=1.1"
+azure-mgmt-core = ">=1.3.2"
+isodate = ">=0.6.1"
 
 [[package]]
 name = "azure-mgmt-recoveryservicesbackup"
@@ -1417,13 +1417,13 @@ requests = ["requests (>=2.20.0,<3.0.0.dev0)"]
 
 [[package]]
 name = "hcloud"
-version = "1.33.2"
+version = "1.35.0"
 description = "Official Hetzner Cloud python library"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "hcloud-1.33.2-py3-none-any.whl", hash = "sha256:88e7a1b4009205ae90e777b6b6da4fb53097965e49fb081f8c6585a74b0cdfdf"},
-    {file = "hcloud-1.33.2.tar.gz", hash = "sha256:1828b0f876cdff49dad9f8804b5e8e9fbda78f4f5547435ac3ac30088438ce5f"},
+    {file = "hcloud-1.35.0-py3-none-any.whl", hash = "sha256:b03efd72daf456ea5806c1a876694ae4de53cbc658566bc784f24f7534bd617e"},
+    {file = "hcloud-1.35.0.tar.gz", hash = "sha256:b1949ab637be517b7af6becdbf840c47722f9471c6b870e6f35de1ef6fcea3e3"},
 ]
 
 [package.dependencies]
@@ -1431,8 +1431,8 @@ python-dateutil = ">=2.7.5"
 requests = ">=2.20"
 
 [package.extras]
-docs = ["myst-parser (>=2.0.0,<2.1)", "sphinx (>=7.2.2,<7.3)", "sphinx-rtd-theme (>=2,<2.1)", "watchdog (>=3.0.0,<3.1)"]
-test = ["coverage (>=7.4,<7.5)", "mypy (>=1.8,<1.9)", "pylint (>=3,<3.1)", "pytest (>=7.4,<7.5)", "types-python-dateutil", "types-requests"]
+docs = ["myst-parser (>=2.0.0,<2.1)", "sphinx (>=7.2.2,<7.3)", "sphinx-rtd-theme (>=2,<2.1)", "watchdog (>=4,<4.1)"]
+test = ["coverage (>=7.4,<7.5)", "mypy (>=1.9,<1.10)", "pylint (>=3,<3.2)", "pytest (>=8,<8.2)", "pytest-cov (>=5,<5.1)", "types-python-dateutil", "types-requests"]
 
 [[package]]
 name = "humanfriendly"
@@ -1475,13 +1475,13 @@ six = "*"
 
 [[package]]
 name = "jinja2"
-version = "3.1.3"
+version = "3.1.4"
 description = "A very fast and expressive template engine."
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "Jinja2-3.1.3-py3-none-any.whl", hash = "sha256:7d6d50dd97d52cbc355597bd845fabfbac3f551e1f99619e39a35ce8c370b5fa"},
-    {file = "Jinja2-3.1.3.tar.gz", hash = "sha256:ac8bd6544d4bb2c9792bf3a159e80bba8fda7f07e81bc3aed565432d5925ba90"},
+    {file = "jinja2-3.1.4-py3-none-any.whl", hash = "sha256:bc5dd2abb727a5319567b7a813e6a2e7318c39f4f487cfe6c89c6f9c7d25197d"},
+    {file = "jinja2-3.1.4.tar.gz", hash = "sha256:4a3aee7acbbe7303aede8e9648d13b8bf88a429282aa6122a993f0ac800cb369"},
 ]
 
 [package.dependencies]
@@ -1628,41 +1628,38 @@ files = [
 
 [[package]]
 name = "msal"
-version = "1.24.0b2"
-description = "The Microsoft Authentication Library (MSAL) for Python library"
+version = "1.28.0"
+description = "The Microsoft Authentication Library (MSAL) for Python library enables your app to access the Microsoft Cloud by supporting authentication of users with Microsoft Azure Active Directory accounts (AAD) and Microsoft Accounts (MSA) using industry standard OAuth2 and OpenID Connect."
 optional = false
-python-versions = ">=2.7"
+python-versions = ">=3.7"
 files = [
-    {file = "msal-1.24.0b2-py2.py3-none-any.whl", hash = "sha256:008d4bc3e456f6878ea1722ab6aa0a1ca3da77cc22bef324a261eafcffe8ddda"},
-    {file = "msal-1.24.0b2.tar.gz", hash = "sha256:a0e6e3f1b099ed29a39e167e83a069ab84d9a7712627f72950030b56791b7cbc"},
+    {file = "msal-1.28.0-py3-none-any.whl", hash = "sha256:3064f80221a21cd535ad8c3fafbb3a3582cd9c7e9af0bb789ae14f726a0ca99b"},
+    {file = "msal-1.28.0.tar.gz", hash = "sha256:80bbabe34567cb734efd2ec1869b2d98195c927455369d8077b3c542088c5c9d"},
 ]
 
 [package.dependencies]
-cryptography = ">=0.6,<44"
+cryptography = ">=0.6,<45"
 PyJWT = {version = ">=1.0.0,<3", extras = ["crypto"]}
-pymsalruntime = {version = ">=0.13.2,<0.14", optional = true, markers = "python_version >= \"3.6\" and platform_system == \"Windows\" and extra == \"broker\""}
+pymsalruntime = {version = ">=0.13.2,<0.15", optional = true, markers = "python_version >= \"3.6\" and platform_system == \"Windows\" and extra == \"broker\""}
 requests = ">=2.0.0,<3"
 
 [package.extras]
-broker = ["pymsalruntime (>=0.13.2,<0.14)"]
+broker = ["pymsalruntime (>=0.13.2,<0.15)"]
 
 [[package]]
 name = "msal-extensions"
-version = "1.0.0"
+version = "1.2.0b1"
 description = "Microsoft Authentication Library extensions (MSAL EX) provides a persistence API that can save your data on disk, encrypted on Windows, macOS and Linux. Concurrent data access will be coordinated by a file lock mechanism."
 optional = false
-python-versions = "*"
+python-versions = ">=3.7"
 files = [
-    {file = "msal-extensions-1.0.0.tar.gz", hash = "sha256:c676aba56b0cce3783de1b5c5ecfe828db998167875126ca4b47dc6436451354"},
-    {file = "msal_extensions-1.0.0-py2.py3-none-any.whl", hash = "sha256:91e3db9620b822d0ed2b4d1850056a0f133cba04455e62f11612e40f5502f2ee"},
+    {file = "msal_extensions-1.2.0b1-py3-none-any.whl", hash = "sha256:217f391bb549de11b19abe8029a8375fe3ca0556aa8cce004b2083f00a569b71"},
+    {file = "msal_extensions-1.2.0b1.tar.gz", hash = "sha256:3658b3814cd6a7759e83cb0ec145f30330ee249a92444adaf9aa4eb4f5bbcbbc"},
 ]
 
 [package.dependencies]
-msal = ">=0.4.1,<2.0.0"
-portalocker = [
-    {version = ">=1.0,<3", markers = "python_version >= \"3.5\" and platform_system != \"Windows\""},
-    {version = ">=1.6,<3", markers = "python_version >= \"3.5\" and platform_system == \"Windows\""},
-]
+msal = ">=1.27,<1.29"
+portalocker = ">=1.4,<3"
 
 [[package]]
 name = "msrest"
@@ -1686,13 +1683,13 @@ async = ["aiodns", "aiohttp (>=3.0)"]
 
 [[package]]
 name = "msrestazure"
-version = "0.6.4"
+version = "0.6.4.post1"
 description = "AutoRest swagger generator Python client runtime. Azure-specific module."
 optional = false
 python-versions = "*"
 files = [
-    {file = "msrestazure-0.6.4-py2.py3-none-any.whl", hash = "sha256:3de50f56147ef529b31e099a982496690468ecef33f0544cb0fa0cfe1e1de5b9"},
-    {file = "msrestazure-0.6.4.tar.gz", hash = "sha256:a06f0dabc9a6f5efe3b6add4bd8fb623aeadacf816b7a35b0f89107e0544d189"},
+    {file = "msrestazure-0.6.4.post1-py2.py3-none-any.whl", hash = "sha256:2264493b086c2a0a82ddf5fd87b35b3fffc443819127fed992ac5028354c151e"},
+    {file = "msrestazure-0.6.4.post1.tar.gz", hash = "sha256:39842007569e8c77885ace5c46e4bf2a9108fcb09b1e6efdf85b6e2c642b55d4"},
 ]
 
 [package.dependencies]
@@ -1846,27 +1843,27 @@ tests = ["pytest (>=4.6.9)", "pytest-cov (>=2.8.1)", "pytest-flake8 (>=1.0.5)", 
 
 [[package]]
 name = "psutil"
-version = "5.9.7"
+version = "5.9.8"
 description = "Cross-platform lib for process and system monitoring in Python."
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*"
 files = [
-    {file = "psutil-5.9.7-cp27-cp27m-macosx_10_9_x86_64.whl", hash = "sha256:0bd41bf2d1463dfa535942b2a8f0e958acf6607ac0be52265ab31f7923bcd5e6"},
-    {file = "psutil-5.9.7-cp27-cp27m-manylinux2010_i686.whl", hash = "sha256:5794944462509e49d4d458f4dbfb92c47539e7d8d15c796f141f474010084056"},
-    {file = "psutil-5.9.7-cp27-cp27m-manylinux2010_x86_64.whl", hash = "sha256:fe361f743cb3389b8efda21980d93eb55c1f1e3898269bc9a2a1d0bb7b1f6508"},
-    {file = "psutil-5.9.7-cp27-cp27mu-manylinux2010_i686.whl", hash = "sha256:e469990e28f1ad738f65a42dcfc17adaed9d0f325d55047593cb9033a0ab63df"},
-    {file = "psutil-5.9.7-cp27-cp27mu-manylinux2010_x86_64.whl", hash = "sha256:3c4747a3e2ead1589e647e64aad601981f01b68f9398ddf94d01e3dc0d1e57c7"},
-    {file = "psutil-5.9.7-cp27-none-win32.whl", hash = "sha256:1d4bc4a0148fdd7fd8f38e0498639ae128e64538faa507df25a20f8f7fb2341c"},
-    {file = "psutil-5.9.7-cp27-none-win_amd64.whl", hash = "sha256:4c03362e280d06bbbfcd52f29acd79c733e0af33d707c54255d21029b8b32ba6"},
-    {file = "psutil-5.9.7-cp36-abi3-macosx_10_9_x86_64.whl", hash = "sha256:ea36cc62e69a13ec52b2f625c27527f6e4479bca2b340b7a452af55b34fcbe2e"},
-    {file = "psutil-5.9.7-cp36-abi3-manylinux_2_12_i686.manylinux2010_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:1132704b876e58d277168cd729d64750633d5ff0183acf5b3c986b8466cd0284"},
-    {file = "psutil-5.9.7-cp36-abi3-manylinux_2_12_x86_64.manylinux2010_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:fe8b7f07948f1304497ce4f4684881250cd859b16d06a1dc4d7941eeb6233bfe"},
-    {file = "psutil-5.9.7-cp36-cp36m-win32.whl", hash = "sha256:b27f8fdb190c8c03914f908a4555159327d7481dac2f01008d483137ef3311a9"},
-    {file = "psutil-5.9.7-cp36-cp36m-win_amd64.whl", hash = "sha256:44969859757f4d8f2a9bd5b76eba8c3099a2c8cf3992ff62144061e39ba8568e"},
-    {file = "psutil-5.9.7-cp37-abi3-win32.whl", hash = "sha256:c727ca5a9b2dd5193b8644b9f0c883d54f1248310023b5ad3e92036c5e2ada68"},
-    {file = "psutil-5.9.7-cp37-abi3-win_amd64.whl", hash = "sha256:f37f87e4d73b79e6c5e749440c3113b81d1ee7d26f21c19c47371ddea834f414"},
-    {file = "psutil-5.9.7-cp38-abi3-macosx_11_0_arm64.whl", hash = "sha256:032f4f2c909818c86cea4fe2cc407f1c0f0cde8e6c6d702b28b8ce0c0d143340"},
-    {file = "psutil-5.9.7.tar.gz", hash = "sha256:3f02134e82cfb5d089fddf20bb2e03fd5cd52395321d1c8458a9e58500ff417c"},
+    {file = "psutil-5.9.8-cp27-cp27m-macosx_10_9_x86_64.whl", hash = "sha256:26bd09967ae00920df88e0352a91cff1a78f8d69b3ecabbfe733610c0af486c8"},
+    {file = "psutil-5.9.8-cp27-cp27m-manylinux2010_i686.whl", hash = "sha256:05806de88103b25903dff19bb6692bd2e714ccf9e668d050d144012055cbca73"},
+    {file = "psutil-5.9.8-cp27-cp27m-manylinux2010_x86_64.whl", hash = "sha256:611052c4bc70432ec770d5d54f64206aa7203a101ec273a0cd82418c86503bb7"},
+    {file = "psutil-5.9.8-cp27-cp27mu-manylinux2010_i686.whl", hash = "sha256:50187900d73c1381ba1454cf40308c2bf6f34268518b3f36a9b663ca87e65e36"},
+    {file = "psutil-5.9.8-cp27-cp27mu-manylinux2010_x86_64.whl", hash = "sha256:02615ed8c5ea222323408ceba16c60e99c3f91639b07da6373fb7e6539abc56d"},
+    {file = "psutil-5.9.8-cp27-none-win32.whl", hash = "sha256:36f435891adb138ed3c9e58c6af3e2e6ca9ac2f365efe1f9cfef2794e6c93b4e"},
+    {file = "psutil-5.9.8-cp27-none-win_amd64.whl", hash = "sha256:bd1184ceb3f87651a67b2708d4c3338e9b10c5df903f2e3776b62303b26cb631"},
+    {file = "psutil-5.9.8-cp36-abi3-macosx_10_9_x86_64.whl", hash = "sha256:aee678c8720623dc456fa20659af736241f575d79429a0e5e9cf88ae0605cc81"},
+    {file = "psutil-5.9.8-cp36-abi3-manylinux_2_12_i686.manylinux2010_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:8cb6403ce6d8e047495a701dc7c5bd788add903f8986d523e3e20b98b733e421"},
+    {file = "psutil-5.9.8-cp36-abi3-manylinux_2_12_x86_64.manylinux2010_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:d06016f7f8625a1825ba3732081d77c94589dca78b7a3fc072194851e88461a4"},
+    {file = "psutil-5.9.8-cp36-cp36m-win32.whl", hash = "sha256:7d79560ad97af658a0f6adfef8b834b53f64746d45b403f225b85c5c2c140eee"},
+    {file = "psutil-5.9.8-cp36-cp36m-win_amd64.whl", hash = "sha256:27cc40c3493bb10de1be4b3f07cae4c010ce715290a5be22b98493509c6299e2"},
+    {file = "psutil-5.9.8-cp37-abi3-win32.whl", hash = "sha256:bc56c2a1b0d15aa3eaa5a60c9f3f8e3e565303b465dbf57a1b730e7a2b9844e0"},
+    {file = "psutil-5.9.8-cp37-abi3-win_amd64.whl", hash = "sha256:8db4c1b57507eef143a15a6884ca10f7c73876cdf5d51e713151c1236a0e68cf"},
+    {file = "psutil-5.9.8-cp38-abi3-macosx_11_0_arm64.whl", hash = "sha256:d16bbddf0693323b8c6123dd804100241da461e41d6e332fb0ba6058f630f8c8"},
+    {file = "psutil-5.9.8.tar.gz", hash = "sha256:6be126e3225486dff286a8fb9a06246a5253f4c7c53b475ea5f5ac934e64194c"},
 ]
 
 [package.extras]
@@ -2252,13 +2249,13 @@ files = [
 
 [[package]]
 name = "requests"
-version = "2.31.0"
+version = "2.32.0"
 description = "Python HTTP for Humans."
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 files = [
-    {file = "requests-2.31.0-py3-none-any.whl", hash = "sha256:58cd2187c01e70e6e26505bca751777aa9f2ee0b7f4300988b709f44e013003f"},
-    {file = "requests-2.31.0.tar.gz", hash = "sha256:942c5a758f98d790eaed1a29cb6eefc7ffb0d1cf7af05c3d2791656dbd6ad1e1"},
+    {file = "requests-2.32.0-py3-none-any.whl", hash = "sha256:f2c3881dddb70d056c5bd7600a4fae312b2a300e39be6a118d30b90bd27262b5"},
+    {file = "requests-2.32.0.tar.gz", hash = "sha256:fa5490319474c82ef1d2c9bc459d3652e3ae4ef4c4ebdd18a21145a47ca4b6b8"},
 ]
 
 [package.dependencies]
@@ -2456,4 +2453,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10"
-content-hash = "dff449c22f05c5faad57d9f1d160c34bf2a8af9042ea752c19d7aa96c7145966"
+content-hash = "ae68e86b37822322c2be4290c67a7b184912ce1ad0e87ca2b737fb1617d660d4"
