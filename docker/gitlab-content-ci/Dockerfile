@@ -42,7 +42,7 @@ RUN echo "deb http://httpredir.debian.org/debian stable-backports main" | tee -a
     && echo 'deb https://debian.neo4j.com stable 5' | tee -a /etc/apt/sources.list.d/neo4j.list \
     && apt-get update
 RUN mkdir -p /var/lib/neo4j/plugins \
-    && wget -O /var/lib/neo4j/plugins/apoc-5.5.0-core.jar https://github.com/neo4j/apoc/releases/download/5.5.0/apoc-5.5.0-core.jar \
+    && wget -O /var/lib/neo4j/plugins/apoc-5.20.0-core.jar https://github.com/neo4j/apoc/releases/download/5.20.0/apoc-5.20.0-core.jar \
     && apt-get install neo4j -y && source ~/.bashrc && neo4j --version && neo4j-admin --version \
     && neo4j_conf_file="/etc/neo4j/neo4j.conf" \
     && echo "dbms.security.procedures.unrestricted=apoc.*" >> $NEO4J_CONF_FILE \
