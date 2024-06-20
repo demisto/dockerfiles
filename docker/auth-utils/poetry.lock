@@ -49,13 +49,13 @@ msal-extensions = ">=0.3.0,<2.0.0"
 
 [[package]]
 name = "azure-kusto-data"
-version = "4.4.1"
+version = "4.5.1"
 description = "Kusto Data Client"
 optional = false
 python-versions = "*"
 files = [
-    {file = "azure-kusto-data-4.4.1.tar.gz", hash = "sha256:05573b733fe29b9bb292a4c46c74b65a35a35143ea1f9be146d294c8ca28d5aa"},
-    {file = "azure_kusto_data-4.4.1-py2.py3-none-any.whl", hash = "sha256:c56d10d5da2b7da24be9a03c8f39cb5bc5b02da2d062bf5109789336a126509a"},
+    {file = "azure-kusto-data-4.5.1.tar.gz", hash = "sha256:13675546254021bba4fccba801c15ca8f18037510f527fe518001b544e1335ce"},
+    {file = "azure_kusto_data-4.5.1-py2.py3-none-any.whl", hash = "sha256:8ae99bd2a88793345d2cbe32f2c14ce27a2d1e3adcee29a718b7e7c3ccb1fcbd"},
 ]
 
 [package.dependencies]
@@ -895,18 +895,18 @@ files = [
 
 [[package]]
 name = "urllib3"
-version = "2.0.7"
+version = "2.2.2"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 files = [
-    {file = "urllib3-2.0.7-py3-none-any.whl", hash = "sha256:fdb6d215c776278489906c2f8916e6e7d4f5a9b602ccbcfdf7f016fc8da0596e"},
-    {file = "urllib3-2.0.7.tar.gz", hash = "sha256:c97dfde1f7bd43a71c8d2a58e369e9b2bf692d1334ea9f9cae55add7d0dd0f84"},
+    {file = "urllib3-2.2.2-py3-none-any.whl", hash = "sha256:a448b2f64d686155468037e1ace9f2d2199776e17f0a46610480d311f73e3472"},
+    {file = "urllib3-2.2.2.tar.gz", hash = "sha256:dd505485549a7a552833da5e6063639d0d177c04f23bc3864e41e5dc5f612168"},
 ]
 
 [package.extras]
 brotli = ["brotli (>=1.0.9)", "brotlicffi (>=0.8.0)"]
-secure = ["certifi", "cryptography (>=1.9)", "idna (>=2.0.0)", "pyopenssl (>=17.1.0)", "urllib3-secure-extra"]
+h2 = ["h2 (>=4,<5)"]
 socks = ["pysocks (>=1.5.6,!=1.5.7,<2.0)"]
 zstd = ["zstandard (>=0.18.0)"]
 
