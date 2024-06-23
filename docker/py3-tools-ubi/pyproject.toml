@@ -15,14 +15,13 @@ exifread = "*"
 geopy = "*"
 dnspython = "*"
 algorithmia = "*"
-asana = "*"
+asana = "<=3.2.1"  # BC in Higher version, community supported integration
 feedparser = "*"
 beautifulsoup4 = "*"
 mail-parser = "*"
 imap-tools = "*"
 imapclient = "*"
 pyjarm = "*"
-pyminizip = "*"
 paho-mqtt = "*"
 arrow = "*"
 pytz = "*"
@@ -50,6 +49,7 @@ xlrd = "==1.2.0"
 pycryptodome = "*"
 requests-toolbelt = "*"
 certifi = "*"
+pyzipper = "*"
 
 [build-system]
 requires = ["poetry-core"]
