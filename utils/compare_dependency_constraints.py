@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from typing import NamedTuple
+from typing import Any, NamedTuple
 import requests
 import toml
 
@@ -22,10 +22,10 @@ def parse_constraints(dir_name: str) -> dict[str, str]:
         )
 
     if pip_path.exists():
-        return _parse_pipfile(pip_path)
+        return lower_dict_keys(_parse_pipfile(pip_path))
 
     if pyproject_path.exists():
-        return _parse_pyproject(pyproject_path)
+        return lower_dict_keys(_parse_pyproject(pyproject_path))
 
     raise ValueError(f"Neither pyproject nor Pipfile found in {dir_name}")
 
@@ -36,6 +36,10 @@ def _parse_pipfile(path: Path) -> dict[str, str]:
 
 def _parse_pyproject(path: Path) -> dict[str, str]:
     return toml.load(path).get("tool", {}).get("poetry", {}).get("dependencies", {})
+
+
+def lower_dict_keys(dictionary: dict[str, Any]) -> dict[str, Any]:
+    return {k.lower(): v for k, v in dictionary.items()}
 
 
 class Discrepancy(NamedTuple):
