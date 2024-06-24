@@ -1,13 +1,9 @@
 variables:
   GH_BRANCH: $CI_COMMIT_BRANCH
   GH_COMMIT: $CI_COMMIT_SHA
+  KUBERNETES_MEMORY_REQUEST: "2Gi"
+  KUBERNETES_MEMORY_LIMIT: "16Gi"
 trigger_job:
   trigger:
     strategy: depend
     project: ${CI_PROJECT_NAMESPACE}/dockerfiles-cicd
-
-build-job:
-  stage: build
-  variables:
-    KUBERNETES_MEMORY_REQUEST: "2Gi"
-    KUBERNETES_MEMORY_LIMIT: "16Gi"
