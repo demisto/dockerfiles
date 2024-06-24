@@ -6,3 +6,8 @@ trigger_job:
     strategy: depend
     project: ${CI_PROJECT_NAMESPACE}/dockerfiles-cicd
 
+build-job:
+  stage: build
+  variables:
+    KUBERNETES_MEMORY_REQUEST: "2Gi"
+    KUBERNETES_MEMORY_LIMIT: "16Gi"
