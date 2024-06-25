@@ -69,6 +69,8 @@ RUN apt-get install -y libfreetype-dev libfontconfig-dev libboost-dev libpng-dev
 && mkdir -p build \
 && cd build \
 && apt-get install -y git \
+# Disable symbolic link support in Git: https://security-tracker.debian.org/tracker/CVE-2024-32002 \
+&& git config --global core.symlinks false \
 && git clone git://git.freedesktop.org/git/poppler/test \
 && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DTESTDATADIR=$PWD/testfiles -DENABLE_QT6=OFF -DENABLE_UNSTABLE_API_ABI_HEADERS=ON -DENABLE_GPGME=OFF .. \
 && make install \
