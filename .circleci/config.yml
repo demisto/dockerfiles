@@ -24,6 +24,9 @@ jobs:
           name: install poetry
           command: curl -sSL https://install.python-poetry.org | python3 -
       - run:
+          name: poetry self show
+          command: poetry self show
+      - run:
           name: install poetry export plugin
           command: poetry self add poetry-plugin-export
       - run:
