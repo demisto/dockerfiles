@@ -1,7 +1,7 @@
 jobs:
   docker_build:
     docker:
-      - image: devdemisto/dockerbuild:1.0.0.84796
+      - image: devdemisto/dockerbuild:1.0.0.99341
     steps:
       - checkout
       - run:
@@ -21,14 +21,8 @@ jobs:
           fingerprints:
             - 14:9b:f7:c3:6a:d7:bd:34:8d:d6:3f:a7:68:d1:d6:af
       - run:
-          name: install poetry
-          command: curl -sSL https://install.python-poetry.org | python3 -
-      - run:
           name: poetry self show
           command: poetry self show
-      - run:
-          name: install poetry export plugin
-          command: poetry self add poetry-plugin-export
       - run:
           name: Build Docker Images
           command: |
