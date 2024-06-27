@@ -5,7 +5,7 @@ WORKDIR "/app"
 
 SHELL ["/bin/bash", "-c"]
 RUN apt-get update -y -q && \
-    apt-get install -y -q libnss3 nodejs \
+    apt-get -t bullseye-backports install -y -q nodejs \
     npm gconf-service \
     libasound2 libatk1.0-0 libatk-bridge2.0-0 \
     libc6 libcairo2 libcups2 libdbus-1-3 \
@@ -18,14 +18,14 @@ RUN apt-get update -y -q && \
     libxext6 libxfixes3 libxi6 libxrandr2 \
     libxrender1 libxss1 libxtst6 \
     ca-certificates fonts-liberation \
-    lsb-release \
+    libnss3 lsb-release \
     xdg-utils wget locales \
     fonts-arphic-ukai fonts-arphic-uming \
     fonts-ipafont-mincho fonts-ipafont-gothic \
     fonts-unfonts-core \
     fonts-noto-cjk \
     fonts-noto-core \
-    libgbm-dev && apt-get -t bullseye-backports install -y -q libnss3 \
+    libgbm-dev \
     && rm -rf /var/lib/apt/lists/* \
     && npm i npm@8.1.3 -g
 
