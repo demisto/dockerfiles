@@ -5,7 +5,7 @@ WORKDIR "/app"
 
 SHELL ["/bin/bash", "-c"]
 RUN apt-get update -y -q && \
-    apt-get -t bullseye-backports install -y -q nodejs \
+    apt-get install -y -q nodejs \
     npm gconf-service \
     libasound2 libatk1.0-0 libatk-bridge2.0-0 \
     libc6 libcairo2 libcups2 libdbus-1-3 \
