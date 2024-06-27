@@ -14,8 +14,8 @@ echo \
   $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null && \
 sudo apt-get update && \
-apt-get upgrade -y docker-ce docker-ce-cli containerd.io git  \
-    && apt-get purge -y docker-compose-plugin docker-buildx-plugin docker-scan-plugin git-lfs && rm -rf /var/lib/apt/lists/*  \
+apt-get upgrade -y docker-ce docker-ce-cli docker-buildx-plugin containerd.io git  \
+    && apt-get purge -y docker-compose-plugin docker-scan-plugin git-lfs && rm -rf /var/lib/apt/lists/*  \
     && rm /usr/local/bin/docker-compose /usr/local/bin/yq /usr/local/bin/compose-switch /usr/local/lib/docker/cli-plugins/docker-compose
 
 USER circleci

@@ -221,7 +221,7 @@ function docker_build {
         echo "ENV DEPRECATED_REASON=\"$reason\"" >> "$tmp_dir/Dockerfile"
     fi
     
-    docker build -f "$tmp_dir/Dockerfile" . -t ${image_full_name} \
+    docker buildx build -f "$tmp_dir/Dockerfile" . -t ${image_full_name} \
         --label "org.opencontainers.image.authors=Demisto <containers@demisto.com>" \
         --label "org.opencontainers.image.version=${VERSION}" \
         --label "org.opencontainers.image.revision=${CIRCLE_SHA1}"
@@ -238,7 +238,7 @@ function docker_build {
 
       echo "running docker build again with tag $image_full_name"
 
-      docker build -f "$tmp_dir/Dockerfile" . -t ${image_full_name} \
+      docker buildx build -f "$tmp_dir/Dockerfile" . -t ${image_full_name} \
         --label "org.opencontainers.image.authors=Demisto <containers@demisto.com>" \
         --label "org.opencontainers.image.version=${VERSION}" \
         --label "org.opencontainers.image.revision=${CIRCLE_SHA1}"
