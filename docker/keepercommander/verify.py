@@ -1,3 +1,3 @@
 import keepercommander
 
-print("All is good. KSM Core module imported successfully.")
+print("All is good, keepercommander imported successfully.")
