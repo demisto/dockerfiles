@@ -8,9 +8,9 @@ COPY requirements.txt .
 
 COPY localtime /etc/localtime
 
-RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget curl gcc \
+RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget cargo \
   && pip install --no-cache-dir -r requirements.txt \
-  && curl -sSf https://sh.rustup.rs | sh -y \
+  && pip install --no-cache-dir setuptools_rust wheel libcst \
   && apk del .build-dependencies
 
 RUN addgroup -g 4000 demisto \
