@@ -1,3 +1,5 @@
+# Last modified: 2024-07-02T14:02:43.6N:z
+
 FROM alpine:3.17.8 as files-src
 COPY weights /yolo-coco
 RUN cd yolo-coco \
