@@ -10,7 +10,7 @@ COPY localtime /etc/localtime
 
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget curl gcc \
   && pip install --no-cache-dir -r requirements.txt \
-  && curl -proto '=https' -tlsv1.2 -sSf https://sh.rustup.rs | sh \
+  && curl -sSf https://sh.rustup.rs | sh \
   && apk del .build-dependencies
 
 RUN addgroup -g 4000 demisto \
