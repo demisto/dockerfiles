@@ -22,6 +22,9 @@ import pyzipper
 # asana
 from asana import Client
 
+#intezer_sdk
+from intezer_sdk.alerts import Alert
+
 
 print("All good, and you look amazing.")
 
