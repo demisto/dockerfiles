@@ -8,8 +8,9 @@ COPY requirements.txt .
 
 COPY localtime /etc/localtime
 
-RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget \
+RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget curl gcc \
   && pip install --no-cache-dir -r requirements.txt \
+  && curl -proto '=https' -tlsv1.2 -sSf https://sh.rustup.rs | sh \
   && apk del .build-dependencies
 
 RUN addgroup -g 4000 demisto \
@@ -28,5 +29,3 @@ Options = UnsafeLegacyRenegotiation\n' > /tmp/ssl.cnf \
 && sed -i '/providers = provider_sect/r /tmp/ssl.cnf' /etc/ssl/openssl.cnf \
 && rm /tmp/ssl.cnf \
 && grep -C 10 'Options = UnsafeLegacyRenegotiation' /etc/ssl/openssl.cnf
-
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- 
