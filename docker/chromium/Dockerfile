@@ -23,8 +23,8 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
 && rm -rf /var/lib/apt/lists/* \
 && touch /var/chrome_headless.log \
 && chmod 777 /var/chrome_headless.log \
-&& touch /var/port.txt \
-&& chmod 777 /var/port.txt \
+&& touch /var/chrome_instances.tsv \
+&& chmod 777 /var/chrome_instances.tsv \
 && touch /var/rasterizations_counter.txt \
 && chmod 777 /var/rasterizations_counter.txt
 
@@ -81,6 +81,7 @@ RUN apt-get install -y libfreetype-dev libfontconfig-dev libboost-dev libpng-dev
 
 RUN apt-get purge -y --auto-remove \
   curl \
+  git \
   unzip \
   jq \
 && rm -rf /var/lib/apt/lists/*
