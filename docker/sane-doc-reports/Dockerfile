@@ -3,50 +3,13 @@ WORKDIR "/app"
 
 SHELL ["/bin/bash", "-c"]
 
-# Install necessary packages
-RUN apt-get update && apt-get install -y \
-    mercurial \
-    build-essential \
-    autoconf \
-    automake \
-    libtool \
-    libnspr4-dev \
-    pkg-config \
-    wget
-
-# Set work directory
-WORKDIR /usr/src
-
-# Clone the NSPR and NSS repositories
-RUN hg clone https://hg.mozilla.org/projects/nspr
-RUN hg clone https://hg.mozilla.org/projects/nss
-
-# Build and install NSPR
-RUN cd nspr && \
-    ./configure --prefix=/usr && \
-    make && \
-    make install
-
-# Build NSS
-RUN cd nss && \
-    export NSPR_INCLUDE_DIR=/usr/include/nspr && \
-    export NSPR_LIB_DIR=/usr/lib && \
-    export NSS_ENABLE_WERROR=0 && \
-    make nss_build_all
-
-# Install NSS
-RUN cd nss/dist && \
-    cp -r /usr/src/nss/dist/Debug/lib/* /usr/lib/ && \
-    cp -r /usr/src/nss/dist/public/nss/* /usr/include/nss/
-
-# Clean up unnecessary packages and files
-RUN apt-get remove --purge -y mercurial build-essential autoconf automake libtool && \
-    apt-get autoremove -y && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /usr/src/nspr /usr/src/nss
 
 
 RUN apt-get update -y -q && \
+    apt-get install -y -q mercurial ninja-build python3-pip git && \
+    hg clone https://hg.mozilla.org/projects/nss && \
+    cd nss  \
+    ./build.sh \
     apt-get install -y -q nodejs npm gconf-service \
     libasound2 libatk1.0-0 libatk-bridge2.0-0 \
     libc6 libcairo2 libcups2 libdbus-1-3 \
