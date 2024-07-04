@@ -1,10 +1,9 @@
-# Last modified: 2024-07-04T00:48:43.075888+00:00
 FROM alpine:3.17.8 as files-src
 COPY weights /yolo-coco
 RUN cd yolo-coco \
   && cat yolov3.weights.aa yolov3.weights.ab yolov3.weights.ac yolov3.weights.ad yolov3.weights.ae > yolov3.weights
 
-FROM demisto/opencv:1.0.0.77214
+FROM demisto/opencv:1.0.0.100630
 
 COPY requirements.txt .
 COPY yolo-coco /yolo-coco/.
