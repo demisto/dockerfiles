@@ -10,7 +10,7 @@ RUN apt-get update -y -q && \
     hg clone https://hg.mozilla.org/projects/nss && \
     cd nss  \
     ./build.sh \
-    apt-get install -y -q nodejs npm gconf-service \
+RUN apt-get install -y -q nodejs npm gconf-service \
     libasound2 libatk1.0-0 libatk-bridge2.0-0 \
     libc6 libcairo2 libcups2 libdbus-1-3 \
     libexpat1 libfontconfig1 libgcc1 \
@@ -23,7 +23,7 @@ RUN apt-get update -y -q && \
     libxrender1 libxss1 libxtst6 \
     ca-certificates fonts-liberation \
     libappindicator1 libnss3 lsb-release \
-    xdg-utils git \
+    xdg-utils \
     && rm -rf /var/lib/apt/lists/*
 
 RUN npm install -g https://github.com/shakiba/svgexport#4c144c589050c039cbfc83a37d8e6d1f6f35bd27 --unsafe-perm=true
