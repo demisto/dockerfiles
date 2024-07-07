@@ -5,4 +5,5 @@ trigger_job:
   trigger:
     strategy: depend
     project: ${CI_PROJECT_NAMESPACE}/dockerfiles-cicd
+    branch: only_fail_not_master
 
