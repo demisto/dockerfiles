@@ -13,7 +13,7 @@ defusedxml = "*"
 opencv-python = "==4.5.5.64"  # using previous version until fixed https://github.com/opencv/opencv-python/issues/676
 scikit-learn = "==1.0.2"   # cannot upgrade, the newer versions are BC with the training model. 
 scipy = "==1.8.0"   # All dependencies listed below are frozen because we couldn't upgrade all of them. It's possible that some could still be updated. https://jira-dc.paloaltonetworks.com/browse/CIAC-9755
-NumPy = "==1.21.6"
+numpy = "==1.21.6"
 beautifulsoup4 = "==4.11.1"
 catboost = "==1.0.6"
 certifi = "==2024.7.4"
