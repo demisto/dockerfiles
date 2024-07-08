@@ -1,0 +1,17 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+fastapi = "*"
+uvicorn = "*"
+fastapi_utils = "*"
+httpx = "*"
+pydantic = ">=1.0.0,<2.0.0" # prevent unintended upgrade to v2
+pyjwt = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.10"
