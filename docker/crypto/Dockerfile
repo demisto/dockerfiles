@@ -1,7 +1,7 @@
 
 # Note: use this image as a base if you are dependent upon cryptography
 # See teams image for an example.
-FROM demisto/python3:3.10.14.99474
+FROM demisto/python3:3.10.14.101217
 
 COPY requirements.txt .
 

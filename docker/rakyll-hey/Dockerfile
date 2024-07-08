@@ -1,5 +1,5 @@
 
-FROM demisto/python3-deb:3.10.14.98108
+FROM demisto/python3-deb:3.10.14.101214
 
 COPY requirements.txt .
 # downloaded from https://hey-release.s3.us-east-2.amazonaws.com/hey_linux_amd64 (version 0.1.4)
