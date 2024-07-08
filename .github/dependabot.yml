@@ -343,6 +343,8 @@ updates:
       interval: daily
     ignore:
       - dependency-name: scikit-learn
+      - dependency-name: transformers
+      - dependency-name: torch
   - package-ecosystem: pip
     directory: /docker/fastapi
     ignore:
@@ -741,5 +743,13 @@ updates:
       interval: daily
   - package-ecosystem: pip
     directory: /docker/kubernetespy
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/sublime
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/keepercommander
     schedule:
      interval: daily
