@@ -1,5 +1,5 @@
-# Last modified: 2024-06-23T17:00:00.000000+00:00
-FROM demisto/python3-deb:3.10.14.93258
+# Last modified: 2024-07-07T11:53:03.967887+00:00
+FROM demisto/python3-deb:3.10.14.101214
 
 WORKDIR "/app"
 
@@ -42,5 +42,5 @@ RUN gsutil cp -r gs://sane-reports-artifacts/sane-report.tar . \
 # Update permissions and ownership on /app dir
 RUN chown -R root:demisto /app/ && chmod 775 /app/ && chmod 775 /app/dist
 
-RUN apt-get purge -y --auto-remove git npm apt-transport-https ca-certificates gnupg curl google-cloud-sdk \
+RUN npm uninstall -g npm && apt-get purge -y --auto-remove git npm apt-transport-https ca-certificates gnupg curl google-cloud-sdk \
     && rm -rf /var/lib/apt/lists/*

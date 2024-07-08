@@ -8,6 +8,7 @@ import sys
 import base64
 import subprocess
 import pychrome
+from psutil import Process
 
 # verify the google-chrome and chromedriver have the same version (exluding patch level)
 chrome_version = subprocess.check_output(["google-chrome", "--version"], text=True).split()[2]
