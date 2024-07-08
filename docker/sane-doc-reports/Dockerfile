@@ -1,4 +1,4 @@
-FROM demisto/python3-deb:3.10.14.101214
+FROM demisto/python3-deb:3.11.9.101917
 WORKDIR "/app"
 
 SHELL ["/bin/bash", "-c"]
