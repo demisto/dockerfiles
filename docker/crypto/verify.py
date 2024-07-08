@@ -1,6 +1,7 @@
 from cryptography.fernet import Fernet
 import msal
-import OpenSSL.crypto
+from cryptography.hazmat.primitives.serialization import pkcs12
+from cryptography.hazmat.primitives import serialization
 from bs4 import BeautifulSoup
 # Make sure cryptograph works
 key = Fernet.generate_key()
