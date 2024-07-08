@@ -343,6 +343,8 @@ updates:
       interval: daily
     ignore:
       - dependency-name: scikit-learn
+      - dependency-name: transformers
+      - dependency-name: torch
   - package-ecosystem: pip
     directory: /docker/fastapi
     ignore:
