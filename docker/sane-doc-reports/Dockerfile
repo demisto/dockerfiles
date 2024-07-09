@@ -1,6 +1,4 @@
-# Last modified: 2024-07-02T14:02:43.6N:z
-
-FROM demisto/python3-deb:3.10.14.98108
+FROM demisto/python3-deb:3.11.9.102626
 WORKDIR "/app"
 
 SHELL ["/bin/bash", "-c"]

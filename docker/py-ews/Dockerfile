@@ -1,6 +1,6 @@
 # Last modified: 2024-07-02T14:02:43.6N:z
 
-FROM demisto/python3-deb:3.10.14.98108
+FROM demisto/python3-deb:3.11.9.102626
 
 # END Docker file from https://raw.githubusercontent.com/docker-library/python/331890ef059fae05f84c652520b78c340526dc71/3.10/bullseye/Dockerfile
 
