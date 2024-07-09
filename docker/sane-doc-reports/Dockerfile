@@ -8,7 +8,7 @@ SHELL ["/bin/bash", "-c"]
 RUN apt-get update -y -q && \
     apt-get install -y -q mercurial ninja-build python3-pip git && \
     hg clone https://hg.mozilla.org/projects/nss && \
-    cd nss  \
+    cd nss && \
     ./build.sh \
 RUN apt-get install -y -q nodejs npm gconf-service \
     libasound2 libatk1.0-0 libatk-bridge2.0-0 \
