@@ -15,7 +15,7 @@ RUN apt-get update -y -q && \
     libxext6 libxfixes3 libxi6 libxrandr2 \
     libxrender1 libxss1 libxtst6 \
     ca-certificates fonts-liberation \
-    libappindicator1 libnss3 lsb-release \
+    libappindicator1 lsb-release \
     xdg-utils git \
     && rm -rf /var/lib/apt/lists/*
 
