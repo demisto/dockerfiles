@@ -8,3 +8,5 @@ import dill
 import catboost
 from PIL import Image
 from cv2 import cv2
+import urllib3
+import certifi
