@@ -7,4 +7,5 @@ RUN apt-get update && apt-get install -y --no-install-recommends poppler-utils p
     apt-get purge -y --auto-remove python3-dev make gcc g++ && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get remove libnss3 -y && \
-    apt-get install poppler-utils
+    apt update && \
+    apt-get install poppler-utils -y
