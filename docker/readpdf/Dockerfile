@@ -7,6 +7,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends poppler-utils p
     apt-get purge -y --auto-remove python3-dev make gcc g++ && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get remove libnss3 -y && \
+    apt update && \
     apt-get install -y -q mercurial ninja-build python3-pip git gyp && \
     python3 -m pip install gyp-next && \
     hg clone https://hg.mozilla.org/projects/nspr && \
