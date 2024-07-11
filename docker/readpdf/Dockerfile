@@ -9,7 +9,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends poppler-utils p
     apt-get remove libnss3 -y && \
     apt update && \
     apt-get install -y -q mercurial ninja-build python3-pip git gyp && \
-    python3 -m pip install gyp-next && \
     hg clone https://hg.mozilla.org/projects/nspr && \
     hg clone https://hg.mozilla.org/projects/nss && \
     cd nss && \
