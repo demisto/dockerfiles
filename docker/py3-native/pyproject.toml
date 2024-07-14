@@ -6,7 +6,7 @@ authors = ["Your Name <you@example.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "~3.10"
+python = "~3.11"
 opensearch_dsl = "*"
 aiohttp = "*"
 python-magic = "*"
@@ -45,7 +45,7 @@ parse-emails = "*"
 slack-sdk = {extras = ["optional"], version = "*"}
 pyjwt = {extras = ["crypto"],version = "*"}
 google-api-python-client = "*"
-exchangelib = "<=5.0.3"
+exchangelib = ">=5.4.1"
 requests-oauthlib = "*"
 oauthlib = {extras = ["signedtoken"], version = "*"}
 requests-ntlm = "==1.1.0"
