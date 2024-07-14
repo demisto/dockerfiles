@@ -774,32 +774,33 @@ files = [
 
 [[package]]
 name = "exchangelib"
-version = "5.0.3"
+version = "5.4.2"
 description = "Client for Microsoft Exchange Web Services (EWS)"
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 files = [
-    {file = "exchangelib-5.0.3-py2.py3-none-any.whl", hash = "sha256:00a7666099aeca5e32ded089e612a6d5a9c9aa412ff41f385bbd12d27a248976"},
-    {file = "exchangelib-5.0.3.tar.gz", hash = "sha256:b254154fa543a0d9ff47762f4cdd718327971987fff444522849aa1f4017b7fd"},
+    {file = "exchangelib-5.4.2-py3-none-any.whl", hash = "sha256:e70f7db02db03b6ac88818178401ef5aec769e9c67af4b8309f35d01f4b9ef64"},
+    {file = "exchangelib-5.4.2.tar.gz", hash = "sha256:8f6eceec262681658c61f593eb3d326f25aedcd5a85789aafeb04064ff70d8ec"},
 ]
 
 [package.dependencies]
 cached-property = "*"
 defusedxml = ">=0.6.0"
-dnspython = ">=2.0.0"
+dnspython = ">=2.2.0"
 isodate = "*"
 lxml = ">3.0"
 oauthlib = "*"
 pygments = "*"
-requests = ">=2.7"
+requests = ">=2.31.0"
 requests-ntlm = ">=0.2.0"
 requests-oauthlib = "*"
 tzdata = "*"
 tzlocal = "*"
 
 [package.extras]
-complete = ["requests-gssapi", "requests-negotiate-sspi"]
+complete = ["msal", "requests-gssapi", "requests-negotiate-sspi"]
 kerberos = ["requests-gssapi"]
+msal = ["msal"]
 sspi = ["requests-negotiate-sspi"]
 
 [[package]]
@@ -4281,4 +4282,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.11"
-content-hash = "936fda969baea319aa246e35395f4595baa5de86f7768123f94ea3824d9c134d"
+content-hash = "d808f919c031266515663ca06c314ddf97cec276a9bf033bee7be4087ab8b55c"
