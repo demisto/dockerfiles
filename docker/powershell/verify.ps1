@@ -1,3 +1,5 @@
+# Last modified: 2024-07-14T00:12:45.520896+00:00
+
 Write-Host("Verify script is running")
 
 Get-TimeZone
