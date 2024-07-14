@@ -17,8 +17,7 @@ RUN apt-get update -y -q && \
     ca-certificates fonts-liberation \
     libappindicator1 libnss3 lsb-release \
     xdg-utils git \
-    && rm -rf /var/lib/apt/lists/* \
-    && apt-get upgrade -y
+    && rm -rf /var/lib/apt/lists/*
 
 RUN npm install -g https://github.com/shakiba/svgexport#4c144c589050c039cbfc83a37d8e6d1f6f35bd27 --unsafe-perm=true
 
