@@ -22,7 +22,9 @@ RUN apt-get update \
   python3-dev pipenv gfortran wget git g++ pkg-config libhdf5-dev \
 && pipenv install --system \
 && apt-get purge -y --auto-remove gcc \
-  python3-dev gfortran wget git g++ pkg-config libhdf5-dev pipenv
+  python3-dev gfortran wget git g++ pkg-config libhdf5-dev pipenv \
+&& apt-get upgrade -y
+
 COPY demisto_ml-0.2.tar.gz .
 RUN pip install demisto_ml-0.2.tar.gz
 RUN rm -rf /var/lib/apt/lists/*
