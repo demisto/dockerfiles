@@ -11,4 +11,5 @@ RUN apt-get update \
     build-essential \
     ruby-dev \
     rubygems \
-&& rm -rf /var/lib/apt/lists/*
+&& rm -rf /var/lib/apt/lists/* \
+&& apt-get upgrade -y
