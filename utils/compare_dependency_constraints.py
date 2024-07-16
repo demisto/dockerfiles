@@ -3,6 +3,7 @@ from pathlib import Path
 from typing import Any, NamedTuple
 import requests
 import toml
+import sys
 
 DOCKER_FOLDER = Path(__file__).parent.parent / "docker"
 NATIVE_IMAGE = "py3-native"
@@ -98,7 +99,9 @@ def compare_constraints(images_contained_in_native: list[str]):
             print(  # noqa: T201
                 f"::error file={discrepancy.in_image},line=1,endLine=1,title=Error"
             )
-            
+        if discrepancies:
+            return 1
+        return 0
 
 
 def load_native_image_conf() -> list[str]:
@@ -110,4 +113,4 @@ def load_native_image_conf() -> list[str]:
     )["native_images"]["native:candidate"]["supported_docker_images"]
 
 
-compare_constraints(load_native_image_conf())
+sys.exit(compare_constraints(load_native_image_conf()))
