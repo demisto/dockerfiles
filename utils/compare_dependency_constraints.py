@@ -52,6 +52,29 @@ class Discrepancy(NamedTuple):
     def __str__(self) -> str:
         return f"{self.dependency}: {self.in_image or 'missing'} in {self.image}, {self.in_native or 'missing'} in native"
 
+def find_library_line_number(lib_name: str, file_path: Path):
+    """
+    Searches for a library in the pyproject.toml or Pipfile file and returns the line number where it is found.
+
+    Parameters:
+    - lib_name: The name of the library to search for.
+    - file_path: The directory containing the pyproject.toml or Pipfile.
+
+    Returns:
+    - The line number containing the library name, or None if the library is not found.
+    """
+    file_pyproject_path = file_path / "pyproject.toml"
+    if file_pyproject_path.exists():
+        file_path = file_pyproject_path
+    else:
+        file_path = Path(file_path) / "Pipfile"
+
+    with file_path.open('r') as file:
+        for line_number, line in enumerate(file, start=1):  # Start counting from line 1
+            if lib_name in line:
+                return line_number
+
+    return None
 
 def compare_constraints(images_contained_in_native: list[str]):
     native_constraints = (
@@ -94,9 +117,10 @@ def compare_constraints(images_contained_in_native: list[str]):
         )
 
     for discrepancy in discrepancies:
+        line_number = find_library_line_number(discrepancy.dependency, Path(f'docker/{discrepancy.image}'))
         print(str(discrepancy))
         print(
-            f"::error file=docker/{discrepancy.image}/Dockerfile,line=1,endLine=1,title=Native Image Discrepancy::{discrepancy}"
+            f"::error file=docker/{discrepancy.image}/Dockerfile,line={line_number},endLine=1,title=Native Image Discrepancy::{discrepancy}"
         )
     return int(bool(discrepancies))
 
