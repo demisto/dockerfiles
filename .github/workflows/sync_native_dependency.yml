@@ -23,6 +23,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install pipenv
           pipenv install
+          pipenv shell
       - name: Run compare_dependency_constraints Script.
         env:
           CHANGED_FILES: "${{ steps.changed-files.outputs.all_changed_files }}"
