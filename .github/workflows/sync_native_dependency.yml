@@ -9,9 +9,6 @@ jobs:
     if: github.repository == 'demisto/dockerFiles'
     steps:
       - uses: actions/checkout@v3
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v41
       - name: Set up Python 3.11
         uses: actions/setup-python@v3
         with:
@@ -22,8 +19,6 @@ jobs:
           pip install pipenv
           pipenv install
       - name: Run compare_dependency_constraints Script.
-        env:
-          CHANGED_FILES: "${{ steps.changed-files.outputs.all_changed_files }}"
         run: |
           echo "==== $(date): Starting environment setup... ===="
           cd "$GITHUB_WORKSPACE/utils/"
