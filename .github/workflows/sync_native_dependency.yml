@@ -22,13 +22,12 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install pipenv
-          pipenv install
       - name: Run compare_dependency_constraints Script.
         env:
           CHANGED_FILES: "${{ steps.changed-files.outputs.all_changed_files }}"
         run: |
           echo "==== $(date): Starting environment setup... ===="
           cd "$GITHUB_WORKSPACE/utils/"
-          echo "==== $(date): Running validator... ===="
+          pipenv install
           echo "==== $(date): Running chceking Native dependency ===="
           pipenv run ./compare_dependency_constraints.py
