@@ -455,6 +455,8 @@ updates:
     directory: /docker/mlclustering
     schedule:
       interval: daily
+    ignore:
+      - dependency-name: scikit-learn
   - package-ecosystem: pip
     directory: /docker/stix
     schedule:
