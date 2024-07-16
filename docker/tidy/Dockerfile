@@ -5,6 +5,7 @@ COPY requirements.txt .
 COPY ansible /home/demisto/ansible
 COPY ansible.cfg /etc/ansible/ansible.cfg
 
+
 RUN apk --update add --no-cache --virtual .build-dependencies \
     musl-dev libffi-dev openssl-dev build-base \
     && pip install --no-cache-dir -r requirements.txt \
