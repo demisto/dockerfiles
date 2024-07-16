@@ -60,9 +60,8 @@ def compare_constraints(images_contained_in_native: list[str]):
         | parse_constraints(NATIVE_IMAGE)
     )
     native_constraint_keys = set(native_constraints.keys())
-
+    discrepancies: list[Discrepancy] = []
     for image in images_contained_in_native:
-        discrepancies: list[Discrepancy] = []
 
         constraints = parse_constraints(image)
         constraint_keys = set(constraints.keys())
@@ -96,7 +95,7 @@ def compare_constraints(images_contained_in_native: list[str]):
 
     for discrepancy in discrepancies:
         print(str(discrepancy))
-        print(  # noqa: T201
+        print(
             f"::error file=docker/{discrepancy.image}/Dockerfile,line=1,endLine=1,title=Native Image Discrepancy::{discrepancy}"
         )
     return int(bool(discrepancies))
