@@ -95,6 +95,10 @@ def compare_constraints(images_contained_in_native: list[str]):
 
         for discrepancy in discrepancies:
             print(str(discrepancy))
+            print(  # noqa: T201
+                f"::error file={discrepancy.in_image},line=1,endLine=1,title=Error"
+            )
+            
 
 
 def load_native_image_conf() -> list[str]:
