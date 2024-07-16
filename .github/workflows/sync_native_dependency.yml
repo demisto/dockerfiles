@@ -24,6 +24,8 @@ jobs:
         run: |
           echo "==== $(date): Starting environment setup... ===="
           python -m pip install --upgrade pip
+          pipenv install
+          pipenv shell
           pwd
           cd "$GITHUB_WORKSPACE/utils/"
           echo "==== $(date): Running validator... ===="
