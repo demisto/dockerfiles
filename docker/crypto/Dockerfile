@@ -7,7 +7,7 @@ COPY requirements.txt .
 
 # Crypto  needs the latest pip
 RUN pip3 install --no-cache-dir --upgrade pip
-
+RUN sed -i 's/^Options = .*/Options = IgnoreUnexpectedEOF,UnsafeLegacyRenegotiation/' /etc/ssl/openssl.cnf
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git \
   rust cargo \
   libffi-dev openssl-dev \
