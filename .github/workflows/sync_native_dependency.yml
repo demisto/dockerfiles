@@ -28,4 +28,4 @@ jobs:
           cd "$GITHUB_WORKSPACE/utils/"
           pipenv install
           echo "==== $(date): Running chceking Native dependency ===="
-          pipenv run compare_dependency_constraints.py
+          pipenv run python compare_dependency_constraints.py
