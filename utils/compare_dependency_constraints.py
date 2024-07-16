@@ -50,7 +50,7 @@ class Discrepancy(NamedTuple):
     in_native: str | None = None
 
     def __str__(self) -> str:
-        return f"{self.dependency}: {self.in_image or 'missing'} in {self.image}, {self.in_native or 'missing'} in native"
+        return f"{self.dependency}: {self.in_image or 'missing'} in {self.image} image, {self.in_native or 'missing'} in Native image"
 
 def find_library_line_number(lib_name: str, file_path: Path):
     """
