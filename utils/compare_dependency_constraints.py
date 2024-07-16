@@ -117,9 +117,9 @@ def compare_constraints(images_contained_in_native: list[str]):
         else:
             file_path = DOCKER_FOLDER / f"{discrepancy.image}/Pipfile"
         line_number = find_library_line_number(discrepancy.dependency, file_path)
-        # print(str(discrepancy))
+
         print(
-            f"::error file={file_path},line={line_number},endLine=1,title=Native Image Discrepancy::{discrepancy}"
+            f"::error file={file_path},line={line_number},endLine={line_number},title=Native Image Discrepancy::{discrepancy}"
         )
     return int(bool(discrepancies))
 
