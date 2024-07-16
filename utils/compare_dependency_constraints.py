@@ -96,7 +96,9 @@ def compare_constraints(images_contained_in_native: list[str]):
 
     for discrepancy in discrepancies:
         print(str(discrepancy))
-
+        print(  # noqa: T201
+            f"::error file=docker/{discrepancy.image}/Dockerfile,line=1,endLine=1,title=Native Image Discrepancy::{discrepancy}"
+        )
     return int(bool(discrepancies))
 
 
@@ -109,5 +111,5 @@ def load_native_image_conf() -> list[str]:
     )["native_images"]["native:candidate"]["supported_docker_images"]
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(compare_constraints(load_native_image_conf()))
