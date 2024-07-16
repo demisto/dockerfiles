@@ -1,1 +1,0 @@
-../python3/dynamic_version.sh
