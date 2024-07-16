@@ -5,4 +5,7 @@ FROM mcr.microsoft.com/powershell:7.4-alpine-3.17
 RUN cp /usr/share/zoneinfo/Etc/UTC /etc/localtime
 
 RUN addgroup -g 4000 demisto \
-  && adduser -u 4000 -G demisto -D demisto -s /bin/sh
+  && adduser -u 4000 -G demisto -D demisto -s /bin/sh \
+  && apk update \
+  && apk upgrade \
+  && apk del less
