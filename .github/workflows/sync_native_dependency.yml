@@ -32,4 +32,4 @@ jobs:
           cd "$GITHUB_WORKSPACE/utils/"
           echo "==== $(date): Running validator... ===="
           echo "==== $(date): Running chceking Native dependency ===="
-          python ./compare_dependency_constraints.py
+          pipenv run ./compare_dependency_constraints.py
