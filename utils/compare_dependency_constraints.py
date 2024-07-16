@@ -63,12 +63,6 @@ def find_library_line_number(lib_name: str, file_path: Path):
     Returns:
     - The line number containing the library name, or None if the library is not found.
     """
-    file_pyproject_path = file_path / "pyproject.toml"
-    if file_pyproject_path.exists():
-        file_path = file_pyproject_path
-    else:
-        file_path = Path(file_path) / "Pipfile"
-
     with file_path.open('r') as file:
         for line_number, line in enumerate(file, start=1):  # Start counting from line 1
             if lib_name in line:
@@ -117,10 +111,15 @@ def compare_constraints(images_contained_in_native: list[str]):
         )
 
     for discrepancy in discrepancies:
-        line_number = find_library_line_number(discrepancy.dependency, Path(f'docker/{discrepancy.image}'))
-        print(str(discrepancy))
+        file_pyproject_path = DOCKER_FOLDER / f"{discrepancy.image}/pyproject.toml"
+        if file_pyproject_path.exists():
+            file_path = file_pyproject_path
+        else:
+            file_path = DOCKER_FOLDER / f"{discrepancy.image}/Pipfile"
+        line_number = find_library_line_number(discrepancy.dependency, file_path)
+        # print(str(discrepancy))
         print(
-            f"::error file=docker/{discrepancy.image}/Dockerfile,line={line_number},endLine=1,title=Native Image Discrepancy::{discrepancy}"
+            f"::error file={file_path},line={line_number},endLine=1,title=Native Image Discrepancy::{discrepancy}"
         )
     return int(bool(discrepancies))
 
