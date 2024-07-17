@@ -10,8 +10,8 @@ ENV APOC_CONF_FILE /etc/neo4j/apoc.conf
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh && cat ~/.profile >> /etc/.profile
 
 RUN sudo apt-get install software-properties-common \
-        && add-apt-repository ppa:git-core/ppa -y \
-        && sudo apt-get remove --purge software-properties-common
+    && add-apt-repository ppa:git-core/ppa -y \
+    && sudo apt-get remove --purge software-properties-common
 
 RUN apt-get update
 RUN apt-get upgrade -y
