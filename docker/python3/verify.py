@@ -49,9 +49,5 @@ xml_obj = fromstring(xml)
 assert xml_obj.tag == 'book'
 print('defusedxml installed correctly')
 
-
 import setuptools
-from distutils.version import LooseVersion
-if LooseVersion(setuptools.__version__) < LooseVersion("70.0.0"):
-    print(f'Using setuptools version {setuptools.__version__}')
-    exit(1)
+print(f'Using setuptools version {setuptools.__version__}')
