@@ -58,7 +58,9 @@ FROM registry.access.redhat.com/${BASE_UBI_VERSION}:${BASE_UBI_TAG}
 RUN dnf update -y --nodocs && \
     dnf install -y --nodocs procps-ng && \
     dnf clean all && \
-    rm -rf /var/cache/dnf
+    rm -rf /var/cache/dnf \
+    && pip uninstall setuptools -y \
+    && pip install setuptools>=70.3.0
 
 ENV PATH /usr/local/bin:/home/python/.local/bin:$PATH
 
