@@ -17,7 +17,8 @@ RUN curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash 
     && nvm install $NODE_VERSION \
     && nvm alias default $NODE_VERSION \
     && nvm use default \
-    && git --version  # makes sure git is installed. We do not `apt-get install` it, to avoid two instances.
+    && git --version 
+    # git --version verifies git is installed. To avoid two instances of git, we do not `apt-get install git`.
 
 # Installing the gsutil cli
 RUN apt-get install apt-transport-https ca-certificates gnupg gpgv -y --allow-downgrades\
