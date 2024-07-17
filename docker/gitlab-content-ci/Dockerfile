@@ -8,7 +8,11 @@ ENV APOC_CONF_FILE /etc/neo4j/apoc.conf
 
 # Currently sh is linked to dash, linking it to /bin/bash instead.
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh && cat ~/.profile >> /etc/.profile
-RUN add-apt-repository ppa:git-core/ppa -y
+
+RUN sudo apt-get install software-properties-common \
+        && add-apt-repository ppa:git-core/ppa -y \
+        && sudo apt-get remove --purge software-properties-common
+
 RUN apt-get update
 RUN apt-get upgrade -y
 RUN apt-get install -y curl jq unzip openssh-client gcc libffi-dev libssl-dev git zip cowsay netcat wget python2 python3-pip software-properties-common
@@ -17,9 +21,11 @@ RUN curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash 
     && nvm install $NODE_VERSION \
     && nvm alias default $NODE_VERSION \
     && nvm use default
+
 RUN git --version 
 RUN which git
 RUN apt-get install git
+
 # Installing the gsutil cli
 RUN apt-get install apt-transport-https ca-certificates gnupg gpgv -y --allow-downgrades\
     && echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" |  tee -a /etc/apt/sources.list.d/google-cloud-sdk.list \
