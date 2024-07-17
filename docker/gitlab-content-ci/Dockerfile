@@ -12,7 +12,7 @@ RUN rm /bin/sh && ln -s /bin/bash /bin/sh && cat ~/.profile >> /etc/.profile
 RUN apt-get update
 RUN    apt-get install software-properties-common \
     && add-apt-repository ppa:git-core/ppa -y \
-    && apt-get remove --purge software-properties-common
+    && apt-get remove --purge software-properties-common -y
 
 RUN apt-get update
 RUN apt-get upgrade -y
