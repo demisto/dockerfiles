@@ -27,5 +27,4 @@ system_default = system_default_sect\n\
 Options = UnsafeLegacyRenegotiation\n' > /tmp/ssl.cnf \
 && sed -i '/providers = provider_sect/r /tmp/ssl.cnf' /etc/ssl/openssl.cnf \
 && rm /tmp/ssl.cnf \
-&& grep -C 10 'Options = UnsafeLegacyRenegotiation' /etc/ssl/openssl.cnf \
-&& rm -rf /usr/local/lib/python3.11/site-packages/setuptools-65.5.1.dist-info
+&& grep -C 10 'Options = UnsafeLegacyRenegotiation' /etc/ssl/openssl.cnf
