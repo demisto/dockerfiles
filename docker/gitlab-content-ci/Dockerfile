@@ -51,7 +51,7 @@ RUN mkdir -p /var/lib/neo4j/plugins \
     && echo "apoc.import.file.enabled=true" >> $APOC_CONF_FILE \
     && echo "apoc.import.file.use_neo4j_config=true" >> $APOC_CONF_FILE
 # Installing goenv
-RUN git clone https://github.com/syndbg/goenv.git --depth 1 ~/.goenv
+RUN git clone https://github.com/go-nv/goenv.git --depth 1 ~/.goenv
 RUN echo 'export GOENV_ROOT="$HOME/.goenv"' >> ~/.bashrc \
     && echo 'export PATH="$GOENV_ROOT/bin:$PATH"' >> ~/.bashrc \ 
     && source ~/.bashrc \
