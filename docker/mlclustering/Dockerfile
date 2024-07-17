@@ -1,4 +1,4 @@
-FROM python:3.9.19-slim-bullseye
+FROM devdemisto/python3-9-deb:3.9.16.103688
 
 COPY requirements.txt .
 
