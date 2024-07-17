@@ -10,7 +10,9 @@ COPY localtime /etc/localtime
 
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget \
   && pip install --no-cache-dir -r requirements.txt \
-  && apk del .build-dependencies
+  && apk del .build-dependencies \
+  && pip uninstall setuptools -y \
+  && pip install setuptools>=70.3.0
 
 RUN addgroup -g 4000 demisto \
   && adduser -u 4000 -G demisto -D demisto -s /bin/sh 
