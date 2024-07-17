@@ -58,9 +58,7 @@ FROM registry.access.redhat.com/${BASE_UBI_VERSION}:${BASE_UBI_TAG}
 RUN dnf update -y --nodocs && \
     dnf install -y --nodocs procps-ng && \
     dnf clean all && \
-    rm -rf /var/cache/dnf \
-    && pip uninstall setuptools -y \
-    && pip install setuptools>=70.3.0
+    rm -rf /var/cache/dnf
 
 ENV PATH /usr/local/bin:/home/python/.local/bin:$PATH
 
@@ -101,7 +99,9 @@ Options = UnsafeLegacyRenegotiation\n' > /tmp/ssl.cnf \
     && grep -C 10 'Options = UnsafeLegacyRenegotiation' /etc/pki/tls/openssl.cnf
 
 RUN groupadd -g 4000 demisto && \
-    useradd -u 4000 -g demisto demisto -s /bin/sh
+    useradd -u 4000 -g demisto demisto -s /bin/sh && \
+    pip uninstall setuptools -y && \
+    pip install setuptools>=70.3.0
 
 # when changing it make sure to change also PYTHON_VERSION_TO_INSTALL env var in line 23
 ENV PYTHON_VERSION="3.11.9"
