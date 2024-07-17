@@ -10,21 +10,14 @@ ENV APOC_CONF_FILE /etc/neo4j/apoc.conf
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh && cat ~/.profile >> /etc/.profile
 
 RUN apt-get update
-RUN apt-get install software-properties-common -y
-RUN add-apt-repository ppa:git-core/ppa -y 
-
-RUN apt-get update
 RUN apt-get upgrade -y
-RUN apt-get install -y curl jq unzip openssh-client gcc libffi-dev libssl-dev git zip cowsay netcat wget python2 python3-pip software-properties-common
+RUN apt-get install -y curl jq unzip openssh-client gcc libffi-dev libssl-dev zip cowsay netcat wget python2 python3-pip software-properties-common
 RUN curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash \
     && . $NVM_DIR/nvm.sh \
     && nvm install $NODE_VERSION \
     && nvm alias default $NODE_VERSION \
-    && nvm use default
-
-RUN git --version 
-RUN which git
-RUN apt-get install git
+    && nvm use default \
+    && git --version  # makes sure git is installed (we dont install here, it to avoid two instances)
 
 # Installing the gsutil cli
 RUN apt-get install apt-transport-https ca-certificates gnupg gpgv -y --allow-downgrades\
