@@ -10,6 +10,6 @@ RUN chmod +x minicondainstall.sh && ./minicondainstall.sh -b -u -p ~/miniconda3 
   python3-dev gfortran wget git g++ pkg-config libhdf5-dev
 #RUN pip install -r requirements.txt
 #RUN pip install --no-binary :all: hdbscan==0.8.27
-RUN ~/miniconda3/bin/conda env create -f environment.yml && conda activate clusteringenv \
+RUN ~/miniconda3/bin/conda env create -f environment.yml && ~/miniconda3/bin/conda activate clusteringenv \
 && apt-get purge -y --auto-remove gcc pipenv \
   python3-dev gfortran wget git g++ pkg-config libhdf5-dev && rm -rf minicondainstall.sh
