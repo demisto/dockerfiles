@@ -193,21 +193,23 @@ function docker_build {
         fi
 
     fi
+         if [ -f "pyproject.toml" -a ! -f "requirements.txt" ]; then
+                if [[ "$(prop 'dont_generate_requirements')" ]]; then
+                  echo 'Not generating requirements as dont_generate_requirements is true' # only implemented for pipenv
+                else
+               if [ ! -f "poetry.lock" ]; then
+                    echo "Error: pyproject.toml present without poetry.lock. Make sure to commit your poetry.lock file"
+                    return 1
+                fi
 
-    if [ -f "pyproject.toml" -a ! -f "requirements.txt" ]; then
-       if [ ! -f "poetry.lock" ]; then
-            echo "Error: pyproject.toml present without poetry.lock. Make sure to commit your poetry.lock file"
-            return 1
-        fi
-
-      echo "starting to install dependencies from poetry..."
-      poetry --version
-      poetry export -f requirements.txt --output requirements.txt --without-hashes
-      echo "poetry.lock generated requirements.txt file: "
-      echo "############ REQUIREMENTS.TXT ############"
-      cat requirements.txt
-      echo "##########################################"
-
+              echo "starting to install dependencies from poetry..."
+              poetry --version
+              poetry export -f requirements.txt --output requirements.txt --without-hashes
+              echo "poetry.lock generated requirements.txt file: "
+              echo "############ REQUIREMENTS.TXT ############"
+              cat requirements.txt
+              echo "##########################################"
+          fi
     fi
 
     tmp_dir=$(mktemp -d)
