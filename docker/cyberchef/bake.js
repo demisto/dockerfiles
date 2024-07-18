@@ -1,4 +1,4 @@
-import cyberchefNode from "cyberchef-node";
+const cyberchefNode = require("cyberchef-node");
 
 async function runBake(input, recipe, options) {
     const parsedRecipe = JSON.parse(recipe);
