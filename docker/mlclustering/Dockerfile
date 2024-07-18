@@ -3,9 +3,8 @@ FROM demisto/python3-9-deb:3.9.16.103780
 #COPY requirements.txt .
 COPY environment.yml .
 ADD https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh minicondainstall.sh
-RUN chmod +x minicondainstall.sh && ./minicondainstall.sh -b -u -p ~/miniconda3
+RUN chmod +x minicondainstall.sh && ./minicondainstall.sh -b -u -p ~/miniconda3 && ~/miniconda3/bin/conda --version
 
-RUN conda --version
 RUN apt-get update \
 && apt-get install -y --no-install-recommends pipenv build-essential \
   gcc \
