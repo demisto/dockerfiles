@@ -1,6 +1,6 @@
 const cyberchefNode = require("cyberchef-node");
 
-async function runMagic(input, args = {}) {
+async function runMagic(input, args = "{}") {
     const parsedArgs = JSON.parse(args);
 
     try {

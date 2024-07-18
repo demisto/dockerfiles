@@ -1,6 +1,6 @@
 const cyberchefNode = require("cyberchef-node");
 
-async function runBake(input, recipe = [], options = {}) {
+async function runBake(input, recipe = "[]", options = "{}") {
     const parsedRecipe = JSON.parse(recipe);
     const parsedOptions = JSON.parse(options);
 
