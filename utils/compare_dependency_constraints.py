@@ -63,8 +63,7 @@ def find_library_line_number(lib_name: str, file_path: Path) -> int | None:
     Returns:
     - The line number containing the library name, or None if the library is not found.
     """
-    with file_path.open('r') as file:
-        for line_number, line in enumerate(file, start=1):  # Start counting from line 1
+    for line_number, line in enumerate(file_path.read_text().splitlines(), start=1):  # Start counting from line 1
             if lib_name in line:
                 return line_number
 
