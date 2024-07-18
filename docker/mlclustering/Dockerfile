@@ -1,7 +1,7 @@
 FROM devdemisto/python3-9-deb:3.9.16.103723
 
 #COPY requirements.txt .
-COPY environment.txt .
+COPY environment.yml .
 ADD https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh minicondainstall.sh
 RUN chmod +x minicondainstall.sh && ./minicondainstall.sh -b -u -p ~/miniconda3 &&  ~/miniconda3/bin/conda --version \
     && apt-get update \
