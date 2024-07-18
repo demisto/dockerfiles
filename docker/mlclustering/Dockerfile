@@ -3,14 +3,15 @@ FROM demisto/python3-9-deb:3.9.16.103780
 #COPY requirements.txt .
 COPY environment.yml .
 ADD https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh minicondainstall.sh
-RUN chmod +x minicondainstall.sh && ./minicondainstall.sh -b -u -p $HOME/miniconda3  \
-    && export PATH=$HOME/miniconda3/bin:$PATH && conda --version \
-&& apt-get update \
+RUN chmod +x minicondainstall.sh && ./minicondainstall.sh -b -u -p ~/miniconda3
+
+RUN conda --version
+RUN apt-get update \
 && apt-get install -y --no-install-recommends pipenv build-essential \
   gcc \
   python3-dev gfortran wget git g++ pkg-config libhdf5-dev
 #RUN pip install -r requirements.txt
 #RUN pip install --no-binary :all: hdbscan==0.8.27
-RUN conda init && conda env create -f environment.yml && conda activate clusteringenv \
+RUN ~/miniconda3/bin/conda init && ~/miniconda3/bin/conda env create -f environment.yml && ~/miniconda3/bin/conda activate clusteringenv \
 && apt-get purge -y --auto-remove gcc pipenv \
   python3-dev gfortran wget git g++ pkg-config libhdf5-dev && rm -rf minicondainstall.sh
