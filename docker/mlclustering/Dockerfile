@@ -13,7 +13,7 @@ RUN apt-get update \
 #RUN pip install --no-binary :all: hdbscan==0.8.27
 RUN ~/miniconda3/bin/conda init bash
 SHELL ["/bin/bash", "-c"]
-RUN  ~/miniconda3/bin/conda env create -f environment.yml && \
-     && echo "source activate clusteringenv" > ~/.bashrc \
+RUN  ~/miniconda3/bin/conda env create -f environment.yml \
+&& echo "source activate clusteringenv" > ~/.bashrc \
 && apt-get purge -y --auto-remove gcc pipenv \
   python3-dev gfortran wget git g++ pkg-config libhdf5-dev && rm -rf minicondainstall.sh
