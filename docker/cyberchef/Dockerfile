@@ -10,3 +10,4 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
 
 RUN apk add --update --no-cache nodejs npm
 RUN npm install -g --save cyberchef-node
+ENV NODE_PATH=/usr/local/lib/node_modules
