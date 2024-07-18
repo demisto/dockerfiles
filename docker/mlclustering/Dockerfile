@@ -10,4 +10,4 @@ RUN apt-get update \
 RUN pip install poetry && poetry export -f requirements.txt --output requirements.txt --without-hashes \
 && pip install --no-binary :all: --no-cache-dir -r requirements.txt \
 && apt-get purge -y --auto-remove gcc \
-  python3-dev gfortran wget git g++ pkg-config libhdf5-dev
+  python3-dev gfortran wget git g++ pkg-config libhdf5-dev cmake
