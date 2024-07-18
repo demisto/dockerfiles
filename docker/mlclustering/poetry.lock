@@ -65,6 +65,24 @@ graph = ["objgraph (>=1.7.2)"]
 profile = ["gprof2dot (>=2022.7.29)"]
 
 [[package]]
+name = "hdbscan"
+version = "0.8.27"
+description = "Clustering based on density with variable density clusters"
+optional = false
+python-versions = "*"
+files = [
+    {file = "hdbscan-0.8.27.tar.gz", hash = "sha256:e3a418d0d36874f7b6a1bf0b7461f3857fc13a525fd48ba34caed2fe8973aa26"},
+]
+
+[package.dependencies]
+cython = ">=0.27"
+joblib = ">=1.0"
+numpy = ">=1.16"
+scikit-learn = ">=0.20"
+scipy = ">=1.0"
+six = "*"
+
+[[package]]
 name = "joblib"
 version = "1.4.2"
 description = "Lightweight pipelining with Python functions"
@@ -283,4 +301,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "ae5981d5fcdc30068cdcbdf5fa0ba33e290acdad8376528d8db930383d591c8a"
+content-hash = "d0b379f4188706566fe6dd8fc05f39c2e7a6b6169f9f9f7ea6748cf5696a61cd"
