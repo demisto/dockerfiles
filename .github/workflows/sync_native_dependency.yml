@@ -21,7 +21,6 @@ jobs:
       - name: Run compare_dependency_constraints Script.
         run: |
           ls
-          echo "==== $(date): Starting environment setup... ===="
           cd "$GITHUB_WORKSPACE"
           echo "==== $(date): Running chceking Native dependency ===="
           pipenv run python utils/compare_dependency_constraints.py
