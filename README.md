@@ -85,7 +85,7 @@ It is possible to run a local build to verify that the build process is working.
 Requirements:
 
 * Local install of docker
-* Local install of `pipenv` or `poetry` (if building an image which is managing packages via these build tools - recommended)
+* Local install of `pipenv` or `poetry` (depends whether the image folder contains `Pipfile` or a `pyproject.toml`, respectively)
 
 The script `docker/build_docker.sh` is used to build all modified Docker images. The script detects modified directories using `git` by comparing against `origin/master` if on a branch or if on `master` by using the `CIRCLE_COMPARE_URL` environment variable to obtain the commit range of the current build.
 
