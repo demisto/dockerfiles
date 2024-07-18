@@ -52,7 +52,7 @@ class Discrepancy(NamedTuple):
     def __str__(self) -> str:
         return f"{self.dependency}: {self.in_image or 'missing'} in {self.image} image, {self.in_native or 'missing'} in Native image"
 
-def find_library_line_number(lib_name: str, file_path: Path):
+def find_library_line_number(lib_name: str, file_path: Path) -> int | None:
     """
     Searches for a library in the pyproject.toml or Pipfile file and returns the line number where it is found.
 
