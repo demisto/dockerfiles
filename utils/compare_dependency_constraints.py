@@ -13,12 +13,12 @@ def parse_constraints(dir_name: str) -> dict[str, str]:
     if not dir_path.exists():
         raise FileNotFoundError(dir_path)
 
-    pip_path = dir_path / "pyproject.toml"
+    pip_path = dir_path / "Pipfile"
     pyproject_path = dir_path / "pyproject.toml"
 
     if pip_path.exists() and pyproject_path.exists():
         raise ValueError(
-            f"Can't have both pyproject and pyproject.toml in a dockerfile folder ({dir_name})"
+            f"Can't have both pyproject and Pipfile in a dockerfile folder ({dir_name})"
         )
 
     if pip_path.exists():
@@ -27,7 +27,7 @@ def parse_constraints(dir_name: str) -> dict[str, str]:
     if pyproject_path.exists():
         return lower_dict_keys(_parse_pyproject(pyproject_path))
 
-    raise ValueError(f"Neither pyproject nor pyproject.toml found in {dir_name}")
+    raise ValueError(f"Neither pyproject nor Pipfile found in {dir_name}")
 
 
 def _parse_pipfile(path: Path) -> dict[str, str]:
