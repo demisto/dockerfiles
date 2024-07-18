@@ -17,3 +17,4 @@ RUN  ~/miniconda3/bin/conda env create -f environment.yml \
 && echo "source activate clusteringenv" > ~/.bashrc \
 && apt-get purge -y --auto-remove gcc pipenv \
   python3-dev gfortran wget git g++ pkg-config libhdf5-dev && rm -rf minicondainstall.sh
+ENV PATH=/root/miniconda3/envs/clusteringenv/bin:$PATH
