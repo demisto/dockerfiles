@@ -273,7 +273,7 @@ function docker_build {
     PY3CMD="python3"
     if [ -f "Pipfile" ]; then
         file_name="Pipfile"
-        get_version_from_file 'Pipfile' 'python_version = \"([^\"]+)\"'
+        get_version_from_file 'pyproject.toml' 'python_version = \"([^\"]+)\"'
     fi
     if [ -f "pyproject.toml" ]; then 
         file_name="pyproject.toml"

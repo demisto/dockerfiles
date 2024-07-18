@@ -46,10 +46,10 @@ def is_docker_file_outdated(
 
 
 def extract_current_python_version(file_path: str) -> Tuple[str, str, bool]:
-    """Extract the current python version from Pipfile or the pyproject.toml.
+    """Extract the current python version from pyproject.toml or the pyproject.toml.
 
     Args:
-        file_path (str): The file path to the Pipfile or the pyproject.toml file.
+        file_path (str): The file path to the pyproject.toml or the pyproject.toml file.
 
     Returns:
         Tuple[str,str, bool]: The python version in list and str.
@@ -58,7 +58,7 @@ def extract_current_python_version(file_path: str) -> Tuple[str, str, bool]:
     try:
         with open(file_path, "r") as f:
             file_content = f.read()
-        if "Pipfile" in file_path:
+        if "pyproject.toml" in file_path:
             python_version = re.search(PIPFILE_PYTHON_VERSION_REGEX, file_content)
         elif "pyproject.toml" in file_path:
             python_version = re.search(PYPROJECT_PYTHON_VERSION_REGEX, file_content)
@@ -77,7 +77,7 @@ def get_version_to_replace_with(version: str, file_path: str) -> str:
     """Gets the correct version to replace from the version string.
 
     Args:
-        file_path (str): The file path to the Pipfile or the pyproject.toml file.
+        file_path (str): The file path to the pyproject.toml or the pyproject.toml file.
         version (str): The updated/old version.
     """
     version_array = version.split(".")
@@ -96,10 +96,10 @@ def get_version_to_replace_with(version: str, file_path: str) -> str:
 def replace_python_version(
     file_path: str, version: str, full_str_python_version: str
 ) -> bool:
-    """Replace the current python version in the Pipfile or the pyproject.toml.
+    """Replace the current python version in the pyproject.toml or the pyproject.toml.
 
     Args:
-        file_path (str): The file path to the Pipfile or the pyproject.toml file.
+        file_path (str): The file path to the pyproject.toml or the pyproject.toml file.
         version (str): The updated/old version.
         full_str_python_version (str): The older version.
     """
@@ -108,7 +108,7 @@ def replace_python_version(
         file_content = f.read()
         python_version = (
             f'python_version = "{version_to_replace}"'
-            if "Pipfile" in file_path
+            if "pyproject.toml" in file_path
             else f'python = "{version_to_replace}"'
         )
         if full_str_python_version != python_version:
@@ -121,10 +121,10 @@ def replace_python_version(
 
 
 def change_python_version(file_path: str, str_version: str) -> Tuple[bool, str]:
-    """Replace the current python version in the Pipfile or the pyproject.toml.
+    """Replace the current python version in the pyproject.toml or the pyproject.toml.
 
     Args:
-        file_path (str): The file path to the Pipfile or the pyproject.toml file.
+        file_path (str): The file path to the pyproject.toml or the pyproject.toml file.
         version (str): The version.
         full_str_python_version (str): The older version.
     """
@@ -146,14 +146,14 @@ def run_lock(base_path_docker: str, pipfile_or_pyproject_path: str) -> bool:
 
     Args:
         base_path_docker (str): The DockerFile path.
-        pipfile_or_pyproject_path (str): The file path to the Pipfile
+        pipfile_or_pyproject_path (str): The file path to the pyproject.toml
         or the pyproject.toml file.
     """
     base_path = base_path_docker.replace("/Dockerfile", "")
     current_directory = os.getcwd()
     os.chdir(f"{current_directory}/" + base_path)
     try:
-        if "Pipfile" in pipfile_or_pyproject_path:
+        if "pyproject.toml" in pipfile_or_pyproject_path:
             # waits for the process to end.
             completed_process = subprocess.run(
                 ["pipenv", "lock", "--keep-outdated"],

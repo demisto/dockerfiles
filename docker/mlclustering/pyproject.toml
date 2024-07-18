@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "dockerfiles"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+pandas = "1.2.4"
+numpy = "1.20.2"
+scikit-learn = "0.24.1"
+dill = "*"
+Cython = "0.29.23"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

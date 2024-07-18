@@ -92,7 +92,7 @@ def filter_ignored_files(files_list):
         return files_list
 
 def get_file_path_and_docker_version_if_exist(dockerfile: dict, docker_latest_tag:str)-> Optional[Tuple]:
-        """Gets the Pipfile or the pyproject.toml file path 
+        """Gets the pyproject.toml or the pyproject.toml file path
            and the docker version from the Dockerfile.
         Args:
             dockerfile (str): A dict that represents the docker file.
@@ -102,7 +102,7 @@ def get_file_path_and_docker_version_if_exist(dockerfile: dict, docker_latest_ta
         """
         base_path = dockerfile["path"]
         base_path=base_path.replace("/Dockerfile", "")
-        pipfile_path = glob(f"{base_path}/Pipfile", recursive=True)
+        pipfile_path = glob(f"{base_path}/pyproject.toml", recursive=True)
         pyproject_path = glob(f"{base_path}/pyproject.toml", recursive=True)
         extracted_python_version = re.search(EXTRACT_PYTHON_VERSION_REGEX, docker_latest_tag)
         if extracted_python_version:
@@ -111,7 +111,7 @@ def get_file_path_and_docker_version_if_exist(dockerfile: dict, docker_latest_ta
                 print(f"[INFO] Got path for: {path[0]}")
                 return path[0],extracted_version
             else:
-                print(f"[INFO] Can't find Pipfile/pyproject file for {dockerfile['name']}.")
+                print(f"[INFO] Can't find pyproject.toml/pyproject file for {dockerfile['name']}.")
         else:
             print(f"[ERROR] Can't find docker tag for {dockerfile['name']}.")
         return None

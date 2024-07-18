@@ -34,9 +34,9 @@ def test_get_operator_and_version(version, expected_version, expected_operator):
 
 test_data_parse_and_match_versions = [
     ("3.10", ">=3.10,<3.11", "pyproject.toml", (False, "~3.10")),
-    ("3.11", "3.9", "Pipfile", (False, "3.11")),
-    ("3.10.6", "3.11.5", "Pipfile", (False, "3.10")),
-    ("3.10.6", "3.10", "Pipfile", (True, "")),
+    ("3.11", "3.9", "pyproject.toml", (False, "3.11")),
+    ("3.10.6", "3.11.5", "pyproject.toml", (False, "3.10")),
+    ("3.10.6", "3.10", "pyproject.toml", (True, "")),
     ("3.10.6", "~3.10", "pyproject.toml", (True, "")),
 ]
 
