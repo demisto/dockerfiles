@@ -28,8 +28,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   gcc \
   python3-dev \
 && rm -rf /var/lib/apt/lists/* \
-&& pip uninstall setuptools -y \
-&& pip install setuptools>=70.3.0
+&& pip install --upgrade setuptools
 
 
 RUN groupadd --gid 4000 demisto \
