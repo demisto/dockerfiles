@@ -18,6 +18,5 @@ jobs:
           python -m pip install --upgrade pip
           pip install pipenv
           pipenv install
-      - name: Run compare_dependency_constraints Script.
-        run: |
-          pipenv run python utils/compare_dependency_constraints.py
+      - name: Compare dependency constraints
+        run: pipenv run python utils/compare_dependency_constraints.py
