@@ -3,7 +3,7 @@ FROM demisto/python3:3.11.9.103066
 ENV DEMISTO_SDK_IGNORE_CONTENT_WARNING true
 COPY requirements.txt .
 
-RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base libffi-dev openssl-dev wget \
+RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base libffi-dev openssl-dev \
   && apk add --no-cache git  \
   && apk add --no-cache libstdc++  \
   && apk add --no-cache --upgrade grep  \
@@ -15,3 +15,6 @@ ADD https://raw.githubusercontent.com/demisto/content/master/tox.ini /home/demis
 ADD https://raw.githubusercontent.com/demisto/content/master/Tests/demistomock/demistomock.py /home/demisto
 ADD https://raw.githubusercontent.com/demisto/content/master/Tests/demistomock/demistomock.ps1 /home/demisto
 ADD https://raw.githubusercontent.com/demisto/content/master/Tests/scripts/dev_envs/pytest/conftest.py /home/demisto
+ADD https://raw.githubusercontent.com/demisto/content/master/Tests/Marketplace/approved_usecases.json /home/demisto
+ADD https://raw.githubusercontent.com/demisto/content/master/Tests/Marketplace/approved_tags.json /home/demisto
+ADD https://raw.githubusercontent.com/demisto/content/master/Tests/Marketplace/approved_categories.json /home/demisto
