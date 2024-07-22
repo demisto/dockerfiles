@@ -20,7 +20,7 @@ RUN sh -c "yes | pwsh -Command 'Uninstall-Module -Force -Name newtonsoft.json'"
 
 
 RUN pwsh -command 'Install-Module -Force -Name newtonsoft.json -MinimumVersion 13.0.1'
-RUN pwsh -command 'Import-Module -Name newtonsoft.json MinimumVersion 13.0.1'
+RUN pwsh -command 'Import-Module -Name newtonsoft.json -MinimumVersion 13.0.1'
 
 
 # Set timezone to Etc/UTC for backwards comp. See: https://github.com/regebro/tzlocal/issues/101
