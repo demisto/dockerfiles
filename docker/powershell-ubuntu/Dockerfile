@@ -13,7 +13,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 && rm -rf /var/lib/apt/lists/*
 
 
-RUN sh -c "yes | pwsh -Command 'Uninstall-Module -Force -Name newtonsoft.json'"
+# RUN sh -c "yes | pwsh -Command 'Uninstall-Module -Force -Name newtonsoft.json'"
 # RUN pwsh -Command 'Uninstall-Module -Force -Name newtonsoft.json'
 
 # RUN sh -c "yes | pwsh -Command 'Install-Module -Name newtonsoft.json -MinimumVersion 13.0.1'"
@@ -23,7 +23,7 @@ RUN sh -c "yes | pwsh -Command 'Uninstall-Module -Force -Name newtonsoft.json'"
 # RUN pwsh -command 'Import-Module -Name newtonsoft.json'
 
 
-RUN pwsh -command 'Uninstall-Package newtonsoft.json'
+RUN pwsh -command 'Uninstall-Package -Force newtonsoft.json'
 
 # Set timezone to Etc/UTC for backwards comp. See: https://github.com/regebro/tzlocal/issues/101
 RUN echo 'Etc/UTC' > /etc/timezone \
