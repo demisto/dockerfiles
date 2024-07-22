@@ -4,8 +4,8 @@
 
 ## 8.7.0
 
-* Updated the library ***exchangelib*** to version ***5.0.3*** to allow support for the **EWSv2**  intgration.
-* Added the library ***ntlm_auth*** to allow support for the **EWSv2**  intgration.
+* Updated the library ***exchangelib*** to version ***5.4.2*** to allow support for the **EWSv2**  integration.
+* Added the library ***ntlm_auth*** to allow support for the **EWSv2**  integration.
 * Updated the image to use Python 3.11.
 
 ## 8.6.0
