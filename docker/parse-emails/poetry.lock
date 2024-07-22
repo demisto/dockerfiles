@@ -199,19 +199,18 @@ files = [
 ]
 
 [[package]]
-name = "lark"
-version = "1.1.8"
+name = "lark-parser"
+version = "0.12.0"
 description = "a modern parsing library"
 optional = false
-python-versions = ">=3.6"
+python-versions = "*"
 files = [
-    {file = "lark-1.1.8-py3-none-any.whl", hash = "sha256:7d2c221a66a8165f3f81aacb958d26033d40d972fdb70213ab0a2e0627e29c86"},
-    {file = "lark-1.1.8.tar.gz", hash = "sha256:7ef424db57f59c1ffd6f0d4c2b705119927f566b68c0fe1942dddcc0e44391a5"},
+    {file = "lark-parser-0.12.0.tar.gz", hash = "sha256:15967db1f1214013dca65b1180745047b9be457d73da224fcda3d9dd4e96a138"},
+    {file = "lark_parser-0.12.0-py2.py3-none-any.whl", hash = "sha256:0eaf30cb5ba787fe404d73a7d6e61df97b21d5a63ac26c5008c78a494373c675"},
 ]
 
 [package.extras]
 atomic-cache = ["atomicwrites"]
-interegular = ["interegular (>=0.3.1,<0.4.0)"]
 nearley = ["js2py"]
 regex = ["regex"]
 
@@ -424,21 +423,22 @@ files = [
 
 [[package]]
 name = "rtfde"
-version = "0.1.2"
+version = "0.0.2"
 description = "A library for extracting HTML content from RTF encapsulated HTML as commonly found in the exchange MSG email format."
 optional = false
-python-versions = "~=3.8"
+python-versions = ">=3.6"
 files = [
-    {file = "RTFDE-0.1.2-py3-none-any.whl", hash = "sha256:f6d1450c99b04e930da130e8b419aa33b1f953623e1b94ad5c0f67f0362eb737"},
+    {file = "RTFDE-0.0.2-py3-none-any.whl", hash = "sha256:18386e4f060cee12a2a8035b0acf0cc99689f5dff1bf347bab7e92351860a21d"},
+    {file = "RTFDE-0.0.2.tar.gz", hash = "sha256:b86b5d734950fe8745a5b89133f50554252dbd67c6d1b9265e23ee140e7ea8a2"},
 ]
 
 [package.dependencies]
-lark = ">=1.1.8,<1.2.0"
+lark-parser = ">=0.11"
 oletools = ">=0.56"
 
 [package.extras]
-dev = ["coverage (>=7.2.2,<7.3.0)", "lxml (>=4.6,<5.0)", "mypy (>=1.1,<2.0)", "pdoc3 (>=0.10.0,<0.11.0)"]
-msg-parse = ["extract-msg (>=0.27,<1.0)"]
+dev = ["lxml (>=4.6)"]
+msg-parse = ["extract-msg (>=0.27)"]
 
 [[package]]
 name = "setuptools"
@@ -521,4 +521,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.11"
-content-hash = "9bf54e3d48f05f87b470b3844ad2239e1dc0da8daf01723e02169c56f8326799"
+content-hash = "9f8c99d245a046caacd14ec8155aba503b1f86adac965c0ac9654c0082d7795d"
