@@ -16,7 +16,7 @@ SHELL ["/bin/bash", "-c"]
 RUN conda init bash && conda env create -f environment.yml && conda activate clusteringenv && \
     conda list --export > /tmp/conda_packages.txt && \
     mkdir -p /tmp/pkgs && \
-    conda install --download-only -n temp_env -c conda-forge --copy -d /tmp/pkgs --file /tmp/conda_packages.txt
+    conda install --download-only -n clusteringenv -c conda-forge --copy -d /tmp/pkgs --file /tmp/conda_packages.txt
 
 # Extract the downloaded packages
 RUN cd /tmp/pkgs && \
