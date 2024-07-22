@@ -11,9 +11,9 @@ RUN apt-get update \
 ADD https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh minicondainstall.sh
 RUN chmod +x minicondainstall.sh && ./minicondainstall.sh -b -u -p ~/miniconda3 && ~/miniconda3/bin/conda --version
 ENV PATH=/root/miniconda3/bin/:$PATH
-
-SHELL ["/bin/bash", "-c"]
-RUN conda init bash && conda env create -f environment.yml && conda activate clusteringenv && \
+RUN conda init bash
+SHELL ["/bin/bash", "-l", "-c"]
+RUN conda env create -f environment.yml && conda activate clusteringenv && \
     conda list --export > /tmp/conda_packages.txt && \
     mkdir -p /tmp/pkgs && \
     conda install --download-only -n clusteringenv -c conda-forge --copy -d /tmp/pkgs --file /tmp/conda_packages.txt
