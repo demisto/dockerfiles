@@ -6,6 +6,7 @@ RUN apt-get update -y
 RUN sh -c "yes | pwsh -Command 'Install-Module -Name PSWSMan'"
 RUN pwsh -Command 'Install-WSMan'
 
+RUN pwsh -command 'Uninstall-Package -Force newtonsoft.json'
 
 RUN apt update && apt install netbase -y
 # Upgrade all packages to latest
@@ -23,7 +24,6 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 # RUN pwsh -command 'Import-Module -Name newtonsoft.json'
 
 
-RUN pwsh -command 'Uninstall-Package -Force newtonsoft.json'
 
 # Set timezone to Etc/UTC for backwards comp. See: https://github.com/regebro/tzlocal/issues/101
 RUN echo 'Etc/UTC' > /etc/timezone \
