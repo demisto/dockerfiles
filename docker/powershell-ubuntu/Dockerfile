@@ -6,7 +6,9 @@ RUN apt-get update -y
 RUN sh -c "yes | pwsh -Command 'Install-Module -Name PSWSMan'"
 RUN pwsh -Command 'Install-WSMan'
 
-RUN pwsh -command 'Install-Package Newtonsoft.Json -Version 13.0.1'
+RUN pwsh -command 'Install-Package Newtonsoft.Json'
+RUN pwsh -command 'Update-Package Newtonsoft.Json'
+
 
 RUN apt update && apt install netbase -y
 # Upgrade all packages to latest
