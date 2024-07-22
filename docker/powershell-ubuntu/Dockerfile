@@ -14,7 +14,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 
 
 RUN sh -c "yes | pwsh -Command 'Uninstall-Module -Force -Name newtonsoft.json'"
-RUN pwsh -Command 'Uninstall-Module -Force -Name newtonsoft.json'
+# RUN pwsh -Command 'Uninstall-Module -Force -Name newtonsoft.json'
 
 # RUN sh -c "yes | pwsh -Command 'Install-Module -Name newtonsoft.json -MinimumVersion 13.0.1'"
 
