@@ -12,9 +12,11 @@ RUN apt-get update \
 #RUN pip install -r requirements.txt
 #RUN pip install --no-binary :all: hdbscan==0.8.27
 RUN conda init bash
-SHELL ["/bin/bash", "-c"]
+
 RUN conda env create -f environment.yml
 
+SHELL ["/bin/bash", "-c"]
+RUN conda init bash
 RUN conda activate clusteringenv && \
     conda list --export > /tmp/conda_packages.txt && \
     mkdir -p /tmp/pkgs && \
