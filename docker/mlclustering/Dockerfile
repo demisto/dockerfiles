@@ -12,11 +12,8 @@ ADD https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh minico
 RUN chmod +x minicondainstall.sh && ./minicondainstall.sh -b -u -p ~/miniconda3 && ~/miniconda3/bin/conda --version
 ENV PATH=/root/miniconda3/bin/:$PATH
 
-RUN conda env create -f environment.yml
-
 SHELL ["/bin/bash", "-c"]
-RUN conda init bash
-RUN conda activate clusteringenv && \
+RUN conda init bash && conda env create -f environment.yml && conda activate clusteringenv && \
     conda list --export > /tmp/conda_packages.txt && \
     mkdir -p /tmp/pkgs && \
     conda install --download-only -n temp_env -c conda-forge --copy -d /tmp/pkgs --file /tmp/conda_packages.txt
