@@ -7,7 +7,7 @@ RUN sh -c "yes | pwsh -Command 'Install-Module -Name PSWSMan'"
 RUN pwsh -Command 'Install-WSMan'
 
 # RUN pwsh -command 'Install-Package Newtonsoft.Json'
-RUN pwsh -command 'Update-Package Newtonsoft.Json'
+RUN pwsh -command 'Update-Package -Id Newtonsoft.Json'
 
 
 RUN apt update && apt install netbase -y
