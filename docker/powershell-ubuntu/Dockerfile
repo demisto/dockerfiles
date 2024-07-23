@@ -1,5 +1,5 @@
 # Last modified: 2023-11-17T00:12:42.649505+00:00
-FROM mcr.microsoft.com/powershell:7.4-ubuntu-20.04
+FROM mcr.microsoft.com/powershell:7.4-ubuntu-22.04
 
 # For the `no supported WSMan client library was found` error when using Ubuntu 20+
 RUN apt-get update -y
@@ -47,9 +47,6 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 
 
 
-RUN /opt/microsoft/powershell/7 -c "y | pwsh -Command 'Install-Package -Name system.formats.asn1 -ProviderName NuGet -RequiredVersion 8.0.1'"
-
-
 
 
 # build passed
@@ -75,6 +72,9 @@ RUN sh -c "y | pwsh -Command 'Install-Package -Name system.formats.asn1 -Provide
 # Uninstall-Package: No package found for 'system.formats.asn1
 #RUN sh -c "yes | pwsh -Command 'Uninstall-Package -Name system.formats.asn1'"
 
+
+# /opt/microsoft/powershell/7: Permission denied
+# RUN /opt/microsoft/powershell/7 -c "y | pwsh -Command 'Install-Package -Name system.formats.asn1 -ProviderName NuGet -RequiredVersion 8.0.1'"
 
 
 
