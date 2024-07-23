@@ -5,7 +5,7 @@ FROM mcr.microsoft.com/powershell:7.4-ubuntu-20.04
 RUN apt-get update -y
 
 
-# RUN sh -c "yes | pwsh -Command 'Install-Module -Name PSWSMan'"
+RUN sh -c "yes | pwsh -Command 'Install-Module -Name PSWSMan -RequiredVersion 2.3.1'"
 # RUN pwsh -Command 'Install-WSMan'
 
 
