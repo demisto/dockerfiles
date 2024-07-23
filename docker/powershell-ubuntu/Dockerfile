@@ -46,6 +46,12 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 
 
 
+
+RUN /opt/microsoft/powershell/7 -c "y | pwsh -Command 'Install-Package -Name system.formats.asn1 -ProviderName NuGet -RequiredVersion 8.0.1'"
+
+
+
+
 # build passed
 RUN /bin/sh -c sh -c "y | pwsh -Command 'Uninstall-Package -Name newtonsoft.json -ProviderName NuGet'"
 RUN /bin/sh -c sh -c "yes | pwsh -Command 'Uninstall-Package -Name system.formats.asn1 -ProviderName NuGet'"
@@ -53,11 +59,8 @@ RUN /bin/sh -c sh -c "yes | pwsh -Command 'Install-Package -Name system.formats.
 RUN /bin/sh -c sh -c "yes | pwsh -Command 'Uninstall-Module -Name system.formats.asn1 -AllVersions'"
 RUN /bin/sh -c "yes | pwsh -Command 'Uninstall-Module -Name system.formats.asn1 -AllVersions'"
 
-
-
 RUN sh -c "y | pwsh -Command 'Install-Package -Name system.formats.asn1 -ProviderName NuGet -RequiredVersion 8.0.1'"
 # RUN /bin/sh -c "y | pwsh -Command 'Install-Package -Name system.formats.asn1 -ProviderName NuGet -RequiredVersion 8.0.1'"
-
 
 
 
