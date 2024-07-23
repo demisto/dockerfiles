@@ -10,7 +10,10 @@ RUN pwsh -Command 'Install-WSMan'
 # RUN sh -c "yes | pwsh -Command 'Uninstall-Package -Name newtonsoft.json -ProviderName NuGet'"
 
 RUN sh -c "y | pwsh -Command 'Install-Package -Name newtonsoft.json -ProviderName NuGet -RequiredVersion 13.0.1'"
-RUN sh -c "y | pwsh -Command 'Install-Package -Name newtonsoft.json -ProviderName PowerShellGet -RequiredVersion 13.0.1'"
+RUN sh -c "y | pwsh -Command 'Update-Package -Id newtonsoft.json -Version 13.0.1 -ProviderName NuGet'"
+
+
+RUN sh -c "y | pwsh -Command 'Update-Package -Id newtonsoft.json -Version 13.0.1 -ProviderName PowerShellGet'"
 
 RUN apt update && apt install netbase -y
 # Upgrade all packages to latest
