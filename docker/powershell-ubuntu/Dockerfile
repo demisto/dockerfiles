@@ -56,9 +56,6 @@ RUN /bin/sh -c "yes | pwsh -Command 'Uninstall-Module -Name system.formats.asn1 
 
 
 RUN sh -c "y | pwsh -Command 'Install-Package -Name system.formats.asn1 -ProviderName NuGet -RequiredVersion 8.0.1'"
-
-
-
 # RUN /bin/sh -c "y | pwsh -Command 'Install-Package -Name system.formats.asn1 -ProviderName NuGet -RequiredVersion 8.0.1'"
 
 
@@ -73,7 +70,7 @@ RUN sh -c "y | pwsh -Command 'Install-Package -Name system.formats.asn1 -Provide
 #RUN /bin/sh -c "yes | pwsh -Command 'Uninstall-Package -Name system.formats.asn1'"
 
 # Uninstall-Package: No package found for 'system.formats.asn1
-RUN sh -c "yes | pwsh -Command 'Uninstall-Package -Name system.formats.asn1'"
+#RUN sh -c "yes | pwsh -Command 'Uninstall-Package -Name system.formats.asn1'"
 
 
 
