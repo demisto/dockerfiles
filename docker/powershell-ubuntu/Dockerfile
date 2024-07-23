@@ -11,7 +11,7 @@ RUN pwsh -Command 'Install-WSMan'
 # RUN sh -c "yes | pwsh -Command 'Install-Module -Name newtonsoft.json -RequiredVersion 13.0.1'"
 # RUN sh -c "yes | pwsh -Command 'Uninstall-Package -Name newtonsoft.json -ProviderName NuGet'"
 
-RUN sh -c "y | pwsh -Command 'Install-Package -Name newtonsoft.json -ProviderName NuGet -RequiredVersion 13.0.1'"
+# RUN sh -c "y | pwsh -Command 'Install-Package -Name newtonsoft.json -ProviderName NuGet -RequiredVersion 13.0.1'"
 # RUN sh -c "y | pwsh -Command 'Get-Package -Name newtonsoft.json -RequiredVersion 12.0.3 -ProviderName NuGet | Uninstall-Package'"
 #
 
@@ -35,12 +35,12 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 
 
 # RUN sh -c "y | pwsh -Command 'Uninstall-Package -Name newtonsoft.json -ProviderName NuGet -RequiredVersion 12.0.3'"
-RUN /bin/sh -c sh -c "y | pwsh -Command 'Uninstall-Package -Name newtonsoft.json -ProviderName NuGet -RequiredVersion 12.0.3'"
+RUN /bin/sh -c sh -c "y | pwsh -Command 'Uninstall-Package -Name newtonsoft.json -ProviderName NuGet'"
 # RUN sudo /root/.local/share/powershell -c sh -c "y | pwsh -Command 'Uninstall-Package -Name newtonsoft.json -ProviderName NuGet -RequiredVersion 12.0.3'"
-RUN pwsh -Command 'Uninstall-Package -Name newtonsoft.json -ProviderName NuGet -RequiredVersion 12.0.3'
+# RUN pwsh -Command 'Uninstall-Package -Name newtonsoft.json -ProviderName NuGet -RequiredVersion 12.0.3'
 
 
-RUN /bin/sh -c sh -c "y | pwsh -Command 'Install-Package -Name newtonsoft.json -ProviderName NuGet -RequiredVersion 13.0.1'"
+# RUN /bin/sh -c sh -c "y | pwsh -Command 'Install-Package -Name newtonsoft.json -ProviderName NuGet -RequiredVersion 13.0.1'"
 
 
 # Set timezone to Etc/UTC for backwards comp. See: https://github.com/regebro/tzlocal/issues/101
