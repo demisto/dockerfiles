@@ -37,6 +37,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 RUN sh -c "yes | pwsh -Command 'Uninstall-Package -Name newtonsoft.json -ProviderName NuGet -RequiredVersion 12.0.3'"
 RUN /bin/sh -c sh -c "yes | pwsh -Command 'Uninstall-Package -Name newtonsoft.json -ProviderName NuGet -RequiredVersion 12.0.3'"
 RUN /root/.local/share/powershell -c sh -c "yes | pwsh -Command 'Uninstall-Package -Name newtonsoft.json -ProviderName NuGet -RequiredVersion 12.0.3'"
+RUN pwsh -Command 'Uninstall-Package -Name newtonsoft.json -ProviderName NuGet -RequiredVersion 12.0.3'
 
 
 RUN /bin/sh -c sh -c "y | pwsh -Command 'Install-Package -Name newtonsoft.json -ProviderName NuGet -RequiredVersion 13.0.1'"
