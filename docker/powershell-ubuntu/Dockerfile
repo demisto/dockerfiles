@@ -17,7 +17,7 @@ RUN pwsh -Command 'Install-WSMan'
 
 
 
-RUN apt update && apt install netbase -y
+RUN apt update && apt install netbase tzdata -y
 # Upgrade all packages to latest
 RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 && rm -rf /var/lib/apt/lists/*
