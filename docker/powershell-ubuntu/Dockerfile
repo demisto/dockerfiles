@@ -46,9 +46,9 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 RUN /bin/sh -c sh -c "y | pwsh -Command 'Uninstall-Package -Name newtonsoft.json -ProviderName NuGet'"
 
 
-RUN sh -c "yes | pwsh -Command 'Uninstall-Package -Name system.formats.asn1 -ProviderName NuGet'"
+RUN /bin/sh -c sh -c "yes | pwsh -Command 'Uninstall-Package -Name system.formats.asn1 -ProviderName NuGet'"
 
-RUN sh -c "yes | pwsh -Command 'Install-Package -Name system.formats.asn1 -ProviderName NuGet -RequiredVersion 8.0.1'"
+RUN /bin/sh -c sh -c "yes | pwsh -Command 'Install-Package -Name system.formats.asn1 -ProviderName NuGet -RequiredVersion 8.0.1'"
 
 
 
