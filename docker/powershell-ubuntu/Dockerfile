@@ -4,8 +4,6 @@ FROM mcr.microsoft.com/powershell:7.4-ubuntu-20.04
 # For the `no supported WSMan client library was found` error when using Ubuntu 20+
 RUN apt-get update -y
 
-RUN /bin/sh -c sh -c "y | pwsh -Command 'Uninstall-Package -Name newtonsoft.json -ProviderName NuGet -RequiredVersion 12.0.3'"
-RUN /bin/sh -c sh -c "y | pwsh -Command 'Install-Package -Name newtonsoft.json -ProviderName NuGet -RequiredVersion 13.0.1'"
 
 RUN sh -c "yes | pwsh -Command 'Install-Module -Name PSWSMan'"
 RUN pwsh -Command 'Install-WSMan'
@@ -34,6 +32,8 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 # RUN pwsh -command 'Install-Module -Force -Name newtonsoft.json -MinimumVersion 13.0.1'
 # RUN pwsh -command 'Import-Module -Name newtonsoft.json'
 
+RUN /bin/sh -c sh -c "y | pwsh -Command 'Uninstall-Package -Name newtonsoft.json -ProviderName NuGet -RequiredVersion 12.0.3'"
+RUN /bin/sh -c sh -c "y | pwsh -Command 'Install-Package -Name newtonsoft.json -ProviderName NuGet -RequiredVersion 13.0.1'"
 
 
 # Set timezone to Etc/UTC for backwards comp. See: https://github.com/regebro/tzlocal/issues/101
