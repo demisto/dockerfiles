@@ -41,6 +41,13 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 
 # RUN /bin/sh -c sh -c "y | pwsh -Command 'Install-Package -Name newtonsoft.json -ProviderName NuGet -RequiredVersion 13.0.1'"
 
+
+
+
+RUN sh -c "yes | pwsh -Command 'Uninstall-Package -Name system.formats.asn1'"
+RUN sh -c "yes | pwsh -Command 'Uninstall-Package -Name newtonsoft.json'"
+
+
 # build passed
 RUN /bin/sh -c sh -c "y | pwsh -Command 'Uninstall-Package -Name newtonsoft.json -ProviderName NuGet'"
 RUN /bin/sh -c sh -c "yes | pwsh -Command 'Uninstall-Package -Name system.formats.asn1 -ProviderName NuGet'"
