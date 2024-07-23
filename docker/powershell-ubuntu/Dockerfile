@@ -50,8 +50,8 @@ RUN /bin/sh -c sh -c "yes | pwsh -Command 'Uninstall-Module -Name system.formats
 # Uninstall-Package: No package found for 'system.formats.asn1'.
 # RUN /bin/sh -c "yes | pwsh -Command 'Uninstall-Package -Name system.formats.asn1 -ProviderName NuGet'"
 
-
-RUN /bin/sh -c "yes | pwsh -Command 'Uninstall-Package -Name system.formats.asn1'"
+# Uninstall-Package: No package found for 'system.formats.asn1
+#RUN /bin/sh -c "yes | pwsh -Command 'Uninstall-Package -Name system.formats.asn1'"
 
 
 
