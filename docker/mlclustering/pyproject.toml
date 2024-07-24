@@ -6,13 +6,13 @@ authors = ["Your Name <you@example.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.9"
-pandas = "1.2.4"
-numpy = "1.20.2"
-scikit-learn = "0.24.1"
+python = "~3.11"
+pandas = "*"
+numpy = "*"
+scikit-learn = "*"
 dill = "*"
-hdbscan="0.8.29"
-Cython = "0.29.23"
+hdbscan="*"
+Cython = "*"
 
 [build-system]
 requires = ["poetry-core"]
