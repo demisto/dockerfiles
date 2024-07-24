@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   openssh-client \
 && pip install --no-cache-dir -r requirements.txt \
 && pip install https://github.com/vmware/vsphere-automation-sdk-python/archive/refs/tags/v7.0.3.2.tar.gz \
+&& pip install azure-storage-blob \
 && apt-get purge -y --auto-remove \
   gcc \
   python3-dev \
