@@ -62,7 +62,7 @@ RUN dnf update --nodocs -y  \
     do python tessdata_downloader/tessdata_downloader.py -o /usr/local/share/tessdata/ -l $lang; done \
     && tesseract --version --list-langs \
     && rm -rf tessdata_downloader leptonica tesseract download_chromedriver.sh repos \
-    && dnf remove -y python3-devel gcc gcc-c++ make platform-python-pip jq unzip git make autoconf automake libtool libpng-devel libjpeg-devel libtiff-devel zlib-devel giflib-devel \
+    && dnf remove -y python3-devel webkit2gtk3-jsc gcc gcc-c++ make platform-python-pip jq unzip git make autoconf automake libtool libpng-devel libjpeg-devel libtiff-devel zlib-devel giflib-devel \
     && dnf clean all \
     && rm -rf /var/cache/dnf
 
@@ -93,7 +93,7 @@ RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE python3-devel gcc gcc-c+
         && dnf remove -y python3-devel rust cargo libffi-devel openssl-devel gcc gcc-c++ make git platform-python-pip krb5-devel \
         && dnf clean all \
         && rm -rf /var/cache/dnf /root/.cargo \
-        && pip uninstall -y pcodedmp
+        && pip uninstall -y pcodedmp pyminizip
 
 
 ENV NLTK_DATA='/etc/ml/nltk_data'
