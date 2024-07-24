@@ -1,4 +1,4 @@
-FROM demisto/python3-9-deb:3.9.16.103780
+FROM demisto/python3-deb:3.11.9.104959
 
 COPY pyproject.toml .
 COPY poetry.lock .
