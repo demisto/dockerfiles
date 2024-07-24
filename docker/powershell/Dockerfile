@@ -9,13 +9,3 @@ RUN addgroup -g 4000 demisto \
   && apk update \
   && apk upgrade \
   && apk del less
-
-
-# build passed
-RUN /bin/sh -c sh -c "y | pwsh -Command 'Uninstall-Package -Name newtonsoft.json -ProviderName NuGet'"
-RUN /bin/sh -c sh -c "yes | pwsh -Command 'Uninstall-Package -Name system.formats.asn1 -ProviderName NuGet'"
-RUN /bin/sh -c sh -c "yes | pwsh -Command 'Install-Package -Name system.formats.asn1 -ProviderName NuGet -RequiredVersion 8.0.1'"
-RUN /bin/sh -c sh -c "yes | pwsh -Command 'Uninstall-Module -Name system.formats.asn1 -AllVersions'"
-RUN /bin/sh -c "yes | pwsh -Command 'Uninstall-Module -Name system.formats.asn1 -AllVersions'"
-
-RUN sh -c "y | pwsh -Command 'Install-Package -Name system.formats.asn1 -ProviderName NuGet -RequiredVersion 8.0.1'"
