@@ -455,6 +455,8 @@ updates:
     directory: /docker/mlclustering
     schedule:
       interval: daily
+    ignore:
+      - dependency-name: scikit-learn
   - package-ecosystem: pip
     directory: /docker/stix
     schedule:
@@ -752,5 +754,9 @@ updates:
      interval: daily
   - package-ecosystem: pip
     directory: /docker/keepercommander
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/python3-9-deb
     schedule:
      interval: daily
