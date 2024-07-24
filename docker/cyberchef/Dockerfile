@@ -1,4 +1,4 @@
-FROM demisto/python3:3.11.9.104657
+FROM demisto/python3:3.11.9.104957
 
 COPY requirements.txt .
 COPY bake.js /bake.js
