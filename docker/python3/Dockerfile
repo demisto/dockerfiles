@@ -6,6 +6,7 @@ RUN apk --update --no-cache upgrade
 
 COPY requirements.txt .
 
+
 COPY localtime /etc/localtime
 
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget \
