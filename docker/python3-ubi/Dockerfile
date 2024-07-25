@@ -3,7 +3,8 @@ ARG BASE_UBI_VERSION=ubi9
 
 FROM registry.access.redhat.com/${BASE_UBI_VERSION}:${BASE_UBI_TAG} as build
 
-RUN dnf upgrade -y --nodocs && \
+RUN dnf update --nodocs -y \
+    dnf upgrade -y --nodocs && \
     dnf install -y --nodocs \
        bzip2-devel \
        expat-devel \
