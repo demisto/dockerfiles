@@ -764,6 +764,22 @@ azure-mgmt-core = ">=1.3.2"
 isodate = ">=0.6.1"
 
 [[package]]
+name = "azure-mgmt-notificationhubs"
+version = "7.0.0"
+description = "Microsoft Azure Notification Hubs Management Client Library for Python"
+optional = false
+python-versions = "*"
+files = [
+    {file = "azure-mgmt-notificationhubs-7.0.0.zip", hash = "sha256:92ffed71a2999ff5db41afd66c6ba5cfef9d467f732c7bb45b7c41db371c6e4a"},
+    {file = "azure_mgmt_notificationhubs-7.0.0-py2.py3-none-any.whl", hash = "sha256:56cf9e14f56fa1d1fda8e28dadc2f351e2ca532c31916d005f0ec35a5fa3d8f8"},
+]
+
+[package.dependencies]
+azure-common = ">=1.1,<2.0"
+azure-mgmt-core = ">=1.2.0,<2.0.0"
+msrest = ">=0.5.0"
+
+[[package]]
 name = "azure-mgmt-nspkg"
 version = "2.0.0"
 description = "Microsoft Azure Resource Management Namespace Package [Internal]"
@@ -2405,4 +2421,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.11"
-content-hash = "31fcec8411093b42500e28f526d23dc7dde71f4180d1eadff44eb116c6ff7b71"
+content-hash = "86ecd5bd043e4160bc0500c37fd9cba4929a18af59d81698eca8780ae7ab86fc"
