@@ -569,6 +569,22 @@ azure-mgmt-core = ">=1.3.2"
 isodate = ">=0.6.1"
 
 [[package]]
+name = "azure-mgmt-datafactory"
+version = "2.0.0"
+description = "Microsoft Azure Data Factory Management Client Library for Python"
+optional = false
+python-versions = "*"
+files = [
+    {file = "azure-mgmt-datafactory-2.0.0.zip", hash = "sha256:df14272a1835f743d1889f901e972ed6ec9ea9d6f8966ba2865bf10306a621cc"},
+    {file = "azure_mgmt_datafactory-2.0.0-py2.py3-none-any.whl", hash = "sha256:d0e7506ae2d8f9c59474e119a522f12fea21d0bfb5e525faed43e25a7d0f343c"},
+]
+
+[package.dependencies]
+azure-common = ">=1.1,<2.0"
+azure-mgmt-core = ">=1.2.0,<2.0.0"
+msrest = ">=0.6.21"
+
+[[package]]
 name = "azure-mgmt-devtestlabs"
 version = "3.0.0"
 description = "Microsoft Azure DevTestLabs Management Client Library for Python"
@@ -2421,4 +2437,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.11"
-content-hash = "86ecd5bd043e4160bc0500c37fd9cba4929a18af59d81698eca8780ae7ab86fc"
+content-hash = "8c3dabc131c8d49a061be7060f2500aa25d2ecedb525a4c5d898c25184272c39"
