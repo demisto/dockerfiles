@@ -1,5 +1,5 @@
 
-FROM demisto/python3-deb:3.11.9.103065
+FROM demisto/python3-deb:3.11.9.105370
 
 COPY requirements.txt .
 
@@ -12,6 +12,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   openssh-client \
 && pip install --no-cache-dir -r requirements.txt \
 && pip install https://github.com/vmware/vsphere-automation-sdk-python/archive/refs/tags/v7.0.3.2.tar.gz \
+&& pip install --upgrade azure-storage-blob \
+&& pip uninstall aiohttp -y \
 && apt-get purge -y --auto-remove \
   gcc \
   python3-dev \
