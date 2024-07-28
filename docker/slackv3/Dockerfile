@@ -1,15 +1,14 @@
-
-FROM demisto/python3-deb:3.11.9.105370
+FROM demisto/python3:3.11.9.104957
 
 COPY requirements.txt .
 
-RUN apt-get update && apt-get install -y --no-install-recommends python3-dev build-base libffi-dev wget git \
+ARG PYTHON_VERSION_TO_INSTALL=3.11.9
+
+RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base libffi-dev wget git \
   && pip install --no-cache-dir -r requirements.txt \
-  && apt-get purge -y --auto-remove \
-  gcc \
-  python3-dev \
-  lbuild-base \
-  libffi-dev \
-  wget \
-  git \ 
-  && rm -rf /var/lib/apt/lists/*
+  && apk del .build-dependencies \
+  mkdir -p /usr/local/src/python && \
+  tar -zxf Python-${PYTHON_VERSION_TO_INSTALL}.tgz -C /usr/local/src/python --strip-components=1 && \
+  rm -rf Python-${PYTHON_VERSION_TO_INSTALL}.tgz && \
+  cd /usr/local/src/python && \
+  && ./configure --with-openssl=/usr/local/opt/libressl
