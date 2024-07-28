@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends python3-dev bui
   && apt-get purge -y --auto-remove \
   gcc \
   python3-dev \
-  lbuild-base \
+  build-base \
   libffi-dev \
   wget \
   git \ 
