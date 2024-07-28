@@ -1,8 +1,15 @@
 
-FROM demisto/python3:3.11.9.104957
+FROM demisto/python3-deb:3.11.9.105370
 
 COPY requirements.txt .
 
-RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base libffi-dev wget git \
+RUN apt-get update && apt-get install -y --no-install-recommends python3-dev build-base libffi-dev wget git \
   && pip install --no-cache-dir -r requirements.txt \
-  && apk del .build-dependencies
+  && apt-get purge -y --auto-remove \
+  gcc \
+  python3-dev \
+  lbuild-base \
+  libffi-dev \
+  wget \
+  git \ 
+  && rm -rf /var/lib/apt/lists/*
