@@ -100,7 +100,7 @@ Options = UnsafeLegacyRenegotiation\n' > /tmp/ssl.cnf \
 
 RUN groupadd -g 4000 demisto && \
     useradd -u 4000 -g demisto demisto -s /bin/sh && \
-    dnf remove python3-setuptools -y && \
+    dnf remove python3-setuptools python3-setuptools-wheel -y && \
     pip install --upgrade setuptools
 
 RUN rm -f -r /usr/include/python3.9 && \

@@ -90,10 +90,10 @@ RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE python3-devel gcc gcc-c+
         && sed -i 's/##legacy = legacy_sect/legacy = legacy_sect/' /etc/pki/tls/openssl.cnf \
         && sed -i 's/##\[legacy_sect\]/\[legacy_sect\]/' /etc/pki/tls/openssl.cnf \
         && sed -i 's/##activate = 1/activate = 1/' /etc/pki/tls/openssl.cnf \
-        && dnf remove -y python3-devel rust cargo libffi-devel openssl-devel gcc gcc-c++ make git platform-python-pip krb5-devel bind-libs.x86_64 webkit2gtk3-jsc polkit polkit-libs \
+        && dnf remove -y python3-devel rust cargo libffi-devel openssl-devel gcc gcc-c++ make git platform-python-pip krb5-devel \
         && dnf clean all \
         && rm -rf /var/cache/dnf /root/.cargo \
-        && pip uninstall -y pcodedmp pyminizip
+        && pip uninstall -y pcodedmp
 
 
 ENV NLTK_DATA='/etc/ml/nltk_data'
