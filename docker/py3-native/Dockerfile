@@ -93,7 +93,7 @@ RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE python3-devel gcc gcc-c+
         && dnf remove -y python3-devel rust cargo libffi-devel openssl-devel gcc gcc-c++ make git platform-python-pip krb5-devel bind-libs.x86_64 webkit2gtk3-jsc polkit polkit-libs \
         && dnf clean all \
         && rm -rf /var/cache/dnf /root/.cargo \
-        && pip uninstall -y pcodedmp pyminizip aiohttp
+        && pip uninstall -y pcodedmp pyminizip
 
 
 ENV NLTK_DATA='/etc/ml/nltk_data'
