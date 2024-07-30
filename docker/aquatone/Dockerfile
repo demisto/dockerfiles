@@ -11,5 +11,4 @@ RUN apt-get update \
     build-essential \
     ruby-dev \
     rubygems \
-&& apt remove ruby \
 && rm -rf /var/lib/apt/lists/*
