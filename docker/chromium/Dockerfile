@@ -77,9 +77,8 @@ RUN apt-get install -y libfreetype-dev libfontconfig-dev libboost-dev libpng-dev
 && pdftoppm -v \
 && cd ../.. \
 && rm poppler-${POPPLER_VERSION}.tar.xz \
-&& rm -rf poppler-${POPPLER_VERSION}/
-
-RUN apt remove libaom0 -y
+&& rm -rf poppler-${POPPLER_VERSION}/ \
+&& apt remove libaom0 -y
 
 RUN apt-get purge -y --auto-remove \
   curl \
