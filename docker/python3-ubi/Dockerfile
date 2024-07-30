@@ -103,6 +103,8 @@ RUN groupadd -g 4000 demisto && \
     dnf remove python3-setuptools -y && \
     pip install --upgrade setuptools
 
+RUN rpm -e --nodeps python3-setuptools-wheel
+
 # when changing it make sure to change also PYTHON_VERSION_TO_INSTALL env var in line 23
 ENV PYTHON_VERSION="3.11.9"
 ENV LANG="C.UTF-8"
