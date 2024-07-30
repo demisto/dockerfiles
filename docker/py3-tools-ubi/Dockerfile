@@ -1,5 +1,5 @@
 # Last modified: 2024-07-18T00:00:00.000000+00:00
-FROM demisto/python3-ubi:3.11.9.105869
+FROM devdemisto/python3-ubi:3.11.9.105885
 
 COPY requirements.txt .
 
