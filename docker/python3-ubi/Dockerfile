@@ -100,15 +100,15 @@ Options = UnsafeLegacyRenegotiation\n' > /tmp/ssl.cnf \
 
 RUN groupadd -g 4000 demisto && \
     useradd -u 4000 -g demisto demisto -s /bin/sh && \
-    dnf remove python3-setuptools python3-setuptools-wheel -y && \
+    dnf remove python3-setuptools -y && \
     pip install --upgrade setuptools
 
-RUN rm -f -r /usr/include/python3.9 && \
-    rm -f -r /usr/bin/python3.9 && \
-    rm -f -r /usr/lib/python3.9 && \
-    rm -f -r /usr/lib64/python3.9
+# RUN rm -f -r /usr/include/python3.9 && \
+#     rm -f -r /usr/bin/python3.9 && \
+#     rm -f -r /usr/lib/python3.9 && \
+#     rm -f -r /usr/lib64/python3.9
 
-
+RUN rpm -e --nodeps python3-setuptools-wheel
 # when changing it make sure to change also PYTHON_VERSION_TO_INSTALL env var in line 23
 ENV PYTHON_VERSION="3.11.9"
 ENV LANG="C.UTF-8"
