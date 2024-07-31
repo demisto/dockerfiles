@@ -1,6 +1,6 @@
 
-# Last modified: 2024-07-11T00:50:09.014374+00:00
-FROM demisto/python3-deb:3.11.9.103065
+# Last modified: 2024-07-30T00:50:09.014374+00:00
+FROM demisto/python3-deb:3.11.9.105370
 
 COPY requirements.txt .
 
@@ -77,7 +77,8 @@ RUN apt-get install -y libfreetype-dev libfontconfig-dev libboost-dev libpng-dev
 && pdftoppm -v \
 && cd ../.. \
 && rm poppler-${POPPLER_VERSION}.tar.xz \
-&& rm -rf poppler-${POPPLER_VERSION}/
+&& rm -rf poppler-${POPPLER_VERSION}/ \
+&& apt remove libaom0 -y
 
 RUN apt-get purge -y --auto-remove \
   curl \
