@@ -14,7 +14,5 @@ python3-dev \
   gcc \
   python3-dev \
   libxrender-dev \
-&& rm -rf /var/lib/apt/lists/* \
-&& pip install --upgrade setuptools
-
+&& rm -rf /var/lib/apt/lists/*
 
