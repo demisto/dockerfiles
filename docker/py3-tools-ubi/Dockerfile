@@ -1,5 +1,5 @@
 # Last modified: 2024-07-18T00:00:00.000000+00:00
-FROM devdemisto/py3-tools-ubi:1.0.0.105859
+FROM demisto/py3-tools-ubi:1.0.0.105970
 
 COPY requirements.txt .
 
