@@ -1295,6 +1295,16 @@ files = [
 ]
 
 [[package]]
+name = "json2html"
+version = "1.3.0"
+description = "JSON to HTML Table Representation"
+optional = false
+python-versions = "*"
+files = [
+    {file = "json2html-1.3.0.tar.gz", hash = "sha256:8951a53662ae9cfd812685facdba693fc950ffc1c1fd1a8a2d3cf4c34600689c"},
+]
+
+[[package]]
 name = "lark-parser"
 version = "0.12.0"
 description = "a modern parsing library"
@@ -1621,7 +1631,7 @@ name = "ndg-httpsclient"
 version = "0.5.1"
 description = "Provides enhanced HTTPS support for httplib and urllib2 using PyOpenSSL"
 optional = false
-python-versions = ">=2.7,<3.0.0 || >=3.4.0"
+python-versions = ">=2.7,<3.0.dev0 || >=3.4.dev0"
 files = [
     {file = "ndg_httpsclient-0.5.1-py2-none-any.whl", hash = "sha256:d2c7225f6a1c6cf698af4ebc962da70178a99bcde24ee6d1961c4f3338130d57"},
     {file = "ndg_httpsclient-0.5.1-py3-none-any.whl", hash = "sha256:dd174c11d971b6244a891f7be2b32ca9853d3797a72edb34fa5d7b07d8fff7d4"},
@@ -4290,4 +4300,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.11"
-content-hash = "be8d1dbd0c6b82112dc29f4e3c5c07d91551bc0f27f4d391c968d50d94a099c6"
+content-hash = "2b23ab65a251667cad0b530f9ab3eebd42df24c18116dbc0ea9cfa56ec190503"
