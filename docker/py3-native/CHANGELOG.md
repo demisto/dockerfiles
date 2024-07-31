@@ -5,7 +5,7 @@
 * Updated the library ***exchangelib*** to version ***5.0.3*** to allow support for the **EWSv2**  integration.
 * Added the library ***ntlm_auth*** to allow support for the **EWSv2**  integration.
 * Updated the image to use Python 3.11.
-* Added the `json2html` library to allow support for the `Json2HtmlTable` script.
+* Added the ***json2html*** library to allow support for the ***Json2HtmlTable*** script.
 
 ## 8.6.0
 
