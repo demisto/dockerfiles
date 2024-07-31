@@ -15,5 +15,6 @@ RUN apt-get update && apt-get upgrade -y && apt-get -t bullseye-backports instal
 do python tessdata_downloader.py -o /usr/local/share/tessdata/ -l $lang; done \ 
 && apt-get purge -y --auto-remove gcc g++ pkg-config make autoconf automake libtool libpng-dev git \
 libjpeg-dev libtiff5-dev zlib1g-dev libleptonica-dev libicu-dev libpango1.0-dev \
+&& apt remove libaom0/now -y \
 && rm -rf /build \
 && tesseract --version --list-langs
