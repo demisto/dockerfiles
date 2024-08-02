@@ -194,18 +194,19 @@ files = [
 ]
 
 [[package]]
-name = "lark-parser"
-version = "0.12.0"
+name = "lark"
+version = "1.1.9"
 description = "a modern parsing library"
 optional = false
-python-versions = "*"
+python-versions = ">=3.6"
 files = [
-    {file = "lark-parser-0.12.0.tar.gz", hash = "sha256:15967db1f1214013dca65b1180745047b9be457d73da224fcda3d9dd4e96a138"},
-    {file = "lark_parser-0.12.0-py2.py3-none-any.whl", hash = "sha256:0eaf30cb5ba787fe404d73a7d6e61df97b21d5a63ac26c5008c78a494373c675"},
+    {file = "lark-1.1.9-py3-none-any.whl", hash = "sha256:a0dd3a87289f8ccbb325901e4222e723e7d745dbfc1803eaf5f3d2ace19cf2db"},
+    {file = "lark-1.1.9.tar.gz", hash = "sha256:15fa5236490824c2c4aba0e22d2d6d823575dcaf4cdd1848e34b6ad836240fba"},
 ]
 
 [package.extras]
 atomic-cache = ["atomicwrites"]
+interegular = ["interegular (>=0.3.1,<0.4.0)"]
 nearley = ["js2py"]
 regex = ["regex"]
 
@@ -276,11 +277,9 @@ name = "parse-emails"
 version = "0.1.24"
 description = "Parses an email message file and extracts the data from it."
 optional = false
-python-versions = "<4.0,>=3.7"
-files = [
-    {file = "parse_emails-0.1.24-py3-none-any.whl", hash = "sha256:572a7ae7e703f9a638cbf7c0b4d84117e6123b16a22e598f0983a6d556f5149d"},
-    {file = "parse_emails-0.1.24.tar.gz", hash = "sha256:499222a25576ec28e2a8bb0c669e696f111cc8e9640a7cd93ee9f634c627fb9a"},
-]
+python-versions = "^3.7"
+files = []
+develop = false
 
 [package.dependencies]
 chardet = "*"
@@ -291,7 +290,13 @@ pip = "*"
 pyopenssl = "*"
 pytest = "*"
 python-magic = "*"
-RTFDE = "0.0.2"
+RTFDE = "*"
+
+[package.source]
+type = "git"
+url = "https://github.com/demisto/parse-emails.git"
+reference = "455674ae236bbd683ea371c3fe633edd4cb50765"
+resolved_reference = "455674ae236bbd683ea371c3fe633edd4cb50765"
 
 [[package]]
 name = "pcodedmp"
@@ -310,13 +315,13 @@ win-unicode-console = {version = "*", markers = "platform_system == \"Windows\" 
 
 [[package]]
 name = "pip"
-version = "24.1.2"
+version = "24.2"
 description = "The PyPA recommended tool for installing Python packages."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "pip-24.1.2-py3-none-any.whl", hash = "sha256:7cd207eed4c60b0f411b444cd1464198fe186671c323b6cd6d433ed80fc9d247"},
-    {file = "pip-24.1.2.tar.gz", hash = "sha256:e5458a0b89f2755e0ee8c0c77613fe5273e05f337907874d64f13171a898a7ff"},
+    {file = "pip-24.2-py3-none-any.whl", hash = "sha256:2cd581cf58ab7fcfca4ce8efa6dcacd0de5bf8d0a3eb9ec927e07405f4d9e2a2"},
+    {file = "pip-24.2.tar.gz", hash = "sha256:5b5e490b5e9cb275c879595064adce9ebd31b854e3e803740b72f9ccf34a45b8"},
 ]
 
 [[package]]
@@ -379,13 +384,13 @@ diagrams = ["jinja2", "railroad-diagrams"]
 
 [[package]]
 name = "pytest"
-version = "8.3.1"
+version = "8.3.2"
 description = "pytest: simple powerful testing with Python"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "pytest-8.3.1-py3-none-any.whl", hash = "sha256:e9600ccf4f563976e2c99fa02c7624ab938296551f280835ee6516df8bc4ae8c"},
-    {file = "pytest-8.3.1.tar.gz", hash = "sha256:7e8e5c5abd6e93cb1cc151f23e57adc31fcf8cfd2a3ff2da63e23f732de35db6"},
+    {file = "pytest-8.3.2-py3-none-any.whl", hash = "sha256:4ba08f9ae7dcf84ded419494d229b48d0903ea6407b030eaec46df5e6a73bba5"},
+    {file = "pytest-8.3.2.tar.gz", hash = "sha256:c132345d12ce551242c87269de812483f5bcc87cdbb4722e48487ba194f9fdce"},
 ]
 
 [package.dependencies]
@@ -421,32 +426,31 @@ files = [
 
 [[package]]
 name = "rtfde"
-version = "0.0.2"
+version = "0.1.2"
 description = "A library for extracting HTML content from RTF encapsulated HTML as commonly found in the exchange MSG email format."
 optional = false
-python-versions = ">=3.6"
+python-versions = "~=3.8"
 files = [
-    {file = "RTFDE-0.0.2-py3-none-any.whl", hash = "sha256:18386e4f060cee12a2a8035b0acf0cc99689f5dff1bf347bab7e92351860a21d"},
-    {file = "RTFDE-0.0.2.tar.gz", hash = "sha256:b86b5d734950fe8745a5b89133f50554252dbd67c6d1b9265e23ee140e7ea8a2"},
+    {file = "RTFDE-0.1.2-py3-none-any.whl", hash = "sha256:f6d1450c99b04e930da130e8b419aa33b1f953623e1b94ad5c0f67f0362eb737"},
 ]
 
 [package.dependencies]
-lark-parser = ">=0.11"
+lark = ">=1.1.8,<1.2.0"
 oletools = ">=0.56"
 
 [package.extras]
-dev = ["lxml (>=4.6)"]
-msg-parse = ["extract-msg (>=0.27)"]
+dev = ["coverage (>=7.2.2,<7.3.0)", "lxml (>=4.6,<5.0)", "mypy (>=1.1,<2.0)", "pdoc3 (>=0.10.0,<0.11.0)"]
+msg-parse = ["extract-msg (>=0.27,<1.0)"]
 
 [[package]]
 name = "setuptools"
-version = "71.1.0"
+version = "72.1.0"
 description = "Easily download, build, install, upgrade, and uninstall Python packages"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "setuptools-71.1.0-py3-none-any.whl", hash = "sha256:33874fdc59b3188304b2e7c80d9029097ea31627180896fb549c578ceb8a0855"},
-    {file = "setuptools-71.1.0.tar.gz", hash = "sha256:032d42ee9fb536e33087fb66cac5f840eb9391ed05637b3f2a76a7c8fb477936"},
+    {file = "setuptools-72.1.0-py3-none-any.whl", hash = "sha256:5a03e1860cf56bb6ef48ce186b0e557fdba433237481a9a625176c2831be15d1"},
+    {file = "setuptools-72.1.0.tar.gz", hash = "sha256:8d243eff56d095e5817f796ede6ae32941278f542e0f941867cc05ae52b162ec"},
 ]
 
 [package.extras]
@@ -520,4 +524,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.11"
-content-hash = "8c3c238edb95f391b59e9d74426f59f7a4b888ecbf89fecb87a6244bc074470e"
+content-hash = "6b11c3c8f01b761d148d0aa33627537f6d327d56afd0e153f2842a35b1508042"

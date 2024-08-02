@@ -7,7 +7,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "~3.11"
-parse-emails = "*"
+parse-emails = { git = "https://github.com/demisto/parse-emails.git", rev = "455674ae236bbd683ea371c3fe633edd4cb50765" }
 
 
 [build-system]
