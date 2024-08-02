@@ -791,20 +791,19 @@ files = [
 
 [[package]]
 name = "pywinrm"
-version = "0.4.3"
+version = "0.5.0"
 description = "Python library for Windows Remote Management"
 optional = false
-python-versions = "*"
+python-versions = ">=3.8"
 files = [
-    {file = "pywinrm-0.4.3-py2.py3-none-any.whl", hash = "sha256:c476c1e20dd0875da6fe4684c4d8e242dd537025907c2f11e1990c5aee5c9526"},
-    {file = "pywinrm-0.4.3.tar.gz", hash = "sha256:995674bf5ac64b2562c9c56540473109e530d36bde10c262d5a5296121ad5565"},
+    {file = "pywinrm-0.5.0-py3-none-any.whl", hash = "sha256:c267046d281de613fc7c8a528cdd261564d9b99bdb7c2926221eff3263b700c8"},
+    {file = "pywinrm-0.5.0.tar.gz", hash = "sha256:5428eb1e494af7954546cd4ff15c9ef1a30a75e05b25a39fd606cef22201e9f1"},
 ]
 
 [package.dependencies]
 pykerberos = {version = ">=1.2.1,<2.0.0", optional = true, markers = "sys_platform != \"win32\" and extra == \"kerberos\""}
 requests = ">=2.9.1"
 requests-ntlm = ">=1.1.0"
-six = "*"
 winkerberos = {version = ">=0.5.0", optional = true, markers = "sys_platform == \"win32\" and extra == \"kerberos\""}
 xmltodict = "*"
 
