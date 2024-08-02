@@ -32,20 +32,20 @@ aio = ["aiohttp (>=3.0)"]
 
 [[package]]
 name = "azure-identity"
-version = "1.14.0"
+version = "1.16.1"
 description = "Microsoft Azure Identity Library for Python"
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 files = [
-    {file = "azure-identity-1.14.0.zip", hash = "sha256:72441799f8c5c89bfe21026965e266672a7c5d050c2c65119ef899dd5362e2b1"},
-    {file = "azure_identity-1.14.0-py3-none-any.whl", hash = "sha256:edabf0e010eb85760e1dd19424d5e8f97ba2c9caff73a16e7b30ccbdbcce369b"},
+    {file = "azure-identity-1.16.1.tar.gz", hash = "sha256:6d93f04468f240d59246d8afde3091494a5040d4f141cad0f49fc0c399d0d91e"},
+    {file = "azure_identity-1.16.1-py3-none-any.whl", hash = "sha256:8fb07c25642cd4ac422559a8b50d3e77f73dcc2bbfaba419d06d6c9d7cff6726"},
 ]
 
 [package.dependencies]
-azure-core = ">=1.11.0,<2.0.0"
+azure-core = ">=1.23.0"
 cryptography = ">=2.5"
-msal = ">=1.20.0,<2.0.0"
-msal-extensions = ">=0.3.0,<2.0.0"
+msal = ">=1.24.0"
+msal-extensions = ">=0.3.0"
 
 [[package]]
 name = "azure-kusto-data"
