@@ -288,6 +288,7 @@ datetime = "*"
 olefile = "*"
 pip = "*"
 pyopenssl = "*"
+pypandoc = "*"
 pytest = "*"
 python-magic = "*"
 RTFDE = "*"
@@ -295,8 +296,8 @@ RTFDE = "*"
 [package.source]
 type = "git"
 url = "https://github.com/demisto/parse-emails.git"
-reference = "455674ae236bbd683ea371c3fe633edd4cb50765"
-resolved_reference = "455674ae236bbd683ea371c3fe633edd4cb50765"
+reference = "7603ddfe059841adbe3dc4adfc8a1d5482b95725"
+resolved_reference = "7603ddfe059841adbe3dc4adfc8a1d5482b95725"
 
 [[package]]
 name = "pcodedmp"
@@ -367,6 +368,17 @@ cryptography = ">=41.0.5,<44"
 [package.extras]
 docs = ["sphinx (!=5.2.0,!=5.2.0.post0,!=7.2.5)", "sphinx-rtd-theme"]
 test = ["pretend", "pytest (>=3.0.1)", "pytest-rerunfailures"]
+
+[[package]]
+name = "pypandoc"
+version = "1.13"
+description = "Thin wrapper for pandoc."
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "pypandoc-1.13-py3-none-any.whl", hash = "sha256:4c7d71bf2f1ed122aac287113b5c4d537a33bbc3c1df5aed11a7d4a7ac074681"},
+    {file = "pypandoc-1.13.tar.gz", hash = "sha256:31652073c7960c2b03570bd1e94f602ca9bc3e70099df5ead4cea98ff5151c1e"},
+]
 
 [[package]]
 name = "pyparsing"
@@ -524,4 +536,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.11"
-content-hash = "6b11c3c8f01b761d148d0aa33627537f6d327d56afd0e153f2842a35b1508042"
+content-hash = "f43932c36f0dca930c6b598f6afdb3484091254ad75e7894f155bc125c8071bd"
