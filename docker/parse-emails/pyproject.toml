@@ -6,9 +6,8 @@ authors = ["Your Name <you@example.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "~3.10"
-parse-emails = "*"
-rtfde = "*"
+python = "~3.11"
+parse-emails = { git = "https://github.com/demisto/parse-emails.git", rev = "074f5c827caba40d82073d93b0012e46321feccd" }
 
 
 [build-system]
