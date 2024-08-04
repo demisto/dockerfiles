@@ -53,16 +53,16 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 
 
 # build passed
-RUN /bin/sh -c sh -c "y | pwsh -Command 'Uninstall-Package -Name newtonsoft.json -ProviderName NuGet'"
-RUN /bin/sh -c sh -c "yes | pwsh -Command 'Uninstall-Package -Name system.formats.asn1 -ProviderName NuGet'"
-RUN /bin/sh -c sh -c "yes | pwsh -Command 'Install-Package -Name system.formats.asn1 -ProviderName NuGet -RequiredVersion 8.0.1'"
-RUN /bin/sh -c sh -c "yes | pwsh -Command 'Uninstall-Module -Name system.formats.asn1 -AllVersions'"
-RUN /bin/sh -c "yes | pwsh -Command 'Uninstall-Module -Name system.formats.asn1 -AllVersions'"
-
-RUN sh -c "y | pwsh -Command 'Install-Package -Name system.formats.asn1 -ProviderName NuGet -RequiredVersion 8.0.1'"
-# RUN /bin/sh -c "y | pwsh -Command 'Install-Package -Name system.formats.asn1 -ProviderName NuGet -RequiredVersion 8.0.1'"
-
-
+# RUN /bin/sh -c sh -c "y | pwsh -Command 'Uninstall-Package -Name newtonsoft.json -ProviderName NuGet'"
+# RUN /bin/sh -c sh -c "yes | pwsh -Command 'Uninstall-Package -Name system.formats.asn1 -ProviderName NuGet'"
+# RUN /bin/sh -c sh -c "yes | pwsh -Command 'Install-Package -Name system.formats.asn1 -ProviderName NuGet -RequiredVersion 8.0.1'"
+# RUN /bin/sh -c sh -c "yes | pwsh -Command 'Uninstall-Module -Name system.formats.asn1 -AllVersions'"
+# RUN /bin/sh -c "yes | pwsh -Command 'Uninstall-Module -Name system.formats.asn1 -AllVersions'"
+#
+# RUN sh -c "y | pwsh -Command 'Install-Package -Name system.formats.asn1 -ProviderName NuGet -RequiredVersion 8.0.1'"
+# # RUN /bin/sh -c "y | pwsh -Command 'Install-Package -Name system.formats.asn1 -ProviderName NuGet -RequiredVersion 8.0.1'"
+#
+#
 
 
 
@@ -80,6 +80,9 @@ RUN sh -c "y | pwsh -Command 'Install-Package -Name system.formats.asn1 -Provide
 # RUN /opt/microsoft/powershell/7 -c "y | pwsh -Command 'Install-Package -Name system.formats.asn1 -ProviderName NuGet -RequiredVersion 8.0.1'"
 
 
+
+RUN rm ./opt/microsoft/powershell/7/Newtonsoft.Json.dll && \
+    rm ./opt/microsoft/powershell/7/Modules/Microsoft.PowerShell.PSResourceGet/dependencies/Newtonsoft.Json.dll
 
 # Set timezone to Etc/UTC for backwards comp. See: https://github.com/regebro/tzlocal/issues/101
 RUN echo 'Etc/UTC' > /etc/timezone \
