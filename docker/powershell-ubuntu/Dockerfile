@@ -81,12 +81,14 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 
 
 
-RUN rm ./opt/microsoft/powershell/7/Newtonsoft.Json.dll && \
-    rm ./opt/microsoft/powershell/7/Modules/Microsoft.PowerShell.PSResourceGet/dependencies/Newtonsoft.Json.dll
-
 # Set timezone to Etc/UTC for backwards comp. See: https://github.com/regebro/tzlocal/issues/101
 RUN echo 'Etc/UTC' > /etc/timezone \
 && dpkg-reconfigure --frontend noninteractive tzdata
 
 RUN groupadd --gid 4000 demisto \
   && useradd --uid 4000 --gid demisto --shell /bin/bash --create-home demisto
+
+
+
+RUN rm ./opt/microsoft/powershell/7/Newtonsoft.Json.dll \
+    && rm ./opt/microsoft/powershell/7/Modules/Microsoft.PowerShell.PSResourceGet/dependencies/Newtonsoft.Json.dll
