@@ -27,8 +27,9 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 
 
 
-RUN rm /opt/microsoft/powershell/7/Modules/Microsoft.PowerShell.PSResourceGet/dependencies/Newtonsoft.Json.dll
-RUN /bin/sh -c sh -c "y | pwsh -Command 'Install-Package -Name newtonsoft.json -ProviderName NuGet'"
+RUN rm /root/.local/share/powershell/Modules/PSWSMan/2.3.1/bin/PSWSMan.deps.json
+
+# RUN /bin/sh -c sh -c "y | pwsh -Command 'Install-Package -Name newtonsoft.json -ProviderName NuGet'"
 
 
 
