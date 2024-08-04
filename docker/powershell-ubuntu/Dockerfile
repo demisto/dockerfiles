@@ -28,6 +28,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 
 
 RUN rm /root/.local/share/powershell/Modules/PSWSMan/2.3.1/bin/PSWSMan.deps.json
+RUN rm /opt/microsoft/powershell/7/pwsh.deps.json
 
 # RUN /bin/sh -c sh -c "y | pwsh -Command 'Install-Package -Name newtonsoft.json -ProviderName NuGet'"
 
