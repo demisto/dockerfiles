@@ -28,7 +28,9 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 
 RUN /bin/sh -c sh -c "y | pwsh -Command 'Install-Package -Name newtonsoft.json -ProviderName NuGet'"
 
-RUN rm /opt/microsoft/powershell/7/Newtonsoft.Json.dll
+# RUN rm /opt/microsoft/powershell/7/Newtonsoft.Json.dll
+
+
 
 
 # RUN sh -c "yes | pwsh -Command 'Uninstall-Module -Force -Name newtonsoft.json'"
