@@ -75,12 +75,12 @@ RUN dnf update --nodocs -y  \
 # line 6 - since in ubi its 7za --> need to make it to run as 7z like our script
 # lines 8-10 is the configuration for sklearn
 # lines 12-14 - ssl fixes
-# Install initial dependencies
-RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE python3-devel gcc gcc-c++ make wget git poppler poppler-utils \
-        rust cargo libxml2-devel libxslt-devel krb5-devel \
-        libffi-devel openssl-devel libffi libSM mesa-libGL \
-        openssh ca-certificates openssl less rsync libpng-devel freetype-devel gcc-gfortran openblas unzip libstdc++
 
+# Install dependencies in smaller chunks
+RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE  python3-devel gcc gcc-c++ make wget git poppler poppler-utils
+RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE rust cargo libxml2-devel libxslt-devel krb5-devel
+RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE libffi-devel openssl-devel libffi libSM mesa-libGL
+RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE openssh ca-certificates openssl less rsync libpng-devel freetype-devel gcc-gfortran openblas unzip libstdc++
 # Install LibreOffice
 RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE libreoffice
 
