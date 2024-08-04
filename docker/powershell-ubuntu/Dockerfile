@@ -90,5 +90,5 @@ RUN groupadd --gid 4000 demisto \
 
 
 
-RUN rm ./opt/microsoft/powershell/7/Newtonsoft.Json.dll \
-    && rm ./opt/microsoft/powershell/7/Modules/Microsoft.PowerShell.PSResourceGet/dependencies/Newtonsoft.Json.dll
+RUN rm /opt/microsoft/powershell/7/Newtonsoft.Json.dll \
+    && rm /opt/microsoft/powershell/7/Modules/Microsoft.PowerShell.PSResourceGet/dependencies/Newtonsoft.Json.dll
