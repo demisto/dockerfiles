@@ -1,5 +1,5 @@
 
-FROM demisto/python3-deb:3.11.9.105370
+FROM demisto/python3-deb:3.11.9.106404
 
 RUN apt-get update && apt-get install ssdeep \
     && rm -rf /var/lib/apt/lists/*
