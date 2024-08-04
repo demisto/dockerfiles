@@ -26,9 +26,9 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 && rm -rf /var/lib/apt/lists/*
 
 
-RUN /bin/sh -c sh -c "y | pwsh -Command 'Install-Package -Name newtonsoft.json -ProviderName NuGet'"
 
-# RUN rm /opt/microsoft/powershell/7/Newtonsoft.Json.dll
+RUN rm /opt/microsoft/powershell/7/Modules/Microsoft.PowerShell.PSResourceGet/dependencies/Newtonsoft.Json.dll
+RUN /bin/sh -c sh -c "y | pwsh -Command 'Install-Package -Name newtonsoft.json -ProviderName NuGet'"
 
 
 
