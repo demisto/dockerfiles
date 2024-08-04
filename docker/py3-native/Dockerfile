@@ -1,4 +1,4 @@
-FROM demisto/py3-tools-ubi:1.0.0.104082
+FROM demisto/py3-tools-ubi:1.0.0.105970
 
 
 
@@ -77,7 +77,7 @@ RUN dnf update --nodocs -y  \
 # lines 12-14 - ssl fixes
 RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE python3-devel gcc gcc-c++ make wget git poppler poppler-utils \
         rust cargo libxml2-devel libxslt-devel krb5-devel \
-        libffi-devel openssl-devel libffi libSM mesa-libGL \
+        libffi-devel libffi libSM mesa-libGL \
         openssh ca-certificates openssl less rsync libpng-devel freetype-devel gcc-gfortran openblas unzip libstdc++ \
         && dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE libreoffice \
         && dnf remove -y postgresql-jdbc --noautoremove \
@@ -89,9 +89,9 @@ RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE python3-devel gcc gcc-c+
         && chown -R demisto:demisto /etc/ml && chmod -R 775 /etc/ml \
         && dnf install -y --nodocs java-11-openjdk-headless cairo libX11-xcb \
         && sed -i 's/##legacy = legacy_sect/legacy = legacy_sect/' /etc/pki/tls/openssl.cnf \
-    && sed -i 's/##\[legacy_sect\]/\[legacy_sect\]/' /etc/pki/tls/openssl.cnf \
+        && sed -i 's/##\[legacy_sect\]/\[legacy_sect\]/' /etc/pki/tls/openssl.cnf \
         && sed -i 's/##activate = 1/activate = 1/' /etc/pki/tls/openssl.cnf \
-        && dnf remove -y python3-devel rust cargo libffi-devel openssl-devel gcc gcc-c++ make git platform-python-pip krb5-devel \
+        && dnf remove -y python3-devel rust cargo libffi-devel gcc gcc-c++ make git platform-python-pip krb5-devel \
         && dnf clean all \
         && rm -rf /var/cache/dnf /root/.cargo \
         && pip uninstall -y pcodedmp
