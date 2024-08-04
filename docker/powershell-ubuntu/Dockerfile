@@ -25,6 +25,7 @@ RUN apt update && apt install netbase -y
 RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 && rm -rf /var/lib/apt/lists/*
 
+RUN rm /opt/microsoft/powershell/7/Newtonsoft.Json.dll
 
 # RUN sh -c "yes | pwsh -Command 'Uninstall-Module -Force -Name newtonsoft.json'"
 # RUN pwsh -Command 'Uninstall-Module -Force -Name newtonsoft.json'
@@ -88,6 +89,3 @@ RUN echo 'Etc/UTC' > /etc/timezone \
 RUN groupadd --gid 4000 demisto \
   && useradd --uid 4000 --gid demisto --shell /bin/bash --create-home demisto
 
-
-
-RUN rm /opt/microsoft/powershell/7/Newtonsoft.Json.dll
