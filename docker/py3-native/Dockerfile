@@ -75,58 +75,26 @@ RUN dnf update --nodocs -y  \
 # line 6 - since in ubi its 7za --> need to make it to run as 7z like our script
 # lines 8-10 is the configuration for sklearn
 # lines 12-14 - ssl fixes
-
-# Install dependencies in smaller chunks
-RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE  python3-devel gcc gcc-c++ make wget git poppler poppler-utils
-RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE rust cargo libxml2-devel libxslt-devel krb5-devel
-# Install each package separately to identify the problematic one
-RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE libffi-devel || (echo "Failed to install libffi-devel" && exit 1)
-RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE openssl-devel || (echo "Failed to install openssl-devel" && exit 1)
-RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE libffi || (echo "Failed to install libffi" && exit 1)
-RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE libSM || (echo "Failed to install libSM" && exit 1)
-RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE mesa-libGL || (echo "Failed to install mesa-libGL" && exit 1)
-RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE openssh ca-certificates openssl less rsync libpng-devel freetype-devel gcc-gfortran openblas unzip libstdc++
-# Install LibreOffice
-RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE libreoffice
-
-# Remove postgresql-jdbc
-RUN dnf remove -y postgresql-jdbc --noautoremove
-
-# Install additional tools
-RUN dnf install -y --nodocs --enablerepo=$FEDORA_EPEL p7zip unrar
-
-# Create symbolic link for 7za
-RUN ln -s /usr/bin/7za /usr/bin/7z
-
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Create directory for NLTK data
-RUN mkdir /etc/ml
-
-# Download NLTK data
-RUN python -c "import nltk; nltk.download('wordnet', download_dir='/etc/ml/nltk_data'); nltk.download('stopwords', download_dir='/etc/ml/nltk_data'); nltk.download('punkt', download_dir='/etc/ml/nltk_data')"
-
-# Set permissions for /etc/ml
-RUN chown -R demisto:demisto /etc/ml && chmod -R 775 /etc/ml
-
-# Install Java and other libraries
-RUN dnf install -y --nodocs java-11-openjdk-headless cairo libX11-xcb
-
-# Update OpenSSL configuration
-RUN sed -i 's/##legacy = legacy_sect/legacy = legacy_sect/' /etc/pki/tls/openssl.cnf \
+RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE python3-devel gcc gcc-c++ make wget git poppler poppler-utils \
+        rust cargo libxml2-devel libxslt-devel krb5-devel \
+        libffi-devel openssl-devel libffi libSM mesa-libGL \
+        openssh ca-certificates openssl less rsync libpng-devel freetype-devel gcc-gfortran openblas unzip libstdc++ \
+        && dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE libreoffice \
+        && dnf remove -y postgresql-jdbc --noautoremove \
+        && dnf install -y --nodocs --enablerepo=$FEDORA_EPEL p7zip unrar \
+        && ln -s /usr/bin/7za /usr/bin/7z \
+        && pip install --no-cache-dir -r requirements.txt \
+        && mkdir /etc/ml \
+        && python -c "import nltk; nltk.download('wordnet', download_dir='/etc/ml/nltk_data'); nltk.download('stopwords', download_dir='/etc/ml/nltk_data'); nltk.download('punkt', download_dir='/etc/ml/nltk_data')" \
+        && chown -R demisto:demisto /etc/ml && chmod -R 775 /etc/ml \
+        && dnf install -y --nodocs java-11-openjdk-headless cairo libX11-xcb \
+        && sed -i 's/##legacy = legacy_sect/legacy = legacy_sect/' /etc/pki/tls/openssl.cnf \
     && sed -i 's/##\[legacy_sect\]/\[legacy_sect\]/' /etc/pki/tls/openssl.cnf \
-    && sed -i 's/##activate = 1/activate = 1/' /etc/pki/tls/openssl.cnf
+        && sed -i 's/##activate = 1/activate = 1/' /etc/pki/tls/openssl.cnf \
+        && dnf remove -y python3-devel rust cargo libffi-devel openssl-devel gcc gcc-c++ make git platform-python-pip krb5-devel \
+        && dnf clean all \
+        && rm -rf /var/cache/dnf /root/.cargo \
+        && pip uninstall -y pcodedmp
 
-# Remove development dependencies
-RUN dnf remove -y python3-devel rust cargo libffi-devel openssl-devel gcc gcc-c++ make git platform-python-pip krb5-devel
 
-# Clean up
-RUN dnf clean all \
-    && rm -rf /var/cache/dnf /root/.cargo
-
-# Uninstall pcodedmp
-RUN pip uninstall -y pcodedmp
-
-# Set environment variable for NLTK data
 ENV NLTK_DATA='/etc/ml/nltk_data'
