@@ -79,7 +79,12 @@ RUN dnf update --nodocs -y  \
 # Install dependencies in smaller chunks
 RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE  python3-devel gcc gcc-c++ make wget git poppler poppler-utils
 RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE rust cargo libxml2-devel libxslt-devel krb5-devel
-RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE libffi-devel openssl-devel libffi libSM mesa-libGL
+# Install each package separately to identify the problematic one
+RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE libffi-devel || (echo "Failed to install libffi-devel" && exit 1)
+RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE openssl-devel || (echo "Failed to install openssl-devel" && exit 1)
+RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE libffi || (echo "Failed to install libffi" && exit 1)
+RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE libSM || (echo "Failed to install libSM" && exit 1)
+RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE mesa-libGL || (echo "Failed to install mesa-libGL" && exit 1)
 RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE openssh ca-certificates openssl less rsync libpng-devel freetype-devel gcc-gfortran openblas unzip libstdc++
 # Install LibreOffice
 RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE libreoffice
