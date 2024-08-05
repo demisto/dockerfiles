@@ -25,10 +25,8 @@ RUN apt update && apt install netbase -y
 RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 && rm -rf /var/lib/apt/lists/*
 
-
-
-RUN rm /root/.local/share/powershell/Modules/PSWSMan/2.3.1/bin/PSWSMan.deps.json
-RUN rm /opt/microsoft/powershell/7/pwsh.deps.json
+RUN rm /opt/microsoft/powershell/7/Newtonsoft.Json.dll
+RUN cp ./opt/microsoft/powershell/7/Modules/Microsoft.PowerShell.PSResourceGet/dependencies/Newtonsoft.Json.dll /opt/microsoft/powershell/7/Newtonsoft.Json.dll
 
 # RUN /bin/sh -c sh -c "y | pwsh -Command 'Install-Package -Name newtonsoft.json -ProviderName NuGet'"
 
