@@ -276,9 +276,11 @@ name = "parse-emails"
 version = "0.1.24"
 description = "Parses an email message file and extracts the data from it."
 optional = false
-python-versions = "^3.7"
-files = []
-develop = false
+python-versions = "<4.0,>=3.7"
+files = [
+    {file = "parse_emails-0.1.24-py3-none-any.whl", hash = "sha256:572a7ae7e703f9a638cbf7c0b4d84117e6123b16a22e598f0983a6d556f5149d"},
+    {file = "parse_emails-0.1.24.tar.gz", hash = "sha256:499222a25576ec28e2a8bb0c669e696f111cc8e9640a7cd93ee9f634c627fb9a"},
+]
 
 [package.dependencies]
 chardet = "*"
@@ -290,12 +292,6 @@ pyopenssl = "*"
 pytest = "*"
 python-magic = "*"
 RTFDE = "0.0.2"
-
-[package.source]
-type = "git"
-url = "https://github.com/demisto/parse-emails.git"
-reference = "e91404b"
-resolved_reference = "e91404b7fcfcffec1001720c2e6bde3eddf91f5e"
 
 [[package]]
 name = "pcodedmp"
@@ -314,13 +310,13 @@ win-unicode-console = {version = "*", markers = "platform_system == \"Windows\" 
 
 [[package]]
 name = "pip"
-version = "24.2"
+version = "24.1.2"
 description = "The PyPA recommended tool for installing Python packages."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "pip-24.2-py3-none-any.whl", hash = "sha256:2cd581cf58ab7fcfca4ce8efa6dcacd0de5bf8d0a3eb9ec927e07405f4d9e2a2"},
-    {file = "pip-24.2.tar.gz", hash = "sha256:5b5e490b5e9cb275c879595064adce9ebd31b854e3e803740b72f9ccf34a45b8"},
+    {file = "pip-24.1.2-py3-none-any.whl", hash = "sha256:7cd207eed4c60b0f411b444cd1464198fe186671c323b6cd6d433ed80fc9d247"},
+    {file = "pip-24.1.2.tar.gz", hash = "sha256:e5458a0b89f2755e0ee8c0c77613fe5273e05f337907874d64f13171a898a7ff"},
 ]
 
 [[package]]
@@ -383,13 +379,13 @@ diagrams = ["jinja2", "railroad-diagrams"]
 
 [[package]]
 name = "pytest"
-version = "8.3.2"
+version = "8.3.1"
 description = "pytest: simple powerful testing with Python"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "pytest-8.3.2-py3-none-any.whl", hash = "sha256:4ba08f9ae7dcf84ded419494d229b48d0903ea6407b030eaec46df5e6a73bba5"},
-    {file = "pytest-8.3.2.tar.gz", hash = "sha256:c132345d12ce551242c87269de812483f5bcc87cdbb4722e48487ba194f9fdce"},
+    {file = "pytest-8.3.1-py3-none-any.whl", hash = "sha256:e9600ccf4f563976e2c99fa02c7624ab938296551f280835ee6516df8bc4ae8c"},
+    {file = "pytest-8.3.1.tar.gz", hash = "sha256:7e8e5c5abd6e93cb1cc151f23e57adc31fcf8cfd2a3ff2da63e23f732de35db6"},
 ]
 
 [package.dependencies]
@@ -444,13 +440,13 @@ msg-parse = ["extract-msg (>=0.27)"]
 
 [[package]]
 name = "setuptools"
-version = "72.1.0"
+version = "71.1.0"
 description = "Easily download, build, install, upgrade, and uninstall Python packages"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "setuptools-72.1.0-py3-none-any.whl", hash = "sha256:5a03e1860cf56bb6ef48ce186b0e557fdba433237481a9a625176c2831be15d1"},
-    {file = "setuptools-72.1.0.tar.gz", hash = "sha256:8d243eff56d095e5817f796ede6ae32941278f542e0f941867cc05ae52b162ec"},
+    {file = "setuptools-71.1.0-py3-none-any.whl", hash = "sha256:33874fdc59b3188304b2e7c80d9029097ea31627180896fb549c578ceb8a0855"},
+    {file = "setuptools-71.1.0.tar.gz", hash = "sha256:032d42ee9fb536e33087fb66cac5f840eb9391ed05637b3f2a76a7c8fb477936"},
 ]
 
 [package.extras]
@@ -524,4 +520,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.11"
-content-hash = "4e84ac19c82621e6cc2d9ed2cf93fb1dd6b8f909e5f8efad96ad941849657bb7"
+content-hash = "8c3c238edb95f391b59e9d74426f59f7a4b888ecbf89fecb87a6244bc074470e"
