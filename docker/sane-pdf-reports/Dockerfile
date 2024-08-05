@@ -1,9 +1,7 @@
-# Last modified: 2024-05-06T12:41:34.997824+00:00
-FROM demisto/python3-deb:3.10.14.93258
+# Last modified: 2024-08-04T08:34:35.110761+00:00
+FROM demisto/python3-deb:3.11.9.106709
 
 WORKDIR "/app"
-
-COPY ./get_build_artifacts.py .
 
 SHELL ["/bin/bash", "-c"]
 RUN apt-get update -y -q && \
@@ -32,12 +30,17 @@ RUN apt-get update -y -q && \
     && npm i npm@8.1.3 -g
 
 RUN npm i puppeteer@5.3.1 && ln -s /app/node_modules/puppeteer/.local-chromium/linux-*/chrome-linux/chrome /usr/bin/chromium-browser
+# install gsutil acc to https://cloud.google.com/storage/docs/gsutil_install
+RUN apt-get update -y -q && apt-get install -y -q apt-transport-https ca-certificates gnupg curl \
+    && echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list \
+    && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg && apt-get update -y && apt-get install google-cloud-sdk -y
 
-RUN python get_build_artifacts.py --project sane-reports --branch master --filter "sane-report$" \
-    && mv sane-report sane-report.tar && tar -xvf sane-report.tar && rm -f sane-report.tar
+
+RUN gsutil cp -r gs://sane-reports-artifacts/sane-report.tar . \
+    && tar -xvf sane-report.tar && rm -f sane-report.tar
 
 # Update permissions and ownership on /app dir
 RUN chown -R root:demisto /app/ && chmod 775 /app/ && chmod 775 /app/dist
 
-RUN apt-get purge -y --auto-remove git npm \
+RUN npm uninstall -g npm && apt-get purge -y --auto-remove git npm apt-transport-https ca-certificates gnupg curl google-cloud-sdk \
     && rm -rf /var/lib/apt/lists/*

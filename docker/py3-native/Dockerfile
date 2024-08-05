@@ -1,4 +1,5 @@
-FROM demisto/py3-tools-ubi:1.0.0.94298
+FROM demisto/py3-tools-ubi:1.0.0.105970
+
 
 
 
@@ -33,8 +34,8 @@ RUN dnf update --nodocs -y  \
     && ./download_chromedriver.sh \
     && touch /var/chrome_headless.log \
     && chmod 777 /var/chrome_headless.log \
-    && touch /var/port.txt \
-    && chmod 777 /var/port.txt \
+    && touch /var/chrome_instances.tsv \
+    && chmod 777 /var/chrome_instances.tsv \
     && touch /var/rasterizations_counter.txt \
     && chmod 777 /var/rasterizations_counter.txt \
     && unzip chromedriver-linux64.zip \
@@ -62,7 +63,7 @@ RUN dnf update --nodocs -y  \
     do python tessdata_downloader/tessdata_downloader.py -o /usr/local/share/tessdata/ -l $lang; done \
     && tesseract --version --list-langs \
     && rm -rf tessdata_downloader leptonica tesseract download_chromedriver.sh repos \
-    && dnf remove -y python3-devel gcc gcc-c++ make platform-python-pip jq unzip git make autoconf automake libtool libpng-devel libjpeg-devel libtiff-devel zlib-devel giflib-devel \
+    && dnf remove -y python3-devel gcc gcc-c++ make platform-python-pip jq unzip git make autoconf automake libtool libpng-devel libjpeg-devel libtiff-devel zlib-devel giflib-devel webkit2gtk3-jsc bind-libs.x86_64 polkit polkit-libs \
     && dnf clean all \
     && rm -rf /var/cache/dnf
 

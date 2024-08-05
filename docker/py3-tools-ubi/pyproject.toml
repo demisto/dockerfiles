@@ -6,24 +6,23 @@ authors = ["Your Name <you@example.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "~3.10"
+python = "~3.11"
 cloudshare = "*"
-intezer-sdk = "^1.19.9"
+intezer-sdk = ">=1.21.3"
 emoji = "*"
 exifread = "*"
 "stomp.py" = "*"
 geopy = "*"
 dnspython = "*"
 algorithmia = "*"
-asana = "*"
+asana = "<=3.2.1"  # BC in Higher version, community supported integration
 feedparser = "*"
 beautifulsoup4 = "*"
 mail-parser = "*"
 imap-tools = "*"
 imapclient = "*"
 pyjarm = "*"
-pyminizip = "*"
-paho-mqtt = "*"
+paho-mqtt = "^1.6.1"  # breaking changes in v2
 arrow = "*"
 pytz = "*"
 python-dateutil = "*"
@@ -51,6 +50,7 @@ pycryptodome = "*"
 requests-toolbelt = "*"
 certifi = "*"
 pyzipper = "*"
+json2html = "*"
 
 [build-system]
 requires = ["poetry-core"]

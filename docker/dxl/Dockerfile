@@ -1,5 +1,5 @@
-# Last modified: 2024-03-26T00:12:37.257350+00:00
-FROM python:3.9.19-alpine3.19
+# Last modified: 2024-08-03T00:14:03.150822+00:00
+FROM python:3.9.19-alpine3.20
 
 # Upgrade all packages to latest
 RUN apk --update --no-cache upgrade
@@ -11,7 +11,8 @@ COPY requirements.txt .
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git \
   libffi-dev openssl-dev \
   && pip install --no-cache-dir -r requirements.txt \
-  && apk del .build-dependencies
+  && apk del .build-dependencies \
+  && pip install --upgrade setuptools
 
 RUN addgroup -g 4000 demisto \
   && adduser -u 4000 -G demisto -D demisto -s /bin/sh

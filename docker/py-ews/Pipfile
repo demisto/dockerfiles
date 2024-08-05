@@ -6,7 +6,7 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-exchangelib = ">=5.2.0"
+exchangelib = ">=5.4.1"
 chardet = "*"
 dateparser = "*"
 asn1crypto = "*"
@@ -28,7 +28,7 @@ pygments = "*"
 pykerberos = "*"
 python-dateutil = "*"
 pytz = "*"
-requests = "*"
+requests = ">=2.32.3"
 requests-kerberos = "*"
 requests-ntlm = "==1.1.0" # lock because of https://github.com/requests/requests-ntlm/issues/136
 six = "*"
@@ -36,4 +36,4 @@ tzlocal = "*"
 urllib3 = "<2"
 
 [requires]
-python_version = "3.10"
+python_version = "3.11"
