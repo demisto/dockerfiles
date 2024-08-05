@@ -210,16 +210,6 @@ nearley = ["js2py"]
 regex = ["regex"]
 
 [[package]]
-name = "m2crypto"
-version = "0.41.0"
-description = "A Python crypto and SSL toolkit"
-optional = false
-python-versions = "*"
-files = [
-    {file = "M2Crypto-0.41.0.tar.gz", hash = "sha256:3a1358c7ee849046d91782a777f1786bf027a1c1d51b5faf8f19435bfc3f1495"},
-]
-
-[[package]]
 name = "msoffcrypto-tool"
 version = "5.4.1"
 description = "Python tool and library for decrypting and encrypting MS Office files using a password or other keys"
@@ -286,7 +276,7 @@ name = "parse-emails"
 version = "0.1.24"
 description = "Parses an email message file and extracts the data from it."
 optional = false
-python-versions = "^3.8"
+python-versions = "^3.7"
 files = []
 develop = false
 
@@ -294,9 +284,8 @@ develop = false
 chardet = "*"
 compressed_rtf = "*"
 datetime = "*"
-M2Crypto = "*"
 olefile = "*"
-pip = "24.2.0"
+pip = "*"
 pyopenssl = "*"
 pytest = "*"
 python-magic = "*"
@@ -305,8 +294,8 @@ RTFDE = "0.0.2"
 [package.source]
 type = "git"
 url = "https://github.com/demisto/parse-emails.git"
-reference = "6577b98"
-resolved_reference = "6577b982510bb631465405e0c4b28ce0cbeb8bb1"
+reference = "6f364fe"
+resolved_reference = "6f364fea330a19e279d565246cf3a15f2bccb4e9"
 
 [[package]]
 name = "pcodedmp"
@@ -535,4 +524,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.11"
-content-hash = "357abf64be035f457178499e6fd417ebfb00e600c71cad94b3a68727c874b52a"
+content-hash = "a52065f53a7a872cdcfa8d3e4bb63aa092e8d2abe22596196c3d4652bdf57a34"
