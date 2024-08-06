@@ -1,6 +1,6 @@
 
-# Last modified: 2024-05-30T16:37:10.558306+00:00
-FROM demisto/python3-deb:3.10.14.96370
+# Last modified: 2024-08-04T08:34:57.494864+00:00
+FROM demisto/python3-deb:3.11.9.106709
 
 COPY requirements.txt .
 
@@ -23,8 +23,8 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
 && rm -rf /var/lib/apt/lists/* \
 && touch /var/chrome_headless.log \
 && chmod 777 /var/chrome_headless.log \
-&& touch /var/port.txt \
-&& chmod 777 /var/port.txt \
+&& touch /var/chrome_instances.tsv \
+&& chmod 777 /var/chrome_instances.tsv \
 && touch /var/rasterizations_counter.txt \
 && chmod 777 /var/rasterizations_counter.txt
 
@@ -77,10 +77,12 @@ RUN apt-get install -y libfreetype-dev libfontconfig-dev libboost-dev libpng-dev
 && pdftoppm -v \
 && cd ../.. \
 && rm poppler-${POPPLER_VERSION}.tar.xz \
-&& rm -rf poppler-${POPPLER_VERSION}/
+&& rm -rf poppler-${POPPLER_VERSION}/ \
+&& apt remove libaom0 -y
 
 RUN apt-get purge -y --auto-remove \
   curl \
+  git \
   unzip \
   jq \
 && rm -rf /var/lib/apt/lists/*

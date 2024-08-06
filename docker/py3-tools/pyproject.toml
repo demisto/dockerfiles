@@ -6,9 +6,9 @@ authors = ["Your Name <you@example.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "~3.10"
+python = "~3.11"
 cloudshare = "*"
-intezer-sdk = "^1.19.9"
+intezer-sdk = ">=1.21.3"
 emoji = "*"
 exifread = "*"
 "stomp.py" = "*"
@@ -23,7 +23,7 @@ imap-tools = "*"
 imapclient = "*"
 pyjarm = "*"
 pyzipper = "*"
-paho-mqtt = "*"
+paho-mqtt = "^1.6.1"  # breaking changes in v2
 arrow = "*"
 pytz = "*"
 python-dateutil = "*"
@@ -54,6 +54,7 @@ pycryptodome = "*"
 requests-toolbelt = "*"
 urllib3 = "^2.2.2"
 pydantic = ">=2.7.1"
+json2html = "*"
 
 [build-system]
 requires = ["poetry-core"]

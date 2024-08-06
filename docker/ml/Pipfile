@@ -12,7 +12,7 @@ default = false
 [packages]
 fasttext = "*"
 numpy = "*"
-scikit-learn = "*"
+scikit-learn = "==1.1.2"
 pandas = "*"
 nltk = "*"
 lime = "*"
@@ -26,8 +26,8 @@ eli5 = "*"
 langdetect = "*"
 onnx = "*"
 onnxruntime = "*"
-transformers = "*"
-torch = {version = "*", extras = ["cpu"], index="pytorch"}
+transformers = "==4.36.2"
+torch = {version = "==2.2.0", extras = ["cpu"], index="pytorch"}
 
 [dev-packages]
 

@@ -343,6 +343,8 @@ updates:
       interval: daily
     ignore:
       - dependency-name: scikit-learn
+      - dependency-name: transformers
+      - dependency-name: torch
   - package-ecosystem: pip
     directory: /docker/fastapi
     ignore:
@@ -585,6 +587,7 @@ updates:
     ignore:
       - dependency-name: "intezer-sdk"
       - dependency-name: "asana"  # lock on v3.2.1, BC in Higher version
+      - dependency-name: paho-mqtt
   - package-ecosystem: pip
     directory: /docker/pan-os-python
     schedule:
@@ -744,6 +747,21 @@ updates:
     schedule:
      interval: daily
   - package-ecosystem: pip
+    directory: /docker/sublime
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/keepercommander
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/python3-9-deb
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/cyberchef
+    schedule:
+     interval: daily  - package-ecosystem: pip
     directory: /docker/pysigma
     schedule:
      interval: daily

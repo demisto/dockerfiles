@@ -1,6 +1,6 @@
 
-# Last modified: 2024-06-14T00:13:48.572445+00:00
-FROM python:3.10.14-slim-bullseye
+# Last modified: 2024-08-06T00:14:38.642928+00:00
+FROM python:3.11.9-slim-bullseye
 
 RUN echo 'deb http://deb.debian.org/debian bullseye-backports main' >> /etc/apt/sources.list
 
@@ -27,7 +27,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 && apt-get purge -y --auto-remove \
   gcc \
   python3-dev \
-&& rm -rf /var/lib/apt/lists/*
+&& rm -rf /var/lib/apt/lists/* \
+&& pip install --upgrade setuptools
 
 
 RUN groupadd --gid 4000 demisto \
