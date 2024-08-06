@@ -6,6 +6,7 @@
 * Added the library ***ntlm_auth*** to allow support for the **EWSv2**  integration.
 * Updated the image to use Python 3.11.
 * Added the ***json2html*** library to allow support for the ***Json2HtmlTable*** script.
+* Updated the ***parse-emails*** library to version ***0.1.25*** to allow support for the ***ParseEmailFilesV2*** script.
 
 ## 8.6.0
 
