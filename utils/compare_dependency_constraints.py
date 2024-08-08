@@ -3,31 +3,55 @@ from pathlib import Path
 from typing import Any, NamedTuple
 import requests
 import toml
+import sys
 
 DOCKER_FOLDER = Path(__file__).parent.parent / "docker"
 NATIVE_IMAGE = "py3-native"
+PYPROJECT =  "pyproject.toml"
+PIPFILE = "Pipfile"
 
 
-def parse_constraints(dir_name: str) -> dict[str, str]:
+class Discrepancy(NamedTuple):
+    dependency: str
+    image: str
+    path: Path
+    in_image: str | None = None
+    in_native: str | None = None
+
+    def __str__(self) -> str:
+        return (
+            f"{self.dependency} is {self.in_image or 'missing'} in {self.image}, "
+            f"but {self.in_native or 'missing'} in the native image. "
+            "This discrepancy may cause issues when running content."
+        )
+def get_dependency_file_path(dir_name: str) -> Path:
     dir_path = DOCKER_FOLDER / dir_name
+
     if not dir_path.exists():
         raise FileNotFoundError(dir_path)
 
-    pip_path = dir_path / "Pipfile"
-    pyproject_path = dir_path / "pyproject.toml"
+    pip_path = dir_path / PIPFILE
+    pyproject_path = dir_path / PYPROJECT
 
     if pip_path.exists() and pyproject_path.exists():
         raise ValueError(
-            f"Can't have both pyproject and Pipfile in a dockerfile folder ({dir_name})"
+            f"Can't have both pyproject and Pipfile in a dockerfile folder ({dir_path})"
         )
-
     if pip_path.exists():
-        return lower_dict_keys(_parse_pipfile(pip_path))
+        return pip_path
 
     if pyproject_path.exists():
-        return lower_dict_keys(_parse_pyproject(pyproject_path))
+        return pyproject_path
+    
+    raise ValueError(f"Neither pyproject nor Pipfile found in {dir_path}")
 
-    raise ValueError(f"Neither pyproject nor Pipfile found in {dir_name}")
+def parse_constraints(name: str) -> dict[str, str]:
+    path = get_dependency_file_path(name)
+    if path.suffix == PIPFILE:
+        return lower_dict_keys(_parse_pipfile(path))
+
+    return lower_dict_keys(_parse_pyproject(path))
+
 
 
 def _parse_pipfile(path: Path) -> dict[str, str]:
@@ -42,14 +66,24 @@ def lower_dict_keys(dictionary: dict[str, Any]) -> dict[str, Any]:
     return {k.lower(): v for k, v in dictionary.items()}
 
 
-class Discrepancy(NamedTuple):
-    dependency: str
-    image: str
-    in_image: str | None = None
-    in_native: str | None = None
+def find_library_line_number(lib_name: str, file_path: Path) -> int:
+    """
+    Searches for a library in the pyproject.toml or Pipfile file and returns the line number where it is found.
 
-    def __str__(self) -> str:
-        return f"{self.dependency}: {self.in_image or 'missing'} in {self.image}, {self.in_native or 'missing'} in native"
+    Parameters:
+    - lib_name: The name of the library to search for.
+    - file_path: The directory containing the pyproject.toml or Pipfile.
+
+    Returns:
+    - The line number containing the library name, or 1 if the library is not found.
+    """
+    for line_number, line in enumerate(
+        file_path.read_text().splitlines(), start=1
+    ):  # Start counting from line 1
+        if lib_name in line:
+            return line_number
+
+    return 1  # default
 
 
 def compare_constraints(images_contained_in_native: list[str]):
@@ -59,10 +93,9 @@ def compare_constraints(images_contained_in_native: list[str]):
         | parse_constraints(NATIVE_IMAGE)
     )
     native_constraint_keys = set(native_constraints.keys())
-
+    discrepancies: list[Discrepancy] = []
     for image in images_contained_in_native:
-        discrepancies: list[Discrepancy] = []
-
+        path = get_dependency_file_path(image)
         constraints = parse_constraints(image)
         constraint_keys = set(constraints.keys())
 
@@ -72,6 +105,7 @@ def compare_constraints(images_contained_in_native: list[str]):
                     dependency=dependency,
                     image=image,
                     in_image=constraints[dependency],
+                    path=path
                 )
                 for dependency in sorted(
                     constraint_keys.difference(native_constraint_keys)
@@ -85,6 +119,7 @@ def compare_constraints(images_contained_in_native: list[str]):
                     image=image,
                     in_image=constraints[dependency],
                     in_native=native_constraints[dependency],
+                    path=path
                 )
                 for dependency in sorted(
                     constraint_keys.intersection(native_constraint_keys)
@@ -93,8 +128,14 @@ def compare_constraints(images_contained_in_native: list[str]):
             )
         )
 
-        for discrepancy in discrepancies:
-            print(str(discrepancy))
+    for discrepancy in discrepancies:
+
+        line_number = find_library_line_number(discrepancy.dependency, discrepancy.path)
+
+        print(
+            f"::error file={discrepancy.path},line={line_number},endLine={line_number},title=Native Image Discrepancy::{discrepancy}"
+        )
+    return int(bool(discrepancies))
 
 
 def load_native_image_conf() -> list[str]:
@@ -106,4 +147,5 @@ def load_native_image_conf() -> list[str]:
     )["native_images"]["native:candidate"]["supported_docker_images"]
 
 
-compare_constraints(load_native_image_conf())
+if __name__ == "__main__":
+    sys.exit(compare_constraints(load_native_image_conf()))
