@@ -8,7 +8,7 @@ import sys
 DOCKER_FOLDER = Path(__file__).parent.parent / "docker"
 NATIVE_IMAGE = "py3-native"
 PY3_TOOLS_UBI_IMAGE = "py3-tools-ubi"
-PYTHON3_UBI_IMAGE = "py3-tools"
+PY3_TOOLS_IMAGE = "py3-tools"
 PYPROJECT = "pyproject.toml"
 PIPFILE = "Pipfile"
 
@@ -18,6 +18,7 @@ class Discrepancy(NamedTuple):
 
     dependency: str
     image: str
+    reference_image: str
     path: Path
     in_image: str | None = None
     in_reference: str | None = None
@@ -25,7 +26,7 @@ class Discrepancy(NamedTuple):
     def __str__(self) -> str:
         return (
             f"{self.dependency} is {self.in_image or 'missing'} in {self.image}, "
-            f"but {self.in_reference or 'missing'} in the {self.image} image. "
+            f"but {self.in_reference or 'missing'} in the {self.reference_image} image. "
             "This discrepancy may cause issues when running content."
         )
 
@@ -116,15 +117,15 @@ def compare_constraints(images_contained_in_native: list[str]):
         int: Returns 1 if there are discrepancies, 0 otherwise.
     """
     native_constraints = (
-        parse_constraints(PYTHON3_UBI_IMAGE)
+        parse_constraints(PY3_TOOLS_IMAGE)
         | parse_constraints(PY3_TOOLS_UBI_IMAGE)
         | parse_constraints(NATIVE_IMAGE)
     )
-    python3_ubi_constraints = parse_constraints(PYTHON3_UBI_IMAGE)
+    py3_tools_constraints = parse_constraints(PY3_TOOLS_IMAGE)
     py3_tools_ubi_constraints = parse_constraints(PY3_TOOLS_UBI_IMAGE)
 
     native_constraint_keys = set(native_constraints.keys())
-    python3_ubi_keys = set(python3_ubi_constraints.keys())
+    py3_tools_keys = set(py3_tools_constraints.keys())
     py3_tools_ubi_keys = set(py3_tools_ubi_constraints.keys())
 
     discrepancies: list[Discrepancy] = []
@@ -140,6 +141,7 @@ def compare_constraints(images_contained_in_native: list[str]):
                 Discrepancy(
                     dependency=dependency,
                     image=image,
+                    reference_image="native",
                     in_image=constraints[dependency],
                     path=path,
                 )
@@ -153,6 +155,7 @@ def compare_constraints(images_contained_in_native: list[str]):
                 Discrepancy(
                     dependency=dependency,
                     image=image,
+                    reference_image="native",
                     in_image=constraints[dependency],
                     in_reference=native_constraints[dependency],
                     path=path,
@@ -170,11 +173,12 @@ def compare_constraints(images_contained_in_native: list[str]):
             Discrepancy(
                 dependency=dependency,
                 image=PY3_TOOLS_UBI_IMAGE,
+                reference_image=PY3_TOOLS_IMAGE,
                 in_image=py3_tools_ubi_constraints.get(dependency),
-                in_reference=python3_ubi_constraints.get(dependency),
+                in_reference=py3_tools_constraints.get(dependency),
                 path=get_dependency_file_path(PY3_TOOLS_UBI_IMAGE),
             )
-            for dependency in sorted(py3_tools_ubi_keys.difference(python3_ubi_keys))
+            for dependency in sorted(py3_tools_ubi_keys.difference(py3_tools_keys))
         )
     )
     discrepancies.extend(  # shared dependencies with py3-tools, different versions
@@ -182,12 +186,13 @@ def compare_constraints(images_contained_in_native: list[str]):
             Discrepancy(
                 dependency=dependency,
                 image=PY3_TOOLS_UBI_IMAGE,
+                reference_image=PY3_TOOLS_IMAGE,
                 in_image=py3_tools_ubi_constraints.get(dependency),
-                in_reference=python3_ubi_constraints.get(dependency),
+                in_reference=py3_tools_constraints.get(dependency),
                 path=get_dependency_file_path(PY3_TOOLS_UBI_IMAGE),
             )
-            for dependency in sorted(py3_tools_ubi_keys.intersection(python3_ubi_keys))
-            if py3_tools_ubi_constraints.get(dependency) != python3_ubi_constraints.get(dependency)
+            for dependency in sorted(py3_tools_ubi_keys.intersection(py3_tools_keys))
+            if py3_tools_ubi_constraints.get(dependency) != py3_tools_constraints.get(dependency)
         )
     )
 
