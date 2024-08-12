@@ -8,7 +8,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "~3.11"
 cloudshare = "*"
-intezer-sdk = "==1.19.9"  # CIAC-10263
+intezer-sdk = ">=1.21.3"
 emoji = "*"
 exifread = "*"
 "stomp.py" = "*"
@@ -21,7 +21,6 @@ beautifulsoup4 = "*"
 mail-parser = "*"
 imap-tools = "*"
 imapclient = "*"
-pyminizip = "*"
 pyjarm = "*"
 paho-mqtt = "^1.6.1"  # breaking changes in v2
 arrow = "*"
@@ -51,6 +50,7 @@ pycryptodome = "*"
 requests-toolbelt = "*"
 certifi = "*"
 pyzipper = "*"
+json2html = "*"
 
 [build-system]
 requires = ["poetry-core"]

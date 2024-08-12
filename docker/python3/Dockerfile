@@ -1,4 +1,4 @@
-# Last modified: 2024-07-11T00:14:52.979036+00:00
+# Last modified: 2024-08-06T00:14:44.916067+00:00
 FROM python:3.11.9-alpine3.20
 
 # Upgrade all packages to latest
@@ -10,7 +10,8 @@ COPY localtime /etc/localtime
 
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget \
   && pip install --no-cache-dir -r requirements.txt \
-  && apk del .build-dependencies
+  && apk del .build-dependencies \
+  && pip install --upgrade setuptools
 
 RUN addgroup -g 4000 demisto \
   && adduser -u 4000 -G demisto -D demisto -s /bin/sh 
