@@ -7,28 +7,35 @@ import sys
 
 DOCKER_FOLDER = Path(__file__).parent.parent / "docker"
 NATIVE_IMAGE = "py3-native"
-PYPROJECT =  "pyproject.toml"
+PY3_TOOLS_UBI_IMAGE = "py3-tools-ubi"
+PYTHON3_UBI_IMAGE = "python3-ubi"
+PYPROJECT = "pyproject.toml"
 PIPFILE = "Pipfile"
 
 
 class Discrepancy(NamedTuple):
+    """Represents a discrepancy between dependencies in different images."""
+
     dependency: str
     image: str
     path: Path
     in_image: str | None = None
-    in_native: str | None = None
+    in_reference: str | None = None
 
     def __str__(self) -> str:
         return (
             f"{self.dependency} is {self.in_image or 'missing'} in {self.image}, "
-            f"but {self.in_native or 'missing'} in the native image. "
+            f"but {self.in_reference or 'missing'} in the reference image. "
             "This discrepancy may cause issues when running content."
         )
+
+
 def get_dependency_file_path(dir_name: str) -> Path:
+    """Returns the path to the dependency file (Pipfile or pyproject.toml) in the given directory."""
     dir_path = DOCKER_FOLDER / dir_name
 
     if not dir_path.exists():
-        raise FileNotFoundError(dir_path)
+        raise FileNotFoundError(f"Directory {dir_path} does not exist.")
 
     pip_path = dir_path / PIPFILE
     pyproject_path = dir_path / PYPROJECT
@@ -42,10 +49,12 @@ def get_dependency_file_path(dir_name: str) -> Path:
 
     if pyproject_path.exists():
         return pyproject_path
-    
+
     raise ValueError(f"Neither pyproject nor Pipfile found in {dir_path}")
 
+
 def parse_constraints(name: str) -> dict[str, str]:
+    """Parses the dependency constraints from the given image name."""
     path = get_dependency_file_path(name)
     if path.suffix == PIPFILE:
         return lower_dict_keys(_parse_pipfile(path))
@@ -53,16 +62,18 @@ def parse_constraints(name: str) -> dict[str, str]:
     return lower_dict_keys(_parse_pyproject(path))
 
 
-
 def _parse_pipfile(path: Path) -> dict[str, str]:
+    """Parses the Pipfile and returns the dependencies."""
     return toml.load(path).get("packages", {})
 
 
 def _parse_pyproject(path: Path) -> dict[str, str]:
+    """Parses the pyproject.toml file and returns the dependencies."""
     return toml.load(path).get("tool", {}).get("poetry", {}).get("dependencies", {})
 
 
 def lower_dict_keys(dictionary: dict[str, Any]) -> dict[str, Any]:
+    """Converts all keys in the dictionary to lowercase."""
     return {k.lower(): v for k, v in dictionary.items()}
 
 
@@ -87,13 +98,38 @@ def find_library_line_number(lib_name: str, file_path: Path) -> int:
 
 
 def compare_constraints(images_contained_in_native: list[str]):
+    """Compares the dependency constraints between different images and reports discrepancies.
+
+    This function compares the dependencies of the following images:
+    - `python3-ubi`
+    - `py3-tools-ubi`
+    - `native`
+
+    against the dependencies of the images listed in `images_contained_in_native`.
+
+    Additionally, it compares the dependencies of `python3-ubi` against `py3-tools-ubi`.
+
+    Args:
+        images_contained_in_native (list[str]): A list of image names to compare against the native image.
+
+    Returns:
+        int: Returns 1 if there are discrepancies, 0 otherwise.
+    """
     native_constraints = (
-        parse_constraints("python3-ubi")
-        | parse_constraints("py3-tools-ubi")
+        parse_constraints(PYTHON3_UBI_IMAGE)
+        | parse_constraints(PY3_TOOLS_UBI_IMAGE)
         | parse_constraints(NATIVE_IMAGE)
     )
+    python3_ubi_constraints = parse_constraints(PYTHON3_UBI_IMAGE)
+    py3_tools_ubi_constraints = parse_constraints(PY3_TOOLS_UBI_IMAGE)
+
     native_constraint_keys = set(native_constraints.keys())
+    python3_ubi_keys = set(python3_ubi_constraints.keys())
+    py3_tools_ubi_keys = set(py3_tools_ubi_constraints.keys())
+
     discrepancies: list[Discrepancy] = []
+
+    # Compare each image with native
     for image in images_contained_in_native:
         path = get_dependency_file_path(image)
         constraints = parse_constraints(image)
@@ -105,7 +141,7 @@ def compare_constraints(images_contained_in_native: list[str]):
                     dependency=dependency,
                     image=image,
                     in_image=constraints[dependency],
-                    path=path
+                    path=path,
                 )
                 for dependency in sorted(
                     constraint_keys.difference(native_constraint_keys)
@@ -118,8 +154,8 @@ def compare_constraints(images_contained_in_native: list[str]):
                     dependency=dependency,
                     image=image,
                     in_image=constraints[dependency],
-                    in_native=native_constraints[dependency],
-                    path=path
+                    in_reference=native_constraints[dependency],
+                    path=path,
                 )
                 for dependency in sorted(
                     constraint_keys.intersection(native_constraint_keys)
@@ -128,10 +164,35 @@ def compare_constraints(images_contained_in_native: list[str]):
             )
         )
 
+    # Compare py3-tools-ubi with python3-ubi
+    discrepancies.extend(  # py3-tools-ubi dependencies missing from python3-ubi
+        (
+            Discrepancy(
+                dependency=dependency,
+                image=PY3_TOOLS_UBI_IMAGE,
+                in_image=py3_tools_ubi_constraints[dependency],
+                in_reference=python3_ubi_constraints[dependency],
+                path=get_dependency_file_path(PY3_TOOLS_UBI_IMAGE),
+            )
+            for dependency in sorted(py3_tools_ubi_keys.difference(python3_ubi_keys))
+        )
+    )
+    discrepancies.extend(  # shared dependencies with python3-ubi, different versions
+        (
+            Discrepancy(
+                dependency=dependency,
+                image=PY3_TOOLS_UBI_IMAGE,
+                in_image=py3_tools_ubi_constraints[dependency],
+                in_reference=python3_ubi_constraints[dependency],
+                path=get_dependency_file_path(PY3_TOOLS_UBI_IMAGE),
+            )
+            for dependency in sorted(py3_tools_ubi_keys.intersection(python3_ubi_keys))
+            if py3_tools_ubi_constraints[dependency] != python3_ubi_constraints[dependency]
+        )
+    )
+
     for discrepancy in discrepancies:
-
         line_number = find_library_line_number(discrepancy.dependency, discrepancy.path)
-
         print(
             f"::error file={discrepancy.path},line={line_number},endLine={line_number},title=Native Image Discrepancy::{discrepancy}"
         )
@@ -139,6 +200,7 @@ def compare_constraints(images_contained_in_native: list[str]):
 
 
 def load_native_image_conf() -> list[str]:
+    """Returns the supported docker images by the native image from a remote JSON file."""
     return json.loads(
         requests.get(
             "https://raw.githubusercontent.com/demisto/content/master/Tests/docker_native_image_config.json",
