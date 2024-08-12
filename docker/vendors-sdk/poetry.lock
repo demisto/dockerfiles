@@ -216,6 +216,22 @@ protobuf = ["protobuf", "requests"]
 schema-registry = ["requests"]
 
 [[package]]
+name = "cyberintegrations"
+version = "0.7.3"
+description = "Python library - modules for processing data from the TI and DRP system collected in one library. This library simplifies work with the products API and gives you the flexibility to customize the search and retrieval of data from the system."
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "cyberintegrations-0.7.3-py3-none-any.whl", hash = "sha256:974dfdb762f000bb8ef98449d0052a5bdcfc5c984fc5e96917dd20f3241e3be4"},
+    {file = "cyberintegrations-0.7.3.tar.gz", hash = "sha256:05ba59fc9f65ea954cb1f0d80ec2c45580031b7569d46e3e1c8b300ff1d3ce43"},
+]
+
+[package.dependencies]
+dataclasses = "*"
+requests = ">=2.25.1"
+urllib3 = "*"
+
+[[package]]
 name = "cymruwhois"
 version = "1.6"
 description = "Client for the whois.cymru.com service"
@@ -231,6 +247,17 @@ files = [
 cache = ["python-memcached"]
 docs = ["sphinx"]
 tests = ["nose"]
+
+[[package]]
+name = "dataclasses"
+version = "0.6"
+description = "A backport of the dataclasses module for Python 3.6"
+optional = false
+python-versions = "*"
+files = [
+    {file = "dataclasses-0.6-py3-none-any.whl", hash = "sha256:454a69d788c7fda44efd71e259be79577822f5e3f53f029a22d08004e951dc9f"},
+    {file = "dataclasses-0.6.tar.gz", hash = "sha256:6988bd2b895eef432d562370bb707d540f32f7360ab13da45340101bc2307d84"},
+]
 
 [[package]]
 name = "datefinder"
@@ -1184,4 +1211,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.11"
-content-hash = "ffce9dfcaa213e92a30668dca9c448c8b50057c9feab29ed94ff32dd1cdf0cf5"
+content-hash = "1648b9578021b1a4978ac9f14e76b404a18a29d20f554005aa15ae5165a94f9a"
