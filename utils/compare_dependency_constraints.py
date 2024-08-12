@@ -8,7 +8,7 @@ import sys
 DOCKER_FOLDER = Path(__file__).parent.parent / "docker"
 NATIVE_IMAGE = "py3-native"
 PY3_TOOLS_UBI_IMAGE = "py3-tools-ubi"
-PYTHON3_UBI_IMAGE = "python3-ubi"
+PYTHON3_UBI_IMAGE = "py3-tools"
 PYPROJECT = "pyproject.toml"
 PIPFILE = "Pipfile"
 
@@ -101,13 +101,13 @@ def compare_constraints(images_contained_in_native: list[str]):
     """Compares the dependency constraints between different images and reports discrepancies.
 
     This function compares the dependencies of the following images:
-    - `python3-ubi`
+    - `py3-tools`
     - `py3-tools-ubi`
     - `native`
 
     against the dependencies of the images listed in `images_contained_in_native`.
 
-    Additionally, it compares the dependencies of `python3-ubi` against `py3-tools-ubi`.
+    Additionally, it compares the dependencies of `py3-tools` against `py3-tools-ubi`.
 
     Args:
         images_contained_in_native (list[str]): A list of image names to compare against the native image.
@@ -164,8 +164,8 @@ def compare_constraints(images_contained_in_native: list[str]):
             )
         )
 
-    # Compare py3-tools-ubi with python3-ubi
-    discrepancies.extend(  # py3-tools-ubi dependencies missing from python3-ubi
+    # Compare py3-tools-ubi with py3-tools
+    discrepancies.extend(  # py3-tools-ubi dependencies missing from py3-tools
         (
             Discrepancy(
                 dependency=dependency,
@@ -177,7 +177,7 @@ def compare_constraints(images_contained_in_native: list[str]):
             for dependency in sorted(py3_tools_ubi_keys.difference(python3_ubi_keys))
         )
     )
-    discrepancies.extend(  # shared dependencies with python3-ubi, different versions
+    discrepancies.extend(  # shared dependencies with py3-tools, different versions
         (
             Discrepancy(
                 dependency=dependency,
