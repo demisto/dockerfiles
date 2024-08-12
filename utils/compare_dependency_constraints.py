@@ -25,7 +25,7 @@ class Discrepancy(NamedTuple):
     def __str__(self) -> str:
         return (
             f"{self.dependency} is {self.in_image or 'missing'} in {self.image}, "
-            f"but {self.in_reference or 'missing'} in the reference image. "
+            f"but {self.in_reference or 'missing'} in the {self.image} image. "
             "This discrepancy may cause issues when running content."
         )
 
@@ -170,8 +170,8 @@ def compare_constraints(images_contained_in_native: list[str]):
             Discrepancy(
                 dependency=dependency,
                 image=PY3_TOOLS_UBI_IMAGE,
-                in_image=py3_tools_ubi_constraints[dependency],
-                in_reference=python3_ubi_constraints[dependency],
+                in_image=py3_tools_ubi_constraints.get(dependency),
+                in_reference=python3_ubi_constraints.get(dependency),
                 path=get_dependency_file_path(PY3_TOOLS_UBI_IMAGE),
             )
             for dependency in sorted(py3_tools_ubi_keys.difference(python3_ubi_keys))
@@ -182,12 +182,12 @@ def compare_constraints(images_contained_in_native: list[str]):
             Discrepancy(
                 dependency=dependency,
                 image=PY3_TOOLS_UBI_IMAGE,
-                in_image=py3_tools_ubi_constraints[dependency],
-                in_reference=python3_ubi_constraints[dependency],
+                in_image=py3_tools_ubi_constraints.get(dependency),
+                in_reference=python3_ubi_constraints.get(dependency),
                 path=get_dependency_file_path(PY3_TOOLS_UBI_IMAGE),
             )
             for dependency in sorted(py3_tools_ubi_keys.intersection(python3_ubi_keys))
-            if py3_tools_ubi_constraints[dependency] != python3_ubi_constraints[dependency]
+            if py3_tools_ubi_constraints.get(dependency) != python3_ubi_constraints.get(dependency)
         )
     )
 
