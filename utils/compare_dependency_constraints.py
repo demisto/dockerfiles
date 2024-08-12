@@ -133,7 +133,6 @@ def compare_constraints(images_contained_in_native: list[str]) -> int:
         compare_py3_tools_with_ubi(py3_tools_constraints, py3_tools_ubi_constraints)
     )
 
-
     for discrepancy in discrepancies:
         line_number = find_library_line_number(discrepancy.dependency, discrepancy.path)
         print(
