@@ -98,7 +98,7 @@ def find_library_line_number(lib_name: str, file_path: Path) -> int:
     return 1  # default
 
 
-def compare_constraints(images_contained_in_native: list[str]):
+def compare_constraints(images_contained_in_native: list[str]) -> int:
     """Compares the dependency constraints between different images and reports discrepancies.
 
     This function compares the dependencies of the following images:
@@ -116,6 +116,7 @@ def compare_constraints(images_contained_in_native: list[str]):
     Returns:
         int: Returns 1 if there are discrepancies, 0 otherwise.
     """
+
     native_constraints = (
         parse_constraints(PY3_TOOLS_IMAGE)
         | parse_constraints(PY3_TOOLS_UBI_IMAGE)
@@ -123,51 +124,72 @@ def compare_constraints(images_contained_in_native: list[str]):
     )
     py3_tools_constraints = parse_constraints(PY3_TOOLS_IMAGE)
     py3_tools_ubi_constraints = parse_constraints(PY3_TOOLS_UBI_IMAGE)
+    discrepancies: list[Discrepancy] = []
 
+    for image in images_contained_in_native:
+        discrepancies.extend(compare_with_native(image, native_constraints))
+
+    discrepancies.extend(
+        compare_py3_tools_with_ubi(py3_tools_constraints, py3_tools_ubi_constraints)
+    )
+
+
+    for discrepancy in discrepancies:
+        line_number = find_library_line_number(discrepancy.dependency, discrepancy.path)
+        print(
+            f"::error file={discrepancy.path},line={line_number},endLine={line_number},title=Native Image Discrepancy::{discrepancy}"
+        )
+    return int(bool(discrepancies))
+
+
+def compare_with_native(image: str, native_constraints: dict) -> list[Discrepancy]:
+    path = get_dependency_file_path(image)
+    constraints = parse_constraints(image)
+    constraint_keys = set(constraints.keys())
     native_constraint_keys = set(native_constraints.keys())
+
+    discrepancies: list[Discrepancy] = []
+
+    discrepancies.extend(  # image dependencies missing from native
+        (
+            Discrepancy(
+                dependency=dependency,
+                image=image,
+                reference_image=NATIVE_IMAGE,
+                in_image=constraints[dependency],
+                path=path,
+            )
+            for dependency in sorted(constraint_keys.difference(native_constraint_keys))
+        )
+    )
+    discrepancies.extend(  # shared dependencies with native, different versions
+        (
+            Discrepancy(
+                dependency=dependency,
+                image=image,
+                reference_image=NATIVE_IMAGE,
+                in_image=constraints[dependency],
+                in_reference=native_constraints[dependency],
+                path=path,
+            )
+            for dependency in sorted(
+                constraint_keys.intersection(native_constraint_keys)
+            )
+            if constraints[dependency] != native_constraints[dependency]
+        )
+    )
+
+    return discrepancies
+
+
+def compare_py3_tools_with_ubi(
+    py3_tools_constraints: dict, py3_tools_ubi_constraints: dict
+) -> list[Discrepancy]:
     py3_tools_keys = set(py3_tools_constraints.keys())
     py3_tools_ubi_keys = set(py3_tools_ubi_constraints.keys())
 
     discrepancies: list[Discrepancy] = []
 
-    # Compare each image with native
-    for image in images_contained_in_native:
-        path = get_dependency_file_path(image)
-        constraints = parse_constraints(image)
-        constraint_keys = set(constraints.keys())
-
-        discrepancies.extend(  # image dependencies missing from native
-            (
-                Discrepancy(
-                    dependency=dependency,
-                    image=image,
-                    reference_image="native",
-                    in_image=constraints[dependency],
-                    path=path,
-                )
-                for dependency in sorted(
-                    constraint_keys.difference(native_constraint_keys)
-                )
-            )
-        )
-        discrepancies.extend(  # shared dependencies with native, different versions
-            (
-                Discrepancy(
-                    dependency=dependency,
-                    image=image,
-                    reference_image="native",
-                    in_image=constraints[dependency],
-                    in_reference=native_constraints[dependency],
-                    path=path,
-                )
-                for dependency in sorted(
-                    constraint_keys.intersection(native_constraint_keys)
-                )
-                if constraints[dependency] != native_constraints[dependency]
-            )
-        )
-
-    # Compare py3-tools-ubi with py3-tools
     discrepancies.extend(  # py3-tools-ubi dependencies missing from py3-tools
         (
             Discrepancy(
@@ -192,16 +214,12 @@ def compare_constraints(images_contained_in_native: list[str]):
                 path=get_dependency_file_path(PY3_TOOLS_UBI_IMAGE),
             )
             for dependency in sorted(py3_tools_ubi_keys.intersection(py3_tools_keys))
-            if py3_tools_ubi_constraints.get(dependency) != py3_tools_constraints.get(dependency)
+            if py3_tools_ubi_constraints.get(dependency)
+            != py3_tools_constraints.get(dependency)
         )
     )
 
-    for discrepancy in discrepancies:
-        line_number = find_library_line_number(discrepancy.dependency, discrepancy.path)
-        print(
-            f"::error file={discrepancy.path},line={line_number},endLine={line_number},title=Native Image Discrepancy::{discrepancy}"
-        )
-    return int(bool(discrepancies))
+    return discrepancies
 
 
 def load_native_image_conf() -> list[str]:
