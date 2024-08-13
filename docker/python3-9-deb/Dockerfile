@@ -1,6 +1,6 @@
 
-# Last modified: 2024-07-11T00:14:45.039529+00:00
-FROM python:3.9.16-slim-bullseye
+# Last modified: 2024-08-08T00:14:37.838087+00:00
+FROM python:3.9.19-slim-bullseye
 
 RUN echo 'deb http://deb.debian.org/debian bullseye-backports main' >> /etc/apt/sources.list
 
@@ -22,9 +22,9 @@ COPY requirements.txt .
 #Install tools for building binary deps (will be reomved later on)
 RUN apt-get update && apt-get install -y --no-install-recommends \
   gcc \
-  python3.9-dev \ 
+  python3.9-dev \
   build-essential \
-&& pip install --no-cache-dir -r requirements.txt \
+&& pip install --upgrade pip setuptools && pip install --no-cache-dir -r requirements.txt \
 && apt-get purge -y --auto-remove \
   gcc \
   python3.9-dev \
