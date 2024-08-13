@@ -22,6 +22,9 @@ import pyzipper
 # asana
 from asana import Client
 
+# json2html
+import json2html
+
 
 # intezer_sdk
 from intezer_sdk import consts
