@@ -800,20 +800,19 @@ msrestazure = ">=0.4.27,<2.0.0"
 
 [[package]]
 name = "azure-mgmt-hdinsight"
-version = "0.1.0"
+version = "9.0.0"
 description = "Microsoft Azure HDInsight Management Client Library for Python"
 optional = false
 python-versions = "*"
 files = [
-    {file = "azure-mgmt-hdinsight-0.1.0.zip", hash = "sha256:89c8a3816742cb8ceba8a16d74d3980289d34323177978a410bb7323f6ddf71c"},
-    {file = "azure_mgmt_hdinsight-0.1.0-py2.py3-none-any.whl", hash = "sha256:d56982f651e8a52c31a061ca4ff5a8bf9c7ecd99c236e8ec67665fd464033cad"},
+    {file = "azure-mgmt-hdinsight-9.0.0.zip", hash = "sha256:41ebdc69c0d1f81d25dd30438c14fff4331f66639f55805b918b9649eaffe78a"},
+    {file = "azure_mgmt_hdinsight-9.0.0-py2.py3-none-any.whl", hash = "sha256:1df6d8284bc173d8d556a31a9bde677ada0fe1f52227c5d499ab05fcd71b8d4f"},
 ]
 
 [package.dependencies]
 azure-common = ">=1.1,<2.0"
-azure-mgmt-nspkg = ">=2.0.0"
-msrest = ">=0.5.0"
-msrestazure = ">=0.4.32,<2.0.0"
+azure-mgmt-core = ">=1.2.0,<2.0.0"
+msrest = ">=0.6.21"
 
 [[package]]
 name = "azure-mgmt-iothub"
@@ -3457,4 +3456,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.11"
-content-hash = "1f887c4acb6b87d1c9dbec0877f11c5c64f803dfb8f7be7459855b1937ba92d5"
+content-hash = "33f67e971d5cf51dedf5707dc04f6136d73c26ce850d81696cff017f0fc22267"
