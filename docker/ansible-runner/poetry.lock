@@ -1103,19 +1103,19 @@ msrestazure = ">=0.4.32,<2.0.0"
 
 [[package]]
 name = "azure-mgmt-sql"
-version = "0.10.0"
+version = "3.0.1"
 description = "Microsoft Azure SQL Management Client Library for Python"
 optional = false
 python-versions = "*"
 files = [
-    {file = "azure-mgmt-sql-0.10.0.zip", hash = "sha256:551020c92a48a78d11853a7a4917a01a3f1a1e7362afad28a182ece8c9c554ad"},
-    {file = "azure_mgmt_sql-0.10.0-py2.py3-none-any.whl", hash = "sha256:07184591678b2a9a8f3197c30634c6fccb4db9b61d977307586ba2648c2df9de"},
+    {file = "azure-mgmt-sql-3.0.1.zip", hash = "sha256:129042cc011225e27aee6ef2697d585fa5722e5d1aeb0038af6ad2451a285457"},
+    {file = "azure_mgmt_sql-3.0.1-py2.py3-none-any.whl", hash = "sha256:1d1dd940d4d41be4ee319aad626341251572a5bf4a2addec71779432d9a1381f"},
 ]
 
 [package.dependencies]
 azure-common = ">=1.1,<2.0"
-msrest = ">=0.5.0"
-msrestazure = ">=0.4.32,<2.0.0"
+azure-mgmt-core = ">=1.2.0,<2.0.0"
+msrest = ">=0.6.21"
 
 [[package]]
 name = "azure-mgmt-storage"
@@ -3456,4 +3456,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.11"
-content-hash = "33f67e971d5cf51dedf5707dc04f6136d73c26ce850d81696cff017f0fc22267"
+content-hash = "a381d29379903a3bd29cbf23a20c335d0762857d3c01c24292f995e02dccef99"
