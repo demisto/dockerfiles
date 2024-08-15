@@ -11,4 +11,6 @@ RUN apt-get update \
     build-essential \
     ruby-dev \
     rubygems \
-&& rm -rf /var/lib/apt/lists/*
+&& rm -rf /var/lib/apt/lists/* \
+&& rm ./usr/lib/ruby/gems/2.7.0/specifications/default/bundler-2.1.4.gemspec \
+&& gem install bundler
