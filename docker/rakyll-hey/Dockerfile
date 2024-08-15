@@ -13,4 +13,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 && apt-get purge -y --auto-remove \
   gcc \
   python3-dev \
-&& rm -rf /var/lib/apt/lists/*
+&& rm -rf /var/lib/apt/lists/* \
+&& rm ./usr/lib/ruby/gems/2.7.0/specifications/default/bundler-2.1.4.gemspec \
+&& gem install bundler
