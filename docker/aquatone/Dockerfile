@@ -1,5 +1,5 @@
-# Last modified: 2024-07-11T00:50:18.895800+00:00
-FROM demisto/python3-deb:3.11.9.103065
+# Last modified: 2024-08-15T00:50:18.895800+00:00
+FROM demisto/python3-deb:3.11.9.108277
 
 RUN apt-get update \
 && apt-get install -y --no-install-recommends \
@@ -11,4 +11,6 @@ RUN apt-get update \
     build-essential \
     ruby-dev \
     rubygems \
-&& rm -rf /var/lib/apt/lists/*
+&& rm -rf /var/lib/apt/lists/* \
+&& rm ./usr/lib/ruby/gems/2.7.0/specifications/default/bundler-2.1.4.gemspec \
+&& gem install bundler
