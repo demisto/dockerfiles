@@ -1087,19 +1087,19 @@ msrestazure = ">=0.4.32,<2.0.0"
 
 [[package]]
 name = "azure-mgmt-servicebus"
-version = "0.5.3"
+version = "8.1.0"
 description = "Microsoft Azure Service Bus Management Client Library for Python"
 optional = false
-python-versions = "*"
+python-versions = ">=3.7"
 files = [
-    {file = "azure-mgmt-servicebus-0.5.3.zip", hash = "sha256:7d1e8c3dc05ffdfe496ae643290ce4de93a3bf814ffda69121223e3d7da12408"},
-    {file = "azure_mgmt_servicebus-0.5.3-py2.py3-none-any.whl", hash = "sha256:cbc3fc8d8b8930452cf7d499856313da208eb66f62ade0091aa9bae0db2b1674"},
+    {file = "azure-mgmt-servicebus-8.1.0.zip", hash = "sha256:47c35aae7ede0bb8f9f6d0e3b206e4f651743dc3a03b04a7ce8329dd0bb4ae68"},
+    {file = "azure_mgmt_servicebus-8.1.0-py3-none-any.whl", hash = "sha256:1a0cc09cf3d43a38d2d1b3b1960c050f6eef35411d8e79d074a112e320abafa7"},
 ]
 
 [package.dependencies]
 azure-common = ">=1.1,<2.0"
-msrest = ">=0.5.0"
-msrestazure = ">=0.4.32,<2.0.0"
+azure-mgmt-core = ">=1.3.1,<2.0.0"
+msrest = ">=0.6.21"
 
 [[package]]
 name = "azure-mgmt-sql"
@@ -3456,4 +3456,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.11"
-content-hash = "a381d29379903a3bd29cbf23a20c335d0762857d3c01c24292f995e02dccef99"
+content-hash = "3acfb0b2e76c5923da7bfdbc1f3f0090475433588818a73ff6963efaec7a9e3e"
