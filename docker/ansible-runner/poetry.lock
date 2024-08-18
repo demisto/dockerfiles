@@ -2912,20 +2912,19 @@ files = [
 
 [[package]]
 name = "pyvmomi"
-version = "7.0.3"
+version = "8.0.3.0.1"
 description = "VMware vSphere Python SDK"
 optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,>=2.7.9"
 files = [
-    {file = "pyvmomi-7.0.3.tar.gz", hash = "sha256:2ab52d940061d25307e4e4867ffea6e8ed597e7263025b0abaacc5b1d652da31"},
+    {file = "pyvmomi-8.0.3.0.1.tar.gz", hash = "sha256:db795c960159cfa3c81e6af4cf1f46618e61cf0349db1666de75df98a4f29c69"},
 ]
 
 [package.dependencies]
-requests = ">=2.3.0"
 six = ">=1.7.3"
 
 [package.extras]
-sso = ["lxml", "pyOpenSSL", "pywin32"]
+sso = ["lxml", "pyOpenSSL"]
 
 [[package]]
 name = "pywin32"
@@ -3456,4 +3455,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.11"
-content-hash = "3acfb0b2e76c5923da7bfdbc1f3f0090475433588818a73ff6963efaec7a9e3e"
+content-hash = "8d4a6c7010f42557d5abf779378277bea5e763e37393b4ffe7938cdf84722932"
