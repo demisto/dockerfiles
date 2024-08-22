@@ -9,7 +9,7 @@ RUN apk --update add --no-cache libxslt-dev \
   && rm -f -r /usr/include/python3.11.9 \
   && rm -f -r /usr/bin/python3.11.9 \
   && rm -f -r /usr/lib/python3.11.9 \
-  &&  rm -f -r /usr/lib64/python3.11.9 \
+  && rm -f -r /usr/lib64/python3.11.9 \
   && apt-get update && apt-get install -y --no-install-recommends python3.12 \
   && update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.12 1
 
