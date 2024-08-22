@@ -5,13 +5,13 @@ COPY requirements.txt .
 RUN apk --update add --no-cache libxslt-dev \
   && apk --update add --no-cache --virtual .build-dependencies python3-dev gcc build-base wget git libffi-dev openssl-dev python3-dev libxml2-dev \
   && pip install --no-cache-dir -r requirements.txt \
-  && apk del .build-dependencies
-
-# Replace python version 3.11.9 with 3.12
-RUN apt-get purge -y python3.11.9 \
-&& apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* \
-&& apt-get update && apt-get install -y --no-install-recommends python3.12 \
-&& update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.12 1
+  && apk del .build-dependencies \
+  && rm -f -r /usr/include/python3.11.9 \
+  && rm -f -r /usr/bin/python3.11.9 \
+  && rm -f -r /usr/lib/python3.11.9 \
+  &&  rm -f -r /usr/lib64/python3.11.9 \
+  && apt-get update && apt-get install -y --no-install-recommends python3.12 \
+  && update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.12 1
 
 
 # Handling the issue described here: https://github.com/ecederstrand/exchangelib/issues/608
