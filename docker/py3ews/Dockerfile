@@ -1,18 +1,52 @@
-FROM demisto/crypto:1.0.0.107997
+# Last modified: 2024-08-06T00:14:44.916067+00:00
+FROM python:3.12.5-alpine3.19
+
+# Upgrade all packages to latest
+RUN apk --update --no-cache upgrade
 
 COPY requirements.txt .
+
+COPY localtime /etc/localtime
+
+RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget \
+  && pip install --no-cache-dir -r requirements.txt \
+  && apk del .build-dependencies \
+  && pip install --upgrade setuptools
+
+RUN addgroup -g 4000 demisto \
+  && adduser -u 4000 -G demisto -D demisto -s /bin/sh 
+
+# Handling the issue described here https://knowledgebase.paloaltonetworks.com/KCSArticleDetail?id=kA10g000000POJ0CAO&lang=en_US%E2%80%A9
+# by enabling UnsafeLegacyRenegotiation
+# We add to the openssl_init section after the last element "providers = provider_sect"
+RUN cp /etc/ssl/openssl.cnf /etc/ssl/openssl.cnf.org && \ 
+echo -e 'ssl_conf = ssl_sect\n\
+[ssl_sect]\n\
+system_default = system_default_sect\n\
+\n\
+[system_default_sect]\n\
+Options = UnsafeLegacyRenegotiation\n' > /tmp/ssl.cnf \
+&& sed -i '/providers = provider_sect/r /tmp/ssl.cnf' /etc/ssl/openssl.cnf \
+&& rm /tmp/ssl.cnf \
+&& grep -C 10 'Options = UnsafeLegacyRenegotiation' /etc/ssl/openssl.cnf
+
+
+COPY requirements.txt .
+
+# Crypto  needs the latest pip
+RUN pip3 install --no-cache-dir --upgrade pip
+
+RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git \
+  rust cargo \
+  libffi-dev openssl-dev \
+  && pip install --no-cache-dir -r requirements.txt \
+  && apk del .build-dependencies \
+  && rm -rf /root/.cargo
 
 RUN apk --update add --no-cache libxslt-dev \
   && apk --update add --no-cache --virtual .build-dependencies python3-dev gcc build-base wget git libffi-dev openssl-dev python3-dev libxml2-dev \
   && pip install --no-cache-dir -r requirements.txt \
-  && apk del .build-dependencies \
-  && rm -f -r /usr/include/python3.11.9 \
-  && rm -f -r /usr/bin/python3.11.9 \
-  && rm -f -r /usr/lib/python3.11.9 \
-  && rm -f -r /usr/lib64/python3.11.9 \
-  && apt-get update && apt-get install -y --no-install-recommends python3.12 \
-  && update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.12 1
-
+  && apk del .build-dependencies 
 
 # Handling the issue described here: https://github.com/ecederstrand/exchangelib/issues/608
 # by activating the legacy sect in openssl.cnf (re-enableing md4 to hashlib)
