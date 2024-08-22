@@ -1,9 +1,12 @@
 [[source]]
-name = "pypi"
 url = "https://pypi.org/simple"
 verify_ssl = true
+name = "pypi"
+
+[packages]
+memray = "*"
 
 [dev-packages]
 
-[packages]
-memray = "==1.13.4"
+[requires]
+python_version = "3.9"
