@@ -937,13 +937,13 @@ grpcio-gcp = ["grpcio-gcp (>=0.2.2,<1.0.dev0)"]
 
 [[package]]
 name = "google-api-python-client"
-version = "2.137.0"
+version = "2.141.0"
 description = "Google API Client Library for Python"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "google_api_python_client-2.137.0-py2.py3-none-any.whl", hash = "sha256:a8b5c5724885e5be9f5368739aa0ccf416627da4ebd914b410a090c18f84d692"},
-    {file = "google_api_python_client-2.137.0.tar.gz", hash = "sha256:e739cb74aac8258b1886cb853b0722d47c81fe07ad649d7f2206f06530513c04"},
+    {file = "google_api_python_client-2.141.0-py2.py3-none-any.whl", hash = "sha256:43c05322b91791204465291b3852718fae38d4f84b411d8be847c4f86882652a"},
+    {file = "google_api_python_client-2.141.0.tar.gz", hash = "sha256:0f225b1f45d5a6f8c2a400f48729f5d6da9a81138e81e0478d61fdd8edf6563a"},
 ]
 
 [package.dependencies]
@@ -2020,13 +2020,13 @@ xml = ["lxml (>=4.9.2)"]
 
 [[package]]
 name = "parse-emails"
-version = "0.1.24"
+version = "0.1.27"
 description = "Parses an email message file and extracts the data from it."
 optional = false
 python-versions = "<4.0,>=3.7"
 files = [
-    {file = "parse_emails-0.1.24-py3-none-any.whl", hash = "sha256:572a7ae7e703f9a638cbf7c0b4d84117e6123b16a22e598f0983a6d556f5149d"},
-    {file = "parse_emails-0.1.24.tar.gz", hash = "sha256:499222a25576ec28e2a8bb0c669e696f111cc8e9640a7cd93ee9f634c627fb9a"},
+    {file = "parse_emails-0.1.27-py3-none-any.whl", hash = "sha256:31161f6c32bb6d4d6314c1ce3a3106d274460d7b432b308fe8fe92a7bc06329c"},
+    {file = "parse_emails-0.1.27.tar.gz", hash = "sha256:754483b9c2c6c6778f780383047a5e11ebba8a680b1d3ee2f9de0f259b320591"},
 ]
 
 [package.dependencies]
@@ -2036,9 +2036,10 @@ datetime = "*"
 olefile = "*"
 pip = "*"
 pyopenssl = "*"
+pypandoc = "*"
 pytest = "*"
 python-magic = "*"
-RTFDE = "0.0.2"
+RTFDE = "*"
 
 [[package]]
 name = "pcodedmp"
@@ -2774,6 +2775,17 @@ cryptography = ">=41.0.5,<44"
 [package.extras]
 docs = ["sphinx (!=5.2.0,!=5.2.0.post0,!=7.2.5)", "sphinx-rtd-theme"]
 test = ["pretend", "pytest (>=3.0.1)", "pytest-rerunfailures"]
+
+[[package]]
+name = "pypandoc"
+version = "1.13"
+description = "Thin wrapper for pandoc."
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "pypandoc-1.13-py3-none-any.whl", hash = "sha256:4c7d71bf2f1ed122aac287113b5c4d537a33bbc3c1df5aed11a7d4a7ac074681"},
+    {file = "pypandoc-1.13.tar.gz", hash = "sha256:31652073c7960c2b03570bd1e94f602ca9bc3e70099df5ead4cea98ff5151c1e"},
+]
 
 [[package]]
 name = "pyparsing"
