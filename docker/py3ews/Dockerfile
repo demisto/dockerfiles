@@ -30,9 +30,6 @@ Options = UnsafeLegacyRenegotiation\n' > /tmp/ssl.cnf \
 && rm /tmp/ssl.cnf \
 && grep -C 10 'Options = UnsafeLegacyRenegotiation' /etc/ssl/openssl.cnf
 
-
-COPY requirements.txt .
-
 # Crypto  needs the latest pip
 RUN pip3 install --no-cache-dir --upgrade pip
 
@@ -46,7 +43,7 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
 RUN apk --update add --no-cache libxslt-dev \
   && apk --update add --no-cache --virtual .build-dependencies python3-dev gcc build-base wget git libffi-dev openssl-dev python3-dev libxml2-dev \
   && pip install --no-cache-dir -r requirements.txt \
-  && apk del .build-dependencies 
+  && apk del .build-dependencies
 
 # Handling the issue described here: https://github.com/ecederstrand/exchangelib/issues/608
 # by activating the legacy sect in openssl.cnf (re-enableing md4 to hashlib)
