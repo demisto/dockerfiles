@@ -307,13 +307,13 @@ files = [
 
 [[package]]
 name = "extract-msg"
-version = "0.48.5"
+version = "0.49.0"
 description = "Extracts emails and attachments saved in Microsoft Outlook's .msg files"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "extract_msg-0.48.5-py3-none-any.whl", hash = "sha256:36f89ee19521e1bc0f3f0f9628423f0285fde1180b62cc9e61f20d5b22e780f1"},
-    {file = "extract_msg-0.48.5.tar.gz", hash = "sha256:16f097a6455d9d038d67d7a063bf391b33d7d1eb9684a2d04b56b13fdf3053ac"},
+    {file = "extract_msg-0.49.0-py3-none-any.whl", hash = "sha256:6a1756164ef2d0c230bce1966d52155da8bd4bec9a6a1c3166cbdff8ffd9e0ba"},
+    {file = "extract_msg-0.49.0.tar.gz", hash = "sha256:cc700cdcc0cb6fcdbfa3b9e477201958cc28c584716d5c45fdd47261c1f2dfcc"},
 ]
 
 [package.dependencies]
@@ -428,13 +428,13 @@ win-unicode-console = {version = "*", markers = "platform_system == \"Windows\" 
 
 [[package]]
 name = "publicsuffixlist"
-version = "1.0.2.20240727"
+version = "1.0.2.20240827"
 description = "publicsuffixlist implement"
 optional = false
 python-versions = ">=3.5"
 files = [
-    {file = "publicsuffixlist-1.0.2.20240727-py2.py3-none-any.whl", hash = "sha256:731c7112cc1a0d92ebd5208af983adee7a3696948147c5ff1710a51530df7305"},
-    {file = "publicsuffixlist-1.0.2.20240727.tar.gz", hash = "sha256:6f23eae56171b98e97dc59344cc0700c96869f8adf57674fc6e5386716225c12"},
+    {file = "publicsuffixlist-1.0.2.20240827-py2.py3-none-any.whl", hash = "sha256:54db24ac936d9cc7fe52eab5de8acf6dc263d3088313461ba640bdfabf759801"},
+    {file = "publicsuffixlist-1.0.2.20240827.tar.gz", hash = "sha256:68f5aa02abe59a192f2b13d41f587eafe14b16811fc563549c8dacc2a9264954"},
 ]
 
 [package.extras]
@@ -454,28 +454,28 @@ files = [
 
 [[package]]
 name = "pymisp"
-version = "2.4.195"
+version = "2.4.197"
 description = "Python API for MISP."
 optional = false
 python-versions = "<4.0,>=3.8"
 files = [
-    {file = "pymisp-2.4.195-py3-none-any.whl", hash = "sha256:5603b69f253a43e964e28be20ac90430ec014ae3e10b4335fec14c88b0b10dca"},
-    {file = "pymisp-2.4.195.tar.gz", hash = "sha256:3200bc0934fbd51c8146eae3e5174720cd1987307c1a561312b29f96bb52fe51"},
+    {file = "pymisp-2.4.197-py3-none-any.whl", hash = "sha256:6e9078dbe4066701318ff8d5de2723db33bfac79677e16b274c517f0adec74a2"},
+    {file = "pymisp-2.4.197.tar.gz", hash = "sha256:840881779d1762803e9329ae5129a88abb0e6110afb43c9e3e6e3877e5931a6c"},
 ]
 
 [package.dependencies]
 deprecated = ">=1.2.14,<2.0.0"
-extract_msg = {version = ">=0.48.5,<0.49.0", optional = true, markers = "extra == \"email\""}
+extract_msg = {version = ">=0.49,<0.50", optional = true, markers = "extra == \"email\""}
 oletools = {version = ">=0.60.1,<0.61.0", optional = true, markers = "extra == \"email\""}
-publicsuffixlist = ">=1.0.2.20240726,<2.0.0.0"
+publicsuffixlist = ">=1.0.2.20240827,<2.0.0.0"
 python-dateutil = ">=2.9.0.post0,<3.0.0"
 requests = ">=2.32.3,<3.0.0"
 RTFDE = {version = ">=0.1.1,<0.2.0", optional = true, markers = "extra == \"email\""}
 
 [package.extras]
 brotli = ["urllib3[brotli]"]
-docs = ["Sphinx (>=7.4.7,<8.0.0)", "docutils (>=0.21.1,<0.22.0)", "recommonmark (>=0.7.1,<0.8.0)", "sphinx-autodoc-typehints (>=2.2.3,<3.0.0)"]
-email = ["RTFDE (>=0.1.1,<0.2.0)", "extract_msg (>=0.48.5,<0.49.0)", "oletools (>=0.60.1,<0.61.0)"]
+docs = ["Sphinx (>=7.2,<8.0)", "Sphinx (>=8,<9)", "docutils (>=0.21.1,<0.22.0)", "recommonmark (>=0.7.1,<0.8.0)", "sphinx-autodoc-typehints (>=2.3.0,<3.0.0)"]
+email = ["RTFDE (>=0.1.1,<0.2.0)", "extract_msg (>=0.49,<0.50)", "oletools (>=0.60.1,<0.61.0)"]
 fileobjects = ["lief (>=0.15.0,<0.16.0)", "pydeep2 (>=0.5.1,<0.6.0)", "python-magic (>=0.4.27,<0.5.0)"]
 openioc = ["beautifulsoup4 (>=4.12.3,<5.0.0)"]
 pdfexport = ["reportlab (>=4.2.2,<5.0.0)"]
