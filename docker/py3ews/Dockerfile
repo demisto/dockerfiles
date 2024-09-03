@@ -6,7 +6,6 @@ RUN apk --update add --no-cache libxslt-dev \
   && apk --update add --no-cache --virtual .build-dependencies python3-dev gcc build-base wget git libffi-dev openssl-dev python3-dev libxml2-dev \
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies
-
 # Handling the issue described here: https://github.com/ecederstrand/exchangelib/issues/608
 # by activating the legacy sect in openssl.cnf (re-enableing md4 to hashlib)
 RUN cp /etc/ssl/openssl.cnf /etc/ssl/openssl.cnf.org \

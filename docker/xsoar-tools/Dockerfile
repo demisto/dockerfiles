@@ -1,5 +1,5 @@
 
-FROM demisto/python3:3.11.9.103066
+FROM demisto/python3:3.11.9.107902
 ENV DEMISTO_SDK_IGNORE_CONTENT_WARNING true
 COPY requirements.txt .
 
@@ -15,6 +15,6 @@ ADD https://raw.githubusercontent.com/demisto/content/master/tox.ini /home/demis
 ADD https://raw.githubusercontent.com/demisto/content/master/Tests/demistomock/demistomock.py /home/demisto
 ADD https://raw.githubusercontent.com/demisto/content/master/Tests/demistomock/demistomock.ps1 /home/demisto
 ADD https://raw.githubusercontent.com/demisto/content/master/Tests/scripts/dev_envs/pytest/conftest.py /home/demisto
-ADD https://raw.githubusercontent.com/demisto/content/master/Tests/Marketplace/approved_usecases.json /home/demisto
-ADD https://raw.githubusercontent.com/demisto/content/master/Tests/Marketplace/approved_tags.json /home/demisto
-ADD https://raw.githubusercontent.com/demisto/content/master/Tests/Marketplace/approved_categories.json /home/demisto
+ADD https://raw.githubusercontent.com/demisto/content/master/Config/approved_usecases.json /home/demisto
+ADD https://raw.githubusercontent.com/demisto/content/master/Config/approved_tags.json /home/demisto
+ADD https://raw.githubusercontent.com/demisto/content/master/Config/approved_categories.json /home/demisto
