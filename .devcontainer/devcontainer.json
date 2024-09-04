@@ -1,5 +1,11 @@
 {
-  "image": "3.11-bookworm",
-  "features": {
-  }
+  "name": "Python 3.11",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "args": { "VARIANT": "3.11" }
+  },
+  "settings": {
+    "terminal.integrated.shell.linux": "/bin/bash"
+  },
+  "extensions": ["ms-python.python"]
 }
