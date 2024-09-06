@@ -1,5 +1,5 @@
 
-FROM demisto/yarapy:1.0.0.109779
+FROM demisto/yarapy:1.0.0.109973
 
 COPY requirements.txt .
 
