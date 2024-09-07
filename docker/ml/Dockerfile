@@ -1,4 +1,4 @@
-FROM alpine:3.17.9 as files-src
+FROM alpine:3.17.10 as files-src
 RUN mkdir /ml
 COPY ./encrypted_model.b /ml/encrypted_model.b
 
