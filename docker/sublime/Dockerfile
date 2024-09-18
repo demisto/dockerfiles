@@ -1,5 +1,5 @@
 
-FROM demisto/python3:3.11.9.107902
+FROM demisto/python3:3.11.10.111526
 
 # Upgrade all packages to latest
 RUN apk --update --no-cache upgrade

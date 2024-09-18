@@ -1,5 +1,5 @@
-# Last modified: 2024-08-08T16:38:05.032308+00:00
-FROM demisto/python3:3.11.9.107902
+# Last modified: 2024-09-15T08:37:41.206883+00:00
+FROM demisto/python3:3.11.10.111526
 
 RUN mkdir /opt/scripts
 
