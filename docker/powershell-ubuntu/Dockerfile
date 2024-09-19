@@ -1,12 +1,12 @@
-# Last modified: 2023-11-17T00:12:42.649505+00:00
-FROM mcr.microsoft.com/powershell:7.4-ubuntu-20.04
+# Last modified: 2024-09-18T00:15:23.740254+00:00
+FROM mcr.microsoft.com/powershell:7.4-ubuntu-22.04
 
 # For the `no supported WSMan client library was found` error when using Ubuntu 20+
 RUN apt-get update -y
 RUN sh -c "yes | pwsh -Command 'Install-Module -Name PSWSMan'"
 RUN pwsh -Command 'Install-WSMan'
 
-RUN apt update && apt install netbase -y
+RUN apt update && apt install netbase tzdata -y
 # Upgrade all packages to latest
 RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 && rm -rf /var/lib/apt/lists/*
