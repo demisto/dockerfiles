@@ -1,4 +1,9 @@
 
-FROM demisto/slackv3:1.0.0.97264
+FROM demisto/python3:3.11.10.111526
 
 COPY requirements.txt .
+
+RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base libffi-dev wget git \
+  && pip install --no-cache-dir -r requirements.txt \
+  &&   && pip install slack-sdk==3.29.0 \
+  && apk del .build-dependencies
