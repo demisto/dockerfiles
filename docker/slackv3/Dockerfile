@@ -5,5 +5,5 @@ COPY requirements.txt .
 
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base libffi-dev wget git \
   && pip install --no-cache-dir -r requirements.txt \
-  &&   && pip install slack-sdk==3.29.0 \
+  && pip install slack-sdk==3.29.0 \
   && apk del .build-dependencies
