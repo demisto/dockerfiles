@@ -1,5 +1,5 @@
 
-FROM demisto/python3:3.11.10.111526
+FROM demisto/slackv3:1.0.0.97264
 
 COPY requirements.txt .
 
