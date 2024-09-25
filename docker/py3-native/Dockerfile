@@ -1,5 +1,3 @@
-# Last modified: 2024-09-25T00:16:59.192462+00:00
-
 FROM demisto/py3-tools-ubi:1.0.0.112540
 
 
