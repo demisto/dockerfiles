@@ -865,19 +865,19 @@ msrestazure = ">=0.4.32,<2.0.0"
 
 [[package]]
 name = "azure-mgmt-managedservices"
-version = "1.0.0"
+version = "6.0.0"
 description = "Microsoft Azure Managed Services Client Library for Python"
 optional = false
 python-versions = "*"
 files = [
-    {file = "azure-mgmt-managedservices-1.0.0.zip", hash = "sha256:fed8399fc6773aada37c1d0496a46f59410d77c9494d0ca5967c531c3376ad19"},
-    {file = "azure_mgmt_managedservices-1.0.0-py2.py3-none-any.whl", hash = "sha256:cc05519a528ad6c1fe87c18da34c6fac62f0a097ee6e73630826fdc598bce869"},
+    {file = "azure-mgmt-managedservices-6.0.0.zip", hash = "sha256:ec0cb3858bcf8edf5eee0eddee81560424eb84352e0df082ddc94eb99badfd5e"},
+    {file = "azure_mgmt_managedservices-6.0.0-py2.py3-none-any.whl", hash = "sha256:78db45fc282d0e1973cc1a08d42a89b53b6084af45c6b7cac2aee57a469ee7b6"},
 ]
 
 [package.dependencies]
 azure-common = ">=1.1,<2.0"
-msrest = ">=0.5.0"
-msrestazure = ">=0.4.32,<2.0.0"
+azure-mgmt-core = ">=1.2.0,<2.0.0"
+msrest = ">=0.6.21"
 
 [[package]]
 name = "azure-mgmt-managementgroups"
@@ -3455,4 +3455,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.11"
-content-hash = "b093f162fe68610f7663f7b2fb365a4693281da3fbb1f5b68751cd37160c6e7d"
+content-hash = "bad86afb7b7f478ca93fc88e9c3e6a555ff50381c9d2f2231537f83f97cb669f"
