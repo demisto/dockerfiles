@@ -1,4 +1,4 @@
-FROM demisto/python3-9-deb:3.9.20.111529
+FROM demisto/python3-9-deb:3.9.20.112750
 
 RUN mkdir /model
 COPY ./model_docker.pkl /model/model_docker.pkl
