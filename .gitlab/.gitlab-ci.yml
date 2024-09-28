@@ -1,8 +1,7 @@
 variables:
-  GH_BRANCH: cont-stat-failed-packs
-  GH_COMMIT: $CI_COMMIT_SHA
-trigger_job:
-  trigger:
-    project: ${CI_PROJECT_NAMESPACE}/dockerfiles-cicd
-    strategy: depend
-  ref: $GH_BRANCH
+  CURRENT_BRANCH_NAME: cont-stat-failed-packs
+
+include:
+  - file: "/.gitlab-ci.yml"
+    ref: circle-deprecation
+    project: "${CI_PROJECT_NAMESPACE}/dockerfiles-cicd"
