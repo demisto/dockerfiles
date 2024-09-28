@@ -1,8 +1,8 @@
 variables:
-  GH_BRANCH: $CI_COMMIT_BRANCH
+  GH_BRANCH: cont-stat-failed-packs
   GH_COMMIT: $CI_COMMIT_SHA
 trigger_job:
   trigger:
-    strategy: depend
     project: ${CI_PROJECT_NAMESPACE}/dockerfiles-cicd
-
+    strategy: depend
+  ref: $GH_BRANCH
