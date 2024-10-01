@@ -1,4 +1,4 @@
-FROM demisto/python3-deb:3.11.10.112749
+FROM demisto/python3-deb:3.11.10.112962
 RUN apt-get update && apt-get upgrade -y && apt-get -t bullseye-backports install  \
     gcc g++ wget git pkg-config \
     make autoconf automake libtool libpng-dev  \
