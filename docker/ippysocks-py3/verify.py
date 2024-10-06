@@ -1,3 +1,3 @@
 import whois
-import dnspython
+import dns
 print('ippysocks-py3 is good!!!')
