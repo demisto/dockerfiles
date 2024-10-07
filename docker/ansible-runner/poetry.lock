@@ -421,13 +421,13 @@ tests-no-zope = ["attrs[tests-mypy]", "cloudpickle", "hypothesis", "pympler", "p
 
 [[package]]
 name = "azure-cli-core"
-version = "2.61.0"
+version = "2.64.0"
 description = "Microsoft Azure Command-Line Tools Core Module"
 optional = false
 python-versions = ">=3.8.0"
 files = [
-    {file = "azure_cli_core-2.61.0-py3-none-any.whl", hash = "sha256:a6e9fb1eb8dc56e5cde46a810de5cbe62c9bb015a1a7eb37e1143a8bcfe90ae7"},
-    {file = "azure_cli_core-2.61.0.tar.gz", hash = "sha256:faf3b771a46fec387783acacf95f44964d6a798119a45e5e2250cce5f9fc088a"},
+    {file = "azure_cli_core-2.64.0-py3-none-any.whl", hash = "sha256:82ead13bb916df364559160889161621f8c28f3d5ded3352b126807c10c9a13d"},
+    {file = "azure_cli_core-2.64.0.tar.gz", hash = "sha256:df449beb1604ef50aaadb509ae8fbbc44e5b92a46e358faec2ce0db6f0e19a4f"},
 ]
 
 [package.dependencies]
@@ -439,13 +439,13 @@ distro = {version = "*", markers = "sys_platform == \"linux\""}
 humanfriendly = ">=10.0,<11.0"
 jmespath = "*"
 knack = ">=0.11.0,<0.12.0"
-msal = {version = "1.28.0", extras = ["broker"]}
-msal-extensions = "1.2.0b1"
+msal = {version = "1.30.0", extras = ["broker"]}
+msal-extensions = "1.2.0"
 msrestazure = ">=0.6.4,<0.7.0"
 packaging = ">=20.9"
 paramiko = ">=2.0.8,<4.0.0"
 pkginfo = ">=1.5.0.1"
-psutil = {version = ">=5.9,<6.0", markers = "sys_platform != \"cygwin\""}
+psutil = {version = ">=5.9", markers = "sys_platform != \"cygwin\""}
 PyJWT = ">=2.1.0"
 pyopenssl = ">=17.1.0"
 requests = {version = "*", extras = ["socks"]}
@@ -2108,37 +2108,37 @@ python-dateutil = ">=2.8.2"
 
 [[package]]
 name = "msal"
-version = "1.28.0"
+version = "1.30.0"
 description = "The Microsoft Authentication Library (MSAL) for Python library enables your app to access the Microsoft Cloud by supporting authentication of users with Microsoft Azure Active Directory accounts (AAD) and Microsoft Accounts (MSA) using industry standard OAuth2 and OpenID Connect."
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "msal-1.28.0-py3-none-any.whl", hash = "sha256:3064f80221a21cd535ad8c3fafbb3a3582cd9c7e9af0bb789ae14f726a0ca99b"},
-    {file = "msal-1.28.0.tar.gz", hash = "sha256:80bbabe34567cb734efd2ec1869b2d98195c927455369d8077b3c542088c5c9d"},
+    {file = "msal-1.30.0-py3-none-any.whl", hash = "sha256:423872177410cb61683566dc3932db7a76f661a5d2f6f52f02a047f101e1c1de"},
+    {file = "msal-1.30.0.tar.gz", hash = "sha256:b4bf00850092e465157d814efa24a18f788284c9a479491024d62903085ea2fb"},
 ]
 
 [package.dependencies]
-cryptography = ">=0.6,<45"
+cryptography = ">=2.5,<45"
 PyJWT = {version = ">=1.0.0,<3", extras = ["crypto"]}
-pymsalruntime = {version = ">=0.13.2,<0.15", optional = true, markers = "python_version >= \"3.6\" and platform_system == \"Windows\" and extra == \"broker\""}
+pymsalruntime = {version = ">=0.13.2,<0.17", optional = true, markers = "python_version >= \"3.6\" and platform_system == \"Windows\" and extra == \"broker\""}
 requests = ">=2.0.0,<3"
 
 [package.extras]
-broker = ["pymsalruntime (>=0.13.2,<0.15)"]
+broker = ["pymsalruntime (>=0.13.2,<0.17)"]
 
 [[package]]
 name = "msal-extensions"
-version = "1.2.0b1"
+version = "1.2.0"
 description = "Microsoft Authentication Library extensions (MSAL EX) provides a persistence API that can save your data on disk, encrypted on Windows, macOS and Linux. Concurrent data access will be coordinated by a file lock mechanism."
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "msal_extensions-1.2.0b1-py3-none-any.whl", hash = "sha256:217f391bb549de11b19abe8029a8375fe3ca0556aa8cce004b2083f00a569b71"},
-    {file = "msal_extensions-1.2.0b1.tar.gz", hash = "sha256:3658b3814cd6a7759e83cb0ec145f30330ee249a92444adaf9aa4eb4f5bbcbbc"},
+    {file = "msal_extensions-1.2.0-py3-none-any.whl", hash = "sha256:cf5ba83a2113fa6dc011a254a72f1c223c88d7dfad74cc30617c4679a417704d"},
+    {file = "msal_extensions-1.2.0.tar.gz", hash = "sha256:6f41b320bfd2933d631a215c91ca0dd3e67d84bd1a2f50ce917d5874ec646bef"},
 ]
 
 [package.dependencies]
-msal = ">=1.27,<1.29"
+msal = ">=1.29,<2"
 portalocker = ">=1.4,<3"
 
 [[package]]
@@ -3456,4 +3456,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.11"
-content-hash = "2446f718b370f013767559e0fa3af68259916359b40471c109c5b7f56c4eb933"
+content-hash = "8cc5629acd3d5230868de2fe7925dfa230c1f0ee62a9aa8f1f3befb51abed305"
