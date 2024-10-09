@@ -1,6 +1,5 @@
 # Cortex XSOAR Dockerfiles and Image Build Management
 
-[![CircleCI](https://circleci.com/gh/demisto/dockerfiles.svg?style=svg)](https://circleci.com/gh/demisto/dockerfiles)
 
 This repository's `master` branch tracks images pushed to [the official Demisto Docker Hub organization](https://hub.docker.com/u/demisto/). Other branches` images are pushed to [devdemisto](https://hub.docker.com/u/devdemisto).
 
