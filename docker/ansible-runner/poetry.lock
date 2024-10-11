@@ -992,19 +992,20 @@ msrestazure = ">=0.4.32,<2.0.0"
 
 [[package]]
 name = "azure-mgmt-rdbms"
-version = "10.2.0b12"
+version = "10.2.0b18"
 description = "Microsoft Azure RDBMS Management Client Library for Python"
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 files = [
-    {file = "azure-mgmt-rdbms-10.2.0b12.tar.gz", hash = "sha256:59d4e6d18c4c5cd1c6712183dfc619d5898968c8df2c90bc38899779d7310de1"},
-    {file = "azure_mgmt_rdbms-10.2.0b12-py3-none-any.whl", hash = "sha256:f36bb145efe61b30d0b50689f451bfa4d82f5b9136de95a7bc6d2f05babaad24"},
+    {file = "azure_mgmt_rdbms-10.2.0b18-py3-none-any.whl", hash = "sha256:a44c30a13c57a92ce619916af3846dc75872f5ee4d226f8d13efca2a7a4a583f"},
+    {file = "azure_mgmt_rdbms-10.2.0b18.tar.gz", hash = "sha256:10703b96a7217e3d7d9303354d9ffb98f7cf72176b8f031fa74075c61f7fe397"},
 ]
 
 [package.dependencies]
-azure-common = ">=1.1,<2.0"
-azure-mgmt-core = ">=1.3.2,<2.0.0"
-isodate = ">=0.6.1,<1.0.0"
+azure-common = ">=1.1"
+azure-mgmt-core = ">=1.3.2"
+isodate = ">=0.6.1"
+typing-extensions = ">=4.6.0"
 
 [[package]]
 name = "azure-mgmt-recoveryservices"
@@ -3456,4 +3457,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.11"
-content-hash = "8cc5629acd3d5230868de2fe7925dfa230c1f0ee62a9aa8f1f3befb51abed305"
+content-hash = "3fd8e70bcbf84338b86bda683b88f3bffa53127cd0f7b894ad3b679d8c084b72"
