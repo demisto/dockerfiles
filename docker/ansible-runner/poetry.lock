@@ -882,19 +882,19 @@ msrestazure = ">=0.4.32,<2.0.0"
 
 [[package]]
 name = "azure-mgmt-managementgroups"
-version = "0.2.0"
+version = "1.0.0"
 description = "Microsoft Azure Management Groups Client Library for Python"
 optional = false
 python-versions = "*"
 files = [
-    {file = "azure-mgmt-managementgroups-0.2.0.zip", hash = "sha256:3d5237947458dc94b4a392141174b1c1258d26611241ee104e9006d1d798f682"},
-    {file = "azure_mgmt_managementgroups-0.2.0-py2.py3-none-any.whl", hash = "sha256:8194ee6274df865eccd1ed9d385ea625aeba9b8058b9e4fdf547f5207271a775"},
+    {file = "azure-mgmt-managementgroups-1.0.0.zip", hash = "sha256:bab9bd532a1c34557f5b0ab9950e431e3f00bb96e8a3ce66df0f6ce2ae19cd73"},
+    {file = "azure_mgmt_managementgroups-1.0.0-py2.py3-none-any.whl", hash = "sha256:f569b942cfdabb4adf184aedd689dec98373fb173f5aa81131328159bfb4e629"},
 ]
 
 [package.dependencies]
 azure-common = ">=1.1,<2.0"
-msrest = ">=0.5.0"
-msrestazure = ">=0.4.32,<2.0.0"
+azure-mgmt-core = ">=1.2.0,<2.0.0"
+msrest = ">=0.6.21"
 
 [[package]]
 name = "azure-mgmt-marketplaceordering"
@@ -3456,4 +3456,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.11"
-content-hash = "8cc5629acd3d5230868de2fe7925dfa230c1f0ee62a9aa8f1f3befb51abed305"
+content-hash = "2363fb1d4c68e3cc87b55fcfd2943c0c4d5a5b7738421cd936c5c1d06333410c"
