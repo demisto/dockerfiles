@@ -5,7 +5,7 @@ name = "pypi"
 
 [packages]
 demisto-py = "*"
-demisto-sdk = "==1.31.11" # this should only be modified manually. only specify a version, do not use *.
+demisto-sdk = {git = "https://github.com/demisto/demisto-sdk.git", rev = "support-validate-content"}
 
 [dev-packages]
 
