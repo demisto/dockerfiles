@@ -76,7 +76,7 @@ RUN dnf update --nodocs -y  \
 # lines 8-10 is the configuration for sklearn
 # lines 12-14 - ssl fixes
 RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE --nobest python3-devel gcc gcc-c++ make wget git poppler poppler-utils \
-        pip install pyOpenSSL==3.3.1 \
+        && pip install pyOpenSSL==3.3.1 \
         rust cargo libxml2-devel libxslt-devel krb5-devel \
         libffi-devel openssl-devel libffi libSM mesa-libGL \
         openssh ca-certificates openssl less rsync libpng-devel freetype-devel gcc-gfortran openblas unzip libstdc++ \
