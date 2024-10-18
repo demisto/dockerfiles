@@ -96,5 +96,7 @@ RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE --nobest python3-devel g
         && rm -rf /var/cache/dnf /root/.cargo \
         && pip uninstall -y pcodedmp
 
+RUN yum update -y && yum install -y python3-openssl
+
 
 ENV NLTK_DATA='/etc/ml/nltk_data'
