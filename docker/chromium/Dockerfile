@@ -1,6 +1,6 @@
 
-# Last modified: 2024-10-16T16:38:57.635423+00:00
-FROM demisto/python3-deb:3.11.10.113523
+# Last modified: 2024-10-19T00:49:14.691904+00:00
+FROM demisto/python3-deb:3.11.10.113802
 
 COPY requirements.txt .
 
