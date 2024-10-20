@@ -28,6 +28,7 @@ jobs:
       - store_artifacts:
           path: artifacts
           destination: docker_images
+    executor: docker/default
 version: 2.1
 workflows:
   version: 2
