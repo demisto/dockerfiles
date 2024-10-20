@@ -34,6 +34,7 @@ RUN apt-get update && apt-get install -y -f --no-install-recommends --allow-down
 && pip install --no-cache-dir -r requirements.txt \
 && apt-get purge -y --auto-remove \
   gcc \
+  libcom-err2 \
   python3-dev \
   build-essential \
   git \
