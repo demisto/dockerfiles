@@ -638,6 +638,17 @@ files = [
 requests = ">=2.29.0,<3"
 
 [[package]]
+name = "ipaddress"
+version = "1.0.23"
+description = "IPv4/IPv6 manipulation library"
+optional = false
+python-versions = "*"
+files = [
+    {file = "ipaddress-1.0.23-py2.py3-none-any.whl", hash = "sha256:6e0f4a39e66cb5bb9a137b00276a2eff74f93b71dcbdad6f10ff7df9d3557fcc"},
+    {file = "ipaddress-1.0.23.tar.gz", hash = "sha256:b7f8e0369580bb4a24d5ba1d7cc29660a4a6987763faf1d8a8046830e020e7e2"},
+]
+
+[[package]]
 name = "jmespath"
 version = "1.0.1"
 description = "JSON Matching Expressions"
@@ -688,18 +699,22 @@ pyasn1 = ">=0.4.6"
 
 [[package]]
 name = "mail-parser"
-version = "3.15.0"
-description = "Wrapper for email standard library"
+version = "4.0.0"
+description = "Improved wrapper for email standard library"
 optional = false
-python-versions = "*"
+python-versions = ">=3.7"
 files = [
-    {file = "mail-parser-3.15.0.tar.gz", hash = "sha256:d66638acf0633dfd8a718e1e3646a6d58f8e9d75080c94638c7b267b4b0d6c86"},
-    {file = "mail_parser-3.15.0-py3-none-any.whl", hash = "sha256:b5d3cd8752cd7c0352c4520388b00881bca24e5ce613d667d8ff8a3ce4994f51"},
+    {file = "mail_parser-4.0.0-py3-none-any.whl", hash = "sha256:fa832528da1cb8b30c7561fec16f51a25699cdb0c19853cc86a4e94738f24738"},
+    {file = "mail_parser-4.0.0.tar.gz", hash = "sha256:5702357f799c7b99f0a3d6b6ec9e8a3fafe33e4264880c5dc497a4787aeb3416"},
 ]
 
 [package.dependencies]
-simplejson = ">=3.17.0"
-six = ">=1.14.0"
+ipaddress = "*"
+six = "*"
+
+[package.extras]
+dev = ["build", "pre-commit", "twine", "wheel"]
+test = ["coverage", "pytest", "pytest-cov", "pytest-mock", "pytest-ordering"]
 
 [[package]]
 name = "markdownify"
