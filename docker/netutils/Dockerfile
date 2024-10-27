@@ -11,4 +11,4 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies
 
-RUN apk --update add --no-cache curl bind-tools openssl iputils nmap nmap-scripts
+RUN apk --update add --no-cache curl bind-tools openssl iputils nmap nmap-scripts tcpdump
