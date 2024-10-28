@@ -21,6 +21,18 @@ python-dateutil = "*"
 gitpython = "^3.1.43" # import git
 python-gitlab = "^3.0.0" # import gitlab
 toml = "*"
+demisto-sdk = "*"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"
+
+[tool.pytest.ini_options]
+addopts = """
+    --disable-warnings
+    --color=yes
+    -v
+    --ignore='Tests/'
+    --ignore='Utils/'
+    --junitxml=report.xml
+    """
+python_files = "test_*.py *_test.py"
