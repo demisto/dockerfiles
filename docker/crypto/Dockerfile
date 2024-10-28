@@ -4,7 +4,7 @@
 FROM demisto/python3:3.11.10.111526
 
 COPY requirements.txt .
-
+RUN touch /tmp/logfile.log && chown demisto /tmp/logfile.log
 # Crypto  needs the latest pip
 RUN pip3 install --no-cache-dir --upgrade pip
 
