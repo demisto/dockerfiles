@@ -2,7 +2,7 @@
 FROM demisto/python3-deb:3.11.10.114471
 
 COPY requirements.txt .
-
+ENV SSLKEYLOGFILE=/tmp/secrets.log
 RUN apt-get update && apt-get install -y --no-install-recommends \
   gcc \
   python3-dev \
