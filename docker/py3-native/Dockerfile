@@ -34,10 +34,8 @@ RUN dnf update --nodocs -y  \
     && ./download_chromedriver.sh \
     && touch /var/chrome_headless.log \
     && chmod 777 /var/chrome_headless.log \
-    && touch /var/chrome_instances.tsv \
-    && chmod 777 /var/chrome_instances.tsv \
-    && touch /var/rasterizations_counter.txt \
-    && chmod 777 /var/rasterizations_counter.txt \
+    && touch /var/chrome_instances.json \
+    && chmod 777 /var/chrome_instances.json \
     && unzip chromedriver-linux64.zip \
     && mv chromedriver-linux64/chromedriver /usr/bin/chromedriver \
     && rm -rf chromedriver-linux64.zip \
