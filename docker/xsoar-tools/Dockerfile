@@ -15,8 +15,6 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies
 
-
-RUN mkdir -p ${CONTENT_DIR}
 ADD https://raw.githubusercontent.com/demisto/content/master/Packs/Base/Scripts/CommonServerPython/CommonServerPython.py ${CONTENT_DIR}
 ADD https://raw.githubusercontent.com/demisto/content/master/Packs/Base/Scripts/CommonServerPowerShell/CommonServerPowerShell.ps1 ${CONTENT_DIR}
 ADD https://raw.githubusercontent.com/demisto/content/master/tox.ini ${CONTENT_DIR}
