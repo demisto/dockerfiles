@@ -1,7 +1,9 @@
+
 FROM demisto/python3:3.11.10.110725
 
 ARG CONTENT_DIR=/home/demisto/content
 ENV CONTENT_DIR=${CONTENT_DIR}
+
 ENV DEMISTO_SDK_IGNORE_CONTENT_WARNING true
 
 COPY requirements.txt .
