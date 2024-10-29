@@ -1,7 +1,9 @@
-ARG CONTENT_DIR=/home/demisto/content
-
 FROM demisto/python3:3.11.10.110725
+
+ARG CONTENT_DIR=/home/demisto/content
+ENV CONTENT_DIR=${CONTENT_DIR}
 ENV DEMISTO_SDK_IGNORE_CONTENT_WARNING true
+
 COPY requirements.txt .
 
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base libffi-dev openssl-dev \
@@ -11,7 +13,7 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies
 
-  
+
 RUN mkdir -p ${CONTENT_DIR}
 ADD https://raw.githubusercontent.com/demisto/content/master/Packs/Base/Scripts/CommonServerPython/CommonServerPython.py ${CONTENT_DIR}
 ADD https://raw.githubusercontent.com/demisto/content/master/Packs/Base/Scripts/CommonServerPowerShell/CommonServerPowerShell.ps1 ${CONTENT_DIR}
