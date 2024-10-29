@@ -5,7 +5,7 @@ COPY requirements.txt .
 ENV SSLKEYLOGFILE=/tmp/sslkey.log
 RUN apt-get update && apt-get install -y --no-install-recommends \
   gcc \
-  python3-dev
+  python3-dev \
   tshark \
 && pip install --no-cache-dir -r requirements.txt \
 && apt-get purge -y --auto-remove \
