@@ -18,5 +18,8 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
 RUN mkdir /ml
 RUN python -c "import nltk; nltk.download('wordnet', download_dir='/ml/nltk_data'); nltk.download('stopwords', download_dir='/ml/nltk_data'); nltk.download('punkt', download_dir='/ml/nltk_data')"
 
+# Temporry workaround for issue: https://github.com/numpy/numpy/issues/27605
+ENV OMP_NUM_THREADS=4
+
 ENV NLTK_DATA='/ml/nltk_data'
 RUN chown -R demisto:demisto /ml && chmod -R 775 /ml
