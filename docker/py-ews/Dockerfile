@@ -1,5 +1,5 @@
 
-FROM demisto/python3-deb:3.11.10.111527
+FROM demisto/python3-deb:3.11.10.114849
 
 # END Docker file from https://raw.githubusercontent.com/docker-library/python/331890ef059fae05f84c652520b78c340526dc71/3.10/bullseye/Dockerfile
 
@@ -18,7 +18,7 @@ COPY requirements.txt .
 #Install tools for building binary deps (will be reomved later on)
 RUN apt-get update && apt-get install -y -f --no-install-recommends --allow-downgrades \
     gcc \
-    libcom-err2=1.46.2-2 \
+    libcom-err2=1.46.2-2+deb11u1 \
     python3-dev \
     build-essential \
     wget \
