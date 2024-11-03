@@ -1,6 +1,6 @@
 
 
-FROM demisto/python3-deb:3.11.10.114471
+FROM demisto/python3-deb:3.11.10.114849
 
 COPY requirements.txt .
 
