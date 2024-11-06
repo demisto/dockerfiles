@@ -8,6 +8,8 @@ COPY requirements.txt .
 
 COPY localtime /etc/localtime
 
+COPY public_list.txt /python3
+
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget \
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies \
