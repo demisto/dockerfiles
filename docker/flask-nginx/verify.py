@@ -1,4 +1,5 @@
 import subprocess
+from flask_cors import CORS
 from taxii2client.v21 import Server
 
 res = subprocess.check_output(['nginx', '-V'], text=True, stderr=subprocess.STDOUT)
