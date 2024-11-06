@@ -83,6 +83,7 @@ RUN apt-get purge -y --auto-remove \
   git \
   unzip \
   jq \
+  libarchive13 \
 && rm -rf /var/lib/apt/lists/*
 
 ENV CHROME_EXE="/opt/google/chrome/google-chrome"
