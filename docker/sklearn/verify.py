@@ -6,4 +6,9 @@ import dill
 import networkx
 from bs4 import BeautifulSoup
 
+import os
+import multiprocessing
+assert os.environ['OPENBLAS_NUM_THREADS'] == 1
+assert os.environ['OMP_NUM_THREADS'] == multiprocessing.cpu_count()
+
 print('All packages were imported successfully')
