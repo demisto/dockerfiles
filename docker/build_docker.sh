@@ -448,5 +448,10 @@ if [ ${#errors[@]} != 0 ]; then
   done
   exit 1
 fi
-echo $PUSHED_DOCKERS > $ARTIFACTS_FOLDER/pushed_dockers.txt
-echo "Successfully pushed $PUSHED_DOCKERS"
+
+if [ -n "$PUSHED_DOCKERS" ]; then
+  echo "${PUSHED_DOCKERS}" > "${ARTIFACTS_FOLDER}/pushed_dockers.txt"
+  echo "Successfully pushed ${PUSHED_DOCKERS}"
+else
+    echo "No dockers were built and pushed"
+fi
