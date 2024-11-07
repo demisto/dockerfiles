@@ -23,6 +23,6 @@ RUN chown -R demisto:demisto /ml && chmod -R 775 /ml
 
 # set the number of threads for numpy libs
 ENV OPENBLAS_NUM_THREADS=1
-RUN chmod +x entrypoint.sh
 COPY entrypoint.sh /ml
+RUN chmod +x /ml/entrypoint.sh
 ENTRYPOINT ["/ml/entrypoint.sh"]
