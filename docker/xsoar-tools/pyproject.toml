@@ -7,7 +7,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "~3.11"
-demisto-sdk = "1.32.3"
+demisto-sdk = {git = "https://github.com/demisto/demisto-sdk.git", rev = "CIAC-11199/support-ValidateContent-script"}
 demisto-py = "*"
 
 [build-system]
