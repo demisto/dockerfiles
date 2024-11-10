@@ -601,88 +601,84 @@ urllib3 = ">=1.26.7"
 
 [[package]]
 name = "demisto-sdk"
-version = "1.32.3"
+version = "1.32.2"
 description = "\"A Python library for the Demisto SDK\""
 optional = false
-python-versions = ">=3.9,<3.13"
-files = []
-develop = false
+python-versions = "<3.12,>=3.9"
+files = [
+    {file = "demisto_sdk-1.32.2-py3-none-any.whl", hash = "sha256:7d56f58effd69c89a9a5c8f0faed15d76cfb4f22f234742c824896ce16386bbe"},
+    {file = "demisto_sdk-1.32.2.tar.gz", hash = "sha256:44094b067eb653264717a9ea1971718c06fb11df11e970f282508d43b0e1f14f"},
+]
 
 [package.dependencies]
-autopep8 = "^2.0.4"
-bandit = "^1.7.4"
-beautifulsoup4 = "^4.11.1"
+autopep8 = ">=2.0.4,<3.0.0"
+bandit = ">=1.7.4,<2.0.0"
+beautifulsoup4 = ">=4.11.1,<5.0.0"
 chardet = ">=4,<6"
-click = "^8.0.0"
-coloredlogs = "^15.0.1"
-configparser = "^5.2.0"
-coverage = "^7.2.1,<7.4"
-dateparser = "^1.1.1"
-decorator = "^5.1.1"
-demisto-py = "^3.2.10"
-dictdiffer = "^0.9.0"
-dictor = "^0.1.9"
-docker = "^7.1.0"
-flatten-dict = "^0.4.2"
-gitdb = "^4.0.9"
-GitPython = "^3.1.37"
-giturlparse = "^0.10.0"
-google-cloud-secret-manager = "^2.18.3"
-google-cloud-storage = "^2.13.0"
-imagesize = "^1.3.0"
-importlib-resources = "^5.6.0"
-inflection = "^0.5.1"
-json5 = "^0.9.14"
-jsonschema = "^4.4.0"
-junitparser = "^3.1.0"
-loguru = "^0.7.2"
-lxml = "^5.0.0"
-mergedeep = "^1.3.4"
-more-itertools = "^10.0.0"
-mypy = "^0.982"
-neo4j = "^5.14.0"
-networkx = "^2.7.1"
-nltk = "==3.9.1"
-ordered-set = "^4.1.0"
-orjson = "^3.8.3"
-packaging = "^24.0"
+click = ">=8.0.0,<9.0.0"
+coloredlogs = ">=15.0.1,<16.0.0"
+configparser = ">=5.2.0,<6.0.0"
+coverage = ">=7.2.1,<7.4"
+dateparser = ">=1.1.1,<2.0.0"
+decorator = ">=5.1.1,<6.0.0"
+demisto-py = ">=3.2.10,<4.0.0"
+dictdiffer = ">=0.9.0,<0.10.0"
+dictor = ">=0.1.9,<0.2.0"
+docker = ">=7.1.0,<8.0.0"
+flatten-dict = ">=0.4.2,<0.5.0"
+gitdb = ">=4.0.9,<5.0.0"
+GitPython = ">=3.1.37,<4.0.0"
+giturlparse = ">=0.10.0,<0.11.0"
+google-cloud-secret-manager = ">=2.18.3,<3.0.0"
+google-cloud-storage = ">=2.13.0,<3.0.0"
+imagesize = ">=1.3.0,<2.0.0"
+importlib-resources = ">=5.6.0,<6.0.0"
+inflection = ">=0.5.1,<0.6.0"
+json5 = ">=0.9.14,<0.10.0"
+jsonschema = ">=4.4.0,<5.0.0"
+junitparser = ">=3.1.0,<4.0.0"
+loguru = ">=0.7.2,<0.8.0"
+lxml = ">=5.0.0,<6.0.0"
+mergedeep = ">=1.3.4,<2.0.0"
+more-itertools = ">=10.0.0,<11.0.0"
+mypy = ">=0.982,<0.983"
+neo4j = ">=5.14.0,<6.0.0"
+networkx = ">=2.7.1,<3.0.0"
+nltk = "3.9.1"
+ordered-set = ">=4.1.0,<5.0.0"
+orjson = ">=3.8.3,<4.0.0"
+packaging = ">=24.0,<25.0"
 paramiko = ">=3.4.1,<4.0"
 Pebble = ">=4.6.3,<6.0.0"
-pre-commit = "^3.5.0"
-prettytable = "^3.2.0"
-pydantic = "^1.10"
-pygithub = "^2.2.0"
-pykwalify = "^1.8.0"
-pylint = "^3.3.1"
-PyPDF2 = "^1.28.6"
-pyspellchecker = "^0.6.3"
-pytest-freezegun = "^0.4.2"
-python-dotenv = "^0.20.0"
-requests = "^2.27.1"
-"ruamel.yaml" = "^0.17.21"
-slack-sdk = "^3.17.0"
+pre-commit = ">=3.5.0,<4.0.0"
+prettytable = ">=3.2.0,<4.0.0"
+pydantic = ">=1.10,<2.0"
+pygithub = ">=2.2.0,<3.0.0"
+pykwalify = ">=1.8.0,<2.0.0"
+pylint = ">=3.3.1,<4.0.0"
+PyPDF2 = ">=1.28.6,<2.0.0"
+pyspellchecker = ">=0.6.3,<0.7.0"
+pytest-freezegun = ">=0.4.2,<0.5.0"
+python-dotenv = ">=0.20.0,<0.21.0"
+requests = ">=2.27.1,<3.0.0"
+"ruamel.yaml" = ">=0.17.21,<0.18.0"
+slack-sdk = ">=3.17.0,<4.0.0"
 tabulate = ">=0.8.9,<0.10.0"
-tenacity = "^8.4.1"
-toml = "^0.10.2"
-typer = {version = "^0.9.0", extras = ["all"]}
-typing-extensions = "^4.1.1"
-ujson = "^5.1.0"
+tenacity = ">=8.4.1,<9.0.0"
+toml = ">=0.10.2,<0.11.0"
+typer = {version = ">=0.9.0,<0.10.0", extras = ["all"]}
+typing-extensions = ">=4.1.1,<5.0.0"
+ujson = ">=5.1.0,<6.0.0"
 urllib3 = ">=1.26,<3"
-uv = "^0.1.5"
-vulture = "^2.3"
-wcmatch = "^8.3"
-werkzeug = "^2.2.0"
-yamlordereddictloader = "^0.4.0"
+uv = ">=0.1.5,<0.2.0"
+vulture = ">=2.3,<3.0"
+wcmatch = ">=8.3,<9.0"
+werkzeug = ">=2.2.0,<3.0.0"
+yamlordereddictloader = ">=0.4.0,<0.5.0"
 
 [package.extras]
 build = ["gsutil (==5.17)"]
 generate-unit-tests = ["klara (>=0.6.3,<0.7.0)"]
-
-[package.source]
-type = "git"
-url = "https://github.com/demisto/demisto-sdk.git"
-reference = "CIAC-11199/support-ValidateContent-script"
-resolved_reference = "1eaf60d33b98cb4bdf54faa1543a239433da4173"
 
 [[package]]
 name = "deprecated"
@@ -1171,13 +1167,13 @@ pyreadline3 = {version = "*", markers = "sys_platform == \"win32\" and python_ve
 
 [[package]]
 name = "identify"
-version = "2.6.1"
+version = "2.6.2"
 description = "File identification library for Python"
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.9"
 files = [
-    {file = "identify-2.6.1-py2.py3-none-any.whl", hash = "sha256:53863bcac7caf8d2ed85bd20312ea5dcfc22226800f6d6881f232d861db5a8f0"},
-    {file = "identify-2.6.1.tar.gz", hash = "sha256:91478c5fb7c3aac5ff7bf9b4344f803843dc586832d5f110d672b19aa1984c98"},
+    {file = "identify-2.6.2-py2.py3-none-any.whl", hash = "sha256:c097384259f49e372f4ea00a19719d95ae27dd5ff0fd77ad630aa891306b82f3"},
+    {file = "identify-2.6.2.tar.gz", hash = "sha256:fab5c716c24d7a789775228823797296a2994b075fb6080ac83a102772a98cbd"},
 ]
 
 [package.extras]
@@ -1846,13 +1842,13 @@ files = [
 
 [[package]]
 name = "packaging"
-version = "24.1"
+version = "24.2"
 description = "Core utilities for Python packages"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "packaging-24.1-py3-none-any.whl", hash = "sha256:5b8f2217dbdbd2f7f384c41c628544e6d52f2d0f53c6d0c3ea61aa5d1d7ff124"},
-    {file = "packaging-24.1.tar.gz", hash = "sha256:026ed72c8ed3fcce5bf8950572258698927fd1dbda10a5e981cdf0ac37f4f002"},
+    {file = "packaging-24.2-py3-none-any.whl", hash = "sha256:09abb1bccd265c01f4a3aa3f7a7db064b36514d2cba19a2f694fe6150451a759"},
+    {file = "packaging-24.2.tar.gz", hash = "sha256:c228a6dc5e932d346bc5739379109d49e8853dd8223571c7c5b55260edc0b97f"},
 ]
 
 [[package]]
@@ -3319,4 +3315,4 @@ pyyaml = "*"
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.11"
-content-hash = "8428afb6341618d1e077d04158687d1c939fb50e2675db8525f650545d8244ee"
+content-hash = "ba64a55290adab89a51c6f142d626ddc6f25d91eb652662d1a6c25ed9f3f3710"
