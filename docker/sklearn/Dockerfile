@@ -23,6 +23,6 @@ RUN chown -R demisto:demisto /ml && chmod -R 775 /ml
 
 # set the number of threads for numpy libs
 ENV OPENBLAS_NUM_THREADS=1
-RUN echo "#!/bin/bash \
-export OMP_NUM_THREADS=4" >> entrypoint.sh && chmod +x entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
+# RUN echo "#!/bin/bash \
+# export " >> entrypoint.sh && chmod +x entrypoint.sh
+ENTRYPOINT OMP_NUM_THREADS=4
