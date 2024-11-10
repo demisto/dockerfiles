@@ -25,4 +25,7 @@ RUN chown -R demisto:demisto /ml && chmod -R 775 /ml
 ENV OPENBLAS_NUM_THREADS=1
 # RUN echo "#!/bin/bash \
 # export " >> entrypoint.sh && chmod +x entrypoint.sh
-ENTRYPOINT ["OMP_NUM_THREADS=$(nproc) "]
+# ENTRYPOINT ["OMP_NUM_THREADS=$(nproc)"]
+COPY entrypoint.sh /entrypoint.sh
+# Set the script as the entrypoint
+ENTRYPOINT ["/entrypoint.sh"]
