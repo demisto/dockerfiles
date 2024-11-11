@@ -8,7 +8,7 @@ COPY requirements.txt .
 
 COPY localtime /etc/localtime
 
-COPY public_list.txt /home/demisto/public_list.txt
+COPY public_list.txt /var/public_list.txt
 
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget \
   && pip install --no-cache-dir -r requirements.txt \
