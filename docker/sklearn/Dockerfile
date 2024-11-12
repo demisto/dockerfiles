@@ -23,3 +23,4 @@ RUN chown -R demisto:demisto /ml && chmod -R 775 /ml
 
 # set the number of threads for numpy libs
 ENV OPENBLAS_NUM_THREADS=1
+ENV OMP_NUM_THREADS=4
