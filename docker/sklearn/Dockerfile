@@ -20,3 +20,6 @@ RUN python -c "import nltk; nltk.download('wordnet', download_dir='/ml/nltk_data
 
 ENV NLTK_DATA='/ml/nltk_data'
 RUN chown -R demisto:demisto /ml && chmod -R 775 /ml
+
+# set the number of threads for numpy libs
+ENV OPENBLAS_NUM_THREADS=1
