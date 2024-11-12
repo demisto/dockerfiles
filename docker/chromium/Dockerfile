@@ -1,6 +1,6 @@
 
-# Last modified: 2024-10-16T16:38:57.635423+00:00
-FROM demisto/python3-deb:3.11.10.113523
+# Last modified: 2024-11-05T16:39:09.611168+00:00
+FROM demisto/python3-deb:3.11.10.115178
 
 COPY requirements.txt .
 
@@ -23,10 +23,8 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
 && rm -rf /var/lib/apt/lists/* \
 && touch /var/chrome_headless.log \
 && chmod 777 /var/chrome_headless.log \
-&& touch /var/chrome_instances.tsv \
-&& chmod 777 /var/chrome_instances.tsv \
-&& touch /var/rasterizations_counter.txt \
-&& chmod 777 /var/rasterizations_counter.txt
+&& touch /var/chrome_instances.json \
+&& chmod 777 /var/chrome_instances.json
 
 # Based on instructions at: https://tecadmin.net/setup-selenium-with-chromedriver-on-debian/
 # Will install the latest version available from the chrome repo.
@@ -85,6 +83,7 @@ RUN apt-get purge -y --auto-remove \
   git \
   unzip \
   jq \
+  libarchive13 \
 && rm -rf /var/lib/apt/lists/*
 
 ENV CHROME_EXE="/opt/google/chrome/google-chrome"
