@@ -4,9 +4,6 @@ FROM python:3.11.10-slim-bullseye
 
 RUN echo 'deb http://deb.debian.org/debian bullseye-backports main' >> /etc/apt/sources.list
 
-# Relevant for tldextract
-COPY public_list.txt /var/public_list.txt
-
 # Basic linux utilities
 RUN apt-get update && apt-get install -y --no-install-recommends \
   procps \
@@ -21,6 +18,9 @@ RUN apt-get update && apt-get -t bullseye-backports -y --no-install-recommends u
 && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
+
+# Relevant for tldextract
+COPY public_list.txt /var/public_list.txt
 
 #Install tools for building binary deps (will be reomved later on)
 RUN apt-get update && apt-get install -y --no-install-recommends \

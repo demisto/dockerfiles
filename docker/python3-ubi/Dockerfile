@@ -1,9 +1,6 @@
 ARG BASE_UBI_TAG=9.4
 ARG BASE_UBI_VERSION=ubi9
 
-# Relevant for tldextract
-COPY public_list.txt /var/public_list.txt
-
 FROM registry.access.redhat.com/${BASE_UBI_VERSION}:${BASE_UBI_TAG} as build
 
 RUN dnf upgrade -y --nodocs && \
@@ -54,6 +51,10 @@ RUN find /usr/local -depth \
     ldconfig
 
 COPY requirements.txt .
+
+# Relevant for tldextract
+COPY public_list.txt /var/public_list.txt
+
 RUN pip3.11 install -r requirements.txt
 
 FROM registry.access.redhat.com/${BASE_UBI_VERSION}:${BASE_UBI_TAG}
