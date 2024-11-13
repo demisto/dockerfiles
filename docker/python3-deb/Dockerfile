@@ -4,6 +4,8 @@ FROM python:3.11.10-slim-bullseye
 
 RUN echo 'deb http://deb.debian.org/debian bullseye-backports main' >> /etc/apt/sources.list
 
+COPY public_list.txt /var/public_list.txt
+
 # Basic linux utilities
 RUN apt-get update && apt-get install -y --no-install-recommends \
   procps \
