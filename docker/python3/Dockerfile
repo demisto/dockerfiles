@@ -8,6 +8,7 @@ COPY requirements.txt .
 
 COPY localtime /etc/localtime
 
+# Relevant for tldextract
 COPY public_list.txt /var/public_list.txt
 
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget \
