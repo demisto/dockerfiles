@@ -47,7 +47,7 @@ RUN apt-get update && apt-get -t bullseye-backports install -y --no-install-reco
 && echo "deb [arch=amd64]  http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
 && apt-get -y update && apt-get install -y google-chrome-stable \
 && apt-get install -y tigervnc-standalone-server x11-utils imagemagick \
-&& ./download_chromedriver.sh \
+&& curl https://storage.googleapis.com/chrome-for-testing-public/126.0.6478.126/linux64/chromedriver-linux64.zip --output chromedriver-linux64.zip \
 && unzip chromedriver-linux64.zip \
 && mv chromedriver-linux64/chromedriver /usr/bin/chromedriver \
 && rm -rf chromedriver-linux64.zip \

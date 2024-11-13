@@ -13,4 +13,4 @@ set -e
 
 echo "url to download chromedriver version 126.0.6478.126"
 
-curl https://storage.googleapis.com/chrome-for-testing-public/126.0.6478.126/linux64/chromedriver-linux64.zip --output chromedriver-linux64.zip
+# curl https://storage.googleapis.com/chrome-for-testing-public/126.0.6478.126/linux64/chromedriver-linux64.zip --output chromedriver-linux64.zip
