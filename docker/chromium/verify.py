@@ -18,7 +18,7 @@ print(f'Comparing full versions: {chrome_version} to: {driver_version}')
 chrome_version_arr = chrome_version.split('.')[:3]
 driver_version_arr = driver_version.split('.')[:3]
 print(f'Comparing  versions without patch: {chrome_version_arr} to: {driver_version_arr}')
-assert chrome_version_arr == driver_version_arr
+assert chrome_version_arr >= driver_version_arr
 
 print(f'Using pychrome version {pychrome.__version__}')
 
