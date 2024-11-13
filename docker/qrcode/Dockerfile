@@ -1,5 +1,5 @@
 
-FROM demisto/opencv:1.0.0.115861
+FROM demisto/opencv:1.0.0.116051
 COPY Pipfile.lock .
 COPY Pipfile .
 RUN apt-get update && apt-get -t bullseye-backports install -y --no-install-recommends \
