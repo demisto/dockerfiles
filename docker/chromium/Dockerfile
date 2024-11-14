@@ -1,6 +1,6 @@
 
-# Last modified: 2024-10-29T16:39:29.645670+00:00
-FROM demisto/python3-deb:3.11.10.114849
+# Last modified: 2024-11-14T00:50:38.920337+00:00
+FROM demisto/python3-deb:3.11.10.116440
 
 COPY requirements.txt .
 
@@ -83,6 +83,7 @@ RUN apt-get purge -y --auto-remove \
   git \
   unzip \
   jq \
+  libarchive13 \
 && rm -rf /var/lib/apt/lists/*
 
 ENV CHROME_EXE="/opt/google/chrome/google-chrome"

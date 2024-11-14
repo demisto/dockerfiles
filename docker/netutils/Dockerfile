@@ -1,5 +1,5 @@
-# Last modified: 2024-10-27T08:38:12.130283+00:00
-FROM demisto/python3:3.11.10.113941
+# Last modified: 2024-11-14T00:50:24.665183+00:00
+FROM demisto/python3:3.11.10.116439
 
 RUN mkdir /opt/scripts
 
@@ -11,4 +11,4 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies
 
-RUN apk --update add --no-cache curl bind-tools openssl iputils nmap nmap-scripts
+RUN apk --update add --no-cache curl bind-tools openssl iputils nmap nmap-scripts tcpdump
