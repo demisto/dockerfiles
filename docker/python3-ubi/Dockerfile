@@ -22,9 +22,6 @@ RUN dnf upgrade -y --nodocs && \
 # when changing it make sure to change also PYTHON_VERSION env var in line 105
 ARG PYTHON_VERSION_TO_INSTALL=3.11.9
 
-# Relevant for tldextract
-COPY public_list.dat /var/public_list.dat
-
 # install python3.11.9
 RUN wget https://www.python.org/ftp/python/${PYTHON_VERSION_TO_INSTALL}/Python-${PYTHON_VERSION_TO_INSTALL}.tgz && \
     mkdir -p /usr/local/src/python && \
@@ -65,6 +62,9 @@ RUN dnf update -y --nodocs && \
     rm -rf /var/cache/dnf
 
 ENV PATH /usr/local/bin:/home/python/.local/bin:$PATH
+
+# Relevant for tldextract
+COPY public_list.dat /var/public_list.dat
 
 COPY --from=build /usr/local/include/python3.11 /usr/local/include/python3.11
 COPY --from=build /usr/local/lib /usr/local/lib
