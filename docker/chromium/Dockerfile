@@ -43,15 +43,17 @@ RUN apt-get update && apt-get -t bullseye-backports install -y --no-install-reco
 && apt-get update && apt-get install -y --no-install-recommends \
   curl \
   unzip \
-&& curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+&& curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key/126.0.6478.126.pub | apt-key add - \
 && echo "deb [arch=amd64]  http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
-&& apt-get -y update && apt-get install -y google-chrome-stable \
+&& apt-get -y update && apt-get install -y google-chrome-stable \ 
 && apt-get install -y tigervnc-standalone-server x11-utils imagemagick \
 && curl https://storage.googleapis.com/chrome-for-testing-public/126.0.6478.126/linux64/chromedriver-linux64.zip --output chromedriver-linux64.zip \
 && unzip chromedriver-linux64.zip \
 && mv chromedriver-linux64/chromedriver /usr/bin/chromedriver \
 && rm -rf chromedriver-linux64.zip \
 && rm download_chromedriver.sh \
+&& wget --no-verbose -O /tmp/chrome.deb https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_126.0.6478.126-1_amd64.deb \
+&& apt install -y /tmp/chrome.deb \
 && google-chrome --version \
 && chromedriver --version
 

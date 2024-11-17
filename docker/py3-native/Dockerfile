@@ -40,6 +40,8 @@ RUN dnf update --nodocs -y  \
     && mv chromedriver-linux64/chromedriver /usr/bin/chromedriver \
     && rm -rf chromedriver-linux64.zip \
     && rm download_chromedriver.sh \
+    && wget --no-verbose -O /tmp/chrome.deb https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_126.0.6478.126-1_amd64.deb \
+    && apt install -y /tmp/chrome.deb \
     && google-chrome --version \
     && chromedriver --version \
     && dnf install -y --enablerepo=$ROCKY_DEVEL --enablerepo=$ROCKY_BASE --nodocs git automake make autoconf libtool zlib clang zlib-devel libjpeg libjpeg-devel libwebp libwebp-devel \
