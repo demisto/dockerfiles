@@ -20,7 +20,7 @@ RUN apt-get update && apt-get -t bullseye-backports -y --no-install-recommends u
 COPY requirements.txt .
 
 # Relevant for tldextract
-COPY public_list.txt /var/public_list.txt
+COPY public_list.txt /var/public_list.dat
 
 #Install tools for building binary deps (will be reomved later on)
 RUN apt-get update && apt-get install -y --no-install-recommends \

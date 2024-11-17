@@ -53,7 +53,7 @@ RUN find /usr/local -depth \
 COPY requirements.txt .
 
 # Relevant for tldextract
-COPY public_list.txt /var/public_list.txt
+COPY public_list.txt /var/public_list.dat
 
 RUN pip3.11 install -r requirements.txt
 

@@ -52,5 +52,5 @@ print('defusedxml installed correctly')
 import setuptools
 print(f'Using setuptools version {setuptools.__version__}')
 
-assert os.path.exists("/var/public_list.txt")
-print("public_list.txt for TLDextract exists")
+assert os.path.exists("/var/public_list.dat")
+print("public_list.dat for TLDextract exists")
