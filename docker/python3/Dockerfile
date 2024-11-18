@@ -3,6 +3,7 @@ FROM python:3.11.10-alpine3.20
 
 
 
+
 # Upgrade all packages to latest
 RUN apk --update --no-cache upgrade
 
