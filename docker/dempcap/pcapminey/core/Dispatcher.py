@@ -99,5 +99,5 @@ class Dispatcher:
         return (stream, files)
 
 if __name__ == '__main__':
-    d = Dispatcher(os.path.dirname(__file__) + '/../unit_tests/webextract/web_light.pcap')
+    d = Dispatcher(os.path.dirname(__file__) + '/../tests/webextract/web_light.pcap')
     d.run()
