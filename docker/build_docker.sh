@@ -366,7 +366,7 @@ EOF
 }
 
 # default compare branch against master
-DIFF_COMPARE=origin/master...${CI_COMMIT_REF_NAME}
+DIFF_COMPARE=origin/master...${CI_COMMIT_SHA}
 
 if [ -z "${CI_COMMIT_SHA}" ]; then
     echo "CI_COMMIT_SHA not set. Assuming local testing."
