@@ -11,7 +11,7 @@ readme = "README.md"
 package-mode = false
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = ">=3.10,<3.13"
 "ruamel.yaml" = "*"
 requests = "*"
 dockerfile_parse = "*"
@@ -21,7 +21,9 @@ python-dateutil = "*"
 gitpython = "^3.1.43" # import git
 python-gitlab = "^3.0.0" # import gitlab
 toml = "*"
-demisto-sdk = "*"
+demisto-sdk = "1.32.4"
+wrapt = "^1.16.0"
+pipenv = "^2024.4.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"
