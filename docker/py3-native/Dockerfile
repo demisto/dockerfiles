@@ -94,5 +94,7 @@ RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE --nobest python3-devel g
         && rm -rf /var/cache/dnf /root/.cargo \
         && pip uninstall -y pcodedmp
 
+# Relevant for tldextract
+COPY public_list.dat /var/public_list.dat
 
 ENV NLTK_DATA='/etc/ml/nltk_data'
