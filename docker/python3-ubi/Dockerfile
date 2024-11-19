@@ -51,6 +51,7 @@ RUN find /usr/local -depth \
     ldconfig
 
 COPY requirements.txt .
+
 RUN pip3.11 install -r requirements.txt
 
 FROM registry.access.redhat.com/${BASE_UBI_VERSION}:${BASE_UBI_TAG}
@@ -61,6 +62,9 @@ RUN dnf update -y --nodocs && \
     rm -rf /var/cache/dnf
 
 ENV PATH /usr/local/bin:/home/python/.local/bin:$PATH
+
+# Relevant for tldextract
+COPY public_list.dat /var/public_list.dat
 
 COPY --from=build /usr/local/include/python3.11 /usr/local/include/python3.11
 COPY --from=build /usr/local/lib /usr/local/lib
