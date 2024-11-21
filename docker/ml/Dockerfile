@@ -11,7 +11,7 @@ RUN unzip /distilled_bert_base_uncased_tokenizer.zip -d /ml \
   && rm /distilled_bert_base_uncased_tokenizer.zip \
   && chmod -R 775 /ml
 
-FROM demisto/python3-deb:3.11.10.116440
+FROM demisto/python3-deb:3.11.10.116949
 ENV HF_HOME /ml/.cache
 COPY Pipfile Pipfile
 COPY Pipfile.lock Pipfile.lock
