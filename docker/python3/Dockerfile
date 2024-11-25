@@ -1,4 +1,4 @@
-# Last modified: 2024-10-20T00:17:56.791794+00:00
+# Last modified: 2024-11-14T00:16:47.268736+00:00
 FROM python:3.11.10-alpine3.20
 
 # Upgrade all packages to latest
@@ -7,6 +7,9 @@ RUN apk --update --no-cache upgrade
 COPY requirements.txt .
 
 COPY localtime /etc/localtime
+
+# Relevant for tldextract
+COPY public_list.dat /var/public_list.dat
 
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget \
   && pip install --no-cache-dir -r requirements.txt \
