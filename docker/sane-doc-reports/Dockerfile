@@ -33,3 +33,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   npm \
   python3-dev \
 && rm -rf /var/lib/apt/lists/* 
+
+RUN apt-get update && \
+    apt-get remove -y python3.9 python3.9-dev python3.9-venv && \
+    apt-get autoremove -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
