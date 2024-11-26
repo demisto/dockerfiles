@@ -11,7 +11,7 @@ DOCKER_SRC_DIR=${SCRIPT_DIR}
 if [[ "${DOCKER_SRC_DIR}" != /* ]]; then
     DOCKER_SRC_DIR="${CURRENT_DIR}/${SCRIPT_DIR}"
 fi
-DOCKERFILES_TRUST_DIR="${DOCKER_SRC_DIR}/../dockerfiles-trust"
+DOCKERFILES_TRUST_DIR="$(cd "${DOCKER_SRC_DIR}/../dockerfiles-trust" && pwd)"
 
 # parse a property form build.conf file in current dir
 # param $1: property name
@@ -102,8 +102,15 @@ function sign_setup {
         echo "Content trust passphrases not set. Not setting up docker signing."
         return 1;
     fi
+    if [ -n "${DOCKERFILES_TRUST_GIT_SSH_KEY}" ]; then
+      echo "Setting up git ssh key for dockerfiles trust"
+      GIT_SSH_COMMAND="ssh -i ${DOCKERFILES_TRUST_GIT_SSH_KEY}"
+      export GIT_SSH_COMMAND
+    else
+      echo "DOCKERFILES_TRUST_GIT_SSH_KEY not set."
+    fi
     if [ ! -d "${DOCKERFILES_TRUST_DIR}" ]; then
-        git clone "${DOCKERFILES_TRUST_GIT}" "${DOCKERFILES_TRUST_DIR}"   
+        git clone "${DOCKERFILES_TRUST_GIT}" "${DOCKERFILES_TRUST_DIR}"
         git config --file "${DOCKERFILES_TRUST_DIR}/.git/config"  user.email "dc-builder@users.noreply.github.com"
         git config --file "${DOCKERFILES_TRUST_DIR}/.git/config" user.name "dc-builder"           
     else
