@@ -9,3 +9,9 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
   && wget --no-check-certificate https://github.com/elceef/dnstwist/archive/refs/heads/master.zip \
   && unzip master.zip \
   && mv dnstwist-master dnstwist
+
+
+
+registry/organization/imagename:tag
+
+
