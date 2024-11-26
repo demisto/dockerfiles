@@ -12,6 +12,5 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
 
 
 
-registry/organization/imagename:tag
 
 
