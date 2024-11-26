@@ -10,3 +10,5 @@ from PIL import Image
 from cv2 import cv2
 import urllib3
 import certifi
+import psutil
+print("All good, and you look amazing.")
