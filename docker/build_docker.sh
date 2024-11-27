@@ -11,7 +11,10 @@ DOCKER_SRC_DIR=${SCRIPT_DIR}
 if [[ "${DOCKER_SRC_DIR}" != /* ]]; then
     DOCKER_SRC_DIR="${CURRENT_DIR}/${SCRIPT_DIR}"
 fi
-DOCKERFILES_TRUST_DIR="$(cd "${DOCKER_SRC_DIR}/../dockerfiles-trust" && pwd)"
+DOCKERFILES_TRUST_DIR="$(cd "${DOCKER_SRC_DIR}/.." && pwd)"
+DOCKERFILES_TRUST_DIR="${DOCKERFILES_TRUST_DIR}/dockerfiles-trust"
+
+echo "DOCKER_SRC_DIR: ${DOCKER_SRC_DIR}, DOCKERFILES_TRUST_DIR: ${DOCKERFILES_TRUST_DIR}"
 
 # parse a property form build.conf file in current dir
 # param $1: property name
