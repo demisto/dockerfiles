@@ -1,6 +1,8 @@
 FROM demisto/python3:3.11.10.116949
 
 ENV DEMISTO_SDK_IGNORE_CONTENT_WARNING true
+ENV DEMISTO_SDK_SKIP_LOGGER_SETUP true
+
 COPY requirements.txt .
 
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base libffi-dev openssl-dev \
