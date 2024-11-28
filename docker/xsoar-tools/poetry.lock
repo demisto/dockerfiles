@@ -680,8 +680,10 @@ build = ["gsutil (==5.17)"]
 generate-unit-tests = ["klara (>=0.6.3,<0.7.0)"]
 
 [package.source]
-type = "directory"
-url = "../../../demisto-sdk"
+type = "git"
+url = "https://github.com/demisto/demisto-sdk.git"
+reference = "validate-content-support-fixes"
+resolved_reference = "b845ab392890e687d0a7b4da302486689cee9ce3"
 
 [[package]]
 name = "deprecated"
@@ -3333,4 +3335,4 @@ pyyaml = "*"
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.11"
-content-hash = "b206e80c8276eff9995694238a98ae478438ee6d8e4cfc1700c0070c32da36bf"
+content-hash = "2202b2aeaaa1211c225853d8b97fd71a0b876f802dad178f6e32d4f546fa91e3"
