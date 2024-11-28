@@ -5,13 +5,16 @@ ENV DEMISTO_SDK_SKIP_LOGGER_SETUP true
 
 COPY requirements.txt .
 
-RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base libffi-dev openssl-dev \
-  && apk add --no-cache git  \
-  && apk add --no-cache libstdc++  \
-  && apk add --no-cache --upgrade grep  \
-  && pip install --no-cache-dir virtualenv \
-  && pip install --no-cache-dir -r requirements.txt \
+# Install base dependencies and Python build tools
+RUN apk --update add --no-cache --virtual .build-dependencies \
+      python3-dev build-base libffi-dev openssl-dev \
+  && apk add --no-cache git libstdc++ grep curl \
+  && pip install --no-cache-dir poetry \
+  && poetry install --no-root \
+  && poetry run pre-commit install-hooks \
   && apk del .build-dependencies
+
+RUN poetry run pre-commit install-hooks --verbose
 
 
 ADD https://raw.githubusercontent.com/demisto/content/master/Packs/Base/Scripts/CommonServerPython/CommonServerPython.py /home/demisto
