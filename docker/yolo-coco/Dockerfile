@@ -18,4 +18,4 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   python3-dev \
 && rm -rf /var/lib/apt/lists/*
 
-FROM demisto/python3:3.11.10.115186
+FROM demisto/python3:3.11.10.116949
