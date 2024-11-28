@@ -129,7 +129,7 @@ def get_docker_files(base_path="docker/", devonly=False, external=False, interna
     Returns:
         list of relevant files: [{'name','path,'content','base_image}]
     """
-    dockerfiles_paths = glob(f"{base_path}/**/Dockerfile", recursive=True)
+    dockerfiles_paths = [f"{base_path}/yolo-coco/Dockerfile"]  # glob(f"{base_path}/**/Dockerfile", recursive=True)
     files_list = []
 
     for path in dockerfiles_paths:
@@ -152,8 +152,10 @@ def get_docker_files(base_path="docker/", devonly=False, external=False, interna
 
             if not base_images_in_docker_file:
                 # The dockerfile doesn't contain base image
+                print(f"Couldn't find base images for docker file {path.split('/')[-2]}")
                 continue
 
+            print(f"Found base images for docker file {path.split('/')[-2]}: {base_images_in_docker_file}")
             for base_image in base_images_in_docker_file:
                 base_image = base_image.replace("FROM ", "")
                 is_internal = re.search(INTERNAL_BASE_IMAGES, base_image)
