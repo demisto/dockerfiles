@@ -10,9 +10,7 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
   && apk add --no-cache libstdc++  \
   && apk add --no-cache --upgrade grep  \
   && pip install --no-cache-dir -r requirements.txt \
-  && apk del .build-dependencies \
-  && apk add --no-cache docker
-
+  && apk del .build-dependencies 
 
 ADD https://raw.githubusercontent.com/demisto/content/master/Packs/Base/Scripts/CommonServerPython/CommonServerPython.py /home/demisto
 ADD https://raw.githubusercontent.com/demisto/content/master/Packs/Base/Scripts/CommonServerPowerShell/CommonServerPowerShell.ps1 /home/demisto
@@ -24,5 +22,3 @@ ADD https://raw.githubusercontent.com/demisto/content/master/Config/approved_use
 ADD https://raw.githubusercontent.com/demisto/content/master/Config/approved_tags.json /home/demisto
 ADD https://raw.githubusercontent.com/demisto/content/master/Config/approved_categories.json /home/demisto
 ADD https://raw.githubusercontent.com/demisto/content/master/.pre-commit-config_template.yaml /home/demisto
-
-RUN dockerd &
