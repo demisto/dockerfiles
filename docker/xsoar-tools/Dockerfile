@@ -22,3 +22,4 @@ ADD https://raw.githubusercontent.com/demisto/content/master/Config/approved_use
 ADD https://raw.githubusercontent.com/demisto/content/master/Config/approved_tags.json /home/demisto
 ADD https://raw.githubusercontent.com/demisto/content/master/Config/approved_categories.json /home/demisto
 ADD https://raw.githubusercontent.com/demisto/content/master/.pre-commit-config_template.yaml /home/demisto
+
