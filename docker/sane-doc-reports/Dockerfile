@@ -32,5 +32,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   git \
   npm \
   python3-dev \
-&& rm -rf /var/lib/apt/lists/* \
-&& apt-get remove python3.9 python3.9-minimal python3.9-dev
+  python3.9 \ 
+  python3.9-minimal \
+&& rm -rf /var/lib/apt/lists/*

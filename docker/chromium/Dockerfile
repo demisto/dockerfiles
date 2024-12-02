@@ -84,7 +84,9 @@ RUN apt-get purge -y --auto-remove \
   unzip \
   jq \
   libarchive13 \
-&& rm -rf /var/lib/apt/lists/* \
-&& apt-get remove python3.9 python3.9-minimal python3.9-dev
+  python3.9 \
+  python3.9-minimal \
+  python3.9-dev \
+&& rm -rf /var/lib/apt/lists/*
 
 ENV CHROME_EXE="/opt/google/chrome/google-chrome"
