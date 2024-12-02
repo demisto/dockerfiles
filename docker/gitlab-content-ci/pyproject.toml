@@ -1,0 +1,146 @@
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core"]
+
+[tool.coverage.run]
+omit = ["**/conftest.py", "*/test_data/*", "*_test.py", "conftest.py"]
+relative_files = true
+
+[tool.mypy]
+allow_redefinition = true
+check_untyped_defs = true
+exclude = [
+  "*infrastructure_tests*",
+  ".*_test.py$",
+  ".venv",
+  "artifacts*",
+  "BlacklistValidation*",
+  "SecretActions*",
+  "test_.*.py",
+  "test_data",
+  "tests_data",
+]
+follow_imports = "silent"
+ignore_missing_imports = true
+namespace_packages = true
+pretty = true
+python_version = "3.10"
+show_error_codes = true
+
+[tool.poetry]
+authors = ["Your Name <you@example.com>"]
+description = ""
+name = "infra"
+package-mode = false
+readme = "README.md"
+version = "0.0.11"
+
+[tool.poetry.dependencies]
+beautifulsoup4 = "^4.11.1"
+coloredlogs = "^15.0.1"
+demisto-sdk = "1.32.4"
+Faker = "^15.3.4"
+filelock = "^3.10.0"
+gitpython = "^3.1.43"  # import git
+google = "^3.0.0"
+google-api-python-client = "^2.64.0"
+google-auth-httplib2 = "^0.1.0"
+google-auth-oauthlib = "^0.5.3"
+google-cloud-bigquery = "^3.22.0"
+google-cloud-compute = "^1.8.0"
+google-cloud-firestore = "^2.3.4"
+google-cloud-logging = "^3.1.2"
+google-cloud-pubsub = "^2.18.3"
+google-cloud-secret-manager = "^2.11.1"
+google-cloud-storage = "^2.9.0"
+humanize = "^4.9.0"
+jinja2 = "^3.1.3"
+jira = "^3.8.0"
+matplotlib = "^3.9.0, !=3.9.1"
+more-itertools = "^10.0.0"
+pandas = "^2.2.2"
+paramiko = ">=3.4.1,<4.0"
+pendulum = "^3.0.0"
+pygithub = "^2.3.0"
+# pydantic = "^1.10.8" # commented out code
+python = ">=3.10,<3.11"
+python-gitlab = "^3.0.0"  # import gitlab
+PyYAML = "^6.0"
+requests-mock = "^1.12.1"
+retry = "^0.9.2"
+ruamel-yaml = ">=0.17.21,<0.18.0"
+scp = "^0.15.0"
+sendgrid = "^6.11.0"
+timeout-decorator = "^0.5.0"
+
+[tool.poetry.group.dev.dependencies]
+mock = "^5.1.0"
+mock-open = "^1.4.0"
+pre-commit = "*"  # version may be limited by the SDK, but here there's no real limitation
+pytest = "^8.2.2"
+pytest-mock = "^3.14.0"
+ruff = "*"  # See `.pre-commit-config-template` for version used in pre-commit. Version here doesn't matter.
+towncrier = "^24.7"
+
+[tool.poetry.group.documentation]
+optional = true
+
+[tool.poetry.group.documentation.dependencies]
+parinx = {git = "https://github.com/npsolve/parinx.git", rev = "6493798ceba8089345d970f71be4a896eb6b081d"}
+
+[tool.poetry.group.gold]
+optional = true
+
+[tool.poetry.group.gold.dependencies]
+gsutil = "5.14"
+jsonschema = "^4.17.3"
+python-gitlab = "^3.0.0"  # import gitlab
+virtualenv = "^20.17.1"
+
+[tool.poetry.group.infra-release]
+optional = true
+
+[tool.poetry.group.infra-release.dependencies]
+# To limit versions on unpinned group members, that are also configured in the main group, change the value in the main one, and leave the one here unpinned ("*")
+gitpython = "*"
+more-itertools = "*"
+packaging = "*"
+python-dotenv = "*"
+python-gitlab = "*"
+towncrier = "*"
+typer = "*"
+
+[tool.poetry.group.mypy]
+optional = true
+
+[tool.poetry.group.mypy.dependencies]
+defusedxml = "^0.7.1"
+# dependencies required for running mypy natively, until CIAC-10508 is fixed
+mypy = "0.982"
+types-dateparser = "^1.1.4.20240106"
+types-decorator = "^5.1.8"
+types-emoji = "2.1.0.3"
+types-markdown = "3.6.0.20240316"
+types-mock = "^4.0.15"
+types-paramiko = "2.12.0"
+types-protobuf = "^4.24.0.4"
+types-PyMySQL = "1.1.0.20240425"
+types-python-dateutil = "^2.9.0.20240316"
+types-pytz = ">=2021.3.6,<2023.0.0"
+types-PyYAML = "6.0.12.20240311"
+types-requests = "2.28.11"
+types-setuptools = "^69.2.0.20240317"
+types-six = "^1.16.21.20240513"
+types-tabulate = "^0.9.0.20240106"
+types-toml = "^0.10.8.7"
+types-tqdm = "^4.66.0.2"
+types-ujson = "^5.6.0.0"
+
+[tool.poetry.group.testing]
+optional = true
+
+[tool.poetry.group.testing.dependencies]
+pytest-cov = "^5.0.0"
+
+[tool.poetry.group.upload.dependencies]
+db-dtypes = "^1.2.0"
