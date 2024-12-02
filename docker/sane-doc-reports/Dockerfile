@@ -2,13 +2,6 @@ FROM demisto/python3-deb:3.11.10.117398
 WORKDIR "/app"
 
 SHELL ["/bin/bash", "-c"]
-
-# Verify and remove Python 3.9 if present
-RUN apt-get update && apt-get remove -y python3.9 python3.9-dev && rm -rf /var/lib/apt/lists/*
-
-# Ensure Python 3.11 is default
-RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.11 1
-
 RUN apt-get update -y -q && \
     apt-get install -y -q nodejs npm gconf-service \
     libasound2 libatk1.0-0 libatk-bridge2.0-0 \
@@ -39,4 +32,5 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   git \
   npm \
   python3-dev \
-&& rm -rf /var/lib/apt/lists/* 
+&& rm -rf /var/lib/apt/lists/* \
+&& apt-get remove python3.9 python3.9-minimal python3.9-dev
