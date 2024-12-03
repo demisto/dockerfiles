@@ -36,8 +36,10 @@ COPY poetry.lock /tmp
 # installations
 RUN apt-get install openjdk-11-jre -y && source ~/.bashrc && java -version
 WORKDIR /tmp
-RUN curl -sSL https://install.python-poetry.org | python3 - && source ~/.bashrc && poetry --version \
-    && poetry config settings.virtualenvs.create false && poetry install
+RUN curl -sSL https://install.python-poetry.org | python3 - && 
+RUN poetry --version \
+    && poetry config settings.virtualenvs.create false \
+    && poetry install
 
 # install neo4j
 RUN echo "deb http://httpredir.debian.org/debian stable-backports main" | tee -a /etc/apt/sources.list.d/stable-backports.list \
