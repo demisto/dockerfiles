@@ -23,7 +23,9 @@ RUN apt-get update \
 && pipenv install --system \
 && apt-get purge -y --auto-remove gcc \
   python3-dev gfortran wget git g++ pkg-config libhdf5-dev pipenv \
-&& apt-get upgrade -y
+&& apt-get upgrade -y \
+&& apt install perl --upgrade \
+&& apt install --only-upgrade libsqlite3-0
 
 COPY demisto_ml-0.2.tar.gz .
 RUN pip install demisto_ml-0.2.tar.gz
