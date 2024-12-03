@@ -38,7 +38,7 @@ RUN apt-get install openjdk-11-jre -y && source ~/.bashrc && java -version
 WORKDIR /tmp
 RUN curl -sSL https://install.python-poetry.org | python3 -
 RUN source ~/.bashrc && poetry --version \
-    && poetry config settings.virtualenvs.create false \
+    && poetry config virtualenvs.create false \
     && poetry install
 
 # install neo4j
