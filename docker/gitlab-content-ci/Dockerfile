@@ -31,9 +31,13 @@ RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
     && apt-get install docker-ce-cli -y && source ~/.bashrc && docker --version
 RUN apt-get install kubectl -y && source ~/.bashrc && ! kubectl version --output yaml
 
+COPY pyproject.toml /tmp
+COPY poetry.lock /tmp
 # installations
 RUN apt-get install openjdk-11-jre -y && source ~/.bashrc && java -version
-RUN curl -sSL https://install.python-poetry.org | python3 - && source ~/.bashrc && poetry --version
+WORKDIR /tmp
+RUN curl -sSL https://install.python-poetry.org | python3 - && source ~/.bashrc && poetry --version \
+    && poetry config settings.virtualenvs.create false && poetry install
 
 # install neo4j
 RUN echo "deb http://httpredir.debian.org/debian stable-backports main" | tee -a /etc/apt/sources.list.d/stable-backports.list \
