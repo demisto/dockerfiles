@@ -36,8 +36,8 @@ COPY poetry.lock /tmp
 # installations
 RUN apt-get install openjdk-11-jre -y && source ~/.bashrc && java -version
 WORKDIR /tmp
-RUN curl -sSL https://install.python-poetry.org | python3 - && 
-RUN poetry --version \
+RUN curl -sSL https://install.python-poetry.org | python3 -
+RUN source ~/.bashrc && poetry --version \
     && poetry config settings.virtualenvs.create false \
     && poetry install
 
