@@ -37,6 +37,6 @@ COPY oob_evaluation.txt /ml
 RUN chown -R demisto:demisto /ml && chmod -R 775 /ml
 COPY --from=files-src --chown=demisto:demisto /ml /ml
 
-RUN apt update && \
-    apt install -y perl && \
-    apt install --only-upgrade -y libsqlite3-0
+RUN apt update \
+&& apt install -y perl \
+&& apt install --only-upgrade -y libsqlite3-0
