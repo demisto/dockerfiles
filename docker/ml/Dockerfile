@@ -28,6 +28,8 @@ RUN apt-get update \
 
 COPY demisto_ml-0.2.tar.gz .
 RUN pip install demisto_ml-0.2.tar.gz
+RUN pip install "onnx>=1.17.0"
+RUN pip install torch==2.2.0 --trusted-host download.pytorch.org --index-url https://download.pytorch.org/whl/cpu
 RUN rm -rf /var/lib/apt/lists/*
 RUN python -m spacy download en_core_web_sm
 RUN mkdir /ml
