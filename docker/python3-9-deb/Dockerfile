@@ -1,5 +1,5 @@
 
-# Last modified: 2024-10-20T00:18:00.313328+00:00
+# Last modified: 2024-11-14T00:16:58.374649+00:00
 FROM python:3.9.20-slim-bullseye
 
 RUN echo 'deb http://deb.debian.org/debian bullseye-backports main' >> /etc/apt/sources.list
@@ -18,6 +18,9 @@ RUN apt-get update && apt-get -t bullseye-backports -y --no-install-recommends u
 && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
+
+# Relevant for tldextract
+COPY public_list.dat /var/public_list.dat
 
 #Install tools for building binary deps (will be reomved later on)
 RUN apt-get update && apt-get install -y --no-install-recommends \
