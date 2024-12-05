@@ -5,6 +5,13 @@ description = ""
 authors = ["Your Name <you@example.com>"]
 readme = "README.md"
 
+
+[[tool.poetry.source]]
+name = "pytorch"
+url = "https://download.pytorch.org/whl/cpu/"
+priority = "explicit"
+
+
 [tool.poetry.dependencies]
 python = "^3.10"
 fasttext = "*"
@@ -24,7 +31,7 @@ langdetect = "*"
 onnx = "*"
 onnxruntime = "*"
 transformers = "==4.36.2"
-torch = {version = "==2.2.0", extras = ["cpu"]}
+torch = {version = "==2.2.0", extras = ["cpu"], source="pytorch"}
 
 
 [tool.poetry.group.dev.dependencies]
