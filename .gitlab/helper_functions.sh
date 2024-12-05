@@ -2,12 +2,13 @@
 
 CYAN="\e[0;36m"
 CLEAR="\e[0m"
-SECTION_START="\e[0Ksection_start:the_time:section_id\r\e[0K${CYAN}section_header${CLEAR}"
-SECTION_END="\e[0Ksection_end:the_time:section_id\r\e[0K"
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 NC='\033[0m'
+
+SECTION_START="\e[0Ksection_start:the_time:section_id\r\e[0K${CYAN}section_header${CLEAR}"
+SECTION_END="\e[0Ksection_end:the_time:section_id\r\e[0K"
 
 section_start() {
     local section_header section_id start
@@ -29,12 +30,12 @@ section_start() {
         section_header="$2"
         section_id="$1"
     else
-        echo "section_start should be called with 1-3 args but it was called with $#"
+        echo "section_start should be called with 1-3 args but it was called with $# args"
         echo "acceptable usages:"
-        echo "    1. section_start \"<section-start-id>\" \"<section-header>\""
-        echo "    2. section_start \"<section-header>\""
-        echo "    3. section_start \"<section-start-id>\" \"<section-header>\" --collapse"
-        echo "    4. section_start \"<section-header>\" --collapse"
+        echo "    1. section_start \"<section-header>\""
+        echo "    2. section_start \"<section-start-id>\" \"<section-header>\""
+        echo "    3. section_start \"<section-header>\" --collapse"
+        echo "    4. section_start \"<section-start-id>\" \"<section-header>\" --collapse"
         echo "where <section-start-id> is only alphanumeric characters and underscore and"
         echo "--collapse indicates that you would like those log steps to be collapsed in the job log output by default"
         exit 9
@@ -52,11 +53,11 @@ section_end() {
     if [[ "$#" -eq 1 ]]; then
         section_id="$(echo "$1" | tr -c '[:alnum:]\n\r' '_')"
     else
-        echo "section_end should be called with 1 arg but it was called with $#"
+        echo "section_end should be called with 1 arg but it was called with $# args"
         echo "acceptable usage:"
         echo "    1. section_end \"<section-start-id>\""
-        echo "    2. section_start \"<section-header>\""
-        echo "where <section-start-id> or <section-header> is that of the section this marks the end of"
+        echo "    2. section_end \"<section-header>\""
+        echo "where <section-start-id> or <section-header> is the id of the section this marks the end of"
         exit 9
     fi
     end_time=$(date +%s)

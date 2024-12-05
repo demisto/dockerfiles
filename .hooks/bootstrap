@@ -35,7 +35,7 @@ fi
 echo "======================="
 if [ -z "${INSTALL_POETRY}" ]; then
     if ! command -v poetry >/dev/null 2>&1; then
-        echo "ERROR: poetry is missing. Please run the following command to install poetry:
+        echo "ERROR: poetry is missing. Please run the following command to install it:
                curl -sSL https://install.python-poetry.org | python3 -" 1>&2
         exit 1
     fi
@@ -43,10 +43,10 @@ else
     should_install_poetry="yes"
     if command -v poetry >/dev/null 2>&1; then
         if [[ "$(poetry --version)" == "Poetry (version ${POETRY_VERSION})" ]]; then
-            echo "Poetry already installed:$(poetry --version) with correct version"
+            echo "Poetry is already installed with the correct version: $(poetry --version)"
             should_install_poetry="no"
         else
-            echo "Poetry installed with a different version:$(poetry --version) required:${POETRY_VERSION}"
+            echo "Poetry is already installed with a different version: $(poetry --version), required version: ${POETRY_VERSION}"
         fi
     else
         echo "Poetry isn't installed"
@@ -70,11 +70,10 @@ else
     fi
 fi
 
-GIT_HOOKS_DIR="${PWD}/.git/hooks"
-
 if [ -n "${NO_HOOKS}" ]; then
     echo "Skipping hooks setup as environment variable NO_HOOKS is set"
 else
+    GIT_HOOKS_DIR="${PWD}/.git/hooks"
     if [ ! -e "${GIT_HOOKS_DIR}/pre-commit" ]; then
         echo "Installing 'pre-commit' hooks"
         poetry run pre-commit install
@@ -106,7 +105,7 @@ fi
 
 echo "=========================="
 echo "Done setting up virtualenv with poetry"
-echo "Activate the venv by running: poetry shell"
+echo "Activate the virtualenv by running: poetry shell"
 echo "Deactivate by running: deactivate"
 echo "======================="
 
