@@ -1,9 +1,12 @@
-[[source]]
-url = "https://pypi.org/simple"
-verify_ssl = true
-name = "pypi"
+[tool.poetry]
+name = "ml"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
 
-[packages]
+[tool.poetry.dependencies]
+python = "^3.10"
 fasttext = "*"
 numpy = "*"
 scikit-learn = "==1.1.2"
@@ -23,7 +26,9 @@ onnxruntime = "*"
 transformers = "==4.36.2"
 torch = {version = "==2.2.0", extras = ["cpu"]}
 
-[dev-packages]
 
-[requires]
-python_version = "3.10"
+[tool.poetry.group.dev.dependencies]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
