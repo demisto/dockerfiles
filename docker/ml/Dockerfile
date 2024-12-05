@@ -13,8 +13,7 @@ RUN unzip /distilled_bert_base_uncased_tokenizer.zip -d /ml \
 
 FROM demisto/python3-deb:3.10.14.98108
 ENV HF_HOME /ml/.cache
-COPY Pipfile Pipfile
-COPY Pipfile.lock Pipfile.lock
+COPY requirements.txt .
 
 RUN apt-get update \
 && apt-get install -y --no-install-recommends \
