@@ -101,19 +101,15 @@ function sign_setup {
     if [ "${SIGN_SETUP_DONE}" = "yes" ]; then
         return 0;
     fi
-    if [ -z "${DOCKER_CONTENT_TRUST_REPOSITORY_PASSPHRASE}" ] || [ -z "${DOCKER_CONTENT_TRUST_ROOT_PASSPHRASE}" ] || [ -z "${DOCKERFILES_TRUST_GIT}" ]; then
+    if [ -z "${DOCKER_CONTENT_TRUST_REPOSITORY_PASSPHRASE}" ] || [ -z "${DOCKER_CONTENT_TRUST_ROOT_PASSPHRASE}" ] || [ -z "${DOCKERFILES_TRUST_GIT_HTTPS}" ]; then
         echo "Content trust passphrases not set. Not setting up docker signing."
         return 1;
     fi
-    if [ -n "${DOCKERFILES_TRUST_GIT_SSH_KEY}" ]; then
-      echo "Setting up git ssh key for dockerfiles trust"
-      GIT_SSH_COMMAND="ssh -i ${DOCKERFILES_TRUST_GIT_SSH_KEY}"
-      export GIT_SSH_COMMAND
-    else
-      echo "DOCKERFILES_TRUST_GIT_SSH_KEY not set."
-    fi
+    local DOCKERFILES_TRUST_GIT_URL="https://oauth2:${GITHUB_TOKEN}@${DOCKERFILES_TRUST_GIT_HTTPS}"
+
     if [ ! -d "${DOCKERFILES_TRUST_DIR}" ]; then
-        git clone "${DOCKERFILES_TRUST_GIT}" "${DOCKERFILES_TRUST_DIR}"
+        git clone "${DOCKERFILES_TRUST_GIT_URL}" "${DOCKERFILES_TRUST_DIR}"
+        git remote set-url origin "${DOCKERFILES_TRUST_GIT_URL}"
         git config --file "${DOCKERFILES_TRUST_DIR}/.git/config"  user.email "dc-builder@users.noreply.github.com"
         git config --file "${DOCKERFILES_TRUST_DIR}/.git/config" user.name "dc-builder"           
     else
@@ -435,6 +431,12 @@ echo $DIFF_COMPARE > $ARTIFACTS_FOLDER/diff_compare.txt
 echo $SCRIPT_DIR > $ARTIFACTS_FOLDER/script_dir.txt
 echo $CURRENT_DIR > $ARTIFACTS_FOLDER/current_dir.txt
 echo $DOCKER_INCLUDE_GREP > $ARTIFACTS_FOLDER/docker_include_grep.txt
+
+  docker_trust=0
+  if sign_setup; then
+      docker_trust=1
+      echo "using DOCKER_TRUST=${docker_trust} DOCKER_CONFIG=${DOCKER_CONFIG}"
+  fi
 
 total=$(find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | wc -l)
 count=0
