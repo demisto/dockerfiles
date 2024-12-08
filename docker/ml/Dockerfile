@@ -18,7 +18,7 @@ COPY Pipfile.lock Pipfile.lock
 
 RUN apt-get update \
   && apt-get install -y --no-install-recommends gcc python3-dev pipenv gfortran wget git g++ pkg-config libhdf5-dev 
-RUN pipenv install --system 
+RUN pipenv install --deploy --ignore-pipfile --system
 RUN apt-get purge -y --auto-remove gcc python3-dev gfortran wget git g++ pkg-config libhdf5-dev pipenv
 RUN apt-get upgrade -y && apt install -y perl libsqlite3-0
 
