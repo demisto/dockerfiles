@@ -1,4 +1,4 @@
-FROM alpine:3.17.10 AS files-src
+FROM alpine:3.17.10 as files-src
 RUN mkdir /ml
 COPY ./encrypted_model.b /ml/encrypted_model.b
 
@@ -17,10 +17,13 @@ COPY requirements.txt .
 
 RUN apt-get update \
 && apt-get install -y --no-install-recommends \
+  gcc \
+  python3-dev pipenv gfortran wget git g++ pkg-config libhdf5-dev \
+&& pipenv install --system \
+&& apt-get purge -y --auto-remove gcc \
+  python3-dev gfortran wget git g++ pkg-config libhdf5-dev pipenv \
 && apt-get upgrade -y \
-&& apt install -y perl libsqlite3-0 \
-&& pip install --no-cache-dir -r requirements.txt
-
+&& apt install -y perl libsqlite3-0
 
 COPY demisto_ml-0.2.tar.gz .
 RUN pip install demisto_ml-0.2.tar.gz
