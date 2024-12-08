@@ -9,10 +9,6 @@ import lime
 import tabulate
 from Crypto.Hash import SHA256
 import spacy
-
-nltk.download('stopwords', download_dir='/ml/nltk_data')
-nltk.download('punkt', download_dir='/ml/nltk_data')
-
 nlp = spacy.load('en_core_web_sm', disable=['tagger', 'parser', 'ner', 'textcat'])
 doc = nlp('tokenize this sentence')
 import demisto_ml
@@ -20,7 +16,6 @@ import catboost
 import eli5
 import langdetect
 import onnx
-
 
 def verify_stat(filename):
     res = os.stat(filename)
@@ -33,4 +28,12 @@ verify_stat('/ml/encrypted_model.b')
 verify_stat('/ml/nltk_data')
 verify_stat('/ml/oob_evaluation.txt')
 
+
 print('All package imported succesfully')
+
+
+
+
+
+
+
