@@ -97,6 +97,7 @@ function cr_login {
 }
 
 SIGN_SETUP_DONE=no
+DOCKERFILES_TRUST_GIT_URL=""
 function sign_setup {
     if [ "${SIGN_SETUP_DONE}" = "yes" ]; then
         return 0;
@@ -105,7 +106,7 @@ function sign_setup {
         echo "Content trust passphrases not set. Not setting up docker signing."
         return 1;
     fi
-    local DOCKERFILES_TRUST_GIT_URL="https://oauth2:${GITHUB_TOKEN}@${DOCKERFILES_TRUST_GIT_HTTPS}"
+    DOCKERFILES_TRUST_GIT_URL="https://oauth2:${GITHUB_TOKEN}@${DOCKERFILES_TRUST_GIT_HTTPS}"
 
     if [ ! -d "${DOCKERFILES_TRUST_DIR}" ]; then
         git clone "${DOCKERFILES_TRUST_GIT_URL}" "${DOCKERFILES_TRUST_DIR}"
@@ -133,7 +134,8 @@ function commit_dockerfiles_trust {
         git commit -m "$(date): trust update from PR: ${CI_COMMIT_REF_NAME} commit: ${CI_COMMIT_SHA}"
         COMMIT_DONE=no
         for i in 1 2 3 4 5; do
-            if git push; then
+            echo "Attempt $i to push... to upstream ${DOCKERFILES_TRUST_GIT_URL}"
+            if git push --set-upstream "${DOCKERFILES_TRUST_GIT_URL}"; then
                 echo "Push done successfully"
                 COMMIT_DONE=yes
                 break;
@@ -431,12 +433,6 @@ echo $DIFF_COMPARE > $ARTIFACTS_FOLDER/diff_compare.txt
 echo $SCRIPT_DIR > $ARTIFACTS_FOLDER/script_dir.txt
 echo $CURRENT_DIR > $ARTIFACTS_FOLDER/current_dir.txt
 echo $DOCKER_INCLUDE_GREP > $ARTIFACTS_FOLDER/docker_include_grep.txt
-
-  docker_trust=0
-  if sign_setup; then
-      docker_trust=1
-      echo "using DOCKER_TRUST=${docker_trust} DOCKER_CONFIG=${DOCKER_CONFIG}"
-  fi
 
 total=$(find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | wc -l)
 count=0
