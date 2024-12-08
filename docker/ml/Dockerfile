@@ -15,12 +15,9 @@ FROM demisto/python3-deb:3.10.14.98108
 ENV HF_HOME='/ml/.cache'
 COPY requirements.txt .
 
-RUN apt-get update \
-RUN apt-get install -y --no-install-recommends \
-  gcc \
-  python3-dev pipenv gfortran wget git g++ pkg-config libhdf5-dev
-RUN apt-get purge -y --auto-remove gcc \
-  python3-dev gfortran wget git g++ pkg-config libhdf5-dev
+RUN apt-get update
+RUN apt-get install -y --no-install-recommends gcc python3-dev pipenv gfortran wget git g++ pkg-config libhdf5-dev
+RUN apt-get purge -y --auto-remove gcc python3-dev gfortran wget git g++ pkg-config libhdf5-dev
 RUN apt-get upgrade -y
 RUN apt install -y perl libsqlite3-0
 
