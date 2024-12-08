@@ -1,5 +1,5 @@
-# from selenium import webdriver
-# from selenium.common.exceptions import NoSuchElementException, InvalidArgumentException
+from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException, InvalidArgumentException
 from PyPDF2 import PdfFileReader
 import pdf2image
 import numpy as np
