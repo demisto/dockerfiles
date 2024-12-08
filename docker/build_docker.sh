@@ -134,7 +134,7 @@ function commit_dockerfiles_trust {
         git commit -m "$(date): trust update from PR: ${CI_COMMIT_REF_NAME} commit: ${CI_COMMIT_SHA}"
         COMMIT_DONE=no
         for i in 1 2 3 4 5; do
-            echo "Attempt $i to push... to upstream ${DOCKERFILES_TRUST_GIT_URL}"
+            echo "Attempt $i to push..."
             if git push --set-upstream "${DOCKERFILES_TRUST_GIT_URL}"; then
                 echo "Push done successfully"
                 COMMIT_DONE=yes
