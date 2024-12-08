@@ -17,14 +17,11 @@ COPY Pipfile Pipfile
 COPY Pipfile.lock Pipfile.lock
 
 RUN apt-get update \
-&& apt-get install -y --no-install-recommends \
-  gcc \
-  python3-dev pipenv gfortran wget git g++ pkg-config libhdf5-dev \
-&& pipenv install --system \
-&& apt-get purge -y --auto-remove gcc \
-  python3-dev gfortran wget git g++ pkg-config libhdf5-dev pipenv \
-&& apt-get upgrade -y \
-&& apt install -y perl libsqlite3-0
+  && apt-get install -y --no-install-recommends gcc python3-dev pipenv gfortran wget git g++ pkg-config libhdf5-dev \
+  && pipenv install --system \
+  && apt-get purge -y --auto-remove gcc python3-dev gfortran wget git g++ pkg-config libhdf5-dev pipenv \
+  && apt-get upgrade -y \
+  && apt install -y perl libsqlite3-0
 
 COPY demisto_ml-0.2.tar.gz .
 RUN pip install demisto_ml-0.2.tar.gz
