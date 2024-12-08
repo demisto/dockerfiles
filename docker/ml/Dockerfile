@@ -15,11 +15,20 @@ FROM demisto/python3-deb:3.10.14.98108
 ENV HF_HOME='/ml/.cache'
 COPY requirements.txt .
 
+FROM python:3.9-slim
+
+# Install dependencies
 RUN apt-get update \
-&& apt-get install -y --no-install-recommends \
-&& apt-get upgrade -y \
-&& apt install -y perl libsqlite3-0 \
-&& pip install --no-cache-dir -r requirements.txt
+    && apt-get install -y --no-install-recommends \
+        perl \
+        libsqlite3-0 \
+    && apt-get upgrade -y \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python requirements
+COPY requirements.txt /app/requirements.txt
+WORKDIR /app
+RUN pip install --no-cache-dir -r requirements.txt
 
 
 COPY demisto_ml-0.2.tar.gz .
