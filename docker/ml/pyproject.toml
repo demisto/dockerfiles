@@ -15,7 +15,7 @@ priority = "explicit"
 [tool.poetry.dependencies]
 python = "^3.10"
 fasttext = "*"
-numpy = "*"
+numpy = "==1.26.4" # TODO - add docs why it cannot be updated
 scikit-learn = "==1.1.2"
 pandas = "*"
 nltk = "*"
