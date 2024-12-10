@@ -89,6 +89,7 @@ PR_NUM: the PR number to post to. If not set, will try to get from last commit m
     parser.add_argument("docker_image", help="The docker image with tag version to use. For example: devdemisto/python3:1.5.0.27")
     parser.add_argument("--is_contribution", help="Whether the PR is a contribution or not", action="store_true", default=False)
     args = parser.parse_args()
+    print("Posting to github about image: " + args.docker_image)
     post_url = get_post_url()
     if not post_url:
         return
