@@ -355,7 +355,7 @@ function docker_build {
           exit 1
         fi
         if [ -n "$CI" ]; then
-            IMAGE_NAME_SAVE=`echo ${image_full_name} | tr / _`.tar
+            IMAGE_NAME_SAVE="$(echo ${image_full_name} | sed -e 's/\//__/g').tar"
             IMAGE_SAVE="${ARTIFACTS_FOLDER}/${IMAGE_NAME_SAVE}"
             echo "Creating artifact of docker image at ${IMAGE_SAVE}"
             docker save -o "${IMAGE_SAVE}" "${image_full_name}"
