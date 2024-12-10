@@ -12,8 +12,8 @@ ARTIFACTS_FOLDER = Path(os.getenv("ARTIFACTS_FOLDER", "."))
 
 
 def get_docker_image_size(docker_image, is_contribution: bool = False) -> str:
-    """Get the size of the image from docker hub or locally, depending whether
-    we're contributing or not.
+    """
+    Get the size of the image from docker hub or locally, depending on whether we're contributing or not.
 
     Arguments:
         docker_image {string} -- the full name of the image
@@ -90,7 +90,7 @@ PR_NUM: the PR number to post to. If not set, it will try to infer it from the l
     parser.add_argument("--is_contribution", help="Whether the PR is a contribution or not", action="store_true", default=False)
     args = parser.parse_args()
     print("Posting to github about image: " + args.docker_image)
-    post_url = get_post_url()
+    post_url = get_pr_comments_url()
     if not post_url:
         return
     print('Found PR Comments URL: {post_url}')
