@@ -31,6 +31,7 @@ def get_docker_image_size(docker_image, is_contribution: bool = False) -> str:
                 res.raise_for_status()
                 size_bytes = res.json()['images'][0]['size']
                 size = '{0:.2f} MB'.format(float(size_bytes)/1024/1024)
+                break
             except Exception as ex:
                 print("[{}] failed getting image size for image: {}. Err: {}".format(i, docker_image, ex))
                 if i != 3:
@@ -80,7 +81,7 @@ def get_post_url() -> str | None:
 
 def main():
     desc = """Post a message to github about the created image. Relies on environment variables:
-GITHUB_KEY: api key of user to use for posting
+XSOAR_BOT_GITHUB_TOKEN: api key of user to use for posting
 PR_NUM: the PR number to post to. If not set, will try to get from last commit message.
     """
     parser = argparse.ArgumentParser(description=desc,
@@ -132,7 +133,7 @@ PR_NUM: the PR number to post to. If not set, will try to get from last commit m
             docker_info
         )
     print("Going to post comment:\n\n{}".format(message))
-    res = requests.post(post_url, json={"body": message}, auth=(os.environ['GITHUB_KEY'], 'x-oauth-basic'))
+    res = requests.post(post_url, json={"body": message}, auth=(os.environ['XSOAR_BOT_GITHUB_TOKEN'], 'x-oauth-basic'))
     try:
         res.raise_for_status()
     except Exception as ex:
