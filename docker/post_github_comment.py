@@ -58,7 +58,7 @@ def convert_docker_image_tar(docker_image: str) -> str:
     Returns:
     - `str` of the fixed Docker image TAR.
     """
-    return f"{docker_image.replace('/', '_')}.tar.gz"
+    return f"{docker_image.replace('/', '__')}.tar.gz"
 
 
 def get_pr_comments_url() -> str | None:
