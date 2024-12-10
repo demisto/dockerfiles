@@ -355,14 +355,12 @@ function docker_build {
           exit 1
         fi
         if [ -n "$CI" ]; then
-            echo "Creating artifact of docker image..."
-            ARTDIR="${DOCKER_SRC_DIR}/../artifacts"
-            mkdir -p "${ARTDIR}"
-            IMAGENAMESAVE=`echo ${image_full_name} | tr / _`.tar
-            IMAGESAVE=${ARTDIR}/$IMAGENAMESAVE
-            docker save -o "$IMAGESAVE" ${image_full_name}
-            gzip "$IMAGESAVE"
-            ${DOCKER_SRC_DIR}/post_github_comment.py ${image_full_name} "--is_contribution"
+            IMAGE_NAME_SAVE=`echo ${image_full_name} | tr / _`.tar
+            IMAGE_SAVE="${ARTIFACTS_FOLDER}/${IMAGE_NAME_SAVE}"
+            echo "Creating artifact of docker image to: ${IMAGE_SAVE}"
+            docker save -o "${IMAGE_SAVE}" "${image_full_name}"
+            gzip "${IMAGE_SAVE}"
+            "${DOCKER_SRC_DIR}/post_github_comment.py" "${image_full_name}" "--is_contribution"
             cat << EOF
 -------------------------
 Docker image [$image_full_name] has been saved as an artifact.
