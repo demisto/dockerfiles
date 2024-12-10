@@ -12,12 +12,12 @@ ARTIFACTS_FOLDER = Path(os.getenv("ARTIFACTS_FOLDER", "."))
 
 
 def get_docker_image_size(docker_image, is_contribution: bool = False) -> str:
-    """Get the size of the image from docker hub or CircleCI worker depending on
-    if we're contributing or not.
+    """Get the size of the image from docker hub or locally, depending whether
+    we're contributing or not.
 
     Arguments:
         docker_image {string} -- the full name of the image
-        is_contribution {bool} -- flag whether we should get the image size from Dockerhub or CircleCI artifacts
+        is_contribution {bool} -- flag whether we should get the image size from Dockerhub, or locally
 
     Returns:
     - `str` containing the Docker image in MB, e.g. '12.34 MB'.
@@ -33,7 +33,7 @@ def get_docker_image_size(docker_image, is_contribution: bool = False) -> str:
                 size = '{0:.2f} MB'.format(float(size_bytes)/1024/1024)
                 break
             except Exception as ex:
-                print("[{}] failed getting image size for image: {}. Err: {}".format(i, docker_image, ex))
+                print("Attempt [{}] failed getting image size for image: {}. Err: {}".format(i, docker_image, ex))
                 if i != 3:
                     print("Sleeping 5 seconds and trying again...")
                     time.sleep(5)
@@ -61,7 +61,7 @@ def convert_docker_image_tar(docker_image: str) -> str:
     return f"{docker_image.replace('/', '_')}.tar.gz"
 
 
-def get_post_url() -> str | None:
+def get_pr_comments_url() -> str | None:
     if os.getenv('PR_NUM'):
         pr_num = os.getenv('PR_NUM')
         print("PR number found from environment: " + pr_num)
@@ -71,10 +71,10 @@ def get_post_url() -> str | None:
     last_comment = subprocess.check_output(["git", "log", "-1", "--pretty=%B"], text=True)
     m = re.search(r"#(\d+)", last_comment, re.MULTILINE)
     if not m:
-        print("No issue id found in last commit comment. Ignoring: \n------\n{}\n-------".format(last_comment))
+        print("No issue id found in the last commit comment. Ignoring: \n------\n{}\n-------".format(last_comment))
         return None
     issue_id = m.group(1)
-    print("Issue id found from last commit comment: " + issue_id)
+    print("Issue id found from the last commit comment: " + issue_id)
     post_url = "https://api.github.com/repos/demisto/dockerfiles/issues/{}/comments".format(issue_id)
     return post_url
 
@@ -82,7 +82,7 @@ def get_post_url() -> str | None:
 def main():
     desc = """Post a message to github about the created image. Relies on environment variables:
 XSOAR_BOT_GITHUB_TOKEN: api key of user to use for posting
-PR_NUM: the PR number to post to. If not set, will try to get from last commit message.
+PR_NUM: the PR number to post to. If not set, it will try to infer it from the last commit message.
     """
     parser = argparse.ArgumentParser(description=desc,
                                      formatter_class=argparse.RawTextHelpFormatter)
@@ -93,6 +93,7 @@ PR_NUM: the PR number to post to. If not set, will try to get from last commit m
     post_url = get_post_url()
     if not post_url:
         return
+    print('Found PR Comments URL: {post_url}')
     inspect_format = f'''
 {{{{ range $env := .Config.Env }}}}{{{{ if eq $env "DEPRECATED_IMAGE=true" }}}}## 🔴 IMPORTANT: This image is deprecated 🔴{{{{ end }}}}{{{{ end }}}}
 ## Docker Metadata

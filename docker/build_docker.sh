@@ -357,7 +357,7 @@ function docker_build {
         if [ -n "$CI" ]; then
             IMAGE_NAME_SAVE=`echo ${image_full_name} | tr / _`.tar
             IMAGE_SAVE="${ARTIFACTS_FOLDER}/${IMAGE_NAME_SAVE}"
-            echo "Creating artifact of docker image to: ${IMAGE_SAVE}"
+            echo "Creating artifact of docker image at ${IMAGE_SAVE}"
             docker save -o "${IMAGE_SAVE}" "${image_full_name}"
             gzip "${IMAGE_SAVE}"
             "${DOCKER_SRC_DIR}/post_github_comment.py" "${image_full_name}" "--is_contribution"
