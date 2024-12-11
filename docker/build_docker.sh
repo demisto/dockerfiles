@@ -5,6 +5,7 @@ set -e
 
 REVISION=${CI_PIPELINE_ID:-$(date +%s)}
 PUSHED_DOCKERS=""
+IMAGE_ARTIFACTS=""
 CURRENT_DIR=$(pwd)
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 DOCKER_SRC_DIR=${SCRIPT_DIR}
@@ -355,14 +356,13 @@ function docker_build {
           exit 1
         fi
         if [ -n "$CI" ]; then
-            echo "Creating artifact of docker image..."
-            ARTDIR="${DOCKER_SRC_DIR}/../artifacts"
-            mkdir -p "${ARTDIR}"
-            IMAGENAMESAVE=`echo ${image_full_name} | tr / _`.tar
-            IMAGESAVE=${ARTDIR}/$IMAGENAMESAVE
-            docker save -o "$IMAGESAVE" ${image_full_name}
-            gzip "$IMAGESAVE"
-            ${DOCKER_SRC_DIR}/post_github_comment.py ${image_full_name} "--is_contribution"
+            IMAGE_NAME_SAVE="$(echo ${image_full_name} | sed -e 's/\//__/g').tar"
+            IMAGE_SAVE="${ARTIFACTS_FOLDER}/${IMAGE_NAME_SAVE}"
+            echo "Creating artifact of docker image at ${IMAGE_SAVE}"
+            docker save -o "${IMAGE_SAVE}" "${image_full_name}"
+            IMAGE_ARTIFACTS="${IMAGE_SAVE},${IMAGE_ARTIFACTS}"
+            gzip "${IMAGE_SAVE}"
+            "${DOCKER_SRC_DIR}/post_github_comment.py" "${image_full_name}" "--is_contribution"
             cat << EOF
 -------------------------
 Docker image [$image_full_name] has been saved as an artifact.
@@ -423,12 +423,12 @@ fi
 
 echo "DOCKER_ORG: ${DOCKER_ORG}, DIFF_COMPARE: [${DIFF_COMPARE}], SCRIPT_DIR: [${SCRIPT_DIR}], BRANCH: ${CI_COMMIT_REF_NAME}, PWD: [${CURRENT_DIR}]"
 
-# echo to bash env to be used in future steps
 ARTIFACTS_FOLDER="${ARTIFACTS_FOLDER:-artifacts}"
 if [[ ! -d "${ARTIFACTS_FOLDER}" ]]; then
   mkdir -p "${ARTIFACTS_FOLDER}"
 fi
 
+# echo to bash env to be used in future steps
 echo $DIFF_COMPARE > $ARTIFACTS_FOLDER/diff_compare.txt
 echo $SCRIPT_DIR > $ARTIFACTS_FOLDER/script_dir.txt
 echo $CURRENT_DIR > $ARTIFACTS_FOLDER/current_dir.txt
@@ -458,9 +458,17 @@ if [ ${#errors[@]} != 0 ]; then
   exit 1
 fi
 
+
 if [ -n "$PUSHED_DOCKERS" ]; then
   echo "${PUSHED_DOCKERS}" > "${ARTIFACTS_FOLDER}/pushed_dockers.txt"
-  echo "Successfully pushed ${PUSHED_DOCKERS}"
+  echo "Successfully pushed:${PUSHED_DOCKERS}"
 else
     echo "No dockers were built and pushed"
+fi
+
+if [ -n "${IMAGE_ARTIFACTS}" ]; then
+  echo "${IMAGE_ARTIFACTS}" > "${ARTIFACTS_FOLDER}/image_artifacts.txt"
+  echo "Successfully saved:${IMAGE_ARTIFACTS}"
+else
+    echo "No image artifacts were saved"
 fi
