@@ -8,7 +8,6 @@ COPY requirements.txt .
 
 COPY localtime /etc/localtime
 
-# FIXME! remove before merge.
 # Relevant for tldextract
 COPY public_list.dat /var/public_list.dat
 
