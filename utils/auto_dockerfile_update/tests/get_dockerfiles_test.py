@@ -1,4 +1,4 @@
-from get_dockerfiles import get_docker_files
+from utils.auto_dockerfile_update.get_dockerfiles import get_docker_files
 
 
 def test_get_docker_files_multiple_from():
