@@ -127,9 +127,9 @@ def get_docker_files(base_path="docker/", devonly=False, external=False, interna
         internal (bool):whether or not to get dockerfiles with internal base images
 
     Returns:
-        list of relevant files: [{'name','path,'content','base_image}]
+        list of relevant files: [{'name','path','content','base_image'}]
     """
-    dockerfiles_paths = [f"{base_path}/yolo-coco/Dockerfile"]  # glob(f"{base_path}/**/Dockerfile", recursive=True)
+    dockerfiles_paths = glob(f"{base_path}/**/Dockerfile", recursive=True)
     files_list = []
 
     for path in dockerfiles_paths:
