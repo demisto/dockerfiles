@@ -10,5 +10,5 @@ def test_get_docker_files_multiple_from():
     Then
         - Verify length of output list is as expected
     """
-    files_list = get_docker_files(base_path="test_data/")
+    files_list = get_docker_files(base_path="utils/auto_dockerfile_update/tests/test_data/")
     assert len(files_list) == 3
