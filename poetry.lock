@@ -2,13 +2,13 @@
 
 [[package]]
 name = "astroid"
-version = "3.3.5"
+version = "3.3.8"
 description = "An abstract syntax tree for Python with inference support."
 optional = false
 python-versions = ">=3.9.0"
 files = [
-    {file = "astroid-3.3.5-py3-none-any.whl", hash = "sha256:a9d1c946ada25098d790e079ba2a1b112157278f3fb7e718ae6a9252f5835dc8"},
-    {file = "astroid-3.3.5.tar.gz", hash = "sha256:5cfc40ae9f68311075d27ef68a4841bdc5cc7f6cf86671b49f00607d30188e2d"},
+    {file = "astroid-3.3.8-py3-none-any.whl", hash = "sha256:187ccc0c248bfbba564826c26f070494f7bc964fd286b6d9fff4420e55de828c"},
+    {file = "astroid-3.3.8.tar.gz", hash = "sha256:a88c7994f914a4ea8572fac479459f4955eeccc877be3f2d959a33273b0cf40b"},
 ]
 
 [package.dependencies]
@@ -605,13 +605,13 @@ urllib3 = ">=1.26.7"
 
 [[package]]
 name = "demisto-sdk"
-version = "1.33.2"
+version = "1.33.3"
 description = "\"A Python library for the Demisto SDK\""
 optional = false
 python-versions = "<3.13,>=3.9"
 files = [
-    {file = "demisto_sdk-1.33.2-py3-none-any.whl", hash = "sha256:ffa9cbe1f3aeec2fa9af749d3a53ed4b766ba520e167b0767aa6b125e08676ac"},
-    {file = "demisto_sdk-1.33.2.tar.gz", hash = "sha256:ee7d1af2d572f4172c3bf3ecd24eaf6e83fdd3860951e3213eb8d20453bbfa36"},
+    {file = "demisto_sdk-1.33.3-py3-none-any.whl", hash = "sha256:527bbc13cecd2672cd8ae22ae19e09c7c5b502fb78e450e0850b81c9052fcdc4"},
+    {file = "demisto_sdk-1.33.3.tar.gz", hash = "sha256:3f1a79c9bb45e0d69a8e90d034e0f172c50da8c6e64b1cae50f55c5086b3dc98"},
 ]
 
 [package.dependencies]
@@ -658,7 +658,7 @@ prettytable = ">=3.2.0,<4.0.0"
 pydantic = ">=1.10,<2.0"
 pygithub = ">=2.2.0,<3.0.0"
 pykwalify = ">=1.8.0,<2.0.0"
-pylint = ">=3.3.1,<4.0.0"
+pylint = ">=3.3.2,<4.0.0"
 PyPDF2 = ">=1.28.6,<2.0.0"
 pyspellchecker = ">=0.6.3,<0.7.0"
 pytest-freezegun = ">=0.4.2,<0.5.0"
@@ -913,12 +913,12 @@ files = [
 google-auth = ">=2.14.1,<3.0.dev0"
 googleapis-common-protos = ">=1.56.2,<2.0.dev0"
 grpcio = [
-    {version = ">=1.33.2,<2.0dev", optional = true, markers = "python_version < \"3.11\" and extra == \"grpc\""},
     {version = ">=1.49.1,<2.0dev", optional = true, markers = "python_version >= \"3.11\" and extra == \"grpc\""},
+    {version = ">=1.33.2,<2.0dev", optional = true, markers = "python_version < \"3.11\" and extra == \"grpc\""},
 ]
 grpcio-status = [
-    {version = ">=1.33.2,<2.0.dev0", optional = true, markers = "python_version < \"3.11\" and extra == \"grpc\""},
     {version = ">=1.49.1,<2.0.dev0", optional = true, markers = "python_version >= \"3.11\" and extra == \"grpc\""},
+    {version = ">=1.33.2,<2.0.dev0", optional = true, markers = "python_version < \"3.11\" and extra == \"grpc\""},
 ]
 proto-plus = ">=1.22.3,<2.0.0dev"
 protobuf = ">=3.19.5,<3.20.0 || >3.20.0,<3.20.1 || >3.20.1,<4.21.0 || >4.21.0,<4.21.1 || >4.21.1,<4.21.2 || >4.21.2,<4.21.3 || >4.21.3,<4.21.4 || >4.21.4,<4.21.5 || >4.21.5,<6.0.0.dev0"
@@ -2234,22 +2234,22 @@ python-dateutil = ">=2.8.0"
 
 [[package]]
 name = "pylint"
-version = "3.3.1"
+version = "3.3.3"
 description = "python code static checker"
 optional = false
 python-versions = ">=3.9.0"
 files = [
-    {file = "pylint-3.3.1-py3-none-any.whl", hash = "sha256:2f846a466dd023513240bc140ad2dd73bfc080a5d85a710afdb728c420a5a2b9"},
-    {file = "pylint-3.3.1.tar.gz", hash = "sha256:9f3dcc87b1203e612b78d91a896407787e708b3f189b5fa0b307712d49ff0c6e"},
+    {file = "pylint-3.3.3-py3-none-any.whl", hash = "sha256:26e271a2bc8bce0fc23833805a9076dd9b4d5194e2a02164942cb3cdc37b4183"},
+    {file = "pylint-3.3.3.tar.gz", hash = "sha256:07c607523b17e6d16e2ae0d7ef59602e332caa762af64203c24b41c27139f36a"},
 ]
 
 [package.dependencies]
-astroid = ">=3.3.4,<=3.4.0-dev0"
+astroid = ">=3.3.8,<=3.4.0-dev0"
 colorama = {version = ">=0.4.5", markers = "sys_platform == \"win32\""}
 dill = [
-    {version = ">=0.2", markers = "python_version < \"3.11\""},
     {version = ">=0.3.7", markers = "python_version >= \"3.12\""},
     {version = ">=0.3.6", markers = "python_version >= \"3.11\" and python_version < \"3.12\""},
+    {version = ">=0.2", markers = "python_version < \"3.11\""},
 ]
 isort = ">=4.2.5,<5.13.0 || >5.13.0,<6"
 mccabe = ">=0.6,<0.8"
@@ -3423,4 +3423,4 @@ pyyaml = "*"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<3.13"
-content-hash = "85ddc4e097e29ca078b0dcce73de532fd3f7395554b77deb3f9851205d0e89f9"
+content-hash = "097afe72c824225ab220d56f72f72278460e4a9eb5502ea6a16724d0ece2b080"
