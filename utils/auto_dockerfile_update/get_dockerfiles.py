@@ -48,6 +48,9 @@ def parse_base_image(full_base_image_name: str) -> (str, str, str):
     else:
         repository, full_image_name = full_base_image_name.split("/")
 
+    if not ":" in full_image_name:
+        return repository, full_image_name, None
+
     image_name, tag = full_image_name.split(":")
     return repository, image_name, tag
 
@@ -160,7 +163,11 @@ def get_docker_files(base_path="docker/", devonly=False, external=False, interna
                 base_image = base_image.replace("FROM ", "")
                 is_internal = re.search(INTERNAL_BASE_IMAGES, base_image)
                 if (is_internal and internal) or (not is_internal and external):
+
                     repo, image_name, tag = parse_base_image(base_image)
+                    if not tag:  # base image doesn't have a version to update
+                        continue
+
                     last_modified = get_last_modified(docker_file_content)
                     curr_dockerfile = {
                         "path": path,
