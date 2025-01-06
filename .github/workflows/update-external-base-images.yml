@@ -26,7 +26,7 @@ jobs:
             echo "==== $(date): Starting pipenv setup... ===="
             python -m pip install --upgrade pip
             pip install pipenv==2024.4.0
-            pipenv install
+            pipenv install --python=$(which python)
             echo "==== Finished ===="
             [[ ${{ vars.DISABLE_TIMESTAMP_AUTOUPDATES }} = 'true' ]] && tu_flag="--no-timestamp-updates"
             echo tu_flag being passed is $tu_flag
