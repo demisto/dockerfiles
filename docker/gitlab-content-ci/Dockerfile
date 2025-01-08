@@ -62,3 +62,7 @@ RUN echo 'export GOENV_ROOT="$HOME/.goenv"' >> ~/.bashrc \
     && echo 'export PATH="$PATH:$GOPATH/bin"' >> ~/.bashrc \
     && source ~/.bashrc
 RUN curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.60.3
+
+# Installing fzf
+RUN apt install fzf \
+    && source ~/.bashrc
