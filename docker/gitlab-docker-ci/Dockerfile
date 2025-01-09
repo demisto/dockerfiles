@@ -1,4 +1,4 @@
-FROM devdemisto/gitlab-content-ci:1.0.0.64455
+FROM devdemisto/gitlab-content-ci:1.0.0.1947584
 
 USER root
 
