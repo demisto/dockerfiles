@@ -1,43 +1,24 @@
 FROM devdemisto/gitlab-content-ci:1.0.0.1947584
 
 USER root
+# install docker
 
-ENV DEBIAN_FRONTEND=noninteractive
-ENV GIT_SSL_NO_VERIFY=1
+RUN sudo apt-get update  && \
+sudo apt-get install -y ca-certificates curl gnupg libkrb5-dev automake python3-dev libtool && \
+sudo install -m 0755 -d /etc/apt/keyrings && \
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg && \
+sudo chmod a+r /etc/apt/keyrings/docker.gpg && \
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null && \
+sudo apt-get update && \
+apt-get upgrade -y docker-ce docker-ce-cli docker-buildx-plugin containerd.io git  \
+    && apt-get purge -y docker-compose-plugin docker-scan-plugin git-lfs && rm -rf /var/lib/apt/lists/*  \
+    && rm /usr/local/bin/docker-compose /usr/local/bin/yq /usr/local/bin/compose-switch /usr/local/lib/docker/cli-plugins/docker-compose
 
-
-RUN apt-get update && apt-get install -y \
-    ca-certificates \
-    build-essential \
-    curl \
-    git \
-    libbz2-dev \
-    libffi-dev \
-    liblzma-dev \
-    libncurses5-dev \
-    libreadline-dev \
-    libsqlite3-dev \
-    libssl-dev \
-    libxml2-dev \
-    libxmlsec1-dev \
-    llvm \
-    make \
-    python3-openssl \
-    tk-dev \
-    wget \
-    xz-utils \
-    zlib1g-dev
-
-# Install pyenv
-RUN git clone https://github.com/pyenv/pyenv.git ~/.pyenv
-
-# Environment variables for pyenv
-ENV PYENV_ROOT /root/.pyenv
-ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
-
-# Initialization of pyenv in the shell
-RUN echo 'eval "$(pyenv init --path)"' >> /etc/profile.d/pyenv.sh
-RUN echo 'eval "$(pyenv init -)"' >> /etc/profile
+USER circleci
+COPY requirements.txt /tmp/requirements.txt
 
 # Setup pyenv
 RUN pyenv install -s 2.7.18 && pyenv versions | grep 2.7.18 && \
@@ -46,4 +27,4 @@ RUN pyenv install -s 2.7.18 && pyenv versions | grep 2.7.18 && \
  pyenv install -s 3.10.13 && pyenv versions | grep 3.10.13 && \
  pyenv install -s 3.11.0 && pyenv versions | grep 3.11.0 && \
  pyenv install -s 3.12.0 && pyenv versions | grep 3.12.0 && \
-pyenv global 3.10.13
+pyenv global 3.10.13 && pip3 install --no-cache-dir -r /tmp/requirements.txt
