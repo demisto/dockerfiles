@@ -1,7 +1,7 @@
 variables:
-  CURRENT_BRANCH_NAME: $INFRA_BRANCH
+  CURRENT_BRANCH_NAME: "dev_task_docker_with_python_versions_infra_pr"
 
 include:
   - file: "/.gitlab/ci/dockerfiles/.gitlab-ci.yml"
-    ref: $INFRA_BRANCH
+    ref: "dev_task_docker_with_python_versions_infra_pr"
     project: "${CI_PROJECT_NAMESPACE}/infra"
