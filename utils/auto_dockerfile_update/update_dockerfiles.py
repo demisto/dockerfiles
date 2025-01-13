@@ -156,7 +156,7 @@ def run_lock(base_path_docker: str, pipfile_or_pyproject_path: str) -> bool:
         if "Pipfile" in pipfile_or_pyproject_path:
             # waits for the process to end.
             completed_process = subprocess.run(
-                ["pipenv", "lock"],
+                ["pipenv", "lock", "--keep-outdated"],
                 check=True,
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.PIPE,
@@ -357,9 +357,9 @@ def update_and_push_dockerfiles(
 
         changedFiles = [item.a_path for item in git_repo.index.diff(None)]
         print(f"[INFO] changed files are: {','.join(changedFiles)}")
-        git_repo.git.add("*")
-        git_repo.git.commit(m=f"Update Dockerfiles")
-        git_repo.git.push("--set-upstream", "origin", branch)
+        # git_repo.git.add("*")
+        # git_repo.git.commit(m=f"Update Dockerfiles")
+        # git_repo.git.push("--set-upstream", "origin", branch)
         print(f"Created branch {branch_name} successfully")
     except GitCommandError as e:
         print(f"Error creating {branch_name}")
