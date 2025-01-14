@@ -1,6 +1,5 @@
 FROM devdemisto/gitlab-content-ci:1.0.0.64455
-COPY requirements.txt /tmp/requirements.txt
-RUN pip install -r /tmp/requirements.txt
+
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
@@ -24,3 +23,6 @@ RUN curl -s https://pyenv.run | bash \
 # Setup pyenv
 RUN pyenv install -s 2.7.18 && pyenv versions | grep 2.7.18 && \
  pyenv install -s 3.8.15 && pyenv versions | grep 3.8.15
+
+COPY requirements.txt /tmp/requirements.txt
+RUN pip install -r /tmp/requirements.txt
