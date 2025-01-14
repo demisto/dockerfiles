@@ -2,7 +2,7 @@ name: Create update dockerfiles PR
 
 on:
   workflow_run:
-    workflows: []
+    workflows: [Update external base images2, Update internal base images2]
     types: completed
   workflow_dispatch:
 
