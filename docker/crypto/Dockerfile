@@ -3,7 +3,6 @@
 # See teams image for an example.
 FROM demisto/python3:3.12.7.117934
 
-
 COPY requirements.txt .
 
 # Crypto  needs the latest pip
