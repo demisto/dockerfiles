@@ -4,11 +4,8 @@ import sys
 def verify_python_version(version):
     """ Verify if provided python version is correctly installed. """
     try:
-        # Directly calling the version specific Python interpreter
-        result = subprocess.run([f"/root/.pyenv/shims/python{version}", "-c", "import sys; print(sys.version)"], check=True, text=True, stdout=subprocess.PIPE)
-        print(f"Python {version} is correctly installed: {result.stdout}")
+        subprocess.run([f"/root/.pyenv/shims/python{version}", "-c", "import sys; print(sys.version)"], check=True, text=True, stdout=subprocess.PIPE)
     except subprocess.CalledProcessError:
-        print(f"Failed to run Python {version}")
         sys.exit(1)
 
 def main():
