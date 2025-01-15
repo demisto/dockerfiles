@@ -10,10 +10,10 @@ python = "~3.11"
 tldextract = "*"
 more-itertools = "*"
 defusedxml = "*"
-opencv-python = "*"  # using previous version until fixed https://github.com/opencv/opencv-python/issues/676
-scikit-learn = "*"   # cannot upgrade, the newer versions are BC with the training model. 
-scipy = "*"   # All dependencies listed below are frozen because we couldn't upgrade all of them. It's possible that some could still be updated. https://jira-dc.paloaltonetworks.com/browse/CIAC-9755
-NumPy = "*"
+opencv-python = "*"
+scikit-learn = "*"
+scipy = "*"
+NumPy = "==1.26.4"  # waiting for: https://github.com/catboost/catboost/issues/2671
 beautifulsoup4 = "*"
 catboost = "*"
 certifi = "*"
