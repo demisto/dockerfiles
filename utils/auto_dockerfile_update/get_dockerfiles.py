@@ -48,6 +48,9 @@ def parse_base_image(full_base_image_name: str) -> (str, str, str):
     else:
         repository, full_image_name = full_base_image_name.split("/")
 
+    if not ":" in full_image_name:
+        return repository, full_image_name, None
+
     image_name, tag = full_image_name.split(":")
     return repository, image_name, tag
 
@@ -127,7 +130,7 @@ def get_docker_files(base_path="docker/", devonly=False, external=False, interna
         internal (bool):whether or not to get dockerfiles with internal base images
 
     Returns:
-        list of relevant files: [{'name','path,'content','base_image}]
+        list of relevant files: [{'name','path','content','base_image'}]
     """
     dockerfiles_paths = glob(f"{base_path}/**/Dockerfile", recursive=True)
     files_list = []
@@ -148,27 +151,33 @@ def get_docker_files(base_path="docker/", devonly=False, external=False, interna
 
         with open(path) as f:
             docker_file_content = f.read()
-            base_image = re.search(BASE_IMAGE_REGEX, docker_file_content)
+            base_images_in_docker_file = re.findall(BASE_IMAGE_REGEX, docker_file_content)
 
-            if not base_image:
+            if not base_images_in_docker_file:
                 # The dockerfile doesn't contain base image
+                print(f"Couldn't find base images for docker file {path.split('/')[-2]}")
                 continue
 
-            base_image = base_image.group(0)
-            base_image = base_image.replace("FROM ", "")
-            is_internal = re.search(INTERNAL_BASE_IMAGES, base_image)
-            if (is_internal and internal) or (not is_internal and external):
-                repo, image_name, tag = parse_base_image(base_image)
-                last_modified = get_last_modified(docker_file_content)
-                curr_dockerfile = {"path": path,
-                                   "repo": repo,
-                                   "image_name": image_name,
-                                   "tag": tag,
-                                   "last_modified": last_modified,
-                                   "content": docker_file_content,
-                                   "name": dockerfile_dir_path.split('/')[1],
-                                   }
+            print(f"Found base images for docker file {path.split('/')[-2]}: {base_images_in_docker_file}")
+            for base_image in base_images_in_docker_file:
+                base_image = base_image.replace("FROM ", "")
+                is_internal = re.search(INTERNAL_BASE_IMAGES, base_image)
+                if (is_internal and internal) or (not is_internal and external):
 
-                files_list.append(curr_dockerfile)
+                    repo, image_name, tag = parse_base_image(base_image)
+                    if not tag:  # base image doesn't have a version to update
+                        continue
+
+                    last_modified = get_last_modified(docker_file_content)
+                    curr_dockerfile = {
+                        "path": path,
+                        "repo": repo,
+                        "image_name": image_name,
+                        "tag": tag,
+                        "last_modified": last_modified,
+                        "content": docker_file_content,
+                        "name": dockerfile_dir_path.split('/')[1],
+                    }
+                    files_list.append(curr_dockerfile)
 
     return filter_ignored_files(files_list)

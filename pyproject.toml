@@ -1,0 +1,41 @@
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "dockerfiles"
+version = "0.0.1"
+description = "Dockerfiles for Cortex XSOAR content"
+authors = ["Cortex XSOAR"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.13"
+"ruamel.yaml" = "*"
+requests = "*"
+dockerfile_parse = "*"
+pyyaml = "*"
+regex = "*"
+python-dateutil = "*"
+gitpython = "^3.1.44" # import git
+python-gitlab = "^3.0.0" # import gitlab
+toml = "*"
+demisto-sdk = "1.33.4"
+wrapt = "^1.17.0"
+pipenv = "^2024.4.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "*"
+
+[tool.pytest.ini_options]
+addopts = """
+    --disable-warnings
+    --color=yes
+    -v
+    --ignore='Tests/'
+    --ignore='artifacts/'
+    --ignore='Utils/'
+    --junitxml=report.xml
+    """
+python_files = "test_*.py *_test.py"

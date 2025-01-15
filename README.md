@@ -1,7 +1,5 @@
 # Cortex XSOAR Dockerfiles and Image Build Management
 
-[![CircleCI](https://circleci.com/gh/demisto/dockerfiles.svg?style=svg)](https://circleci.com/gh/demisto/dockerfiles)
-
 This repository's `master` branch tracks images pushed to [the official Demisto Docker Hub organization](https://hub.docker.com/u/demisto/). Other branches` images are pushed to [devdemisto](https://hub.docker.com/u/devdemisto).
 
 **Note:** We generate nightly information about packages and OS dependencies used in each of Demisto's Docker images. Checkout the `dockerfiles-info` project [README](https://github.com/demisto/dockerfiles-info/blob/master/README.md) for a full listing.
@@ -87,7 +85,7 @@ Requirements:
 * Local install of docker
 * Local install of `pipenv` or `poetry` (depends whether the image folder contains `Pipfile` or a `pyproject.toml`, respectively)
 
-The script `docker/build_docker.sh` is used to build all modified Docker images. The script detects modified directories using `git` by comparing against `origin/master` if on a branch or if on `master` by using the `CIRCLE_COMPARE_URL` environment variable to obtain the commit range of the current build.
+The script `docker/build_docker.sh` is used to build all modified Docker images. The script detects modified directories using `git` by comparing against `origin/master`.
 
 If you want to test how the script detects commit changes: Make sure you are working on a branch and the changes are committed. If you haven't committed the changes and want to run a local build you can run the script with a image name (which corresponds to a directory name) to the run the build on. For example:
 
@@ -120,8 +118,8 @@ After opening a Pull Request, and in order for the reviewer to understand the co
 
 The build script will check for a `build.conf` file in the target image directory and will read from it `name=value` properties. Supported properties:
 
-* **version**: The version to use for tagging. Default: `1.0.0`. See [Dynamic Versioning](#dynamic-versioning) for non-static versions. #Note: that additionally, the CircleCI build number is always appended to the version as a revision (for example: `1.0.0.15519`) to create a unique version per build.
-* **devonly**: If set the image will be pushed only to the `devdemisto` org in docker hub and will not be pushed to the `demisto` org. Should be used for images which are for development purposes only (such as the image used in CircleCI to build this project).
+* **version**: The version to use for tagging. Default: `1.0.0`. See [Dynamic Versioning](#dynamic-versioning) for non-static versions. #Note: that additionally, the CI build number is always appended to the version as a revision (for example: `1.0.0.15519`) to create a unique version per build.
+* **devonly**: If set the image will be pushed only to the `devdemisto` org in docker hub and will not be pushed to the `demisto` org. Should be used for images which are for development purposes only (such as the image used in CI to build this project).
 * **deprecated**: If set the image will be listed as deprecated in the deprecated_images.json file and the image will be forbidden form using in the integrations/automations.
 * **deprecated_reason**: Free text that explain the deprecation reason.
 
@@ -193,13 +191,13 @@ cat verify.ps1 | docker run --rm -i <image_name> pwsh -c '-'
 
 ## Docker Image Deployment
 
-When you first open a PR, a `development` docker image is built (via CircleCI) under the `devdemisto` docker organization. So for example if your image is named `ldap3` an image with the name `devdemisto/ldap3` will be built.
+When you first open a PR, a `development` docker image is built under the `devdemisto` docker organization. So for example if your image is named `ldap3` an image with the name `devdemisto/ldap3` will be built.
 
 If the PR is on a local branch of the `dockerfiles` github project (relevant only for members of the project with commit access), the image will be deployed to the [devdemisto](https://hub.docker.com/u/devdemisto) docker hub organization. A bot will add a comment to the PR stating that the image has been deployed and available. You can then test the image out simply by doing `docker pull <image_name>` (instructions will be included in the comment added to the PR).
 
-If you are contributing (**thank you!!**) via an external fork, then the image built will not be deployed to docker hub. It will be available to download from the build artifacts. You can download the image and load it locally by running the `docker load` command. If you go into the build details in CircleCI you will see also instructions in the end of the `Build Docker Images` step on how to load it with a one liner bash command. Example contribution build can be seen [here](https://circleci.com/gh/demisto/dockerfiles/1976#artifacts/containers/0).
+If you are contributing (**thank you!!**) via an external fork, then the image built will not be deployed to docker hub. It will be available to download from the build artifacts, a comment with instructions will be posted on the PR. You can download the image and load it locally by running the `docker load` command.
 
-Once merged into master, CircleCI will run another build and create a `production` ready docker image which will be deployed at Docker Hub under the [demisto](https://hub.docker.com/u/demisto) organization. A bot will add a comment to the original PR about the production deployment and the image will then be fully available for usage. An example `production` comment added to a PR can be seen [here](https://github.com/demisto/dockerfiles/pull/462#issuecomment-533150059).
+Once merged into master, It will run an additional build and create a *production* ready docker image which will be deployed at Docker Hub under the [demisto](https://hub.docker.com/u/demisto) organization. A bot will add a comment to the original PR about the production deployment and the image will then be fully available for usage. An example *production* comment added to a PR can be seen [here](https://github.com/demisto/dockerfiles/pull/462#issuecomment-533150059).
 
 ## Advanced
 
