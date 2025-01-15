@@ -3,17 +3,21 @@
 # exit on errors
 set -e
 
-REVISION=${CIRCLE_BUILD_NUM:-`date +%s`}
-PUSHED_DOCKERS=''
-CURRENT_DIR=`pwd`
-SCRIPT_DIR=$(dirname ${BASH_SOURCE})
+REVISION=${CI_PIPELINE_ID:-$(date +%s)}
+PUSHED_DOCKERS=""
+IMAGE_ARTIFACTS=""
+CURRENT_DIR=$(pwd)
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 DOCKER_SRC_DIR=${SCRIPT_DIR}
 if [[ "${DOCKER_SRC_DIR}" != /* ]]; then
     DOCKER_SRC_DIR="${CURRENT_DIR}/${SCRIPT_DIR}"
 fi
-DOCKERFILES_TRUST_DIR="${DOCKER_SRC_DIR}/../dockerfiles-trust"
+DOCKERFILES_TRUST_DIR="$(cd "${DOCKER_SRC_DIR}/.." && pwd)"
+DOCKERFILES_TRUST_DIR="${DOCKERFILES_TRUST_DIR}/dockerfiles-trust"
 
-# parse a propty form build.conf file in current dir
+echo "DOCKER_SRC_DIR: ${DOCKER_SRC_DIR}, DOCKERFILES_TRUST_DIR: ${DOCKERFILES_TRUST_DIR}"
+
+# parse a property form build.conf file in current dir
 # param $1: property name
 # param $2: default value
 function prop {
@@ -21,7 +25,8 @@ function prop {
         echo "${2}"
         return 0
     fi
-    local RES=$(grep "^${1}=" build.conf | cut -d'=' -f2)
+    local RES
+    RES=$(grep "^${1}=" build.conf | cut -d'=' -f2)
     if [[ "$RES" ]]; then
         echo "$RES"
     else 
@@ -30,7 +35,7 @@ function prop {
 }
 
 # param $1: filename
-# param $2: regex pattren
+# param $2: regex pattern
 function get_version_from_file() {
     while IFS= read -r line || [ -n "$line" ]; do
         if [[ $line =~ $2 ]]; then
@@ -93,16 +98,20 @@ function cr_login {
 }
 
 SIGN_SETUP_DONE=no
+DOCKERFILES_TRUST_GIT_URL=""
 function sign_setup {
     if [ "${SIGN_SETUP_DONE}" = "yes" ]; then
         return 0;
     fi
-    if [ -z "${DOCKER_CONTENT_TRUST_REPOSITORY_PASSPHRASE}" -o -z "${DOCKER_CONTENT_TRUST_ROOT_PASSPHRASE}" -o -z "${DOCKERFILES_TRUST_GIT}" ]; then
+    if [ -z "${DOCKER_CONTENT_TRUST_REPOSITORY_PASSPHRASE}" ] || [ -z "${DOCKER_CONTENT_TRUST_ROOT_PASSPHRASE}" ] || [ -z "${DOCKERFILES_TRUST_GIT_HTTPS}" ]; then
         echo "Content trust passphrases not set. Not setting up docker signing."
         return 1;
     fi
+    DOCKERFILES_TRUST_GIT_URL="https://oauth2:${GITHUB_TOKEN}@${DOCKERFILES_TRUST_GIT_HTTPS}"
+
     if [ ! -d "${DOCKERFILES_TRUST_DIR}" ]; then
-        git clone "${DOCKERFILES_TRUST_GIT}" "${DOCKERFILES_TRUST_DIR}"   
+        git clone "${DOCKERFILES_TRUST_GIT_URL}" "${DOCKERFILES_TRUST_DIR}"
+        git remote set-url origin "${DOCKERFILES_TRUST_GIT_URL}"
         git config --file "${DOCKERFILES_TRUST_DIR}/.git/config"  user.email "dc-builder@users.noreply.github.com"
         git config --file "${DOCKERFILES_TRUST_DIR}/.git/config" user.name "dc-builder"           
     else
@@ -123,10 +132,11 @@ function commit_dockerfiles_trust {
         git stash list | grep -q 'stash' && git checkout stash -- .
         git add -A
         echo "starting commit loop..."
-        git commit -m "$(date): trust update from PR: ${CIRCLE_PULL_REQUEST}"
+        git commit -m "$(date): trust update from PR: ${CI_COMMIT_REF_NAME} commit: ${CI_COMMIT_SHA}"
         COMMIT_DONE=no
         for i in 1 2 3 4 5; do
-            if git push; then
+            echo "Attempt $i to push..."
+            if git push --set-upstream "${DOCKERFILES_TRUST_GIT_URL}"; then
                 echo "Push done successfully"
                 COMMIT_DONE=yes
                 break;
@@ -154,7 +164,7 @@ function docker_build {
     image_name=$(basename $1)
     echo "Starting build for dir: $1, image: ${image_name}, pwd: $(pwd)"
     cd $1        
-    if  [[ "$CIRCLE_BRANCH" == "master" ]] && [[ "$(prop 'devonly')" ]]; then
+    if  [[ "${CI_COMMIT_REF_NAME}" == "master" ]] && [[ "$(prop 'devonly')" ]]; then
         echo "== skipping image [${image_name}] as it is marked devonly =="
         return 0
     fi
@@ -171,7 +181,7 @@ function docker_build {
     fi
 
     del_requirements=no
-    if [ -f "Pipfile" -a ! -f "requirements.txt" ]; then
+    if [ -f "Pipfile" ] && [ ! -f "requirements.txt" ]; then
         if [ ! -f "Pipfile.lock" ]; then
             echo "Error: Pipfile present without Pipfile.lock. Make sure to commit your Pipfile.lock file"
             return 1
@@ -194,7 +204,7 @@ function docker_build {
 
     fi
 
-    if [ -f "pyproject.toml" -a ! -f "requirements.txt" ]; then
+    if [ -f "pyproject.toml" ] && [ ! -f "requirements.txt" ]; then
        if [ ! -f "poetry.lock" ]; then
             echo "Error: pyproject.toml present without poetry.lock. Make sure to commit your poetry.lock file"
             return 1
@@ -224,7 +234,7 @@ function docker_build {
     docker buildx build -f "$tmp_dir/Dockerfile" . -t ${image_full_name} \
         --label "org.opencontainers.image.authors=Demisto <containers@demisto.com>" \
         --label "org.opencontainers.image.version=${VERSION}" \
-        --label "org.opencontainers.image.revision=${CIRCLE_SHA1}"
+        --label "org.opencontainers.image.revision=${CI_COMMIT_SHA}"
 
     if [[ -e "dynamic_version.sh" ]]; then
       echo "dynamic_version.sh file was found"
@@ -233,7 +243,7 @@ function docker_build {
       VERSION="${dynamic_version}.${REVISION}"
       image_full_name="${DOCKER_ORG}/${image_name}:${VERSION}"
 
-      # add the last layer and rebuild. Everything shuld be cached besides this layer
+      # add the last layer and rebuild. Everything should be cached besides this layer
       echo "ENV DOCKER_IMAGE=$image_full_name" >> "$tmp_dir/Dockerfile"
 
       echo "running docker build again with tag $image_full_name"
@@ -241,14 +251,14 @@ function docker_build {
       docker buildx build -f "$tmp_dir/Dockerfile" . -t ${image_full_name} \
         --label "org.opencontainers.image.authors=Demisto <containers@demisto.com>" \
         --label "org.opencontainers.image.version=${VERSION}" \
-        --label "org.opencontainers.image.revision=${CIRCLE_SHA1}"
+        --label "org.opencontainers.image.revision=${CI_COMMIT_SHA}"
     fi
     rm -rf "$tmp_dir"
 
     if [ ${del_requirements} = "yes" ]; then
         rm requirements.txt
     fi
-    if [ -n "$CI" ]; then
+    if [ -n "${GITLAB_CI}" ]; then
         echo "Checking that source files were not modified by build..."
         DIFF_OUT=$(git diff -- .)
         if [[ -n "$DIFF_OUT" ]]; then
@@ -295,12 +305,12 @@ function docker_build {
         PY3CMD="python3"
         $PY3CMD ${DOCKER_SRC_DIR}/verify_licenses.py ${image_full_name}
     fi
-
-    for filename in `find . -name "*verify.py"`; do
-      echo "==========================="
-      echo "Verifying docker image by running the python script $filename within the docker image"
-      cat $filename | docker run --rm -i ${image_full_name} python '-'
-    done
+    local filename
+    while IFS= read -r -d '' filename; do
+        echo "==========================="
+        echo "Verifying docker image by running the bash script $filename within the docker image"
+        cat "${filename}" | docker run --rm -i ${image_full_name} bash '-'
+    done < <(find . -name "*verify.sh" -print0)
 
     if [ -f "verify.ps1" ]; then
         echo "==========================="            
@@ -330,9 +340,9 @@ function docker_build {
         if [[ "$docker_trust" == "1" ]]; then
             commit_dockerfiles_trust
         fi
-        if ! ${DOCKER_SRC_DIR}/post_github_comment.py ${image_full_name}; then 
+        if ! "${DOCKER_SRC_DIR}/post_github_comment.py" "${image_full_name}"; then
             echo "Failed post_github_comment.py. Will stop build only if not on master"
-            if [ "$CIRCLE_BRANCH" == "master" ]; then
+            if [ "${CI_COMMIT_REF_NAME}" == "master" ]; then
                 echo "Continuing as we are on master branch..."
             else
                 echo "failing build!!"
@@ -341,31 +351,21 @@ function docker_build {
         fi
     else
         echo "Skipping docker push"
-        if [ "$CIRCLE_BRANCH" == "master" ]; then
+        if [ "${CI_COMMIT_REF_NAME}" == "master" ]; then
           echo "Did not push image on master. Failing build"
           exit 1
         fi
         if [ -n "$CI" ]; then
-            echo "Creating artifact of docker image..."
-            ARTDIR="${DOCKER_SRC_DIR}/../artifacts"
-            mkdir -p "${ARTDIR}"
-            IMAGENAMESAVE=`echo ${image_full_name} | tr / _`.tar
-            IMAGESAVE=${ARTDIR}/$IMAGENAMESAVE
-            docker save -o "$IMAGESAVE" ${image_full_name}
-            gzip "$IMAGESAVE"
-            ${DOCKER_SRC_DIR}/post_github_comment.py ${image_full_name} "--is_contribution"
+            IMAGE_NAME_SAVE="$(echo ${image_full_name} | sed -e 's/\//__/g').tar"
+            IMAGE_SAVE="${ARTIFACTS_FOLDER}/${IMAGE_NAME_SAVE}"
+            echo "Creating artifact of docker image at ${IMAGE_SAVE}"
+            docker save -o "${IMAGE_SAVE}" "${image_full_name}"
+            IMAGE_ARTIFACTS="${IMAGE_SAVE},${IMAGE_ARTIFACTS}"
+            gzip "${IMAGE_SAVE}"
+            "${DOCKER_SRC_DIR}/post_github_comment.py" "${image_full_name}" "--is_contribution"
             cat << EOF
 -------------------------
-
-Docker image [$image_full_name] has been saved as an artifact. It is available at the following link: 
-https://output.circle-artifacts.com/output/job/${CIRCLE_WORKFLOW_JOB_ID}/artifacts/0/docker_images/$IMAGENAMESAVE.gz
-
-Load it locally into docker by running:
-
-\`\`\`
-curl -L "https://output.circle-artifacts.com/output/job/${CIRCLE_WORKFLOW_JOB_ID}/artifacts/0/docker_images/$IMAGENAMESAVE.gz" | gunzip | docker load
-\`\`\`
-
+Docker image [$image_full_name] has been saved as an artifact.
 --------------------------
 EOF
         fi
@@ -373,27 +373,26 @@ EOF
 
 }
 
-# default compare circle branch against master
-DIFF_COMPARE=origin/master...${CIRCLE_BRANCH}
+# default compare branch against master
+DIFF_COMPARE=origin/master...${CI_COMMIT_SHA}
 
-if [ -z "$CIRCLE_SHA1" ]; then
-    echo "CIRCLE_SHA1 not set. Assuming local testing."
-    CIRCLE_SHA1=testing
+if [ -z "${CI_COMMIT_SHA}" ]; then
+    echo "CI_COMMIT_SHA not set. Assuming local testing."
+    CI_COMMIT_SHA=testing
     DOCKER_ORG=${DOCKER_ORG:-devtesting}
     
-    if [ -z "$CIRCLE_BRANCH" ]; then
+    if [ -z "${CI_COMMIT_REF_NAME}" ]; then
         # simply compare against origin/master
         DIFF_COMPARE=origin/master
     fi
 fi
 
-
-if [[ ! $(which pyenv) ]] && [[ -n "${CIRCLECI}" ]]; then 
-    echo "pyenv not found. setting up necessary env for pyenv on circle ci";\
+if [[ ! $(which pyenv) ]] && [[ -n "${GITLAB_CI}" ]]; then
+    echo "pyenv not found. setting up necessary env for pyenv on CI";\
     export PATH="$HOME/.pyenv/bin:$PATH"
     eval "$(pyenv init -)"
     eval "$(pyenv virtualenv-init -)"
-    pyenv shell system $(pyenv versions --bare | grep 3.10)
+    pyenv shell system "$(pyenv versions --bare | grep 3.10)"
 fi
 
 echo "default python versions: "
@@ -417,41 +416,30 @@ if [[ -n "$1" ]]; then
     DOCKER_INCLUDE_GREP="/${1}$"
 fi
 
-if [ "$CIRCLE_BRANCH" == "master" ]; then
-    # on master we use the range obtained from CIRCLE_COMPARE_URL
-    # example of comapre url: https://github.com/demisto/content/compare/62f0bd03be73...1451bf0f3c2a
-    # if there wasn't a successful build CIRCLE_COMPARE_URL is empty. We set diff compare to special ALL
-    if [ -z "$CIRCLE_COMPARE_URL" ]; then
-        echo "CIRCLE_COMPARE_URL not set. Assuming 'rebuild'. Comparing last commit."
-        DIFF_COMPARE="HEAD^1...HEAD"
-    else
-        DIFF_COMPARE=$(echo "$CIRCLE_COMPARE_URL" | sed 's:^.*/compare/::g')    
-        if [ -z "${DIFF_COMPARE}" ]; then
-            echo "Failed: extracting diff compare from CIRCLE_COMPARE_URL: ${CIRCLE_COMPARE_URL}"
-            exit 2
-        fi
-    fi
+if [ "${CI_COMMIT_REF_NAME}" == "master" ]; then
+    DIFF_COMPARE="HEAD^1...HEAD"
     DOCKER_ORG=demisto
 fi
 
-echo "DOCKER_ORG: ${DOCKER_ORG}, DIFF_COMPARE: [${DIFF_COMPARE}], SCRIPT_DIR: [${SCRIPT_DIR}], CIRCLE_BRANCH: ${CIRCLE_BRANCH}, PWD: [${CURRENT_DIR}]"
+echo "DOCKER_ORG: ${DOCKER_ORG}, DIFF_COMPARE: [${DIFF_COMPARE}], SCRIPT_DIR: [${SCRIPT_DIR}], BRANCH: ${CI_COMMIT_REF_NAME}, PWD: [${CURRENT_DIR}]"
 
-# echo to bash env to be used in future steps
-CIRCLE_ARTIFACTS="artifacts"
-if [[ ! -d $CIRCLE_ARTIFACTS ]]; then
-  mkdir $CIRCLE_ARTIFACTS
+ARTIFACTS_FOLDER="${ARTIFACTS_FOLDER:-artifacts}"
+if [[ ! -d "${ARTIFACTS_FOLDER}" ]]; then
+  mkdir -p "${ARTIFACTS_FOLDER}"
 fi
 
-echo $DIFF_COMPARE > $CIRCLE_ARTIFACTS/diff_compare.txt
-echo $SCRIPT_DIR > $CIRCLE_ARTIFACTS/script_dir.txt
-echo $CURRENT_DIR > $CIRCLE_ARTIFACTS/current_dir.txt
-echo $DOCKER_INCLUDE_GREP > $CIRCLE_ARTIFACTS/docker_include_grep.txt
+# echo to bash env to be used in future steps
+echo $DIFF_COMPARE > $ARTIFACTS_FOLDER/diff_compare.txt
+echo $SCRIPT_DIR > $ARTIFACTS_FOLDER/script_dir.txt
+echo $CURRENT_DIR > $ARTIFACTS_FOLDER/current_dir.txt
+echo $DOCKER_INCLUDE_GREP > $ARTIFACTS_FOLDER/docker_include_grep.txt
 
 total=$(find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | wc -l)
 count=0
 errors=()
 for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | sort`; do
-    if [[ ${DIFF_COMPARE} = "ALL" ]] || [[ $(git diff --name-status $DIFF_COMPARE -- ${docker_dir}) ]]; then
+    echo "Checking dir: ${docker_dir} against ${DIFF_COMPARE}"
+    if [[ ${DIFF_COMPARE} = "ALL" ]] || [[ $(git --no-pager diff "${DIFF_COMPARE}" --name-status -- "${docker_dir}") ]]; then
         if [ -n "${DOCKER_INCLUDE_GREP}" ] && [ -z "$(echo ${docker_dir} | grep -E ${DOCKER_INCLUDE_GREP})" ]; then
             [[ -z "$1" ]] && echo "Skipping dir: '${docker_dir}' as not included in grep expression DOCKER_INCLUDE_GREP: '${DOCKER_INCLUDE_GREP}'"
             continue
@@ -469,5 +457,18 @@ if [ ${#errors[@]} != 0 ]; then
   done
   exit 1
 fi
-echo $PUSHED_DOCKERS > $CIRCLE_ARTIFACTS/pushed_dockers.txt
-echo "Successfully pushed $PUSHED_DOCKERS"
+
+
+if [ -n "$PUSHED_DOCKERS" ]; then
+  echo "${PUSHED_DOCKERS}" > "${ARTIFACTS_FOLDER}/pushed_dockers.txt"
+  echo "Successfully pushed:${PUSHED_DOCKERS}"
+else
+    echo "No dockers were built and pushed"
+fi
+
+if [ -n "${IMAGE_ARTIFACTS}" ]; then
+  echo "${IMAGE_ARTIFACTS}" > "${ARTIFACTS_FOLDER}/image_artifacts.txt"
+  echo "Successfully saved:${IMAGE_ARTIFACTS}"
+else
+    echo "No image artifacts were saved"
+fi

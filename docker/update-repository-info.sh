@@ -8,8 +8,8 @@ if [ -z "$CI" ]; then
     exit 1
 fi
 
-if [[ ! $(which pyenv) ]] && [[ -n "${CIRCLECI}" ]]; then 
-    echo "pyenv not found. setting up necessary env for pyenv on circle ci";\
+if [[ ! $(which pyenv) ]] && [[ -n "${GITLAB_CI}" ]]; then
+    echo "pyenv not found. setting up necessary env for pyenv on CI";\
     export PATH="$HOME/.pyenv/bin:$PATH"
     eval "$(pyenv init -)"
     eval "$(pyenv virtualenv-init -)"
