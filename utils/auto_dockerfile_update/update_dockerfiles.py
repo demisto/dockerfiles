@@ -156,7 +156,7 @@ def run_lock(base_path_docker: str, pipfile_or_pyproject_path: str) -> bool:
         if "Pipfile" in pipfile_or_pyproject_path:
             # waits for the process to end.
             completed_process = subprocess.run(
-                ["pipenv", "lock"],
+                ["pipenv", "lock", "--keep-outdated"],
                 check=True,
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.PIPE,
@@ -165,7 +165,7 @@ def run_lock(base_path_docker: str, pipfile_or_pyproject_path: str) -> bool:
                 return False
         elif "pyproject.toml" in pipfile_or_pyproject_path:
             completed_process = subprocess.run(
-                ["poetry", "lock"],
+                ["poetry", "lock", "--no-update"],
                 stderr=subprocess.PIPE,
                 check=True,
                 stdout=subprocess.DEVNULL,
