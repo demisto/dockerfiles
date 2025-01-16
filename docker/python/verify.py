@@ -1,7 +1,6 @@
 import warnings
 import dateparser
 import tldextract
-
 # set warnings to throw an error
 warnings.simplefilter("error")
 d = dateparser.parse('1 day')
