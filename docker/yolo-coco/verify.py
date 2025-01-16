@@ -1,6 +1,5 @@
 import os
 
-
 weights_path = os.path.join("/yolo-coco", "yolov3.weights")
 
 if os.path.exists(weights_path):
