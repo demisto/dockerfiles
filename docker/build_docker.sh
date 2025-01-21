@@ -308,9 +308,9 @@ function docker_build {
     local filename
     while IFS= read -r -d '' filename; do
         echo "==========================="
-        echo "Verifying docker image by running the bash script $filename within the docker image"
-        cat "${filename}" | docker run --rm -i ${image_full_name} bash '-'
-    done < <(find . -name "*verify.sh" -print0)
+        echo "Verifying docker image by running the python script $filename within the docker image"
+        cat "${filename}" | docker run --rm -i ${image_full_name} python '-'
+    done < <(find . -name "*verify.py" -print0)
 
     if [ -f "verify.ps1" ]; then
         echo "==========================="            
