@@ -43,21 +43,6 @@ test = ["anyio[trio]", "coverage[toml] (>=7)", "exceptiongroup (>=1.2.0)", "hypo
 trio = ["trio (>=0.26.1)"]
 
 [[package]]
-name = "avro"
-version = "1.12.0"
-description = "Avro is a serialization and RPC framework."
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "avro-1.12.0-py2.py3-none-any.whl", hash = "sha256:9a255c72e1837341dd4f6ff57b2b6f68c0f0cecdef62dd04962e10fd33bec05b"},
-    {file = "avro-1.12.0.tar.gz", hash = "sha256:cad9c53b23ceed699c7af6bddced42e2c572fd6b408c257a7d4fc4e8cf2e2d6b"},
-]
-
-[package.extras]
-snappy = ["python-snappy"]
-zstandard = ["zstandard"]
-
-[[package]]
 name = "cachetools"
 version = "5.5.1"
 description = "Extensible memoizing collections and decorators"
@@ -1532,4 +1517,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.11"
-content-hash = "73a479a144a952daccac39a576174cdf6ee169780fd5f1ef60e77d7096bb2d6a"
+content-hash = "1648b9578021b1a4978ac9f14e76b404a18a29d20f554005aa15ae5165a94f9a"
