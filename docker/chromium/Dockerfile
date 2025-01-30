@@ -57,11 +57,11 @@ RUN apt-get update && apt-get -t bullseye-backports install -y --no-install-reco
 
 # Install latest Poppler
 RUN apt-get install -y libfreetype-dev libfontconfig-dev libboost-dev libpng-dev zlib1g-dev liblcms2-dev libcurl4 libcurl4-gnutls-dev \
-&& apt-get install -y libjpeg-dev libcairo-dev libopenjp2-7-dev libtiff-dev libnss3-dev \
+&& apt-get install -y libjpeg-dev libcairo-dev libopenjp2-7-dev libnss3-dev \
 && apt-get install -y build-essential \
 && apt-get install -y libgpgmepp-dev qtbase5-dev libcairo2-dev \
 && apt-get install -y xz-utils cmake \
-&& apt-get update && apt-get --only-upgrade install libtiff-dev \
+&& apt-get update && apt-get install libtiff-dev \
 && wget https://poppler.freedesktop.org/poppler-${POPPLER_VERSION}.tar.xz -v \
 && tar -xf ./poppler-${POPPLER_VERSION}.tar.xz \
 && cd poppler-${POPPLER_VERSION} \
