@@ -61,6 +61,7 @@ RUN apt-get install -y libfreetype-dev libfontconfig-dev libboost-dev libpng-dev
 && apt-get install -y build-essential \
 && apt-get install -y libgpgmepp-dev qtbase5-dev libcairo2-dev \
 && apt-get install -y xz-utils cmake \
+&& apt-get update && apt-get --only-upgrade install libtiff-dev \
 && wget https://poppler.freedesktop.org/poppler-${POPPLER_VERSION}.tar.xz -v \
 && tar -xf ./poppler-${POPPLER_VERSION}.tar.xz \
 && cd poppler-${POPPLER_VERSION} \
