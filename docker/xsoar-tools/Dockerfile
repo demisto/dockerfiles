@@ -7,14 +7,16 @@ ENV DEMISTO_SDK_SKIP_LOGGER_SETUP true
 COPY requirements.txt .
 
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base libffi-dev openssl-dev \
-  && apk add --no-cache git  \
   && apk add --no-cache libstdc++  \
   && apk add --no-cache --upgrade grep  \
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies
 
+RUN apk add --no-cache git
+
 # Set git user info for running git commands in the ValidateContent script
-# RUN git config --global user.name "CortexUser" && \ git config --global user.email "Cortex@User.com"
+RUN git config --global user.name "CortexUser" && git config --global user.email "Cortex@User.com"
+
 
 ADD https://raw.githubusercontent.com/demisto/content/master/Packs/Base/Scripts/CommonServerPython/CommonServerPython.py /home/demisto
 ADD https://raw.githubusercontent.com/demisto/content/master/Packs/Base/Scripts/CommonServerPowerShell/CommonServerPowerShell.ps1 /home/demisto
