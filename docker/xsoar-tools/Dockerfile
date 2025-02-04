@@ -14,7 +14,7 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
   && apk del .build-dependencies
 
 # Set git user info for running git commands in the ValidateContent script
-RUN git config --global user.name "ContainerUser" && \ git config --global user.email "container@example.com" 
+RUN git config --global user.name "CortexUser" && \ git config --global user.email "Cortex@User.com" 
 
 ADD https://raw.githubusercontent.com/demisto/content/master/Packs/Base/Scripts/CommonServerPython/CommonServerPython.py /home/demisto
 ADD https://raw.githubusercontent.com/demisto/content/master/Packs/Base/Scripts/CommonServerPowerShell/CommonServerPowerShell.ps1 /home/demisto
