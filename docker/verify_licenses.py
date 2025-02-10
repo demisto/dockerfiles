@@ -108,6 +108,7 @@ def check_python_license(docker_image: str, licenses: dict, ignore_packages: dic
         print("Checking license for package: {} ...".format(name))
         classifiers = []
         found_licenses = []
+        license_expression = None
         if name in known_licenses:
             classifiers = [known_licenses[name]['license']]
         else:
