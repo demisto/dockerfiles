@@ -33,7 +33,7 @@ RUN apt-get install kubectl -y && source ~/.bashrc && ! kubectl version --output
 
 # installations
 RUN apt-get install openjdk-11-jre -y && source ~/.bashrc && java -version
-RUN curl -sSL https://install.python-poetry.org | python3 - && source ~/.bashrc && poetry --version
+RUN curl -sSL https://install.python-poetry.org | python3 - --version 1.8.2 && source ~/.bashrc && poetry --version
 
 # install neo4j
 RUN echo "deb http://httpredir.debian.org/debian stable-backports main" | tee -a /etc/apt/sources.list.d/stable-backports.list \
