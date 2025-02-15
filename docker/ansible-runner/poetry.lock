@@ -1004,19 +1004,20 @@ azure-nspkg = ">=2.0.0"
 
 [[package]]
 name = "azure-mgmt-privatedns"
-version = "0.1.0"
+version = "1.2.0"
 description = "Microsoft Azure DNS Private Zones Client Library for Python"
 optional = false
-python-versions = "*"
+python-versions = ">=3.8"
 files = [
-    {file = "azure-mgmt-privatedns-0.1.0.zip", hash = "sha256:d29cfd8cec806e06673d9382d3f5766fc65d9a9de75b424705094a34a7db8d23"},
-    {file = "azure_mgmt_privatedns-0.1.0-py2.py3-none-any.whl", hash = "sha256:aeea39403333b280ceb7086cda6ea98ba78472735c1a14388e16d22ea87974c7"},
+    {file = "azure_mgmt_privatedns-1.2.0-py3-none-any.whl", hash = "sha256:1bf9d978de4d74fc683d9af42f8135dcd565075f851c7227197924dd72b0b539"},
+    {file = "azure_mgmt_privatedns-1.2.0.tar.gz", hash = "sha256:34231872f01b94f6195d8ee5428e17469252ed04ea0828d52325ebe7bf0a120b"},
 ]
 
 [package.dependencies]
-azure-common = ">=1.1,<2.0"
-msrest = ">=0.5.0"
-msrestazure = ">=0.4.32,<2.0.0"
+azure-common = ">=1.1"
+azure-mgmt-core = ">=1.3.2"
+isodate = ">=0.6.1"
+typing-extensions = ">=4.6.0"
 
 [[package]]
 name = "azure-mgmt-rdbms"
@@ -3638,4 +3639,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.11"
-content-hash = "9312e9194b676eeeac5d85ee03826317b4c63a82fae920f3591f54ca56610e9c"
+content-hash = "c7063a12a55c4e244f0df746f8f2fdb7c3f66d0647df9f93073d49f79cb75dec"
