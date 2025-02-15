@@ -1182,19 +1182,20 @@ msrestazure = ">=0.4.32,<2.0.0"
 
 [[package]]
 name = "azure-mgmt-web"
-version = "0.41.0"
+version = "8.0.0"
 description = "Microsoft Azure Web Apps Management Client Library for Python"
 optional = false
-python-versions = "*"
+python-versions = ">=3.8"
 files = [
-    {file = "azure-mgmt-web-0.41.0.zip", hash = "sha256:5f170f25c72119ff4b4e2f39d46ce21bdb2f399f786ea24eedc15c12cfba3054"},
-    {file = "azure_mgmt_web-0.41.0-py2.py3-none-any.whl", hash = "sha256:b1cc1230a7606e961024ddc4b77638a360540dcd64e08a8689d361086d0cd0b9"},
+    {file = "azure_mgmt_web-8.0.0-py3-none-any.whl", hash = "sha256:0536aac05bfc673b56ed930f2966b77856e84df675d376e782a7af6bb92449af"},
+    {file = "azure_mgmt_web-8.0.0.tar.gz", hash = "sha256:c8d9c042c09db7aacb20270a9effed4d4e651e365af32d80897b84dc7bf35098"},
 ]
 
 [package.dependencies]
-azure-common = ">=1.1,<2.0"
-msrest = ">=0.5.0"
-msrestazure = ">=0.4.32,<2.0.0"
+azure-common = ">=1.1"
+azure-mgmt-core = ">=1.3.2"
+isodate = ">=0.6.1"
+typing-extensions = ">=4.6.0"
 
 [[package]]
 name = "azure-nspkg"
@@ -3638,4 +3639,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.11"
-content-hash = "9312e9194b676eeeac5d85ee03826317b4c63a82fae920f3591f54ca56610e9c"
+content-hash = "494e982382bf14d6685ffa0194c8ac44d9a89a71c3c7e8e8bcd58bfc03c71320"
