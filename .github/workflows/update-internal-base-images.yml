@@ -15,7 +15,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: '3.12'
       - name: Setup Poetry
         uses: Gr1N/setup-poetry@v8
       - name: run
@@ -24,8 +24,8 @@ jobs:
             git config --global user.name "auto dockerfiles update"
             echo "==== $(date): Starting pipenv setup... ===="
             python -m pip install --upgrade pip
-            pip install pipenv==2023.3.18
-            pipenv install
+            pip install pipenv==2024.4.0
+            pipenv install --python=$(which python)
             echo "==== Finished ===="
             pipenv run python ./utils/auto_dockerfile_update/update_dockerfiles.py -t internal
             echo "Done!"
