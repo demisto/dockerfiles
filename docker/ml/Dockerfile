@@ -29,7 +29,7 @@ RUN pip install demisto_ml-0.2.tar.gz
 RUN rm -rf /var/lib/apt/lists/*
 RUN python -m spacy download en_core_web_sm
 RUN mkdir -p /ml/nltk_data && chmod -R 777 /ml/nltk_data
-RUN python -c "import nltk; nltk.download('punkt_tab', download_dir='/ml/nltk_data'); nltk.download('stopwords', download_dir='/ml/nltk_data')
+RUN python -c "import nltk; nltk.download('punkt_tab', download_dir='/ml/nltk_data'); nltk.download('stopwords', download_dir='/ml/nltk_data')"
 
 COPY oob_evaluation.txt /ml
 RUN chown -R demisto:demisto /ml && chmod -R 775 /ml
