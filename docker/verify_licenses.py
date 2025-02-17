@@ -109,6 +109,7 @@ def check_python_license(docker_image: str, licenses: dict, ignore_packages: dic
         print("Checking license for package: {} ...".format(pkg_name))
         classifiers = []
         found_licenses = []
+        license_expression = None
         if pkg_name in known_licenses:
             classifiers = [known_licenses[pkg_name]['license']]
         else:
@@ -118,6 +119,8 @@ def check_python_license(docker_image: str, licenses: dict, ignore_packages: dic
                 res.raise_for_status()
                 pip_info = res.json()
                 classifiers = pip_info["info"].get("classifiers")
+                # Fallback source for a license
+                license_expression = pip_info["info"].get('license_expression')
             except Exception as ex:
                 print("Failed getting info from pypi (will try pip): " + str(ex))
         for classifier in classifiers:
@@ -125,6 +128,10 @@ def check_python_license(docker_image: str, licenses: dict, ignore_packages: dic
             if classifier.startswith("License ::") and not classifier == "License :: OSI Approved":
                 print("{}: found license classifier: {}".format(pkg_name, classifier))
                 found_licenses.append(classifier)
+                        
+        if license_expression:
+            found_licenses.append(license_expression)
+            
         if len(found_licenses) == 0:  # try getting via pip show
             docker_cmd_arr = ["docker", "run", "--rm",
                               docker_image, "pip", "show", pkg_name]

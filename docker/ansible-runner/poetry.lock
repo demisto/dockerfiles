@@ -538,18 +538,18 @@ aio = ["aiohttp (>=3.0)"]
 
 [[package]]
 name = "azure-graphrbac"
-version = "0.61.1"
+version = "0.61.2"
 description = "Microsoft Azure Graph RBAC Client Library for Python"
 optional = false
 python-versions = "*"
 files = [
-    {file = "azure-graphrbac-0.61.1.zip", hash = "sha256:53e98ae2ca7c19b349e9e9bb1b6a824aeae8dcfcbe17190d20fe69c0f185b2e2"},
-    {file = "azure_graphrbac-0.61.1-py2.py3-none-any.whl", hash = "sha256:7b4e0f05676acc912f2b33c71c328d9fb2e4dc8e70ebadc9d3de8ab08bf0b175"},
+    {file = "azure_graphrbac-0.61.2-py2.py3-none-any.whl", hash = "sha256:7a204554aa933684b09df3e17669fe31aa307d33b9bfb44595fe0ad5b99900d4"},
+    {file = "azure_graphrbac-0.61.2.tar.gz", hash = "sha256:fb25b03307e17f739c81ad6bd3e9b57c57843686031f0f214b65158447c773dd"},
 ]
 
 [package.dependencies]
 azure-common = ">=1.1,<2.0"
-msrest = ">=0.5.0"
+msrest = ">=0.6.21"
 msrestazure = ">=0.4.32,<2.0.0"
 
 [[package]]
@@ -747,19 +747,20 @@ azure-core = ">=1.26.2,<2.0.0"
 
 [[package]]
 name = "azure-mgmt-cosmosdb"
-version = "9.5.1"
+version = "9.7.0"
 description = "Microsoft Azure Cosmos DB Management Client Library for Python"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "azure-mgmt-cosmosdb-9.5.1.tar.gz", hash = "sha256:4e55d3973f11cf02cf7a8055aee86615233d7cbe3bb227a07c176bac8bc7ef02"},
-    {file = "azure_mgmt_cosmosdb-9.5.1-py3-none-any.whl", hash = "sha256:860cad5583d63936e5f9477f7878a256c4dee039169cdea554da851f0762f0c7"},
+    {file = "azure_mgmt_cosmosdb-9.7.0-py3-none-any.whl", hash = "sha256:be735a554d16995c8cefe413e62119985f8fabae1cb45a6f6ad2c3958bed14da"},
+    {file = "azure_mgmt_cosmosdb-9.7.0.tar.gz", hash = "sha256:b5072d319f11953d8f12e22459aded1912d5f27e442e1d8b49596a85005410a1"},
 ]
 
 [package.dependencies]
 azure-common = ">=1.1"
 azure-mgmt-core = ">=1.3.2"
 isodate = ">=0.6.1"
+typing-extensions = ">=4.6.0"
 
 [[package]]
 name = "azure-mgmt-datafactory"
@@ -1116,19 +1117,20 @@ msrestazure = ">=0.4.32,<2.0.0"
 
 [[package]]
 name = "azure-mgmt-servicebus"
-version = "8.1.0"
+version = "8.2.1"
 description = "Microsoft Azure Service Bus Management Client Library for Python"
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 files = [
-    {file = "azure-mgmt-servicebus-8.1.0.zip", hash = "sha256:47c35aae7ede0bb8f9f6d0e3b206e4f651743dc3a03b04a7ce8329dd0bb4ae68"},
-    {file = "azure_mgmt_servicebus-8.1.0-py3-none-any.whl", hash = "sha256:1a0cc09cf3d43a38d2d1b3b1960c050f6eef35411d8e79d074a112e320abafa7"},
+    {file = "azure_mgmt_servicebus-8.2.1-py3-none-any.whl", hash = "sha256:ea61b1c91cf7cf9915840df28acf5a5c0b2c6d811702934c1d7ceb4146b0c096"},
+    {file = "azure_mgmt_servicebus-8.2.1.tar.gz", hash = "sha256:d4e0024bef6c619c6a65f530865147d5645b01f76b12f8611c0ebb16ef16cf47"},
 ]
 
 [package.dependencies]
-azure-common = ">=1.1,<2.0"
-azure-mgmt-core = ">=1.3.1,<2.0.0"
-msrest = ">=0.6.21"
+azure-common = ">=1.1"
+azure-mgmt-core = ">=1.3.2"
+isodate = ">=0.6.1"
+typing-extensions = ">=4.6.0"
 
 [[package]]
 name = "azure-mgmt-sql"
@@ -2191,13 +2193,13 @@ dev = ["bumpver", "isort", "mypy", "pylint", "pytest", "yapf"]
 
 [[package]]
 name = "msgraph-sdk"
-version = "1.5.4"
+version = "1.18.0"
 description = "The Microsoft Graph Python SDK"
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.9"
 files = [
-    {file = "msgraph_sdk-1.5.4-py3-none-any.whl", hash = "sha256:9ea349f30cc4a03edb587e26554c7a4839a38c2ef30d4b5396882fd2be82dcac"},
-    {file = "msgraph_sdk-1.5.4.tar.gz", hash = "sha256:b0e146328d136d1db175938d8fc901f3bb32acf3ea6fe93c0dc7c5a0abc45e39"},
+    {file = "msgraph_sdk-1.18.0-py3-none-any.whl", hash = "sha256:f09b015bb9d7690bc6f30c9a28f9a414107aaf06be4952c27b3653dcdf33f2a3"},
+    {file = "msgraph_sdk-1.18.0.tar.gz", hash = "sha256:ef49166ada7b459b5a843ceb3d253c1ab99d8987ebf3112147eb6cbcaa101793"},
 ]
 
 [package.dependencies]
@@ -3636,4 +3638,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.11"
-content-hash = "c13ab879fa3e417f52f9dfaeded567b1d01c4fa4ea34d7acfe2f060d7b3b8ec7"
+content-hash = "9312e9194b676eeeac5d85ee03826317b4c63a82fae920f3591f54ca56610e9c"
