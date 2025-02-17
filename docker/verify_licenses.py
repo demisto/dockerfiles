@@ -101,32 +101,40 @@ def check_python_license(docker_image: str, licenses: dict, ignore_packages: dic
         ["docker", "run", "--rm", docker_image, "pip", "list", "--format", "json"])
     pip_list = json.loads(pip_list_json)
     for pkg in pip_list:
-        name = pkg["name"]
-        if is_pkg_ignored(name, docker_image, ignore_packages):
-            print("Ignoring package: " + name)
+        pkg_name = pkg["name"]
+        pkg_version = pkg["version"]
+        if is_pkg_ignored(pkg_name, docker_image, ignore_packages):
+            print("Ignoring package: " + pkg_name)
             continue
-        print("Checking license for package: {} ...".format(name))
+        print("Checking license for package: {} ...".format(pkg_name))
         classifiers = []
         found_licenses = []
-        if name in known_licenses:
-            classifiers = [known_licenses[name]['license']]
+        license_expression = None
+        if pkg_name in known_licenses:
+            classifiers = [known_licenses[pkg_name]['license']]
         else:
             try:
                 res = req_session.get(
-                    "https://pypi.org/pypi/{}/json".format(name))
+                    "https://pypi.org/pypi/{}/{}/json".format(pkg_name, pkg_version))
                 res.raise_for_status()
                 pip_info = res.json()
                 classifiers = pip_info["info"].get("classifiers")
+                # Fallback source for a license
+                license_expression = pip_info["info"].get('license_expression')
             except Exception as ex:
                 print("Failed getting info from pypi (will try pip): " + str(ex))
         for classifier in classifiers:
             # check that we have license and not just the OSI Approved string
             if classifier.startswith("License ::") and not classifier == "License :: OSI Approved":
-                print("{}: found license classifier: {}".format(name, classifier))
+                print("{}: found license classifier: {}".format(pkg_name, classifier))
                 found_licenses.append(classifier)
+                        
+        if license_expression:
+            found_licenses.append(license_expression)
+            
         if len(found_licenses) == 0:  # try getting via pip show
             docker_cmd_arr = ["docker", "run", "--rm",
-                              docker_image, "pip", "show", name]
+                              docker_image, "pip", "show", pkg_name]
             pip_show = subprocess.check_output(
                 docker_cmd_arr, universal_newlines=True)
             homepage = ''
@@ -143,22 +151,22 @@ def check_python_license(docker_image: str, licenses: dict, ignore_packages: dic
                             verify=True
                         ).json()
                         license_name = repo_license.get('license', {}).get('name', 'NOT_FOUND_IN_GITHUB')
-                        print("{}: found license from GitHub API: {}".format(name, license_name))
+                        print("{}: found license from GitHub API: {}".format(pkg_name, license_name))
                         found_licenses.append(license_name)
                     else:
-                        print("{}: found license from pip show: {}".format(name, line))
+                        print("{}: found license from pip show: {}".format(pkg_name, line))
                         found_licenses.append(line)
         for found_lic in found_licenses:
             found = False
             for lic in licenses:
                 if re.search(lic["regex"], found_lic):
                     print("{}: found license: {} matches license: {}".format(
-                        name, found_lic, lic["name"]))
+                        pkg_name, found_lic, lic["name"]))
                     found = True
                     break
             if not found:
                 msg = "{}: no approved license found for license: {}".format(
-                    name, found_lic)
+                    pkg_name, found_lic)
                 print("FAILURE: {} {}".format(docker_image, msg))
                 raise Exception(msg)
 
