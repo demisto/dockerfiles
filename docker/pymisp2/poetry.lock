@@ -461,13 +461,13 @@ files = [
 
 [[package]]
 name = "pymisp"
-version = "2.5.7"
+version = "2.5.7.1"
 description = "Python API for MISP."
 optional = false
 python-versions = "<4.0,>=3.9.2"
 files = [
-    {file = "pymisp-2.5.7-py3-none-any.whl", hash = "sha256:4c6e2079cfc37ea0fb3e8c56f551dae033f2ac5d9d34fcfb1f9834d28841f689"},
-    {file = "pymisp-2.5.7.tar.gz", hash = "sha256:7b0043c143618a64d4c0972cdfca035bfec03b8cfd5767523f0c6f531ad767f6"},
+    {file = "pymisp-2.5.7.1-py3-none-any.whl", hash = "sha256:c249a0ccf7c34f381c15955b27af284193a6eaae4387047c63cb7d2c5624be49"},
+    {file = "pymisp-2.5.7.1.tar.gz", hash = "sha256:522f357fb9efd11acd14f423e577c3c8996c3bf90c9d66c2f3e83af31d669159"},
 ]
 
 [package.dependencies]
@@ -479,7 +479,7 @@ requests = ">=2.32.3"
 
 [package.extras]
 brotli = ["urllib3 (>=2.3.0)"]
-docs = ["docutils (>=0.21.2)", "myst-parser (>=4.0.1)", "sphinx (>=8.2.0)", "sphinx-autodoc-typehints (>=3.1.0)"]
+docs = ["docutils (>=0.21.2)", "myst-parser (>=4.0.1)", "sphinx (>=8.2.1)", "sphinx-autodoc-typehints (>=3.1.0)"]
 email = ["RTFDE (>=0.1.2)", "extract_msg (>=0.53.1)", "oletools (>=0.60.2)"]
 fileobjects = ["lief (>=0.16.3)", "pydeep2 (>=0.5.1)", "python-magic (>=0.4.27)"]
 openioc = ["beautifulsoup4 (>=4.13.3)"]
