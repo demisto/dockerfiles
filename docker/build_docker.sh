@@ -75,6 +75,8 @@ function docker_login {
 
 CR_LOGIN_DONE=no
 function cr_login {
+    echo "Failed docker login to CR repo"
+    exit 3
     if [ "${CR_LOGIN_DONE}" = "yes" ]; then
         return 0;
     fi
