@@ -161,6 +161,7 @@ function commit_dockerfiles_trust {
 # build docker. 
 # Param $1: docker dir with all relevant files
 function docker_build {
+    cr_login
     DOCKER_ORG=${DOCKER_ORG:-devdemisto}
     DOCKER_ORG_DEMISTO=demisto
     image_name=$(basename $1)
