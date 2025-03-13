@@ -1,8 +1,7 @@
 variables:
-  GH_BRANCH: $CI_COMMIT_BRANCH
-  GH_COMMIT: $CI_COMMIT_SHA
-trigger_job:
-  trigger:
-    strategy: depend
-    project: ${CI_PROJECT_NAMESPACE}/dockerfiles-cicd
+  CURRENT_BRANCH_NAME: $INFRA_BRANCH
 
+include:
+  - file: "/.gitlab/ci/dockerfiles/.gitlab-ci.yml"
+    ref: $INFRA_BRANCH
+    project: "${CI_PROJECT_NAMESPACE}/infra"

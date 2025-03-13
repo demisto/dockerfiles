@@ -1,4 +1,4 @@
-FROM demisto/python3:3.11.9.107902
+FROM demisto/python3:3.12.8.1983910
 
 COPY requirements.txt .
 
@@ -16,7 +16,11 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
   && apk del .build-dependencies
 
 RUN mkdir /ml
-RUN python -c "import nltk; nltk.download('wordnet', download_dir='/ml/nltk_data'); nltk.download('stopwords', download_dir='/ml/nltk_data'); nltk.download('punkt', download_dir='/ml/nltk_data')"
+RUN python -c "import nltk; nltk.download('wordnet', download_dir='/ml/nltk_data'); nltk.download('stopwords', download_dir='/ml/nltk_data'); nltk.download('punkt_tab', download_dir='/ml/nltk_data')"
 
 ENV NLTK_DATA='/ml/nltk_data'
 RUN chown -R demisto:demisto /ml && chmod -R 775 /ml
+
+# set the number of threads for numpy libs
+ENV OPENBLAS_NUM_THREADS=1
+ENV OMP_NUM_THREADS=4

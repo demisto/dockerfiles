@@ -4,6 +4,7 @@ import pyodbc
 import psycopg2
 import cx_Oracle
 import teradatasqlalchemy
+import pymysql
 
 assert 'FreeTDS' in pyodbc.drivers()
 assert 'ODBC Driver 18 for SQL Server' in pyodbc.drivers(), pyodbc.drivers()
@@ -15,7 +16,6 @@ try:
 except Exception as ex:
     assert 'ORA-12162' in str(ex)
 
-
 # freetds test
 engine = sqlalchemy.create_engine('mssql+pyodbc:///testuser:testpass@127.0.0.1:1433/TEST?driver=FreeTDS')
 try:
@@ -25,5 +25,12 @@ except Exception as ex:
 
 # teradata test: raises sqlalchemy.exc.NoSuchModuleError if the plugin is not installed
 eng = sqlalchemy.create_engine('teradatasql://guest:foo@bar') 
+
+#  test there no missing 'cryptography' module
+try:
+    pymysql._auth.sha2_rsa_encrypt(b'test', b'test', 'test')
+except TypeError as ex:
+    assert "argument 'data': from_buffer() cannot return the address of a unicode object" in str(ex)
+
 
 print("All is good. All imported successfully")

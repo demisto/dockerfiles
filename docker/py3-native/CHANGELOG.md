@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 8.8.0
+
 ## 8.7.0
 
 * Updated the library ***exchangelib*** to version ***5.4.2***  to allow support for the **EWSv2**  integration.
