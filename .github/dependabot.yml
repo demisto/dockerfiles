@@ -733,6 +733,10 @@ updates:
     schedule:
      interval: daily
   - package-ecosystem: pip
+    directory: /docker/slackbolt
+    schedule:
+     interval: daily
+  - package-ecosystem: pip
     directory: /docker/qrcode
     schedule:
      interval: daily
@@ -764,5 +768,8 @@ updates:
      interval: daily  
   - package-ecosystem: pip
     directory: /docker/pysigma
+    schedule:
+     interval: daily  - package-ecosystem: pip
+    directory: /docker/slack-bolt
     schedule:
      interval: daily
