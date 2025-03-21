@@ -1,4 +1,5 @@
-FROM demisto/py3-tools-ubi:1.0.0.89275
+FROM demisto/py3-tools-ubi:1.0.0.114275
+
 
 
 
@@ -33,10 +34,8 @@ RUN dnf update --nodocs -y  \
     && ./download_chromedriver.sh \
     && touch /var/chrome_headless.log \
     && chmod 777 /var/chrome_headless.log \
-    && touch /var/port.txt \
-    && chmod 777 /var/port.txt \
-    && touch /var/rasterizations_counter.txt \
-    && chmod 777 /var/rasterizations_counter.txt \
+    && touch /var/chrome_instances.json \
+    && chmod 777 /var/chrome_instances.json \
     && unzip chromedriver-linux64.zip \
     && mv chromedriver-linux64/chromedriver /usr/bin/chromedriver \
     && rm -rf chromedriver-linux64.zip \
@@ -62,7 +61,7 @@ RUN dnf update --nodocs -y  \
     do python tessdata_downloader/tessdata_downloader.py -o /usr/local/share/tessdata/ -l $lang; done \
     && tesseract --version --list-langs \
     && rm -rf tessdata_downloader leptonica tesseract download_chromedriver.sh repos \
-    && dnf remove -y python3-devel gcc gcc-c++ make platform-python-pip jq unzip git make autoconf automake libtool libpng-devel libjpeg-devel libtiff-devel zlib-devel giflib-devel \
+    && dnf remove -y python3-devel gcc gcc-c++ make platform-python-pip jq unzip git make autoconf automake libtool libpng-devel libjpeg-devel libtiff-devel zlib-devel giflib-devel webkit2gtk3-jsc bind-libs.x86_64 polkit polkit-libs \
     && dnf clean all \
     && rm -rf /var/cache/dnf
 
@@ -74,7 +73,7 @@ RUN dnf update --nodocs -y  \
 # line 6 - since in ubi its 7za --> need to make it to run as 7z like our script
 # lines 8-10 is the configuration for sklearn
 # lines 12-14 - ssl fixes
-RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE python3-devel gcc gcc-c++ make wget git poppler poppler-utils \
+RUN dnf install -y --nodocs --enablerepo=$ROCKY_RELEASE --nobest python3-devel gcc gcc-c++ make wget git poppler poppler-utils \
         rust cargo libxml2-devel libxslt-devel krb5-devel \
         libffi-devel openssl-devel libffi libSM mesa-libGL \
         openssh ca-certificates openssl less rsync libpng-devel freetype-devel gcc-gfortran openblas unzip libstdc++ \

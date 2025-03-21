@@ -48,3 +48,9 @@ xml = '<?xml version="1.0" encoding="UTF-8"?>' \
 xml_obj = fromstring(xml)
 assert xml_obj.tag == 'book'
 print('defusedxml installed correctly')
+
+import setuptools
+print(f'Using setuptools version {setuptools.__version__}')
+
+assert os.path.exists("/var/public_list.dat")
+print("public_list.dat for TLDextract exists")

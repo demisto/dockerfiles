@@ -1,7 +1,7 @@
-# Last modified: 2023-02-14T00:14:20.610888+00:00
-FROM mcr.microsoft.com/powershell:7.3-debian-bullseye-slim
+# Last modified: 2024-03-22T00:12:32.871263+00:00
+FROM mcr.microsoft.com/powershell:7.4-debian-bullseye-slim
 
-RUN echo 'deb http://deb.debian.org/debian buster-backports main' >> /etc/apt/sources.list
+RUN echo 'deb http://deb.debian.org/debian bullseye-backports main' >> /etc/apt/sources.list
 
 # Basic linux utilities
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -13,7 +13,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 && rm -rf /var/lib/apt/lists/*
 
 # Upgrade using backports
-RUN apt-get update && apt-get -t buster-backports -y --no-install-recommends upgrade \
+RUN apt-get update && apt-get -t bullseye-backports -y --no-install-recommends upgrade \
 && rm -rf /var/lib/apt/lists/*
 
 RUN groupadd --gid 4000 demisto \

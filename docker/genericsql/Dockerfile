@@ -1,5 +1,5 @@
 
-FROM demisto/python3-deb:3.10.13.89023
+FROM demisto/python3-deb:3.12.7.117935
 
 COPY requirements.txt .
 COPY odbcinst.ini /etc/odbcinst.ini
@@ -29,7 +29,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   libc-dev \
   libssl-dev \
   unixodbc-dev \
-&& wget ftp://ftp.freetds.org/pub/freetds/stable/freetds-1.1.39.tar.gz \
+# && wget ftp://ftp.freetds.org/pub/freetds/stable/freetds-1.1.39.tar.gz \
+&& wget --no-check-certificate https://www.freetds.org/files/stable/freetds-1.1.39.tar.gz \
 && tar -xzf freetds-1.1.39.tar.gz \
 && cd freetds-1.1.39 \
 && ./configure --with-openssl --with-unixodbc=/usr --enable-msdblib \

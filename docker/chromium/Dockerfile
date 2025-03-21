@@ -1,6 +1,6 @@
 
-# Last modified: 2024-03-04T16:36:09.614248+00:00
-FROM demisto/python3-deb:3.10.13.89023
+# Last modified: 2024-11-21T16:39:36.391539+00:00
+FROM demisto/python3-deb:3.11.10.117398
 
 COPY requirements.txt .
 
@@ -23,10 +23,8 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
 && rm -rf /var/lib/apt/lists/* \
 && touch /var/chrome_headless.log \
 && chmod 777 /var/chrome_headless.log \
-&& touch /var/port.txt \
-&& chmod 777 /var/port.txt \
-&& touch /var/rasterizations_counter.txt \
-&& chmod 777 /var/rasterizations_counter.txt
+&& touch /var/chrome_instances.json \
+&& chmod 777 /var/chrome_instances.json
 
 # Based on instructions at: https://tecadmin.net/setup-selenium-with-chromedriver-on-debian/
 # Will install the latest version available from the chrome repo.
@@ -77,12 +75,18 @@ RUN apt-get install -y libfreetype-dev libfontconfig-dev libboost-dev libpng-dev
 && pdftoppm -v \
 && cd ../.. \
 && rm poppler-${POPPLER_VERSION}.tar.xz \
-&& rm -rf poppler-${POPPLER_VERSION}/
+&& rm -rf poppler-${POPPLER_VERSION}/ \
+&& apt remove libaom0 -y
 
 RUN apt-get purge -y --auto-remove \
   curl \
+  git \
   unzip \
   jq \
+  libarchive13 \
+  python3.9 \
+  python3.9-minimal \
+  python3.9-dev \
 && rm -rf /var/lib/apt/lists/*
 
 ENV CHROME_EXE="/opt/google/chrome/google-chrome"

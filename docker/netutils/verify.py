@@ -15,3 +15,6 @@ subprocess.check_output(
 
 # verify netutils
 import netaddr
+
+# verify aiohttp
+import aiohttp

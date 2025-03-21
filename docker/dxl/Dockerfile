@@ -1,5 +1,5 @@
-# Last modified: 2024-02-09T00:12:47.115657+00:00
-FROM python:3.9.18-alpine3.19
+# Last modified: 2025-01-11T00:16:23.557415+00:00
+FROM python:3.9.21-alpine3.21
 
 # Upgrade all packages to latest
 RUN apk --update --no-cache upgrade
@@ -8,10 +8,14 @@ COPY localtime /etc/localtime
 
 COPY requirements.txt .
 
+# Relevant for tldextract
+COPY public_list.dat /var/public_list.dat
+
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git \
   libffi-dev openssl-dev \
   && pip install --no-cache-dir -r requirements.txt \
-  && apk del .build-dependencies
+  && apk del .build-dependencies \
+  && pip install --upgrade setuptools
 
 RUN addgroup -g 4000 demisto \
   && adduser -u 4000 -G demisto -D demisto -s /bin/sh
