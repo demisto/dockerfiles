@@ -117,7 +117,7 @@ def check_python_license(docker_image: str, licenses: dict, ignore_packages: dic
                 res = req_session.get(
                     "https://pypi.org/pypi/{}/{}/json".format(pkg_name, pkg_version))
                 res.raise_for_status()
-                pip_info = res.json()פ
+                pip_info = res.json()
                 classifiers = pip_info["info"].get("classifiers")
                 # Fallback source for a license
                 license_expression = pip_info["info"].get('license_expression')
