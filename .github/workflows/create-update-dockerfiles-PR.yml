@@ -15,7 +15,7 @@ jobs:
       branches: ${{ steps.generate-matrix.outputs.branches }}
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v2
+        uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # v2
       - name: Generate Matrix
         id: generate-matrix
         env:
@@ -45,10 +45,10 @@ jobs:
       matrix:
         branches: ${{ fromJSON(needs.get_branches.outputs.branches) }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # v2
     - name: pull-request
       id: open-pr
-      uses: repo-sync/pull-request@v2
+      uses: repo-sync/pull-request@7e79a9f5dc3ad0ce53138f01df2fad14a04831c5 # v2
       with:
         GITHUB_TOKEN: ${{secrets.CONTENT_BOT_TOKEN}}
         source_branch: "${{ matrix.branches }}"
