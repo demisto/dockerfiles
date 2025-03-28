@@ -30,6 +30,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
 # Will install the latest version available from the chrome repo.
 # To see available chromedriver go to https://chromedriver.storage.googleapis.com/ and search for the major version
 # of chrome(for  example 91.0).
+# JUST FOR TEST
 
 COPY download_chromedriver.sh .
 
