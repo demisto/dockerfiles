@@ -21,7 +21,8 @@ RUN apt-get update -y -q && \
     libnss3 lsb-release \
     xdg-utils wget locales \
     fonts-arphic-ukai fonts-arphic-uming \
-    fonts-ipafont-mincho fonts-ipafont-gothic \
+    fonts-ipafont-mincho \
+    fonts-ipafont-gothic \
     fonts-unfonts-core \
     fonts-noto-cjk \
     fonts-noto-core \
