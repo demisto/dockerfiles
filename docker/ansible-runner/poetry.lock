@@ -929,20 +929,20 @@ msrestazure = ">=0.4.32,<2.0.0"
 
 [[package]]
 name = "azure-mgmt-loganalytics"
-version = "1.0.0"
+version = "12.0.0"
 description = "Microsoft Azure Log Analytics Management Client Library for Python"
 optional = false
 python-versions = "*"
 groups = ["main"]
 files = [
-    {file = "azure-mgmt-loganalytics-1.0.0.zip", hash = "sha256:7eb052a1c4bb037c06a0aff740378bd54a6ae256bf5cb71faa14b4eb61281488"},
-    {file = "azure_mgmt_loganalytics-1.0.0-py2.py3-none-any.whl", hash = "sha256:042b059884a3d1aae4ecedb372b36939ef9623e5c4bc2537d0c0406c206cef0e"},
+    {file = "azure-mgmt-loganalytics-12.0.0.zip", hash = "sha256:da128a7e0291be7fa2063848df92a9180cf5c16d42adc09d2bc2efd711536bfb"},
+    {file = "azure_mgmt_loganalytics-12.0.0-py2.py3-none-any.whl", hash = "sha256:75ac1d47dd81179905c40765be8834643d8994acff31056ddc1863017f3faa02"},
 ]
 
 [package.dependencies]
 azure-common = ">=1.1,<2.0"
-msrest = ">=0.5.0"
-msrestazure = ">=0.4.32,<2.0.0"
+azure-mgmt-core = ">=1.2.0,<2.0.0"
+msrest = ">=0.6.21"
 
 [[package]]
 name = "azure-mgmt-managedservices"
@@ -3697,4 +3697,4 @@ test = ["big-O", "importlib-resources ; python_version < \"3.9\"", "jaraco.funct
 [metadata]
 lock-version = "2.1"
 python-versions = "~3.11"
-content-hash = "47350798a855d874840615f63c9ce17c9fccfc3e8881681bbe2cbbc4eb20cb1e"
+content-hash = "6a89ba17e5590d2f195ec11ebf7af01f76f8794e0b48c515775a8f65aee0f552"
