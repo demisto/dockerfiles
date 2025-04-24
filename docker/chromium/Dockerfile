@@ -56,7 +56,8 @@ RUN apt-get update && apt-get -t bullseye-backports install -y --no-install-reco
 && chromedriver --version
 
 # Install latest Poppler
-RUN apt-get install -y libfreetype-dev libfontconfig-dev libboost-dev libpng-dev zlib1g-dev liblcms2-dev libcurl4 libcurl4-gnutls-dev \
+RUN apt-get install -y libfreetype-dev libfontconfig-dev \
+libboost-dev libpng-dev zlib1g-dev liblcms2-dev libcurl4 libcurl4-gnutls-dev \
 && apt-get install -y libjpeg-dev libcairo-dev libopenjp2-7-dev libtiff-dev libnss3-dev \
 && apt-get install -y build-essential \
 && apt-get install -y libgpgmepp-dev qtbase5-dev libcairo2-dev \
