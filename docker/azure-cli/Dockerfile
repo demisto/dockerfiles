@@ -1,8 +1,5 @@
 # Use Debian Slim as base
-FROM debian:bullseye-slim
-
-# ensure local python is preferred over distribution python
-ENV PATH /usr/local/bin:$PATH
+FROM demisto/python3-deb:3.12.7.117935
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -35,16 +32,14 @@ RUN apt-get update && apt-get install -y \
     libssl-dev
 
 # Upgrade pip
-RUN pip3 install --no-cache-dir --upgrade pip
+RUN pip install --no-cache-dir --upgrade pip
 
 # Copy requirements.txt into the image
 COPY requirements.txt /tmp/requirements.txt
 # COPY verify.py /verify.py
 
 # Install Python dependencies
-RUN pip3 install --no-cache-dir -r /tmp/requirements.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
 # Cleanup build dependencies and temporary files
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /root/.cargo /tmp/*
-
-CMD ["python3"]
