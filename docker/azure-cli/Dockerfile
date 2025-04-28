@@ -46,3 +46,5 @@ RUN pip3 install --no-cache-dir -r /tmp/requirements.txt
 
 # Cleanup build dependencies and temporary files
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /root/.cargo /tmp/*
+
+CMD ["python3"]
