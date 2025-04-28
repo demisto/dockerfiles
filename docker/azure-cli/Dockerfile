@@ -1,6 +1,9 @@
 # Use Debian Slim as base
 FROM debian:bullseye-slim
 
+# ensure local python is preferred over distribution python
+ENV PATH /usr/local/bin:$PATH
+
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install system tools and Azure CLI dependencies
@@ -36,6 +39,7 @@ RUN pip3 install --no-cache-dir --upgrade pip
 
 # Copy requirements.txt into the image
 COPY requirements.txt /tmp/requirements.txt
+# COPY verify.py /verify.py
 
 # Install Python dependencies
 RUN pip3 install --no-cache-dir -r /tmp/requirements.txt
