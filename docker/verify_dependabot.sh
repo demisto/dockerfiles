@@ -27,4 +27,16 @@ for d in `find "$DOCKER_SRC_DIR" -maxdepth 1 -mindepth 1 -type d`; do
             fi
         fi
     fi
+
+    # For deprecated images, notify that the image appears in the dependabot config and suggest to add it
+    if [[ $(grep -E '^deprecated=true' $d/build.conf) ]]; then
+        if [ -f "$d/Pipfile" -o -f "$d/requirements.txt" ]; then
+            if [[ $(grep -B 1 "/docker/${name}\$" "$DEPENDABOT_CONFIG" | grep "package-ecosystem: pip") ]]; then
+                echo "=============================="
+                echo "Foun deprecated image: [$d] in .github/dependabot.yml"
+                echo "Consider to remove it so dependabot will not update dependencies"
+                exit 2
+            fi
+        fi
+    fi
 done
