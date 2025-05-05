@@ -56,26 +56,12 @@ RUN apt-get update && apt-get -t bullseye-backports install -y --no-install-reco
 && chromedriver --version
 
 # Install latest Poppler
-RUN apt-get install -y libfreetype-dev libfontconfig-dev libboost-dev libpng-dev zlib1g-dev liblcms2-dev libcurl4 libcurl4-gnutls-dev \
+RUN apt-get install -y libfreetype-dev libfontconfig-dev \
+libboost-dev libpng-dev zlib1g-dev liblcms2-dev libcurl4 libcurl4-gnutls-dev \
 && apt-get install -y libjpeg-dev libcairo-dev libopenjp2-7-dev libtiff-dev libnss3-dev \
 && apt-get install -y build-essential \
 && apt-get install -y libgpgmepp-dev qtbase5-dev libcairo2-dev \
-&& apt-get install -y xz-utils cmake \
-&& wget https://poppler.freedesktop.org/poppler-${POPPLER_VERSION}.tar.xz -v \
-&& tar -xf ./poppler-${POPPLER_VERSION}.tar.xz \
-&& cd poppler-${POPPLER_VERSION} \
-&& mkdir -p build \
-&& cd build \
-&& apt-get install -y git \
-&& git clone git://git.freedesktop.org/git/poppler/test \
-&& cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DTESTDATADIR=$PWD/testfiles -DENABLE_QT6=OFF -DENABLE_UNSTABLE_API_ABI_HEADERS=ON -DENABLE_GPGME=OFF .. \
-&& make install \
-&& . ~/.bashrc \
-&& ldconfig "$(which pdftoppm)" \
-&& pdftoppm -v \
-&& cd ../.. \
-&& rm poppler-${POPPLER_VERSION}.tar.xz \
-&& rm -rf poppler-${POPPLER_VERSION}/ \
+&& apt-get install -y xz-utils poppler-utils \
 && apt remove libaom0 -y
 
 RUN apt-get purge -y --auto-remove \
