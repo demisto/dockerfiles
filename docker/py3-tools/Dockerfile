@@ -7,6 +7,10 @@ COPY requirements.txt .
 
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git libffi-dev \
   && pip install --no-cache-dir -r requirements.txt \
+  && pip install --no-cache-dir \
+       --index-url https://test.pypi.org/simple/ \
+       --extra-index-url https://pypi.org/simple \
+       cortex-module-test \
   && apk del .build-dependencies
 
 

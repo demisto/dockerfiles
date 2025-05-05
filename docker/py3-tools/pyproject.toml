@@ -6,7 +6,7 @@ authors = ["Your Name <you@example.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "~3.12"
+python = ">=3.10,<3.13"
 cloudshare = "*"
 intezer-sdk = ">=1.21.3"
 emoji = "*"
@@ -52,9 +52,14 @@ opensearch_dsl = "*"
 aiohttp = "*"
 pycryptodome = "*"
 requests-toolbelt = "*"
-urllib3 = "^2.4.0"
+urllib3 = "^2.3.0"
 pydantic = ">=2.7.1"
 json2html = "*"
+cortex-module-test = { version = "^0.0.1", source = "testpypi" }
+
+[[tool.poetry.source]]
+name = "testpypi"
+url = "https://test.pypi.org/simple/"
 
 [build-system]
 requires = ["poetry-core"]
