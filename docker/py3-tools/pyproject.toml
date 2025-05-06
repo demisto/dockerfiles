@@ -5,6 +5,14 @@ description = ""
 authors = ["Your Name <you@example.com>"]
 readme = "README.md"
 
+[[tool.poetry.source]]
+name = "pypi"
+priority = "primary"
+
+[[tool.poetry.source]]
+name = "testpypi"
+url = "https://test.pypi.org/simple/"
+
 [tool.poetry.dependencies]
 python = "~3.12"
 cloudshare = "*"
@@ -56,10 +64,6 @@ urllib3 = "^2.4.0"
 pydantic = ">=2.7.1"
 json2html = "*"
 cortex-module-test = { version = "^0.0.1", source = "testpypi" }
-
-[[tool.poetry.source]]
-name = "testpypi"
-url = "https://test.pypi.org/simple/"
 
 [build-system]
 requires = ["poetry-core"]
