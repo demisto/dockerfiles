@@ -11,7 +11,8 @@ COPY localtime /etc/localtime
 # Relevant for tldextract
 COPY public_list.dat /var/public_list.dat
 
-RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget \
+RUN apk --update add --no-cache --virtual .build-dependencies \
+  python3-dev build-base wget \
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies \
   && pip install --upgrade setuptools
