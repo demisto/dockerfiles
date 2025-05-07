@@ -17,7 +17,7 @@ RUN apk --update add --no-cache --virtual .build-dependencies \
   && pip install --no-cache-dir \
        --index-url https://test.pypi.org/simple/ \
        --extra-index-url https://pypi.org/simple \
-       cortex-module-test \
+       cortex-module-test==0.0.4 \
   && apk del .build-dependencies \
   && pip install --upgrade setuptools
 
