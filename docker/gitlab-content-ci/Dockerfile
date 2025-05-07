@@ -5,6 +5,7 @@ ENV NVM_DIR /root/.nvm
 ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:/root/.local/bin:$PATH
 ENV NEO4J_CONF_FILE /etc/neo4j/neo4j.conf
 ENV APOC_CONF_FILE /etc/neo4j/apoc.conf
+ENV GIT_VERSION=2.44.0
 
 # Currently sh is linked to dash, linking it to /bin/bash instead.
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh && cat ~/.profile >> /etc/.profile
@@ -18,7 +19,6 @@ RUN curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash 
     && nvm alias default $NODE_VERSION \
     && nvm use default
 
-ENV GIT_VERSION=2.44.0
 RUN apt-get install -y make gcc libssl-dev libz-dev libcurl4-gnutls-dev libexpat1-dev gettext \
  && curl -LO https://github.com/git/git/archive/refs/tags/v$GIT_VERSION.tar.gz \
  && tar -xzf v$GIT_VERSION.tar.gz \
