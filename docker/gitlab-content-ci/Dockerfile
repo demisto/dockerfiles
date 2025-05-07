@@ -18,6 +18,18 @@ RUN curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash 
     && nvm alias default $NODE_VERSION \
     && nvm use default
 
+ENV GIT_VERSION=2.44.0
+RUN apt-get install -y make gcc libssl-dev libz-dev libcurl4-gnutls-dev libexpat1-dev gettext \
+ && curl -LO https://github.com/git/git/archive/refs/tags/v$GIT_VERSION.tar.gz \
+ && tar -xzf v$GIT_VERSION.tar.gz \
+ && cd git-$GIT_VERSION \
+ && make prefix=/usr/local all \
+ && make prefix=/usr/local install \
+ && cd .. \
+ && rm -rf git-$GIT_VERSION v$GIT_VERSION.tar.gz \
+ && git --version
+
+
 # Installing the gsutil cli
 RUN apt-get install apt-transport-https ca-certificates gnupg gpgv -y --allow-downgrades\
     && echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" |  tee -a /etc/apt/sources.list.d/google-cloud-sdk.list \
