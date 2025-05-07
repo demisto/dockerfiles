@@ -1,33 +1,37 @@
 FROM demisto/python3-deb:3.10.11.61745
 
 ENV NODE_VERSION 14.16.0
+ENV GIT_VERSION=2.44.0
 ENV NVM_DIR /root/.nvm
 ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:/root/.local/bin:$PATH
 ENV NEO4J_CONF_FILE /etc/neo4j/neo4j.conf
 ENV APOC_CONF_FILE /etc/neo4j/apoc.conf
-ENV GIT_VERSION=2.44.0
 
 # Currently sh is linked to dash, linking it to /bin/bash instead.
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh && cat ~/.profile >> /etc/.profile
 
-RUN apt-get update
-RUN apt-get upgrade -y
-RUN apt-get install -y curl jq unzip openssh-client gcc libffi-dev libssl-dev git zip cowsay netcat wget python2 python3-pip software-properties-common
+# Update system and install dependencies (combine to reduce layers)
+RUN apt-get update && apt-get upgrade -y && apt-get install -y \
+    curl jq unzip openssh-client git zip cowsay netcat wget python2 python3-pip \
+    software-properties-common gcc libffi-dev libssl-dev make \
+    libz-dev libcurl4-gnutls-dev libexpat1-dev gettext
+
+# Install Node via NVM
 RUN curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash \
     && . $NVM_DIR/nvm.sh \
     && nvm install $NODE_VERSION \
     && nvm alias default $NODE_VERSION \
     && nvm use default
 
-RUN apt-get install -y make gcc libssl-dev libz-dev libcurl4-gnutls-dev libexpat1-dev gettext \
- && curl -LO https://github.com/git/git/archive/refs/tags/v$GIT_VERSION.tar.gz \
- && tar -xzf v$GIT_VERSION.tar.gz \
- && cd git-$GIT_VERSION \
- && make prefix=/usr/local all \
- && make prefix=/usr/local install \
- && cd .. \
- && rm -rf git-$GIT_VERSION v$GIT_VERSION.tar.gz \
- && git --version
+# Build and install newer Git version
+RUN curl -LO https://github.com/git/git/archive/refs/tags/v$GIT_VERSION.tar.gz \
+    && tar -xzf v$GIT_VERSION.tar.gz \
+    && cd git-$GIT_VERSION \
+    && make prefix=/usr/local all \
+    && make prefix=/usr/local install \
+    && cd .. \
+    && rm -rf git-$GIT_VERSION v$GIT_VERSION.tar.gz \
+    && git --version
 
 
 # Installing the gsutil cli
