@@ -13,10 +13,10 @@ COPY public_list.dat /var/public_list.dat
 
 RUN apk --update add --no-cache --virtual .build-dependencies \
   python3-dev build-base wget \
-  && pip install --no-cache-dir -r requirements.txt \
   && pip install --no-cache-dir \
-       --index-url https://test.pypi.org/simple/ \
-       cortex-module-test==0.0.4 \
+       --index-url https://pypi.org/simple \
+       --extra-index-url https://test.pypi.org/simple/ \
+       -r requirements.txt \
   && apk del .build-dependencies \
   && pip install --upgrade setuptools
 
