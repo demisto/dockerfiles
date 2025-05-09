@@ -3,7 +3,10 @@ name = "pypi"
 url = "https://pypi.org/simple"
 verify_ssl = true
 
-[dev-packages]
+[[source]]
+name = "testpypi"
+url = "https://test.pypi.org/simple/"
+verify_ssl = true
 
 [packages]
 requests = {extras = ["socks"],version = "*"}
@@ -15,5 +18,9 @@ funcy = "*"
 tldextract = "*"
 more-itertools = "*"
 defusedxml = "*"
+cortex-module-test = {version = "*", index = "testpypi"}
+
+[dev-packages]
+
 [requires]
 python_version = "3.12"
