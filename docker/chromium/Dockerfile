@@ -69,7 +69,7 @@ RUN wget https://poppler.freedesktop.org/poppler-${POPPLER_VERSION}.tar.xz -v \
 && cd build \
 && apt-get install -y git
 
-RUN  git clone git://git.freedesktop.org/git/poppler/test \
+RUN  git clone git clone https://gitlab.freedesktop.org/poppler/poppler.git \
 && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DTESTDATADIR=$PWD/testfiles -DENABLE_QT6=OFF -DENABLE_UNSTABLE_API_ABI_HEADERS=ON -DENABLE_GPGME=OFF .. \
 && make install \
 && . ~/.bashrc \
