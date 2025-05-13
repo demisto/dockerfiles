@@ -1,5 +1,5 @@
 
-# Last modified: 2025-01-15T00:16:31.539836+00:00
+# Last modified: 2025-05-13T10:16:31.539836+00:00
 FROM python:3.12.8-slim-bullseye
 
 RUN echo 'deb http://deb.debian.org/debian bullseye-backports main' >> /etc/apt/sources.list
@@ -26,12 +26,12 @@ COPY public_list.dat /var/public_list.dat
 RUN apt-get update && apt-get install -y --no-install-recommends \
   gcc \
   python3-dev \ 
-&& pip install --no-cache-dir -r requirements.txt \
+# && pip install --no-cache-dir -r requirements.txt \
 && apt-get purge -y --auto-remove \
   gcc \
   python3-dev \
-&& rm -rf /var/lib/apt/lists/* \
-&& pip install --upgrade setuptools
+&& rm -rf /var/lib/apt/lists/* 
+# && pip install --upgrade setuptools
 
 
 RUN groupadd --gid 4000 demisto \
