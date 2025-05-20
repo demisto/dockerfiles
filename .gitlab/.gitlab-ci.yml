@@ -1,7 +1,7 @@
 variables:
-  CURRENT_BRANCH_NAME: $INFRA_BRANCH
+  CURRENT_BRANCH_NAME: "update-dockerfiles-gitlab-image"
 
 include:
   - file: "/.gitlab/ci/dockerfiles/.gitlab-ci.yml"
-    ref: $INFRA_BRANCH
+    ref: "update-dockerfiles-gitlab-image"
     project: "${CI_PROJECT_NAMESPACE}/infra"
