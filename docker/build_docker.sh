@@ -336,6 +336,7 @@ function docker_build {
         echo "Skipping docker push for cr"
     fi
 
+    DOCKER_LOGIN_DONE="no"
     if docker_login; then
         echo "Done docker login"
         env DOCKER_CONTENT_TRUST=$docker_trust DOCKER_CONFIG="${DOCKER_CONFIG}"  docker push ${image_full_name}
