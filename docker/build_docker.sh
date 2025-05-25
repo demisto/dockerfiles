@@ -337,6 +337,7 @@ function docker_build {
     fi
 
     if docker_login; then
+        echo "Done docker login"
         env DOCKER_CONTENT_TRUST=$docker_trust DOCKER_CONFIG="${DOCKER_CONFIG}"  docker push ${image_full_name}
         echo "Done docker push for: ${image_full_name}"
         PUSHED_DOCKERS="${image_full_name},$PUSHED_DOCKERS"
