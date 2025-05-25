@@ -230,7 +230,11 @@ function docker_build {
         reason=$(prop 'deprecated_reason')
         echo "ENV DEPRECATED_REASON=\"$reason\"" >> "$tmp_dir/Dockerfile"
     fi
-    
+
+    echo "### DOCKER LOGIN START ###"
+    docker_login
+    echo "### DOCKER LOGIN DONE ###"
+
     docker buildx build -f "$tmp_dir/Dockerfile" . -t ${image_full_name} \
         --label "org.opencontainers.image.authors=Demisto <containers@demisto.com>" \
         --label "org.opencontainers.image.version=${VERSION}" \
@@ -332,7 +336,9 @@ function docker_build {
         echo "Skipping docker push for cr"
     fi
 
+    DOCKER_LOGIN_DONE="no"
     if docker_login; then
+        echo "Done docker login"
         env DOCKER_CONTENT_TRUST=$docker_trust DOCKER_CONFIG="${DOCKER_CONFIG}"  docker push ${image_full_name}
         echo "Done docker push for: ${image_full_name}"
         PUSHED_DOCKERS="${image_full_name},$PUSHED_DOCKERS"
