@@ -1,5 +1,5 @@
 
-FROM demisto/python3-deb:3.12.10.3471258
+FROM demisto/python3-deb:3.12.10.3561556
 
 COPY requirements.txt .
 COPY odbcinst.ini /etc/odbcinst.ini
