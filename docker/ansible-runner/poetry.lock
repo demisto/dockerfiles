@@ -737,21 +737,22 @@ msrestazure = ">=0.4.27,<2.0.0"
 
 [[package]]
 name = "azure-mgmt-compute"
-version = "10.0.0"
+version = "34.1.0"
 description = "Microsoft Azure Compute Management Client Library for Python"
 optional = false
-python-versions = "*"
+python-versions = ">=3.8"
 groups = ["main"]
 markers = "platform_system == \"Windows\" or platform_system == \"Darwin\" or platform_system != \"Windows\" and platform_system != \"Darwin\""
 files = [
-    {file = "azure-mgmt-compute-10.0.0.zip", hash = "sha256:cfdf35722d5d7ccee8d32a81f6734b210298dfaed10f7299efadf06ea7e96be8"},
-    {file = "azure_mgmt_compute-10.0.0-py2.py3-none-any.whl", hash = "sha256:c25d1077a95790eafec1e01d82204cbd57449477a58e68f25cb41e1b11f45b63"},
+    {file = "azure_mgmt_compute-34.1.0-py3-none-any.whl", hash = "sha256:5de9c4ba12a79c69e2db3d880f93869a0a80e5c99d8232dbebf6c19b1ada3638"},
+    {file = "azure_mgmt_compute-34.1.0.tar.gz", hash = "sha256:cd9d35d1cc1b8cb0bd241ad55c91b77d14e04ae73c632ada1140135f9c217fe1"},
 ]
 
 [package.dependencies]
-azure-common = ">=1.1,<2.0"
-msrest = ">=0.5.0"
-msrestazure = ">=0.4.32,<2.0.0"
+azure-common = ">=1.1"
+azure-mgmt-core = ">=1.3.2"
+isodate = ">=0.6.1"
+typing-extensions = ">=4.6.0"
 
 [[package]]
 name = "azure-mgmt-containerinstance"
@@ -3162,49 +3163,12 @@ tests = ["coverage[toml] (==5.0.4)", "pytest (>=6.0.0,<7.0.0)"]
 
 [[package]]
 name = "pymsalruntime"
-version = "0.16.2"
-description = "The MSALRuntime Python Interop Package"
-optional = false
-python-versions = ">=3.6"
-groups = ["main"]
-markers = "platform_system == \"Windows\""
-files = [
-    {file = "pymsalruntime-0.16.2-cp310-cp310-macosx_14_0_arm64.whl", hash = "sha256:18b51582315b7723c54d99e196058d3ffe63c1e7021adad39f592322afa5d6ef"},
-    {file = "pymsalruntime-0.16.2-cp310-cp310-macosx_14_0_x86_64.whl", hash = "sha256:6741215e88feb056ff1c6128776137e286aab72d4df6d0832b30603f141576ce"},
-    {file = "pymsalruntime-0.16.2-cp310-cp310-win32.whl", hash = "sha256:9484d618258be2d973da21933ef48e2fbcd860d8bb150e357705ee8f25060d7a"},
-    {file = "pymsalruntime-0.16.2-cp310-cp310-win_amd64.whl", hash = "sha256:acaa7e9857b086befbe9c4c502d663305066e6572b59f7202127816cd2e10be3"},
-    {file = "pymsalruntime-0.16.2-cp311-cp311-macosx_14_0_arm64.whl", hash = "sha256:c6ab58a1f16c6d6213a996b6edd549c85c8dbb548574dcf8dd74b4d5d7244057"},
-    {file = "pymsalruntime-0.16.2-cp311-cp311-macosx_14_0_x86_64.whl", hash = "sha256:4e5868333ec8f510e28b7b5998a6374102005027b7850579aa661386d82f9678"},
-    {file = "pymsalruntime-0.16.2-cp311-cp311-win32.whl", hash = "sha256:8a22c5e0c5c6d18fdd590ec863c4920803dbaeb78ac23e5e8034131faabe4f5e"},
-    {file = "pymsalruntime-0.16.2-cp311-cp311-win_amd64.whl", hash = "sha256:9070f13525912fc19f8f07bfa422bf0b4870c619b0e61d1b31dc8eb4ee5dadd8"},
-    {file = "pymsalruntime-0.16.2-cp312-cp312-macosx_14_0_arm64.whl", hash = "sha256:751708bc18cb8823223bdaca08a7294759ee6cac262fd14c6606f52e06f00cc2"},
-    {file = "pymsalruntime-0.16.2-cp312-cp312-macosx_14_0_x86_64.whl", hash = "sha256:788897a2a27b3b309e29b4346118310875528f9d8cc8f23a2c08c4bfc10d0c30"},
-    {file = "pymsalruntime-0.16.2-cp312-cp312-win32.whl", hash = "sha256:687216bcb6294fd3e34d019c3d49f91169fd286a054944fc53f59311aa092927"},
-    {file = "pymsalruntime-0.16.2-cp312-cp312-win_amd64.whl", hash = "sha256:4d8faa34318ca7d1877bbd85f9ba75198bda5ad48b5cf43fc40e5cb25b7c6821"},
-    {file = "pymsalruntime-0.16.2-cp36-cp36m-macosx_14_0_arm64.whl", hash = "sha256:5e67e7b509c642a12b1877233576f9567aa6c9ebedb6e1970ed6c178c101b6b9"},
-    {file = "pymsalruntime-0.16.2-cp36-cp36m-macosx_14_0_x86_64.whl", hash = "sha256:5edf2b06becd2df97de147191ffa65074804c2b8f2613b773c2a949a48a275f8"},
-    {file = "pymsalruntime-0.16.2-cp37-cp37m-macosx_14_0_arm64.whl", hash = "sha256:07a32e3e5eb9fa913e96c7a54e73858f1dc4d63b4e82645888347af656bface9"},
-    {file = "pymsalruntime-0.16.2-cp37-cp37m-macosx_14_0_x86_64.whl", hash = "sha256:510ed8c05bc99a51234fff417e920d26ef5a6e43acd0adb2dc8594102c2bb8ea"},
-    {file = "pymsalruntime-0.16.2-cp37-cp37m-win32.whl", hash = "sha256:2e2b61d547f18262539b90e5e22462699b5e28ac35454bff419fd4d50e488a29"},
-    {file = "pymsalruntime-0.16.2-cp37-cp37m-win_amd64.whl", hash = "sha256:c904beada27ccf17918c8f8581f7d5b225d5850249e27b8359e6c14fb0cf48de"},
-    {file = "pymsalruntime-0.16.2-cp38-cp38-macosx_14_0_arm64.whl", hash = "sha256:e561599077874d24ead3fe29fd1a0baf13b66fd7adfd5801c52b4d21fef2305c"},
-    {file = "pymsalruntime-0.16.2-cp38-cp38-macosx_14_0_x86_64.whl", hash = "sha256:7a2c436542515a1382d92976fc241ec8e6f705f22e6f6568c7051e84947f9711"},
-    {file = "pymsalruntime-0.16.2-cp38-cp38-win32.whl", hash = "sha256:cd57ce12341af55d688a7753eb686e593efa4754af647a1805e941c18227148b"},
-    {file = "pymsalruntime-0.16.2-cp38-cp38-win_amd64.whl", hash = "sha256:b58e3d41a49ab87e45e9e8a326af9d08d440fa0c284f6fe9445b8c0c588e6c13"},
-    {file = "pymsalruntime-0.16.2-cp39-cp39-macosx_14_0_arm64.whl", hash = "sha256:ad297bf2c4a409c82427e32b299f3a74757ed3514d8fc051e5c35399db3b6e67"},
-    {file = "pymsalruntime-0.16.2-cp39-cp39-macosx_14_0_x86_64.whl", hash = "sha256:6c1ce399c663c63ce6dd33ca246061e4bd58a460aa02b13ff40d21bcc350210e"},
-    {file = "pymsalruntime-0.16.2-cp39-cp39-win32.whl", hash = "sha256:fbe911ffe3b018a283291ab5effc161e08932314ecd8d848a16365146b4fb815"},
-    {file = "pymsalruntime-0.16.2-cp39-cp39-win_amd64.whl", hash = "sha256:06db5ee216bda4e5b747326eed0983cea53c52c2e29e8f8c506a5a3aeb9d7259"},
-]
-
-[[package]]
-name = "pymsalruntime"
 version = "0.17.1"
 description = "The MSALRuntime Python Interop Package"
 optional = false
 python-versions = ">=3.6"
 groups = ["main"]
-markers = "platform_system == \"Darwin\""
+markers = "platform_system == \"Windows\" or platform_system == \"Darwin\""
 files = [
     {file = "pymsalruntime-0.17.1-cp310-cp310-macosx_14_0_arm64.whl", hash = "sha256:18e46d9896650f3f6806c2f7f39d09ab37283e1cfa385fac242d39fb1be40267"},
     {file = "pymsalruntime-0.17.1-cp310-cp310-macosx_14_0_x86_64.whl", hash = "sha256:f69f86122c37fed97ff1e1398ed719390e43d9ae5a4b2f6eaa5d7163d70f6157"},
@@ -4017,4 +3981,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = "~3.11"
-content-hash = "96785f04a4b1e71c28daa764eeb6eac2a58c88d81c889c41f7e25f6d3d90cdc5"
+content-hash = "3110d19488a2192ab523e6203b6d67f2349dd8873c1acf3cca3f5b91dfbb9594"
