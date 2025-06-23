@@ -1,12 +1,13 @@
 
-FROM demisto/python3-deb:3.12.7.117935
+FROM demisto/python3-deb:3.12.10.3561556
 
 COPY requirements.txt .
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
   gcc \
   python3-dev \
-&& apt install wget libglib2.0-0 libsm6 libxext6 libgl1-mesa-glx libxrender1 libxrender-dev -y \
+&& apt install wget libglib2.0-0 libsm6 \
+libxext6 libgl1-mesa-glx libxrender1 libxrender-dev -y \
 && pip install --no-cache-dir -r requirements.txt \
 && apt-get purge -y --auto-remove \
   gcc \

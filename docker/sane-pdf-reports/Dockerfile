@@ -1,5 +1,5 @@
-# Last modified: 2025-01-19T16:37:24.741442+00:00
-FROM demisto/python3-deb:3.12.7.117935
+# Last modified: 2025-05-27T16:38:14.113462+00:00
+FROM demisto/python3-deb:3.12.10.3561556
 
 WORKDIR "/app"
 
@@ -21,7 +21,8 @@ RUN apt-get update -y -q && \
     libnss3 lsb-release \
     xdg-utils wget locales \
     fonts-arphic-ukai fonts-arphic-uming \
-    fonts-ipafont-mincho fonts-ipafont-gothic \
+    fonts-ipafont-mincho \
+    fonts-ipafont-gothic \
     fonts-unfonts-core \
     fonts-noto-cjk \
     fonts-noto-core \
