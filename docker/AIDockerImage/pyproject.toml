@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "aidockerimage"
+version = "1.0.0"
+description = "A Docker image with AI and LangChain libraries."
+authors = ["Niko XSOAR LAB nikosxsoarlab@gmail.com"]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+langchain = "*"
+ollama = "*"
+langchain_community = "*"
+langchain_ollama = "*"
+deepseek = "*"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
