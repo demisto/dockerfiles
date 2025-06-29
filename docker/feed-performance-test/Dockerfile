@@ -1,11 +1,11 @@
-FROM demisto/faker3:1.0.0.2113469 AS build
+FROM demisto/faker3:1.0.0.3790814 AS build
 RUN mkdir -p /perf
 COPY script.py /perf
 
 WORKDIR /perf
 RUN python -u script.py
 
-FROM demisto/python3:3.12.8.3296088
+FROM demisto/python3:3.12.11.3982393
 RUN mkdir -p /perf
 WORKDIR /perf
 COPY --from=build /perf/ips.csv .
