@@ -6,12 +6,13 @@ name = "pypi"
 [packages]
 gevent = "*"
 flask = "*"
-Flask-Cors = "*"
+Flask-Cors = "5.0.0" # missing license in the higher version, 
 netaddr = "*"
 tldextract = "*"
 packaging = "*"
 taxii2-client = "*"
 stix2-patterns = "*"
+setuptools = ">=80.9.0" # need just because the version comes from the dependencies are lower, we can remove it once ready
 
 [dev-packages]
 
