@@ -1,12 +1,10 @@
 
 FROM demisto/python3:3.12.11.4095827
 
-COPY requirements.txt .
+# install system libraries
+RUN apk --update add --no-cache libmagic openssl
 
-RUN apk --update add --no-cache libmagic
+# install production dependencies only
+RUN apk --update add --no-cache --virtual .build-deps python3-dev build-base libffi-dev wget git \
+    && apk del .build-deps
 
-RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base libffi-dev wget git \
-  && pip install --no-cache-dir -r requirements.txt \
-  && pip uninstall -y pcodedmp \
-  && apk del .build-dependencies \
-  && apk add openssl
