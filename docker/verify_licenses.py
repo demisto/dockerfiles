@@ -96,7 +96,7 @@ def check_python_license(docker_image: str, licenses: dict, ignore_packages: dic
                 docker_image))
             return
         else:
-            raise 
+            raise
     pip_list_json = subprocess.check_output(
         ["docker", "run", "--rm", docker_image, "pip", "list", "--format", "json"])
     pip_list = json.loads(pip_list_json)
@@ -164,10 +164,7 @@ def check_python_license(docker_image: str, licenses: dict, ignore_packages: dic
                         pkg_name, found_lic, lic["name"]))
                     found = True
                     break
-            # workaround to build dev image
-            if found_lic == "GPL-2.0-or-later":
-                found = True
-                
+
             if not found:
                 msg = "{}: no approved license found for license: {}".format(
                     pkg_name, found_lic)
