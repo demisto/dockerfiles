@@ -164,7 +164,6 @@ def check_python_license(docker_image: str, licenses: dict, ignore_packages: dic
                         pkg_name, found_lic, lic["name"]))
                     found = True
                     break
-
             if not found:
                 msg = "{}: no approved license found for license: {}".format(
                     pkg_name, found_lic)
