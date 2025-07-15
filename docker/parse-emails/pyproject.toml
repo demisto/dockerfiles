@@ -7,7 +7,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "~3.12"
-parse-emails = {git = "https://github.com/demisto/parse-emails.git", rev = "remove-demisto-sdk-dependency"}
+parse-emails = "*"
 
 [build-system]
 requires = ["poetry-core"]
