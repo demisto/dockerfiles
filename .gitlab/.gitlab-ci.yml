@@ -1,7 +1,11 @@
 variables:
-  CURRENT_BRANCH_NAME: $INFRA_BRANCH
+  # TODO Fix before merge
+  # CURRENT_BRANCH_NAME: $INFRA_BRANCH
+  CURRENT_BRANCH_NAME: "security-scans-dockerfiles"
 
 include:
   - file: "/.gitlab/ci/dockerfiles/.gitlab-ci.yml"
-    ref: $INFRA_BRANCH
+    # TODO Fix before merge
+    # ref: $INFRA_BRANCH
+    ref: "security-scans-dockerfiles"
     project: "${CI_PROJECT_NAMESPACE}/infra"
