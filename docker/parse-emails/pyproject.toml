@@ -7,8 +7,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "~3.12"
-parse-emails = "*"
-
+parse-emails = {git = "https://github.com/demisto/parse-emails.git", rev = "XSUP-53425-ParseEmailFilesV2-throws-error-when-finding-Chinese-characters"}
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

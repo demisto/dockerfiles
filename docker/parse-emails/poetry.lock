@@ -491,7 +491,7 @@ files = [
 
 [[package]]
 name = "parse-emails"
-version = "0.1.42"
+version = "0.1.43"
 description = "Parses an email message file and extracts the data from it."
 optional = false
 python-versions = ">=3.9,<3.13"
@@ -517,8 +517,8 @@ slack-sdk = "*"
 [package.source]
 type = "git"
 url = "https://github.com/demisto/parse-emails.git"
-reference = "fix-file-type-resolution"
-resolved_reference = "007c3f7954bf8c5c94eac74050adf04e6307c0d7"
+reference = "XSUP-53425-ParseEmailFilesV2-throws-error-when-finding-Chinese-characters"
+resolved_reference = "e2c592a1079d88b037256d59bc4bf291887bba18"
 
 [[package]]
 name = "pcodedmp"
@@ -1002,4 +1002,4 @@ testing = ["coverage[toml]", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.12"
-content-hash = "cd4176b22f7892af36687b66f41ee22ed29a551e9253b24d9515d79a5a2d74dc"
+content-hash = "b5df0a520a650043a5dba9c16e2210ce9789868aa1bb083b569eb313f7f07b3a"
