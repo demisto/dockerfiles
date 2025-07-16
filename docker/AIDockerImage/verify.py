@@ -1,7 +1,6 @@
-import langchain
-import ollama
-import langchain_community
-import langchain_ollama
-import deepseek
+from dockerfile_test import DockerImageValidator
 
-print("All dependencies imported successfully!")
+
+def test_verify_image():
+    validator = DockerImageValidator('aidockerimage')
+    validator.validate()
