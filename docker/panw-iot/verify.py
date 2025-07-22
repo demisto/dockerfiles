@@ -7,6 +7,7 @@ import snap7
 import pandas
 import orionsdk
 import dns.resolver
+import pyads
 
 def lookup_dns_record(domain, record_type='A'):
     """
@@ -32,4 +33,5 @@ def lookup_dns_record(domain, record_type='A'):
 snap7client = snap7.client.Client()
 swis = orionsdk.SwisClient("server", "username", "password")
 lookup = lookup_dns_record("google.com")
+print(f"pyads version: {pyads.__version__}")
 print("All is good. PANW IoT python packages imported successfully!")
