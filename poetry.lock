@@ -2541,23 +2541,24 @@ cli = ["click (>=5.0)"]
 
 [[package]]
 name = "python-gitlab"
-version = "3.15.0"
-description = "Interact with GitLab API"
+version = "6.1.0"
+description = "The python wrapper for the GitLab REST and GraphQL APIs."
 optional = false
-python-versions = ">=3.7.0"
+python-versions = ">=3.9.0"
 groups = ["main"]
 files = [
-    {file = "python-gitlab-3.15.0.tar.gz", hash = "sha256:c9e65eb7612a9fbb8abf0339972eca7fd7a73d4da66c9b446ffe528930aff534"},
-    {file = "python_gitlab-3.15.0-py3-none-any.whl", hash = "sha256:8f8d1c0d387f642eb1ac7bf5e8e0cd8b3dd49c6f34170cee3c7deb7d384611f3"},
+    {file = "python_gitlab-6.1.0-py3-none-any.whl", hash = "sha256:d36fb714cfde7773dcd6c19dd714bdb6e4dfb00a7ef694c8da176335da171b23"},
+    {file = "python_gitlab-6.1.0.tar.gz", hash = "sha256:062d6943699b09bce40f727f0d0906a0b254ca455593f81745bb1a352535ee77"},
 ]
 
 [package.dependencies]
-requests = ">=2.25.0"
-requests-toolbelt = ">=0.10.1"
+requests = ">=2.32.0"
+requests-toolbelt = ">=1.0.0"
 
 [package.extras]
 autocompletion = ["argcomplete (>=1.10.0,<3)"]
-yaml = ["PyYaml (>=5.2)"]
+graphql = ["gql[httpx] (>=3.5.0,<4)"]
+yaml = ["PyYaml (>=6.0.1)"]
 
 [[package]]
 name = "pytz"
@@ -3663,4 +3664,4 @@ pyyaml = "*"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<3.13"
-content-hash = "e879e4783aaef79b2516fda847e464826e0db1420bcdd17fc2570eea3f805575"
+content-hash = "8053353eb1984b61c0b870a9d795af8312ab0b6b7111ac32af7379fc126fac93"
