@@ -9,10 +9,11 @@ COPY requirements.txt .
 COPY yolo-coco /yolo-coco/.
 COPY --from=files-src /yolo-coco/yolov3.weights /yolo-coco/.
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get upgrade && apt-get install -y --no-install-recommends \
   gcc \
   python3-dev \
 && pip install --no-cache-dir -r requirements.txt \
+&& pip install --upgrade pip setuptools \
 && apt-get purge -y --auto-remove \
   gcc \
   python3-dev \
