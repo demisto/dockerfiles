@@ -2,7 +2,7 @@
 # Last modified: 2025-07-23T08:09:07.673573+00:00
 FROM python:3.12.11-slim-bullseye
 
-RUN echo 'deb http://deb.debian.org/debian bullseye-backports main' >> /etc/apt/sources.list
+# RUN echo 'deb http://deb.debian.org/debian bullseye-backports main' >> /etc/apt/sources.list
 
 # Basic linux utilities
 RUN apt-get update && apt-get install -y --no-install-recommends \
