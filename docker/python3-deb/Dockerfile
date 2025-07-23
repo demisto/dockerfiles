@@ -1,5 +1,5 @@
 
-# Last modified: 2025-07-02T00:16:49.673573+00:00
+# Last modified: 2025-07-23T08:09:07.673573+00:00
 FROM python:3.12.11-slim-bullseye
 
 RUN echo 'deb http://deb.debian.org/debian bullseye-backports main' >> /etc/apt/sources.list
@@ -25,7 +25,8 @@ COPY public_list.dat /var/public_list.dat
 #Install tools for building binary deps (will be reomved later on)
 RUN apt-get update && apt-get install -y --no-install-recommends \
   gcc \
-  python3-dev \ 
+  python3-dev \
+&& pip install --upgrade pip \
 && pip install --no-cache-dir -r requirements.txt \
 && apt-get purge -y --auto-remove \
   gcc \
