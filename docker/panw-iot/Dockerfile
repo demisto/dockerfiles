@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends python3-dev wge
   && pip install --no-cache-dir -r requirements.txt \
   && apt-get purge -y --auto-remove \
   gcc \
+  make \
   python3-dev \
   wget \
   git \
