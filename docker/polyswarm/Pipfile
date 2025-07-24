@@ -4,9 +4,10 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-polyswarm = "3.7.0"
+polyswarm = "==3.11.0"
 
 [dev-packages]
+pytest-vcr = ">=1.0.2"
 
 [requires]
 python_version = "3.12"
