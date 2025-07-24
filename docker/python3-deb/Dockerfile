@@ -37,7 +37,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # by enabling UnsafeLegacyRenegotiation
 # We add to the openssl_init section after the last element "providers = provider_sect"
 RUN cp /etc/ssl/openssl.cnf /etc/ssl/openssl.cnf.org && \
-printf 'ssl_conf = ssl_sect\n[ssl_sect]\nsystem_default = system_default_sect\n\n[system_default_sect]\nOptions = UnsafeLegacyRenegotiation\n' > /tmp/ssl.cnf \
+echo -e 'ssl_conf = ssl_sect\n[ssl_sect]\nsystem_default = system_default_sect\n\n[system_default_sect]\nOptions = UnsafeLegacyRenegotiation\n' > /tmp/ssl.cnf \
 && sed -i '/providers = provider_sect/r /tmp/ssl.cnf' /etc/ssl/openssl.cnf \
 && rm /tmp/ssl.cnf \
 && grep -C 10 'Options = UnsafeLegacyRenegotiation' /etc/ssl/openssl.cnf
