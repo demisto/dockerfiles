@@ -1,8 +1,8 @@
 
 # Last modified: 2025-07-02T00:16:49.673573+00:00
-FROM python:3.12.11-slim-bullseye
+FROM python:3.12.11-slim-bookworm
 
-RUN echo 'deb http://deb.debian.org/debian bullseye-backports main' >> /etc/apt/sources.list
+RUN echo 'deb http://deb.debian.org/debian bookworm-backports main' >> /etc/apt/sources.list
 
 # Basic linux utilities
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -14,7 +14,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 && rm -rf /var/lib/apt/lists/*
 
 # Upgrade using backports
-RUN apt-get update && apt-get -t bullseye-backports -y --no-install-recommends upgrade \
+RUN apt-get update && apt-get -t bookworm-backports -y --no-install-recommends upgrade \
 && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
