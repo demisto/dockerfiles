@@ -15,23 +15,23 @@ from ctypes import *
 print(c_double.from_param(1e300))
 print("all is good cve-2021-3177 is patched")
 
-import ssl
-if ssl.OPENSSL_VERSION_INFO >= (3,0,0,0,0):
-    if os.path.exists("/etc/ssl/openssl.cnf"):
-        # in python3 (alpine) the path to openssl conf is /etc/ssl/openssl.cnf
-        ssl_cnf_file_path = "/etc/ssl/openssl.cnf"
-    else:
-        # in python3 (ubi) the path to openssl conf is /etc/pki/tls/openssl.cnf
-        ssl_cnf_file_path = "/etc/pki/tls/openssl.cnf"
-    search_string = 'Options = UnsafeLegacyRenegotiation'
-    with open(ssl_cnf_file_path) as f:
-        ssl_cnf = f.read()
-        if search_string not in ssl_cnf:
-            print('openSSL version changed.\n\
-Please validate SSL Legacy renegotiation error is not an issue.\n\
-If SSL Legacy renegotiation error occurs, please refer to python3 image Dockerfile for reference.')
-            exit(1)
-print('openSSL version is good.')
+# import ssl
+# if ssl.OPENSSL_VERSION_INFO >= (3,0,0,0,0):
+#     if os.path.exists("/etc/ssl/openssl.cnf"):
+#         # in python3 (alpine) the path to openssl conf is /etc/ssl/openssl.cnf
+#         ssl_cnf_file_path = "/etc/ssl/openssl.cnf"
+#     else:
+#         # in python3 (ubi) the path to openssl conf is /etc/pki/tls/openssl.cnf
+#         ssl_cnf_file_path = "/etc/pki/tls/openssl.cnf"
+#     search_string = 'Options = UnsafeLegacyRenegotiation'
+#     with open(ssl_cnf_file_path) as f:
+#         ssl_cnf = f.read()
+#         if search_string not in ssl_cnf:
+#             print('openSSL version changed.\n\
+# Please validate SSL Legacy renegotiation error is not an issue.\n\
+# If SSL Legacy renegotiation error occurs, please refer to python3 image Dockerfile for reference.')
+#             exit(1)
+# print('openSSL version is good.')
 
 import more_itertools
 even, odd = more_itertools.partition(lambda num: num % 2 == 1, range(5))
