@@ -300,4 +300,3 @@ To mark an image as deprecated please follow the following steps:
   * DEPRECATED_IMAGE=true
   * DEPRECATED_REASON="the same text as deprecated_reason key from the build.conf file"
 * 3- commit all changed files including the deprecated_image.json and create a new PR
-
