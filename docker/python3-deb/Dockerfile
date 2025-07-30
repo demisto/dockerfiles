@@ -41,71 +41,25 @@ echo 'ssl_conf = ssl_sect\n\
 system_default = system_default_sect\n\
 \n\
 [system_default_sect]\n\
-Options = UnsafeLegacyRenegotiation,IgnoreUnexpectedEOF\n\
+Options = UnsafeLegacyRenegotiation,IgnoreUnexpectedEOF,AllowUnsafeLegacyRenegotiation,Padding,AllowNoDHEKEX,AllowNoSignatureAlgorithms,AllowUnsafeRenegotiation,LegacyRenegotiation,UnsafeLegacyServerConnect,MiddleboxCompat,NoRenegotiation\n\
 CipherString = DEFAULT@SECLEVEL=0\n\
-MinProtocol = TLSv1.2\n' > /tmp/ssl.cnf \
+MinProtocol = TLSv1\n\
+MaxProtocol = None\n\
+Ciphersuites = TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256:TLS_AES_128_CCM_SHA256\n\
+SignatureAlgorithms = ECDSA+SHA1:RSA+SHA1:RSA+SHA224:RSA+SHA256:RSA+SHA384:RSA+SHA512:ECDSA+SHA224:ECDSA+SHA256:ECDSA+SHA384:ECDSA+SHA512:RSA-PSS+SHA256:RSA-PSS+SHA384:RSA-PSS+SHA512:ED25519:ED448:ECDSA+SHA1:RSA+SHA1\n\
+\n\
+[provider_sect]\n\
+default = default_sect\n\
+legacy = legacy_sect\n\
+\n\
+[default_sect]\n\
+activate = 1\n\
+\n\
+[legacy_sect]\n\
+activate = 1\n' > /tmp/ssl.cnf \
 && sed -i '/providers = provider_sect/r /tmp/ssl.cnf' /etc/ssl/openssl.cnf \
 && rm /tmp/ssl.cnf \
 && grep -C 10 'Options = UnsafeLegacyRenegotiation,IgnoreUnexpectedEOF' /etc/ssl/openssl.cnf
-
-# Create a Python script to configure SSL settings to make OpenSSL 3 behave more like OpenSSL 1.1
-RUN echo '#!/usr/bin/env python3\n\
-import ssl\n\
-import os\n\
-\n\
-# Create a file that will be imported by Python applications to configure SSL\n\
-with open("/usr/local/lib/python3.12/ssl_backcompat.py", "w") as f:\n\
-    f.write("""\n\
-# This module configures SSL settings to make OpenSSL 3 behave more like OpenSSL 1.1\n\
-import ssl\n\
-import os\n\
-\n\
-def patch_ssl():\n\
-    """Configure SSL settings to make OpenSSL 3 behave more like OpenSSL 1.1"""\n\
-    # Create a default context with less restrictive settings\n\
-    default_ctx = ssl.create_default_context()\n\
-    \n\
-    # Set security level to 1 (equivalent to OpenSSL 1.1.1 default)\n\
-    default_ctx.set_ciphers("DEFAULT@SECLEVEL=1")\n\
-    \n\
-    # Enable legacy renegotiation support\n\
-    default_ctx.options |= ssl.OP_LEGACY_SERVER_CONNECT\n\
-    \n\
-    # Add all workarounds for various SSL implementation bugs\n\
-    default_ctx.options |= ssl.OP_ALL\n\
-    \n\
-    # Allow legacy insecure renegotiation\n\
-    if hasattr(ssl, "OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION"):\n\
-        default_ctx.options |= ssl.OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION\n\
-    \n\
-    # Set minimum TLS version to be compatible with OpenSSL 1.1\n\
-    if hasattr(ssl, "TLSVersion"):\n\
-        default_ctx.minimum_version = ssl.TLSVersion.TLSv1\n\
-        # Don\'t restrict maximum version\n\
-        default_ctx.maximum_version = ssl.TLSVersion.MAXIMUM_SUPPORTED\n\
-    \n\
-    # Set as the default context for all future SSL connections\n\
-    ssl._create_default_https_context = lambda: default_ctx\n\
-    \n\
-    # Also set environment variables that some libraries might use\n\
-    os.environ["OPENSSL_CONF"] = "/etc/ssl/openssl.cnf"\n\
-    os.environ["OPENSSL_ALLOW_PROXY_CERTS"] = "1"\n\
-    os.environ["OPENSSL_ALLOW_UNSAFE_LEGACY_RENEGOTIATION"] = "1"\n\
-\n\
-# Apply the patch by default when this module is imported\n\
-patch_ssl()\n\
-""")\n\
-\n\
-# Create a sitecustomize.py file to auto-import our SSL settings\n\
-with open("/usr/local/lib/python3.12/sitecustomize.py", "w") as f:\n\
-    f.write("""\n\
-# Auto-import SSL backcompat settings\n\
-try:\n\
-    import ssl_backcompat\n\
-except ImportError:\n\
-    pass\n\
-""")\n\
-' > /tmp/configure_ssl.py && python3 /tmp/configure_ssl.py && rm /tmp/configure_ssl.py
 
 RUN groupadd --gid 4000 demisto \
   && useradd --uid 4000 --gid demisto --shell /bin/bash --create-home demisto
