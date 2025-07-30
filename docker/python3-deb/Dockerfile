@@ -43,19 +43,11 @@ system_default = system_default_sect\n\
 \n\
 [system_default_sect]\n\
 Options = UnsafeLegacyRenegotiation\n\
-CipherString = DEFAULT@SECLEVEL=0\n\
-MinProtocol = None\n\
-MaxProtocol = None\n' > /tmp/ssl.cnf \
+CipherString = DEFAULT@SECLEVEL=2\n\
+MinProtocol = TLSv1.2\n' > /tmp/ssl.cnf \
 && sed -i '/providers = provider_sect/r /tmp/ssl.cnf' /etc/ssl/openssl.cnf \
 && rm /tmp/ssl.cnf \
-# Enable legacy provider for OpenSSL 3.0 compatibility
-&& sed -i 's/^# \(legacy = legacy_sect\)/\1/' /etc/ssl/openssl.cnf \
 && grep -C 10 'Options = UnsafeLegacyRenegotiation' /etc/ssl/openssl.cnf
-
-# Set environment variables to disable SSL verification for Python requests
-ENV PYTHONHTTPSVERIFY=0
-ENV CURL_CA_BUNDLE=""
-ENV REQUESTS_CA_BUNDLE=""
 
 RUN groupadd --gid 4000 demisto \
   && useradd --uid 4000 --gid demisto --shell /bin/bash --create-home demisto
