@@ -1,5 +1,4 @@
-
-# Last modified: 2025-07-02T00:16:49.673573+00:00
+# Last modified: 2025-07-30T14:49:10+03:00
 FROM python:3.12.11-slim-bookworm
 
 RUN echo 'deb http://deb.debian.org/debian bookworm-backports main' >> /etc/apt/sources.list
@@ -42,12 +41,10 @@ echo 'ssl_conf = ssl_sect\n\
 system_default = system_default_sect\n\
 \n\
 [system_default_sect]\n\
-Options = UnsafeLegacyRenegotiation\n\
-CipherString = DEFAULT@SECLEVEL=2\n\
-MinProtocol = TLSv1.2\n' > /tmp/ssl.cnf \
+Options = UnsafeLegacyRenegotiation,IgnoreUnexpectedEOF\n' > /tmp/ssl.cnf \
 && sed -i '/providers = provider_sect/r /tmp/ssl.cnf' /etc/ssl/openssl.cnf \
 && rm /tmp/ssl.cnf \
-&& grep -C 10 'Options = UnsafeLegacyRenegotiation' /etc/ssl/openssl.cnf
+&& grep -C 10 'Options = UnsafeLegacyRenegotiation,IgnoreUnexpectedEOF' /etc/ssl/openssl.cnf
 
 RUN groupadd --gid 4000 demisto \
   && useradd --uid 4000 --gid demisto --shell /bin/bash --create-home demisto
