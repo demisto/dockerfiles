@@ -48,6 +48,8 @@ MinProtocol = None\n\
 MaxProtocol = None\n' > /tmp/ssl.cnf \
 && sed -i '/providers = provider_sect/r /tmp/ssl.cnf' /etc/ssl/openssl.cnf \
 && rm /tmp/ssl.cnf \
+# Enable legacy provider for OpenSSL 3.0 compatibility
+&& sed -i 's/^# \(legacy = legacy_sect\)/\1/' /etc/ssl/openssl.cnf \
 && grep -C 10 'Options = UnsafeLegacyRenegotiation' /etc/ssl/openssl.cnf
 
 # Set environment variables to disable SSL verification for Python requests
