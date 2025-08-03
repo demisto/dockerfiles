@@ -1,3 +1,3 @@
 import pytmv1
 
-print("Successfully imported pytmv1")
+print("Imported pytmv1 succuss.")
