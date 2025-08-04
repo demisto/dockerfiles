@@ -6,11 +6,13 @@ FROM demisto/python3-deb:3.12.11.4417419
 
 COPY requirements.txt .
 
-RUN apt-get update && apt-get install -y --no-install-recommends python3-dev wget git gcc make \
+RUN apt-get update && apt-get install -y --no-install-recommends python3-dev wget git gcc g++ make cmake \
   && pip install --no-cache-dir -r requirements.txt \
   && apt-get purge -y --auto-remove \
   gcc \
+  g++ \
   make \
+  cmake \
   python3-dev \
   wget \
   git \
