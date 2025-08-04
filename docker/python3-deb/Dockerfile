@@ -33,7 +33,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 && pip install --upgrade setuptools
 
 # Handling the issue described here https://knowledgebase.paloaltonetworks.com/KCSArticleDetail?id=kA10g000000POJ0CAO&lang=en_US%E2%80%A9
-# by enabling UnsafeLegacyRenegotiation and ignoring SSL legacy renegotiation errors
+# by enabling UnsafeLegacyRenegotiation
 # We add to the openssl_init section after the last element "providers = provider_sect"
 RUN cp /etc/ssl/openssl.cnf /etc/ssl/openssl.cnf.org && \
 echo 'ssl_conf = ssl_sect\n\
@@ -41,12 +41,7 @@ echo 'ssl_conf = ssl_sect\n\
 system_default = system_default_sect\n\
 \n\
 [system_default_sect]\n\
-Options = UnsafeLegacyRenegotiation,IgnoreUnexpectedEOF,AllowUnsafeLegacyRenegotiation,Padding,AllowNoDHEKEX,AllowNoSignatureAlgorithms,AllowUnsafeRenegotiation,LegacyRenegotiation,UnsafeLegacyServerConnect,MiddleboxCompat,NoRenegotiation\n\
-CipherString = DEFAULT@SECLEVEL=0\n\
-MinProtocol = TLSv1\n\
-MaxProtocol = None\n\
-Ciphersuites = TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256:TLS_AES_128_CCM_SHA256\n\
-SignatureAlgorithms = ECDSA+SHA1:RSA+SHA1:RSA+SHA224:RSA+SHA256:RSA+SHA384:RSA+SHA512:ECDSA+SHA224:ECDSA+SHA256:ECDSA+SHA384:ECDSA+SHA512:RSA-PSS+SHA256:RSA-PSS+SHA384:RSA-PSS+SHA512:ED25519:ED448:ECDSA+SHA1:RSA+SHA1\n\
+Options = UnsafeLegacyRenegotiation\n\
 \n\
 [provider_sect]\n\
 default = default_sect\n\
@@ -59,7 +54,7 @@ activate = 1\n\
 activate = 1\n' > /tmp/ssl.cnf \
 && sed -i '/providers = provider_sect/r /tmp/ssl.cnf' /etc/ssl/openssl.cnf \
 && rm /tmp/ssl.cnf \
-&& grep -C 10 'Options = UnsafeLegacyRenegotiation,IgnoreUnexpectedEOF' /etc/ssl/openssl.cnf
+&& grep -C 10 'Options = UnsafeLegacyRenegotiation' /etc/ssl/openssl.cnf
 
 RUN groupadd --gid 4000 demisto \
   && useradd --uid 4000 --gid demisto --shell /bin/bash --create-home demisto
