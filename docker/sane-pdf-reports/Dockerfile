@@ -1,4 +1,4 @@
-# Last modified: 2025-07-01T16:39:02.925940+00:00
+# Last modified: 2025-08-05T16:00:00.000000+00:00
 FROM demisto/python3-deb:3.12.11.4027491
 
 WORKDIR "/app"
@@ -45,6 +45,4 @@ RUN chown -R root:demisto /app/ && chmod 775 /app/ && chmod 775 /app/dist
 
 RUN npm uninstall -g npm && apt-get purge -y --auto-remove git npm apt-transport-https ca-certificates gnupg curl google-cloud-sdk \
     python3-dev \
-    python3.9 \
-    python3.9-minimal \
     && rm -rf /var/lib/apt/lists/*
