@@ -1,4 +1,4 @@
-# Last modified: 2025-07-30T14:49:10+03:00
+# Last modified: 2025-08-05T11:51:44+03:00
 FROM python:3.12.11-slim-bookworm
 
 RUN echo 'deb http://deb.debian.org/debian bookworm-backports main' >> /etc/apt/sources.list
@@ -36,7 +36,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # by enabling UnsafeLegacyRenegotiation
 # We add to the openssl_init section after the last element "providers = provider_sect"
 RUN cp /etc/ssl/openssl.cnf /etc/ssl/openssl.cnf.org && \ 
-echo -e 'ssl_conf = ssl_sect\n\
+echo 'ssl_conf = ssl_sect\n\
 [ssl_sect]\n\
 system_default = system_default_sect\n\
 \n\
