@@ -828,20 +828,20 @@ azure-core = ">=1.31.0"
 
 [[package]]
 name = "azure-mgmt-cosmosdb"
-version = "9.7.0"
+version = "9.8.0"
 description = "Microsoft Azure Cosmos DB Management Client Library for Python"
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.9"
 groups = ["main"]
 markers = "platform_system == \"Windows\" or platform_system == \"Darwin\" or platform_system == \"Linux\" or platform_system != \"Windows\" and platform_system != \"Darwin\" and platform_system != \"Linux\" or sys_platform != \"win32\""
 files = [
-    {file = "azure_mgmt_cosmosdb-9.7.0-py3-none-any.whl", hash = "sha256:be735a554d16995c8cefe413e62119985f8fabae1cb45a6f6ad2c3958bed14da"},
-    {file = "azure_mgmt_cosmosdb-9.7.0.tar.gz", hash = "sha256:b5072d319f11953d8f12e22459aded1912d5f27e442e1d8b49596a85005410a1"},
+    {file = "azure_mgmt_cosmosdb-9.8.0-py3-none-any.whl", hash = "sha256:00eea8038ebe619ab8c27cd4572eb4b3509a4973fdfd46636006c889a86096be"},
+    {file = "azure_mgmt_cosmosdb-9.8.0.tar.gz", hash = "sha256:214ee47165387e578f86e6611fb329b4d54dc295ad79da37b9d92c5d6d20d1b1"},
 ]
 
 [package.dependencies]
 azure-common = ">=1.1"
-azure-mgmt-core = ">=1.3.2"
+azure-mgmt-core = ">=1.5.0"
 isodate = ">=0.6.1"
 typing-extensions = ">=4.6.0"
 
@@ -3165,46 +3165,12 @@ tests = ["coverage[toml] (==5.0.4)", "pytest (>=6.0.0,<7.0.0)"]
 
 [[package]]
 name = "pymsalruntime"
-version = "0.17.1"
-description = "The MSALRuntime Python Interop Package"
-optional = false
-python-versions = ">=3.6"
-groups = ["main"]
-markers = "platform_system == \"Windows\" and sys_platform == \"win32\""
-files = [
-    {file = "pymsalruntime-0.17.1-cp310-cp310-macosx_14_0_arm64.whl", hash = "sha256:18e46d9896650f3f6806c2f7f39d09ab37283e1cfa385fac242d39fb1be40267"},
-    {file = "pymsalruntime-0.17.1-cp310-cp310-macosx_14_0_x86_64.whl", hash = "sha256:f69f86122c37fed97ff1e1398ed719390e43d9ae5a4b2f6eaa5d7163d70f6157"},
-    {file = "pymsalruntime-0.17.1-cp310-cp310-win32.whl", hash = "sha256:ba0beecc9ba3a244e60fbfeaa977dd570995d3b29c19317ea3ef3bcc10cd43c5"},
-    {file = "pymsalruntime-0.17.1-cp310-cp310-win_amd64.whl", hash = "sha256:260bbd6cea5ebb136a208f412512c759bf84f9ac701534be911bf3b4eff77bae"},
-    {file = "pymsalruntime-0.17.1-cp311-cp311-macosx_14_0_arm64.whl", hash = "sha256:ab652482c86ecdbd5963ca5f5a59846b3612e3ff27d0ba78e87dd1cb8680eaa3"},
-    {file = "pymsalruntime-0.17.1-cp311-cp311-macosx_14_0_x86_64.whl", hash = "sha256:7dfd058fe2fbeae55fe9f1907a2b03758b0d08aa661161b354c5b80e1f6ce889"},
-    {file = "pymsalruntime-0.17.1-cp311-cp311-win32.whl", hash = "sha256:cd9102e68952e42d589ef9829e47b3f80044cdf6fc9dfd165ddd50336847ab50"},
-    {file = "pymsalruntime-0.17.1-cp311-cp311-win_amd64.whl", hash = "sha256:97c8e7fe9c61e5399c952b712436f00b3abf288e8d9d9a4fbd60e769c7fb06e3"},
-    {file = "pymsalruntime-0.17.1-cp312-cp312-macosx_14_0_arm64.whl", hash = "sha256:44fc412fe2201e573de4a75ab5cffd52789b57ad28764bdedcdfac29e551af66"},
-    {file = "pymsalruntime-0.17.1-cp312-cp312-macosx_14_0_x86_64.whl", hash = "sha256:e4d250d33b654d80f83533f077205fb5866aff168ff8c6ba948d4b21a4da6891"},
-    {file = "pymsalruntime-0.17.1-cp312-cp312-win32.whl", hash = "sha256:6a86614836791dc4866f0234121c3f64d9b364a52ca1eadad7e4d2e678156b1f"},
-    {file = "pymsalruntime-0.17.1-cp312-cp312-win_amd64.whl", hash = "sha256:007703bd607263d35a7f4db2c9dfb7a4b6da83259e37255acabcbbdfcd24a19b"},
-    {file = "pymsalruntime-0.17.1-cp37-cp37m-macosx_14_0_arm64.whl", hash = "sha256:7afb9964f7659cf8b904694f718a9d5a9652d32b9353e7525ceb0be09f00f014"},
-    {file = "pymsalruntime-0.17.1-cp37-cp37m-macosx_14_0_x86_64.whl", hash = "sha256:21aa7058b5553e5844954438919287ea6b1b9a32dc54c757cbcfeaac5e9f394f"},
-    {file = "pymsalruntime-0.17.1-cp37-cp37m-win32.whl", hash = "sha256:f4e2841fece53afc58a30bc89e193c5cb171235009c8784ee4c374d2b44923c1"},
-    {file = "pymsalruntime-0.17.1-cp37-cp37m-win_amd64.whl", hash = "sha256:51139ebdc0364c6ed5a8dcb961dac42fc9eab6e17b7a7e734598f0deec43f574"},
-    {file = "pymsalruntime-0.17.1-cp38-cp38-macosx_14_0_arm64.whl", hash = "sha256:70ddb210053519a82f60d987ae364ba19fc1d9c920dd0d19a7cf8eb9f023f5f2"},
-    {file = "pymsalruntime-0.17.1-cp38-cp38-macosx_14_0_x86_64.whl", hash = "sha256:6ec49091375b10981c738022ebff53559d34c5dcab41946499481d4ef0e153fa"},
-    {file = "pymsalruntime-0.17.1-cp38-cp38-win32.whl", hash = "sha256:ee709690585d80e58534912ea32ba0ba2353c1e427936d0578b856b2f93984bc"},
-    {file = "pymsalruntime-0.17.1-cp38-cp38-win_amd64.whl", hash = "sha256:c89d1358aa27e417a8284d37bd97ed6245a483855b5a2490de720435d23ecae9"},
-    {file = "pymsalruntime-0.17.1-cp39-cp39-macosx_14_0_arm64.whl", hash = "sha256:872d45572f495e304bb1b412f3d3c7599924e36926df57a16ec05251b218e5c1"},
-    {file = "pymsalruntime-0.17.1-cp39-cp39-macosx_14_0_x86_64.whl", hash = "sha256:3799e202c0ddf65748822ea5acd8cb471286cce660bafeef7a4c7f68655aeaa5"},
-    {file = "pymsalruntime-0.17.1-cp39-cp39-win32.whl", hash = "sha256:71df1659a6eba3e3d15546a440c1471bd5c8c684a85833cc9b8ad7820598d5c2"},
-]
-
-[[package]]
-name = "pymsalruntime"
 version = "0.18.1"
 description = "The MSALRuntime Python Interop Package"
 optional = false
 python-versions = ">=3.6"
 groups = ["main"]
-markers = "platform_system == \"Linux\" and sys_platform == \"win32\""
+markers = "platform_system == \"Windows\" and sys_platform == \"win32\""
 files = [
     {file = "pymsalruntime-0.18.1-cp310-cp310-macosx_14_0_arm64.whl", hash = "sha256:0c22e2e83faa10de422bbfaacc1bb2887c9025ee8a53f0fc2e4f7db01c4a7b66"},
     {file = "pymsalruntime-0.18.1-cp310-cp310-macosx_14_0_x86_64.whl", hash = "sha256:8ce2944a0f944833d047bb121396091e00287e2b6373716106da86ea99abf379"},
@@ -4024,4 +3990,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = "~3.12"
-content-hash = "f978270934022282fadf234307ef05996e9de7b38956dae04418601a5198c7a9"
+content-hash = "19f684d94064d56ae29ddd8b26a18c1157ff1c693d16e48807d038f7820eee9f"
