@@ -1,7 +1,6 @@
 FROM demisto/python3-deb:3.12.11.4424127
 
 ENV NODE_VERSION 14.16.0
-ENV GIT_VERSION 1:2.39.2-1~bpo11+1
 ENV NVM_DIR /root/.nvm
 ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:/root/.local/bin:$PATH
 ENV NEO4J_CONF_FILE /etc/neo4j/neo4j.conf
@@ -14,7 +13,7 @@ RUN apt-get update
 RUN apt-get upgrade -y
 RUN apt-get update && apt-get install -y curl jq unzip openssh-client gcc libffi-dev libssl-dev git zip cowsay netcat-openbsd wget python3-pip software-properties-common
 # Upgrade Git to latest version from backports (already configured in base image)
-RUN apt-get update && apt-get -t bullseye-backports install -y --no-install-recommends git=$GIT_VERSION && git --version
+RUN apt-get update && apt-get install -y git && git --version
 
 RUN curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash \
     && . $NVM_DIR/nvm.sh \
