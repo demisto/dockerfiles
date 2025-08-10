@@ -1,4 +1,4 @@
-FROM demisto/python3-deb:3.10.11.61745
+FROM demisto/python3-deb:3.12.11.4424127
 
 ENV NODE_VERSION 14.16.0
 ENV GIT_VERSION 1:2.39.2-1~bpo11+1
