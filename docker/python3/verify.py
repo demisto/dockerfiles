@@ -54,6 +54,3 @@ print(f'Using setuptools version {setuptools.__version__}')
 
 assert os.path.exists("/var/public_list.dat")
 print("public_list.dat for TLDextract exists")
-
-from deepmerge import always_merger
-print('deepmerge installed correctly')
