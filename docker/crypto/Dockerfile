@@ -1,3 +1,4 @@
+# Last modified: 2025-08-19T16:33:28+03:00
 
 # Note: use this image as a base if you are dependent upon cryptography
 # See teams image for an example.
