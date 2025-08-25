@@ -708,20 +708,21 @@ msrestazure = ">=0.4.27,<2.0.0"
 
 [[package]]
 name = "azure-mgmt-compute"
-version = "10.0.0"
+version = "35.0.0"
 description = "Microsoft Azure Compute Management Client Library for Python"
 optional = false
-python-versions = "*"
+python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "azure-mgmt-compute-10.0.0.zip", hash = "sha256:cfdf35722d5d7ccee8d32a81f6734b210298dfaed10f7299efadf06ea7e96be8"},
-    {file = "azure_mgmt_compute-10.0.0-py2.py3-none-any.whl", hash = "sha256:c25d1077a95790eafec1e01d82204cbd57449477a58e68f25cb41e1b11f45b63"},
+    {file = "azure_mgmt_compute-35.0.0-py3-none-any.whl", hash = "sha256:52d18b39da48547a086ba74e418de1bfb1108b8f8c9d6cb002919ece2f3902ed"},
+    {file = "azure_mgmt_compute-35.0.0.tar.gz", hash = "sha256:43196911135507d1ce76f089c4e57d3b225885e5127d023be2ce1c597fd44336"},
 ]
 
 [package.dependencies]
-azure-common = ">=1.1,<2.0"
-msrest = ">=0.5.0"
-msrestazure = ">=0.4.32,<2.0.0"
+azure-common = ">=1.1"
+azure-mgmt-core = ">=1.5.0"
+isodate = ">=0.6.1"
+typing-extensions = ">=4.6.0"
 
 [[package]]
 name = "azure-mgmt-containerinstance"
@@ -3832,4 +3833,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = "~3.12"
-content-hash = "19f684d94064d56ae29ddd8b26a18c1157ff1c693d16e48807d038f7820eee9f"
+content-hash = "5f43914321f09b719d20fdf4233ce444a2e4d378d269b51f3d783f302b987e5e"
