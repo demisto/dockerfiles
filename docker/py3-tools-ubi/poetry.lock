@@ -512,18 +512,19 @@ files = [
 
 [[package]]
 name = "exifread"
-version = "3.0.0"
-description = "Read Exif metadata from tiff and jpeg files."
+version = "3.5.1"
+description = "Library to extract Exif information from digital camera image files."
 optional = false
-python-versions = "*"
+python-versions = ">=3.7"
 groups = ["main"]
 files = [
-    {file = "ExifRead-3.0.0-py3-none-any.whl", hash = "sha256:2c5c59ef03b3bbee75b82b82d2498006b3c13509f35c9a76c7552faff73fa2d5"},
-    {file = "ExifRead-3.0.0.tar.gz", hash = "sha256:0ac5a364169dbdf2bd62f94f5c073970ab6694a3166177f5e448b10c943e2ca4"},
+    {file = "exifread-3.5.1-py3-none-any.whl", hash = "sha256:e5426ce2857423ad401e575ea9d159dc97449dc041fb6e61b35109caea72c311"},
+    {file = "exifread-3.5.1.tar.gz", hash = "sha256:9f998f80d3062741c976dfc4fd033424bc40932937994e4d2181eb70c4b6aedd"},
 ]
 
 [package.extras]
-dev = ["mypy (==0.950)", "pylint (==2.13.8)"]
+dev = ["build (>=1.0,<2.0)", "pre-commit (>=2.21,<3.0)", "pylint (>=3.1,<4.0)"]
+test = ["pytest (>=7.4,<8.0)"]
 
 [[package]]
 name = "feedparser"
