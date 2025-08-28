@@ -1,5 +1,5 @@
-# Last modified: 2025-07-01T16:38:32.394197+00:00
-FROM demisto/python3-deb:3.12.11.4027491
+# Last modified: 2025-08-04T16:43:06.848653+00:00
+FROM demisto/python3-deb:3.12.11.4417419
 
 RUN apt-get update \
 && apt-get install -y --no-install-recommends \
