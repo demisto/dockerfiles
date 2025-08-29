@@ -1232,21 +1232,22 @@ msrestazure = ">=0.4.32,<2.0.0"
 
 [[package]]
 name = "azure-mgmt-search"
-version = "3.0.0"
+version = "9.2.0"
 description = "Microsoft Azure Search Management Client Library for Python"
 optional = false
-python-versions = "*"
+python-versions = ">=3.9"
 groups = ["main"]
 markers = "platform_system == \"Windows\" or platform_system == \"Darwin\" or platform_system == \"Linux\" or platform_system != \"Windows\" and platform_system != \"Darwin\" and platform_system != \"Linux\" or sys_platform != \"win32\""
 files = [
-    {file = "azure-mgmt-search-3.0.0.zip", hash = "sha256:d4c78b14b48edd2e27e2068c9a448acfc84a18595be77fe483afe7bb447e1eb6"},
-    {file = "azure_mgmt_search-3.0.0-py2.py3-none-any.whl", hash = "sha256:43c0270204b38eff6183d4313437f89e9463f5b8065bddb15463bf89fa83b944"},
+    {file = "azure_mgmt_search-9.2.0-py3-none-any.whl", hash = "sha256:29dbbec94c4668c65a5e5138a724532d5f08d3ed1cfcb458f9da46dc8e5400ea"},
+    {file = "azure_mgmt_search-9.2.0.tar.gz", hash = "sha256:a0da0ec332d1f43d0f6acb63b8cfd80085b075e91afcf812f8c769ad9fdcad84"},
 ]
 
 [package.dependencies]
-azure-common = ">=1.1,<2.0"
-msrest = ">=0.5.0"
-msrestazure = ">=0.4.32,<2.0.0"
+azure-common = ">=1.1"
+azure-mgmt-core = ">=1.5.0"
+isodate = ">=0.6.1"
+typing-extensions = ">=4.6.0"
 
 [[package]]
 name = "azure-mgmt-servicebus"
@@ -3996,4 +3997,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = "~3.12"
-content-hash = "ddedf843228998ce2ce5fb875e60f3c3cadf1a1c09d6d3fb95dd693abdf7027b"
+content-hash = "5a8fb842525ed1b374096e4068c34165139ae6cca94ccc1359b56f1f7f1d74c4"
