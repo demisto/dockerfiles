@@ -305,27 +305,77 @@ def update_internal_base_dockerfile(git_repo: Repo) -> None:
     Returns:
         None
     """
+    print("=== Starting internal base dockerfiles update ===")
     docker_files = get_docker_files(internal=True)
+    print(f"Found {len(docker_files)} internal dockerfiles to analyze")
+    
     dependency_json = create_dependencies_json(docker_files)
+    print(f"Created dependency mapping for {len(dependency_json)} base images")
+    
+    total_updated = 0
+    total_skipped = 0
+    
     for base_image, dependency_list in dependency_json.items():
+        print(f"\n--- Processing base image: {base_image} ---")
+        print(f"Found {len(dependency_list)} dependent dockerfiles")
+        
         curr_repo, image_name = base_image.split("/")
-        latest_tag = get_latest_tag(curr_repo, image_name, "")
-        latest_tag_name = latest_tag["name"]
-        latest_tag_last_updated = latest_tag["last_updated"]
-        outdated_files = [
-            file
-            for file in dependency_list
-            if is_docker_file_outdated(file, latest_tag_name, latest_tag_last_updated)
-        ]
+        
+        # Always get the absolute latest tag without any version filtering
+        # This ensures we only target the latest tag, ignoring any intermediate versions
+        try:
+            latest_tag = get_latest_tag(curr_repo, image_name, "")
+            latest_tag_name = latest_tag["name"]
+            latest_tag_last_updated = latest_tag["last_updated"]
+            print(f"Latest available tag for {base_image}: {latest_tag_name}")
+        except Exception as e:
+            print(f"ERROR: Failed to get latest tag for {base_image}: {e}")
+            continue
+        
+        # Filter to only include files that should be updated to the absolute latest tag
+        # This prevents creating PRs for intermediate version updates
+        outdated_files = []
+        for file in dependency_list:
+            current_tag = file["tag"]
+            print(f"  Checking {file['name']}: {current_tag}")
+            
+            if is_docker_file_outdated(file, latest_tag_name, latest_tag_last_updated):
+                print(f"    ✓ Outdated: {current_tag} -> {latest_tag_name}")
+                outdated_files.append(file)
+            else:
+                print(f"    - Up-to-date: {current_tag}")
+                total_skipped += 1
+        
+        if not outdated_files:
+            print(f"No files need updating for {base_image} (all {len(dependency_list)} files up-to-date)")
+            continue
+            
+        print(f"Will update {len(outdated_files)} out of {len(dependency_list)} files for {base_image}")
+        
+        # Create PRs only for the absolute latest tag
+        batch_count = 0
         for batch_slice in batch(outdated_files, BATCH_SIZE):
+            batch_count += 1
             image_names = reduce(
                 lambda a, b: f"{a}-{b}", [file["name"] for file in batch_slice]
             )
             branch_name = rf"autoupdate/{base_image}_{image_names}_{latest_tag_name}"
-            update_and_push_dockerfiles(
-                git_repo, branch_name, batch_slice, latest_tag_name
-            )
-    print("Finished to update dockerfiles")
+            
+            print(f"  Batch {batch_count}: Creating branch {branch_name}")
+            print(f"  Files in batch: {[file['name'] for file in batch_slice]}")
+            
+            try:
+                update_and_push_dockerfiles(
+                    git_repo, branch_name, batch_slice, latest_tag_name
+                )
+                print(f"  ✓ Successfully created branch and updated {len(batch_slice)} files")
+                total_updated += len(batch_slice)
+            except Exception as e:
+                print(f"  ERROR: Failed to create branch {branch_name}: {e}")
+                
+    print(f"\n=== Internal dockerfiles update complete ===")
+    print(f"Updated: {total_updated}, Skipped: {total_skipped}, Total processed: {len(docker_files)}")
+    print("Finished to update dockerfiles - only latest tags processed")
 
 
 def update_and_push_dockerfiles(
