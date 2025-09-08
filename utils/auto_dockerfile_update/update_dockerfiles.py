@@ -269,6 +269,11 @@ def update_external_base_dockerfiles(git_repo: Repo, no_timestamp_updates=True) 
             branch_name = rf"autoupdate/Update_{file['repo']}_{file['image_name']}_from_{file['tag']}_to_{latest_tag_name}"
             update_and_push_dockerfiles(git_repo, branch_name, [file], latest_tag_name)
             print(f"Updated {file['path']}")
+
+            # Cleanup outdated branches for this base image
+            base_image_name = f"{file['repo']}/{file['image_name']}"
+            cleanup_outdated_autoupdate_branches(git_repo, base_image_name, latest_tag_name)
+
     print("Finished to update dockerfiles")
 
 
@@ -294,6 +299,93 @@ def batch(iterable, n=1):
     l = len(iterable)
     for ndx in range(0, l, n):
         yield iterable[ndx : min(ndx + n, l)]
+
+
+def cleanup_outdated_autoupdate_branches(git_repo: Repo, base_image: str, latest_tag_name: str, is_external: bool = True) -> None:
+    """
+    Remove outdated autoupdate branches for a specific base image.
+    This prevents creating PRs for intermediate versions when newer versions are available.
+    
+    Args:
+        git_repo (Repo): the git repository
+        base_image (str): base image name (e.g., "demisto/python3" or "library/python")
+        latest_tag_name (str): the current latest tag
+        is_external (bool): True for external images, False for internal images
+    """
+    try:
+        # Get all remote branches
+        git_repo.git.fetch("origin")
+        remote_branches = git_repo.git.branch("-r").split('\n')
+        
+        # Filter for autoupdate branches related to this base image
+        autoupdate_branches = []
+        repo_name, image_name = base_image.split('/')
+        
+        for branch in remote_branches:
+            branch = branch.strip()
+            if not branch.startswith("origin/autoupdate/"):
+                continue
+                
+            # Check if this branch is for our base image based on type
+            if is_external:
+                # External format: autoupdate/Update_library_python_from_3.10.2_to_3.11.1
+                if f"Update_{repo_name}_{image_name}_" in branch:
+                    autoupdate_branches.append(branch)
+            else:
+                # Internal format: autoupdate/demisto/python3_imagename_1.2.3.123456
+                if f"/{repo_name}/{image_name}_" in branch:
+                    autoupdate_branches.append(branch)
+        
+        if not autoupdate_branches:
+            print(f"No existing autoupdate branches found for {base_image} ({'external' if is_external else 'internal'})")
+            return
+            
+        print(f"Found {len(autoupdate_branches)} existing autoupdate branches for {base_image} ({'external' if is_external else 'internal'})")
+        
+        from get_latest_tag import parse_versions
+        latest_version = parse_versions(latest_tag_name)
+        
+        for branch in autoupdate_branches:
+            branch_name = branch.replace("origin/", "")
+            
+            # Extract target version from branch name based on type
+            branch_target_version = None
+            
+            try:
+                if is_external and "_to_" in branch_name:
+                    # External format: autoupdate/Update_library_python_from_3.10.2_to_3.11.1
+                    branch_target_version = branch_name.split("_to_")[-1]
+                elif not is_external:
+                    # Internal format: autoupdate/demisto/python3_imagename_1.2.3.123456
+                    parts = branch_name.split('_')
+                    if len(parts) >= 2:
+                        branch_target_version = parts[-1]
+                
+                if not branch_target_version:
+                    print(f"  Warning: Could not extract version from branch {branch_name}")
+                    continue
+                    
+                branch_version = parse_versions(branch_target_version)
+                
+                # If branch targets an older version than latest, delete it
+                if branch_version < latest_version:
+                    print(f"  Deleting outdated branch: {branch_name} (targets {branch_target_version} < {latest_tag_name})")
+                    
+                    # Delete remote branch - remove the "autoupdate/" prefix for the delete command
+                    delete_branch_name = branch_name.replace("autoupdate/", "")
+                    git_repo.git.push("origin", "--delete", delete_branch_name)
+                    print(f"  ✓ Deleted remote branch: {branch_name}")
+                    
+                elif branch_target_version == latest_tag_name:
+                    print(f"  Keeping current branch: {branch_name} (targets latest {branch_target_version})")
+                else:
+                    print(f"  Keeping newer branch: {branch_name} (targets {branch_target_version} >= {latest_tag_name})")
+                    
+            except Exception as e:
+                print(f"  Warning: Could not parse version from branch {branch_name}: {e}")
+                
+    except Exception as e:
+        print(f"Warning: Failed to cleanup branches for {base_image}: {e}")
 
 
 def update_internal_base_dockerfile(git_repo: Repo) -> None:
@@ -331,6 +423,8 @@ def update_internal_base_dockerfile(git_repo: Repo) -> None:
         except Exception as e:
             print(f"ERROR: Failed to get latest tag for {base_image}: {e}")
             continue
+        
+        cleanup_outdated_autoupdate_branches(git_repo, base_image, latest_tag_name, is_external=False)
         
         # Filter to only include files that should be updated to the absolute latest tag
         # This prevents creating PRs for intermediate version updates
