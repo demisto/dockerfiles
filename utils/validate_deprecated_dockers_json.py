@@ -96,7 +96,7 @@ If in fix more - will override the file with the correct version based on the bu
         names_should_be_in_file, names_should_be_in_config = compare_deprecated_images(previous_json, deprecated_info)
         if names_should_be_in_file or names_should_be_in_config:
             raise ValueError(
-                f"The deprecated_images.json file is not valid. Did you deprecate an image in this pr? Add it to docker/deprecated_images.json. You can use util/validate_deprecated_dockers_json.py --fix to do so."
+                f"The deprecated_images.json file is not valid. Did you deprecate an image in this pr? Add it to docker/deprecated_images.json. You can use utils/validate_deprecated_dockers_json.py --fix to do so.\n"
                 f"Set of items that are deprecated according to their build.conf but not in the deprecated_images.json: {names_should_be_in_file}\n"
                 f"Set of items that are in the file but not deprecated according to the build.conf {names_should_be_in_config}"
             )
