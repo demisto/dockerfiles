@@ -12,6 +12,7 @@ RUN unzip /distilled_bert_base_uncased_tokenizer.zip -d /ml \
   && chmod -R 775 /ml
 
 FROM demisto/python3-deb:3.12.11.4801753
+
 COPY requirements.txt .
 
 
