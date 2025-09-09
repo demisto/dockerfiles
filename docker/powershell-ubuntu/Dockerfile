@@ -7,10 +7,18 @@ RUN sh -c "yes | pwsh -Command 'Install-Module -Name PSWSMan'"
 RUN pwsh -Command 'Install-WSMan'
 
 # Update, install gss-ntlmssp, upgrade packages, and clean up in a single layer
+RUN wget http://security.ubuntu.com/ubuntu/pool/main/g/gss-ntlmssp/gss-ntlmssp_1.2.0-1_amd64.deb
+RUN dpkg -i gss-ntlmssp_1.2.0-1_amd64.deb
+# Clean up the downloaded file to reduce image size
+RUN rm gss-ntlmssp_1.2.0-1_amd64.deb
+# RUN apt-get update && \
+    # apt-get install -y gss-ntlmssp && \
+    # apt-get -y --no-install-recommends upgrade && \
+    # rm -rf /var/lib/apt/lists/*
+
+# Install any missing dependencies that the package requires
 RUN apt-get update && \
-    apt-get install -y gss-ntlmssp && \
-    apt-get -y --no-install-recommends upgrade && \
-    rm -rf /var/lib/apt/lists/*
+    apt-get install -y --fix-broken
 
 RUN apt update && apt install netbase tzdata -y
 # Upgrade all packages to latest
