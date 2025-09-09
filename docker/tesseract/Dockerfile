@@ -1,5 +1,5 @@
 FROM demisto/python3-deb:3.12.11.4801753
-RUN apt-get update && apt-get upgrade -y && apt-get -t bullseye-backports install  \
+RUN apt-get update && apt-get upgrade -y && apt-get -t bookworm-backports install  \
     gcc g++ wget git pkg-config \
     make autoconf automake libtool libpng-dev  \
     libjpeg-dev libtiff5-dev zlib1g-dev libleptonica-dev  \
@@ -7,7 +7,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get -t bullseye-backports instal
 && mkdir /build && cd /build && git clone --depth 1 https://github.com/tesseract-ocr/tesseract.git \
 && cd tesseract  \
 && ./autogen.sh && ./configure && gmake && make install && ldconfig \
-&& apt-get -t bullseye-backports install -y --no-install-recommends imagemagick file \
+&& apt-get -t bookworm-backports install -y --no-install-recommends imagemagick file \
 && rm -rf /var/lib/apt/lists/* \
 && git clone https://github.com/zdenop/tessdata_downloader.git \
 && cd tessdata_downloader \
