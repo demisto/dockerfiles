@@ -2,12 +2,13 @@
 FROM mcr.microsoft.com/powershell:7.5-ubuntu-22.04
 
 # For the `no supported WSMan client library was found` error when using Ubuntu 20+
-RUN apt-get update -y
 RUN sh -c "yes | pwsh -Command 'Install-Module -Name PSWSMan'"
 RUN pwsh -Command 'Install-WSMan'
 
 # Update, install gss-ntlmssp, upgrade packages, and clean up in a single layer
-RUN apt-get update && \
+RUN apt-get update -y && \
+    # install wget
+    apt-get install -y wget && \
     # install gss-ntlmssp from debian repository
     wget http://ftp.debian.org/debian/pool/main/g/gss-ntlmssp/gss-ntlmssp_1.2.0-1_amd64.deb && \
     dpkg -i gss-ntlmssp_1.2.0-1_amd64.deb && \
