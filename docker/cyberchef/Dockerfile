@@ -1,5 +1,5 @@
-# Last modified: 2025-08-13T00:46:29.599993+00:00
-FROM demisto/python3:3.12.11.4508456
+# Last modified: 2025-09-09T12:45:22.959642+00:00
+FROM demisto/python3:3.12.11.4819260
 
 COPY requirements.txt .
 COPY bake.js /bake.js
