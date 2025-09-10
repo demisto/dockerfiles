@@ -8,3 +8,10 @@ if ($(Get-TimeZone).Id -ne 'Etc/UTC' -and $(Get-TimeZone).Id -ne 'UCT' -and $(Ge
 }
 
 Write-Output("All good. pwsh is setup fine!")
+
+# Use dpkg-query to reliably check if the package is installed.
+/usr/bin/dpkg-query -s gss-ntlmssp > $null
+
+if ($LASTEXITCODE -ne 0) {
+    throw "Verification failed: gss-ntlmssp is not installed."
+}
