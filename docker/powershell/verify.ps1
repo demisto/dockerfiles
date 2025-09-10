@@ -7,4 +7,11 @@ if ($(Get-TimeZone).Id -ne 'Etc/UTC' -and $(Get-TimeZone).Id -ne 'UCT' -and $(Ge
     throw "TimeZone.Id not equal to Etc/UTC or UCT or Zulu. Value: " + $(Get-TimeZone).Id
 }
 
+# Check if gss-ntlmssp is installed
+Write-Host("Verifying gss-ntlmssp installation...")
+dpkg -s gss-ntlmssp
+if ($LASTEXITCODE -ne 0) {
+    throw "Verification failed: gss-ntlmssp is not installed."
+}
+
 Write-Output("All good. pwsh is setup fine!")
