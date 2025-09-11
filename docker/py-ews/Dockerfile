@@ -25,7 +25,7 @@ RUN apt-get update && apt-get install -y -f --no-install-recommends --allow-down
     git \
     libxml2 \
     libxslt1.1 \
-	libkrb5-3 \
+    libkrb5-3 \
     libffi-dev \
     libxml2-dev \
     libxslt-dev \
@@ -39,8 +39,9 @@ RUN apt-get update && apt-get install -y -f --no-install-recommends --allow-down
   git \
   wget \
   libffi-dev \
-  wget \
   libxml2-dev \
+  libxslt-dev \
+  libssl-dev \
   libssl-dev \
   libkrb5-dev \
 && rm -rf /var/lib/apt/lists/*
