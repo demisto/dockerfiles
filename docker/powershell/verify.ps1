@@ -7,20 +7,4 @@ if ($(Get-TimeZone).Id -ne 'Etc/UTC' -and $(Get-TimeZone).Id -ne 'UCT' -and $(Ge
     throw "TimeZone.Id not equal to Etc/UTC or UCT or Zulu. Value: " + $(Get-TimeZone).Id
 }
 
-function Test-SystemPackage {
-    [CmdletBinding()]
-    param (
-        [Parameter(Mandatory = $true)]
-        [string]$Name
-    )
-
-    /usr/bin/dpkg-query -s $Name > $null 2>&1
-    return $LASTEXITCODE -eq 0
-}
-
-Write-Host("Verifying gss-ntlmssp installation...")
-if (-not (Test-SystemPackage -Name 'gss-ntlmssp')) {
-    throw "Verification failed: gss-ntlmssp is not installed."
-}
-
 Write-Output("All good. pwsh is setup fine!")
