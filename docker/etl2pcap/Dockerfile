@@ -1,4 +1,4 @@
-FROM demisto/python3:3.12.11.4417419
+FROM demisto/python3:3.12.11.4819260
 
 RUN mkdir /var/opt/etl
 

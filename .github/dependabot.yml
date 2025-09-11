@@ -672,13 +672,6 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: pip
-    directory: /docker/py3-native
-    ignore:
-      - dependency-name: "requests-ntlm"
-      - dependency-name: "intezer-sdk"
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
     directory: /docker/splunksdk-py3
     schedule:
       interval: daily
@@ -776,5 +769,9 @@ updates:
      interval: daily
   - package-ecosystem: pip
     directory: /docker/slack-bolt
+    schedule:
+     interval: daily  
+  - package-ecosystem: pip
+    directory: /docker/python3-deb-bullseye
     schedule:
      interval: daily
