@@ -1,6 +1,5 @@
 
-FROM demisto/python3-deb:3.12.11.4027491
-
+FROM demisto/python3-deb:3.12.11.4801753
 COPY requirements.txt .
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -16,6 +15,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends p7zip-full \
   && rm -rf /var/lib/apt/lists/*
 
 # installs unrar requires non-free repo
-RUN sed -i.org 's/bullseye[^ ]* main$/& contrib non-free/g' /etc/apt/sources.list \
+RUN sed -i.org 's/bookworm[^ ]* main$/& contrib non-free/g' /etc/apt/sources.list \
   && apt-get update && apt-get install -y --no-install-recommends unrar \
   && rm -rf /var/lib/apt/lists/*
