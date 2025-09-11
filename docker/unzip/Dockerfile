@@ -16,5 +16,5 @@ RUN apt-get update && apt-get install -y --no-install-recommends p7zip-full \
 
 # installs unrar requires non-free repo
 RUN sed -i.org 's/bookworm[^ ]* main$/& contrib non-free/g' /etc/apt/sources.list \
-  && apt-get update && apt-get install -y --no-install-recommends unrar \
+  && apt-get update && apt-get install -y --no-install-recommends unrar-nonfree \
   && rm -rf /var/lib/apt/lists/*
