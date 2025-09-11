@@ -13,6 +13,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   make \
   automake \
   autoconf \
+  gettext \
+  pkg-config \
 && pip install --no-cache-dir -r requirements.txt \
 && apt-get purge -y --auto-remove \
   gcc \
@@ -24,4 +26,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   make \
   automake \
   autoconf \
+  gettext \
+  pkg-config \
 && rm -rf /var/lib/apt/lists/*
