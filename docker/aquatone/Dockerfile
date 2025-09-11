@@ -1,5 +1,5 @@
-# Last modified: 2025-07-01T16:38:32.394197+00:00
-FROM demisto/python3-deb:3.12.11.4027491
+# Last modified: 2025-09-12T01:21:08.331803
+FROM demisto/python3-deb:3.12.11.4801753
 
 RUN apt-get update \
 && apt-get install -y --no-install-recommends \
@@ -12,5 +12,5 @@ RUN apt-get update \
     ruby-dev \
     rubygems \
 && rm -rf /var/lib/apt/lists/* \
-&& rm ./usr/lib/ruby/gems/2.7.0/specifications/default/bundler-2.1.4.gemspec \
+&& find /usr/lib/ruby/gems/*/specifications/default/ -name "bundler-*.gemspec" -delete\
 && gem install bundler
