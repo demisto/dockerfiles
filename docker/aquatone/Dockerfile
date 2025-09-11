@@ -12,5 +12,5 @@ RUN apt-get update \
     ruby-dev \
     rubygems \
 && rm -rf /var/lib/apt/lists/* \
-&& rm ./usr/lib/ruby/gems/2.7.0/specifications/default/bundler-2.1.4.gemspec \
+&& find /usr/lib/ruby/gems/*/specifications/default/ -name "bundler-*.gemspec" -delete\
 && gem install bundler
