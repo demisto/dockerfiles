@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   libaio1 \
   wget \
   unzip \
-  libssl1.1 \
+  libssl3 \
 && rm -rf /var/lib/apt/lists/*
 
 # install oracle instant client
