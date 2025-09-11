@@ -10,15 +10,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   gcc \
   python3-dev \
 && rm -rf /var/lib/apt/lists/*
-
-# --- Mitigate CVE-2025-6965: Install SQLite 3.50.2+ from source ---
-RUN apt-get update && apt-get install -y wget make gcc libreadline-dev zlib1g-dev \
-  && wget https://www.sqlite.org/2024/sqlite-autoconf-3500200.tar.gz \
-  && tar xzf sqlite-autoconf-3500200.tar.gz \
-  && cd sqlite-autoconf-3500200 \
-  && ./configure && make && make install \
-  && cd .. && rm -rf sqlite-autoconf-3500200* \
-  && ldconfig
+# Fix CVE-2025-6965: Update SQLite to a patched version
+RUN apt-get update && apt-get install -y --no-install-recommends sqlite3 && rm -rf /var/lib/apt/lists/*
 
 # --- Mitigate CVE-2023-31484: Upgrade CPAN.pm to >=2.35 ---
 RUN apt-get update && apt-get install -y perl cpanminus \
