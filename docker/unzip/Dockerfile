@@ -15,9 +15,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN apt-get update && apt-get install -y --no-install-recommends p7zip-full \
   && rm -rf /var/lib/apt/lists/*
 
-# The unrar-nonfree package was renamed to unrar in Debian Bookworm.
-# This section adds the non-free repository and installs the correct package.
-RUN sed -i.org 's/bookworm[^ ]* main$/& contrib non-free/g' /etc/apt/sources.list \
-  && apt-get update \
-  && apt-get install -y --no-install-recommends unrar \
-  && rm -rf /var/lib/apt/lists/*
+# Add a new sources list file that includes the contrib and non-free repositories
+RUN echo "deb http://deb.debian.org/debian bookworm contrib non-free" >> /etc/apt/sources.list.d/contrib-nonfree.list \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends unrar \
+    && rm -rf /var/lib/apt/lists/*
