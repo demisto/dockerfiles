@@ -15,3 +15,7 @@ libxext6 libgl1-mesa-glx libxrender1 libxrender-dev -y \
   libxrender-dev \
 && rm -rf /var/lib/apt/lists/*
 
+# Upgrade all packages to latest
+RUN apt-get update && apt-get -y --no-install-recommends upgrade \
+&& rm -rf /var/lib/apt/lists/*
+
