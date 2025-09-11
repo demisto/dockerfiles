@@ -4,7 +4,7 @@ FROM demisto/python3-deb:3.12.11.4801753
 
 COPY requirements.txt .
 
-ARG POPPLER_VERSION=24.02.0
+ARG POPPLER_VERSION=25.09.1
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
   python3-dev \
