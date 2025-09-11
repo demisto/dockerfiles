@@ -1,8 +1,8 @@
 
-FROM demisto/opencv:1.0.0.4757640
+FROM demisto/opencv:1.0.0.4855524
 COPY Pipfile.lock .
 COPY Pipfile .
-RUN apt-get update && apt-get -t bullseye-backports install -y --no-install-recommends \
+RUN apt-get update && apt-get -t bookworm-backports install -y --no-install-recommends \
   gcc \
   python3-dev \
   libzbar0 \
