@@ -34,7 +34,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
 COPY download_chromedriver.sh .
 
 # Deps needed by google-chrome
-RUN apt-get update && apt-get -t bullseye-backports install -y --no-install-recommends \
+RUN apt-get update && apt-get -t bookworm-backports install -y --no-install-recommends \
   jq \
   gnupg2 \
   libgtk-3-0 \
