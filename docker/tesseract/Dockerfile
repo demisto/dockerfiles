@@ -17,4 +17,5 @@ do python tessdata_downloader.py -o /usr/local/share/tessdata/ -l $lang; done \
 libjpeg-dev libtiff5-dev zlib1g-dev libleptonica-dev libicu-dev libpango1.0-dev \
 && apt remove libaom0/now -y \
 && rm -rf /build \
+# Last modified: 2025-09-12T03:11:14.185937+00:00
 && tesseract --version --list-langs
