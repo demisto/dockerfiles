@@ -1,4 +1,4 @@
-FROM demisto/python3-deb:3.11.10.117398
+FROM demisto/python3-deb:3.12.11.4801753
 WORKDIR "/app"
 
 SHELL ["/bin/bash", "-c"]
@@ -32,6 +32,4 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   git \
   npm \
   python3-dev \
-  python3.9 \ 
-  python3.9-minimal \
 && rm -rf /var/lib/apt/lists/* 
