@@ -1,5 +1,5 @@
 
-FROM demisto/python3-deb:3.12.11.4027491
+FROM demisto/python3-deb:3.12.11.4801753
 
 COPY requirements.txt .
 COPY odbcinst.ini /etc/odbcinst.ini
@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   libaio1 \
   wget \
   unzip \
-  libssl1.1 \
+  libssl3 \
 && rm -rf /var/lib/apt/lists/*
 
 # install oracle instant client
@@ -49,10 +49,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Install the Microsoft ODBC driver for SQL Server (Linux)
 RUN apt-get update \
 && apt-get install -y --allow-downgrades gpgv gnupg2 curl apt-utils \
-&& curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
-&& curl https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list \
+&& curl -sSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | tee /etc/apt/trusted.gpg.d/microsoft.gpg > /dev/null \
+&& curl https://packages.microsoft.com/config/debian/12/prod.list > /etc/apt/sources.list.d/mssql-release.list \
 && apt-get update \
-&& ACCEPT_EULA=Y apt-get install msodbcsql18 \
+&& DEBIAN_FRONTEND=noninteractive ACCEPT_EULA=Y apt-get install -y --allow-downgrades msodbcsql18 \
 && apt-get install -y unixodbc-dev libgssapi-krb5-2
 
 # install python packages
