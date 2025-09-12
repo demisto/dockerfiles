@@ -716,10 +716,6 @@ updates:
     schedule:
      interval: daily
   - package-ecosystem: pip
-    directory: /docker/confluent-kafka
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
     directory: /docker/pytmv1
     ignore:
       - dependency-name: "pytmv1"
