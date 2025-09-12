@@ -8,6 +8,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "~3.12"
 demisto-sdk = "*"
+ujson = "5.10"  # in version 5.11.0 there is a license change (error: ujson: no approved license found for license)
 referencing = "~0.35.1"
 
 [build-system]
