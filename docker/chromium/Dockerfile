@@ -1,10 +1,10 @@
 
-# Last modified: 2024-11-21T16:39:36.391539+00:00
-FROM demisto/python3-deb:3.11.10.117398
+# Last modified: 2025-09-08T11:29:52.638928+00:00
+FROM demisto/python3-deb:3.12.11.4801753
 
 COPY requirements.txt .
 
-ARG POPPLER_VERSION=24.02.0
+ARG POPPLER_VERSION=25.09.1
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
   python3-dev \
@@ -13,9 +13,6 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
   fonts-noto-cjk \
   fonts-noto-core \
   zlib1g-dev \
-&& wget http://http.us.debian.org/debian/pool/main/liba/libappindicator/libappindicator1_0.4.92-7_amd64.deb -O /tmp/libappindicator1_0.4.92-7_amd64.deb \
-&& wget http://http.us.debian.org/debian/pool/main/libi/libindicator/libindicator7_0.5.0-4_amd64.deb -O /tmp/libindicator7_0.5.0-4_amd64.deb \
-&& apt-get install -y  /tmp/libindicator7_0.5.0-4_amd64.deb /tmp/libappindicator1_0.4.92-7_amd64.deb \
 && pip3 install --no-cache-dir -r requirements.txt \
 && apt-get purge -y --auto-remove \
   python3-dev \
@@ -34,7 +31,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
 COPY download_chromedriver.sh .
 
 # Deps needed by google-chrome
-RUN apt-get update && apt-get -t bullseye-backports install -y --no-install-recommends \
+RUN apt-get update && apt-get -t bookworm-backports install -y --no-install-recommends \
   jq \
   gnupg2 \
   libgtk-3-0 \
