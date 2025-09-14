@@ -1,3 +1,5 @@
+# Last modified: 2025-09-14T10:46:53.699+00:00
+
 FROM demisto/python3:3.12.11.4819260
 
 
@@ -11,5 +13,4 @@ WORKDIR /src/rubrik-polaris-sdk-for-python
 
 RUN python setup.py install
 
-# Last modified: 2025-09-12T03:11:14.185937+00:00
 WORKDIR /
