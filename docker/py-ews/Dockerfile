@@ -16,7 +16,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 #RUN rm CVE-2021-3177.diff
 COPY requirements.txt .
 
-#Install tools for building binary deps (will be reomved later on)
+#Install tools for building binary deps (will be removed later on)
 RUN apt-get update && apt-get install -y --no-install-recommends --allow-downgrades \
     gcc \
     python3-dev \
@@ -31,7 +31,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends --allow-downgra
     libxslt-dev \
     libssl-dev \
     libkrb5-dev \
-    libgssapi-krb5-2 \
 && pip install --no-cache-dir -r requirements.txt \
 && apt-get purge -y --auto-remove \
   gcc \
