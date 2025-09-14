@@ -32,7 +32,7 @@ RUN apt-get update && apt-get install -y -f --no-install-recommends --allow-down
     libxslt-dev \
     libssl-dev \
     libkrb5-dev \
-    # libgssapi-krb5-2 \
+    libgssapi-krb5-2 \
 && pip install --no-cache-dir -r requirements.txt \
 && apt-get purge -y --auto-remove \
   gcc \
