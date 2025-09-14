@@ -31,13 +31,12 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
 COPY download_chromedriver.sh .
 
 # Deps needed by google-chrome
-RUN apt-get update && apt-get -t bookworm-backports install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y --no-install-recommends \
   jq \
   gnupg2 \
   libgtk-3-0 \
   libu2f-udev \
   udev \
-&& apt-get update && apt-get install -y --no-install-recommends \
   curl \
   unzip \
 && curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
@@ -57,13 +56,12 @@ RUN apt-get install -y libfreetype-dev libfontconfig-dev libboost-dev libpng-dev
 && apt-get install -y libjpeg-dev libcairo-dev libopenjp2-7-dev libtiff-dev libnss3-dev \
 && apt-get install -y build-essential \
 && apt-get install -y libgpgmepp-dev qtbase5-dev libcairo2-dev \
-&& apt-get install -y xz-utils cmake \ 
+&& apt-get install -y xz-utils cmake git \ 
 && wget https://poppler.freedesktop.org/poppler-${POPPLER_VERSION}.tar.xz -v \
 && tar -xf ./poppler-${POPPLER_VERSION}.tar.xz \
 && cd poppler-${POPPLER_VERSION} \
 && mkdir -p build \
 && cd build \
-&& apt-get install -y git \
 && git clone --branch poppler-${POPPLER_VERSION} --depth 1 https://gitlab.freedesktop.org/poppler/poppler.git \
 && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DTESTDATADIR=$PWD/testfiles -DENABLE_QT6=OFF -DENABLE_UNSTABLE_API_ABI_HEADERS=ON -DENABLE_GPGME=OFF poppler \
 && make install \
@@ -72,8 +70,7 @@ RUN apt-get install -y libfreetype-dev libfontconfig-dev libboost-dev libpng-dev
 && pdftoppm -v \
 && cd ../.. \
 && rm poppler-${POPPLER_VERSION}.tar.xz \
-&& rm -rf poppler-${POPPLER_VERSION}/ \
-&& apt remove libaom0 -y
+&& rm -rf poppler-${POPPLER_VERSION}/
 
 RUN apt-get purge -y --auto-remove \
   curl \
