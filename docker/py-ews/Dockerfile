@@ -1,6 +1,6 @@
 # Last modified: 2025-09-12T03:11:14.185937+00:00
 
-FROM demisto/python3-deb:3.12.7.117935
+FROM demisto/python3-deb:3.12.11.4801753
 
 # END Docker file from https://raw.githubusercontent.com/docker-library/python/331890ef059fae05f84c652520b78c340526dc71/3.10/bullseye/Dockerfile
 
@@ -32,6 +32,7 @@ RUN apt-get update && apt-get install -y -f --no-install-recommends --allow-down
     libxslt-dev \
     libssl-dev \
     libkrb5-dev \
+    # libgssapi-krb5-2 \
 && pip install --no-cache-dir -r requirements.txt \
 && apt-get purge -y --auto-remove \
   gcc \
