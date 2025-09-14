@@ -3,7 +3,7 @@ FROM demisto/python3:3.12.11.4819260 AS base
 
 RUN apk --update add --no-cache swig
 
-RUN apk --update add --no-cache --virtual .build-dependencies gcc \
+RUN apk --update add --no-cache --virtual .build-dependencies gcc g++ \
   musl-dev python3-dev libffi-dev openssl-dev build-base wget git
 
 FROM base AS requirements_gen
