@@ -494,20 +494,21 @@ tests-mypy = ["mypy (>=1.11.1) ; platform_python_implementation == \"CPython\" a
 
 [[package]]
 name = "azure-cli-core"
-version = "2.76.0"
+version = "2.77.0"
 description = "Microsoft Azure Command-Line Tools Core Module"
 optional = false
 python-versions = ">=3.9.0"
 groups = ["main"]
 markers = "platform_system == \"Windows\" or platform_system == \"Darwin\" or platform_system == \"Linux\" or platform_system != \"Windows\" and platform_system != \"Darwin\" and platform_system != \"Linux\" or sys_platform != \"win32\""
 files = [
-    {file = "azure_cli_core-2.76.0-py3-none-any.whl", hash = "sha256:281afe732ac6f85a39b6535466ac2e919c9c83d304ee67ef471f70ce16ecbb67"},
-    {file = "azure_cli_core-2.76.0.tar.gz", hash = "sha256:97dbcc4557589cb68356d9f5c3793ecf5d86118622dc78835057e029c7698a95"},
+    {file = "azure_cli_core-2.77.0-py3-none-any.whl", hash = "sha256:cf980de2ac72760d021e48cf60898d64c752f6548b9e0c6d20cd4f201f27f172"},
+    {file = "azure_cli_core-2.77.0.tar.gz", hash = "sha256:5e04dd530e23fcdef6e8d5a7a8da02b382e2216d617def12dc8d6d1e35a3b34e"},
 ]
 
 [package.dependencies]
 argcomplete = ">=3.5.2,<3.6.0"
 azure-cli-telemetry = "==1.1.0.*"
+azure-core = ">=1.35.0,<1.36.0"
 azure-mgmt-core = ">=1.2.0,<2"
 cryptography = "*"
 distro = {version = "*", markers = "sys_platform == \"linux\""}
@@ -516,8 +517,8 @@ jmespath = "*"
 knack = ">=0.11.0,<0.12.0"
 microsoft-security-utilities-secret-masker = ">=1.0.0b4,<1.1.0"
 msal = [
-    {version = "1.33.0b1", extras = ["broker"], markers = "sys_platform == \"win32\""},
-    {version = "1.33.0b1", markers = "sys_platform != \"win32\""},
+    {version = "1.34.0b1", extras = ["broker"], markers = "sys_platform == \"win32\""},
+    {version = "1.34.0b1", markers = "sys_platform != \"win32\""},
 ]
 msal-extensions = "1.2.0"
 packaging = ">=20.9"
@@ -576,15 +577,15 @@ files = [
 
 [[package]]
 name = "azure-core"
-version = "1.33.0"
+version = "1.35.1"
 description = "Microsoft Azure Core Library for Python"
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.9"
 groups = ["main"]
 markers = "platform_system == \"Windows\" or platform_system == \"Darwin\" or platform_system == \"Linux\" or platform_system != \"Windows\" and platform_system != \"Darwin\" and platform_system != \"Linux\" or sys_platform != \"win32\""
 files = [
-    {file = "azure_core-1.33.0-py3-none-any.whl", hash = "sha256:9b5b6d0223a1d38c37500e6971118c1e0f13f54951e6893968b38910bc9cda8f"},
-    {file = "azure_core-1.33.0.tar.gz", hash = "sha256:f367aa07b5e3005fec2c1e184b882b0b039910733907d001c20fb08ebb8c0eb9"},
+    {file = "azure_core-1.35.1-py3-none-any.whl", hash = "sha256:12da0c9e08e48e198f9158b56ddbe33b421477e1dc98c2e1c8f9e254d92c468b"},
+    {file = "azure_core-1.35.1.tar.gz", hash = "sha256:435d05d6df0fff2f73fb3c15493bb4721ede14203f1ff1382aa6b6b2bdd7e562"},
 ]
 
 [package.dependencies]
@@ -2445,15 +2446,15 @@ files = [
 
 [[package]]
 name = "msal"
-version = "1.33.0b1"
+version = "1.34.0b1"
 description = "The Microsoft Authentication Library (MSAL) for Python library enables your app to access the Microsoft Cloud by supporting authentication of users with Microsoft Azure Active Directory accounts (AAD) and Microsoft Accounts (MSA) using industry standard OAuth2 and OpenID Connect."
 optional = false
 python-versions = ">=3.7"
 groups = ["main"]
 markers = "platform_system == \"Windows\" or platform_system == \"Darwin\" or platform_system == \"Linux\" or platform_system != \"Windows\" and platform_system != \"Darwin\" and platform_system != \"Linux\" or sys_platform != \"win32\""
 files = [
-    {file = "msal-1.33.0b1-py3-none-any.whl", hash = "sha256:8f4da5a0a19688a943f93a0e1b241370de5ad93a5cc1e3ccda7a69230ac9fac4"},
-    {file = "msal-1.33.0b1.tar.gz", hash = "sha256:b464b86145a27c30ca8cb34204e5396637f4d5c9fd211c469adc55ae70cb2a4c"},
+    {file = "msal-1.34.0b1-py3-none-any.whl", hash = "sha256:3b6373325e3509d97873e36965a75e9cc9393f1b579d12cc03c0ca0ef6d37eb4"},
+    {file = "msal-1.34.0b1.tar.gz", hash = "sha256:86cdbfec14955e803379499d017056c6df4ed40f717fd6addde94bdeb4babd78"},
 ]
 
 [package.dependencies]
@@ -3995,4 +3996,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = "~3.12"
-content-hash = "8975e3eff573bbf8bda2d25564aca07e2b6d66a30fa15d8910fa305596e986d7"
+content-hash = "30eb6c2e7e0503764f19d2c71e61dadd9b26869920f7346585090c84bde1e5b3"
