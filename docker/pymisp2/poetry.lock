@@ -338,14 +338,14 @@ files = [
 
 [[package]]
 name = "extract-msg"
-version = "0.54.0"
+version = "0.55.0"
 description = "Extracts emails and attachments saved in Microsoft Outlook's .msg files"
 optional = false
 python-versions = ">=3.8"
 groups = ["main"]
 files = [
-    {file = "extract_msg-0.54.0-py3-none-any.whl", hash = "sha256:5ec1b9645e5c1a6ce05f3f07f221a083ee0bc27c5e8474d64a4032c016ba5495"},
-    {file = "extract_msg-0.54.0.tar.gz", hash = "sha256:b8ed8198e64ccb34ae66fc1c2c422e56f9234c64bbf80afcda7100593920ff2b"},
+    {file = "extract_msg-0.55.0-py3-none-any.whl", hash = "sha256:baf0cdee9a8d267b70c366bc57ceb03dbfa1e7ab2dca6824169a7fe623f0917c"},
+    {file = "extract_msg-0.55.0.tar.gz", hash = "sha256:cf08283498c3dfcc7f894dad1579f52e3ced9fb76b865c2355cbe757af8a54e1"},
 ]
 
 [package.dependencies]
@@ -483,32 +483,32 @@ files = [
 
 [[package]]
 name = "pymisp"
-version = "2.5.10"
+version = "2.5.17.1"
 description = "Python API for MISP."
 optional = false
 python-versions = "<4.0,>=3.9.2"
 groups = ["main"]
 files = [
-    {file = "pymisp-2.5.10-py3-none-any.whl", hash = "sha256:7bd76c74e2c0fbdbed61973b09469c381e0d3a1276298c12e13e8b772516493c"},
-    {file = "pymisp-2.5.10.tar.gz", hash = "sha256:369595f98783ea60e97fefb2d56c3c7ef60ea9e56ad13aa10ece924db2343252"},
+    {file = "pymisp-2.5.17.1-py3-none-any.whl", hash = "sha256:d28a77d1bdba945cc6d94b49077979283e64b938e1848345f5964c9ff73fd66f"},
+    {file = "pymisp-2.5.17.1.tar.gz", hash = "sha256:11e418e0d772d5542642698d60bc71dcb43863673a2c034fe19e08454cc6867c"},
 ]
 
 [package.dependencies]
 deprecated = ">=1.2.18"
-extract_msg = {version = ">=0.54.0", optional = true, markers = "extra == \"email\""}
+extract_msg = {version = ">=0.55.0", optional = true, markers = "extra == \"email\""}
 oletools = {version = ">=0.60.2", optional = true, markers = "extra == \"email\""}
 python-dateutil = ">=2.9.0.post0"
-requests = ">=2.32.3"
+requests = ">=2.32.5"
 
 [package.extras]
-brotli = ["urllib3 (>=2.3.0)"]
-docs = ["docutils (>=0.21.2) ; python_version >= \"3.11\"", "myst-parser (>=4.0.1) ; python_version >= \"3.11\"", "sphinx (>=8.2.3) ; python_version >= \"3.11\"", "sphinx-autodoc-typehints (>=3.1.0) ; python_version >= \"3.11\""]
-email = ["RTFDE (>=0.1.2) ; python_version <= \"3.9\"", "extract_msg (>=0.54.0)", "oletools (>=0.60.2)"]
-fileobjects = ["lief (>=0.16.4)", "pydeep2 (>=0.5.1)", "python-magic (>=0.4.27)"]
-openioc = ["beautifulsoup4 (>=4.13.3)"]
-pdfexport = ["reportlab (>=4.3.1)"]
+brotli = ["urllib3 (>=2.5.0)"]
+docs = ["docutils (<0.22) ; python_version >= \"3.11\"", "myst-parser (>=4.0.1) ; python_version >= \"3.11\"", "sphinx (>=8.2.3) ; python_version >= \"3.11\"", "sphinx-autodoc-typehints (>=3.2.0) ; python_version >= \"3.11\""]
+email = ["RTFDE (>=0.1.2.1) ; python_version <= \"3.9\"", "extract_msg (>=0.55.0)", "oletools (>=0.60.2)"]
+fileobjects = ["lief (>=0.17.0)", "pydeep2 (>=0.5.1)", "python-magic (>=0.4.27)"]
+openioc = ["beautifulsoup4 (>=4.13.5)"]
+pdfexport = ["reportlab (>=4.4.3)"]
 url = ["pyfaup (>=1.2)"]
-virustotal = ["validators (>=0.34.0)"]
+virustotal = ["validators (>=0.35.0)"]
 
 [[package]]
 name = "pyparsing"
@@ -553,14 +553,14 @@ files = [
 
 [[package]]
 name = "requests"
-version = "2.32.4"
+version = "2.32.5"
 description = "Python HTTP for Humans."
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "requests-2.32.4-py3-none-any.whl", hash = "sha256:27babd3cda2a6d50b30443204ee89830707d396671944c998b5975b031ac2b2c"},
-    {file = "requests-2.32.4.tar.gz", hash = "sha256:27d0316682c8a29834d3264820024b62a36942083d52caf2f14c0591336d3422"},
+    {file = "requests-2.32.5-py3-none-any.whl", hash = "sha256:2462f94637a34fd532264295e186976db0f5d453d1cdd31473c85a6a161affb6"},
+    {file = "requests-2.32.5.tar.gz", hash = "sha256:dbba0bac56e100853db0ea71b82b4dfd5fe2bf6d3754a8893c3af500cec7d7cf"},
 ]
 
 [package.dependencies]
