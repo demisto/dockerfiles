@@ -1,7 +1,7 @@
 
 FROM demisto/python3-deb:3.11.10.117398
 
-RUN apt-get update && apt-get install build-essential flex bison libtool make automake autoconf -y
+RUN apt-get update && apt-get upgrade -y && apt-get install build-essential flex bison libtool make automake autoconf -y
 
 COPY requirements.txt .
 
