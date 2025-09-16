@@ -1055,21 +1055,22 @@ msrestazure = ">=0.4.20,<2.0.0"
 
 [[package]]
 name = "azure-mgmt-monitor"
-version = "3.0.0"
+version = "7.0.0"
 description = "Microsoft Azure Monitor Client Library for Python"
 optional = false
-python-versions = "*"
+python-versions = ">=3.9"
 groups = ["main"]
 markers = "platform_system == \"Windows\" or platform_system == \"Darwin\" or platform_system == \"Linux\" or platform_system != \"Windows\" and platform_system != \"Darwin\" and platform_system != \"Linux\" or sys_platform != \"win32\""
 files = [
-    {file = "azure-mgmt-monitor-3.0.0.zip", hash = "sha256:91ddb7333bf2b9541a53864cc8d2501e3694a03a9c0e41cbfae3348558675ce6"},
-    {file = "azure_mgmt_monitor-3.0.0-py2.py3-none-any.whl", hash = "sha256:de750771fd9ab9f7db0e6f5a2933405affdd53176abcc6d7cc294ee8b93825f4"},
+    {file = "azure_mgmt_monitor-7.0.0-py3-none-any.whl", hash = "sha256:ad63b5d187e21d2d34366271ade6abbeea1fcf76e313ff0f83d394d9c124aa1b"},
+    {file = "azure_mgmt_monitor-7.0.0.tar.gz", hash = "sha256:b75f536441d430f69ff873a1646e5f5dbcb3080a10768a59d0adc01541623816"},
 ]
 
 [package.dependencies]
-azure-common = ">=1.1,<2.0"
-azure-mgmt-core = ">=1.2.0,<2.0.0"
-msrest = ">=0.6.21"
+azure-common = ">=1.1"
+azure-mgmt-core = ">=1.5.0"
+isodate = ">=0.6.1"
+typing-extensions = ">=4.6.0"
 
 [[package]]
 name = "azure-mgmt-network"
@@ -3996,4 +3997,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = "~3.12"
-content-hash = "05bd239e435bb21d8c5143698eb1c2511c22d9f9f37c643313c9827e5e1e112e"
+content-hash = "e9af0a95da5dad7c2b0224c5e7a456c526bc0c00a4822a876feee1a50c2cf1b7"
