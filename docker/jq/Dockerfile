@@ -1,15 +1,7 @@
 
-FROM demisto/python3-deb:3.12.11.4801753
+FROM demisto/python3-deb:3.11.10.117398
 
-# https://github.com/mwilliamson/jq.py?tab=readme-ov-file#debian-ubuntu-or-relatives
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    automake \
-    build-essential \
-    libtool \
-    python3-dev \
-    autotools-dev \
-    autoconf \
-&& rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install build-essential flex bison libtool make automake autoconf -y
 
 COPY requirements.txt .
 
