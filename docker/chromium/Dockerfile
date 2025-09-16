@@ -32,7 +32,8 @@ RUN sed -i '/bookworm-backports/d' /etc/apt/sources.list /etc/apt/sources.list.d
 COPY download_chromedriver.sh .
 
 # Deps needed by google-chrome
-RUN apt-get update && apt-get -t bullseye-backports install -y --no-install-recommends \
+RUN sed -i '/bookworm-backports/d' /etc/apt/sources.list /etc/apt/sources.list.d/* 2>/dev/null || true \
+&& apt-get clean && apt-get update && apt-get install -y --no-install-recommends \
   jq \
   gnupg2 \
   libgtk-3-0 \
