@@ -6,7 +6,8 @@ COPY requirements.txt .
 
 ARG POPPLER_VERSION=25.09.1
 
-RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
+RUN sed -i '/bookworm-backports/d' /etc/apt/sources.list /etc/apt/sources.list.d/* 2>/dev/null || true \
+&& apt-get clean && apt-get update && apt-get install -y --no-install-recommends \
   python3-dev \
   wget \
   libxss1 \
