@@ -53,7 +53,7 @@ RUN apt-get update \
 && curl -fsSL https://packages.microsoft.com/config/debian/12/prod.list | tee /etc/apt/sources.list.d/mssql-release.list \
 && echo "deb [arch=amd64,arm64,armhf signed-by=/usr/share/keyrings/microsoft-prod.gpg] https://packages.microsoft.com/debian/12/prod bookworm main" > /etc/apt/sources.list.d/mssql-release.list \
 && apt-get update \
-&& DEBIAN_FRONTEND=noninteractive ACCEPT_EULA=Y apt-get install msodbcsql18 \
+&& ACCEPT_EULA=Y apt-get install -y msodbcsql18 \
 && apt-get install -y unixodbc-dev libgssapi-krb5-2
 
 # install python packages
