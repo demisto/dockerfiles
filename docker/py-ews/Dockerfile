@@ -40,8 +40,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends --allow-downgra
   git \
   wget \
   libffi-dev \
-  wget \
   libxml2-dev \
   libssl-dev \
-  libkrb5-dev \
 && rm -rf /var/lib/apt/lists/*
