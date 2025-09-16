@@ -32,12 +32,11 @@ COPY download_chromedriver.sh .
 
 # Deps needed by google-chrome
 RUN sed -i '/bookworm-backports/d' /etc/apt/sources.list /etc/apt/sources.list.d/* 2>/dev/null || true \
-&& apt-get update && apt-get install -y --no-install-recommends \
+&& apt-get clean && apt-get update && apt-get install -y --no-install-recommends \
   jq \
   gnupg2 \
   libgtk-3-0 \
   libu2f-udev \
-  udev \
   curl \
   unzip \
 && curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
