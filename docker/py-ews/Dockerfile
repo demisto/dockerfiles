@@ -17,8 +17,6 @@ COPY requirements.txt .
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libxml2 \
     libxslt1.1 \
-    libkrb5-3 \
-    libgssapi-krb5-2 \
 && rm -rf /var/lib/apt/lists/*
 
 # Install build dependencies, build packages, then remove build deps
@@ -26,17 +24,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     python3-dev \
     build-essential \
-    libffi-dev \
     libxml2-dev \
     libxslt-dev \
     libssl-dev \
-    libkrb5-dev \
 && pip install --no-cache-dir -r requirements.txt \
 && apt-get purge -y --auto-remove \
     gcc \
     python3-dev \
     build-essential \
-    libffi-dev \
     libxml2-dev \
     libxslt-dev \
     libssl-dev \
