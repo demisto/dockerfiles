@@ -801,20 +801,20 @@ msrestazure = ">=0.4.32,<2.0.0"
 
 [[package]]
 name = "azure-mgmt-containerservice"
-version = "35.0.0"
+version = "39.1.0"
 description = "Microsoft Azure Container Service Management Client Library for Python"
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.9"
 groups = ["main"]
 markers = "platform_system == \"Windows\" or platform_system == \"Darwin\" or platform_system == \"Linux\" or platform_system != \"Windows\" and platform_system != \"Darwin\" and platform_system != \"Linux\" or sys_platform != \"win32\""
 files = [
-    {file = "azure_mgmt_containerservice-35.0.0-py3-none-any.whl", hash = "sha256:171554415da6a5c3cf492c86ae7cd606f2d80b3bf3d1cbf3d28a445018aa54f6"},
-    {file = "azure_mgmt_containerservice-35.0.0.tar.gz", hash = "sha256:71a149b3d65c2bc5c9c9c7843a11f81c3a1fb61ea187326feaa94ad3cee3dc74"},
+    {file = "azure_mgmt_containerservice-39.1.0-py3-none-any.whl", hash = "sha256:b46d0eac51a4cfb80533e41b266246ccbe7607d21c4ae6bfbb1f9fb90c6e1244"},
+    {file = "azure_mgmt_containerservice-39.1.0.tar.gz", hash = "sha256:6f0c3fe44e937e8efd0b6037be1023923599a52ce57b811e3056d80b7f9738d0"},
 ]
 
 [package.dependencies]
 azure-common = ">=1.1"
-azure-mgmt-core = ">=1.3.2"
+azure-mgmt-core = ">=1.6.0"
 isodate = ">=0.6.1"
 typing-extensions = ">=4.6.0"
 
@@ -3996,4 +3996,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = "~3.12"
-content-hash = "30eb6c2e7e0503764f19d2c71e61dadd9b26869920f7346585090c84bde1e5b3"
+content-hash = "05bd239e435bb21d8c5143698eb1c2511c22d9f9f37c643313c9827e5e1e112e"
