@@ -891,22 +891,22 @@ msrestazure = ">=0.4.32,<2.0.0"
 
 [[package]]
 name = "azure-mgmt-dns"
-version = "2.1.0"
+version = "9.0.0"
 description = "Microsoft Azure DNS Management Client Library for Python"
 optional = false
-python-versions = "*"
+python-versions = ">=3.9"
 groups = ["main"]
 markers = "platform_system == \"Windows\" or platform_system == \"Darwin\" or platform_system == \"Linux\" or platform_system != \"Windows\" and platform_system != \"Darwin\" and platform_system != \"Linux\" or sys_platform != \"win32\""
 files = [
-    {file = "azure-mgmt-dns-2.1.0.zip", hash = "sha256:3730b1b3f545a5aa43c0fff07418b362a789eb7d81286e2bed90ffef88bfa5d0"},
-    {file = "azure_mgmt_dns-2.1.0-py2.py3-none-any.whl", hash = "sha256:5b80546b0f182d7abe90c43025cd5ca7e6605224b4d5b872cca2456667f172ef"},
+    {file = "azure_mgmt_dns-9.0.0-py3-none-any.whl", hash = "sha256:00bd1d9d679d77aeba9178782d03c833549a4077147c9d78fedbfcd5909be633"},
+    {file = "azure_mgmt_dns-9.0.0.tar.gz", hash = "sha256:89f8c4e467a94224b97bf16dd76d5bd616bf11cefe727f776618a57cc5486e37"},
 ]
 
 [package.dependencies]
-azure-common = ">=1.1,<2.0"
-azure-mgmt-nspkg = ">=2.0.0"
-msrest = ">=0.5.0"
-msrestazure = ">=0.4.32,<2.0.0"
+azure-common = ">=1.1"
+azure-mgmt-core = ">=1.5.0"
+isodate = ">=0.6.1"
+typing-extensions = ">=4.6.0"
 
 [[package]]
 name = "azure-mgmt-eventhub"
@@ -3998,4 +3998,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = "~3.12"
-content-hash = "6d2aaa525e09b3e0294b6e4d0c018977cee98ef812dbc781bdbf0e7a57862ac2"
+content-hash = "3e3390e3b35099dfa860f6c1d04f4fe3b33212a7755ca813d264208f18da48fc"
