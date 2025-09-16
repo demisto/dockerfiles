@@ -36,7 +36,6 @@ RUN sed -i '/bookworm-backports/d' /etc/apt/sources.list /etc/apt/sources.list.d
   jq \
   gnupg2 \
   libgtk-3-0 \
-  libu2f-udev \
   curl \
   unzip \
 && curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
