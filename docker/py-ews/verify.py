@@ -45,7 +45,6 @@ from exchangelib.version import (
     EXCHANGE_2019,
 )
 from exchangelib.version import VERSIONS as EXC_VERSIONS
-from future import utils as future_utils
 from requests.exceptions import ConnectionError
 
 # verify that we support dh 1024
