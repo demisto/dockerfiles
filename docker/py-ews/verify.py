@@ -1,37 +1,56 @@
 import email
 import hashlib
-import subprocess
-import warnings
-from collections import deque
+from email.policy import SMTP, SMTPUTF8
+from io import StringIO
 from multiprocessing import Process
 
-import lxml
-import dateparser
+import dateparser  # type: ignore
 import exchangelib
-from io import StringIO
-from exchangelib import (BASIC, DELEGATE, DIGEST, IMPERSONATION, NTLM, Account,
-                         Body, Build, Configuration, Credentials, EWSDateTime,
-                         EWSTimeZone, FileAttachment, Folder, HTMLBody,
-                         ItemAttachment, Version)
-from exchangelib.errors import (AutoDiscoverFailed, ErrorFolderNotFound,
-                                ErrorInvalidIdMalformed,
-                                ErrorInvalidPropertyRequest,
-                                ErrorIrresolvableConflict, ErrorItemNotFound,
-                                ErrorMailboxMoveInProgress,
-                                ErrorMailboxStoreUnavailable,
-                                ErrorNameResolutionNoResults, RateLimitError,
-                                ResponseMessageError, TransportError)
+from CommonServerPython import *
+from EWSApiModule import *
+from exchangelib import (
+    BASIC,
+    DELEGATE,
+    DIGEST,
+    IMPERSONATION,
+    NTLM,
+    Body,
+    EWSDateTime,
+    EWSTimeZone,
+    FileAttachment,
+    FolderCollection,
+    HTMLBody,
+    ItemAttachment,
+    Version,
+)
+from exchangelib.errors import (
+    ErrorCannotOpenFileAttachment,
+    ErrorFolderNotFound,
+    ErrorInvalidPropertyRequest,
+    ErrorIrresolvableConflict,
+    ErrorMailboxMoveInProgress,
+    ErrorMailboxStoreUnavailable,
+    ErrorMimeContentConversionFailed,
+    ErrorNameResolutionNoResults,
+    RateLimitError,
+    TransportError,
+)
 from exchangelib.items import Contact, Item, Message
-from exchangelib.protocol import BaseProtocol, Protocol
 from exchangelib.services import EWSService
-from exchangelib.services.common import EWSAccountService
 from exchangelib.util import add_xml_child, create_element
-from exchangelib.version import (EXCHANGE_2007, EXCHANGE_2010,
-                                 EXCHANGE_2010_SP2, EXCHANGE_2013,
-                                 EXCHANGE_2016, EXCHANGE_2019)
+from exchangelib.version import (
+    EXCHANGE_2007,
+    EXCHANGE_2010,
+    EXCHANGE_2010_SP2,
+    EXCHANGE_2013,
+    EXCHANGE_2013_SP1,
+    EXCHANGE_2016,
+    EXCHANGE_2019,
+)
+from exchangelib.version import VERSIONS as EXC_VERSIONS
 from future import utils as future_utils
 from requests.exceptions import ConnectionError
-from _sqlite3 import *
+
 # verify that we support dh 1024
 import requests
 requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS ='@SECLEVEL=1:ECDHE+AESGCM:ECDHE+CHACHA20:DHE+AESGCM:DHE+CHACHA20:ECDH+AESGCM:DH+AESGCM:' \
