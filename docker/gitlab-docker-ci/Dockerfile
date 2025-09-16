@@ -2,7 +2,10 @@ FROM devdemisto/gitlab-content-ci:1.0.0.2492694
 
 # Clean up any existing backports references that may cause conflicts
 RUN sed -i '/bullseye-backports/d' /etc/apt/sources.list /etc/apt/sources.list.d/* 2>/dev/null || true \
-&& sed -i '/bookworm-backports/d' /etc/apt/sources.list /etc/apt/sources.list.d/* 2>/dev/null || true
+&& sed -i '/bookworm-backports/d' /etc/apt/sources.list /etc/apt/sources.list.d/* 2>/dev/null || true \
+&& sed -i '/stable-backports/d' /etc/apt/sources.list /etc/apt/sources.list.d/* 2>/dev/null || true \
+&& sed -i '/trixie-backports/d' /etc/apt/sources.list /etc/apt/sources.list.d/* 2>/dev/null || true \
+&& apt-get clean
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
