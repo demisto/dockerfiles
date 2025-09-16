@@ -25,7 +25,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends --allow-downgra
     git \
     libxml2 \
     libxslt1.1 \
-	libkrb5-3 \
+    libkrb5-3 \
     libffi-dev \
     libxml2-dev \
     libxslt-dev \
