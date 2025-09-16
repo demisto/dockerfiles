@@ -1329,21 +1329,22 @@ msrestazure = ">=0.4.32,<2.0.0"
 
 [[package]]
 name = "azure-mgmt-web"
-version = "0.41.0"
+version = "10.0.0"
 description = "Microsoft Azure Web Apps Management Client Library for Python"
 optional = false
-python-versions = "*"
+python-versions = ">=3.9"
 groups = ["main"]
 markers = "platform_system == \"Windows\" or platform_system == \"Darwin\" or platform_system == \"Linux\" or platform_system != \"Windows\" and platform_system != \"Darwin\" and platform_system != \"Linux\" or sys_platform != \"win32\""
 files = [
-    {file = "azure-mgmt-web-0.41.0.zip", hash = "sha256:5f170f25c72119ff4b4e2f39d46ce21bdb2f399f786ea24eedc15c12cfba3054"},
-    {file = "azure_mgmt_web-0.41.0-py2.py3-none-any.whl", hash = "sha256:b1cc1230a7606e961024ddc4b77638a360540dcd64e08a8689d361086d0cd0b9"},
+    {file = "azure_mgmt_web-10.0.0-py3-none-any.whl", hash = "sha256:ddf241479baebc818db86570a07d47532b11583041d1eed16b44dfbe5ffedcb8"},
+    {file = "azure_mgmt_web-10.0.0.tar.gz", hash = "sha256:6a32b6f41b1743184390636ab781c43def12fcfd6dd788f3029635d3f7d64c7b"},
 ]
 
 [package.dependencies]
-azure-common = ">=1.1,<2.0"
-msrest = ">=0.5.0"
-msrestazure = ">=0.4.32,<2.0.0"
+azure-common = ">=1.1"
+azure-mgmt-core = ">=1.6.0"
+isodate = ">=0.6.1"
+typing-extensions = ">=4.6.0"
 
 [[package]]
 name = "azure-nspkg"
@@ -3998,4 +3999,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = "~3.12"
-content-hash = "3e3390e3b35099dfa860f6c1d04f4fe3b33212a7755ca813d264208f18da48fc"
+content-hash = "de584054d08f3996d8c516b92d0eccfa896fb4d3d4c855b7c1aeb244e2519060"
