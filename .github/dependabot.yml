@@ -78,10 +78,6 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: pip
-    directory: /docker/dockerbuild
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
     directory: /docker/faker3
     schedule:
       interval: daily
@@ -376,10 +372,6 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: pip
-    directory: /docker/ami-management
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
     directory: /docker/google-cloud-securitycenter
     schedule:
       interval: daily
@@ -569,14 +561,6 @@ updates:
       - dependency-name: "intezer-sdk"
       - dependency-name: "asana"  # lock on v3.2.1, BC in Higher version
   - package-ecosystem: pip
-    directory: /docker/py3-tools-ubi
-    schedule:
-      interval: daily
-    ignore:
-      - dependency-name: "intezer-sdk"
-      - dependency-name: "asana"  # lock on v3.2.1, BC in Higher version
-      - dependency-name: paho-mqtt
-  - package-ecosystem: pip
     directory: /docker/pan-os-python
     schedule:
       interval: daily
@@ -655,10 +639,6 @@ updates:
     directory: /docker/illumio
     schedule:
      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/python3-ubi
-    schedule:
-      interval: daily
   - package-ecosystem: pip
     directory: /docker/splunksdk-py3
     schedule:
