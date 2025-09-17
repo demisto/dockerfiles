@@ -494,20 +494,21 @@ tests-mypy = ["mypy (>=1.11.1) ; platform_python_implementation == \"CPython\" a
 
 [[package]]
 name = "azure-cli-core"
-version = "2.76.0"
+version = "2.77.0"
 description = "Microsoft Azure Command-Line Tools Core Module"
 optional = false
 python-versions = ">=3.9.0"
 groups = ["main"]
 markers = "platform_system == \"Windows\" or platform_system == \"Darwin\" or platform_system == \"Linux\" or platform_system != \"Windows\" and platform_system != \"Darwin\" and platform_system != \"Linux\" or sys_platform != \"win32\""
 files = [
-    {file = "azure_cli_core-2.76.0-py3-none-any.whl", hash = "sha256:281afe732ac6f85a39b6535466ac2e919c9c83d304ee67ef471f70ce16ecbb67"},
-    {file = "azure_cli_core-2.76.0.tar.gz", hash = "sha256:97dbcc4557589cb68356d9f5c3793ecf5d86118622dc78835057e029c7698a95"},
+    {file = "azure_cli_core-2.77.0-py3-none-any.whl", hash = "sha256:cf980de2ac72760d021e48cf60898d64c752f6548b9e0c6d20cd4f201f27f172"},
+    {file = "azure_cli_core-2.77.0.tar.gz", hash = "sha256:5e04dd530e23fcdef6e8d5a7a8da02b382e2216d617def12dc8d6d1e35a3b34e"},
 ]
 
 [package.dependencies]
 argcomplete = ">=3.5.2,<3.6.0"
 azure-cli-telemetry = "==1.1.0.*"
+azure-core = ">=1.35.0,<1.36.0"
 azure-mgmt-core = ">=1.2.0,<2"
 cryptography = "*"
 distro = {version = "*", markers = "sys_platform == \"linux\""}
@@ -516,8 +517,8 @@ jmespath = "*"
 knack = ">=0.11.0,<0.12.0"
 microsoft-security-utilities-secret-masker = ">=1.0.0b4,<1.1.0"
 msal = [
-    {version = "1.33.0b1", extras = ["broker"], markers = "sys_platform == \"win32\""},
-    {version = "1.33.0b1", markers = "sys_platform != \"win32\""},
+    {version = "1.34.0b1", extras = ["broker"], markers = "sys_platform == \"win32\""},
+    {version = "1.34.0b1", markers = "sys_platform != \"win32\""},
 ]
 msal-extensions = "1.2.0"
 packaging = ">=20.9"
@@ -576,15 +577,15 @@ files = [
 
 [[package]]
 name = "azure-core"
-version = "1.33.0"
+version = "1.35.1"
 description = "Microsoft Azure Core Library for Python"
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.9"
 groups = ["main"]
 markers = "platform_system == \"Windows\" or platform_system == \"Darwin\" or platform_system == \"Linux\" or platform_system != \"Windows\" and platform_system != \"Darwin\" and platform_system != \"Linux\" or sys_platform != \"win32\""
 files = [
-    {file = "azure_core-1.33.0-py3-none-any.whl", hash = "sha256:9b5b6d0223a1d38c37500e6971118c1e0f13f54951e6893968b38910bc9cda8f"},
-    {file = "azure_core-1.33.0.tar.gz", hash = "sha256:f367aa07b5e3005fec2c1e184b882b0b039910733907d001c20fb08ebb8c0eb9"},
+    {file = "azure_core-1.35.1-py3-none-any.whl", hash = "sha256:12da0c9e08e48e198f9158b56ddbe33b421477e1dc98c2e1c8f9e254d92c468b"},
+    {file = "azure_core-1.35.1.tar.gz", hash = "sha256:435d05d6df0fff2f73fb3c15493bb4721ede14203f1ff1382aa6b6b2bdd7e562"},
 ]
 
 [package.dependencies]
@@ -745,21 +746,22 @@ msrestazure = ">=0.4.27,<2.0.0"
 
 [[package]]
 name = "azure-mgmt-compute"
-version = "10.0.0"
+version = "36.0.0"
 description = "Microsoft Azure Compute Management Client Library for Python"
 optional = false
-python-versions = "*"
+python-versions = ">=3.9"
 groups = ["main"]
 markers = "platform_system == \"Windows\" or platform_system == \"Darwin\" or platform_system == \"Linux\" or platform_system != \"Windows\" and platform_system != \"Darwin\" and platform_system != \"Linux\" or sys_platform != \"win32\""
 files = [
-    {file = "azure-mgmt-compute-10.0.0.zip", hash = "sha256:cfdf35722d5d7ccee8d32a81f6734b210298dfaed10f7299efadf06ea7e96be8"},
-    {file = "azure_mgmt_compute-10.0.0-py2.py3-none-any.whl", hash = "sha256:c25d1077a95790eafec1e01d82204cbd57449477a58e68f25cb41e1b11f45b63"},
+    {file = "azure_mgmt_compute-36.0.0-py3-none-any.whl", hash = "sha256:31f27afa8c097ba1f8b37ae258a763e2c7737f6eddc423c22e2beb11255cd526"},
+    {file = "azure_mgmt_compute-36.0.0.tar.gz", hash = "sha256:ee343daa3f5b3494ecaa07a70ac5c4337d23ea006590632919ab2835c32e67a1"},
 ]
 
 [package.dependencies]
-azure-common = ">=1.1,<2.0"
-msrest = ">=0.5.0"
-msrestazure = ">=0.4.32,<2.0.0"
+azure-common = ">=1.1"
+azure-mgmt-core = ">=1.6.0"
+isodate = ">=0.6.1"
+typing-extensions = ">=4.6.0"
 
 [[package]]
 name = "azure-mgmt-containerinstance"
@@ -799,38 +801,38 @@ msrestazure = ">=0.4.32,<2.0.0"
 
 [[package]]
 name = "azure-mgmt-containerservice"
-version = "35.0.0"
+version = "39.1.0"
 description = "Microsoft Azure Container Service Management Client Library for Python"
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.9"
 groups = ["main"]
 markers = "platform_system == \"Windows\" or platform_system == \"Darwin\" or platform_system == \"Linux\" or platform_system != \"Windows\" and platform_system != \"Darwin\" and platform_system != \"Linux\" or sys_platform != \"win32\""
 files = [
-    {file = "azure_mgmt_containerservice-35.0.0-py3-none-any.whl", hash = "sha256:171554415da6a5c3cf492c86ae7cd606f2d80b3bf3d1cbf3d28a445018aa54f6"},
-    {file = "azure_mgmt_containerservice-35.0.0.tar.gz", hash = "sha256:71a149b3d65c2bc5c9c9c7843a11f81c3a1fb61ea187326feaa94ad3cee3dc74"},
+    {file = "azure_mgmt_containerservice-39.1.0-py3-none-any.whl", hash = "sha256:b46d0eac51a4cfb80533e41b266246ccbe7607d21c4ae6bfbb1f9fb90c6e1244"},
+    {file = "azure_mgmt_containerservice-39.1.0.tar.gz", hash = "sha256:6f0c3fe44e937e8efd0b6037be1023923599a52ce57b811e3056d80b7f9738d0"},
 ]
 
 [package.dependencies]
 azure-common = ">=1.1"
-azure-mgmt-core = ">=1.3.2"
+azure-mgmt-core = ">=1.6.0"
 isodate = ">=0.6.1"
 typing-extensions = ">=4.6.0"
 
 [[package]]
 name = "azure-mgmt-core"
-version = "1.5.0"
+version = "1.6.0"
 description = "Microsoft Azure Management Core Library for Python"
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.9"
 groups = ["main"]
 markers = "platform_system == \"Windows\" or platform_system == \"Darwin\" or platform_system == \"Linux\" or platform_system != \"Windows\" and platform_system != \"Darwin\" and platform_system != \"Linux\" or sys_platform != \"win32\""
 files = [
-    {file = "azure_mgmt_core-1.5.0-py3-none-any.whl", hash = "sha256:18aaa5a723ee8ae05bf1bfc9f6d0ffb996631c7ea3c922cc86f522973ce07b5f"},
-    {file = "azure_mgmt_core-1.5.0.tar.gz", hash = "sha256:380ae3dfa3639f4a5c246a7db7ed2d08374e88230fd0da3eb899f7c11e5c441a"},
+    {file = "azure_mgmt_core-1.6.0-py3-none-any.whl", hash = "sha256:0460d11e85c408b71c727ee1981f74432bc641bb25dfcf1bb4e90a49e776dbc4"},
+    {file = "azure_mgmt_core-1.6.0.tar.gz", hash = "sha256:b26232af857b021e61d813d9f4ae530465255cb10b3dde945ad3743f7a58e79c"},
 ]
 
 [package.dependencies]
-azure-core = ">=1.31.0"
+azure-core = ">=1.32.0"
 
 [[package]]
 name = "azure-mgmt-cosmosdb"
@@ -889,22 +891,22 @@ msrestazure = ">=0.4.32,<2.0.0"
 
 [[package]]
 name = "azure-mgmt-dns"
-version = "2.1.0"
+version = "9.0.0"
 description = "Microsoft Azure DNS Management Client Library for Python"
 optional = false
-python-versions = "*"
+python-versions = ">=3.9"
 groups = ["main"]
 markers = "platform_system == \"Windows\" or platform_system == \"Darwin\" or platform_system == \"Linux\" or platform_system != \"Windows\" and platform_system != \"Darwin\" and platform_system != \"Linux\" or sys_platform != \"win32\""
 files = [
-    {file = "azure-mgmt-dns-2.1.0.zip", hash = "sha256:3730b1b3f545a5aa43c0fff07418b362a789eb7d81286e2bed90ffef88bfa5d0"},
-    {file = "azure_mgmt_dns-2.1.0-py2.py3-none-any.whl", hash = "sha256:5b80546b0f182d7abe90c43025cd5ca7e6605224b4d5b872cca2456667f172ef"},
+    {file = "azure_mgmt_dns-9.0.0-py3-none-any.whl", hash = "sha256:00bd1d9d679d77aeba9178782d03c833549a4077147c9d78fedbfcd5909be633"},
+    {file = "azure_mgmt_dns-9.0.0.tar.gz", hash = "sha256:89f8c4e467a94224b97bf16dd76d5bd616bf11cefe727f776618a57cc5486e37"},
 ]
 
 [package.dependencies]
-azure-common = ">=1.1,<2.0"
-azure-mgmt-nspkg = ">=2.0.0"
-msrest = ">=0.5.0"
-msrestazure = ">=0.4.32,<2.0.0"
+azure-common = ">=1.1"
+azure-mgmt-core = ">=1.5.0"
+isodate = ">=0.6.1"
+typing-extensions = ">=4.6.0"
 
 [[package]]
 name = "azure-mgmt-eventhub"
@@ -1053,21 +1055,22 @@ msrestazure = ">=0.4.20,<2.0.0"
 
 [[package]]
 name = "azure-mgmt-monitor"
-version = "3.0.0"
+version = "7.0.0"
 description = "Microsoft Azure Monitor Client Library for Python"
 optional = false
-python-versions = "*"
+python-versions = ">=3.9"
 groups = ["main"]
 markers = "platform_system == \"Windows\" or platform_system == \"Darwin\" or platform_system == \"Linux\" or platform_system != \"Windows\" and platform_system != \"Darwin\" and platform_system != \"Linux\" or sys_platform != \"win32\""
 files = [
-    {file = "azure-mgmt-monitor-3.0.0.zip", hash = "sha256:91ddb7333bf2b9541a53864cc8d2501e3694a03a9c0e41cbfae3348558675ce6"},
-    {file = "azure_mgmt_monitor-3.0.0-py2.py3-none-any.whl", hash = "sha256:de750771fd9ab9f7db0e6f5a2933405affdd53176abcc6d7cc294ee8b93825f4"},
+    {file = "azure_mgmt_monitor-7.0.0-py3-none-any.whl", hash = "sha256:ad63b5d187e21d2d34366271ade6abbeea1fcf76e313ff0f83d394d9c124aa1b"},
+    {file = "azure_mgmt_monitor-7.0.0.tar.gz", hash = "sha256:b75f536441d430f69ff873a1646e5f5dbcb3080a10768a59d0adc01541623816"},
 ]
 
 [package.dependencies]
-azure-common = ">=1.1,<2.0"
-azure-mgmt-core = ">=1.2.0,<2.0.0"
-msrest = ">=0.6.21"
+azure-common = ">=1.1"
+azure-mgmt-core = ">=1.5.0"
+isodate = ">=0.6.1"
+typing-extensions = ">=4.6.0"
 
 [[package]]
 name = "azure-mgmt-network"
@@ -1178,21 +1181,22 @@ isodate = ">=0.6.1"
 
 [[package]]
 name = "azure-mgmt-recoveryservicesbackup"
-version = "0.15.0"
+version = "9.2.0"
 description = "Microsoft Azure Recovery Services Backup Management Client Library for Python"
 optional = false
-python-versions = "*"
+python-versions = ">=3.8"
 groups = ["main"]
 markers = "platform_system == \"Windows\" or platform_system == \"Darwin\" or platform_system == \"Linux\" or platform_system != \"Windows\" and platform_system != \"Darwin\" and platform_system != \"Linux\" or sys_platform != \"win32\""
 files = [
-    {file = "azure-mgmt-recoveryservicesbackup-0.15.0.zip", hash = "sha256:cb96a46c976a5d9b118be99e72ad68a51d587bdc93c4d6e51a9ff38e25c4a856"},
-    {file = "azure_mgmt_recoveryservicesbackup-0.15.0-py2.py3-none-any.whl", hash = "sha256:76530c85b7fefb68a6c2d3ea930871373e0e140e8ba0ffcd0292aede1a24237c"},
+    {file = "azure_mgmt_recoveryservicesbackup-9.2.0-py3-none-any.whl", hash = "sha256:c0002858d0166b6a10189a1fd580a49c83dc31b111e98010a5b2ea0f767dfff1"},
+    {file = "azure_mgmt_recoveryservicesbackup-9.2.0.tar.gz", hash = "sha256:c402b3e22a6c3879df56bc37e0063142c3352c5102599ff102d19824f1b32b29"},
 ]
 
 [package.dependencies]
-azure-common = ">=1.1,<2.0"
-msrest = ">=0.5.0"
-msrestazure = ">=0.4.32,<2.0.0"
+azure-common = ">=1.1"
+azure-mgmt-core = ">=1.3.2"
+isodate = ">=0.6.1"
+typing-extensions = ">=4.6.0"
 
 [[package]]
 name = "azure-mgmt-redis"
@@ -1232,21 +1236,22 @@ msrestazure = ">=0.4.32,<2.0.0"
 
 [[package]]
 name = "azure-mgmt-search"
-version = "3.0.0"
+version = "9.2.0"
 description = "Microsoft Azure Search Management Client Library for Python"
 optional = false
-python-versions = "*"
+python-versions = ">=3.9"
 groups = ["main"]
 markers = "platform_system == \"Windows\" or platform_system == \"Darwin\" or platform_system == \"Linux\" or platform_system != \"Windows\" and platform_system != \"Darwin\" and platform_system != \"Linux\" or sys_platform != \"win32\""
 files = [
-    {file = "azure-mgmt-search-3.0.0.zip", hash = "sha256:d4c78b14b48edd2e27e2068c9a448acfc84a18595be77fe483afe7bb447e1eb6"},
-    {file = "azure_mgmt_search-3.0.0-py2.py3-none-any.whl", hash = "sha256:43c0270204b38eff6183d4313437f89e9463f5b8065bddb15463bf89fa83b944"},
+    {file = "azure_mgmt_search-9.2.0-py3-none-any.whl", hash = "sha256:29dbbec94c4668c65a5e5138a724532d5f08d3ed1cfcb458f9da46dc8e5400ea"},
+    {file = "azure_mgmt_search-9.2.0.tar.gz", hash = "sha256:a0da0ec332d1f43d0f6acb63b8cfd80085b075e91afcf812f8c769ad9fdcad84"},
 ]
 
 [package.dependencies]
-azure-common = ">=1.1,<2.0"
-msrest = ">=0.5.0"
-msrestazure = ">=0.4.32,<2.0.0"
+azure-common = ">=1.1"
+azure-mgmt-core = ">=1.5.0"
+isodate = ">=0.6.1"
+typing-extensions = ">=4.6.0"
 
 [[package]]
 name = "azure-mgmt-servicebus"
@@ -1324,21 +1329,22 @@ msrestazure = ">=0.4.32,<2.0.0"
 
 [[package]]
 name = "azure-mgmt-web"
-version = "0.41.0"
+version = "10.0.0"
 description = "Microsoft Azure Web Apps Management Client Library for Python"
 optional = false
-python-versions = "*"
+python-versions = ">=3.9"
 groups = ["main"]
 markers = "platform_system == \"Windows\" or platform_system == \"Darwin\" or platform_system == \"Linux\" or platform_system != \"Windows\" and platform_system != \"Darwin\" and platform_system != \"Linux\" or sys_platform != \"win32\""
 files = [
-    {file = "azure-mgmt-web-0.41.0.zip", hash = "sha256:5f170f25c72119ff4b4e2f39d46ce21bdb2f399f786ea24eedc15c12cfba3054"},
-    {file = "azure_mgmt_web-0.41.0-py2.py3-none-any.whl", hash = "sha256:b1cc1230a7606e961024ddc4b77638a360540dcd64e08a8689d361086d0cd0b9"},
+    {file = "azure_mgmt_web-10.0.0-py3-none-any.whl", hash = "sha256:ddf241479baebc818db86570a07d47532b11583041d1eed16b44dfbe5ffedcb8"},
+    {file = "azure_mgmt_web-10.0.0.tar.gz", hash = "sha256:6a32b6f41b1743184390636ab781c43def12fcfd6dd788f3029635d3f7d64c7b"},
 ]
 
 [package.dependencies]
-azure-common = ">=1.1,<2.0"
-msrest = ">=0.5.0"
-msrestazure = ">=0.4.32,<2.0.0"
+azure-common = ">=1.1"
+azure-mgmt-core = ">=1.6.0"
+isodate = ">=0.6.1"
+typing-extensions = ">=4.6.0"
 
 [[package]]
 name = "azure-nspkg"
@@ -2443,15 +2449,15 @@ files = [
 
 [[package]]
 name = "msal"
-version = "1.33.0b1"
+version = "1.34.0b1"
 description = "The Microsoft Authentication Library (MSAL) for Python library enables your app to access the Microsoft Cloud by supporting authentication of users with Microsoft Azure Active Directory accounts (AAD) and Microsoft Accounts (MSA) using industry standard OAuth2 and OpenID Connect."
 optional = false
 python-versions = ">=3.7"
 groups = ["main"]
 markers = "platform_system == \"Windows\" or platform_system == \"Darwin\" or platform_system == \"Linux\" or platform_system != \"Windows\" and platform_system != \"Darwin\" and platform_system != \"Linux\" or sys_platform != \"win32\""
 files = [
-    {file = "msal-1.33.0b1-py3-none-any.whl", hash = "sha256:8f4da5a0a19688a943f93a0e1b241370de5ad93a5cc1e3ccda7a69230ac9fac4"},
-    {file = "msal-1.33.0b1.tar.gz", hash = "sha256:b464b86145a27c30ca8cb34204e5396637f4d5c9fd211c469adc55ae70cb2a4c"},
+    {file = "msal-1.34.0b1-py3-none-any.whl", hash = "sha256:3b6373325e3509d97873e36965a75e9cc9393f1b579d12cc03c0ca0ef6d37eb4"},
+    {file = "msal-1.34.0b1.tar.gz", hash = "sha256:86cdbfec14955e803379499d017056c6df4ed40f717fd6addde94bdeb4babd78"},
 ]
 
 [package.dependencies]
@@ -3364,21 +3370,18 @@ files = [
 
 [[package]]
 name = "pyvmomi"
-version = "8.0.3.0.1"
+version = "9.0.0.0"
 description = "VMware vSphere Python SDK"
 optional = false
-python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,>=2.7.9"
+python-versions = "*"
 groups = ["main"]
 markers = "platform_system == \"Windows\" or platform_system == \"Darwin\" or platform_system == \"Linux\" or platform_system != \"Windows\" and platform_system != \"Darwin\" and platform_system != \"Linux\" or sys_platform != \"win32\""
 files = [
-    {file = "pyvmomi-8.0.3.0.1.tar.gz", hash = "sha256:db795c960159cfa3c81e6af4cf1f46618e61cf0349db1666de75df98a4f29c69"},
+    {file = "pyvmomi-9.0.0.0-py3-none-any.whl", hash = "sha256:7812642a62b6ce2b439d7e4856d27101ad102734bce41daf77bedfb3e2d9cbf2"},
 ]
 
-[package.dependencies]
-six = ">=1.7.3"
-
 [package.extras]
-sso = ["lxml", "pyOpenSSL"]
+sso = ["lxml", "pyOpenSSL (<24.3.0)"]
 
 [[package]]
 name = "pywin32"
@@ -3996,4 +3999,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = "~3.12"
-content-hash = "ddedf843228998ce2ce5fb875e60f3c3cadf1a1c09d6d3fb95dd693abdf7027b"
+content-hash = "de584054d08f3996d8c516b92d0eccfa896fb4d3d4c855b7c1aeb244e2519060"
