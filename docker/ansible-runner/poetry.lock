@@ -964,22 +964,22 @@ msrestazure = ">=0.4.32,<2.0.0"
 
 [[package]]
 name = "azure-mgmt-keyvault"
-version = "1.1.0"
+version = "12.0.0"
 description = "Microsoft Azure Key Vault Management Client Library for Python"
 optional = false
-python-versions = "*"
+python-versions = ">=3.9"
 groups = ["main"]
 markers = "platform_system == \"Windows\" or platform_system == \"Darwin\" or platform_system == \"Linux\" or platform_system != \"Windows\" and platform_system != \"Darwin\" and platform_system != \"Linux\" or sys_platform != \"win32\""
 files = [
-    {file = "azure-mgmt-keyvault-1.1.0.zip", hash = "sha256:05a15327a922441d2ba32add50a35c7f1b9225727cbdd3eeb98bc656e4684099"},
-    {file = "azure_mgmt_keyvault-1.1.0-py2.py3-none-any.whl", hash = "sha256:406298b6236abf9e3bae3218df2fc89c25aee471b917eca7769ff5696fc8ec01"},
+    {file = "azure_mgmt_keyvault-12.0.0-py3-none-any.whl", hash = "sha256:621435752f236797752984773a330044a575268f8fb6a74c612e727b4742ee32"},
+    {file = "azure_mgmt_keyvault-12.0.0.tar.gz", hash = "sha256:e2cf18e8a4928b5d1cab127be42ea9ad0246d687ca12fc27a2ad66487ce1c86b"},
 ]
 
 [package.dependencies]
-azure-common = ">=1.1,<2.0"
-azure-mgmt-nspkg = ">=2.0.0"
-msrest = ">=0.5.0"
-msrestazure = ">=0.4.32,<2.0.0"
+azure-common = ">=1.1"
+azure-mgmt-core = ">=1.5.0"
+isodate = ">=0.6.1"
+typing-extensions = ">=4.6.0"
 
 [[package]]
 name = "azure-mgmt-loganalytics"
@@ -3999,4 +3999,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = "~3.12"
-content-hash = "dfce4a8e599aa24412106f1f8eae30bd6090931a028c675280c2ad9db2ac8621"
+content-hash = "f8c73b12b7e981ce647d99020b0b06ebde2ba17da477582b423e3f606425640a"
