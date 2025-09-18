@@ -726,7 +726,11 @@ updates:
   - package-ecosystem: pip
     directory: /docker/slack-bolt
     schedule:
-     interval: daily  
+     interval: daily
+  - package-ecosystem: pip
+    directory: /docker/mjml
+    schedule:
+     interval: daily
   - package-ecosystem: pip
     directory: /docker/python3-deb-bullseye
     schedule:
