@@ -1781,6 +1781,19 @@ trio = ["trio (>=0.30)"]
 wmi = ["wmi (>=1.5.1) ; platform_system == \"Windows\""]
 
 [[package]]
+name = "durationpy"
+version = "0.10"
+description = "Module for converting between datetime.timedelta and Go's Duration strings."
+optional = false
+python-versions = "*"
+groups = ["main"]
+markers = "platform_system == \"Windows\" or platform_system == \"Darwin\" or platform_system == \"Linux\" or platform_system != \"Windows\" and platform_system != \"Darwin\" and platform_system != \"Linux\" or sys_platform != \"win32\""
+files = [
+    {file = "durationpy-0.10-py3-none-any.whl", hash = "sha256:3b41e1b601234296b4fb368338fdcd3e13e0b4fb5b67345948f4f2bf9868b286"},
+    {file = "durationpy-0.10.tar.gz", hash = "sha256:1fa6893409a6e739c9c72334fc65cca1f355dbdd93405d30f726deb5bde42fba"},
+]
+
+[[package]]
 name = "footmark"
 version = "1.25.0"
 description = "A Python interface to Aliyun Web Services"
@@ -2202,19 +2215,20 @@ tabulate = "*"
 
 [[package]]
 name = "kubernetes"
-version = "30.1.0"
+version = "33.1.0"
 description = "Kubernetes python client"
 optional = false
 python-versions = ">=3.6"
 groups = ["main"]
 markers = "platform_system == \"Windows\" or platform_system == \"Darwin\" or platform_system == \"Linux\" or platform_system != \"Windows\" and platform_system != \"Darwin\" and platform_system != \"Linux\" or sys_platform != \"win32\""
 files = [
-    {file = "kubernetes-30.1.0-py2.py3-none-any.whl", hash = "sha256:e212e8b7579031dd2e512168b617373bc1e03888d41ac4e04039240a292d478d"},
-    {file = "kubernetes-30.1.0.tar.gz", hash = "sha256:41e4c77af9f28e7a6c314e3bd06a8c6229ddd787cad684e0ab9f69b498e98ebc"},
+    {file = "kubernetes-33.1.0-py2.py3-none-any.whl", hash = "sha256:544de42b24b64287f7e0aa9513c93cb503f7f40eea39b20f66810011a86eabc5"},
+    {file = "kubernetes-33.1.0.tar.gz", hash = "sha256:f64d829843a54c251061a8e7a14523b521f2dc5c896cf6d65ccf348648a88993"},
 ]
 
 [package.dependencies]
 certifi = ">=14.05.14"
+durationpy = ">=0.7"
 google-auth = ">=1.0.1"
 oauthlib = ">=3.2.2"
 python-dateutil = ">=2.5.3"
@@ -3999,4 +4013,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = "~3.12"
-content-hash = "f8c73b12b7e981ce647d99020b0b06ebde2ba17da477582b423e3f606425640a"
+content-hash = "33d53655c07408eca726ad01a276c16d84c54d8800d340baddbfe857ac9e01a0"
