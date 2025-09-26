@@ -1896,14 +1896,14 @@ hyperframe = ">=6.1,<7"
 
 [[package]]
 name = "hcloud"
-version = "2.6.0"
+version = "2.7.0"
 description = "Official Hetzner Cloud python library"
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "hcloud-2.6.0-py3-none-any.whl", hash = "sha256:f1bd8f9997653c049c6454d9dfeb8909061d7fdffdafa4ea98cd4589e876dcc0"},
-    {file = "hcloud-2.6.0.tar.gz", hash = "sha256:45933390763ed08b9679c61d79bafde1acb7f0296d9b8b61377c2a4e4e12c9a1"},
+    {file = "hcloud-2.7.0-py3-none-any.whl", hash = "sha256:e1c22c5daba1c78b7394b2ba7ecc16596e6074aed9ea2915f164801f271cd76a"},
+    {file = "hcloud-2.7.0.tar.gz", hash = "sha256:d82343ed54f0ccf1475e24984cbd3a04ac4830b568bf3707f85540243f61434b"},
 ]
 
 [package.dependencies]
@@ -1912,7 +1912,7 @@ requests = ">=2.20"
 
 [package.extras]
 docs = ["myst-parser (>=4,<4.1)", "sphinx (>=8,<8.3)", "sphinx-rtd-theme (>=3,<3.1)", "watchdog (>=6,<6.1)"]
-test = ["coverage (>=7.10,<7.11)", "mypy (>=1.17,<1.18)", "pylint (>=3,<3.4)", "pytest (>=8,<8.5)", "pytest-cov (>=6,<6.4)", "types-python-dateutil", "types-requests"]
+test = ["coverage (>=7.10,<7.11)", "mypy (>=1.18,<1.19)", "pylint (>=3,<3.4)", "pytest (>=8,<8.5)", "pytest-cov (>=7,<7.1)", "types-python-dateutil", "types-requests"]
 
 [[package]]
 name = "hpack"
