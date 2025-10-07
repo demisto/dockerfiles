@@ -1,6 +1,6 @@
 import subprocess
 
-expected_versions = ["2.7.18", "3.9.16", "3.8.15", "3.10.13", "3.11.0", "3.12.0"]
+expected_versions = ["2.7.18", "3.9.16", "3.8.15", "3.10.13", "3.11.0", "3.12.11", "3.13.7"]
 
 def get_installed_pyenv_versions():
     result = subprocess.run(['pyenv', 'versions'], stdout=subprocess.PIPE, text=True)
