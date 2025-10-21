@@ -1,5 +1,5 @@
 
-FROM demisto/m2crypto:1.0.0.4878177
+FROM demisto/m2crypto:1.0.0.5220164
 
 # Upgrade all packages to latest
 RUN apk --update --no-cache upgrade
