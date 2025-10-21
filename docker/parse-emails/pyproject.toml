@@ -7,7 +7,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "~3.12"
-parse-emails = "*"
+parse-emails = { git = "https://github.com/demisto/parse-emails", rev = "XSUP-56881-Email-attachment's-subject-is-removed" }
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
