@@ -22,10 +22,6 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: pip
-    directory: /docker/sane-doc-reports
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
     directory: /docker/python-deb
     schedule:
       interval: daily
@@ -79,14 +75,6 @@ updates:
       interval: daily
   - package-ecosystem: pip
     directory: /docker/duoadmin
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/zeep
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/dockerbuild
     schedule:
       interval: daily
   - package-ecosystem: pip
@@ -231,10 +219,6 @@ updates:
       interval: daily
   - package-ecosystem: pip
     directory: /docker/taxii2
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/trustar
     schedule:
       interval: daily
   - package-ecosystem: pip
@@ -388,10 +372,6 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: pip
-    directory: /docker/ami-management
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
     directory: /docker/google-cloud-securitycenter
     schedule:
       interval: daily
@@ -490,10 +470,6 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: pip
-    directory: /docker/jq
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
     directory: /docker/lxml
     schedule:
       interval: daily
@@ -581,14 +557,6 @@ updates:
       - dependency-name: "intezer-sdk"
       - dependency-name: "asana"  # lock on v3.2.1, BC in Higher version
   - package-ecosystem: pip
-    directory: /docker/py3-tools-ubi
-    schedule:
-      interval: daily
-    ignore:
-      - dependency-name: "intezer-sdk"
-      - dependency-name: "asana"  # lock on v3.2.1, BC in Higher version
-      - dependency-name: paho-mqtt
-  - package-ecosystem: pip
     directory: /docker/pan-os-python
     schedule:
       interval: daily
@@ -668,10 +636,6 @@ updates:
     schedule:
      interval: daily
   - package-ecosystem: pip
-    directory: /docker/python3-ubi
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
     directory: /docker/splunksdk-py3
     schedule:
       interval: daily
@@ -713,10 +677,6 @@ updates:
      interval: daily
   - package-ecosystem: pip
     directory: /docker/elasticsearch
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
-    directory: /docker/confluent-kafka
     schedule:
      interval: daily
   - package-ecosystem: pip
