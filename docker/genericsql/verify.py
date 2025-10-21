@@ -30,7 +30,8 @@ eng = sqlalchemy.create_engine('teradatasql://guest:foo@bar')
 try:
     pymysql._auth.sha2_rsa_encrypt(b'test', b'test', 'test')
 except TypeError as ex:
-    assert "argument 'data': from_buffer() cannot return the address of a unicode object" in str(ex)
+    msg = str(ex)
+    assert "TypeError: argument 'data': Cannot convert '<class 'str'>' instance to a buffer." in msg
 
 
 print("All is good. All imported successfully")
