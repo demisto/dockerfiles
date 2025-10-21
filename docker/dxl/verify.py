@@ -1,5 +1,6 @@
 from dxlclient.broker import Broker
-from dxlclient.client import DxlClient
+# from dxlclient import DxlClient
+# from dxlclient.client import DxlClient
 from dxlclient.client_config import DxlClientConfig
 from dxlmarclient import ConditionConstants, MarClient, OperatorConstants, ProjectionConstants, TieClient
 from dxlclient.message import Event
