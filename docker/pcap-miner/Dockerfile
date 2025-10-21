@@ -8,7 +8,6 @@ RUN apk update && apk upgrade
 
 RUN apk --update add --no-cache libxml2 \
   libxslt \
-  tshark=4.4.9 \
   libmagic
 
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git \
