@@ -31,7 +31,7 @@ try:
     pymysql._auth.sha2_rsa_encrypt(b'test', b'test', 'test')
 except TypeError as ex:
     msg = str(ex)
-    assert "TypeError: argument 'data': Cannot convert '<class 'str'>' instance to a buffer." in msg
+    assert "argument 'data': Cannot convert '<class 'str'>' instance to a buffer." in msg
 
 
 print("All is good. All imported successfully")
