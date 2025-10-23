@@ -1,4 +1,5 @@
-FROM demisto/python3-deb:3.12.10.3561556
+# Last modified: 2025-10-22T00:28:21.973748+00:00
+FROM demisto/python3-deb:3.12.11.5107264
 
 WORKDIR /content
 
@@ -37,6 +38,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && npm ci \
     && npm install -g jsdoc-to-markdown@5.0.3 \
     && npm list \
+    && npm update \
     && demisto-sdk --version
 
 # Default demisto-sdk help
