@@ -52,6 +52,10 @@ import requests
 import ssl
 from urllib3.util import ssl_ as urllib3_ssl
 
+# Python 3.12 ships with stricter OpenSSL defaults (typically SECLEVEL=2), which
+# reject 1024-bit DH. The dh1024.badssl.com check then fails with
+# "ssl.SSLError: DH_KEY_TOO_SMALL". For this verification only, we relax to
+# SECLEVEL=1 by setting urllib3's DEFAULT_CIPHERS and using a custom SSLContext.
 urllib3_ssl.DEFAULT_CIPHERS = (
     'DEFAULT:@SECLEVEL=1:'
     'ECDHE+AESGCM:ECDHE+CHACHA20:'
