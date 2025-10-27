@@ -1,4 +1,4 @@
-FROM demisto/faker3:1.0.0.5301847 AS build
+FROM demisto/faker3:1.0.0.5597549 AS build
 RUN mkdir -p /perf
 COPY script.py /perf
 
