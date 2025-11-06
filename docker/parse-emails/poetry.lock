@@ -514,13 +514,15 @@ files = [
 
 [[package]]
 name = "parse-emails"
-version = "0.1.45"
+version = "0.1.46"
 description = "Parses an email message file and extracts the data from it."
 optional = false
 python-versions = ">=3.9,<3.13"
 groups = ["main"]
-files = []
-develop = false
+files = [
+    {file = "parse_emails-0.1.46-py3-none-any.whl", hash = "sha256:32a58402313152db2c557296c4d3037d9bb949b34e1aa4b232387afa51f870a4"},
+    {file = "parse_emails-0.1.46.tar.gz", hash = "sha256:1a61dfb5219043a3b2846bc947c5ecc1dd30a4b1bb89de2405501b463681880e"},
+]
 
 [package.dependencies]
 chardet = "*"
@@ -562,14 +564,14 @@ win-unicode-console = {version = "*", markers = "platform_system == \"Windows\" 
 
 [[package]]
 name = "pip"
-version = "25.2"
+version = "25.3"
 description = "The PyPA recommended tool for installing Python packages."
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "pip-25.2-py3-none-any.whl", hash = "sha256:6d67a2b4e7f14d8b31b8b52648866fa717f45a1eb70e83002f4331d07e953717"},
-    {file = "pip-25.2.tar.gz", hash = "sha256:578283f006390f85bb6282dffb876454593d637f5d1be494b5202ce4877e71f2"},
+    {file = "pip-25.3-py3-none-any.whl", hash = "sha256:9655943313a94722b7774661c21049070f6bbb0a1516bf02f7c8d5d9201514cd"},
+    {file = "pip-25.3.tar.gz", hash = "sha256:8d0538dbbd7babbd207f261ed969c65de439f6bc9e5dbd3b3b9a77f25d95f343"},
 ]
 
 [[package]]
@@ -941,4 +943,4 @@ testing = ["coverage[toml]", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.1"
 python-versions = "~3.12"
-content-hash = "702cb6d07d9c5ba3b7501f938bd6e073efb694ecffce03cc345488c065266bb8"
+content-hash = "7e4b59bc668b01e4fe7e4bbaad49bc147c842eb7f32aa8cea6333947693c6aba"
