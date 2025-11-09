@@ -517,35 +517,28 @@ name = "parse-emails"
 version = "0.1.47"
 description = "Parses an email message file and extracts the data from it."
 optional = false
-python-versions = ">=3.9,<3.13"
+python-versions = "<3.13,>=3.9"
 groups = ["main"]
 files = [
-    {file = "parse_emails-0.1.46-py3-none-any.whl", hash = "sha256:32a58402313152db2c557296c4d3037d9bb949b34e1aa4b232387afa51f870a4"},
-    {file = "parse_emails-0.1.46.tar.gz", hash = "sha256:1a61dfb5219043a3b2846bc947c5ecc1dd30a4b1bb89de2405501b463681880e"},
+    {file = "parse_emails-0.1.47-py3-none-any.whl", hash = "sha256:2d6059a87af3ffa4f7b4fd4a73a7286d1527c03aaa9423c744a1ed2012f14519"},
+    {file = "parse_emails-0.1.47.tar.gz", hash = "sha256:53e473d57b2d7319b0dbbb0fb07ce277758ac0e36b51857230f067b829b00b4f"},
 ]
-develop = false
 
 [package.dependencies]
 chardet = "*"
 compressed_rtf = "*"
 datetime = "*"
-jira = "^3.8.0"
-junitparser = "^3.1.2"
+jira = ">=3.8.0,<4.0.0"
+junitparser = ">=3.1.2,<4.0.0"
 olefile = "*"
 pip = "*"
 pyopenssl = "*"
 pypandoc = "*"
 pytest = "*"
-python-gitlab = "^3.0.0"
+python-gitlab = ">=3.0.0,<4.0.0"
 python-magic = "*"
 RTFDE = "*"
 slack-sdk = "*"
-
-[package.source]
-type = "git"
-url = "https://github.com/demisto/parse-emails"
-reference = "0f382ea2fcd0e91a63d35b18787340379b7bcd8b"
-resolved_reference = "0f382ea2fcd0e91a63d35b18787340379b7bcd8b"
 
 [[package]]
 name = "pcodedmp"
