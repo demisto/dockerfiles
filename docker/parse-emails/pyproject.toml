@@ -7,7 +7,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "~3.12"
-parse-emails = { git = "https://github.com/demisto/parse-emails", rev = "0f382ea2fcd0e91a63d35b18787340379b7bcd8b" }
+parse-emails = "*"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
