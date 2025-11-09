@@ -1,5 +1,5 @@
 # Last modified: 2025-10-22T00:28:21.973748+00:00
-FROM demisto/python3-deb:3.12.11.5107264
+FROM demisto/python3-deb:3.12.12.5735221
 
 WORKDIR /content
 
