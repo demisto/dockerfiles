@@ -16,4 +16,4 @@ ENV LLAMA_MODEL_PATH="/app/models/${MODEL_FILENAME}"
 
 RUN mkdir -p /app/models
 
-COPY "model/${MODEL_FILENAME}" "${LLAMA_MODEL_PATH}"
+COPY "${MODEL_FILENAME}" "${LLAMA_MODEL_PATH}"
