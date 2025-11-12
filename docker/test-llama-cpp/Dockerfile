@@ -17,7 +17,7 @@ ENV MODEL_DOWNLOAD_URL="https://huggingface.co/bartowski/Meta-Llama-3.1-8B-Instr
 
 RUN mkdir -p /app/models
 RUN echo "Downloading Llama model from ${MODEL_DOWNLOAD_URL}" \
-    && curl -L "${MODEL_DOWNLOAD_URL}" -o "${LLAMA_MODEL_PATH}" \
+    && curl -L --max-time 3600 "${MODEL_DOWNLOAD_URL}" -o "${LLAMA_MODEL_PATH}" \
     && echo "Download complete."
 
 #COPY "model/${MODEL_FILENAME}" "${LLAMA_MODEL_PATH}"
