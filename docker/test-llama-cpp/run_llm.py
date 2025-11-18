@@ -112,21 +112,21 @@ def call_llm_api(prompt: str, auth_token: str) -> Dict[str, Any]:
     except Exception as e:
         raise RuntimeError(f"Service Error: Cannot load the LLM model. Details: {e}")
 
-    SYSTEM_PROMPT = """You are an expert technical analyst and helpful assistant. 
+    system_prompt = """You are an expert technical analyst and helpful assistant. 
         Your task is to analyze the user's query, which often contains technical terms, code snippets, or data comparisons. 
         Your response must be **direct, concise, and professional**. 
         **OUTPUT INSTRUCTIONS:** You must respond ONLY with a single JSON object that follows this schema. Do not include any introductory or concluding text. 
         ```json { "Result": string, "Verdict":string, "Evidence": [list of relevant evidence to support the verdict]}
         """
 
-    MESSAGES = [
-        ChatCompletionRequestSystemMessage(content=SYSTEM_PROMPT, role="system"),
+    messages = [
+        ChatCompletionRequestSystemMessage(content=system_prompt, role="system"),
         ChatCompletionRequestUserMessage(content=prompt, role="user")
     ]
 
     try:
         response = llm.create_chat_completion(
-            messages=MESSAGES,
+            messages=messages,
             max_tokens=4096,
             repeat_penalty=1.1,
             top_p=0.9,
