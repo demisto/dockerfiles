@@ -17,3 +17,5 @@ ENV LLAMA_MODEL_PATH="/app/models/${MODEL_FILENAME}"
 RUN mkdir -p /app/models
 
 COPY "${MODEL_FILENAME}" "${LLAMA_MODEL_PATH}"
+
+COPY run_llm.py .
