@@ -76,7 +76,7 @@ RUN npm install -g npm@latest
 RUN npm ci
 
 # Install specific npm packages
-RUN npm install -g jsdoc-to-markdown@5.0.3
+RUN npm install -g jsdoc-to-markdown@9.1.3
 
 # List and update npm packages
 RUN npm list
