@@ -1,6 +1,7 @@
 FROM demisto/python3-deb:3.12.12.5735221
 WORKDIR /app
 RUN apt-get update \
+    && apt-get upgrade -y  \
     && apt-get install -y --no-install-recommends \
     build-essential \
     cmake \
