@@ -19,6 +19,4 @@ RUN mkdir -p /app/models
 
 COPY "${MODEL_FILENAME}" "${MODEL_PATH}"
 
-COPY llm_package /app/llm_package
-
-RUN pip install --no-cache-dir ./llm_package
+ENV PYTHONPATH="/app:$PYTHONPATH"
