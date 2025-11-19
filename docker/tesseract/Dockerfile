@@ -1,4 +1,4 @@
-FROM demisto/python3-deb:3.12.12.5735221
+FROM demisto/python3-deb:3.12.12.5919128
 RUN apt-get update && apt-get upgrade -y && apt-get -t bookworm-backports install  \
     gcc g++ wget git pkg-config \
     make autoconf automake libtool libpng-dev  \
