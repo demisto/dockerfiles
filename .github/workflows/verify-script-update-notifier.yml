@@ -7,7 +7,7 @@ on:
 jobs:
   update_verify_script:
     runs-on: ubuntu-latest
-    if: github.actor != 'dependabot[bot]' && !contains(github.event.pull_request.title, 'autoupdate') && !contains(github.head_ref, 'autolock') && github.repository == 'demisto/dockerfiles'
+    if: github.actor != 'dependabot[bot]' && !contains(github.event.pull_request.title, 'autoupdate') && !contains(github.head_ref, 'autolock') && github.repository == 'demisto/dockerFiles'
     steps:
       - uses: actions/checkout@v3
         with:
