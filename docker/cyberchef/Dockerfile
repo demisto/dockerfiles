@@ -10,8 +10,8 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
   && apk del .build-dependencies
 
 RUN apk add --update --no-cache nodejs npm
-# glob can be removed if the default version will be > 10.5.0
-RUN npm install -g --save cyberchef-node glob \
+# glob can be removed if the default version will be > 11.1.0
+RUN npm install -g --save cyberchef-node glob@12.0.0 \
   && cd /usr/local/lib/node_modules/cyberchef-node \
   && npm install jsonpath-plus@latest
 ENV NODE_PATH=/usr/local/lib/node_modules
