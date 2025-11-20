@@ -3,6 +3,7 @@ FROM demisto/python3:3.12.12.5490952
 
 COPY requirements.txt .
 
+RUN apk add --update --no-cache nodejs npm
 # can be removed if the default version will be > 11.1.0
 RUN npm install -g glob@12.0.0
 
@@ -13,7 +14,6 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies
 
-RUN apk add --update --no-cache nodejs npm
 RUN npm install -g --save cyberchef-node \
   && cd /usr/local/lib/node_modules/cyberchef-node \
   && npm install jsonpath-plus@latest
