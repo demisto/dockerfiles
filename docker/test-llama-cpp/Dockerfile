@@ -20,3 +20,5 @@ RUN mkdir -p /app/models
 COPY "${MODEL_FILENAME}" "${MODEL_PATH}"
 
 ENV PYTHONPATH="/app:$PYTHONPATH"
+
+COPY run_llm.py .
