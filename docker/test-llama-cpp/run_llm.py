@@ -7,6 +7,7 @@ from typing import Optional, Any, Dict
 from llama_cpp import Llama, ChatCompletionRequestSystemMessage, ChatCompletionRequestUserMessage
 
 MODEL_PATH = os.environ.get("MODEL_PATH", "Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf")
+C_WIN = 2048
 
 class LLMServiceError(Exception):
     """Base exception for LLM Service errors."""
@@ -84,7 +85,7 @@ class LLMService:
         try:
             cls._llm_instance = Llama(
                 model_path=MODEL_PATH,
-                n_ctx=4096,
+                n_ctx=C_WIN,
                 verbose=False
             )
             print("--- LLM Initialized Successfully ---")
@@ -151,7 +152,7 @@ class LLMService:
         try:
             response = llm.create_chat_completion(
                 messages=messages,
-                max_tokens=4096,
+                max_tokens=C_WIN,
                 repeat_penalty=1.1,
                 top_p=0.9,
                 top_k=40,
