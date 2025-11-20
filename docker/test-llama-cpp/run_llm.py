@@ -159,8 +159,8 @@ class LLMService:
                 temperature=0.03
             )
             response_text = response['choices'][0]['message']['content'].strip()
-            # return self._parse_json_response(response_text)
-            return response_text
+            return self._parse_json_response(response_text)
+            # return response_text
         except Exception as e:
             raise LLMGenerationError(f"Error during LLM chat completion: {e}")
 
