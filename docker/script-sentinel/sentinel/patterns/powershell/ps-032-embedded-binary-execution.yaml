@@ -1,0 +1,35 @@
+# PowerShell Pattern: Embedded Binary Execution
+# Detects Base64-encoded binaries written to disk and executed
+
+id: PS-032
+name: Embedded Binary Execution
+description: |
+  Detects PowerShell scripts that decode Base64-encoded binary data, write it
+  to disk, and execute it. This is a common technique for delivering malware
+  payloads while evading detection. The pattern looks for Base64 decoding
+  combined with file writing and execution.
+languages:
+  - powershell
+detection_type: regex
+detection_logic: 'FromBase64String.*WriteAllBytes.*\.(exe|dll|bat|cmd|ps1)|WriteAllBytes.*FromBase64String.*&\s+["\x27$]'
+severity: Critical
+mitre_technique: T1027.009
+confidence: 0.95
+category: execution
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-19"
+  updated: "2025-11-19"
+  references:
+    - "https://attack.mitre.org/techniques/T1027/009/"
+    - "https://attack.mitre.org/techniques/T1059/001/"
+  tags:
+    - powershell
+    - embedded-binary
+    - base64
+    - execution
+    - malware-delivery
+  examples:
+    - '$bytes = [System.Convert]::FromBase64String($data); [System.IO.File]::WriteAllBytes("payload.exe", $bytes); & "payload.exe"'
+    - '[System.IO.File]::WriteAllBytes($path, [Convert]::FromBase64String($b64))'

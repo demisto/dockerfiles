@@ -1,0 +1,34 @@
+# JavaScript Pattern: String.fromCharCode Obfuscation
+# Detects character code array obfuscation
+
+id: JS-025
+name: String.fromCharCode Obfuscation
+description: |
+  Detects use of String.fromCharCode with arrays of character codes, a common
+  obfuscation technique to hide malicious strings and URLs. Attackers encode
+  strings as numeric arrays to evade signature-based detection and make static
+  analysis more difficult.
+languages:
+  - javascript
+detection_type: regex
+detection_logic: 'String\.fromCharCode\s*\(|\.fromCharCode\s*\(\s*\.\.\.|\.charCodeAt\s*\(\s*\d+\s*\)\s*[-+]\s*\d+'
+severity: High
+mitre_technique: T1027
+confidence: 0.85
+category: obfuscation
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-19"
+  updated: "2025-11-19"
+  references:
+    - "https://attack.mitre.org/techniques/T1027/"
+  tags:
+    - javascript
+    - obfuscation
+    - encoding
+    - fromcharcode
+  examples:
+    - "String.fromCharCode(...encoded)"
+    - "String.fromCharCode(104,116,116,112,115)"
+    - "c.charCodeAt(0) - 1"

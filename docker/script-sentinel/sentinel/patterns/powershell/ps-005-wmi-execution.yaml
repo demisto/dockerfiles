@@ -1,0 +1,35 @@
+# PowerShell Pattern: WMI Command Execution
+# Detects WMI-based command execution
+
+id: PS-005
+name: WMI Command Execution
+description: |
+  Detects use of Windows Management Instrumentation (WMI) for command execution.
+  Attackers use WMI to execute commands remotely or locally while evading
+  traditional process monitoring. This pattern identifies WMI method invocations
+  commonly used for malicious purposes, including Win32_Process.Create.
+languages:
+  - powershell
+detection_type: regex
+detection_logic: '(?i)(?:Invoke-WmiMethod|Get-WmiObject|gwmi).*(?:Win32_Process|Create|CommandLineEventConsumer)'
+severity: High
+mitre_technique: T1047
+confidence: 0.85
+category: execution
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-17"
+  updated: "2025-11-17"
+  references:
+    - "https://attack.mitre.org/techniques/T1047/"
+    - "https://docs.microsoft.com/en-us/windows/win32/wmisdk/wmi-start-page"
+  tags:
+    - powershell
+    - wmi
+    - execution
+    - lateral-movement
+  examples:
+    - "Invoke-WmiMethod -Class Win32_Process -Name Create -ArgumentList 'cmd.exe /c calc.exe'"
+    - "Get-WmiObject -Class Win32_Process -Filter \"name='explorer.exe'\""
+    - "gwmi Win32_Process -Filter \"name='powershell.exe'\" | ForEach-Object { $_.Terminate() }"

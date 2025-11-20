@@ -1,0 +1,35 @@
+# JavaScript Pattern: Prototype Pollution
+# Detects prototype pollution attempts
+
+id: JS-017
+name: Prototype Pollution Attack
+description: |
+  Detects attempts to pollute JavaScript object prototypes, which can lead to
+  security vulnerabilities including property injection, denial of service, and
+  remote code execution. Attackers manipulate __proto__, constructor.prototype,
+  or Object.prototype to inject malicious properties.
+languages:
+  - javascript
+detection_type: regex
+detection_logic: '(?:__proto__|constructor\[[\x27"]prototype[\x27"]\]|Object\.prototype).*='
+severity: High
+mitre_technique: T1059.007
+confidence: 0.85
+category: execution
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-17"
+  updated: "2025-11-17"
+  references:
+    - "https://attack.mitre.org/techniques/T1059/007/"
+    - "https://portswigger.net/web-security/prototype-pollution"
+  tags:
+    - javascript
+    - prototype-pollution
+    - injection
+    - vulnerability
+  examples:
+    - "obj.__proto__.isAdmin = true;"
+    - "user.constructor.prototype.role = 'admin';"
+    - "Object.prototype.polluted = 'malicious';"
