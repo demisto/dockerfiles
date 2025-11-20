@@ -88,7 +88,7 @@ class LLMService:
                 n_ctx=C_WIN,
                 verbose=False
             )
-            print("--- LLM Initialized Successfully ---")
+            # print("--- LLM Initialized Successfully ---")
             return cls._llm_instance
         except Exception as e:
             raise InitializationError(f"Failed to initialize LLM: {e}")
@@ -123,7 +123,7 @@ class LLMService:
                 except json.JSONDecodeError:
                     pass
 
-            print(f"Warning: LLM did not return valid JSON. Raw response: {response_text}", file=sys.stderr)
+            # print(f"Warning: LLM did not return valid JSON. Raw response: {response_text}", file=sys.stderr)
             return {"Error": "LLM response was not valid JSON", "RawResponse": response_text}
 
     def call_llm(self, prompt: str, auth_token: str) -> Dict[str, Any]:
@@ -131,7 +131,7 @@ class LLMService:
         The core logic: Authenticates (decodes JWT) and calls the LLM.
         """
         payload = self._decode_auth_token(auth_token)
-        print(f"Authentication Successful. Token subject: {payload.get('sub')}")
+        # print(f"Authentication Successful. Token subject: {payload.get('sub')}")
 
         try:
             llm = self._initialize_llm()
