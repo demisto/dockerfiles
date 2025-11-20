@@ -1,5 +1,6 @@
 
-FROM demisto/python3-deb:3.12.7.117935
+#
+FROM demisto/python3-deb:3.12.12.5919128
 
 # END Docker file from https://raw.githubusercontent.com/docker-library/python/331890ef059fae05f84c652520b78c340526dc71/3.10/bullseye/Dockerfile
 
