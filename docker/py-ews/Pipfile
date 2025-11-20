@@ -7,9 +7,33 @@ verify_ssl = true
 
 [packages]
 exchangelib = ">=5.4.1"
+chardet = "*"
 dateparser = "*"
+asn1crypto = "*"
+cached-property = "*"
+certifi = "*"
+cffi = "*"
+cryptography = "*"
+defusedxml = "*"
+dnspython = "*"
+enum34 = "*"
+future = "*"
+idna = "*"
+ipaddress = "*"
+isodate = "*"
 lxml = "*"
+ntlm-auth = "*"
+pycparser = "*"
+pygments = "*"
+pykerberos = "*"
+python-dateutil = "*"
+pytz = "*"
+requests = ">=2.32.3"
+requests-kerberos = "*"
 requests-ntlm = "==1.1.0" # lock because of https://github.com/requests/requests-ntlm/issues/136
+six = "*"
+tzlocal = "*"
+urllib3 = "<2"
 
 [requires]
 python_version = "3.12"
