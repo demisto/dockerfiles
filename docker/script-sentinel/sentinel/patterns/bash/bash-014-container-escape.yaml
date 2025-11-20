@@ -1,0 +1,35 @@
+# Bash Pattern: Container Escape Attempts
+# Detects attempts to escape from containers
+
+id: BASH-014
+name: Container Escape Attempts
+description: |
+  Detects techniques used to escape from containerized environments like Docker.
+  Attackers attempt container escapes to gain access to the host system. This
+  pattern identifies common escape techniques including privileged container
+  abuse, cgroup manipulation, and Docker socket access.
+languages:
+  - bash
+detection_type: regex
+detection_logic: '(?:docker.*--privileged|nsenter.*-t\s*1|mount.*proc.*sys|/var/run/docker\.sock|unshare.*-m.*-p.*-n|capsh.*--caps=)'
+severity: High
+mitre_technique: T1611
+confidence: 0.85
+category: privilege_escalation
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-17"
+  updated: "2025-11-17"
+  references:
+    - "https://attack.mitre.org/techniques/T1611/"
+    - "https://book.hacktricks.xyz/linux-hardening/privilege-escalation/docker-security/docker-breakout-privilege-escalation"
+  tags:
+    - bash
+    - container-escape
+    - docker
+    - privilege-escalation
+  examples:
+    - "docker run --privileged -v /:/host alpine chroot /host"
+    - "nsenter -t 1 -m -u -i -n -p -- bash"
+    - "curl --unix-socket /var/run/docker.sock http://localhost/containers/json"

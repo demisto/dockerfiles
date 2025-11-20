@@ -1,0 +1,35 @@
+# Bash Pattern: Systemd Service Persistence
+# Detects systemd service creation for persistence
+
+id: BASH-008
+name: Systemd Service Persistence
+description: |
+  Detects creation or modification of systemd service files for persistence.
+  Attackers create malicious systemd services to maintain access and execute
+  code at boot or on schedule. This pattern identifies systemctl commands and
+  direct service file manipulation in systemd directories.
+languages:
+  - bash
+detection_type: regex
+detection_logic: '(?:systemctl.*(?:enable|start|daemon-reload)|echo.*>\s*/etc/systemd/system/.*\.service|echo.*>\s*/lib/systemd/system/)'
+severity: Medium
+mitre_technique: T1543.002
+confidence: 0.85
+category: persistence
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-17"
+  updated: "2025-11-17"
+  references:
+    - "https://attack.mitre.org/techniques/T1543/002/"
+    - "https://www.freedesktop.org/software/systemd/man/systemd.service.html"
+  tags:
+    - bash
+    - systemd
+    - persistence
+    - service
+  examples:
+    - "echo '[Service]\\nExecStart=/tmp/backdoor' > /etc/systemd/system/evil.service && systemctl enable evil"
+    - "systemctl enable malware.service && systemctl start malware.service"
+    - "cat > /lib/systemd/system/updater.service << EOF\\n[Unit]\\nDescription=System Updater\\n[Service]\\nExecStart=/tmp/malware\\nEOF"

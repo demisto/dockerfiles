@@ -1,0 +1,36 @@
+# Bash Pattern: Command History Manipulation
+# Detects attempts to clear or disable command history
+
+id: BASH-006
+name: Command History Manipulation
+description: |
+  Detects attempts to clear, disable, or manipulate bash command history to
+  hide malicious activity. Attackers clear history to remove evidence of their
+  actions. This pattern identifies history file deletion, HISTFILE manipulation,
+  and history command clearing.
+languages:
+  - bash
+detection_type: regex
+detection_logic: '(?:history\s+-c|>\s*~/\.bash_history|rm.*\.bash_history|unset\s+HISTFILE|export\s+HISTFILE=/dev/null|set\s+\+o\s+history)'
+severity: Medium
+mitre_technique: T1070.003
+confidence: 0.85
+category: defense_evasion
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-17"
+  updated: "2025-11-17"
+  references:
+    - "https://attack.mitre.org/techniques/T1070/003/"
+    - "https://www.gnu.org/software/bash/manual/html_node/Bash-History-Facilities.html"
+  tags:
+    - bash
+    - history
+    - defense-evasion
+    - anti-forensics
+  examples:
+    - "history -c && > ~/.bash_history"
+    - "unset HISTFILE; rm ~/.bash_history"
+    - "export HISTFILE=/dev/null"
+    - "set +o history; malicious_command; set -o history"

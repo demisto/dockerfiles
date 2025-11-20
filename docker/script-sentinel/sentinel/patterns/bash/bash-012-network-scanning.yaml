@@ -1,0 +1,36 @@
+# Bash Pattern: Network Scanning and Reconnaissance
+# Detects network scanning activities
+
+id: BASH-012
+name: Network Scanning and Reconnaissance
+description: |
+  Detects network scanning and reconnaissance activities using common tools.
+  Attackers perform network scans to identify targets, open ports, and services.
+  This pattern identifies nmap, masscan, ping sweeps, and port scanning attempts
+  using bash built-ins or common utilities.
+languages:
+  - bash
+detection_type: regex
+detection_logic: '(?:nmap|masscan|for.*in.*\{1\.\.254\}.*ping|nc\s+-z.*\d+-\d+|/dev/tcp/.*:\d+|/dev/udp/.*:\d+)'
+severity: Low
+mitre_technique: T1046
+confidence: 0.75
+category: discovery
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-17"
+  updated: "2025-11-17"
+  references:
+    - "https://attack.mitre.org/techniques/T1046/"
+    - "https://nmap.org/"
+  tags:
+    - bash
+    - network-scanning
+    - reconnaissance
+    - discovery
+  examples:
+    - "nmap -sS -p- 192.168.1.0/24"
+    - "for i in {1..254}; do ping -c 1 192.168.1.$i & done"
+    - "nc -zv 192.168.1.100 1-65535"
+    - "for port in {1..1024}; do echo > /dev/tcp/192.168.1.1/$port && echo $port open; done 2>/dev/null"

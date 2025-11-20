@@ -1,0 +1,35 @@
+# PowerShell Pattern: AMSI Bypass Attempts
+# Detects attempts to bypass Antimalware Scan Interface
+
+id: PS-010
+name: AMSI Bypass Attempts
+description: |
+  Detects attempts to bypass or disable the Antimalware Scan Interface (AMSI)
+  in PowerShell. AMSI provides script scanning capabilities to antivirus products.
+  Attackers commonly attempt to disable AMSI to evade detection when running
+  malicious PowerShell scripts. This pattern identifies common AMSI bypass techniques.
+languages:
+  - powershell
+detection_type: regex
+detection_logic: '(?i)(?:AmsiScanBuffer|amsiInitFailed|Reflection\.Assembly.*amsi|Management\.Automation\.AmsiUtils|amsiContext)'
+severity: High
+mitre_technique: T1562.001
+confidence: 0.95
+category: defense_evasion
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-17"
+  updated: "2025-11-17"
+  references:
+    - "https://attack.mitre.org/techniques/T1562/001/"
+    - "https://docs.microsoft.com/en-us/windows/win32/amsi/antimalware-scan-interface-portal"
+  tags:
+    - powershell
+    - amsi
+    - defense-evasion
+    - bypass
+  examples:
+    - "[Ref].Assembly.GetType('System.Management.Automation.AmsiUtils').GetField('amsiInitFailed','NonPublic,Static').SetValue($null,$true)"
+    - "$a=[Ref].Assembly.GetTypes();Foreach($b in $a){if($b.Name -like '*iUtils'){$c=$b}};$d=$c.GetFields('NonPublic,Static')"
+    - "[Runtime.InteropServices.Marshal]::WriteInt32([Ref].Assembly.GetType('System.Management.Automation.AmsiUtils').GetField('amsiContext',[Reflection.BindingFlags]'NonPublic,Static').GetValue($null),0x41414141)"
