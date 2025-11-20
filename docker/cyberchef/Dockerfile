@@ -19,4 +19,7 @@ RUN npm install -g --save cyberchef-node \
   && cd /usr/local/lib/node_modules/cyberchef-node \
   && npm install jsonpath-plus@latest
 
+WORKDIR /app 
+RUN npm update --depth 9999
+
 ENV NODE_PATH=/usr/local/lib/node_modules
