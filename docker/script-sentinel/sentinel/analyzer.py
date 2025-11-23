@@ -20,9 +20,11 @@ from .heuristics import HeuristicEngine
 from .obfuscation import detect_obfuscation
 from .ioc_extractor import IOCExtractor
 from .mitre import MITREMapper
-from .adk_agent import analyze_with_adk
 from .verdict import calculate_verdict
 from .extractor import ScriptExtractor, ExtractedScript
+
+# Lazy import for ADK (optional dependency)
+# Only imported when include_llm=True to avoid requiring google-adk for basic usage
 
 logger = logging.getLogger(__name__)
 
@@ -245,32 +247,43 @@ class ScriptAnalyzer:
                 logger.info("Running LLM semantic analysis with ADK")
                 llm_start_time = time.time()
                 try:
-                    # Run ADK analysis asynchronously
-                    llm_findings_result, adk_error = asyncio.run(
-                        analyze_with_adk(
-                            script_content=script_content,
-                            language=language,
-                            ast=ast,
-                            heuristic_findings=heuristic_findings,
-                            model=llm_model
-                        )
-                    )
-                    
-                    if llm_findings_result is not None:
-                        llm_findings = llm_findings_result
-                        llm_available = True
-                        logger.info(f"LLM analysis complete: {len(llm_findings)} findings")
-                    else:
-                        llm_error = adk_error
-                        logger.warning(f"LLM analysis unavailable: {adk_error}")
+                    # Lazy import ADK agent (only when needed)
+                    try:
+                        from .adk_agent import analyze_with_adk
+                    except ImportError as import_err:
+                        llm_error = f"ADK dependencies not installed: {str(import_err)}"
+                        logger.warning(llm_error)
                         logger.info("Falling back to heuristics-only mode")
+                        llm_duration = time.time() - llm_start_time
+                        # Continue without LLM analysis
+                        include_llm = False
+                    else:
+                        # Run ADK analysis asynchronously
+                        llm_findings_result, adk_error = asyncio.run(
+                            analyze_with_adk(
+                                script_content=script_content,
+                                language=language,
+                                ast=ast,
+                                heuristic_findings=heuristic_findings,
+                                model=llm_model
+                            )
+                        )
+                    
+                        if llm_findings_result is not None:
+                            llm_findings = llm_findings_result
+                            llm_available = True
+                            logger.info(f"LLM analysis complete: {len(llm_findings)} findings")
+                        else:
+                            llm_error = adk_error
+                            logger.warning(f"LLM analysis unavailable: {adk_error}")
+                            logger.info("Falling back to heuristics-only mode")
                         
                 except Exception as e:
                     llm_error = str(e)
                     logger.error(f"LLM analysis failed: {e}", exc_info=True)
                     logger.info("Falling back to heuristics-only mode")
                 
-                llm_duration = time.time() - llm_start_time
+                    llm_duration = time.time() - llm_start_time
             
             # Step 4: Generate overall verdict and confidence using verdict module
             logger.info("Calculating final verdict and confidence score")
