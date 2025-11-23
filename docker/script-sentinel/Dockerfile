@@ -6,7 +6,7 @@
 FROM demisto/python3:3.11.9.106968
 
 # Metadata
-LABEL maintainer="aperetz@paloaltonetworks.com"
+LABEL maintainer="aperetz@paloaltonetwroks.com"
 LABEL description="Script Sentinel - Malware analysis for PowerShell, Bash, and JavaScript"
 LABEL version="1.0.0"
 LABEL com.demisto.image.type="python"
@@ -32,9 +32,6 @@ RUN pip install --no-cache-dir --upgrade pip && \
 COPY sentinel/ ./sentinel/
 COPY xsiam_wrapper.py ./
 
-# Switch to non-root user
-USER sentinel
-
 # Set Python path
 ENV PYTHONPATH=/app:$PYTHONPATH
 
@@ -42,8 +39,5 @@ ENV PYTHONPATH=/app:$PYTHONPATH
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD python -c "import sentinel; import xsiam_wrapper" || exit 1
 
-# Use Python as entrypoint for XSIAM integration
-ENTRYPOINT ["python", "xsiam_wrapper.py"]
-
-# Default command (can be overridden)
-CMD ["--help"]
+# No ENTRYPOINT - let Demisto verification run commands directly
+# The XSIAM integration will call xsiam_wrapper.py explicitly
