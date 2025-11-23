@@ -12,7 +12,7 @@ def verify_wrapper_exists():
     """Test that the XSIAM wrapper module exists"""
     try:
         result = subprocess.run(
-            ['python', '-m', 'xsiam_wrapper', '--help'],
+            ['python3', '-m', 'xsiam_wrapper', '--help'],
             capture_output=True,
             text=True,
             timeout=10
@@ -32,12 +32,17 @@ def verify_wrapper_exists():
 
 def verify_dependencies():
     """Verify that all required dependencies are installed"""
+    # Required packages
     required_packages = [
         ('tree_sitter', 'Tree-sitter'),
-        ('google.generativeai', 'Google Generative AI'),
         ('yaml', 'PyYAML'),
         ('rich', 'Rich'),
         ('dotenv', 'python-dotenv'),
+    ]
+    
+    # Optional packages (LLM support)
+    optional_packages = [
+        ('google.generativeai', 'Google Generative AI'),
     ]
     
     all_ok = True
@@ -49,6 +54,14 @@ def verify_dependencies():
             print(f"✗ {name} missing: {e}")
             all_ok = False
     
+    # Check optional packages (don't fail if missing)
+    for package, name in optional_packages:
+        try:
+            __import__(package)
+            print(f"✓ {name} installed (optional)")
+        except ImportError:
+            print(f"ℹ {name} not installed (optional - LLM features disabled)")
+    
     return all_ok
 
 
@@ -58,7 +71,7 @@ def verify_basic_analysis():
     
     try:
         result = subprocess.run(
-            ['python', '-m', 'xsiam_wrapper',
+            ['python3', '-m', 'xsiam_wrapper',
              '--content', test_script,
              '--language', 'bash',
              '--paranoia-level', '1'],
@@ -102,7 +115,7 @@ document.addEventListener('keypress', function(e) {
     
     try:
         result = subprocess.run(
-            ['python', '-m', 'xsiam_wrapper',
+            ['python3', '-m', 'xsiam_wrapper',
              '--content', malicious_script,
              '--language', 'javascript',
              '--paranoia-level', '1'],
