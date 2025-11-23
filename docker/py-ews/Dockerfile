@@ -2,24 +2,17 @@
 #
 FROM demisto/python3-deb:3.12.12.5919128
 
-# END Docker file from https://raw.githubusercontent.com/docker-library/python/331890ef059fae05f84c652520b78c340526dc71/3.10/bullseye/Dockerfile
-
 # Basic linux utilities
 RUN apt-get update && apt-get install -y --no-install-recommends \
   procps \
 && rm -rf /var/lib/apt/lists/*
 
-# Upgrade all packages to latest
-RUN apt-get update && apt-get -y --no-install-recommends upgrade \
-&& rm -rf /var/lib/apt/lists/*
-
-#RUN rm CVE-2021-3177.diff
 COPY requirements.txt .
 
-#Install tools for building binary deps (will be reomved later on)
-RUN apt-get update && apt-get install -y -f --no-install-recommends --allow-downgrades \
+#Install tools for building binary deps (will be removed later on)
+RUN apt-get update && apt-get install -y -f --no-install-recommends \
     gcc \
-    libcom-err2=1.46.2-2+deb11u1 \
+    libcom-err2 \
     python3-dev \
     build-essential \
     wget \
