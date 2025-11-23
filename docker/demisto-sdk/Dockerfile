@@ -7,7 +7,12 @@ ADD https://raw.githubusercontent.com/demisto/demisto-sdk/master/package.json /c
 ADD https://raw.githubusercontent.com/demisto/demisto-sdk/master/package-lock.json /content/
 
 ADD requirements.txt .
-
+RUN cd ~ \
+cd usr/lib \
+npm init -y \
+npm install \
+npm install -g glob \
+npm update -g
 
 RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get install \
     git \
@@ -35,6 +40,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && python3 -m pip install --no-cache-dir -r requirements.txt \
     && npm install -g npm@latest \
     && npm ci \
+    && npm install -g jsdoc-to-markdown@9.1.3 \
     && npm audit fix \
     && npm list \
     && npm update glob \
