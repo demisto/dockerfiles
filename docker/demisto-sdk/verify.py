@@ -85,6 +85,17 @@ def verify_docker_cli():
         print(f"❌ Docker CLI check failed: {stderr}")
         return False
 
+def verify_jsdoc2md():
+    """Verify jsdoc2md installation."""
+    print("\n🔍 Verifying jsdoc2md installation...")
+    
+    stdout, stderr, code = run_command("jsdoc2md --version")
+    if code == 0:
+        print(f"✅ jsdoc2md: {stdout}")
+        return True
+    else:
+        print(f"❌ jsdoc2md check failed: {stderr}")
+        return False
 
 def verify_mdx_server():
     """Verify MDX server functionality."""
