@@ -6,6 +6,12 @@ WORKDIR /content
 ADD https://raw.githubusercontent.com/demisto/demisto-sdk/master/package.json /content/
 ADD https://raw.githubusercontent.com/demisto/demisto-sdk/master/package-lock.json /content/
 
+
+RUN apt-get update && apt-get install -y jq \
+    && jq '.devDependencies.npm = "^11.6.3" | .devDependencies["jsdoc-to-markdown"] = "9.1.3"' /content/package.json > /tmp/package.json.tmp \
+    && mv /tmp/package.json.tmp /content/package.json
+
+
 ADD requirements.txt .
 
 
@@ -35,7 +41,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && python3 -m pip install --no-cache-dir -r requirements.txt \
     && npm install -g npm@latest \
     && npm ci \
-    && npm install -g jsdoc-to-markdown@9.1.3 \
+    && npm audit fix \
     && npm list \
     && demisto-sdk --version
 
