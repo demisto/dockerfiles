@@ -7,7 +7,6 @@ Verify Script Sentinel Docker image
 import tree_sitter
 import yaml
 import rich
-import dotenv
 
 # Verify sentinel modules can be imported
 from sentinel.analyzer import ScriptAnalyzer
