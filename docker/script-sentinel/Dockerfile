@@ -3,7 +3,7 @@
 
 # Use official Demisto Python 3 base image (Alpine-based)
 # Check latest version at: https://hub.docker.com/r/demisto/python3/tags
-FROM demisto/python3:3.11.9.109876
+FROM demisto/python3:3.11.9.106968
 
 # Metadata
 LABEL maintainer="aperetz@paloaltonetwroks.com"
