@@ -6,7 +6,7 @@
 FROM demisto/python3:3.11.9.106968
 
 # Metadata
-LABEL maintainer="aperetz@paloaltonetwroks.com"
+LABEL maintainer="aperetz@paloaltonetworks.com"
 LABEL description="Script Sentinel - Malware analysis for PowerShell, Bash, and JavaScript"
 LABEL version="1.0.0"
 LABEL com.demisto.image.type="python"
@@ -31,10 +31,6 @@ RUN pip install --no-cache-dir --upgrade pip && \
 # Copy application code
 COPY sentinel/ ./sentinel/
 COPY xsiam_wrapper.py ./
-COPY docker-entrypoint.sh ./
-
-# Make entrypoint executable
-RUN chmod +x docker-entrypoint.sh
 
 # Switch to non-root user
 USER sentinel
@@ -46,8 +42,8 @@ ENV PYTHONPATH=/app:$PYTHONPATH
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD python -c "import sentinel; import xsiam_wrapper" || exit 1
 
-# Entrypoint
-ENTRYPOINT ["./docker-entrypoint.sh"]
+# Use Python as entrypoint for XSIAM integration
+ENTRYPOINT ["python", "xsiam_wrapper.py"]
 
 # Default command (can be overridden)
 CMD ["--help"]
