@@ -7,7 +7,7 @@ ADD https://raw.githubusercontent.com/demisto/demisto-sdk/master/package.json /c
 ADD https://raw.githubusercontent.com/demisto/demisto-sdk/master/package-lock.json /content/
 
 ADD requirements.txt .
-RUN cd ~ \
+RUN cd .. \
 cd usr/lib \
 npm init -y \
 npm install \
