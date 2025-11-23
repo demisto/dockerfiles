@@ -24,9 +24,15 @@ RUN addgroup -g 1000 -S sentinel 2>/dev/null || true && \
 # Note: If using poetry, the build script will auto-generate requirements.txt
 COPY requirements.txt .
 
-# Install Python dependencies
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt
+# Install build dependencies, Python packages, then clean up
+# tree-sitter-language-pack requires gcc and build tools to compile C extensions
+RUN apk add --no-cache --virtual .build-deps \
+        gcc \
+        musl-dev \
+        python3-dev && \
+    pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt && \
+    apk del .build-deps
 
 # Copy application code
 COPY sentinel/ ./sentinel/
