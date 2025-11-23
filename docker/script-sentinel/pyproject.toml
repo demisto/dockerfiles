@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "script-sentinel"
+version = "1.0.0"
+description = "Malware analysis for PowerShell, Bash, and JavaScript scripts"
+authors = ["Script Sentinel Team <script-sentinel@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+tree-sitter = "0.21.3"
+google-generativeai = "0.8.3"
+google-ai-generativelanguage = "0.6.10"
+PyYAML = "6.0.2"
+python-dotenv = "1.0.1"
+rich = "13.9.4"
+google-auth = "2.36.0"
+google-api-core = "2.23.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

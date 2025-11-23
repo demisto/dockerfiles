@@ -1,0 +1,32 @@
+# Bash Pattern: Network Traffic Capture
+# Detects use of tcpdump or similar packet capture tools
+
+id: BASH-023
+name: Network Traffic Capture
+description: |
+  Detects use of tcpdump, tshark, or similar packet capture tools to monitor
+  network traffic. While legitimate for network troubleshooting, attackers use
+  packet capture to intercept credentials, session tokens, and sensitive data
+  transmitted over the network. This pattern identifies network sniffing activity.
+languages:
+  - bash
+detection_type: regex
+detection_logic: '(?:tcpdump|tshark|dumpcap)\s+.*(?:-i\s+\w+|-w\s+[\w/.-]+|--interface)'
+severity: Low
+mitre_technique: T1040
+confidence: 0.65
+category: credential_access
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-01-19"
+  references:
+    - "https://attack.mitre.org/techniques/T1040/"
+    - "https://www.tcpdump.org/manpages/tcpdump.1.html"
+  tags:
+    - network-sniffing
+    - packet-capture
+    - credential-access
+  examples:
+    - "tcpdump -i any -w /tmp/capture.pcap"
+    - "tshark --interface eth0 -w output.pcap"

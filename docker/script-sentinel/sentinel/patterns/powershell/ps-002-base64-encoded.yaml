@@ -1,0 +1,30 @@
+# PowerShell Pattern: Base64 Encoded Commands
+# Detects base64-encoded command parameters
+
+id: PS-002
+name: Base64 Encoded Command
+description: |
+  Detects PowerShell commands with base64-encoded parameters (-EncodedCommand or -enc).
+  Attackers frequently use base64 encoding to obfuscate malicious payloads and evade
+  detection. This pattern catches both full and abbreviated parameter names.
+languages:
+  - powershell
+detection_type: regex
+detection_logic: '(?i)-enc(?:odedcommand)?\s+[A-Za-z0-9+/=]{20,}'
+severity: High
+mitre_technique: T1027
+confidence: 0.85
+category: obfuscation
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-01-15"
+  references:
+    - "https://attack.mitre.org/techniques/T1027/"
+  tags:
+    - powershell
+    - obfuscation
+    - base64
+  examples:
+    - "powershell.exe -enc JABjAG8AbQBtAGEAbgBkAA=="
+    - "powershell -EncodedCommand SQBuAHYAbwBrAGUALQBXAGUAYgBSAGUAcQB1AGUAcwB0AA=="
