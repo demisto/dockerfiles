@@ -12,7 +12,7 @@ RUN apt-get update \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-ENV MODEL_FILENAME="Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf"
+ENV MODEL_FILENAME="tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf"
 ENV MODEL_PATH="/app/models/${MODEL_FILENAME}"
 
 RUN mkdir -p /app/models
