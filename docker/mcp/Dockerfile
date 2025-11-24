@@ -1,4 +1,3 @@
-# Last modified: 2025-10-23T12:44:56.987941+00:00
 
 FROM demisto/python3:3.12.12.5490952
 
