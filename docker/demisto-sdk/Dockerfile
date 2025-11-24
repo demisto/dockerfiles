@@ -7,12 +7,6 @@ ADD https://raw.githubusercontent.com/demisto/demisto-sdk/master/package.json /c
 ADD https://raw.githubusercontent.com/demisto/demisto-sdk/master/package-lock.json /content/
 
 ADD requirements.txt .
-# RUN cd .. \
-# cd usr/lib \
-# npm init -y \
-# npm install \
-# npm install -g glob \
-# npm update -g
 
 RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get install \
     git \
@@ -28,8 +22,8 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     xz-utils tk-dev libffi-dev liblzma-dev zsh \
     libffi-dev python3-dev gfortran g++ pkg-config libhdf5-dev \
     -y \
-    # # install node - node distributions: https://github.com/nodesource/distributions
-    # && curl -fsSL https://deb.nodesource.com/setup_24.x | bash - \
+    # install node - node distributions: https://github.com/nodesource/distributions
+    && curl -fsSL https://deb.nodesource.com/setup_24.x | bash - \
     && apt update \
     && apt-get install -y nodejs \
     # install docker
