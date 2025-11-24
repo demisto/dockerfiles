@@ -1,1 +1,1 @@
-pip freeze | grep parse-emails== | grep -o -E '[0-9]+\.[0-9]+(\.[0-9]+)?'
+pip freeze | grep parse-emails | grep -o -E '[0-9]{1,2}\.[0-9]{1,2}(\.[0-9]+)?'
