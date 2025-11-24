@@ -1,5 +1,4 @@
 # Last modified: 2025-11-23T20:35:08.938602+00:00
-
 FROM demisto/python3-deb:3.12.12.5919128
 
 RUN mkdir /model
