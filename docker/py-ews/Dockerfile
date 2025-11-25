@@ -15,7 +15,6 @@ COPY Pipfile .
 
 #Install tools for building binary deps (will be removed later on)
 RUN apt-get update && apt-get install -y -f --no-install-recommends \
-    pipenv \
     gcc \
     python3-dev \
     build-essential \
@@ -33,7 +32,8 @@ RUN apt-get update && apt-get install -y -f --no-install-recommends \
     comerr-dev \
     libkrb5-dev \
     krb5-multidev \
-&& pipenv install --system\
+&& pip install --no-cache-dir pipenv \
+&& pipenv install --system --deploy \
 && apt-get purge -y --auto-remove \
   gcc \
   python3-dev \
@@ -45,4 +45,5 @@ RUN apt-get update && apt-get install -y -f --no-install-recommends \
   libssl-dev \
   comerr-dev \
   krb5-multidev \
-&& rm -rf /var/lib/apt/lists/*
+&& rm -rf /var/lib/apt/lists/* \
+&& pip uninstall -y pipenv
