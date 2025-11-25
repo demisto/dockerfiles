@@ -15,7 +15,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 #RUN rm CVE-2021-3177.diff
 COPY requirements.txt .
 
-#Install tools for building binary deps (will be reomved later on)
+#Install tools for building binary deps (will be removed later on)
 RUN apt-get update && apt-get install -y -f --no-install-recommends \
     gcc \
     python3-dev \
@@ -33,6 +33,7 @@ RUN apt-get update && apt-get install -y -f --no-install-recommends \
     libcom-err2=1.47.0-2+b2 \
     comerr-dev \
     libkrb5-dev \
+    krb5-multidev \
 && pip install --no-cache-dir -r requirements.txt \
 && apt-get purge -y --auto-remove \
   gcc \
@@ -41,8 +42,8 @@ RUN apt-get update && apt-get install -y -f --no-install-recommends \
   git \
   wget \
   libffi-dev \
-  wget \
   libxml2-dev \
   libssl-dev \
-  libkrb5-dev \
+  comerr-dev \
+  krb5-multidev \
 && rm -rf /var/lib/apt/lists/*
