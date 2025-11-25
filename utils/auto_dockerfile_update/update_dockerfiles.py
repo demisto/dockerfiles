@@ -371,9 +371,8 @@ def cleanup_outdated_autoupdate_branches(git_repo: Repo, base_image: str, latest
                 if branch_version < latest_version:
                     print(f"  Deleting outdated branch: {branch_name} (targets {branch_target_version} < {latest_tag_name})")
                     
-                    # Delete remote branch - remove the "autoupdate/" prefix for the delete command
-                    delete_branch_name = branch_name.replace("autoupdate/", "")
-                    git_repo.git.push("origin", "--delete", delete_branch_name)
+                    # Delete remote branch - use the full branch name as it appears remotely
+                    git_repo.git.push("origin", "--delete", branch_name)
                     print(f"  ✓ Deleted remote branch: {branch_name}")
                     
                 elif branch_target_version == latest_tag_name:
