@@ -36,11 +36,11 @@ def is_docker_file_outdated(
     if current_tag_version < latest_tag_version:
         return True
     elif current_tag == latest_tag and not no_timestamp_updates:
-        if last_updated and dateutil.parser.parse(last_updated) > dateutil.parser.parse(
-            dockerfile.get("last_modified")
-        ):
+        if last_updated:
+            tag_last_updated_dt = dateutil.parser.parse(last_updated).replace(tzinfo=timezone.utc)
+            dockerfile_last_modified_dt = dateutil.parser.parse(dockerfile.get("last_modified")).replace(tzinfo=timezone.utc)
             # if the latest tag update date is newer than the dockerfile
-            return True
+            return dockerfile_last_modified_dt < tag_last_updated_dt
 
     return False
 
