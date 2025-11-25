@@ -1,8 +1,6 @@
 
 FROM demisto/python3-deb:3.12.12.5919128
 
-# END Docker file from https://raw.githubusercontent.com/docker-library/python/331890ef059fae05f84c652520b78c340526dc71/3.10/bullseye/Dockerfile
-
 # Basic linux utilities
 RUN apt-get update && apt-get install -y --no-install-recommends \
   procps \
@@ -12,11 +10,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 && rm -rf /var/lib/apt/lists/*
 
-#RUN rm CVE-2021-3177.diff
-COPY requirements.txt .
+COPY Pipfile.lock .
+COPY Pipfile .
 
 #Install tools for building binary deps (will be removed later on)
 RUN apt-get update && apt-get install -y -f --no-install-recommends \
+    pipenv \
     gcc \
     python3-dev \
     build-essential \
@@ -34,7 +33,7 @@ RUN apt-get update && apt-get install -y -f --no-install-recommends \
     comerr-dev \
     libkrb5-dev \
     krb5-multidev \
-&& pip install --no-cache-dir -r requirements.txt \
+&& pipenv install --system\
 && apt-get purge -y --auto-remove \
   gcc \
   python3-dev \
