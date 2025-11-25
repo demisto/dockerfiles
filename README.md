@@ -90,6 +90,7 @@ The script `docker/build_docker.sh` is used to build all modified Docker images.
 If you want to test how the script detects commit changes: Make sure you are working on a branch and the changes are committed. If you haven't committed the changes and want to run a local build you can run the script with a image name (which corresponds to a directory name) to the run the build on. For example:
 
 ```bash
+DOCKER_LOGIN_DONE=yes
 ./docker/build_docker.sh ldap
 ```
 
