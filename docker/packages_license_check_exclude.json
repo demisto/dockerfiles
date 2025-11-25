@@ -1,5 +1,5 @@
 {
-    "description": "Document specifies packages which can be exluded from license verification. As our code doesn't actually link to them. If no docker_images are provided the package is ignored for all images",
+    "description": "Document specifies packages which can be excluded from license verification. As our code doesn't actually link to them. If no docker_images are provided the package is ignored for all images",
     "packages": {
         "jinja2-ansible-filters": {
             "docker_images": ["tidy"],
@@ -54,6 +54,10 @@
         "incydr": {
             "docker_images": ["py42"],
             "notes": "The package has MIT license, however it is not formatted properly in Pypi"
+        },
+        "ujson": {
+            "docker_images": ["demisto-sdk"],
+            "notes": "The package has BSD license, however their license was removed from the setup file by their pre-commit see https://github.com/ultrajson/ultrajson/commit/6f767c02a651ec5fa0974cb467fd6a4b8040285e, but they have a BSD license in their license file see https://github.com/ultrajson/ultrajson/blob/main/LICENSE.txt"
         },
          "wrapt": {
             "docker_images": ["readpdf"],
