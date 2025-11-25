@@ -26,6 +26,8 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && curl -fsSL https://deb.nodesource.com/setup_24.x | bash - \
     && apt update \
     && apt-get install -y nodejs \
+    && npm update \
+    && npm update -g \
     # install docker
     && curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg \
     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian \
