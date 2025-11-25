@@ -29,9 +29,7 @@ RUN apt-get update && apt-get install -y -f --no-install-recommends \
     libssl-dev \
 && apt-get install -y -f --no-install-recommends --allow-downgrades \
     libcom-err2=1.47.0-2+b2 \
-    comerr-dev \
     libkrb5-dev \
-    krb5-multidev \
 && pip install --no-cache-dir pipenv \
 && pipenv install --system --deploy \
 && apt-get purge -y --auto-remove \
@@ -43,7 +41,5 @@ RUN apt-get update && apt-get install -y -f --no-install-recommends \
   libffi-dev \
   libxml2-dev \
   libssl-dev \
-  comerr-dev \
-  krb5-multidev \
 && rm -rf /var/lib/apt/lists/* \
 && pip uninstall -y pipenv
