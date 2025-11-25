@@ -41,5 +41,6 @@ RUN apt-get update && apt-get install -y -f --no-install-recommends \
   libffi-dev \
   libxml2-dev \
   libssl-dev \
+  libkrb5-dev \
 && rm -rf /var/lib/apt/lists/* \
 && pip uninstall -y pipenv
