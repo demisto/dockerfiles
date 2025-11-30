@@ -37,7 +37,7 @@ RUN set -ex \
 	&& gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "$GPG_KEY" \
 	&& gpg --batch --verify python.tar.xz.asc python.tar.xz \
 	&& { command -v gpgconf > /dev/null && gpgconf --kill all || :; } \
-	&& rm -rf "$GNUPGHOME" python.tar.xz.asc \
+	&& rm -rf "$GNUPGHOME" python.tar.xz.asc || true \
 	&& mkdir -p /usr/src/python \
 	&& tar -xJC /usr/src/python --strip-components=1 -f python.tar.xz \	
 	&& rm python.tar.xz \
