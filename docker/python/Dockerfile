@@ -31,8 +31,8 @@ RUN set -ex \
 		xz \
 		patch \
 	\
-	&& wget -O python.tar.xz "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz" \
-	&& wget -O python.tar.xz.asc "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz.asc" \
+	&& wget --no-check-certificate -O python.tar.xz "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz" \
+	&& wget --no-check-certificate -O python.tar.xz.asc "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz.asc" \
 	&& export GNUPGHOME="$(mktemp -d)" \
 	&& gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "$GPG_KEY" \
 	&& gpg --batch --verify python.tar.xz.asc python.tar.xz \
@@ -146,7 +146,7 @@ ENV PYTHON_GET_PIP_SHA256 40ee07eac6674b8d60fce2bbabc148cf0e2f1408c167683f110fd6
 
 RUN set -ex; \
 	\
-	wget -O get-pip.py "$PYTHON_GET_PIP_URL"; \
+	wget --no-check-certificate -O get-pip.py "$PYTHON_GET_PIP_URL"; \
 	echo "$PYTHON_GET_PIP_SHA256 *get-pip.py" | sha256sum -c -; \
 	\
 	python get-pip.py \
