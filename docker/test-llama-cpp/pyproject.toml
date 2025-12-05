@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "test-llama-cpp"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+license = "ISC"
+
+
+[tool.poetry.dependencies]
+python = "~3.12"
+llama-cpp-python = "^0.3.16"
+PyJWT = "^2.8.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
