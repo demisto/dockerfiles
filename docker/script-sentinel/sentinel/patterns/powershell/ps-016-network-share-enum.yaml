@@ -1,0 +1,36 @@
+# PowerShell Pattern: Network Share Enumeration
+# Detects network share discovery and enumeration
+
+id: PS-016
+name: Network Share Enumeration
+description: |
+  Detects PowerShell commands used to enumerate network shares and mapped drives.
+  Attackers perform network share enumeration during reconnaissance to identify
+  accessible resources and potential lateral movement targets. This pattern
+  identifies Get-SmbShare, net share, and WMI-based share enumeration.
+languages:
+  - powershell
+detection_type: regex
+detection_logic: '(?i)(?:Get-SmbShare|Get-WmiObject.*Win32_Share|net\s+share|net\s+use|Get-PSDrive.*FileSystem)'
+severity: Low
+mitre_technique: T1135
+confidence: 0.7
+category: discovery
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-17"
+  updated: "2025-11-17"
+  references:
+    - "https://attack.mitre.org/techniques/T1135/"
+    - "https://docs.microsoft.com/en-us/powershell/module/smbshare/get-smbshare"
+  tags:
+    - powershell
+    - network-share
+    - discovery
+    - reconnaissance
+  examples:
+    - "Get-SmbShare | Where-Object {$_.Name -notlike '*$'}"
+    - "Get-WmiObject -Class Win32_Share -ComputerName DC01"
+    - "net share \\\\fileserver\\share"
+    - "Get-PSDrive -PSProvider FileSystem | Where-Object {$_.DisplayRoot -like '\\\\*'}"

@@ -1,0 +1,35 @@
+# JavaScript Pattern: document.write() XSS Vector
+# Detects use of document.write() with user input
+
+id: JS-005
+name: document.write() XSS Vector
+description: |
+  Detects use of document.write() which can be exploited for Cross-Site Scripting
+  (XSS) attacks when used with untrusted input. This method directly writes HTML
+  to the document and can execute scripts if user-controlled data is included.
+  Modern security best practices discourage its use.
+languages:
+  - javascript
+detection_type: regex
+detection_logic: '\bdocument\.write(?:ln)?\s*\('
+severity: Medium
+mitre_technique: T1059.007
+confidence: 0.7
+category: injection
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-17"
+  updated: "2025-11-17"
+  references:
+    - "https://attack.mitre.org/techniques/T1059/007/"
+    - "https://developer.mozilla.org/en-US/docs/Web/API/Document/write"
+  tags:
+    - javascript
+    - xss
+    - document-write
+    - injection
+  examples:
+    - "document.write('<script>' + userInput + '</script>');"
+    - "document.writeln(untrustedData);"
+    - "document.write('<img src=x onerror=' + payload + '>');"

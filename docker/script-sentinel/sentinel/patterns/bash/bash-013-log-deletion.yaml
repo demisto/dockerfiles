@@ -1,0 +1,36 @@
+# Bash Pattern: Log File Deletion and Tampering
+# Detects attempts to delete or tamper with log files
+
+id: BASH-013
+name: Log File Deletion and Tampering
+description: |
+  Detects attempts to delete, clear, or tamper with system log files to hide
+  malicious activity. Attackers target log files to remove evidence of their
+  actions. This pattern identifies deletion or truncation of common log files
+  in /var/log and other logging directories.
+languages:
+  - bash
+detection_type: regex
+detection_logic: '(?:rm.*(?:/var/log|/var/adm|\.log)|>\s*/var/log/.*\.log|truncate.*(?:/var/log|\.log)|shred.*(?:/var/log|\.log))'
+severity: High
+mitre_technique: T1070.002
+confidence: 0.9
+category: defense_evasion
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-17"
+  updated: "2025-11-17"
+  references:
+    - "https://attack.mitre.org/techniques/T1070/002/"
+    - "https://attack.mitre.org/techniques/T1070/"
+  tags:
+    - bash
+    - log-deletion
+    - defense-evasion
+    - anti-forensics
+  examples:
+    - "rm -rf /var/log/auth.log /var/log/syslog"
+    - "> /var/log/apache2/access.log"
+    - "truncate -s 0 /var/log/messages"
+    - "shred -vfz -n 10 /var/log/secure"

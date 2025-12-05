@@ -1,0 +1,33 @@
+# JavaScript Pattern: Suspicious Long Strings
+# Detects unusually long string literals that may indicate data exfiltration or obfuscation
+
+id: JS-029
+name: Suspicious Long Strings
+description: |
+  Detects JavaScript code containing unusually long string literals (1000+ characters).
+  Attackers use very long strings for data exfiltration, buffer overflow attempts,
+  or to hide malicious payloads. Legitimate code rarely contains such long string
+  literals in a single statement.
+languages:
+  - javascript
+detection_type: regex
+detection_logic: '["''][A-Za-z0-9+/=]{1000,}["'']|const\s+\w+\s*=\s*["''][^"'']{1000,}["'']'
+severity: High
+mitre_technique: T1048
+confidence: 0.80
+category: exfiltration
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-19"
+  updated: "2025-11-19"
+  references:
+    - "https://attack.mitre.org/techniques/T1048/"
+  tags:
+    - javascript
+    - exfiltration
+    - long-strings
+    - data-exfiltration
+  examples:
+    - 'const longString = "AAAA...AAAA"; // 10KB+ string'
+    - 'const data = "VGhpcyBpcyBhIHZlcnkgbG9uZyBiYXNlNjQgc3RyaW5n..."; // Base64 data'

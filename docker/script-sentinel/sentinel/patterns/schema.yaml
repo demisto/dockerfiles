@@ -1,0 +1,144 @@
+# Pattern Definition Schema
+# Version: 1.0
+# 
+# This file documents the schema for security pattern definitions.
+# All pattern YAML files must conform to this schema.
+
+# Pattern Definition Structure
+pattern:
+  # Required Fields
+  # ===============
+  
+  # Unique pattern identifier (format: LANG-NNN)
+  # Examples: PS-001, BASH-042, JS-003
+  id: string  # Required, must match ^[A-Z]+-\d+$
+  
+  # Human-readable pattern name
+  name: string  # Required
+  
+  # Detailed description of what the pattern detects
+  description: string  # Required
+  
+  # List of supported languages
+  # Valid values: powershell, bash, javascript
+  languages: [string]  # Required, must be non-empty list
+  
+  # Detection method type
+  # Valid values: ast, regex
+  detection_type: string  # Required
+  
+  # The actual detection logic
+  # - For 'regex': A valid Python regex pattern
+  # - For 'ast': An AST query or node type to match
+  detection_logic: string  # Required
+  
+  # Severity level
+  # Valid values: High, Medium, Low
+  severity: string  # Required
+  
+  # MITRE ATT&CK technique ID
+  # Format: T1234 or T1234.001
+  mitre_technique: string  # Required
+  
+  # Confidence score (0.0 to 1.0)
+  # Higher values indicate more reliable detection
+  confidence: float  # Required, 0.0 <= value <= 1.0
+  
+  # Optional Fields
+  # ===============
+  
+  # Pattern category for grouping
+  # Examples: command_injection, obfuscation, credential_exposure
+  category: string  # Optional, default: 'general'
+  
+  # Whether pattern is active
+  enabled: boolean  # Optional, default: true
+  
+  # Additional metadata
+  metadata:
+    # Examples of useful metadata:
+    author: string  # Pattern author
+    created: string  # Creation date (ISO 8601)
+    updated: string  # Last update date (ISO 8601)
+    references: [string]  # URLs to documentation
+    tags: [string]  # Additional tags
+    examples: [string]  # Example code snippets that match
+
+# Example Pattern Definitions
+# ============================
+
+# Example 1: PowerShell Invoke-Expression (AST-based)
+---
+id: PS-001
+name: Invoke-Expression Usage
+description: |
+  Detects use of Invoke-Expression cmdlet, which executes arbitrary strings
+  as PowerShell commands. This is commonly used in malicious scripts for
+  code execution and obfuscation.
+languages:
+  - powershell
+detection_type: ast
+detection_logic: "command_expression[command_name='Invoke-Expression']"
+severity: High
+mitre_technique: T1059.001
+confidence: 0.9
+category: command_injection
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-01-15"
+  references:
+    - "https://attack.mitre.org/techniques/T1059/001/"
+  tags:
+    - powershell
+    - code-execution
+    - obfuscation
+
+# Example 2: Base64 Encoded Commands (Regex-based)
+---
+id: PS-002
+name: Base64 Encoded Command
+description: |
+  Detects PowerShell commands with base64-encoded parameters, often used
+  to obfuscate malicious payloads.
+languages:
+  - powershell
+detection_type: regex
+detection_logic: '(?i)-enc(?:odedcommand)?\s+[A-Za-z0-9+/=]{20,}'
+severity: High
+mitre_technique: T1027
+confidence: 0.85
+category: obfuscation
+enabled: true
+
+# Example 3: Bash Reverse Shell (Regex-based)
+---
+id: BASH-001
+name: Bash Reverse Shell Pattern
+description: |
+  Detects common bash reverse shell patterns using /dev/tcp or nc (netcat).
+  These are frequently used for establishing remote access.
+languages:
+  - bash
+detection_type: regex
+detection_logic: '(?:/dev/tcp/|nc\s+-[lve]+\s+\d+|bash\s+-i\s+>&\s+/dev/tcp/)'
+severity: High
+mitre_technique: T1059.004
+confidence: 0.95
+category: command_injection
+
+# Example 4: JavaScript eval() Usage (AST-based)
+---
+id: JS-001
+name: eval() Function Call
+description: |
+  Detects use of eval() function which executes arbitrary JavaScript code.
+  This is a common vector for code injection attacks.
+languages:
+  - javascript
+detection_type: ast
+detection_logic: "call_expression[function='eval']"
+severity: High
+mitre_technique: T1059.007
+confidence: 0.8
+category: command_injection

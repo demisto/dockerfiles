@@ -1,0 +1,33 @@
+# PowerShell Pattern: Registry Monitoring
+# Detects continuous registry monitoring activity
+
+id: PS-026
+name: Registry Monitoring Activity
+description: |
+  Detects continuous monitoring of Windows Registry keys using Get-ItemProperty
+  or similar cmdlets in loops. While legitimate for system administration,
+  attackers use registry monitoring to detect security tool installation,
+  track persistence mechanisms, or identify configuration changes. This pattern
+  identifies surveillance activity targeting the registry.
+languages:
+  - powershell
+detection_type: regex
+detection_logic: '(?:HKLM|HKCU|Registry).*(?:while|for|foreach).*(?:Get-ItemProperty|Get-Item|Compare-Object)'
+severity: Low
+mitre_technique: T1012
+confidence: 0.65
+category: discovery
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-01-19"
+  references:
+    - "https://attack.mitre.org/techniques/T1012/"
+    - "https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.management/get-itemproperty"
+  tags:
+    - registry-monitoring
+    - surveillance
+    - discovery
+  examples:
+    - "while ($true) { Get-ItemProperty -Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run' }"
+    - "Compare-Object $baseline (Get-ItemProperty -Path $regPath)"

