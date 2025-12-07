@@ -1,0 +1,36 @@
+# JavaScript Pattern: Service Worker Abuse
+# Detects malicious service worker registration and usage
+
+id: JS-022
+name: Service Worker Abuse
+description: |
+  Detects registration and use of service workers that could be used for
+  malicious purposes including request interception, data exfiltration,
+  and persistent browser-based attacks. Service workers run in the background
+  and can intercept all network requests, making them powerful attack vectors.
+languages:
+  - javascript
+detection_type: regex
+detection_logic: 'navigator\.serviceWorker\.register|self\.addEventListener\s*\(\s*["\x27]fetch|self\.addEventListener\s*\(\s*["\x27]install|self\.addEventListener\s*\(\s*["\x27]activate|event\.respondWith|self\.skipWaiting|self\.clients\.claim'
+severity: High
+mitre_technique: T1059.007
+confidence: 0.85
+category: persistence
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-19"
+  updated: "2025-11-19"
+  references:
+    - "https://attack.mitre.org/techniques/T1059/007/"
+    - "https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API"
+  tags:
+    - javascript
+    - service-worker
+    - persistence
+    - interception
+  examples:
+    - "navigator.serviceWorker.register('/sw.js')"
+    - "self.addEventListener('fetch', function(event) {})"
+    - "event.respondWith(fetch(event.request))"
+    - "self.skipWaiting()"

@@ -1,0 +1,33 @@
+# JavaScript Pattern: eval() Function Usage
+# Detects use of eval() for code execution
+
+id: JS-001
+name: eval() Function Call
+description: |
+  Detects use of the eval() function which executes arbitrary JavaScript code from
+  strings. This is a common vector for code injection attacks and is considered
+  dangerous. Attackers often use eval() to execute obfuscated or dynamically
+  generated malicious code.
+languages:
+  - javascript
+detection_type: regex
+detection_logic: '\beval\s*\('
+severity: High
+mitre_technique: T1059.007
+confidence: 0.8
+category: command_injection
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-01-15"
+  references:
+    - "https://attack.mitre.org/techniques/T1059/007/"
+    - "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval"
+  tags:
+    - javascript
+    - code-execution
+    - eval
+  examples:
+    - "eval(userInput)"
+    - "eval('alert(1)')"
+    - "var result = eval(dynamicCode)"

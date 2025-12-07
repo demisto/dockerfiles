@@ -1,0 +1,32 @@
+# Bash Pattern: Port Scanning
+# Detects port scanning using /dev/tcp or similar techniques
+
+id: BASH-024
+name: Port Scanning Activity
+description: |
+  Detects port scanning using Bash's /dev/tcp pseudo-device or similar techniques.
+  Attackers use port scanning to discover open services and potential attack vectors
+  on target systems. This pattern identifies network reconnaissance activity that
+  could indicate preparation for further attacks.
+languages:
+  - bash
+detection_type: regex
+detection_logic: '(?:/dev/tcp/|/dev/udp/).*(?:\{1\.\.\d+\}|\$\{?\w+\}?)'
+severity: Low
+mitre_technique: T1046
+confidence: 0.65
+category: discovery
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-01-19"
+  references:
+    - "https://attack.mitre.org/techniques/T1046/"
+    - "https://www.gnu.org/software/bash/manual/html_node/Redirections.html"
+  tags:
+    - port-scanning
+    - network-reconnaissance
+    - discovery
+  examples:
+    - "for port in {1..1024}; do echo >/dev/tcp/$HOST/$port; done"
+    - "timeout 1 bash -c \"echo >/dev/tcp/192.168.1.1/$port\""

