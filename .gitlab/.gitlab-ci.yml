@@ -1,7 +1,7 @@
 variables:
-  CURRENT_BRANCH_NAME: "test_ssl_connection_python2"
+  CURRENT_BRANCH_NAME: $INFRA_BRANCH
 
 include:
   - file: "/.gitlab/ci/dockerfiles/.gitlab-ci.yml"
-    ref: "test_ssl_connection_python2"
+    ref: $INFRA_BRANCH
     project: "${CI_PROJECT_NAMESPACE}/infra"
