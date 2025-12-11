@@ -16,4 +16,5 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 && apt-get purge -y --auto-remove \
   gcc \
   python3-dev \
+# Last modified: 2025-12-11T15:15:00.653594+00:00
 && rm -rf /var/lib/apt/lists/*
