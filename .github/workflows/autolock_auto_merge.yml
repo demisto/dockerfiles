@@ -1,5 +1,5 @@
 name: Autolock PR Auto-merge
-on: pull_request # testing, will revert to pull_request_target
+on: pull_request_target
 
 permissions:
   pull-requests: write
@@ -31,7 +31,7 @@ jobs:
         run: |
           echo "Approving PR and enabling auto-merge"
           gh pr review --approve "$PR_URL"
-          # gh pr merge --auto --squash "$PR_URL"
+          gh pr merge --auto --squash "$PR_URL"
       
       - name: Skip automerge
         if: steps.validate_branch.outputs.valid_branch != 'true'
