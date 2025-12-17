@@ -1,0 +1,39 @@
+name: Autolock PR Auto-merge
+on: pull_request # testing, will revert to pull_request_target
+
+permissions:
+  pull-requests: write
+  contents: write
+
+jobs:
+  autolock-automerge:
+    runs-on: ubuntu-latest
+    if: ${{ github.actor == 'BEAdi' }}
+    steps:
+      - name: Validate branch name
+        id: validate_branch
+        env:
+          BRANCH_NAME: ${{ github.head_ref }}
+        run: |
+          if [[ "$BRANCH_NAME" == autolock/* ]]; then
+            echo "valid_branch=true" >> $GITHUB_OUTPUT
+            echo "Branch name '$BRANCH_NAME' starts with 'autolock/' - proceeding with automerge"
+          else
+            echo "valid_branch=false" >> $GITHUB_OUTPUT
+            echo "Branch name '$BRANCH_NAME' does not start with 'autolock/' - skipping automerge"
+          fi
+      
+      - name: Approve and enable auto-merge
+        if: steps.validate_branch.outputs.valid_branch == 'true'
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Approving PR and enabling auto-merge"
+          gh pr review --approve "$PR_URL"
+          # gh pr merge --auto --squash "$PR_URL"
+      
+      - name: Skip automerge
+        if: steps.validate_branch.outputs.valid_branch != 'true'
+        run: |
+          echo "Skipping automerge - branch name does not match required pattern 'autolock/*'"
