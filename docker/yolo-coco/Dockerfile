@@ -3,7 +3,7 @@ COPY weights /yolo-coco
 RUN cd yolo-coco \
   && cat yolov3.weights.aa yolov3.weights.ab yolov3.weights.ac yolov3.weights.ad yolov3.weights.ae > yolov3.weights
 
-FROM demisto/opencv:1.0.0.4855524
+FROM demisto/opencv:1.0.0.5736532
 
 COPY requirements.txt .
 COPY yolo-coco /yolo-coco/.

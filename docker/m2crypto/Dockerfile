@@ -1,9 +1,9 @@
-# Last modified: 2024-11-19T12:46:59.068894+00:00
-FROM demisto/python3:3.11.10.116949 AS base
+# Last modified: 2025-12-09T12:45:24.410187+00:00
+FROM demisto/python3:3.12.12.6204436 AS base
 
 RUN apk --update add --no-cache swig
 
-RUN apk --update add --no-cache --virtual .build-dependencies gcc \
+RUN apk --update add --no-cache --virtual .build-dependencies gcc g++ \
   musl-dev python3-dev libffi-dev openssl-dev build-base wget git
 
 FROM base AS requirements_gen
