@@ -28,7 +28,7 @@ RUN apt-get update && apt-get install -y -f --no-install-recommends \
     libxslt-dev \
     libssl-dev \
 && apt-get install -y -f --no-install-recommends --allow-downgrades \
-    libcom-err2=1.47.0-2+b2 \
+    libcom-err2 \
     libkrb5-dev \
 && pip install --no-cache-dir pipenv \
 && pipenv install --system --deploy \
