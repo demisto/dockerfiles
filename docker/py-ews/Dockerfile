@@ -1,5 +1,5 @@
 
-FROM demisto/python3-deb:3.12.7.117935
+FROM demisto/python3-deb:3.12.12.5919128
 
 # Basic linux utilities
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -23,12 +23,13 @@ RUN apt-get update && apt-get install -y -f --no-install-recommends \
     libxml2 \
     libxslt1.1 \
 	libkrb5-3 \
+    libgssapi-krb5-2 \
     libffi-dev \
     libxml2-dev \
     libxslt-dev \
     libssl-dev \
 && apt-get install -y -f --no-install-recommends --allow-downgrades \
-    libcom-err2 \
+    libcom-err2=1.47.0-2+b2 \
     libkrb5-dev \
 && pip install --no-cache-dir pipenv \
 && pipenv install --system --deploy \
@@ -44,3 +45,5 @@ RUN apt-get update && apt-get install -y -f --no-install-recommends \
   libkrb5-dev \
 && rm -rf /var/lib/apt/lists/* \
 && pip uninstall -y pipenv
+
+RUN sed -i 's/openssl_conf = openssl_init/openssl_conf = openssl_init\n\n[openssl_init]\nproviders = provider_sect\n\n[provider_sect]\ndefault = default_sect\nlegacy = legacy_sect\n\n[default_sect]\nactivate = 1\n\n[legacy_sect]\nactivate = 1/g' /etc/ssl/openssl.cnf
