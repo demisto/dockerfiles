@@ -1,4 +1,4 @@
-FROM demisto/python3-deb:3.12.12.5919128
+FROM demisto/python3-deb:3.12.12.6269782
 RUN apt-get update && apt-get upgrade -y && apt-get -t bookworm-backports install  \
     gcc g++ wget git pkg-config \
     make autoconf automake libtool libpng-dev  \
@@ -18,4 +18,5 @@ done \
 && apt-get purge -y --auto-remove gcc g++ pkg-config make autoconf automake libtool libpng-dev git \
 libjpeg-dev libtiff5-dev zlib1g-dev libleptonica-dev libicu-dev libpango1.0-dev \
 && rm -rf /build \
+# Last modified: 2025-12-21T10:26:59.431789+00:00
 && tesseract --version --list-langs
