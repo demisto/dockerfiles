@@ -1,6 +1,6 @@
-# Last modified: 2025-11-19T04:37:46.403588+00:00
+# Last modified: 2025-12-22T11:51:17.307255+00:00
 
-FROM demisto/python3-deb:3.12.12.5919128
+FROM demisto/python3-deb:3.12.12.6269782
 
 RUN mkdir /model
 COPY ./model_docker.pkl /model/model_docker.pkl
