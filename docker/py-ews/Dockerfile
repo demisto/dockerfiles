@@ -23,7 +23,6 @@ RUN apt-get update && apt-get install -y -f --no-install-recommends \
     libxml2 \
     libxslt1.1 \
 	libkrb5-3 \
-    libgssapi-krb5-2 \
     libffi-dev \
     libxml2-dev \
     libxslt-dev \
@@ -45,5 +44,3 @@ RUN apt-get update && apt-get install -y -f --no-install-recommends \
   libkrb5-dev \
 && rm -rf /var/lib/apt/lists/* \
 && pip uninstall -y pipenv
-
-RUN sed -i 's/openssl_conf = openssl_init/openssl_conf = openssl_init\n\n[openssl_init]\nproviders = provider_sect\nssl_conf = ssl_sect\n\n[provider_sect]\ndefault = default_sect\nlegacy = legacy_sect\n\n[default_sect]\nactivate = 1\n\n[legacy_sect]\nactivate = 1\n\n[ssl_sect]\nsystem_default = system_default_sect\n\n[system_default_sect]\nCipherString = DEFAULT@SECLEVEL=1/g' /etc/ssl/openssl.cnf
