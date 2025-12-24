@@ -30,10 +30,10 @@ python-dateutil = "*"
 pytz = "*"
 requests = ">=2.32.3"
 requests-kerberos = "*"
-requests-ntlm = "==1.1.0" # lock because of https://github.com/requests/requests-ntlm/issues/136
+requests-ntlm = "*" # lock because of https://github.com/requests/requests-ntlm/issues/136 was solved, unlocking from 1.1.0
 six = "*"
 tzlocal = "*"
-urllib3 = "<2"
+urllib3 = "*"
 
 [requires]
 python_version = "3.12"
