@@ -1,6 +1,6 @@
-# Last modified: 2025-10-22T11:06:10.373714+00:00
+# Last modified: 2025-12-17T00:46:55.001890+00:00
 
-FROM demisto/crypto:1.0.0.5490413
+FROM demisto/crypto:1.0.0.6308375
 
 COPY requirements.txt .
 
