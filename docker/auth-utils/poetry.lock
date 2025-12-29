@@ -243,14 +243,14 @@ typing-extensions = ">=4.0.0"
 
 [[package]]
 name = "azure-kusto-data"
-version = "6.0.0"
+version = "6.0.1"
 description = "Kusto Data Client"
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "azure_kusto_data-6.0.0-py3-none-any.whl", hash = "sha256:90d59cc84c0591ef1a5406377727dcf18b481128ee12c60252bd1ed50a7abc64"},
-    {file = "azure_kusto_data-6.0.0.tar.gz", hash = "sha256:3ccadd1ff746c02a10ef9425ffeebefa29adf393c2446ae2f7959309d2749aab"},
+    {file = "azure_kusto_data-6.0.1-py3-none-any.whl", hash = "sha256:8d4e7adbe122ea08d5f0053ec37f294171ff734e8d77f36983a29694485bc347"},
+    {file = "azure_kusto_data-6.0.1.tar.gz", hash = "sha256:1d5e04d273376330b58d6d11b055aeadda748cd1ecee1117fdc1b8329e76cb75"},
 ]
 
 [package.dependencies]
@@ -262,7 +262,7 @@ python-dateutil = ">=2.9.0"
 requests = ">=2.32.4"
 
 [package.extras]
-async = ["aiohttp (>=3.12.15)", "asgiref (>=3.9.1)"]
+aio = ["aiohttp (>=3.12.15)", "asgiref (>=3.9.1)"]
 pandas = ["pandas (>=2.3.1)"]
 
 [[package]]
