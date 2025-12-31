@@ -7,7 +7,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "~3.12"
-parse-emails = "*"
+parse-emails = {git = "https://github.com/demisto/parse-emails.git", branch = "Fix-double-base64-decoding-of-embedded-email-attachments"}
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
