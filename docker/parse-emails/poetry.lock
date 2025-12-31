@@ -514,31 +514,35 @@ files = [
 
 [[package]]
 name = "parse-emails"
-version = "0.1.47"
+version = "0.1.48"
 description = "Parses an email message file and extracts the data from it."
 optional = false
-python-versions = "<3.13,>=3.9"
+python-versions = ">=3.9,<3.13"
 groups = ["main"]
-files = [
-    {file = "parse_emails-0.1.47-py3-none-any.whl", hash = "sha256:2d6059a87af3ffa4f7b4fd4a73a7286d1527c03aaa9423c744a1ed2012f14519"},
-    {file = "parse_emails-0.1.47.tar.gz", hash = "sha256:53e473d57b2d7319b0dbbb0fb07ce277758ac0e36b51857230f067b829b00b4f"},
-]
+files = []
+develop = false
 
 [package.dependencies]
 chardet = "*"
 compressed_rtf = "*"
 datetime = "*"
-jira = ">=3.8.0,<4.0.0"
-junitparser = ">=3.1.2,<4.0.0"
+jira = "^3.8.0"
+junitparser = "^3.1.2"
 olefile = "*"
 pip = "*"
 pyopenssl = "*"
 pypandoc = "*"
 pytest = "*"
-python-gitlab = ">=3.0.0,<4.0.0"
+python-gitlab = "^3.0.0"
 python-magic = "*"
 RTFDE = "*"
 slack-sdk = "*"
+
+[package.source]
+type = "git"
+url = "https://github.com/demisto/parse-emails.git"
+reference = "Fix-double-base64-decoding-of-embedded-email-attachments"
+resolved_reference = "ea474dc37e845427e55af89c4f06caae64413f0f"
 
 [[package]]
 name = "pcodedmp"
@@ -937,4 +941,4 @@ testing = ["coverage[toml]", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.1"
 python-versions = "~3.12"
-content-hash = "cd4176b22f7892af36687b66f41ee22ed29a551e9253b24d9515d79a5a2d74dc"
+content-hash = "dc4e2a402acdef48d16ce4d20abb96a21993c8a67d27b98f60a82c0277763b0e"
