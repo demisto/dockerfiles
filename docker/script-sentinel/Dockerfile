@@ -124,7 +124,7 @@ RUN mkdir -p /app/temp && \
 RUN chmod +x /app/ml_models/hornet_genvector /app/ml_models/powershell/genpsvector 2>/dev/null || true
 
 # Switch to non-root user
-USER sentinel
+# USER sentinel
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
