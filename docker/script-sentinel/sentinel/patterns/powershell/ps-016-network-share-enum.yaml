@@ -1,0 +1,40 @@
+# PowerShell Pattern: Network Share Enumeration
+# Detects remote network share discovery and enumeration
+
+id: PS-016
+name: Network Share Enumeration
+description: |
+  Detects remote share enumeration targeting other computers. Local Get-SmbShare
+  and net share are common for admin tasks. Pattern focuses on remote enumeration
+  via -ComputerName parameter or UNC paths which indicates network reconnaissance
+  for lateral movement rather than local share management.
+languages:
+  - powershell
+detection_type: regex
+# Focus on remote enumeration - local share listing is common
+detection_logic: '(?i)(?:Get-SmbShare[^\n]*-ComputerName|Get-WmiObject[^\n]*Win32_Share[^\n]*-ComputerName|net\s+view\s+\\\\|Invoke-Command[^\n]*Get-SmbShare)'
+severity: Low
+mitre_technique: T1135
+confidence: 0.80
+category: discovery
+enabled: true
+paranoia_levels:
+  - 2
+  - 3
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-17"
+  updated: "2025-11-17"
+  references:
+    - "https://attack.mitre.org/techniques/T1135/"
+    - "https://docs.microsoft.com/en-us/powershell/module/smbshare/get-smbshare"
+  tags:
+    - powershell
+    - network-share
+    - discovery
+    - reconnaissance
+  examples:
+    - "Get-SmbShare | Where-Object {$_.Name -notlike '*$'}"
+    - "Get-WmiObject -Class Win32_Share -ComputerName DC01"
+    - "net share \\\\fileserver\\share"
+    - "Get-PSDrive -PSProvider FileSystem | Where-Object {$_.DisplayRoot -like '\\\\*'}"

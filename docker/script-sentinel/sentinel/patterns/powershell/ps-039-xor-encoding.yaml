@@ -1,0 +1,38 @@
+# PowerShell Pattern: XOR Encoding Detection
+# Detects XOR encoding used for obfuscation
+
+id: PS-039
+name: XOR Encoding Detection
+description: |
+  Detects use of XOR bitwise operations for data encoding and obfuscation.
+  Attackers frequently use XOR encoding to hide malicious payloads, strings,
+  or commands. This pattern identifies suspicious XOR operations, especially
+  when used in loops or with byte arrays, which are common indicators of
+  encoded payload decryption in malicious scripts.
+languages:
+  - powershell
+detection_type: regex
+detection_logic: '(?i)(?:-bxor\s+0x[0-9a-fA-F]+|ForEach(?:-Object)?\s*\{[^}]*-bxor|\[byte\[\]\].*-bxor|\.GetBytes.*-bxor)'
+severity: High
+mitre_technique: T1027
+confidence: 0.85
+category: obfuscation
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-25"
+  updated: "2025-11-25"
+  references:
+    - "https://attack.mitre.org/techniques/T1027/"
+    - "https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_arithmetic_operators"
+  tags:
+    - powershell
+    - obfuscation
+    - xor-encoding
+    - encryption
+    - payload-decoding
+  examples:
+    - "$decoded = $bytes | ForEach-Object { $_ -bxor 0x42 }"
+    - "[byte[]]$payload | % { $_ -bxor 0xAA }"
+    - "$key = 0x5A; $data -bxor $key"
+    - "ForEach($b in $encrypted) { $b -bxor $xorKey }"

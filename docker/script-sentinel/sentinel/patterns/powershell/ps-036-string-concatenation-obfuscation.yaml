@@ -1,0 +1,44 @@
+# PowerShell Pattern: String Concatenation Obfuscation
+# Detects excessive string concatenation used for obfuscation
+#
+# DISABLED: This pattern overlaps with the obfuscation engine's detect_string_concatenation_powershell()
+# which provides better context-aware detection (checks for cmdlet fragments, execution patterns,
+# variable concatenation for command building).
+# See: sentinel/obfuscation.py - detect_string_concatenation_powershell()
+
+id: PS-036
+name: String Concatenation Obfuscation
+description: |
+  Detects excessive string concatenation (5+ segments) to obfuscate commands.
+  Short concatenation (2-4 parts) is common for path building and string formatting.
+  Pattern requires 5+ consecutive single-char or short string concatenations which
+  strongly indicates deliberate command obfuscation rather than normal string building.
+languages:
+  - powershell
+detection_type: regex
+# Require 5+ concatenations - 3-4 is common for paths like $dir + '\' + $file + '.txt'
+detection_logic: '(?:["\x27]\w{1,3}["\x27]\s*\+\s*){5,}|(?:\+\s*["\x27]\w{1,3}["\x27]\s*){5,}'
+severity: Medium
+mitre_technique: T1027
+confidence: 0.80
+category: obfuscation
+enabled: false  # Disabled - handled by obfuscation engine with better context
+paranoia_levels:
+  - 1
+  - 2
+  - 3
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-25"
+  updated: "2025-11-25"
+  references:
+    - "https://attack.mitre.org/techniques/T1027/"
+  tags:
+    - powershell
+    - obfuscation
+    - string-manipulation
+    - concatenation
+  examples:
+    - "'I' + 'n' + 'v' + 'o' + 'k' + 'e' + '-' + 'E' + 'x' + 'p' + 'r' + 'e' + 's' + 's' + 'i' + 'o' + 'n'"
+    - "$cmd = 'In' + 'vo' + 'ke' + '-Ex' + 'pre' + 'ssion'"
+    - "'po' + 'wer' + 'sh' + 'ell' + '.exe'"

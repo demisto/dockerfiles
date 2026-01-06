@@ -1,0 +1,42 @@
+# JavaScript Pattern: innerHTML Assignment XSS
+# Detects innerHTML assignments that may lead to XSS
+
+id: JS-006
+name: innerHTML Assignment XSS Risk
+description: |
+  Detects direct assignment to innerHTML property which can lead to Cross-Site
+  Scripting vulnerabilities when used with untrusted data. Unlike textContent,
+  innerHTML parses and executes HTML/JavaScript, making it dangerous with
+  user-controlled input. Focus on assignments involving variables, user input,
+  or suspicious HTML tags to reduce false positives from static content.
+languages:
+  - javascript
+detection_type: regex
+# Focus on innerHTML with variables or dangerous patterns, not static strings
+# Matches: innerHTML = variable, innerHTML = something.value, innerHTML with script/event
+detection_logic: '\.innerHTML\s*=\s*[a-zA-Z_$]|\.innerHTML\s*=.*(?:\.value|document\.|window\.|<script|<iframe|onerror=|onload=)'
+severity: Low
+mitre_technique: T1059.007
+confidence: 0.55
+category: injection
+enabled: true
+paranoia_levels:
+  - 1
+  - 2
+  - 3
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-17"
+  updated: "2025-11-17"
+  references:
+    - "https://attack.mitre.org/techniques/T1059/007/"
+    - "https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML"
+  tags:
+    - javascript
+    - xss
+    - innerhtml
+    - dom-manipulation
+  examples:
+    - "element.innerHTML = userInput;"
+    - "div.innerHTML = '<img src=x onerror=alert(1)>';"
+    - "document.getElementById('content').outerHTML = maliciousHTML;"

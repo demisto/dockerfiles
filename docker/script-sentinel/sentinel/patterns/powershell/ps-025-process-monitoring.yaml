@@ -1,0 +1,36 @@
+# PowerShell Pattern: Process Monitoring
+# Detects continuous process monitoring activity
+
+id: PS-025
+name: Process Monitoring Activity
+description: |
+  Detects monitoring of security tool processes or waiting for process termination.
+  General Get-Process with CPU/Memory filters is common for system monitoring.
+  Pattern focuses on monitoring specific security tools or using Wait-Process which
+  indicates surveillance for security tool detection or waiting for targets.
+languages:
+  - powershell
+detection_type: regex
+# Focus on security tool names or wait patterns - general Get-Process is too common
+detection_logic: '(?i)(?:Get-Process[^\n]*(?:defender|antivirus|kaspersky|norton|mcafee|sophos|crowdstrike|sentinel)|while[^\n]*Get-Process[^\n]*-Name[^\n]*(?:lsass|winlogon|csrss)|Wait-Process[^\n]*-Name)'
+severity: Low
+mitre_technique: T1057
+confidence: 0.75
+category: discovery
+enabled: true
+paranoia_levels:
+  - 2
+  - 3
+metadata:
+  author: Script Sentinel Team
+  created: "2025-01-19"
+  references:
+    - "https://attack.mitre.org/techniques/T1057/"
+    - "https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.management/get-process"
+  tags:
+    - process-monitoring
+    - surveillance
+    - discovery
+  examples:
+    - "while ($true) { Get-Process | Where-Object {$_.CPU -gt 50} }"
+    - "foreach ($proc in Get-Process) { $proc.WorkingSet64 }"

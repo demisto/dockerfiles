@@ -1,0 +1,35 @@
+# Example obfuscation detection pattern
+
+id: OBF-001
+name: Base64 Encoded Command
+description: |
+  Detects Base64 encoded PowerShell commands using the -EncodedCommand
+  parameter. This is a common obfuscation technique used by attackers
+  to hide malicious payloads. The pattern matches the parameter followed
+  by a substantial Base64 string (50+ characters).
+languages:
+  - powershell
+detection_type: regex
+detection_logic: '(?i)-enc(odedcommand)?\s+[A-Za-z0-9+/=]{50,}'
+severity: Medium
+mitre_technique: T1027
+confidence: 0.75
+category: obfuscation
+enabled: true
+indicators:
+  - base64_encoding
+  - command_line_obfuscation
+metadata:
+  author: "Script Sentinel Team"
+  created: "2025-01-15"
+  obfuscation_category: "encoding"
+  tags:
+    - obfuscation
+    - base64
+    - encoded-command
+  examples:
+    - "powershell -enc SW52b2tlLUV4cHJlc3Npb24..."
+    - "powershell.exe -EncodedCommand VwByAGkAdABlAC0ASABvAHMAdA..."
+  deobfuscation_hint: |
+    Decode Base64 string using:
+    [System.Text.Encoding]::Unicode.GetString([Convert]::FromBase64String($encoded))
