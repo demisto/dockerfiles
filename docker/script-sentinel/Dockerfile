@@ -90,7 +90,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libssl3 \
     libre2-10 \
     libgomp1 \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    # Create python symlink for CI compatibility
+    && ln -s /usr/bin/python3 /usr/bin/python
 
 # Copy Python packages from builder
 COPY --from=builder /usr/local/lib/python3.12/dist-packages /usr/local/lib/python3.12/dist-packages
