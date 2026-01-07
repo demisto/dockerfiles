@@ -342,10 +342,14 @@ class MLScorer(BaseScorer):
                 lang_arg = 'js' if language == 'javascript' else 'vbs'
                 cmd = [str(binary_path), lang_arg, script_path, temp_dir]
             
+            # Pass environment variables to subprocess for library paths
+            env = os.environ.copy()
+            
             result = subprocess.run(
                 cmd,
                 capture_output=True,
-                timeout=30
+                timeout=30,
+                env=env
             )
 
             if result.returncode != 0:
