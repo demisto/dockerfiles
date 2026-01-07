@@ -29,6 +29,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libre2-10 \
     libssl3 \
     libboost-locale1.83.0 \
+    libboost-thread1.83.0 \
+    libboost-system1.83.0 \
     # Download tool for libre2-5
     wget \
     && rm -rf /var/lib/apt/lists/*
@@ -82,6 +84,8 @@ COPY --from=builder /usr/lib/x86_64-linux-gnu/libssl.so.1.1* /usr/lib/x86_64-lin
 COPY --from=builder /usr/lib/x86_64-linux-gnu/libcrypto.so.1.1* /usr/lib/x86_64-linux-gnu/
 COPY --from=builder /usr/lib/x86_64-linux-gnu/libboost_locale.so.1.71.0 /usr/lib/x86_64-linux-gnu/
 COPY --from=builder /usr/lib/x86_64-linux-gnu/libboost_locale.so.1.83.0 /usr/lib/x86_64-linux-gnu/
+COPY --from=builder /usr/lib/x86_64-linux-gnu/libboost_thread.so.1.83.0 /usr/lib/x86_64-linux-gnu/
+COPY --from=builder /usr/lib/x86_64-linux-gnu/libboost_system.so.1.83.0 /usr/lib/x86_64-linux-gnu/
 
 # Install minimal runtime dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -90,6 +94,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libssl3 \
     libre2-10 \
     libgomp1 \
+    libboost-thread1.83.0 \
+    libboost-system1.83.0 \
     && rm -rf /var/lib/apt/lists/* \
     # Create python symlink for CI compatibility
     && ln -s /usr/bin/python3 /usr/bin/python

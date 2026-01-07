@@ -235,7 +235,7 @@ def format_iocs_for_xdr(iocs_dict: Dict[str, List[Dict[str, Any]]]) -> List[Dict
     return xdr_iocs
 
 
-def run_sentinel_analysis(script_path: str, paranoia_level: int = 1, 
+def run_sentinel_analysis(script_path: str, paranoia_level: int = 1,
                          include_llm: bool = False) -> Tuple[Optional[Dict], Optional[str]]:
     """
     Run Script Sentinel analysis using the existing CLI.
@@ -249,6 +249,8 @@ def run_sentinel_analysis(script_path: str, paranoia_level: int = 1,
         Tuple of (analysis_result_dict, error_message)
     """
     try:
+        import os
+        
         # Build command
         cmd = [
             'python3', '-m', 'sentinel.main',
@@ -260,12 +262,22 @@ def run_sentinel_analysis(script_path: str, paranoia_level: int = 1,
         if include_llm:
             cmd.append('--enable-llm')
         
-        # Execute Script Sentinel CLI
+        # Prepare environment with ML paths
+        env = os.environ.copy()
+        env.update({
+            'PYTHONPATH': '/app',
+            'ML_MODELS_DIR': '/app/ml_models',
+            'LD_LIBRARY_PATH': '/usr/lib/x86_64-linux-gnu:/app/ml_models',
+            'TMPDIR': '/app/temp'
+        })
+        
+        # Execute Script Sentinel CLI with proper environment
         result = subprocess.run(
             cmd,
             capture_output=True,
             text=True,
-            timeout=300  # 5 minute timeout
+            timeout=300,  # 5 minute timeout
+            env=env  # Pass environment variables
         )
         
         if result.returncode != 0:
@@ -324,23 +336,53 @@ def main():
         if entry_id:
             # Retrieve file from War Room upload
             try:
+                import os
+                import shutil
+                
                 file_entry = demisto.getFilePath(entry_id)
                 original_file = file_entry['path']
                 original_filename = file_entry.get('name', 'unknown')
-                
-                # Read file content
-                with open(original_file, 'r', encoding='utf-8') as f:
-                    script_content = f.read()
                 
                 # Preserve original file extension for Core Sentinel detection
                 # Core Sentinel handles: .ps1, .sh, .js, .html, .xml, .sct, etc.
                 file_suffix = Path(original_filename).suffix or '.txt'
                 
-                # Create temp file with ORIGINAL extension
-                temp_file = tempfile.NamedTemporaryFile(mode='w', suffix=file_suffix, delete=False)
-                temp_file.write(script_content)
+                # Create temp file in /tmp with proper permissions
+                temp_file = tempfile.NamedTemporaryFile(
+                    mode='w',
+                    suffix=file_suffix,
+                    delete=False,
+                    dir='/tmp'
+                )
+                temp_path = temp_file.name
                 temp_file.close()
-                script_file = temp_file.name
+                
+                # Copy file instead of reading (preserves permissions better)
+                try:
+                    shutil.copy2(original_file, temp_path)
+                except PermissionError:
+                    # If copy fails, try reading content and writing
+                    try:
+                        # Try reading as text
+                        with open(original_file, 'r', encoding='utf-8') as f:
+                            script_content = f.read()
+                    except (PermissionError, UnicodeDecodeError):
+                        # Last resort: read as binary
+                        with open(original_file, 'rb') as f:
+                            script_content = f.read().decode('utf-8', errors='ignore')
+                    
+                    # Write to temp file
+                    with open(temp_path, 'w', encoding='utf-8') as f:
+                        f.write(script_content)
+                
+                # Ensure file is readable
+                os.chmod(temp_path, 0o644)
+                
+                # Read content for hashing
+                with open(temp_path, 'r', encoding='utf-8') as f:
+                    script_content = f.read()
+                
+                script_file = temp_path
                     
             except Exception as e:
                 return_error(f'Failed to retrieve file from War Room (entry_id: {entry_id}): {e}')
@@ -610,7 +652,7 @@ def main():
         hr_output = f"""### Script Sentinel Analysis Results
 
 **Verdict:** {verdict.upper()}
-**Confidence:** {confidence:.0%}
+**Confidence:** {confidence:.2%}
 **Threat Score:** {threat_score}/100
 
 #### Script Information
@@ -642,12 +684,30 @@ def main():
         
         # Add scorer breakdown if available
         if scorer_scores:
+            # Get raw scores from explanations for better display
+            ml_raw_score = 0.0
+            ml_confidence = 0.0
+            
+            # Parse ML explanation to get raw score
+            for explanation in explanations.get('ml', []):
+                if 'ML score:' in explanation:
+                    # Extract: "ML score: 70.7/100 for powershell"
+                    import re
+                    match = re.search(r'ML score: ([\d.]+)/100', explanation)
+                    if match:
+                        ml_raw_score = float(match.group(1))
+                if 'ML prediction:' in explanation:
+                    # Extract: "ML prediction: 0.912 (threshold: 0.85)"
+                    match = re.search(r'ML prediction: ([\d.]+)', explanation)
+                    if match:
+                        ml_confidence = float(match.group(1))
+            
             hr_output += f"""- **Severity:** {scorer_scores.get('severity', 0):.1f} (weight: {scorer_weights.get('severity', 0.30):.0%})
 - **Co-occurrence:** {scorer_scores.get('cooccurrence', 0):.1f} (weight: {scorer_weights.get('cooccurrence', 0.20):.0%})
 - **Kill Chain:** {scorer_scores.get('killchain', 0):.1f} (weight: {scorer_weights.get('killchain', 0.15):.0%})
 - **Content:** {scorer_scores.get('content', 0):.1f} (weight: {scorer_weights.get('content', 0.10):.0%})
 - **YARA:** {scorer_scores.get('yara', 0):.1f} (weight: {scorer_weights.get('yara', 0.15):.0%})
-- **ML:** {scorer_scores.get('ml', 0):.1f} (weight: {scorer_weights.get('ml', 0.10):.0%})
+- **ML:** {ml_raw_score:.1f}/100 (confidence: {ml_confidence:.1%}, weight: {scorer_weights.get('ml', 0.10):.0%})
 """
         
         hr_output += f"""
