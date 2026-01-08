@@ -138,6 +138,7 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONPATH=/app
 ENV ML_MODELS_DIR=/app/ml_models
 ENV TMPDIR=/app/temp
+ENV LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:/app/ml_models
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \

@@ -3,6 +3,9 @@
 Verify Script Sentinel Docker image for XSIAM deployment
 Tests that all required dependencies are installed and importable
 Includes ML and YARA verification
+
+Version: 1.0.1 - Added LD_LIBRARY_PATH verification for ML binary compatibility
+Last Updated: 2026-01-08
 """
 
 import sys
@@ -141,12 +144,35 @@ def verify_directories():
     """Verify required directories exist"""
     errors = []
     
+    # Main directories
     directories = [
         "/app/sentinel",
         "/app/config",
         "/app/rules",
         "/app/ml_models",
-        "/app/temp"
+        "/app/temp",
+        "/app/data",
+        # Sentinel subdirectories
+        "/app/sentinel/scorers",
+        "/app/sentinel/reporters",
+        "/app/sentinel/utils",
+        # Rules subdirectories
+        "/app/rules/public",
+        "/app/rules/staging",
+        "/app/rules/templates",
+        # ML models subdirectories
+        "/app/ml_models/js",
+        "/app/ml_models/vbs",
+        "/app/ml_models/powershell",
+        # Rules language subdirectories
+        "/app/rules/public/bash",
+        "/app/rules/public/javascript",
+        "/app/rules/public/powershell",
+        "/app/rules/public/python",
+        "/app/rules/public/webshells",
+        "/app/rules/custom/bash",
+        "/app/rules/custom/javascript",
+        "/app/rules/custom/powershell"
     ]
     
     for directory in directories:
@@ -154,6 +180,33 @@ def verify_directories():
             print(f"✓ {directory} exists")
         else:
             errors.append(f"✗ {directory} not found")
+    
+    return errors
+
+def verify_environment():
+    """Verify required environment variables are set"""
+    errors = []
+    
+    # Check LD_LIBRARY_PATH for ML binary compatibility
+    ld_library_path = os.environ.get('LD_LIBRARY_PATH', '')
+    if '/usr/lib/x86_64-linux-gnu' in ld_library_path and '/app/ml_models' in ld_library_path:
+        print(f"✓ LD_LIBRARY_PATH is set correctly: {ld_library_path}")
+    else:
+        errors.append(f"✗ LD_LIBRARY_PATH not set correctly. Current: {ld_library_path}")
+    
+    # Check ML_MODELS_DIR
+    ml_models_dir = os.environ.get('ML_MODELS_DIR', '')
+    if ml_models_dir == '/app/ml_models':
+        print(f"✓ ML_MODELS_DIR is set correctly: {ml_models_dir}")
+    else:
+        errors.append(f"✗ ML_MODELS_DIR not set correctly. Current: {ml_models_dir}")
+    
+    # Check PYTHONPATH
+    pythonpath = os.environ.get('PYTHONPATH', '')
+    if '/app' in pythonpath:
+        print(f"✓ PYTHONPATH is set correctly: {pythonpath}")
+    else:
+        errors.append(f"✗ PYTHONPATH not set correctly. Current: {pythonpath}")
     
     return errors
 
@@ -177,7 +230,11 @@ def main():
     directory_errors = verify_directories()
     print()
     
-    all_errors = import_errors + binary_errors + directory_errors
+    print("Checking environment variables...")
+    env_errors = verify_environment()
+    print()
+    
+    all_errors = import_errors + binary_errors + directory_errors + env_errors
     
     print("=" * 60)
     
