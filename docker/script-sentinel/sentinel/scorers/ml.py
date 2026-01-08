@@ -89,12 +89,21 @@ class MLScorer(BaseScorer):
         ml_config = config.get('ml_scorer', {})
         self.enabled = ml_config.get('enabled', self.DEFAULT_CONFIG['enabled'])
 
-        # Get models directory from config or environment variable
-        models_dir = ml_config.get('models_dir') or os.environ.get('ML_MODELS_DIR')
+        # Get models directory - prioritize environment variable over config
+        # This ensures we use absolute paths in containerized environments
+        models_dir = os.environ.get('ML_MODELS_DIR') or ml_config.get('models_dir')
         if not models_dir:
             models_dir = self.DEFAULT_CONFIG['models_dir']
 
         self.models_dir = Path(models_dir)
+        
+        # Store the source of models_dir for diagnostics
+        if os.environ.get('ML_MODELS_DIR'):
+            self._models_dir_source = f"environment variable ML_MODELS_DIR"
+        elif ml_config.get('models_dir'):
+            self._models_dir_source = f"config file"
+        else:
+            self._models_dir_source = f"default config"
 
         # Load configuration
         self.supported_languages = set(
@@ -147,9 +156,12 @@ class MLScorer(BaseScorer):
             self._init_diagnostics.append(f"✗ Models directory not found: {self.models_dir}")
             self._init_diagnostics.append(f"  Checked path: {self.models_dir.absolute()}")
             self._init_diagnostics.append(f"  Directory exists: {self.models_dir.exists()}")
+            self._init_diagnostics.append(f"  Source: {self._models_dir_source}")
+            self._init_diagnostics.append(f"  ML_MODELS_DIR env: {os.environ.get('ML_MODELS_DIR', 'NOT SET')}")
             return
 
         self._init_diagnostics.append(f"✓ Models directory found: {self.models_dir}")
+        self._init_diagnostics.append(f"  Source: {self._models_dir_source}")
 
         loaded_count = 0
         for language in self.supported_languages:
