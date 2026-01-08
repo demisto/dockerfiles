@@ -773,7 +773,6 @@ def main():
             for explanation in explanations.get('ml', []):
                 if 'ML score:' in explanation:
                     # Extract: "ML score: 70.7/100 for powershell"
-                    import re
                     match = re.search(r'ML score: ([\d.]+)/100', explanation)
                     if match:
                         ml_raw_score = float(match.group(1))
