@@ -250,6 +250,15 @@ def run_sentinel_analysis(script_path: str, paranoia_level: int = 1,
     """
     try:
         import os
+        import sys
+        
+        # DEBUG: Print environment info
+        debug_info = []
+        debug_info.append("=== XSIAM DEBUG: Script Sentinel Execution ===")
+        debug_info.append(f"Script path: {script_path}")
+        debug_info.append(f"Paranoia level: {paranoia_level}")
+        debug_info.append(f"Python version: {sys.version}")
+        debug_info.append(f"Python executable: {sys.executable}")
         
         # Build command
         cmd = [
@@ -262,14 +271,39 @@ def run_sentinel_analysis(script_path: str, paranoia_level: int = 1,
         if include_llm:
             cmd.append('--enable-llm')
         
+        debug_info.append(f"Command: {' '.join(cmd)}")
+        
         # Prepare environment with ML paths
         env = os.environ.copy()
         env.update({
             'PYTHONPATH': '/app',
             'ML_MODELS_DIR': '/app/ml_models',
             'LD_LIBRARY_PATH': '/usr/lib/x86_64-linux-gnu:/app/ml_models',
-            'TMPDIR': '/app/temp'
+            'TMPDIR': '/app/temp',
+            'SENTINEL_DEBUG': '1'  # Enable debug mode
         })
+        
+        # DEBUG: Print environment variables
+        debug_info.append("\n=== Environment Variables ===")
+        for key in ['PYTHONPATH', 'ML_MODELS_DIR', 'LD_LIBRARY_PATH', 'TMPDIR', 'PATH']:
+            debug_info.append(f"{key}: {env.get(key, 'NOT SET')}")
+        
+        # DEBUG: Check ML files exist
+        debug_info.append("\n=== ML Files Check ===")
+        ml_files = [
+            '/app/ml_models/hornet_genvector',
+            '/app/ml_models/powershell/genpsvector',
+            '/app/ml_models/js/model.txt',
+            '/app/ml_models/vbs/model.txt',
+            '/app/ml_models/powershell/model.bin'
+        ]
+        for ml_file in ml_files:
+            exists = os.path.exists(ml_file)
+            executable = os.access(ml_file, os.X_OK) if exists else False
+            debug_info.append(f"{ml_file}: exists={exists}, executable={executable}")
+        
+        # Print debug info to stderr (will appear in XSIAM logs)
+        print("\n".join(debug_info), file=sys.stderr)
         
         # Execute Script Sentinel CLI with proper environment
         result = subprocess.run(
@@ -280,8 +314,24 @@ def run_sentinel_analysis(script_path: str, paranoia_level: int = 1,
             env=env  # Pass environment variables
         )
         
+        # DEBUG: Print subprocess results
+        debug_output = []
+        debug_output.append("\n=== Subprocess Results ===")
+        debug_output.append(f"Return code: {result.returncode}")
+        debug_output.append(f"Stderr length: {len(result.stderr)}")
+        debug_output.append(f"Stdout length: {len(result.stdout)}")
+        if result.stderr:
+            debug_output.append(f"\n=== Stderr Output ===\n{result.stderr[:2000]}")  # First 2000 chars
+        print("\n".join(debug_output), file=sys.stderr)
+        
+        # DEBUG: Always include stderr in response for troubleshooting
+        debug_stderr = result.stderr if result.stderr else "(no stderr output)"
+        
         if result.returncode != 0:
-            return None, f"Script Sentinel failed: {result.stderr}"
+            error_msg = f"Script Sentinel failed (exit code {result.returncode})\n"
+            error_msg += f"=== DEBUG STDERR ===\n{result.stderr}\n"
+            error_msg += f"=== DEBUG STDOUT ===\n{result.stdout[:1000]}"  # First 1000 chars
+            return None, error_msg
         
         # Parse JSON output
         try:
@@ -290,15 +340,28 @@ def run_sentinel_analysis(script_path: str, paranoia_level: int = 1,
             # Find the start of JSON (first '{' character)
             json_start = stdout.find('{')
             if json_start == -1:
-                return None, f"No JSON found in output: {stdout[:200]}"
+                error_msg = f"No JSON found in output\n"
+                error_msg += f"=== DEBUG STDERR ===\n{debug_stderr}\n"
+                error_msg += f"=== DEBUG STDOUT (first 500 chars) ===\n{stdout[:500]}"
+                return None, error_msg
             
             # Extract JSON portion
             json_str = stdout[json_start:]
             
             analysis_result = json.loads(json_str)
+            
+            # IMPORTANT: Attach debug stderr to result metadata for visibility in XSIAM
+            # This will be included in the War Room output
+            if 'metadata' not in analysis_result:
+                analysis_result['metadata'] = {}
+            analysis_result['metadata']['debug_stderr'] = debug_stderr[:2000]  # Limit to 2000 chars
+            
             return analysis_result, None
         except json.JSONDecodeError as e:
-            return None, f"Failed to parse Script Sentinel output: {e}\nOutput: {result.stdout[:200]}"
+            error_msg = f"Failed to parse Script Sentinel output: {e}\n"
+            error_msg += f"=== DEBUG STDERR ===\n{debug_stderr}\n"
+            error_msg += f"=== DEBUG STDOUT (first 500 chars) ===\n{stdout[:500]}"
+            return None, error_msg
             
     except subprocess.TimeoutExpired:
         return None, "Analysis timeout (5 minutes exceeded)"
@@ -614,7 +677,10 @@ def main():
                         'Score': scorer_scores.get('ml', 0),
                         'Weight': scorer_weights.get('ml', 0.10),
                         'Contribution': scorer_scores.get('ml', 0) * scorer_weights.get('ml', 0.10),
-                        'Enabled': scorer_scores.get('ml', 0) > 0
+                        'Enabled': 'ml' in scorer_scores and not any(
+                            'disabled' in exp.lower() or 'not available' in exp.lower()
+                            for exp in explanations.get('ml', [])
+                        )
                     }
                 }
             }
@@ -664,6 +730,21 @@ def main():
 - **Lines:** {metadata.get('script_lines', 0)}
 """
         
+        # Add debug information if available (for troubleshooting ML issues)
+        debug_stderr = metadata.get('debug_stderr', '')
+        if debug_stderr and debug_stderr != "(no stderr output)":
+            hr_output += f"""
+#### 🔍 Debug Information
+<details>
+<summary>Click to expand debug logs (for troubleshooting)</summary>
+
+```
+{debug_stderr}
+```
+</details>
+
+"""
+        
         # Add embedded script info if applicable
         if metadata.get('embedded_analysis'):
             embedded_count = metadata.get('embedded_scripts_count', 0)
@@ -709,6 +790,13 @@ def main():
 - **YARA:** {scorer_scores.get('yara', 0):.1f} (weight: {scorer_weights.get('yara', 0.15):.0%})
 - **ML:** {ml_raw_score:.1f}/100 (confidence: {ml_confidence:.1%}, weight: {scorer_weights.get('ml', 0.10):.0%})
 """
+            
+            # Add ML explanations for debugging
+            ml_explanations = explanations.get('ml', [])
+            if ml_explanations:
+                hr_output += "\n**ML Scorer Details:**\n"
+                for exp in ml_explanations:
+                    hr_output += f"- {exp}\n"
         
         hr_output += f"""
 #### IOCs Detected
