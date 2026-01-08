@@ -36,11 +36,11 @@ def is_docker_file_outdated(
     if current_tag_version < latest_tag_version:
         return True
     elif current_tag == latest_tag and not no_timestamp_updates:
-        if last_updated and dateutil.parser.parse(last_updated) > dateutil.parser.parse(
-            dockerfile.get("last_modified")
-        ):
+        if last_updated:
+            tag_last_updated_dt = dateutil.parser.parse(last_updated).replace(tzinfo=timezone.utc)
+            dockerfile_last_modified_dt = dateutil.parser.parse(dockerfile.get("last_modified")).replace(tzinfo=timezone.utc)
             # if the latest tag update date is newer than the dockerfile
-            return True
+            return dockerfile_last_modified_dt < tag_last_updated_dt
 
     return False
 
@@ -371,9 +371,8 @@ def cleanup_outdated_autoupdate_branches(git_repo: Repo, base_image: str, latest
                 if branch_version < latest_version:
                     print(f"  Deleting outdated branch: {branch_name} (targets {branch_target_version} < {latest_tag_name})")
                     
-                    # Delete remote branch - remove the "autoupdate/" prefix for the delete command
-                    delete_branch_name = branch_name.replace("autoupdate/", "")
-                    git_repo.git.push("origin", "--delete", delete_branch_name)
+                    # Delete remote branch - use the full branch name as it appears remotely
+                    git_repo.git.push("origin", "--delete", branch_name)
                     print(f"  ✓ Deleted remote branch: {branch_name}")
                     
                 elif branch_target_version == latest_tag_name:

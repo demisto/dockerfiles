@@ -1,4 +1,4 @@
-FROM demisto/python3-deb:3.12.12.5919128
+FROM demisto/python3-deb:3.12.12.6493338
 
 COPY requirements.txt .
 
@@ -19,4 +19,5 @@ RUN apt-get update && apt-get install -y --no-install-recommends p7zip-full \
 RUN echo "deb http://deb.debian.org/debian bookworm contrib non-free" >> /etc/apt/sources.list.d/contrib-nonfree.list \
     && apt-get update \
     && apt-get install -y --no-install-recommends unrar \
+# Last modified: 2025-12-31T04:44:03.340562+00:00
     && rm -rf /var/lib/apt/lists/*
