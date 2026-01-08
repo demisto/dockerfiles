@@ -106,9 +106,10 @@ class MLScorer(BaseScorer):
         )
         self.max_score = ml_config.get('max_score', self.DEFAULT_CONFIG['max_score'])
 
-        # Initialize models dictionary
+        # Initialize models dictionary and diagnostic info
         self.models = {}
         self._lightgbm_available = False
+        self._init_diagnostics = []  # Store initialization diagnostics
 
         # Try to import LightGBM
         try:
@@ -116,12 +117,14 @@ class MLScorer(BaseScorer):
             self._lgb = lgb
             self._lightgbm_available = True
             logger.info("LightGBM library loaded successfully")
-        except ImportError:
+            self._init_diagnostics.append("✓ LightGBM library loaded")
+        except ImportError as e:
             logger.warning(
                 "LightGBM not available. ML scoring will be disabled. "
                 "Install with: pip install lightgbm"
             )
             self.enabled = False
+            self._init_diagnostics.append(f"✗ LightGBM import failed: {e}")
             return
 
         # Load models if enabled
@@ -141,30 +144,50 @@ class MLScorer(BaseScorer):
                 f"ML scoring will be disabled."
             )
             self.enabled = False
+            self._init_diagnostics.append(f"✗ Models directory not found: {self.models_dir}")
+            self._init_diagnostics.append(f"  Checked path: {self.models_dir.absolute()}")
+            self._init_diagnostics.append(f"  Directory exists: {self.models_dir.exists()}")
             return
+
+        self._init_diagnostics.append(f"✓ Models directory found: {self.models_dir}")
 
         loaded_count = 0
         for language in self.supported_languages:
             model_path = self._get_model_path(language)
+            binary_path = self._get_binary_path(language)
+            
             if model_path and model_path.exists():
                 try:
                     model = self._lgb.Booster(model_file=str(model_path))
                     self.models[language] = model
                     loaded_count += 1
                     logger.info(f"Loaded {language} ML model from {model_path}")
+                    self._init_diagnostics.append(f"✓ Loaded {language} model: {model_path}")
+                    
+                    # Check binary
+                    if binary_path and binary_path.exists():
+                        is_executable = os.access(binary_path, os.X_OK)
+                        self._init_diagnostics.append(f"  Binary: {binary_path} (executable: {is_executable})")
+                    else:
+                        self._init_diagnostics.append(f"  ✗ Binary not found: {binary_path}")
+                        
                 except Exception as e:
                     logger.error(f"Failed to load {language} model: {e}")
+                    self._init_diagnostics.append(f"✗ Failed to load {language} model: {e}")
             else:
                 logger.warning(
                     f"Model file not found for {language}: {model_path}. "
                     f"Skipping {language} ML scoring."
                 )
+                self._init_diagnostics.append(f"✗ Model not found for {language}: {model_path}")
 
         if loaded_count == 0:
             logger.warning("No ML models loaded. ML scoring will be disabled.")
             self.enabled = False
+            self._init_diagnostics.append("✗ No models loaded - ML scoring disabled")
         else:
             logger.info(f"ML scorer initialized with {loaded_count} model(s)")
+            self._init_diagnostics.append(f"✓ ML scorer initialized with {loaded_count} model(s)")
 
     def _get_model_path(self, language: str) -> Optional[Path]:
         """
@@ -236,7 +259,10 @@ class MLScorer(BaseScorer):
         """
         # Graceful degradation: return 0 if ML scoring disabled
         if not self.enabled:
-            return 0.0, ["ML scoring disabled (models not available)"]
+            explanations = ["ML scoring disabled (models not available)"]
+            # Add diagnostic information to help troubleshoot
+            explanations.extend(self._init_diagnostics)
+            return 0.0, explanations
 
         # Validate inputs
         if not language:
