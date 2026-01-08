@@ -151,7 +151,6 @@ def verify_directories():
         "/app/rules",
         "/app/ml_models",
         "/app/temp",
-        "/app/data",
         # Sentinel subdirectories
         "/app/sentinel/scorers",
         "/app/sentinel/reporters",
