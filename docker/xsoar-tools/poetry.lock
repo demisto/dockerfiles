@@ -698,14 +698,14 @@ files = [
 
 [[package]]
 name = "demisto-py"
-version = "3.2.21"
+version = "3.2.22"
 description = "\"A Python library for the Demisto API\""
 optional = false
 python-versions = "<=3.13,>=3.9"
 groups = ["main"]
 files = [
-    {file = "demisto_py-3.2.21-py3-none-any.whl", hash = "sha256:305e6dcb9ac0b498a47ace21adb16a8f20b1fbf3387f7b87c5ff823563474d3f"},
-    {file = "demisto_py-3.2.21.tar.gz", hash = "sha256:27063b600e8652fdfb60f09fb5bcf2da2e8173ccd4a938f1145754d4d8cb7e1e"},
+    {file = "demisto_py-3.2.22-py3-none-any.whl", hash = "sha256:d46503eed808a7fb004d1e9f73f76234f94e36ce1a053e4b561367ea22b43d3d"},
+    {file = "demisto_py-3.2.22.tar.gz", hash = "sha256:076fd1f37b9f955b1e1c229e53c0988f82e256d84347a96a76c54fc9e79aa633"},
 ]
 
 [package.dependencies]
@@ -714,7 +714,7 @@ python-dateutil = ">=2.7.2,<3.0.0"
 setuptools = ">=80.9.0"
 six = ">=1.16,<2.0"
 tzlocal = ">=5.2.0,<6.0.0"
-urllib3 = "<2.1.0"
+urllib3 = ">2.6.0"
 
 [[package]]
 name = "demisto-sdk"
@@ -3554,21 +3554,21 @@ files = [
 
 [[package]]
 name = "urllib3"
-version = "2.0.7"
+version = "2.6.3"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "urllib3-2.0.7-py3-none-any.whl", hash = "sha256:fdb6d215c776278489906c2f8916e6e7d4f5a9b602ccbcfdf7f016fc8da0596e"},
-    {file = "urllib3-2.0.7.tar.gz", hash = "sha256:c97dfde1f7bd43a71c8d2a58e369e9b2bf692d1334ea9f9cae55add7d0dd0f84"},
+    {file = "urllib3-2.6.3-py3-none-any.whl", hash = "sha256:bf272323e553dfb2e87d9bfd225ca7b0f467b919d7bbd355436d3fd37cb0acd4"},
+    {file = "urllib3-2.6.3.tar.gz", hash = "sha256:1b62b6884944a57dbe321509ab94fd4d3b307075e0c2eae991ac71ee15ad38ed"},
 ]
 
 [package.extras]
-brotli = ["brotli (>=1.0.9) ; platform_python_implementation == \"CPython\"", "brotlicffi (>=0.8.0) ; platform_python_implementation != \"CPython\""]
-secure = ["certifi", "cryptography (>=1.9)", "idna (>=2.0.0)", "pyopenssl (>=17.1.0)", "urllib3-secure-extra"]
+brotli = ["brotli (>=1.2.0) ; platform_python_implementation == \"CPython\"", "brotlicffi (>=1.2.0.0) ; platform_python_implementation != \"CPython\""]
+h2 = ["h2 (>=4,<5)"]
 socks = ["pysocks (>=1.5.6,!=1.5.7,<2.0)"]
-zstd = ["zstandard (>=0.18.0)"]
+zstd = ["backports-zstd (>=1.0.0) ; python_version < \"3.14\""]
 
 [[package]]
 name = "uv"
