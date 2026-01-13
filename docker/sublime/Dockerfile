@@ -1,6 +1,6 @@
-# Last modified: 2025-12-23T04:43:50.582654+00:00
+# Last modified: 2026-01-13T12:12:57.630324+00:00
 
-FROM demisto/python3:3.12.12.6391686
+FROM demisto/python3:3.12.12.6663663
 
 # Upgrade all packages to latest
 RUN apk --update --no-cache upgrade
