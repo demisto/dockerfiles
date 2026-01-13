@@ -1,5 +1,4 @@
 # Last modified: 2026-01-13T12:12:57.630324+00:00
-
 FROM demisto/python3:3.12.12.6663663
 
 # Upgrade all packages to latest
