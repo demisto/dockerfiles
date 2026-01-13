@@ -82,10 +82,6 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: pip
-    directory: /docker/slack
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
     directory: /docker/python3-deb
     schedule:
       interval: daily
@@ -717,10 +713,6 @@ updates:
      interval: daily
   - package-ecosystem: pip
     directory: /docker/anyrun-sdk
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
-    directory: /docker/slack-bolt
     schedule:
      interval: daily  
   - package-ecosystem: pip
