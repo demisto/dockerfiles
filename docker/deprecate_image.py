@@ -120,16 +120,12 @@ def main():
     args = parser.parse_args()
 
     success = True
-    
-    # 1. Update deprecated_images.json
     if not update_deprecated_json(args.name, args.reason, Path(args.file)):
         success = False
 
-    # 2. Update build.conf
     if not update_build_conf(args.name, args.reason):
         pass
 
-    # 3. Update dependabot.yml
     if not update_dependabot_config(args.name):
         success = False
 
