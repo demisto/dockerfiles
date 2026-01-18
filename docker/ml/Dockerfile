@@ -38,4 +38,5 @@ COPY --from=files-src --chown=demisto:demisto /ml /ml
 
 ENV HF_HOME='/ml/.cache'
 ENV NLTK_DATA='/ml/nltk_data'
+# Last modified: 2026-01-18T10:37:22.410811+00:00
 ENV MPLCONFIGDIR='/ml/matplotlib'
