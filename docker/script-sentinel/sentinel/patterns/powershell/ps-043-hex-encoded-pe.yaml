@@ -1,0 +1,41 @@
+# PowerShell Pattern: Hex-Encoded PE File
+# Detects hex-encoded Windows executables (PE files)
+
+id: PS-043
+name: Hex-Encoded PE File
+description: |
+  Detects PowerShell scripts containing hex-encoded Windows PE (Portable Executable)
+  files. Malware often embeds executables as hex strings to evade detection.
+  This pattern identifies the MZ header (4D 5A) in hex format, large hex strings,
+  and common hex encoding patterns with separators like underscores or commas.
+languages:
+  - powershell
+detection_type: regex
+detection_logic: '(?i)(?:4D[_,\s]?5A[_,\s]?90[_,\s]?00|0x4D,\s*0x5A,\s*0x90|77,90,144,0|[0-9A-Fa-f_]{1000,}|(?:[0-9A-Fa-f]{2}[_,\s]){100,})'
+severity: Critical
+mitre_technique: T1027.009
+confidence: 0.9
+category: obfuscation
+enabled: true
+paranoia_levels:
+  - 1
+  - 2
+  - 3
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-25"
+  updated: "2025-11-25"
+  references:
+    - "https://attack.mitre.org/techniques/T1027/009/"
+    - "https://en.wikipedia.org/wiki/Portable_Executable"
+  tags:
+    - powershell
+    - hex-encoding
+    - pe-file
+    - obfuscation
+    - malware-delivery
+  examples:
+    - "$hex = '4D_5A_90_00_03_00_00_00_04_00_00_00_FF_FF_00_00'"
+    - "$bytes = @(0x4D, 0x5A, 0x90, 0x00, 0x03, 0x00)"
+    - "$pe = '4D5A900003000000040000FFFF0000'"
+    - "$data = 77,90,144,0,3,0,0,0,4,0,0,0,255,255,0,0"

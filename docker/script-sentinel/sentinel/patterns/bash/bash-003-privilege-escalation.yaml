@@ -1,0 +1,32 @@
+# Bash Pattern: Privilege Escalation Attempts
+# Detects common privilege escalation patterns
+
+id: BASH-003
+name: Privilege Escalation Attempt
+description: |
+  Detects common privilege escalation patterns including sudo abuse, SUID binary
+  exploitation, and attempts to modify /etc/passwd or /etc/shadow. These patterns
+  indicate attempts to gain elevated privileges on the system.
+languages:
+  - bash
+detection_type: regex
+detection_logic: '(?:sudo\s+-[isl]|chmod\s+[u+]s|(?:echo|tee)[^;|&\n]*(?:>>|>)[^;|&\n]*(?:/etc/passwd|/etc/shadow)|(?:>>|>)\s*(?:/etc/passwd|/etc/shadow)|(?:vi|vim|nano|sed\s+-i)[^\n]*(?:/etc/passwd|/etc/shadow)|find\s+[^\n]*-perm[^\n]*[24]000)'
+severity: High
+mitre_technique: T1548.003
+confidence: 0.85
+category: privilege_escalation
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-01-15"
+  references:
+    - "https://attack.mitre.org/techniques/T1548/003/"
+  tags:
+    - bash
+    - privilege-escalation
+    - sudo
+  examples:
+    - "sudo -i"
+    - "chmod +s /bin/bash"
+    - "echo 'root::0:0:root:/root:/bin/bash' >> /etc/passwd"
+    - "find / -perm -4000 2>/dev/null"

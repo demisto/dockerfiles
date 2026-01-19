@@ -1,0 +1,35 @@
+# JavaScript Pattern: String Reversal Obfuscation
+# Detects string reversal used for obfuscation
+
+id: JS-031
+name: String Reversal Obfuscation
+description: |
+  Detects JavaScript using string reversal for obfuscation, commonly used to hide
+  malicious URLs or commands. Attackers reverse strings to evade simple pattern matching.
+languages:
+  - javascript
+detection_type: regex
+detection_logic: '(?i)(?:\.split\s*\(\s*["\x27]{2}\s*\)\s*\.reverse\s*\(\s*\)\s*\.join|\.reverse\s*\(\s*\)\s*\.join\s*\(\s*["\x27]{2}\s*\)|function\s+\w+\s*\([^)]*\)\s*\{[^}]*\.reverse\s*\(\s*\))'
+severity: High
+mitre_technique: T1027
+confidence: 0.85
+category: obfuscation
+enabled: true
+paranoia_levels:
+  - 1
+  - 2
+  - 3
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-25"
+  updated: "2025-11-25"
+  references:
+    - "https://attack.mitre.org/techniques/T1027/"
+  tags:
+    - javascript
+    - obfuscation
+    - string-manipulation
+    - evasion
+  examples:
+    - 'url = "moc.evil//:ptth".split("").reverse().join("")'
+    - 'function deurl(s) { return s.split("").reverse().join(""); }'

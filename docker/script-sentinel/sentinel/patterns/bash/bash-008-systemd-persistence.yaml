@@ -1,0 +1,41 @@
+# Bash Pattern: Systemd Service Persistence
+# Detects systemd service creation for persistence
+
+id: BASH-008
+name: Systemd Service Persistence
+description: |
+  Detects creation of systemd service files via echo/cat redirects. Plain systemctl
+  enable/start is extremely common for legitimate service management. Pattern focuses
+  on direct file creation in systemd directories which is more suspicious than using
+  package managers or proper deployment tools.
+languages:
+  - bash
+detection_type: regex
+# Focus on direct service file creation - systemctl enable alone is too common
+# Legitimate installs use package managers, not echo/cat to create services
+detection_logic: 'echo.*>\s*/etc/systemd/system/.*\.service|cat.*>\s*/etc/systemd/system/.*\.service|echo.*>\s*/lib/systemd/system/|printf.*>\s*/etc/systemd/system/'
+severity: Medium
+mitre_technique: T1543.002
+confidence: 0.7
+category: persistence
+enabled: true
+paranoia_levels:
+  - 1
+  - 2
+  - 3
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-17"
+  updated: "2025-11-17"
+  references:
+    - "https://attack.mitre.org/techniques/T1543/002/"
+    - "https://www.freedesktop.org/software/systemd/man/systemd.service.html"
+  tags:
+    - bash
+    - systemd
+    - persistence
+    - service
+  examples:
+    - "echo '[Service]\\nExecStart=/tmp/backdoor' > /etc/systemd/system/evil.service && systemctl enable evil"
+    - "systemctl enable malware.service && systemctl start malware.service"
+    - "cat > /lib/systemd/system/updater.service << EOF\\n[Unit]\\nDescription=System Updater\\n[Service]\\nExecStart=/tmp/malware\\nEOF"

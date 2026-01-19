@@ -1,0 +1,43 @@
+# PowerShell Pattern: Scheduled Task Creation
+# Detects creation of scheduled tasks for persistence
+
+id: PS-008
+name: Scheduled Task Creation
+description: |
+  Detects creation or modification of Windows scheduled tasks using PowerShell.
+  Attackers commonly use scheduled tasks to maintain persistence and execute
+  malicious code at specific times or system events. This pattern identifies
+  both native PowerShell cmdlets, schtasks.exe usage, and XML-based task
+  definitions with suspicious characteristics like hidden tasks, boot triggers,
+  and highest privilege execution.
+languages:
+  - powershell
+detection_type: regex
+detection_logic: '(?i)(?:Register-ScheduledTask|New-ScheduledTask|schtasks\s+/create|Set-ScheduledTask|<Task\s+version.*xmlns.*task|<BootTrigger>|<Hidden>true</Hidden>|<RunLevel>HighestAvailable</RunLevel>|RegistrationTrigger.*Enabled.*true)'
+severity: Medium
+mitre_technique: T1053.005
+confidence: 0.8
+category: persistence
+enabled: true
+paranoia_levels:
+  - 1
+  - 2
+  - 3
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-17"
+  updated: "2025-11-25"
+  references:
+    - "https://attack.mitre.org/techniques/T1053/005/"
+    - "https://docs.microsoft.com/en-us/powershell/module/scheduledtasks/"
+  tags:
+    - powershell
+    - scheduled-task
+    - persistence
+    - execution
+  examples:
+    - "Register-ScheduledTask -TaskName 'SystemUpdate' -Action (New-ScheduledTaskAction -Execute 'C:\\malware.exe')"
+    - "schtasks /create /tn Updater /tr C:\\evil.exe /sc daily"
+    - "$action = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument '-enc JAB...'"
+    - "$taskXml = @\"<Task version=\"1.2\"><Triggers><BootTrigger><Enabled>true</Enabled></BootTrigger></Triggers>\""
+    - "<Hidden>true</Hidden><RunLevel>HighestAvailable</RunLevel>"

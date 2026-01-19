@@ -1,0 +1,37 @@
+# Bash Pattern: Network Traffic Capture
+# Detects use of tcpdump or similar packet capture tools
+
+id: BASH-023
+name: Network Traffic Capture
+description: |
+  Detects use of tcpdump/tshark with output to suspicious locations or combined
+  with credential filtering. Plain tcpdump is common for network troubleshooting.
+  Pattern focuses on capture to /tmp, piping to exfil tools, or filtering for
+  credentials which indicates malicious credential sniffing.
+languages:
+  - bash
+detection_type: regex
+# Focus on suspicious output locations or credential filtering
+# Plain tcpdump is common for legitimate network diagnostics
+detection_logic: 'tcpdump\b.*-w\s*/tmp|tcpdump\b.*(?:password|passwd|auth|login)|tshark\b.*(?:password|credential|cookie)|tcpdump\b.*\|.*(?:nc|curl|base64)'
+severity: Medium
+mitre_technique: T1040
+confidence: 0.75
+category: credential_access
+enabled: true
+paranoia_levels:
+  - 2
+  - 3
+metadata:
+  author: Script Sentinel Team
+  created: "2025-01-19"
+  references:
+    - "https://attack.mitre.org/techniques/T1040/"
+    - "https://www.tcpdump.org/manpages/tcpdump.1.html"
+  tags:
+    - network-sniffing
+    - packet-capture
+    - credential-access
+  examples:
+    - "tcpdump -i any -w /tmp/capture.pcap"
+    - "tshark --interface eth0 -w output.pcap"

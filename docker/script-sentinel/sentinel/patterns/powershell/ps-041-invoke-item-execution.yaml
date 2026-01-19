@@ -1,0 +1,41 @@
+# PowerShell Pattern: Invoke-Item Script Execution
+# Detects Invoke-Item used for script execution from suspicious locations
+
+id: PS-041
+name: Invoke-Item Script Execution
+description: |
+  Detects Invoke-Item executing scripts from suspicious locations (TEMP, AppData).
+  Invoke-Item with normal paths is common for opening files. Pattern focuses on
+  execution from temp directories, AppData, or download locations combined with
+  script/executable extensions which indicates dropped payload execution.
+languages:
+  - powershell
+detection_type: regex
+# Focus on suspicious locations - normal Invoke-Item .ps1 is too common
+detection_logic: '(?i)(?:Invoke-Item|ii)\s+[^\n]*(?:\$env:TEMP|\$env:APPDATA|\\Temp\\|\\AppData\\|\\Downloads\\)[^\n]*\.(?:ps1|bat|cmd|vbs|exe|scr)'
+severity: Medium
+mitre_technique: T1059
+confidence: 0.80
+category: execution
+enabled: true
+paranoia_levels:
+  - 1
+  - 2
+  - 3
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-25"
+  updated: "2025-11-25"
+  references:
+    - "https://attack.mitre.org/techniques/T1059/"
+    - "https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.management/invoke-item"
+  tags:
+    - powershell
+    - execution
+    - invoke-item
+    - script-execution
+  examples:
+    - "Invoke-Item 'C:\\malicious\\payload.ps1'"
+    - "Invoke-Item $env:TEMP\\malware.exe"
+    - "ii malicious.bat"
+    - "Invoke-Item -Path .\\script.vbs"

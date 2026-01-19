@@ -1,0 +1,376 @@
+# Script Sentinel Configuration
+# Version: 2.0
+# This file configures the enhanced verdict engine scorers and aggregation weights
+
+# Scorer Weights for Aggregation (Story 1.6 - WeightedAggregator)
+# These weights determine how much each scorer contributes to the final verdict
+# Tuned in Story 3.4 - FINAL Configuration (2025-12-04)
+# After fixing critical bug in paranoia_levels and extensive tuning
+# Achieved: Recall 87.04% (target: ≥85%), Precision 85.45% (target: ≥90%)
+# Configuration represents optimal balance between precision and recall
+# Updated in Story 1.3 (YaraScorer) - weights redistributed to include yara
+aggregator:
+  weights:
+    severity: 0.30        # Reduced to accommodate ML scorer
+    cooccurrence: 0.20    # Reduced to accommodate ML scorer
+    killchain: 0.15       # Attack progression scoring (unchanged)
+    content: 0.10         # Content intelligence contribution (unchanged)
+    yara: 0.15            # Yara rule match scoring (Story 1.3)
+    ml: 0.10              # Machine learning scorer (Hornet LightGBM models)
+
+# Enhanced Severity Scorer Configuration (Story 1.3)
+# Weights for different severity levels and confidence multiplier
+severity_scorer:
+  weights:
+    Critical: 100         # Critical findings (e.g., known malware patterns)
+    High: 70              # High severity (e.g., dangerous commands)
+    Medium: 40            # Medium severity (e.g., suspicious patterns)
+    Low: 20               # Low severity (e.g., minor concerns)
+    Informational: 5      # Informational only (e.g., code quality)
+  confidence_multiplier: true  # Weight findings by their confidence scores
+
+# Pattern Co-occurrence Scorer Configuration (Story 1.4)
+# Analyzes combinations of patterns that appear together
+cooccurrence_scorer:
+  enabled: true           # Enabled in Story 1.4
+  threshold: 0.6          # Minimum co-occurrence score to trigger
+  window_size: 50         # Lines to consider for pattern proximity
+
+# Pattern Combinations (Story 1.4)
+# Defines dangerous pattern combinations and their scores
+pattern_combinations:
+  critical:
+    - patterns: ['download_execute', 'bypass_execution_policy', 'hidden_window']
+      score: 40
+      description: "Download-Execute chain with policy bypass and stealth"
+    - patterns: ['credential_theft', 'network_exfiltration']
+      score: 35
+      description: "Credential theft with network exfiltration"
+    - patterns: ['registry_modification', 'persistence', 'privilege_escalation']
+      score: 38
+      description: "Persistence mechanism with privilege escalation"
+    - patterns: ['BASH-002', 'BASH-033', 'BASH-021']
+      score: 42
+      description: "Dropper pattern: download to hidden location and execute (Story 3.7)"
+    - patterns: ['BASH-032', 'BASH-007']
+      score: 45
+      description: "Credential theft: command hijacking with password capture (Story 3.7)"
+  
+  high:
+    - patterns: ['invoke_expression', 'base64_decode']
+      score: 25
+      description: "Dynamic code execution with encoded payload"
+    - patterns: ['registry_modification', 'persistence']
+      score: 20
+      description: "Registry modification for persistence"
+    - patterns: ['file_download', 'execute_binary']
+      score: 22
+      description: "File download with binary execution"
+    - patterns: ['obfuscation', 'command_injection']
+      score: 23
+      description: "Obfuscated command injection"
+  
+  medium:
+    - patterns: ['file_download', 'suspicious_domain']
+      score: 15
+      description: "File download from suspicious domain"
+    - patterns: ['network_connection', 'data_encoding']
+      score: 12
+      description: "Network connection with data encoding"
+    - patterns: ['process_creation', 'hidden_window']
+      score: 13
+      description: "Process creation with hidden window"
+  
+  # Single-Tactic Combinations (Story 3.6)
+  # Dangerous pattern combinations within the same MITRE tactic
+  # Rationale: Sophisticated malware uses layered techniques in one tactic
+  # (e.g., multiple Defense Evasion techniques) without multi-tactic progression
+  single_tactic:
+    # Defense Evasion (TA0005) - Obfuscation and Evasion Techniques
+    defense_evasion:
+      - name: "Obfuscation + Embedded Payload"
+        patterns: ["PS-032", "PS-039"]  # Embedded Binary + XOR
+        min_matches: 2
+        score: 15
+        description: "Obfuscated embedded binary - common malware delivery"
+      
+      - name: "Multiple Obfuscation Techniques"
+        categories: ["obfuscation"]
+        min_matches: 3
+        score: 20
+        description: "Layered obfuscation indicates evasion intent"
+      
+      - name: "XOR + Base64 Encoding"
+        patterns: ["PS-002", "PS-039"]  # Base64 + XOR
+        min_matches: 2
+        score: 12
+        description: "Multi-layer encoding for payload hiding"
+      
+      - name: "Obfuscation + AMSI Bypass"
+        patterns: ["PS-039", "PS-010"]  # XOR + AMSI Bypass
+        min_matches: 2
+        score: 18
+        description: "Obfuscation with security bypass"
+    
+    # Execution (TA0002) - Command and Script Execution
+    execution:
+      - name: "Download + Execute Chain"
+        patterns: ["PS-001", "PS-033"]  # Invoke-Expression + WriteAllBytes
+        min_matches: 2
+        score: 18
+        description: "Download and execute pattern"
+      
+      - name: "Encoded Command Execution"
+        patterns: ["PS-002", "PS-001"]  # Base64 + Invoke-Expression
+        min_matches: 2
+        score: 16
+        description: "Encoded command execution pattern"
+      
+      - name: "Multiple Execution Methods"
+        categories: ["execution"]
+        min_matches: 3
+        score: 17
+        description: "Multiple command execution techniques"
+    
+    # Persistence (TA0003) - Persistence Mechanisms
+    persistence:
+      - name: "Multiple Persistence Mechanisms"
+        patterns: ["PS-015", "PS-016"]  # Registry + Scheduled Task
+        min_matches: 2
+        score: 17
+        description: "Redundant persistence for reliability"
+      
+      - name: "Registry + Startup Modification"
+        categories: ["persistence"]
+        min_matches: 2
+        score: 15
+        description: "Multiple persistence vectors"
+
+# MITRE Kill Chain Scorer Configuration (Story 1.5)
+# Scores based on MITRE ATT&CK tactic progressions
+killchain_scorer:
+  enabled: true           # Enabled in Story 1.5
+
+# Kill Chain Progressions (Story 1.5)
+# Defines MITRE ATT&CK tactic progressions and their scores
+# Tactics use MITRE ATT&CK tactic IDs (e.g., TA0001 = Initial Access)
+kill_chain_progressions:
+  critical:
+    - name: "Full Attack Chain"
+      tactics: null  # Special case: any N tactics
+      min_tactics: 5
+      score: 40
+      description: "Multi-stage attack with 5+ distinct tactics"
+    - name: "Credential Access → Lateral Movement → Exfiltration"
+      tactics: ['TA0006', 'TA0008', 'TA0010']
+      score: 35
+      description: "Complete credential theft and data exfiltration chain"
+  
+  high:
+    - name: "Initial Access → Execution → Persistence"
+      tactics: ['TA0001', 'TA0002', 'TA0003']
+      score: 30
+      description: "Classic malware installation pattern"
+    - name: "Defense Evasion → Discovery → Collection"
+      tactics: ['TA0005', 'TA0007', 'TA0009']
+      score: 25
+      description: "Reconnaissance and data gathering chain"
+  
+  medium:
+    - name: "Any 3+ Tactics"
+      tactics: null
+      min_tactics: 3
+      score: 15
+      description: "Multi-tactic attack pattern"
+  
+  # Single-Tactic Depth Scoring (Story 3.5)
+  # Awards points for multiple techniques within the same MITRE tactic
+  # Rationale: Sophisticated malware often uses layered techniques in one tactic
+  # (e.g., multiple Defense Evasion techniques) without multi-tactic progression
+  single_tactic_depth:
+    - name: "Very Sophisticated (5+ techniques)"
+      min_techniques: 5
+      score: 20
+      description: "Multiple advanced techniques within single tactic"
+    - name: "Sophisticated (3-4 techniques)"
+      min_techniques: 3
+      score: 15
+      description: "Several techniques within single tactic"
+    - name: "Moderate (2 techniques)"
+      min_techniques: 2
+      score: 10
+      description: "Dual techniques within single tactic"
+
+# Yara Scorer Configuration (Story 1.3)
+# Scores based on Yara rule matches with severity and confidence weighting
+# Formula: match_score = severity_weight * confidence
+#          normalized_score = min(total_score * normalization_factor, max_score)
+yara_scorer:
+  severity_weights:
+    critical: 4.0         # Critical severity Yara matches
+    high: 3.0             # High severity Yara matches
+    medium: 2.0           # Medium severity Yara matches
+    low: 1.0              # Low severity Yara matches
+    informational: 0.5    # Informational Yara matches
+  normalization_factor: 3.0  # Score scaling factor (tunable)
+  max_score: 100          # Maximum score cap
+
+# Machine Learning Scorer Configuration (Hornet LightGBM Integration)
+# Uses pre-trained LightGBM models for PowerShell, JavaScript, and VBScript
+# Models trained on large malware datasets with high accuracy
+ml_scorer:
+  enabled: true           # Enable ML-based scoring
+  models_dir: ml_models   # Directory containing model files (can be overridden by ML_MODELS_DIR env var)
+  supported_languages:    # Languages with available models
+    - powershell
+    - javascript
+    - vbscript
+  thresholds:             # Detection thresholds per language (from Hornet training)
+    powershell: 0.85      # PowerShell model threshold (26,143 features)
+    javascript: 0.5       # JavaScript model threshold (9,355 features)
+    vbscript: 0.9         # VBScript model threshold (707 features)
+  normalization_factor: 100.0  # Scale probability to 0-100 score
+  max_score: 100.0        # Maximum score cap
+
+# Content Intelligence Scorer Configuration (Epic 2)
+# Analyzes script content characteristics (entropy, encoding, complexity)
+content_scorer:
+  enabled: true           # Enabled in Story 2.1 (Shannon Entropy Calculator)
+
+# Content Intelligence Detailed Configuration (Story 2.1+)
+# Mathematical content analysis for obfuscation detection
+content_intelligence:
+  # Shannon Entropy Configuration (Story 2.1)
+  entropy:
+    thresholds:
+      high: 7.5           # High entropy (>7.5) indicates strong obfuscation
+      medium: 6.5         # Medium entropy (6.5-7.5) indicates moderate obfuscation
+                          # Low entropy (<6.5) indicates readable code
+    scoring:
+      max_score: 30       # Maximum score contribution from entropy (0-30 points)
+  
+  # Encoding Layer Detection (Story 2.2)
+  encoding:
+    enabled: true         # Enabled in Story 2.2
+    detection:
+      min_base64_length: 20      # Minimum base64 sequence length to detect
+      max_recursion_depth: 5     # Maximum nested encoding layers to check
+    scoring:
+      single_layer: 10           # Score for 1 encoding layer
+      double_layer: 25           # Score for 2 encoding layers
+      triple_plus_layer: 40      # Score for 3+ encoding layers
+      max_score: 40              # Maximum score contribution from encoding (0-40 points)
+  
+  # Cyclomatic Complexity (Story 2.3)
+  complexity:
+    enabled: true         # Enabled in Story 2.3
+    thresholds:
+      low: 30             # Simple scripts (<30 decision points)
+      medium: 50          # Moderately complex (30-50 decision points)
+      high: 100           # Highly complex (50-100 decision points)
+    scoring:
+      max_score: 30       # Maximum score contribution from complexity (0-30 points)
+  
+  # Suspicious String Patterns (Story 2.4)
+  string_patterns:
+    enabled: true         # Enabled in Story 2.4
+    patterns:
+      critical:
+        - "invoke-expression"
+        - "iex"
+        - "eval"
+        - "exec"
+        - "cmd.exe"
+        - "cmd /c"
+        - "powershell.exe"
+        - "powershell -"
+      high:
+        - "downloadstring"
+        - "downloadfile"
+        - "webclient"
+        - "webrequest"
+        - "net.webclient"
+        - "curl"
+        - "wget"
+        - "encodedcommand"
+        - "-enc"
+        - "-e "
+        - "frombase64"
+        - "base64"
+        - "hidden"
+        - "-windowstyle hidden"
+        - "bypass"
+        - "-executionpolicy bypass"
+      medium:
+        - "schtasks"
+        - "at "
+        - "reg add"
+        - "registry"
+        - "wmi"
+        - "wmic"
+    scoring:
+      max_score: 25       # Maximum score contribution from suspicious strings (0-25 points)
+      thresholds:
+        low: 2            # 1-2 patterns: 5-10 points
+        medium: 5         # 3-5 patterns: 10-15 points
+        high: 10          # 6-10 patterns: 15-20 points
+                          # 10+ patterns: 20-25 points (capped)
+
+# Context-Aware Scoring Configuration (Story 3.7.1)
+# Heuristic-based context analysis to distinguish legitimate admin scripts from malware
+# Uses pattern-free detection without ML/LLM dependencies
+context_aware_scoring:
+  enabled: true           # Feature flag - context-aware scoring enabled (Story 3.7.1)
+  
+  # Legitimate indicators (reduce suspicion score)
+  # These indicators suggest professional, transparent, and safe script practices
+  legitimate_indicators:
+    documentation_weight: -20      # Professional documentation present (.SYNOPSIS, .DESCRIPTION, .NOTES)
+    user_interaction_weight: -20   # Requires user input/approval (Get-Credential, Read-Host)
+    validation_weight: -10          # Safety checks present (Test-Connection, Test-Path, if statements)
+    logging_weight: -10             # Transparent operation (Write-Host, Write-Verbose, Write-Output)
+    error_handling_weight: -10      # Proper error handling (try/catch, error checking)
+  
+  # Malicious indicators (increase suspicion score)
+  # These indicators suggest malicious intent or evasion techniques
+  malicious_indicators:
+    hardcoded_credentials_weight: 30  # Hardcoded passwords (ConvertTo-SecureString -AsPlainText)
+    download_execute_weight: 40       # Download and run pattern (Invoke-WebRequest + Start-Process)
+    user_creation_weight: 30          # Creates backdoor users (net user /add, New-LocalUser)
+    security_cascade_weight: 30       # Multiple security disables (firewall + antivirus + UAC)
+    obfuscation_weight: 20            # Hiding intent (shortened paths, base64, string concatenation)
+
+# Verdict Thresholds (Story 1.6 - WeightedAggregator)
+# Thresholds for mapping aggregated scores to verdicts
+# Tuned in Story 3.4 - Iteration 7 (2025-12-04)
+# Very aggressive threshold - final push for recall target
+# Rationale: Iteration 6 (threshold=30) achieved only 41.67% recall (63 false negatives)
+# Strategy: Lower to 25 to capture more malicious samples, accepting some precision trade-off
+# Example: Malware with severity=60, cooccurrence=10, killchain=5
+#          Score = 60×0.45 + 10×0.30 + 5×0.15 = 27 + 3 + 0.75 = 30.75 → MALICIOUS
+verdict_thresholds:
+  malicious: 25    # Score >= 25 → MALICIOUS verdict (Final tuned value)
+  suspicious: 18   # Score >= 18 → SUSPICIOUS verdict (Final tuned value)
+  # Score < 18 → BENIGN verdict
+
+# Confidence Caps (Story 1.6 - WeightedAggregator)
+# Maximum confidence values to prevent overconfidence
+confidence_caps:
+  malicious: 0.95  # Max 95% confidence for MALICIOUS verdicts
+  suspicious: 0.85 # Max 85% confidence for SUSPICIOUS verdicts
+  benign: 0.75     # Max 75% confidence for BENIGN verdicts
+
+# Paranoia Levels (Story 1.6 - WeightedAggregator)
+# Adjustable threat detection sensitivity levels
+# UPDATED in Story 3.4 - Iteration 7 to match verdict_thresholds
+# These are the ACTUAL thresholds used by the aggregator
+paranoia_levels:
+  1:  # Balanced (default) - FINAL tuned thresholds
+    malicious_threshold: 25   # Final tuned value (matches verdict_thresholds)
+    suspicious_threshold: 18  # Final tuned value (matches verdict_thresholds)
+  2:  # Aggressive - lower thresholds for earlier detection
+    malicious_threshold: 20   # Lowered from 55
+    suspicious_threshold: 15  # Lowered from 30
+  3:  # Very Aggressive - lowest thresholds for maximum sensitivity
+    malicious_threshold: 15   # Lowered from 40
+    suspicious_threshold: 10  # Lowered from 20

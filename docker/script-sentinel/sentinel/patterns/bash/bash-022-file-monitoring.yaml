@@ -1,0 +1,37 @@
+# Bash Pattern: File System Monitoring
+# Detects use of inotifywait for file system monitoring
+
+id: BASH-022
+name: File System Monitoring
+description: |
+  Detects use of inotifywait to monitor sensitive directories. Plain inotifywait
+  is common for build tools, file sync, and automation. Pattern focuses on
+  monitoring of security-sensitive paths like /etc, .ssh, or password files
+  which may indicate surveillance or credential theft attempts.
+languages:
+  - bash
+detection_type: regex
+# Focus on monitoring sensitive directories - plain inotifywait is common
+# Build tools, file sync, and automation use inotifywait legitimately
+detection_logic: 'inotifywait\b.*(?:/etc/passwd|/etc/shadow|\.ssh|/root|/home/\w+/\.|\.gnupg|\.aws)'
+severity: Low
+mitre_technique: T1083
+confidence: 0.7
+category: discovery
+enabled: true
+paranoia_levels:
+  - 2
+  - 3
+metadata:
+  author: Script Sentinel Team
+  created: "2025-01-19"
+  references:
+    - "https://attack.mitre.org/techniques/T1083/"
+    - "https://linux.die.net/man/1/inotifywait"
+  tags:
+    - file-monitoring
+    - surveillance
+    - discovery
+  examples:
+    - "inotifywait -m -r -e modify,create,delete /home"
+    - "inotifywait --monitor --recursive /etc"

@@ -1,0 +1,35 @@
+# Bash Pattern: Command Alias Hijacking
+# Detects malicious redefinition of common commands via alias
+
+id: BASH-032
+name: Command Alias Hijacking
+description: |
+  Detects attempts to hijack common system commands (sudo, ssh, su, passwd) by
+  redefining them as aliases. Attackers use this technique to intercept credentials,
+  log command usage, or execute malicious code when users run trusted commands.
+  This is a critical credential access technique that can capture passwords in plaintext.
+languages:
+  - bash
+detection_type: regex
+detection_logic: '\balias\s+(sudo|ssh|su|passwd|mysql|psql)\s*='
+severity: Critical
+mitre_technique: T1546.004
+confidence: 0.95
+category: credential_access
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-12-04"
+  updated: "2025-12-04"
+  references:
+    - "https://attack.mitre.org/techniques/T1546/004/"
+    - "https://attack.mitre.org/techniques/T1056/002/"
+  tags:
+    - bash
+    - alias-hijacking
+    - credential-theft
+    - command-interception
+  examples:
+    - "alias sudo='function _sudo(){ echo $pwd >> /tmp/.log; command sudo \"$@\"; }; _sudo'"
+    - "alias ssh='/tmp/ssh_wrapper.sh'"
+    - "alias passwd='read -sp \"Password: \" p; echo $p >> /tmp/.creds; /usr/bin/passwd'"

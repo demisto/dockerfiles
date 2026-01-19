@@ -1,0 +1,36 @@
+# Bash Pattern: Hidden Directory Operations
+# Detects creation and use of hidden directories in temporary locations
+
+id: BASH-033
+name: Hidden Directory Operations
+description: |
+  Detects creation of or navigation to hidden directories (starting with .) in
+  temporary locations like /tmp or /var/tmp. Attackers commonly use hidden
+  directories to store malware, tools, or exfiltrated data while evading casual
+  inspection. This pattern identifies suspicious directory operations that may
+  indicate defense evasion or staging for further attacks.
+languages:
+  - bash
+detection_type: regex
+detection_logic: '(?:mkdir|cd|rm\s+-rf)\s+.*(?:/tmp/\.|/var/tmp/\.)'
+severity: Medium
+mitre_technique: T1564.001
+confidence: 0.75
+category: defense_evasion
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-12-04"
+  updated: "2025-12-04"
+  references:
+    - "https://attack.mitre.org/techniques/T1564/001/"
+  tags:
+    - bash
+    - hidden-files
+    - defense-evasion
+    - staging
+  examples:
+    - "mkdir /tmp/.hidden"
+    - "cd /tmp/.malware"
+    - "rm -rf /tmp/.cache"
+    - "mkdir /var/tmp/.staging"

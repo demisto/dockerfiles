@@ -1,0 +1,36 @@
+# JavaScript Pattern: HTA Application Usage
+# Detects HTML Application (HTA) files used for malicious execution
+
+id: JS-033
+name: HTA Application Usage
+description: |
+  Detects HTML Application (HTA) files which are executable HTML files that run
+  with elevated privileges on Windows systems. HTAs can execute arbitrary code
+  and are commonly used by attackers for initial access, payload delivery, and
+  bypassing application whitelisting. The HTA:APPLICATION tag indicates the file
+  will be executed by mshta.exe with full system access.
+languages:
+  - javascript
+detection_type: regex
+detection_logic: '<HTA:APPLICATION'
+severity: High
+mitre_technique: T1218.005
+confidence: 0.90
+category: execution
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-12-04"
+  updated: "2025-12-04"
+  references:
+    - "https://attack.mitre.org/techniques/T1218/005/"
+    - "https://docs.microsoft.com/en-us/previous-versions/ms536496(v=vs.85)"
+  tags:
+    - javascript
+    - hta
+    - mshta
+    - execution
+    - windows
+  examples:
+    - '<HTA:APPLICATION ID="app" APPLICATIONNAME="Installer">'
+    - '<HTA:APPLICATION BORDER="none" CAPTION="no" SHOWINTASKBAR="no">'

@@ -1,0 +1,40 @@
+# PowerShell Pattern: Character Replacement Obfuscation
+# Detects character replacement used for obfuscation
+#
+# DISABLED: This pattern overlaps with the obfuscation engine's detect_character_substitution_powershell()
+# which provides better detection including tick marks, character codes, and string reversal patterns.
+# See: sentinel/obfuscation.py - detect_character_substitution_powershell()
+
+id: PS-038
+name: Character Replacement Obfuscation
+description: |
+  Detects use of -replace operator for character substitution obfuscation.
+  Attackers use multiple chained -replace operations to transform obfuscated
+  strings into executable commands at runtime. This pattern identifies suspicious
+  chains of character replacements, which are rarely used in legitimate scripts
+  but common in malicious obfuscation techniques.
+languages:
+  - powershell
+detection_type: regex
+detection_logic: '(?i)(?:-replace\s+["\x27][^"\x27]+["\x27]\s*,\s*["\x27][^"\x27]*["\x27]\s*){2,}|-creplace.*-replace'
+severity: Medium
+mitre_technique: T1027
+confidence: 0.75
+category: obfuscation
+enabled: false  # Disabled - handled by obfuscation engine
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-25"
+  updated: "2025-11-25"
+  references:
+    - "https://attack.mitre.org/techniques/T1027/"
+    - "https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_comparison_operators"
+  tags:
+    - powershell
+    - obfuscation
+    - string-manipulation
+    - character-replacement
+  examples:
+    - "$cmd = 'Xnvoke-Yxpression' -replace 'X','I' -replace 'Y','E'"
+    - "'pwsh.txt' -replace 'txt','exe' -replace 'pwsh','powershell'"
+    - "$s -creplace 'A','I' -replace 'B','E' -replace 'C','X'"

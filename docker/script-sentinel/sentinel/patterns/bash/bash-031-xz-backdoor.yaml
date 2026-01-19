@@ -1,0 +1,38 @@
+# Bash Pattern: XZ Utils Backdoor Technique
+# Detects XZ Utils backdoor exploitation (CVE-2024-3094)
+
+id: BASH-031
+name: XZ Utils Backdoor Technique
+description: |
+  Detects XZ Utils backdoor exploitation technique (CVE-2024-3094 style) using 
+  xz decompression with character translation and piped execution. This pattern
+  identifies the specific command chain used in the XZ Utils supply chain attack.
+languages:
+  - bash
+detection_type: regex
+detection_logic: '(?i)xz\s+-dc.*?\|.*?(?:eval|head|tail).*?\|.*?tr\s+["\x27].*?["\x27].*?\|.*?(?:xz|/bin/sh|bash)'
+severity: Critical
+mitre_technique: T1027
+confidence: 0.95
+category: backdoor
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-25"
+  updated: "2025-11-25"
+  references:
+    - "https://nvd.nist.gov/vuln/detail/CVE-2024-3094"
+    - "https://www.openwall.com/lists/oss-security/2024/03/29/4"
+    - "https://attack.mitre.org/techniques/T1027/"
+    - "https://attack.mitre.org/techniques/T1059/004/"
+    - "https://attack.mitre.org/techniques/T1140/"
+  tags:
+    - backdoor
+    - xz-utils
+    - cve-2024-3094
+    - decompression
+    - obfuscation
+    - supply-chain
+  examples:
+    - 'xz -dc file.lzma|eval $i|tail -c +31265|tr "\5-\51\204-\377" "\0-\377"|xz -F raw --lzma1 -dc|/bin/sh'
+    - 'xz -dc $srcdir/tests/files/good-large_compressed.lzma|eval $i|tail -c +31265|tr "\5-\51\204-\377\52-\115\132-\203\0-\4\116-\131" "\0-\377"|xz -F raw --lzma1 -dc|/bin/sh'

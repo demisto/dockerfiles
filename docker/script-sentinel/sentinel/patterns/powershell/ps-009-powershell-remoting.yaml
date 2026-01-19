@@ -1,0 +1,40 @@
+# PowerShell Pattern: PowerShell Remoting
+# Detects PowerShell remoting with suspicious scriptblocks
+
+id: PS-009
+name: PowerShell Remoting Usage
+description: |
+  Detects PowerShell remoting with suspicious command content. Simple remoting
+  with Get-Process, Get-Service is common for admin tasks. Pattern focuses on
+  remoting combined with encoded commands, credential access, or execution of
+  downloaded content which indicates malicious lateral movement.
+languages:
+  - powershell
+detection_type: regex
+# Focus on remoting with suspicious content - plain Invoke-Command is too common
+detection_logic: '(?i)(?:Invoke-Command[^\n]*-ComputerName[^\n]*(?:Invoke-Expression|IEX|FromBase64|DownloadString|Net\.WebClient)|Enter-PSSession[^\n]*-Credential[^\n]*\$|New-PSSession[^\n]*(?:\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|foreach))'
+severity: Medium
+mitre_technique: T1021.006
+confidence: 0.80
+category: lateral_movement
+enabled: true
+paranoia_levels:
+  - 1
+  - 2
+  - 3
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-17"
+  updated: "2025-11-17"
+  references:
+    - "https://attack.mitre.org/techniques/T1021/006/"
+    - "https://docs.microsoft.com/en-us/powershell/scripting/learn/remoting/running-remote-commands"
+  tags:
+    - powershell
+    - remoting
+    - lateral-movement
+    - execution
+  examples:
+    - "Enter-PSSession -ComputerName Server01 -Credential $cred"
+    - "Invoke-Command -ComputerName DC01 -ScriptBlock { Get-Process }"
+    - "$session = New-PSSession -ComputerName 192.168.1.100"

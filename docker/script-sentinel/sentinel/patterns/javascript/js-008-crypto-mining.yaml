@@ -1,0 +1,35 @@
+# JavaScript Pattern: Cryptocurrency Mining
+# Detects cryptocurrency mining scripts
+
+id: JS-008
+name: Cryptocurrency Mining Detection
+description: |
+  Detects JavaScript cryptocurrency mining code (cryptojacking). Attackers inject
+  mining scripts into compromised websites to use visitors' CPU resources for
+  mining cryptocurrency. This pattern identifies common mining libraries like
+  CoinHive, Coinhive alternatives, and WebAssembly-based miners.
+languages:
+  - javascript
+detection_type: regex
+detection_logic: '(?i)(?:coinhive|cryptonight|monero|CoinHive\.Anonymous|new\s+Miner\(|\.start\(\).*miner|authedmine|crypto-loot|webminerpool|(?:new\s+)?Worker.*(?:WebSocket|wss:)|pool.*wss:|mining.*(?:WebSocket|Worker))'
+severity: High
+mitre_technique: T1496
+confidence: 0.85
+category: impact
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-17"
+  updated: "2025-11-17"
+  references:
+    - "https://attack.mitre.org/techniques/T1496/"
+    - "https://www.malwarebytes.com/cryptojacking"
+  tags:
+    - javascript
+    - cryptomining
+    - cryptojacking
+    - resource-hijacking
+  examples:
+    - "var miner = new CoinHive.Anonymous('site-key'); miner.start();"
+    - "new Miner('monero-wallet-address', {throttle: 0.2}).start();"
+    - "CoinHive.CONFIG.WEBSOCKET_SHARDS = [['wss://ws001.coinhive.com/proxy']];"

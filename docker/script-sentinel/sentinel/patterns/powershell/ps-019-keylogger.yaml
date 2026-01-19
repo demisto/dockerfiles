@@ -1,0 +1,33 @@
+# PowerShell Pattern: Keylogger Detection
+# Detects keylogging functionality via GetAsyncKeyState or keyboard hooks
+
+id: PS-019
+name: Keylogger Detection
+description: |
+  Detects PowerShell keylogger implementations that use GetAsyncKeyState API,
+  keyboard hooks, or other methods to capture keystrokes. Keyloggers are used
+  to steal credentials, sensitive data, and monitor user activity.
+languages:
+  - powershell
+detection_type: regex
+detection_logic: '(?i)(?:GetAsyncKeyState|SetWindowsHookEx|GetKeyState|GetKeyboardState|RegisterHotKey)|(?:System\.Windows\.Forms\.Keys|Windows\.Input\.Key)|(?:keylog|keystroke).*(?:Add-Content|Out-File|Set-Content)'
+severity: Critical
+mitre_technique: T1056.001
+confidence: 0.95
+category: credential_access
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-01-19"
+  references:
+    - "https://attack.mitre.org/techniques/T1056/001/"
+    - "https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getasynckeystate"
+  tags:
+    - keylogger
+    - credential-theft
+    - input-capture
+    - surveillance
+  examples:
+    - "[DllImport(\"user32.dll\")] public static extern int GetAsyncKeyState(Int32 i);"
+    - "Add-Type -MemberDefinition '[DllImport(\"user32.dll\")] public static extern short GetAsyncKeyState(int vKey);'"
+    - "$key = [System.Windows.Forms.Keys]$i"

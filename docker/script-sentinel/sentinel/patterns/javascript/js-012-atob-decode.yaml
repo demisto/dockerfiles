@@ -1,0 +1,41 @@
+# JavaScript Pattern: Base64 Decoding for Obfuscation
+# Detects base64 decoding often used in obfuscation
+
+id: JS-012
+name: Base64 Decoding Obfuscation
+description: |
+  Detects use of atob() combined with code execution (eval, Function, document.write).
+  Plain atob() is very common for legitimate base64 decoding of images, tokens, and
+  API responses. Pattern requires combination with execution context to indicate
+  obfuscation rather than legitimate data processing.
+languages:
+  - javascript
+detection_type: regex
+# Require atob combined with execution context - plain atob is too common
+# Legitimate: atob(imageData), atob(token). Suspicious: eval(atob(...))
+detection_logic: 'eval\s*\(\s*atob|Function\s*\(\s*atob|document\.write\s*\(\s*atob|atob\s*\([^)]+\)\s*\)|new\s+Function\s*\(.*atob'
+severity: Medium
+mitre_technique: T1027
+confidence: 0.8
+category: obfuscation
+enabled: true
+paranoia_levels:
+  - 1
+  - 2
+  - 3
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-17"
+  updated: "2025-11-17"
+  references:
+    - "https://attack.mitre.org/techniques/T1027/"
+    - "https://developer.mozilla.org/en-US/docs/Web/API/atob"
+  tags:
+    - javascript
+    - obfuscation
+    - base64
+    - encoding
+  examples:
+    - "eval(atob('dmFyIG1hbHdhcmUgPSAiZXZpbCI='));"
+    - "var decoded = atob(encodedPayload); new Function(decoded)();"
+    - "document.write(atob('PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg=='));"

