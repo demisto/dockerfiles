@@ -50,7 +50,7 @@ red_error() {
     echo -e "\033[0;31m$1\033[0m"
 }
 
-DOCKER_LOGIN_DONE=${DOCKER_LOGIN_DONE:-no}
+DOCKER_LOGIN_DONE=${DOCKER_LOGIN_DONE:-yes}
 function docker_login {
     if [ "${DOCKER_LOGIN_DONE}" = "yes" ]; then
         return 0;
