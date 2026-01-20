@@ -5,7 +5,7 @@ COPY script.py /perf
 WORKDIR /perf
 RUN python -u script.py
 
-FROM demisto/python3:3.12.12.6663663
+FROM demisto/python3:3.12.12.6796194
 RUN mkdir -p /perf
 WORKDIR /perf
 COPY --from=build /perf/ips.csv .
