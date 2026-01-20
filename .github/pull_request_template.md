@@ -1,13 +1,17 @@
 <!-- REMINDER: THIS IS A PUBLIC REPO DO NOT POST HERE SECRETS/SENSITIVE DATA -->
+## Contributing to Cortex XSOAR Content
+Make sure to register your contribution by filling the [contribution registration form](https://forms.gle/XDfxU4E61ZwEESSMA)
+
+**The Pull Request will be reviewed only after the contribution registration form is filled.**
 
 ## Status
 Ready/In Progress/In Hold (Reason for hold)
 
 ## Related Content Pull Request
-Related PR: link to the PR at demisto/content
+<!-- Related PR: link to the PR at demisto/content -->
 
 ## Related Issues
-Related: link to the issue
+<!-- To link a Jira ticket use fixes/related: link to the issue, for example fixes: CIAC-XXXX -->
 
 ## Description
-A few sentences describing the overall goals of the pull request's commits.
+<!-- A few sentences describing the overall goals of the pull request's commits. -->
