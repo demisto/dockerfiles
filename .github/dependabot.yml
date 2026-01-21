@@ -1,729 +1,729 @@
-version: 2
-updates:
-    # this one is for pr limits
-  - package-ecosystem: pip
-    directory: /
-    schedule:
-     interval: daily
-    open-pull-requests-limit: 200
-    labels:
-      - "docker"
-      - "dependencies"
-  - package-ecosystem: pip
-    directory: /docker/pcap-http-extractor
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/office-utils
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/docxpy
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/python-deb
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/crypto
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/pymisp
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/pykafka
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/blueliv
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/python3
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/python
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/powershell-core
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/gvault
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/python_pancloud
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/bigquery
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/snowflake
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/tesseract
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/duoadmin
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/faker3
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/python3-deb
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/boto3py3
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/readpdf
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/google-api
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/btfl-soup
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/netutils
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/teams
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/chromium
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/google-vision-api
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/smime-encrypt
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/google-cloud-storage
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/m2crypto
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/devo
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/googleapi-python3
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/google-kms
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/google-api-py3
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/marketo
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/dxl
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/taxii
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/google-cloud-translate
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/matplotlib
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/sixgill
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/fasttext
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/yarapy
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/dxl2
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/genericsql
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/taxii-server
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/py42
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/python_pancloud_v2
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/bs4
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/pandas
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/splunksdk
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/taxii2
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/ippysocks
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/pyotrs
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/netmiko
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/smb
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/distorm3
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/resilient
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/py3ews
-    ignore:
-      - dependency-name: "requests-ntlm"
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/google-k8s-engine
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/threatconnect-py3-sdk
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/pcap-miner
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/threatconnect-tcex
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/smartsheet
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/pycef
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/ntlm
-    ignore:
-      - dependency-name: "requests-ntlm"
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/fetch-data
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/unzip
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/sklearn
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/opencti
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/axonius
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/lacework
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/argus-toolbelt
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/xslxwriter
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/sharepoint
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/twilio
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/ml
-    schedule:
-      interval: daily
-    ignore:
-      - dependency-name: scikit-learn
-      - dependency-name: transformers
-      - dependency-name: torch
-  - package-ecosystem: pip
-    directory: /docker/fastapi
-    ignore:
-      - dependency-name: pydantic
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/boto3
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/ansible-runner
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/pyjwt
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/py2-exchangelib
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/graphql
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/xml-feed
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/dempcap
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/luminate
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/greynoise
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/google-cloud-securitycenter
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/xsoar-tools
-    schedule:
-      interval: daily
-    ignore:
-      - dependency-name: "demisto-sdk"
-  - package-ecosystem: pip
-    directory: /docker/opencv
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/yolo-coco
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/etl2pcap
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/smbprotocol
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/xgboost
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/unifi-video
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/tidy
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/reversinglabs-sdk-py3
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/tableau
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/carbon-black-cloud
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/polyswarm
-    ignore:
-      - dependency-name: "polyswarm"
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/solarwinds-orionsdk
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/mlclustering
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/stix
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/py-ews
-    ignore:
-      - dependency-name: "requests-ntlm"
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/rakyll-hey
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/flask-nginx
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/slackv3
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/bs4-tld
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/machine-learning
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/pymisp2
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/lxml
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/bs4-py3
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/pypdf2
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/dnstwist
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/pytan
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/vmware
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/syslog
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/accessdata
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
-    directory: /docker/python-phash
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
-    directory: /docker/mlurlphishing
-    schedule:
-      interval: daily
-    ignore:
-      - dependency-name: scikit-learn
-      - dependency-name: tldextract
-      - dependency-name: opencv-python
-      - dependency-name: scipy
-      - dependency-name: NumPy
-      - dependency-name: beautifulsoup4
-      - dependency-name: catboost
-      - dependency-name: certifi
-      - dependency-name: charset-normalizer
-      - dependency-name: cycler
-      - dependency-name: dateparser
-      - dependency-name: dill
-      - dependency-name: filelock
-      - dependency-name: fonttools
-      - dependency-name: funcy
-      - dependency-name: graphviz
-      - dependency-name: idna
-      - dependency-name: pandas
-      - dependency-name: Pillow
-      - dependency-name: plotly
-      - dependency-name: pyparsing
-      - dependency-name: PySocks
-      - dependency-name: joblib
-      - dependency-name: kiwisolver
-      - dependency-name: matplotlib
-      - dependency-name: olefile
-      - dependency-name: packaging
-      - dependency-name: python-dateutil
-      - dependency-name: pytz
-      - dependency-name: regex
-      - dependency-name: requests
-      - dependency-name: requests-file
-      - dependency-name: six
-      - dependency-name: soupsieve
-      - dependency-name: tenacity
-      - dependency-name: threadpoolctl
-      - dependency-name: tzlocal
-      - dependency-name: urllib3
-      - dependency-name: python
-  - package-ecosystem: pip
-    directory: /docker/py3-tools
-    schedule:
-      interval: daily
-    ignore:
-      - dependency-name: "intezer-sdk"
-      - dependency-name: "asana"  # lock on v3.2.1, BC in Higher version
-  - package-ecosystem: pip
-    directory: /docker/pan-os-python
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/parse-emails
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/demisto-sdk
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
-    directory: /docker/ibm-db2
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
-    directory: /docker/rubrik-polaris-sdk-py3
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
-    directory: /docker/opnsense
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
-    directory: /docker/glpi
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
-    directory: /docker/gdetect
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
-    directory: /docker/pycountry
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
-    directory: /docker/exodusintelligence
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
-    directory: /docker/xsoar-tools-hf
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
-    directory: /docker/bottle
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
-    directory: /docker/ippysocks-py3
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
-    directory: /docker/armorblox
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/keeper-ksm
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
-    directory: /docker/octoxlabs
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
-    directory: /docker/aquatone
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/panw-iot
-    schedule:
-      interval: daily
-    ignore:
-      - dependency-name: "pyasn1"
-      # Ignore all updates for pyasn1
-  - package-ecosystem: pip
-    directory: /docker/illumio
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
-    directory: /docker/splunksdk-py3
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/datadog-api-client
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
-    directory: /docker/processing-image-file
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
-    directory: /docker/oci
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
-    directory: /docker/privx-api
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
-    directory: /docker/xpanse-ml-ev2
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
-    directory: /docker/commvault
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/ldap
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
-    directory: /docker/auth-utils
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
-    directory: /docker/cyjax
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
-    directory: /docker/elasticsearch
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
-    directory: /docker/pytmv1
-    ignore:
-      - dependency-name: "pytmv1"
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
-    directory: /docker/qrcode
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
-    directory: /docker/stringsifter
-    ignore:
-      - dependency-name: scikit-learn
-    schedule:
-      interval: daily
-  - package-ecosystem: pip
-    directory: /docker/kubernetespy
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
-    directory: /docker/sublime
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
-    directory: /docker/keepercommander
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
-    directory: /docker/cyberchef
-    schedule:
-     interval: daily  
-  - package-ecosystem: pip
-    directory: /docker/pysigma
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
-    directory: /docker/sse-client
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
-    directory: /docker/anyrun-sdk
-    schedule:
-     interval: daily  
-  - package-ecosystem: pip
-    directory: /docker/python3-deb-bullseye
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
-    directory: /docker/mcp
-    schedule:
-     interval: daily
-  - package-ecosystem: pip
-    directory: /docker/falcon-mcp
-    schedule:
-     interval: daily
+# version: 2
+# updates:
+#     # this one is for pr limits
+#   - package-ecosystem: pip
+#     directory: /
+#     schedule:
+#      interval: daily
+#     open-pull-requests-limit: 200
+#     labels:
+#       - "docker"
+#       - "dependencies"
+#   - package-ecosystem: pip
+#     directory: /docker/pcap-http-extractor
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/office-utils
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/docxpy
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/python-deb
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/crypto
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/pymisp
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/pykafka
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/blueliv
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/python3
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/python
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/powershell-core
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/gvault
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/python_pancloud
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/bigquery
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/snowflake
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/tesseract
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/duoadmin
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/faker3
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/python3-deb
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/boto3py3
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/readpdf
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/google-api
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/btfl-soup
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/netutils
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/teams
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/chromium
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/google-vision-api
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/smime-encrypt
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/google-cloud-storage
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/m2crypto
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/devo
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/googleapi-python3
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/google-kms
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/google-api-py3
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/marketo
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/dxl
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/taxii
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/google-cloud-translate
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/matplotlib
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/sixgill
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/fasttext
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/yarapy
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/dxl2
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/genericsql
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/taxii-server
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/py42
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/python_pancloud_v2
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/bs4
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/pandas
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/splunksdk
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/taxii2
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/ippysocks
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/pyotrs
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/netmiko
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/smb
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/distorm3
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/resilient
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/py3ews
+#     ignore:
+#       - dependency-name: "requests-ntlm"
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/google-k8s-engine
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/threatconnect-py3-sdk
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/pcap-miner
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/threatconnect-tcex
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/smartsheet
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/pycef
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/ntlm
+#     ignore:
+#       - dependency-name: "requests-ntlm"
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/fetch-data
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/unzip
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/sklearn
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/opencti
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/axonius
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/lacework
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/argus-toolbelt
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/xslxwriter
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/sharepoint
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/twilio
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/ml
+#     schedule:
+#       interval: daily
+#     ignore:
+#       - dependency-name: scikit-learn
+#       - dependency-name: transformers
+#       - dependency-name: torch
+#   - package-ecosystem: pip
+#     directory: /docker/fastapi
+#     ignore:
+#       - dependency-name: pydantic
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/boto3
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/ansible-runner
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/pyjwt
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/py2-exchangelib
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/graphql
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/xml-feed
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/dempcap
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/luminate
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/greynoise
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/google-cloud-securitycenter
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/xsoar-tools
+#     schedule:
+#       interval: daily
+#     ignore:
+#       - dependency-name: "demisto-sdk"
+#   - package-ecosystem: pip
+#     directory: /docker/opencv
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/yolo-coco
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/etl2pcap
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/smbprotocol
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/xgboost
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/unifi-video
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/tidy
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/reversinglabs-sdk-py3
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/tableau
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/carbon-black-cloud
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/polyswarm
+#     ignore:
+#       - dependency-name: "polyswarm"
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/solarwinds-orionsdk
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/mlclustering
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/stix
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/py-ews
+#     ignore:
+#       - dependency-name: "requests-ntlm"
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/rakyll-hey
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/flask-nginx
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/slackv3
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/bs4-tld
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/machine-learning
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/pymisp2
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/lxml
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/bs4-py3
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/pypdf2
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/dnstwist
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/pytan
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/vmware
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/syslog
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/accessdata
+#     schedule:
+#      interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/python-phash
+#     schedule:
+#      interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/mlurlphishing
+#     schedule:
+#       interval: daily
+#     ignore:
+#       - dependency-name: scikit-learn
+#       - dependency-name: tldextract
+#       - dependency-name: opencv-python
+#       - dependency-name: scipy
+#       - dependency-name: NumPy
+#       - dependency-name: beautifulsoup4
+#       - dependency-name: catboost
+#       - dependency-name: certifi
+#       - dependency-name: charset-normalizer
+#       - dependency-name: cycler
+#       - dependency-name: dateparser
+#       - dependency-name: dill
+#       - dependency-name: filelock
+#       - dependency-name: fonttools
+#       - dependency-name: funcy
+#       - dependency-name: graphviz
+#       - dependency-name: idna
+#       - dependency-name: pandas
+#       - dependency-name: Pillow
+#       - dependency-name: plotly
+#       - dependency-name: pyparsing
+#       - dependency-name: PySocks
+#       - dependency-name: joblib
+#       - dependency-name: kiwisolver
+#       - dependency-name: matplotlib
+#       - dependency-name: olefile
+#       - dependency-name: packaging
+#       - dependency-name: python-dateutil
+#       - dependency-name: pytz
+#       - dependency-name: regex
+#       - dependency-name: requests
+#       - dependency-name: requests-file
+#       - dependency-name: six
+#       - dependency-name: soupsieve
+#       - dependency-name: tenacity
+#       - dependency-name: threadpoolctl
+#       - dependency-name: tzlocal
+#       - dependency-name: urllib3
+#       - dependency-name: python
+#   - package-ecosystem: pip
+#     directory: /docker/py3-tools
+#     schedule:
+#       interval: daily
+#     ignore:
+#       - dependency-name: "intezer-sdk"
+#       - dependency-name: "asana"  # lock on v3.2.1, BC in Higher version
+#   - package-ecosystem: pip
+#     directory: /docker/pan-os-python
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/parse-emails
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/demisto-sdk
+#     schedule:
+#      interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/ibm-db2
+#     schedule:
+#      interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/rubrik-polaris-sdk-py3
+#     schedule:
+#      interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/opnsense
+#     schedule:
+#      interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/glpi
+#     schedule:
+#      interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/gdetect
+#     schedule:
+#      interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/pycountry
+#     schedule:
+#      interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/exodusintelligence
+#     schedule:
+#      interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/xsoar-tools-hf
+#     schedule:
+#      interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/bottle
+#     schedule:
+#      interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/ippysocks-py3
+#     schedule:
+#      interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/armorblox
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/keeper-ksm
+#     schedule:
+#      interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/octoxlabs
+#     schedule:
+#      interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/aquatone
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/panw-iot
+#     schedule:
+#       interval: daily
+#     ignore:
+#       - dependency-name: "pyasn1"
+#       # Ignore all updates for pyasn1
+#   - package-ecosystem: pip
+#     directory: /docker/illumio
+#     schedule:
+#      interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/splunksdk-py3
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/datadog-api-client
+#     schedule:
+#      interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/processing-image-file
+#     schedule:
+#      interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/oci
+#     schedule:
+#      interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/privx-api
+#     schedule:
+#      interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/xpanse-ml-ev2
+#     schedule:
+#      interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/commvault
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/ldap
+#     schedule:
+#      interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/auth-utils
+#     schedule:
+#      interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/cyjax
+#     schedule:
+#      interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/elasticsearch
+#     schedule:
+#      interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/pytmv1
+#     ignore:
+#       - dependency-name: "pytmv1"
+#     schedule:
+#      interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/qrcode
+#     schedule:
+#      interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/stringsifter
+#     ignore:
+#       - dependency-name: scikit-learn
+#     schedule:
+#       interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/kubernetespy
+#     schedule:
+#      interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/sublime
+#     schedule:
+#      interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/keepercommander
+#     schedule:
+#      interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/cyberchef
+#     schedule:
+#      interval: daily  
+#   - package-ecosystem: pip
+#     directory: /docker/pysigma
+#     schedule:
+#      interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/sse-client
+#     schedule:
+#      interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/anyrun-sdk
+#     schedule:
+#      interval: daily  
+#   - package-ecosystem: pip
+#     directory: /docker/python3-deb-bullseye
+#     schedule:
+#      interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/mcp
+#     schedule:
+#      interval: daily
+#   - package-ecosystem: pip
+#     directory: /docker/falcon-mcp
+#     schedule:
+#      interval: daily
