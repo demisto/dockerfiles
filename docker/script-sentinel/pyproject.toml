@@ -1,0 +1,56 @@
+[tool.poetry]
+name = "script-sentinel"
+version = "1.0.0"
+description = "Script Sentinel - Malware analysis for PowerShell, Bash, and JavaScript scripts with ML integration"
+authors = ["Palo Alto Networks XDR Research"]
+readme = "README.md"
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+# ML dependencies
+numpy = ">=1.19.0"
+lightgbm = ">=3.0.0"
+
+# Core dependencies for script analysis
+tree-sitter = "0.25.2"
+tree-sitter-language-pack = "*"
+
+# YAML parsing for configuration
+PyYAML = "6.0.2"
+
+# Rich console output
+rich = "13.9.4"
+
+# Environment variables
+python-dotenv = "1.0.1"
+
+# YARA pattern matching
+yara-python = ">=4.3.0"
+
+# Google Generative AI (for LLM features if enabled)
+google-generativeai = "0.8.3"
+google-ai-generativelanguage = "0.6.10"
+google-auth = "2.36.0"
+google-api-core = "2.23.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0.0"
+pytest-mock = "^3.12.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+# No CLI scripts needed for XSIAM integration
+# The wrapper is called directly by Demisto
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"

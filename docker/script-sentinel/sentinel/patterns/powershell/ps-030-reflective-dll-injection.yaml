@@ -1,0 +1,35 @@
+# PowerShell Pattern: Reflective DLL Injection
+# Detects reflective DLL injection techniques
+
+id: PS-030
+name: Reflective DLL Injection
+description: |
+  Detects PowerShell code performing reflective DLL injection using .NET
+  reflection APIs. This technique loads malicious DLLs directly into memory
+  without touching disk, bypassing many security controls. Attackers use
+  VirtualAlloc, CreateThread, and Marshal.Copy to inject code into processes.
+languages:
+  - powershell
+detection_type: regex
+detection_logic: 'VirtualAlloc|CreateThread|VirtualProtect|WriteProcessMemory|\[System\.Runtime\.InteropServices\.Marshal\]::Copy|\[DllImport\s*\(\s*["\x27]kernel32|Add-Type.*DllImport|ReadAllBytes.*\.dll'
+severity: Critical
+mitre_technique: T1055.001
+confidence: 0.95
+category: injection
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-19"
+  updated: "2025-11-19"
+  references:
+    - "https://attack.mitre.org/techniques/T1055/001/"
+    - "https://www.elastic.co/blog/detecting-reflective-dll-loading-with-windows-defender-atp"
+  tags:
+    - powershell
+    - dll-injection
+    - reflection
+    - process-injection
+  examples:
+    - "[DllImport(\"kernel32\")] public static extern IntPtr VirtualAlloc"
+    - "[System.Runtime.InteropServices.Marshal]::Copy($dllBytes, 0, $addr, $dllBytes.Length)"
+    - "$dllBytes = [System.IO.File]::ReadAllBytes(\"payload.dll\")"

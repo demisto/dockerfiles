@@ -1,0 +1,35 @@
+# PowerShell Pattern: Ransomware Behavior Detection
+# Detects ransomware-like behavior including file encryption and ransom notes
+
+id: PS-020
+name: Ransomware Behavior
+description: |
+  Detects ransomware-like behavior in PowerShell scripts including file encryption,
+  mass file operations, AES/cryptography usage combined with file manipulation,
+  and ransom note creation. This pattern identifies scripts that encrypt files
+  and demand payment for decryption.
+languages:
+  - powershell
+detection_type: regex
+detection_logic: '(?i)(?:System\.Security\.Cryptography\.Aes|AES::Create\(\)|TripleDES|RSACryptoServiceProvider).*(?:Get-ChildItem.*-Recurse|ForEach-Object.*File)|(?:ransom|decrypt|bitcoin|btc|payment).*(?:Out-File|Set-Content)|\.encrypted["\x27]?\s*(?:\)|,)|Encrypt-Data.*WriteAllBytes'
+severity: Critical
+mitre_technique: T1486
+confidence: 0.90
+category: impact
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-01-19"
+  references:
+    - "https://attack.mitre.org/techniques/T1486/"
+    - "https://www.cisa.gov/stopransomware"
+  tags:
+    - ransomware
+    - file-encryption
+    - extortion
+    - data-destruction
+  examples:
+    - "$key = [System.Security.Cryptography.Aes]::Create().Key"
+    - "Get-ChildItem -Recurse | ForEach-Object { Encrypt-File $_ }"
+    - "$note | Out-File \"RANSOM_NOTE.txt\""
+    - "[IO.File]::WriteAllBytes($_.FullName + \".encrypted\", $encrypted)"

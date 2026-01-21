@@ -1,0 +1,36 @@
+# JavaScript Pattern: Anti-Analysis Environment Checks
+# Detects environment checks used to evade analysis
+
+id: JS-032
+name: Anti-Analysis Environment Checks
+description: |
+  Detects JavaScript checking for frames, window size, or other environmental factors
+  to evade analysis. Malware often checks if it's running in a sandbox or automated
+  analysis environment before executing malicious behavior.
+languages:
+  - javascript
+detection_type: regex
+detection_logic: '(?i)(?:top\.frames\.length|window\.innerWidth|window\.innerHeight|document\.documentElement\.client(?:Width|Height)).*?(?:if|&&|\|\|).*?(?:window\.location|redirect|href\s*=)'
+severity: Medium
+mitre_technique: T1497.001
+confidence: 0.75
+category: anti-analysis
+enabled: true
+paranoia_levels:
+  - 1
+  - 2
+  - 3
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-25"
+  updated: "2025-11-25"
+  references:
+    - "https://attack.mitre.org/techniques/T1497/001/"
+  tags:
+    - javascript
+    - anti-analysis
+    - evasion
+    - sandbox-detection
+  examples:
+    - 'if(top.frames.length) { window.location = maliciousUrl; }'
+    - 'if(window.innerWidth < 300) zkzab=1; window.location = url;'

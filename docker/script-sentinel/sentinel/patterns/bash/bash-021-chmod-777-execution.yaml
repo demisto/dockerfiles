@@ -1,0 +1,36 @@
+# Bash Pattern: chmod 777 and Immediate Execution
+# Detects suspicious permission modification followed by execution
+
+id: BASH-021
+name: Suspicious chmod 777 and Immediate Execution
+description: |
+  Detects chmod 777 followed by immediate execution of the file, a common
+  malware pattern. Legitimate scripts rarely need world-writable permissions
+  before execution.
+languages:
+  - bash
+detection_type: regex
+detection_logic: '(?i)chmod\s+777\s+[^\s;]+\s*[;\n]\s*\./'
+severity: High
+mitre_technique: T1222.002
+confidence: 0.85
+category: permission-modification
+enabled: true
+paranoia_levels:
+  - 1
+  - 2
+  - 3
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-25"
+  updated: "2025-11-25"
+  references:
+    - "https://attack.mitre.org/techniques/T1222/002/"
+  tags:
+    - bash
+    - permission-modification
+    - execution
+    - malware
+  examples:
+    - 'chmod 777 malware.sh; ./malware.sh'
+    - 'chmod 777 $execname\n./$execname'

