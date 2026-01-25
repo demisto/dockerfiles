@@ -15,7 +15,7 @@ RUN apk --update add --no-cache --virtual .build-dependencies \
   python3-dev build-base wget \
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies \
-  && pip install --upgrade setuptools
+  && pip install --upgrade setuptools wheel>=0.46.2
 
 RUN addgroup -g 4000 demisto \
   && adduser -u 4000 -G demisto -D demisto -s /bin/sh 
