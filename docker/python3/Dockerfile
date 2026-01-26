@@ -1,4 +1,4 @@
-# Last modified: 2025-12-23T00:29:52.582410+00:00
+# Last modified: 2026-01-25T13:36:39.650738+00:00
 FROM python:3.12.12-alpine3.23
 
 # Upgrade all packages to latest
@@ -15,7 +15,8 @@ RUN apk --update add --no-cache --virtual .build-dependencies \
   python3-dev build-base wget \
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies \
-  && pip install --upgrade setuptools
+  && pip install --upgrade setuptools \
+  && pip install --upgrade wheel>=0.46.2
 
 RUN addgroup -g 4000 demisto \
   && adduser -u 4000 -G demisto -D demisto -s /bin/sh 
