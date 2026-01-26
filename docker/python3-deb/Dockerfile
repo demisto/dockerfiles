@@ -1,4 +1,4 @@
-# Last modified: 2026-01-18T10:37:22.410811+00:00
+# Last modified: 2026-01-25T13:36:39.650738+00:00
 FROM python:3.12.12-slim-bookworm
 
 RUN echo 'deb http://deb.debian.org/debian bookworm-backports main' >> /etc/apt/sources.list
@@ -30,7 +30,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   gcc \
   python3-dev \
 && rm -rf /var/lib/apt/lists/* \
-&& pip install --upgrade setuptools
+&& pip install --upgrade setuptools \
+&& pip install --upgrade wheel>=0.46.2
 
 # Handling the issue described here https://knowledgebase.paloaltonetworks.com/KCSArticleDetail?id=kA10g000000POJ0CAO&lang=en_US%E2%80%A9
 # by enabling UnsafeLegacyRenegotiation
