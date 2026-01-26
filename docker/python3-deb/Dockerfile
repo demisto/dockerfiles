@@ -30,7 +30,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   gcc \
   python3-dev \
 && rm -rf /var/lib/apt/lists/* \
-&& pip install --upgrade setuptools
+&& pip install --upgrade setuptools \
+&& pip install --upgrade wheel>=0.46.2
 
 # Handling the issue described here https://knowledgebase.paloaltonetworks.com/KCSArticleDetail?id=kA10g000000POJ0CAO&lang=en_US%E2%80%A9
 # by enabling UnsafeLegacyRenegotiation
