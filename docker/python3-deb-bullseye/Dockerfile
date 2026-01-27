@@ -1,4 +1,4 @@
-# Last modified: 2025-08-26T15:26:42+03:00
+# Last modified: 2026-01-27T10:57:42+03:00
 FROM python:3.12.11-slim-bullseye
 
 RUN echo 'deb http://archive.debian.org/debian bullseye-backports main' >> /etc/apt/sources.list
@@ -30,7 +30,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   gcc \
   python3-dev \
 && rm -rf /var/lib/apt/lists/* \
-&& pip install --upgrade setuptools
+&& pip install --upgrade setuptools \ 
+&& pip install --upgrade wheel>=0.46.2
 
 RUN groupadd --gid 4000 demisto \
   && useradd --uid 4000 --gid demisto --shell /bin/bash --create-home demisto
