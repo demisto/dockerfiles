@@ -7,6 +7,8 @@ RUN apk --update --no-cache upgrade
 # Fix for XSUP-62124: Add Microsoft TLS G2 ECC certificates to trust store
 # Microsoft renewed download.microsoft.com certificate on Jan 13, 2026 with new issuer
 # "Microsoft TLS G2 ECC CA OCSP 02" which is not in Alpine 3.23's default CA bundle
+# The certificates must be added to both system CA store AND certifi's CA bundle
+# because the requests library uses certifi by default
 RUN apk --update add --no-cache ca-certificates curl openssl \
   && curl -fsSL -o /tmp/ms-tls-g2-ecc-ca.crt "http://www.microsoft.com/pkiops/certs/Microsoft%20TLS%20G2%20ECC%20CA%20OCSP%2002.crt" \
   && curl -fsSL -o /tmp/ms-tls-ecc-root-g2.crt "http://www.microsoft.com/pkiops/certs/Microsoft%20TLS%20ECC%20Root%20G2.crt" \
@@ -28,6 +30,12 @@ RUN apk --update add --no-cache --virtual .build-dependencies \
   && apk del .build-dependencies \
   && pip install --upgrade setuptools \
   && pip install --upgrade wheel>=0.46.2
+
+# Fix for XSUP-62124: Update certifi's CA bundle with Microsoft TLS G2 ECC certificates
+# The requests library uses certifi's CA bundle, not the system CA certificates
+# So we need to append the Microsoft certificates to certifi's cacert.pem file
+RUN cat /usr/local/share/ca-certificates/microsoft-tls-g2-ecc-ca-ocsp-02.crt >> $(python3 -c "import certifi; print(certifi.where())") \
+  && cat /usr/local/share/ca-certificates/microsoft-tls-ecc-root-g2.crt >> $(python3 -c "import certifi; print(certifi.where())")
 
 RUN addgroup -g 4000 demisto \
   && adduser -u 4000 -G demisto -D demisto -s /bin/sh 
