@@ -7,9 +7,9 @@ RUN apk --update --no-cache upgrade
 # Fix for XSUP-62124: Add Microsoft TLS G2 ECC certificates to trust store
 # Microsoft renewed download.microsoft.com certificate on Jan 13, 2026 with new issuer
 # "Microsoft TLS G2 ECC CA OCSP 02" which is not in Alpine 3.23's default CA bundle
-RUN apk --update add --no-cache ca-certificates wget openssl \
-  && wget -q -O /tmp/ms-tls-g2-ecc-ca.crt "http://www.microsoft.com/pkiops/certs/Microsoft%20TLS%20G2%20ECC%20CA%20OCSP%2002.crt" \
-  && wget -q -O /tmp/ms-tls-ecc-root-g2.crt "http://www.microsoft.com/pkiops/certs/Microsoft%20TLS%20ECC%20Root%20G2.crt" \
+RUN apk --update add --no-cache ca-certificates curl openssl \
+  && curl -fsSL -o /tmp/ms-tls-g2-ecc-ca.crt "http://www.microsoft.com/pkiops/certs/Microsoft%20TLS%20G2%20ECC%20CA%20OCSP%2002.crt" \
+  && curl -fsSL -o /tmp/ms-tls-ecc-root-g2.crt "http://www.microsoft.com/pkiops/certs/Microsoft%20TLS%20ECC%20Root%20G2.crt" \
   && openssl x509 -inform DER -in /tmp/ms-tls-g2-ecc-ca.crt -out /usr/local/share/ca-certificates/microsoft-tls-g2-ecc-ca-ocsp-02.crt \
   && openssl x509 -inform DER -in /tmp/ms-tls-ecc-root-g2.crt -out /usr/local/share/ca-certificates/microsoft-tls-ecc-root-g2.crt \
   && update-ca-certificates \
