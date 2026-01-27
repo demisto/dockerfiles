@@ -11,7 +11,7 @@ RUN unzip /distilled_bert_base_uncased_tokenizer.zip -d /ml \
   && rm /distilled_bert_base_uncased_tokenizer.zip \
   && chmod -R 775 /ml
 
-FROM demisto/python3-deb:3.12.12.5919128
+FROM demisto/python3-deb:3.12.12.6878467
 
 COPY requirements.txt .
 
@@ -38,4 +38,5 @@ COPY --from=files-src --chown=demisto:demisto /ml /ml
 
 ENV HF_HOME='/ml/.cache'
 ENV NLTK_DATA='/ml/nltk_data'
+# Last modified: 2026-01-27T12:16:31.703049+00:00
 ENV MPLCONFIGDIR='/ml/matplotlib'
