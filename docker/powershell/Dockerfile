@@ -1,4 +1,4 @@
-# Last modified: 2025-06-12T08:50:57.960137+00:00
+# Last modified: 2026-01-27T12:16:31.703049+00:00
 FROM mcr.microsoft.com/powershell:7.5-alpine-3.20
 
 # Set timezone to Etc/UTC for backwards comp
