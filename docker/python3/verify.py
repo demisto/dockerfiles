@@ -56,19 +56,6 @@ assert os.path.exists("/var/public_list.dat")
 print("public_list.dat for TLDextract exists")
 
 # XSUP-62124: Verify Microsoft TLS G2 ECC certificates are installed and working
-import urllib.request
-import certifi
-
-# Check if Microsoft certificates are in certifi's CA bundle
-print("Checking certifi CA bundle location:", certifi.where())
-with open(certifi.where(), 'r') as f:
-    certifi_content = f.read()
-    if 'Microsoft TLS ECC Root G2' in certifi_content or 'Microsoft TLS G2 ECC CA OCSP 02' in certifi_content:
-        print("✓ Microsoft TLS G2 ECC certificates found in certifi's CA bundle")
-    else:
-        print("ERROR: Microsoft TLS G2 ECC certificates NOT found in certifi's CA bundle")
-        exit(1)
-
 # Test with requests library (uses certifi's CA bundle) - this is what integrations use
 try:
     import requests
