@@ -57,19 +57,29 @@ print("public_list.dat for TLDextract exists")
 
 # XSUP-62124: Verify Microsoft TLS G2 ECC certificates are installed and working
 import urllib.request
+import certifi
+
+# Check if Microsoft certificates are in certifi's CA bundle
+print("Checking certifi CA bundle location:", certifi.where())
+with open(certifi.where(), 'r') as f:
+    certifi_content = f.read()
+    if 'Microsoft TLS ECC Root G2' in certifi_content or 'Microsoft TLS G2 ECC CA OCSP 02' in certifi_content:
+        print("✓ Microsoft TLS G2 ECC certificates found in certifi's CA bundle")
+    else:
+        print("ERROR: Microsoft TLS G2 ECC certificates NOT found in certifi's CA bundle")
+        exit(1)
+
+# Test with requests library (uses certifi's CA bundle) - this is what integrations use
 try:
-    # Test SSL connection to download.microsoft.com
-    # This will fail if the Microsoft TLS G2 ECC CA certificates are not properly installed
-    url = "https://download.microsoft.com/download/7/1/d/71d86715-5596-4529-9b13-da13a5de5b63/ServiceTags_Public_20260119.json"
-    with urllib.request.urlopen(url, timeout=10) as response:
-        if response.status == 200:
-            print("Microsoft TLS G2 ECC certificates verified - SSL connection to download.microsoft.com successful")
-        else:
-            print(f"Warning: Unexpected response status {response.status} from download.microsoft.com")
-except ssl.SSLError as e:
-    print(f"ERROR: SSL certificate verification failed for download.microsoft.com: {e}")
-    print("Microsoft TLS G2 ECC certificates may not be properly installed")
+    import requests
+    response = requests.get("https://download.microsoft.com/download/7/1/d/71d86715-5596-4529-9b13-da13a5de5b63/ServiceTags_Public_20260119.json", timeout=10)
+    if response.status_code == 200:
+        print("✓ requests library SSL connection to download.microsoft.com successful (certifi CA bundle)")
+    else:
+        print(f"Warning: Unexpected response status {response.status_code} from download.microsoft.com")
+except requests.exceptions.SSLError as e:
+    print(f"ERROR: requests library SSL certificate verification failed for download.microsoft.com: {e}")
+    print("This means the Microsoft certificates are not properly installed in certifi's CA bundle")
     exit(1)
 except Exception as e:
-    print(f"Warning: Could not verify Microsoft SSL certificates: {e}")
-    # Don't fail the build for network issues, only for SSL certificate problems
+    print(f"Warning: Could not test requests library connection: {e}")
