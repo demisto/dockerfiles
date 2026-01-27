@@ -54,3 +54,22 @@ print(f'Using setuptools version {setuptools.__version__}')
 
 assert os.path.exists("/var/public_list.dat")
 print("public_list.dat for TLDextract exists")
+
+# XSUP-62124: Verify Microsoft TLS G2 ECC certificates are installed and working
+import urllib.request
+try:
+    # Test SSL connection to download.microsoft.com
+    # This will fail if the Microsoft TLS G2 ECC CA certificates are not properly installed
+    url = "https://download.microsoft.com/download/7/1/d/71d86715-5596-4529-9b13-da13a5de5b63/ServiceTags_Public_20260119.json"
+    with urllib.request.urlopen(url, timeout=10) as response:
+        if response.status == 200:
+            print("Microsoft TLS G2 ECC certificates verified - SSL connection to download.microsoft.com successful")
+        else:
+            print(f"Warning: Unexpected response status {response.status} from download.microsoft.com")
+except ssl.SSLError as e:
+    print(f"ERROR: SSL certificate verification failed for download.microsoft.com: {e}")
+    print("Microsoft TLS G2 ECC certificates may not be properly installed")
+    exit(1)
+except Exception as e:
+    print(f"Warning: Could not verify Microsoft SSL certificates: {e}")
+    # Don't fail the build for network issues, only for SSL certificate problems
