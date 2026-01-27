@@ -13,10 +13,10 @@ priority = "explicit"
 
 
 [tool.poetry.dependencies]
-python = "~3.10"
+python = "~3.12"
 fasttext = "*"
-numpy = "==1.26.4"  # Upgrading to version 2.0.0 may introduce known performance issues, it must be approached with caution.
-scikit-learn = "==1.1.2"
+numpy = "*"
+scikit-learn = "*"
 pandas = "*"
 nltk = "*"
 lime = "*"
@@ -26,15 +26,13 @@ spacy = "*"
 fsspec = "*"
 dill = "*"
 catboost = "*"
-eli5 = "*"
 langdetect = "*"
 onnx = "*"
 onnxruntime = "*"
-transformers = "==4.36.2"
-torch = {version = "==2.2.0", extras = ["cpu"], source="pytorch"}
+transformers = "*"
+setuptools = ">78.1.1"
+torch = {version = "*", extras = ["cpu"], source="pytorch"}
 
-
-[tool.poetry.group.dev.dependencies]
 
 [build-system]
 requires = ["poetry-core"]

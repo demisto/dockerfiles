@@ -7,14 +7,14 @@ on:
 jobs:
   update_verify_script:
     runs-on: ubuntu-latest
-    if: github.actor != 'dependabot[bot]' && contains(github.event.pull_request.title, 'autoupdate') == false && github.repository == 'demisto/dockerFiles'
+    if: github.actor != 'dependabot[bot]' && !contains(github.event.pull_request.title, 'autoupdate') && !contains(github.head_ref, 'autolock') && github.repository == 'demisto/dockerFiles'
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: Get changed files
         id: changed-files
-        uses: tj-actions/changed-files@v41
+        uses: tj-actions/changed-files@v46.0.1
       - name: Set up Python 3.11
         uses: actions/setup-python@v3
         with:

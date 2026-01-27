@@ -18,3 +18,6 @@ import netaddr
 
 # verify aiohttp
 import aiohttp
+
+# verify aiolimiter
+from aiolimiter import AsyncLimiter

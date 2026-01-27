@@ -10,8 +10,9 @@ uvicorn = "*"
 fastapi = "*"
 pydantic = "*"
 syslog-rfc5424-parser = "*"
+setuptools = ">=80.9.0" # need just because the version comes from the dependencies are lower, we can remove it once ready
 
 [dev-packages]
 
 [requires]
-python_version = "3.11"
+python_version = "3.12"

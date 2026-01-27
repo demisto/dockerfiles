@@ -1,4 +1,4 @@
-FROM demisto/python3-deb:3.11.10.115178
+FROM demisto/python3-deb:3.12.12.5919128
 
 WORKDIR /content
 
@@ -24,7 +24,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     libffi-dev python3-dev gfortran g++ pkg-config libhdf5-dev \
     -y \
     # install node - node distributions: https://github.com/nodesource/distributions
-    && curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
+    && curl -fsSL https://deb.nodesource.com/setup_24.x | bash - \
     && apt update \
     && apt-get install -y nodejs \
     # install docker
@@ -35,7 +35,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && python3 -m pip install --no-cache-dir -r requirements.txt \
     && npm install -g npm@latest \
     && npm ci \
-    && npm install -g jsdoc-to-markdown@5.0.3 \
+    && npm install -g jsdoc-to-markdown@9.1.3\
     && npm list \
     && demisto-sdk --version
 

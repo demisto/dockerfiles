@@ -1,5 +1,6 @@
+# Last modified: 2026-01-13T12:12:40.104277+00:00
 
-FROM demisto/python3:3.11.10.116949
+FROM demisto/python3:3.12.12.6663663
 
 ENV DEMISTO_SDK_IGNORE_CONTENT_WARNING true
 ENV DEMISTO_SDK_SKIP_LOGGER_SETUP true
@@ -12,7 +13,7 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
   && apk add --no-cache --upgrade grep  \
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies
-  
+
 ADD https://raw.githubusercontent.com/demisto/content/master/Packs/Base/Scripts/CommonServerPython/CommonServerPython.py /home/demisto
 ADD https://raw.githubusercontent.com/demisto/content/master/Packs/Base/Scripts/CommonServerPowerShell/CommonServerPowerShell.ps1 /home/demisto
 ADD https://raw.githubusercontent.com/demisto/content/master/tox.ini /home/demisto

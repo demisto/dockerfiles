@@ -15,6 +15,11 @@
         "reason": "Use the demisto/py3-tools docker image instead."
     },
     {
+        "created_time_utc": "2025-09-15 13:52:21.933780",
+        "image_name": "demisto/ami-management",
+        "reason": "No available replacement."
+    },
+    {
         "created_time_utc": "2022-05-31T17:51:41.654573Z",
         "image_name": "demisto/archer",
         "reason": "Use the demisto/py3-tools docker image instead."
@@ -88,6 +93,11 @@
         "created_time_utc": "2023-10-24T11:46:57.385745Z",
         "image_name": "demisto/dnspython",
         "reason": "Use the demisto/netutils docker image instead."
+    },
+    {
+        "created_time_utc": "2025-09-15 13:49:55.581498",
+        "image_name": "demisto/dockerbuild",
+        "reason": "No available replacement."
     },
     {
         "created_time_utc": "2024-01-02 17:03:39.490651",
@@ -195,6 +205,11 @@
         "reason": "Use the demisto/vendors-sdk docker image instead."
     },
     {
+        "created_time_utc": "2025-09-18 09:38:18.869188",
+        "image_name": "demisto/jq",
+        "reason": "Due to the lack of updates for the pyjq library over the last three years and its incompatibility with newer Python versions."
+    },
+    {
         "created_time_utc": "2022-05-31T17:54:32.444316Z",
         "image_name": "demisto/langdetect",
         "reason": "Use the demisto/py3-tools docker image instead."
@@ -223,6 +238,11 @@
         "created_time_utc": "2022-05-31T17:54:50.818359Z",
         "image_name": "demisto/minio",
         "reason": "Use the demisto/py3-tools docker image instead."
+    },
+    {
+        "created_time_utc": "2024-07-23T11:34:04.271203Z",
+        "image_name": "demisto/nltk",
+        "reason": "The image is used exclusively by the deprecated content script WordTokenizer."
     },
     {
         "created_time_utc": "2023-10-24T11:46:57.799135Z",
@@ -258,6 +278,16 @@
         "created_time_utc": "2024-01-02 17:03:39.488191",
         "image_name": "demisto/py2-exchangelib",
         "reason": "Image no longer in use by content"
+    },
+    {
+        "created_time_utc": "2025-07-28 14:17:28.137042",
+        "image_name": "demisto/py3-native",
+        "reason": "No available replacement."
+    },
+    {
+        "created_time_utc": "2025-09-16 16:08:03.701406",
+        "image_name": "demisto/py3-tools-ubi",
+        "reason": "No available replacement."
     },
     {
         "created_time_utc": "2023-10-24T11:40:56.598284Z",
@@ -310,9 +340,19 @@
         "reason": "Python 2 is EOL. Use the python3-deb image instead."
     },
     {
+        "created_time_utc": "2025-09-11 23:26:37.667951",
+        "image_name": "demisto/python3-9-deb",
+        "reason": "No available replacement."
+    },
+    {
         "created_time_utc": "2022-05-31T17:55:37.149145Z",
         "image_name": "demisto/python3-arrow",
         "reason": "Use the demisto/py3-tools docker image instead."
+    },
+    {
+        "created_time_utc": "2025-09-16 16:08:03.710761",
+        "image_name": "demisto/python3-ubi",
+        "reason": "No available replacement."
     },
     {
         "created_time_utc": "2024-01-02 17:03:39.487950",
@@ -323,6 +363,16 @@
         "created_time_utc": "2022-05-31T17:55:47.548487Z",
         "image_name": "demisto/python_zipfile",
         "reason": "Use the demisto/py3-tools docker image instead."
+    },
+    {
+        "created_time_utc": "2024-08-15T16:10:04.271203Z",
+        "image_name": "demisto/rakyll-hey",
+        "reason": "No available replacement."
+    },
+    {
+        "created_time_utc": "2025-09-15 14:22:24.855582",
+        "image_name": "demisto/sane-doc-reports",
+        "reason": "No available replacement."
     },
     {
         "created_time_utc": "2022-05-31T17:55:58.050312Z",
@@ -405,6 +455,11 @@
         "reason": "Use the demisto/py3-tools docker image instead."
     },
     {
+        "created_time_utc": "2025-01-22T16:10:04.271203Z",
+        "image_name": "demisto/trustar",
+        "reason": "Image not in use by non-deprecated content item."
+    },
+    {
         "created_time_utc": "2022-05-31T17:57:30.009068Z",
         "image_name": "demisto/tweepy",
         "reason": "Use the demisto/py3-tools docker image instead."
@@ -460,13 +515,13 @@
         "reason": "Image no longer in use by content"
     },
     {
-        "image_name": "demisto/nltk",
-        "reason": "Image no longer in use by content",
-        "created_time_utc": "2024-07-23T11:34:04.271203Z"
+        "created_time_utc": "2026-01-13T13:19:50.893145Z",
+        "image_name": "demisto/slack-bolt",
+        "reason": "The image is no longer in use by content"
     },
     {
-        "image_name": "demisto/rakyll-hey",
-        "reason": "Image no longer in use by content",
-        "created_time_utc": "2024-08-15T16:10:04.271203Z"
+        "created_time_utc": "2026-01-13T13:20:09.955412Z",
+        "image_name": "demisto/slack",
+        "reason": "The image is no longer in use by content"
     }
 ]

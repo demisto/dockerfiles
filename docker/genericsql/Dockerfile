@@ -1,5 +1,6 @@
+# Last modified: 2025-12-31T04:44:13.411507+00:00
 
-FROM demisto/python3-deb:3.12.7.117935
+FROM demisto/python3-deb:3.12.12.6493338
 
 COPY requirements.txt .
 COPY odbcinst.ini /etc/odbcinst.ini
@@ -11,7 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   libaio1 \
   wget \
   unzip \
-  libssl1.1 \
+  libssl3 \
 && rm -rf /var/lib/apt/lists/*
 
 # install oracle instant client
@@ -49,10 +50,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Install the Microsoft ODBC driver for SQL Server (Linux)
 RUN apt-get update \
 && apt-get install -y --allow-downgrades gpgv gnupg2 curl apt-utils \
-&& curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
-&& curl https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list \
+&& curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o /usr/share/keyrings/microsoft-prod.gpg \
+&& curl -fsSL https://packages.microsoft.com/config/debian/12/prod.list | tee /etc/apt/sources.list.d/mssql-release.list \
+&& echo "deb [arch=amd64,arm64,armhf signed-by=/usr/share/keyrings/microsoft-prod.gpg] https://packages.microsoft.com/debian/12/prod bookworm main" > /etc/apt/sources.list.d/mssql-release.list \
 && apt-get update \
-&& ACCEPT_EULA=Y apt-get install msodbcsql18 \
+&& ACCEPT_EULA=Y apt-get install -y msodbcsql18 \
 && apt-get install -y unixodbc-dev libgssapi-krb5-2
 
 # install python packages

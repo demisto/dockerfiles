@@ -1,5 +1,5 @@
-# Last modified: 2026-01-15T00:16:25.539937+00:00
-FROM python:3.12.8-alpine3.21
+# Last modified: 2026-01-27T13:36:39.650738+00:00
+FROM python:3.12.12-alpine3.23
 
 # Upgrade all packages to latest
 RUN apk --update --no-cache upgrade
@@ -11,10 +11,12 @@ COPY localtime /etc/localtime
 # Relevant for tldextract
 COPY public_list.dat /var/public_list.dat
 
-RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget \
+RUN apk --update add --no-cache --virtual .build-dependencies \
+  python3-dev build-base wget \
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies \
-  && pip install --upgrade setuptools
+  && pip install --upgrade setuptools \
+  && pip install --upgrade wheel>=0.46.2
 
 RUN addgroup -g 4000 demisto \
   && adduser -u 4000 -G demisto -D demisto -s /bin/sh 

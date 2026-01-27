@@ -1,12 +1,17 @@
-
-FROM demisto/python3:3.12.8.1983910
+# Last modified: 2026-01-26T08:48:24.442336+00:00
+FROM demisto/python3:3.12.12.6875480
 
 COPY requirements.txt .
+
+RUN apk update && apk upgrade
 
 RUN apk --update add --no-cache libxml2 \
   libxslt \
   tshark \
   libmagic
+
+# Use version 4.4.9 and up -  if v3.22 has this version, this line can be removed (wireshark comes from tshark)
+RUN apk upgrade wireshark-common tshark --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community
 
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git \
   libxml2-dev \

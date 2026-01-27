@@ -21,18 +21,40 @@ jobs:
         env:
           GITHUB_TOKEN: ${{secrets.CONTENT_BOT_TOKEN}}
         run: |
+          echo "=== Starting autoupdate branch discovery ==="
           git fetch
+          echo "Fetched latest changes from remote"
+          
           branches=$(git branch -r | grep autoupdate/)
-          matrix="[ "
-          for branch in $(echo $branches); do
-            exists=`gh pr list --state open -H ${branch#origin/}`
-            if [ -z $exists ]; then
-              matrix="${matrix} \"${branch#origin/}\","
-            fi
-          done
-          matrix="${matrix%?}"
-          SERVICES="${matrix} ]"
-          echo ::set-output name=branches::${SERVICES}
+          echo "Found autoupdate branches:"
+          echo "$branches"
+          
+          if [ -z "$branches" ]; then
+            echo "No autoupdate branches found"
+            SERVICES="[ ]"
+          else
+            echo "Processing branches for PR creation..."
+            matrix="[ "
+            for branch in $(echo $branches); do
+              branch_name="${branch#origin/}"
+              echo "Checking branch: $branch_name"
+              
+              exists=`gh pr list --state open -H $branch_name`
+              if [ -z "$exists" ]; then
+                echo "  No existing PR for $branch_name - will create"
+                matrix="${matrix} \"$branch_name\","
+              else
+                echo "  PR already exists for $branch_name - skipping"
+              fi
+            done
+            
+            matrix="${matrix%?}"
+            SERVICES="${matrix} ]"
+          fi
+          
+          echo "=== Branch discovery complete ==="
+          echo "Final branches matrix: $SERVICES"
+          echo "branches=${SERVICES}" >> $GITHUB_OUTPUT
 
   pull-request:
     if: ${{ needs.get_branches.outputs.branches != '[ ]' }}
@@ -64,4 +86,3 @@ jobs:
         echo "Approving and merging"
         gh pr review --approve "$PR_URL"
         gh pr merge --auto --squash "$PR_URL" 
-        

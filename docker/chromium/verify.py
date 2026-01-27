@@ -23,5 +23,7 @@ assert chrome_version_arr == driver_version_arr
 print(f'Using pychrome version {pychrome.__version__}')
 
 print(f'Using poppler version: {pdf2image.pdf2image._get_poppler_version("pdftocairo")}')
+poppler_version = pdf2image.pdf2image._get_poppler_version("pdftoppm")
+assert poppler_version[0] > 20
 
 print('All is good!!!')

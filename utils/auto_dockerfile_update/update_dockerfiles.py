@@ -36,11 +36,11 @@ def is_docker_file_outdated(
     if current_tag_version < latest_tag_version:
         return True
     elif current_tag == latest_tag and not no_timestamp_updates:
-        if last_updated and dateutil.parser.parse(last_updated) > dateutil.parser.parse(
-            dockerfile.get("last_modified")
-        ):
+        if last_updated:
+            tag_last_updated_dt = dateutil.parser.parse(last_updated).replace(tzinfo=timezone.utc)
+            dockerfile_last_modified_dt = dateutil.parser.parse(dockerfile.get("last_modified")).replace(tzinfo=timezone.utc)
             # if the latest tag update date is newer than the dockerfile
-            return True
+            return dockerfile_last_modified_dt < tag_last_updated_dt
 
     return False
 
@@ -269,6 +269,11 @@ def update_external_base_dockerfiles(git_repo: Repo, no_timestamp_updates=True) 
             branch_name = rf"autoupdate/Update_{file['repo']}_{file['image_name']}_from_{file['tag']}_to_{latest_tag_name}"
             update_and_push_dockerfiles(git_repo, branch_name, [file], latest_tag_name)
             print(f"Updated {file['path']}")
+
+            # Cleanup outdated branches for this base image
+            base_image_name = f"{file['repo']}/{file['image_name']}"
+            cleanup_outdated_autoupdate_branches(git_repo, base_image_name, latest_tag_name)
+
     print("Finished to update dockerfiles")
 
 
@@ -296,6 +301,92 @@ def batch(iterable, n=1):
         yield iterable[ndx : min(ndx + n, l)]
 
 
+def cleanup_outdated_autoupdate_branches(git_repo: Repo, base_image: str, latest_tag_name: str, is_external: bool = True) -> None:
+    """
+    Remove outdated autoupdate branches for a specific base image.
+    This prevents creating PRs for intermediate versions when newer versions are available.
+    
+    Args:
+        git_repo (Repo): the git repository
+        base_image (str): base image name (e.g., "demisto/python3" or "library/python")
+        latest_tag_name (str): the current latest tag
+        is_external (bool): True for external images, False for internal images
+    """
+    try:
+        # Get all remote branches
+        git_repo.git.fetch("origin")
+        remote_branches = git_repo.git.branch("-r").split('\n')
+        
+        # Filter for autoupdate branches related to this base image
+        autoupdate_branches = []
+        repo_name, image_name = base_image.split('/')
+        
+        for branch in remote_branches:
+            branch = branch.strip()
+            if not branch.startswith("origin/autoupdate/"):
+                continue
+                
+            # Check if this branch is for our base image based on type
+            if is_external:
+                # External format: autoupdate/Update_library_python_from_3.10.2_to_3.11.1
+                if f"Update_{repo_name}_{image_name}_" in branch:
+                    autoupdate_branches.append(branch)
+            else:
+                # Internal format: autoupdate/demisto/python3_imagename_1.2.3.123456
+                if f"/{repo_name}/{image_name}_" in branch:
+                    autoupdate_branches.append(branch)
+        
+        if not autoupdate_branches:
+            print(f"No existing autoupdate branches found for {base_image} ({'external' if is_external else 'internal'})")
+            return
+            
+        print(f"Found {len(autoupdate_branches)} existing autoupdate branches for {base_image} ({'external' if is_external else 'internal'})")
+        
+        from get_latest_tag import parse_versions
+        latest_version = parse_versions(latest_tag_name)
+        
+        for branch in autoupdate_branches:
+            branch_name = branch.replace("origin/", "")
+            
+            # Extract target version from branch name based on type
+            branch_target_version = None
+            
+            try:
+                if is_external and "_to_" in branch_name:
+                    # External format: autoupdate/Update_library_python_from_3.10.2_to_3.11.1
+                    branch_target_version = branch_name.split("_to_")[-1]
+                elif not is_external:
+                    # Internal format: autoupdate/demisto/python3_imagename_1.2.3.123456
+                    parts = branch_name.split('_')
+                    if len(parts) >= 2:
+                        branch_target_version = parts[-1]
+                
+                if not branch_target_version:
+                    print(f"  Warning: Could not extract version from branch {branch_name}")
+                    continue
+                    
+                branch_version = parse_versions(branch_target_version)
+                
+                # If branch targets an older version than latest, delete it
+                if branch_version < latest_version:
+                    print(f"  Deleting outdated branch: {branch_name} (targets {branch_target_version} < {latest_tag_name})")
+                    
+                    # Delete remote branch - use the full branch name as it appears remotely
+                    git_repo.git.push("origin", "--delete", branch_name)
+                    print(f"  ✓ Deleted remote branch: {branch_name}")
+                    
+                elif branch_target_version == latest_tag_name:
+                    print(f"  Keeping current branch: {branch_name} (targets latest {branch_target_version})")
+                else:
+                    print(f"  Keeping newer branch: {branch_name} (targets {branch_target_version} >= {latest_tag_name})")
+                    
+            except Exception as e:
+                print(f"  Warning: Could not parse version from branch {branch_name}: {e}")
+                
+    except Exception as e:
+        print(f"Warning: Failed to cleanup branches for {base_image}: {e}")
+
+
 def update_internal_base_dockerfile(git_repo: Repo) -> None:
     """
     Update internal docker images in batches
@@ -305,27 +396,79 @@ def update_internal_base_dockerfile(git_repo: Repo) -> None:
     Returns:
         None
     """
+    print("=== Starting internal base dockerfiles update ===")
     docker_files = get_docker_files(internal=True)
+    print(f"Found {len(docker_files)} internal dockerfiles to analyze")
+    
     dependency_json = create_dependencies_json(docker_files)
+    print(f"Created dependency mapping for {len(dependency_json)} base images")
+    
+    total_updated = 0
+    total_skipped = 0
+    
     for base_image, dependency_list in dependency_json.items():
+        print(f"\n--- Processing base image: {base_image} ---")
+        print(f"Found {len(dependency_list)} dependent dockerfiles")
+        
         curr_repo, image_name = base_image.split("/")
-        latest_tag = get_latest_tag(curr_repo, image_name, "")
-        latest_tag_name = latest_tag["name"]
-        latest_tag_last_updated = latest_tag["last_updated"]
-        outdated_files = [
-            file
-            for file in dependency_list
-            if is_docker_file_outdated(file, latest_tag_name, latest_tag_last_updated)
-        ]
+        
+        # Always get the absolute latest tag without any version filtering
+        # This ensures we only target the latest tag, ignoring any intermediate versions
+        try:
+            latest_tag = get_latest_tag(curr_repo, image_name, "")
+            latest_tag_name = latest_tag["name"]
+            latest_tag_last_updated = latest_tag["last_updated"]
+            print(f"Latest available tag for {base_image}: {latest_tag_name}")
+        except Exception as e:
+            print(f"ERROR: Failed to get latest tag for {base_image}: {e}")
+            continue
+        
+        cleanup_outdated_autoupdate_branches(git_repo, base_image, latest_tag_name, is_external=False)
+        
+        # Filter to only include files that should be updated to the absolute latest tag
+        # This prevents creating PRs for intermediate version updates
+        outdated_files = []
+        for file in dependency_list:
+            current_tag = file["tag"]
+            print(f"  Checking {file['name']}: {current_tag}")
+            
+            if is_docker_file_outdated(file, latest_tag_name, latest_tag_last_updated):
+                print(f"    ✓ Outdated: {current_tag} -> {latest_tag_name}")
+                outdated_files.append(file)
+            else:
+                print(f"    - Up-to-date: {current_tag}")
+                total_skipped += 1
+        
+        if not outdated_files:
+            print(f"No files need updating for {base_image} (all {len(dependency_list)} files up-to-date)")
+            continue
+            
+        print(f"Will update {len(outdated_files)} out of {len(dependency_list)} files for {base_image}")
+        
+        # Create PRs only for the absolute latest tag
+        batch_count = 0
         for batch_slice in batch(outdated_files, BATCH_SIZE):
+            batch_count += 1
             image_names = reduce(
                 lambda a, b: f"{a}-{b}", [file["name"] for file in batch_slice]
             )
             branch_name = rf"autoupdate/{base_image}_{image_names}_{latest_tag_name}"
-            update_and_push_dockerfiles(
-                git_repo, branch_name, batch_slice, latest_tag_name
-            )
-    print("Finished to update dockerfiles")
+            
+            print(f"  Batch {batch_count}: Creating branch {branch_name}")
+            print(f"  Files in batch: {[file['name'] for file in batch_slice]}")
+            
+            try:
+                update_and_push_dockerfiles(
+                    git_repo, branch_name, batch_slice, latest_tag_name
+                )
+                print(f"  ✓ Successfully created branch and updated {len(batch_slice)} files")
+                total_updated += len(batch_slice)
+            except Exception as e:
+                print(f"  ERROR: Failed to create branch {branch_name}: {e}")
+                
+    print(f"\n=== Internal dockerfiles update complete ===")
+    print(f"Updated: {total_updated}, Skipped: {total_skipped}, Total processed: {len(docker_files)}")
+    print("Finished to update dockerfiles - only latest tags processed")
 
 
 def update_and_push_dockerfiles(
