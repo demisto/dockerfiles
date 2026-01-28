@@ -54,3 +54,19 @@ print(f'Using setuptools version {setuptools.__version__}')
 
 assert os.path.exists("/var/public_list.dat")
 print("public_list.dat for TLDextract exists")
+
+# XSUP-62124: Verify Microsoft TLS G2 ECC certificates are installed and working
+# Test with requests library (uses certifi's CA bundle) - this is what integrations use
+try:
+    import requests
+    response = requests.get("https://download.microsoft.com/download/7/1/d/71d86715-5596-4529-9b13-da13a5de5b63/ServiceTags_Public_20260119.json", timeout=10)
+    if response.status_code == 200:
+        print("✓ requests library SSL connection to download.microsoft.com successful (certifi CA bundle)")
+    else:
+        print(f"Warning: Unexpected response status {response.status_code} from download.microsoft.com")
+except requests.exceptions.SSLError as e:
+    print(f"ERROR: requests library SSL certificate verification failed for download.microsoft.com: {e}")
+    print("This means the Microsoft certificates are not properly installed in certifi's CA bundle")
+    exit(1)
+except Exception as e:
+    print(f"Warning: Could not test requests library connection: {e}")
