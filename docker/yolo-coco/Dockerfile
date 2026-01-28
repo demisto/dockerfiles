@@ -3,7 +3,7 @@ COPY weights /yolo-coco
 RUN cd yolo-coco \
   && cat yolov3.weights.aa yolov3.weights.ab yolov3.weights.ac yolov3.weights.ad yolov3.weights.ae > yolov3.weights
 
-FROM demisto/opencv:1.0.0.6361953
+FROM demisto/opencv:1.0.0.6911470
 
 COPY requirements.txt .
 COPY yolo-coco /yolo-coco/.
@@ -16,4 +16,5 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 && apt-get purge -y --auto-remove \
   gcc \
   python3-dev \
+# Last modified: 2026-01-28T16:05:00.971854+00:00
 && rm -rf /var/lib/apt/lists/*
