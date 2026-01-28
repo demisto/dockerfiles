@@ -9,6 +9,7 @@ import orionsdk
 import dns.resolver
 import pyads
 import bs4
+import ping3
 
 def lookup_dns_record(domain, record_type='A'):
     """
@@ -36,4 +37,5 @@ swis = orionsdk.SwisClient("server", "username", "password")
 lookup = lookup_dns_record("google.com")
 print(f"pyads version: {pyads.__version__}")
 print(f"bs4 version: {bs4.__version__}")
+print(f"ping3 version: {ping3.__version__}")
 print("All is good. PANW IoT python packages imported successfully!")
