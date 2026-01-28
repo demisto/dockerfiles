@@ -1,11 +1,13 @@
-# Last modified: 2025-12-31T04:44:21.131431+00:00
-FROM demisto/python3-deb:3.12.12.6493338
+# Last modified: 2026-01-27T13:24:00.000000+00:00
+FROM demisto/python3-deb:3.12.12.6878467
 
 RUN apt-get update \
 && apt-get install -y --no-install-recommends \
     build-essential \
     ruby-dev \
     rubygems \
+&& gem install httparty -v 0.24.2 \ 
+# we can install newer versions of httparty
 && gem install aquatone \
 && apt-get purge -y --auto-remove \
     build-essential \
