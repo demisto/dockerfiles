@@ -1,3 +1,4 @@
+# Last modified: 2026-01-29T13:34:40.859+00:00
 FROM alpine:3.17.10 as files-src
 COPY weights /yolo-coco
 RUN cd yolo-coco \
@@ -16,5 +17,4 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 && apt-get purge -y --auto-remove \
   gcc \
   python3-dev \
-# Last modified: 2026-01-28T16:05:00.971854+00:00
 && rm -rf /var/lib/apt/lists/*
