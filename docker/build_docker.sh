@@ -29,7 +29,7 @@ function prop {
     RES=$(grep "^${1}=" build.conf | cut -d'=' -f2)
     if [[ "$RES" ]]; then
         echo "$RES"
-    else 
+    else
         echo "${2}"
     fi
 }
@@ -61,13 +61,13 @@ function docker_login {
     fi
     if [ -z "$DOCKERHUB_PASSWORD" ]; then
         #for local testing scenarios to allow password to be passed via stdin
-        docker login -u "${DOCKERHUB_USER}" 
+        docker login -u "${DOCKERHUB_USER}"
     else
-        docker login -u "${DOCKERHUB_USER}" -p "${DOCKERHUB_PASSWORD}" 
+        docker login -u "${DOCKERHUB_USER}" -p "${DOCKERHUB_PASSWORD}"
     fi
     if [ $? -ne 0 ]; then
         echo "Failed docker login for user: ${DOCKERHUB_USER}"
-        return 2; 
+        return 2;
     fi
     DOCKER_LOGIN_DONE=yes
     return 0;
@@ -91,7 +91,7 @@ function cr_login {
     fi
     if [ $? -ne 0 ]; then
         echo "Failed docker login to CR repo"
-        exit 3; 
+        exit 3;
     fi
     CR_LOGIN_DONE=yes
     return 0;
@@ -113,7 +113,7 @@ function sign_setup {
         git clone "${DOCKERFILES_TRUST_GIT_URL}" "${DOCKERFILES_TRUST_DIR}"
         git remote set-url origin "${DOCKERFILES_TRUST_GIT_URL}"
         git config --file "${DOCKERFILES_TRUST_DIR}/.git/config"  user.email "dc-builder@users.noreply.github.com"
-        git config --file "${DOCKERFILES_TRUST_DIR}/.git/config" user.name "dc-builder"           
+        git config --file "${DOCKERFILES_TRUST_DIR}/.git/config" user.name "dc-builder"
     else
         echo "${DOCKERFILES_TRUST_DIR} already checked out"
     fi
@@ -123,6 +123,10 @@ function sign_setup {
 }
 
 function commit_dockerfiles_trust {
+    if [ "${DRY_RUN}" = "true" ]; then
+        echo "[DRY-RUN] Would have committed docker trust data"
+        return
+    fi
     cwd="$PWD"
     cd "${DOCKERFILES_TRUST_DIR}"
     if [[ $(git status --short) ]]; then
@@ -156,27 +160,27 @@ function commit_dockerfiles_trust {
     cd "$cwd"
 }
 
-# build docker. 
+# build docker.
 # Param $1: docker dir with all relevant files
 function docker_build {
     DOCKER_ORG=${DOCKER_ORG:-devdemisto}
     DOCKER_ORG_DEMISTO=demisto
     image_name=$(basename $1)
     echo "Starting build for dir: $1, image: ${image_name}, pwd: $(pwd)"
-    cd $1        
+    cd $1
     if  [[ "${CI_COMMIT_REF_NAME}" == "master" ]] && [[ "$(prop 'devonly')" ]]; then
         echo "== skipping image [${image_name}] as it is marked devonly =="
         return 0
     fi
-    
-    VERSION=$(prop 'version' '1.0.0')    
+
+    VERSION=$(prop 'version' '1.0.0')
     VERSION="${VERSION}.${REVISION}"
     echo "${image_name}: using version: ${VERSION}"
     image_full_name="${DOCKER_ORG}/${image_name}:${VERSION}"
 
     if [[ "$(prop 'deprecated')" ]]; then
         echo "${DOCKER_ORG_DEMISTO}/${image_name} image is deprecated, checking whether the image is listed in the deprecated list or not"
-        reason=$(prop 'deprecated_reason')        
+        reason=$(prop 'deprecated_reason')
         ${PY3CMD} "${DOCKER_SRC_DIR}"/add_image_to_deprecated_or_internal_list.py "${DOCKER_ORG_DEMISTO}"/"${image_name}" "${reason}" "${DOCKER_SRC_DIR}"/deprecated_images.json
     fi
 
@@ -224,7 +228,7 @@ function docker_build {
     cp Dockerfile "$tmp_dir/Dockerfile"
     echo "" >> "$tmp_dir/Dockerfile"
     echo "ENV DOCKER_IMAGE=$image_full_name" >> "$tmp_dir/Dockerfile"
-    
+
     if [[ "$(prop 'deprecated')" ]]; then
         echo "ENV DEPRECATED_IMAGE=true" >> "$tmp_dir/Dockerfile"
         reason=$(prop 'deprecated_reason')
@@ -289,7 +293,7 @@ function docker_build {
         file_name="Pipfile"
         get_version_from_file 'Pipfile' 'python_version = \"([^\"]+)\"'
     fi
-    if [ -f "pyproject.toml" ]; then 
+    if [ -f "pyproject.toml" ]; then
         file_name="pyproject.toml"
         get_version_from_file 'pyproject.toml' '^python = \"([^\"]+)\"'
     fi
@@ -302,7 +306,7 @@ function docker_build {
         set -e
     fi
 
-    
+
     if [[ "$(prop 'devonly')" ]]; then
         echo "Skipping license verification for devonly image"
     else
@@ -317,7 +321,7 @@ function docker_build {
     done < <(find . -name "*verify.py" -print0)
 
     if [ -f "verify.ps1" ]; then
-        echo "==========================="            
+        echo "==========================="
         echo "Verifying docker image by running the pwsh script verify.ps1 within the docker image"
         # use "tee" as powershell doesn't fail on throw when run with -c
         cat verify.ps1 | docker run --rm -i ${image_full_name} sh -c 'tee > verify.ps1; pwsh verify.ps1'
@@ -329,24 +333,39 @@ function docker_build {
     fi
 
     if [ -n "$CR_REPO" ] && cr_login; then
-        docker tag ${image_full_name} ${CR_REPO}/${image_full_name}
-        docker push ${CR_REPO}/${image_full_name} > /dev/null
-        echo "Done docker push for cr: ${image_full_name}"
+        if [ "${DRY_RUN}" = "true" ]; then
+            echo "[DRY-RUN] Would have pushed to CR: ${CR_REPO}/${image_full_name}"
+        else
+            docker tag ${image_full_name} ${CR_REPO}/${image_full_name}
+            docker push ${CR_REPO}/${image_full_name} > /dev/null
+            echo "Done docker push for cr: ${image_full_name}"
+        fi
     else
         echo "Skipping docker push for cr"
     fi
 
     DOCKER_LOGIN_DONE="no"
     if docker_login; then
-        echo "Done docker login"
-        env DOCKER_CONTENT_TRUST=$docker_trust DOCKER_CONFIG="${DOCKER_CONFIG}"  docker push ${image_full_name}
-        echo "Done docker push for: ${image_full_name}"
-        PUSHED_DOCKERS="${image_full_name},$PUSHED_DOCKERS"
-        echo "debug pushed_dockers $PUSHED_DOCKERS"
-        if [[ "$docker_trust" == "1" ]]; then
-            commit_dockerfiles_trust
+        if [ "${DRY_RUN}" = "true" ]; then
+            echo "[DRY-RUN] Would have pushed to Docker Hub: ${image_full_name}"
+        else
+            echo "Done docker login"
+            env DOCKER_CONTENT_TRUST=$docker_trust DOCKER_CONFIG="${DOCKER_CONFIG}"  docker push ${image_full_name}
+            echo "Done docker push for: ${image_full_name}"
+            PUSHED_DOCKERS="${image_full_name},$PUSHED_DOCKERS"
+            echo "debug pushed_dockers $PUSHED_DOCKERS"
+            if [[ "$docker_trust" == "1" ]]; then
+                commit_dockerfiles_trust
+            fi
         fi
-        if ! "${DOCKER_SRC_DIR}/post_github_comment.py" "${image_full_name}"; then
+        POST_COMMENT_ARGS=("${image_full_name}")
+        if [ "${UPLOAD_MODE}" = "true" ]; then
+            POST_COMMENT_ARGS+=("--upload" "--files-to-prs" "${FILES_TO_PRS}")
+        fi
+        if [ "${DRY_RUN}" = "true" ]; then
+            POST_COMMENT_ARGS+=("--dry-run")
+        fi
+        if ! "${DOCKER_SRC_DIR}/post_github_comment.py" "${POST_COMMENT_ARGS[@]}"; then
             echo "Failed post_github_comment.py. Will stop build only if not on master"
             if [ "${CI_COMMIT_REF_NAME}" == "master" ]; then
                 echo "Continuing as we are on master branch..."
@@ -368,7 +387,11 @@ function docker_build {
             docker save -o "${IMAGE_SAVE}" "${image_full_name}"
             IMAGE_ARTIFACTS="${IMAGE_SAVE},${IMAGE_ARTIFACTS}"
             gzip "${IMAGE_SAVE}"
-            "${DOCKER_SRC_DIR}/post_github_comment.py" "${image_full_name}" "--is_contribution"
+            POST_COMMENT_ARGS=("${image_full_name}" "--is_contribution")
+            if [ "${DRY_RUN}" = "true" ]; then
+                POST_COMMENT_ARGS+=("--dry-run")
+            fi
+            "${DOCKER_SRC_DIR}/post_github_comment.py" "${POST_COMMENT_ARGS[@]}"
             cat << EOF
 -------------------------
 Docker image [$image_full_name] has been saved as an artifact.
@@ -382,11 +405,42 @@ EOF
 # default compare branch against master
 DIFF_COMPARE=origin/master...${CI_COMMIT_SHA}
 
+# PARSE ARGUMENTS
+UPLOAD_MODE="false"
+DRY_RUN="false"
+while [ "$#" -gt 0 ]; do
+    case "$1" in
+        --upload) UPLOAD_MODE="true"; shift;;
+        --last-upload-commit) LAST_UPLOAD_COMMIT="$2"; shift 2;;
+        --files-to-prs) FILES_TO_PRS="$2"; shift 2;;
+        --dry-run) DRY_RUN="true"; shift;;
+        *) echo "Unknown option: $1"; exit 1;;
+    esac
+done
+
+if [ "${UPLOAD_MODE}" = "true" ]; then
+    if [ -z "${LAST_UPLOAD_COMMIT}" ]; then
+        echo "--last-upload-commit is required for --upload mode"
+        exit 1
+    fi
+    if [ -z "${FILES_TO_PRS}" ]; then
+        echo "--files-to-prs is required for --upload mode"
+        exit 1
+    fi
+    DIFF_COMPARE="${LAST_UPLOAD_COMMIT}...${CI_COMMIT_SHA}"
+    DOCKER_ORG=demisto
+    if [ "${DRY_RUN}" = "true" ]; then
+        DOCKER_ORG=devdemisto
+        echo "[DRY-RUN] Overriding DOCKER_ORG to devdemisto"
+    fi
+    echo "Running in upload mode. Comparing against last upload commit: ${LAST_UPLOAD_COMMIT}"
+fi
+
 if [ -z "${CI_COMMIT_SHA}" ]; then
     echo "CI_COMMIT_SHA not set. Assuming local testing."
     CI_COMMIT_SHA=testing
     DOCKER_ORG=${DOCKER_ORG:-devtesting}
-    
+
     if [ -z "${CI_COMMIT_REF_NAME}" ]; then
         # simply compare against origin/master
         DIFF_COMPARE=origin/master
@@ -413,7 +467,7 @@ echo "=========== docker info =============="
 docker info
 echo "========================="
 
-if [[ -n "$1" ]]; then
+if [[ -n "$1" ]] && [[ "$1" != --* ]]; then
     if [[ ! -d  "${SCRIPT_DIR}/$1" ]]; then
         echo "Image: [$1] specified as command line parameter but directory not found: [${SCRIPT_DIR}/$1]"
         exit 1
@@ -422,9 +476,13 @@ if [[ -n "$1" ]]; then
     DOCKER_INCLUDE_GREP="/${1}$"
 fi
 
-if [ "${CI_COMMIT_REF_NAME}" == "master" ]; then
+if [ "${CI_COMMIT_REF_NAME}" == "master" ] && [ "${UPLOAD_MODE}" = "false" ]; then
     DIFF_COMPARE="HEAD^1...HEAD"
     DOCKER_ORG=demisto
+    if [ "${DRY_RUN}" = "true" ]; then
+        DOCKER_ORG=devdemisto
+        echo "[DRY-RUN] Overriding DOCKER_ORG to devdemisto"
+    fi
 fi
 
 echo "DOCKER_ORG: ${DOCKER_ORG}, DIFF_COMPARE: [${DIFF_COMPARE}], SCRIPT_DIR: [${SCRIPT_DIR}], BRANCH: ${CI_COMMIT_REF_NAME}, PWD: [${CURRENT_DIR}]"
