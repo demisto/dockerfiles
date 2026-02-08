@@ -84,12 +84,11 @@ def get_pr_details(
             file_to_prs_data = json.load(f)
 
         image_name = docker_image.split(":")[0].split("/")[1]
-        # The key in file_to_prs might be just the directory, or could include Dockerfile
-        prs = file_to_prs_data["file_to_prs"].get(f"docker/{image_name}", [])
-        if not prs:
-            prs = file_to_prs_data["file_to_prs"].get(
-                f"docker/{image_name}", []
-            )
+        # search for any file that matches docker/{image_name} and gather all the prs together
+        prs = []
+        for file_path, pr_list in file_to_prs_data["file_to_prs"].items():
+            if file_path.startswith(f"docker/{image_name}"):
+                prs.extend(pr_list)
 
         if not prs:
             print(f"No PRs found for image: {image_name}")
