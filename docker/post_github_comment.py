@@ -88,7 +88,7 @@ def get_pr_details(
         prs = file_to_prs_data["file_to_prs"].get(f"docker/{image_name}", [])
         if not prs:
             prs = file_to_prs_data["file_to_prs"].get(
-                f"docker/{image_name}/Dockerfile", []
+                f"docker/{image_name}", []
             )
 
         if not prs:
