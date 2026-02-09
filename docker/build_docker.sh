@@ -50,7 +50,11 @@ red_error() {
     echo -e "\033[0;31m$1\033[0m"
 }
 
-DOCKER_LOGIN_DONE=${DOCKER_LOGIN_DONE:-no}
+if [ -n "$GITLAB_CI" ]; then
+    DOCKER_LOGIN_DONE=${DOCKER_LOGIN_DONE:-no}
+else
+    DOCKER_LOGIN_DONE=${DOCKER_LOGIN_DONE:-yes}
+fi
 function docker_login {
     if [ "${DOCKER_LOGIN_DONE}" = "yes" ]; then
         return 0;
