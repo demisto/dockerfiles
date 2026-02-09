@@ -112,6 +112,35 @@ def get_pr_details(
         print("CI_COMMIT_REF_NAME not set. Cannot determine PR number.")
         return []
 
+    github_token = os.getenv("GITHUB_TOKEN")
+    if github_token:
+        # Try to find PR by branch name
+        headers = {"Authorization": f"Bearer {github_token}"}
+        # repo is hardcoded as demisto/dockerfiles in other places
+        url = f"https://api.github.com/search/issues?q=repo:demisto/dockerfiles+is:pr+is:open+head:{branch_name}"
+        try:
+            res = requests.get(url, headers=headers, verify=False)
+            res.raise_for_status()
+            data = res.json()
+            if data.get("items"):
+                for pr in data["items"]:
+                    pr_num = pr["number"]
+                    pr_details.append(
+                        (
+                            pr_num,
+                            pr["url"],
+                        )
+                    )
+                return pr_details
+            else:
+                print(
+                    f"No open PR found for branch: {branch_name} via github api search. Falling back to regex."
+                )
+        except Exception as ex:
+            print(
+                f"Failed searching for PR for branch {branch_name}. Err: {ex}. Falling back to regex."
+            )
+
     m = re.match(r"(\d+)/.*", branch_name)
     if not m:
         print(f"Could not extract PR number from branch name: {branch_name}")
