@@ -141,14 +141,6 @@ def get_pr_details(
                 f"Failed searching for PR for branch {branch_name}. Err: {ex}. Falling back to regex."
             )
 
-    m = re.match(r"(\d+)/.*", branch_name)
-    if m:
-        pr_num = int(m.group(1))
-        pr_details.append(
-            (pr_num, f"https://api.github.com/repos/demisto/dockerfiles/issues/{pr_num}")
-        )
-        return pr_details
-
     # try to get from comment
     last_comment = subprocess.check_output(["git", "log", "-1", "--pretty=%B"], text=True)
     m = re.search(r"#(\d+)", last_comment, re.MULTILINE)
