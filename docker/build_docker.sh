@@ -50,7 +50,11 @@ red_error() {
     echo -e "\033[0;31m$1\033[0m"
 }
 
-DOCKER_LOGIN_DONE=${DOCKER_LOGIN_DONE:-no}
+if [ -n "$GITLAB_CI" ]; then
+    DOCKER_LOGIN_DONE=${DOCKER_LOGIN_DONE:-no}
+else
+    DOCKER_LOGIN_DONE=${DOCKER_LOGIN_DONE:-yes}
+fi
 function docker_login {
     if [ "${DOCKER_LOGIN_DONE}" = "yes" ]; then
         return 0;
@@ -408,15 +412,26 @@ DIFF_COMPARE=origin/master...${CI_COMMIT_SHA}
 # PARSE ARGUMENTS
 UPLOAD_MODE="false"
 DRY_RUN="false"
+docker_image_to_build=""
 while [ "$#" -gt 0 ]; do
     case "$1" in
         --upload) UPLOAD_MODE="true"; shift;;
         --last-upload-commit) LAST_UPLOAD_COMMIT="$2"; shift 2;;
         --files-to-prs) FILES_TO_PRS="$2"; shift 2;;
         --dry-run) DRY_RUN="true"; shift;;
-        *) echo "Unknown option: $1"; exit 1;;
+        --*) echo "Unknown option: $1"; exit 1;;
+        *) docker_image_to_build="$1"; shift;;
     esac
 done
+
+if [[ -n "${docker_image_to_build}" ]]; then
+    if [[ ! -d  "${SCRIPT_DIR}/${docker_image_to_build}" ]]; then
+        echo "Image: [${docker_image_to_build}] specified as command line parameter but directory not found: [${SCRIPT_DIR}/${docker_image_to_build}]"
+        exit 1
+    fi
+    DIFF_COMPARE="ALL"
+    DOCKER_INCLUDE_GREP="/${docker_image_to_build}$"
+fi
 
 if [ "${UPLOAD_MODE}" = "true" ]; then
     if [ -z "${LAST_UPLOAD_COMMIT}" ]; then
@@ -467,15 +482,6 @@ echo "=========== docker info =============="
 docker info
 echo "========================="
 
-if [[ -n "$1" ]] && [[ "$1" != --* ]]; then
-    if [[ ! -d  "${SCRIPT_DIR}/$1" ]]; then
-        echo "Image: [$1] specified as command line parameter but directory not found: [${SCRIPT_DIR}/$1]"
-        exit 1
-    fi
-    DIFF_COMPARE="ALL"
-    DOCKER_INCLUDE_GREP="/${1}$"
-fi
-
 if [ "${CI_COMMIT_REF_NAME}" == "master" ] && [ "${UPLOAD_MODE}" = "false" ]; then
     DIFF_COMPARE="HEAD^1...HEAD"
     DOCKER_ORG=demisto
@@ -505,7 +511,7 @@ for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | so
     echo "Checking dir: ${docker_dir} against ${DIFF_COMPARE}"
     if [[ ${DIFF_COMPARE} = "ALL" ]] || [[ $(git --no-pager diff "${DIFF_COMPARE}" --name-status -- "${docker_dir}") ]]; then
         if [ -n "${DOCKER_INCLUDE_GREP}" ] && [ -z "$(echo ${docker_dir} | grep -E ${DOCKER_INCLUDE_GREP})" ]; then
-            [[ -z "$1" ]] && echo "Skipping dir: '${docker_dir}' as not included in grep expression DOCKER_INCLUDE_GREP: '${DOCKER_INCLUDE_GREP}'"
+            [[ -z "${docker_image_to_build}" ]] && echo "Skipping dir: '${docker_dir}' as not included in grep expression DOCKER_INCLUDE_GREP: '${DOCKER_INCLUDE_GREP}'"
             continue
         fi
         count=$((count+1))
