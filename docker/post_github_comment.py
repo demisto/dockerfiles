@@ -113,7 +113,7 @@ def get_pr_details(
         return []
 
     github_token = os.getenv("GITHUB_TOKEN")
-    if github_token:
+    if github_token and branch_name != "master":
         # Try to find PR by branch name
         headers = {"Authorization": f"Bearer {github_token}"}
         # repo is hardcoded as demisto/dockerfiles in other places
@@ -142,15 +142,26 @@ def get_pr_details(
             )
 
     m = re.match(r"(\d+)/.*", branch_name)
-    if not m:
-        print(f"Could not extract PR number from branch name: {branch_name}")
-        return []
+    if m:
+        pr_num = int(m.group(1))
+        pr_details.append(
+            (pr_num, f"https://api.github.com/repos/demisto/dockerfiles/issues/{pr_num}")
+        )
+        return pr_details
 
-    pr_num = int(m.group(1))
-    pr_details.append(
-        (pr_num, f"https://api.github.com/repos/demisto/dockerfiles/issues/{pr_num}")
-    )
-    return pr_details
+    # try to get from comment
+    last_comment = subprocess.check_output(["git", "log", "-1", "--pretty=%B"], text=True)
+    m = re.search(r"#(\d+)", last_comment, re.MULTILINE)
+    if m:
+        pr_num = int(m.group(1))
+        print(f"Issue id found from the last commit comment: {pr_num}")
+        pr_details.append(
+            (pr_num, f"https://api.github.com/repos/demisto/dockerfiles/issues/{pr_num}")
+        )
+        return pr_details
+
+    print("No issue id found in the last commit comment. Ignoring: \n------\n{}\n-------".format(last_comment))
+    return []
 
 
 def post_comment(pr_url: str, message: str, dry_run: bool):
