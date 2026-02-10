@@ -64,7 +64,7 @@ RUN dnf update -y --nodocs && \
 ENV PATH /usr/local/bin:/home/python/.local/bin:$PATH
 
 # Relevant for tldextract
-COPY --chmod=644 public_list.dat /var/public_list.dat
+COPY public_list.dat /var/public_list.dat
 
 COPY --from=build /usr/local/include/python3.11 /usr/local/include/python3.11
 COPY --from=build /usr/local/lib /usr/local/lib
