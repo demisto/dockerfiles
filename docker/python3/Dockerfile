@@ -1,4 +1,4 @@
-# Last modified: 2026-01-31T00:27:57.778008+00:00
+# Last modified: 2026-02-08T00:38:15.262129+00:00
 FROM python:3.12.12-alpine3.23
 
 # Upgrade all packages to latest
@@ -9,7 +9,7 @@ COPY requirements.txt .
 COPY localtime /etc/localtime
 
 # Relevant for tldextract
-COPY public_list.dat /var/public_list.dat
+COPY --chmod=644 public_list.dat /var/public_list.dat
 
 RUN apk --update add --no-cache --virtual .build-dependencies \
   python3-dev build-base wget \
