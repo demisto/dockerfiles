@@ -4,8 +4,15 @@ _site
 .vscode
 *.pyc
 .pytest_cache
-artifacts
 dockerfiles-trust
 .python-version
 .venv
 /report.xml
+# Ignoring Infra folders created during the build.
+/Tests
+# This is the Utils from Infra, not the utils from this repository.
+/Utils
+/config
+# Ignoring build folders.
+pipeline_jobs_folder
+artifacts
