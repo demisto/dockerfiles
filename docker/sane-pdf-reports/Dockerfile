@@ -5,7 +5,8 @@ WORKDIR "/app"
 
 SHELL ["/bin/bash", "-c"]
 RUN apt-get update -y -q && \
-    apt-get install -y -q nodejs \
+    apt-get install -y -q nodejs=22.14.0-1nodesource1 \
+    openssl=3.0.15-1~deb11u1 \
     npm gconf-service \
     libasound2 libatk1.0-0 libatk-bridge2.0-0 \
     libc6 libcairo2 libcups2 libdbus-1-3 \
@@ -29,6 +30,8 @@ RUN apt-get update -y -q && \
     libgbm-dev \
     && rm -rf /var/lib/apt/lists/* \
     && npm i npm@8.1.3 -g
+
+RUN pip install --no-cache-dir "urllib3>=2.6.3" "jaraco.context>=6.1.0" "wheel>=0.46.2"
 
 RUN npm i puppeteer@5.3.1 && ln -s /app/node_modules/puppeteer/.local-chromium/linux-*/chrome-linux/chrome /usr/bin/chromium-browser
 # install gsutil acc to https://cloud.google.com/storage/docs/gsutil_install
