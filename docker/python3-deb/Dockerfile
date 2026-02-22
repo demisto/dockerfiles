@@ -1,4 +1,4 @@
-# Last modified: 2026-02-04T00:27:41.205454+00:00
+# Last modified: 2026-02-07T00:29:16.321707+00:00
 FROM python:3.12.12-slim-bookworm
 
 RUN echo 'deb http://deb.debian.org/debian bookworm-backports main' >> /etc/apt/sources.list
@@ -19,7 +19,7 @@ RUN apt-get update && apt-get -t bookworm-backports -y --no-install-recommends u
 COPY requirements.txt .
 
 # Relevant for tldextract
-COPY public_list.dat /var/public_list.dat
+COPY --chmod=644 public_list.dat /var/public_list.dat
 
 #Install tools for building binary deps (will be reomved later on)
 RUN apt-get update && apt-get install -y --no-install-recommends \

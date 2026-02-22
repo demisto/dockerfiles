@@ -2,6 +2,7 @@ import warnings
 import dateparser
 import tldextract
 import os
+import stat
 # set warnings to throw an error
 warnings.simplefilter("error")
 d = dateparser.parse('1 day')
@@ -54,3 +55,8 @@ print(f'Using setuptools version {setuptools.__version__}')
 
 assert os.path.exists("/var/public_list.dat")
 print("public_list.dat for TLDextract exists")
+
+file_stat = os.stat("/var/public_list.dat")
+file_perms = oct(file_stat.st_mode)[-3:]
+assert file_perms == '644', f"Expected permissions 644, got {file_perms}"
+print(f"public_list.dat has correct permissions: {file_perms}")

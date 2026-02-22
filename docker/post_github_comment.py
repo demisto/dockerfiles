@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import argparse
+import json
 from pathlib import Path
 
 import requests
@@ -7,8 +8,10 @@ import subprocess
 import os
 import re
 import time
+from typing import List, Tuple, Optional, Set
 
-ARTIFACTS_FOLDER = Path(os.getenv("ARTIFACTS_FOLDER", "."))
+ARTIFACTS_FOLDER = Path(os.getenv("ARTIFACTS_FOLDER", "artifacts"))
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 
 
 def get_docker_image_size(docker_image, is_contribution: bool = False) -> str:
@@ -26,14 +29,22 @@ def get_docker_image_size(docker_image, is_contribution: bool = False) -> str:
     if not is_contribution:
         for i in (1, 2, 3):
             try:
-                name, tag = docker_image.split(':')
-                res = requests.get('https://hub.docker.com/v2/repositories/{}/tags/{}/'.format(name, tag))
+                name, tag = docker_image.split(":")
+                res = requests.get(
+                    "https://hub.docker.com/v2/repositories/{}/tags/{}/".format(
+                        name, tag
+                    )
+                )
                 res.raise_for_status()
-                size_bytes = res.json()['images'][0]['size']
-                size = '{0:.2f} MB'.format(float(size_bytes)/1024/1024)
+                size_bytes = res.json()["images"][0]["size"]
+                size = "{0:.2f} MB".format(float(size_bytes) / 1024 / 1024)
                 break
             except Exception as ex:
-                print("Attempt [{}] failed getting image size for image: {}. Err: {}".format(i, docker_image, ex))
+                print(
+                    "Attempt [{}] failed getting image size for image: {}. Err: {}".format(
+                        i, docker_image, ex
+                    )
+                )
                 if i != 3:
                     print("Sleeping 5 seconds and trying again...")
                     time.sleep(5)
@@ -41,7 +52,7 @@ def get_docker_image_size(docker_image, is_contribution: bool = False) -> str:
         docker_image_tar = ARTIFACTS_FOLDER / convert_docker_image_tar(docker_image)
         if docker_image_tar.exists():
             size_bytes = docker_image_tar.stat().st_size
-            size = '{0:.2f} MB'.format(float(size_bytes)/1024/1024)
+            size = "{0:.2f} MB".format(float(size_bytes) / 1024 / 1024)
         else:
             print(f"Docker image '{docker_image_tar}' doesn't exist in filesystem")
     return size
@@ -61,40 +72,163 @@ def convert_docker_image_tar(docker_image: str) -> str:
     return f"{docker_image.replace('/', '__')}.tar.gz"
 
 
-def get_pr_comments_url() -> str | None:
-    if os.getenv('PR_NUM'):
-        pr_num = os.getenv('PR_NUM')
-        print("PR number found from environment: " + pr_num)
-        return f'https://api.github.com/repos/demisto/dockerfiles/issues/{pr_num}/comments'
+def get_pr_details(
+    docker_image: str, upload_mode: bool, files_to_prs: Optional[str]
+) -> List[Tuple[int, str]]:
+    pr_details = []
+    if upload_mode:
+        if not files_to_prs or not Path(files_to_prs).exists():
+            print(f"{files_to_prs} not found. Cannot determine PR number.")
+            return []
+
+        with open(files_to_prs) as f:
+            file_to_prs_data = json.load(f)
+
+        image_name = docker_image.split(":")[0].split("/")[1]
+        # search for any file that matches docker/{image_name} and gather all the prs together
+        prs = []
+        for file_path, pr_list in file_to_prs_data["file_to_prs"].items():
+            if file_path.startswith(f"docker/{image_name}"):
+                prs.extend(pr_list)
+
+        if not prs:
+            print(f"No PRs found for image: {image_name}")
+            return []
+
+        pr_numbers: Set[int] = set()
+        for pr in prs:
+            pr_numbers.add(pr["number"])
+
+        for pr_num in pr_numbers:
+            pr_details.append(
+                (
+                    pr_num,
+                    f"https://api.github.com/repos/demisto/dockerfiles/issues/{pr_num}",
+                )
+            )
+        return pr_details
+
+    branch_name = os.getenv("CI_COMMIT_REF_NAME")
+    if not branch_name:
+        print("CI_COMMIT_REF_NAME not set. Cannot determine PR number.")
+        return []
+
+    if GITHUB_TOKEN and branch_name != "master":
+        # Try to find PR by branch name
+        headers = {"Authorization": f"Bearer {GITHUB_TOKEN}"}
+        # repo is hardcoded as demisto/dockerfiles in other places
+        url = f"https://api.github.com/search/issues?q=repo:demisto/dockerfiles+is:pr+is:open+head:{branch_name}"
+        try:
+            res = requests.get(url, headers=headers, verify=False)
+            res.raise_for_status()
+            data = res.json()
+            if data.get("items"):
+                for pr in data["items"]:
+                    pr_num = pr["number"]
+                    pr_details.append(
+                        (
+                            pr_num,
+                            pr["url"],
+                        )
+                    )
+                return pr_details
+            else:
+                print(
+                    f"No open PR found for branch: {branch_name} via github api search. Falling back to regex."
+                )
+        except Exception as ex:
+            print(
+                f"Failed searching for PR for branch {branch_name}. Err: {ex}. Falling back to regex."
+            )
 
     # try to get from comment
     last_comment = subprocess.check_output(["git", "log", "-1", "--pretty=%B"], text=True)
     m = re.search(r"#(\d+)", last_comment, re.MULTILINE)
-    if not m:
-        print("No issue id found in the last commit comment. Ignoring: \n------\n{}\n-------".format(last_comment))
-        return None
-    issue_id = m.group(1)
-    print("Issue id found from the last commit comment: " + issue_id)
-    post_url = "https://api.github.com/repos/demisto/dockerfiles/issues/{}/comments".format(issue_id)
-    return post_url
+    if m:
+        pr_num = int(m.group(1))
+        print(f"Issue id found from the last commit comment: {pr_num}")
+        pr_details.append(
+            (pr_num, f"https://api.github.com/repos/demisto/dockerfiles/issues/{pr_num}")
+        )
+        return pr_details
+
+    print("No issue id found in the last commit comment. Ignoring: \n------\n{}\n-------".format(last_comment))
+    return []
+
+
+def post_comment(pr_url: str, message: str, dry_run: bool):
+    if dry_run:
+        print(f"[DRY-RUN] Would have posted comment to {pr_url}:")
+        print(message)
+    else:
+        print(f"Going to post comment to {pr_url}:\n\n{message}")
+        res = requests.post(
+            f"{pr_url}/comments",
+            json={"body": message},
+            auth=(os.environ["XSOAR_BOT_GITHUB_TOKEN"], "x-oauth-basic"),
+        )
+        try:
+            res.raise_for_status()
+        except Exception as ex:
+            print(f"Failed comment post to {pr_url}: {ex}")
+
+
+def add_label(pr_num: int, label: str, dry_run: bool):
+    if dry_run:
+        print(f"[DRY-RUN] Would have added label '{label}' to PR #{pr_num}")
+    else:
+        # Adding a label to a PR requires admin rights, that's why we use the content bot and not the xsoar-bot.
+        print(f"Adding '{label}' label to PR #{pr_num}")
+        url = f"https://api.github.com/repos/demisto/dockerfiles/issues/{pr_num}/labels"
+        res = requests.post(
+            url,
+            verify=False,
+            json={"labels": [label]},
+            auth=(GITHUB_TOKEN, "x-oauth-basic"),
+        )
+        try:
+            res.raise_for_status()
+        except Exception as ex:
+            print(f"Failed to add label to PR #{pr_num}: {ex}")
 
 
 def main():
     desc = """Post a message to github about the created image. Relies on environment variables:
 XSOAR_BOT_GITHUB_TOKEN: api key of user to use for posting
-PR_NUM: the PR number to post to. If not set, it will try to infer it from the last commit message.
+CI_COMMIT_REF_NAME: The branch name to use to get the PR number.
     """
-    parser = argparse.ArgumentParser(description=desc,
-                                     formatter_class=argparse.RawTextHelpFormatter)
-    parser.add_argument("docker_image", help="The docker image with tag version to use. For example: devdemisto/python3:1.5.0.27")
-    parser.add_argument("--is_contribution", help="Whether the PR is a contribution or not", action="store_true", default=False)
+    parser = argparse.ArgumentParser(
+        description=desc, formatter_class=argparse.RawTextHelpFormatter
+    )
+    parser.add_argument(
+        "docker_image",
+        help="The docker image with tag version to use. For example: devdemisto/python3:1.5.0.27",
+    )
+    parser.add_argument(
+        "--is_contribution",
+        help="Whether the PR is a contribution or not",
+        action="store_true",
+        default=False,
+    )
+    parser.add_argument(
+        "--upload",
+        help="Whether running in upload mode",
+        action="store_true",
+        default=False,
+    )
+    parser.add_argument("--files-to-prs", help="Path to file_to_prs.json file")
+    parser.add_argument(
+        "--dry-run", help="Do not post to github", action="store_true", default=False
+    )
     args = parser.parse_args()
     print("Posting to github about image: " + args.docker_image)
-    post_url = get_pr_comments_url()
-    if not post_url:
+
+    pr_details_list = get_pr_details(args.docker_image, args.upload, args.files_to_prs)
+    if not pr_details_list:
+        print("No PRs found to comment on.")
         return
-    print('Found PR Comments URL: {post_url}')
-    inspect_format = f'''
+
+    inspect_format = f"""
 {{{{ range $env := .Config.Env }}}}{{{{ if eq $env "DEPRECATED_IMAGE=true" }}}}## 🔴 IMPORTANT: This image is deprecated 🔴{{{{ end }}}}{{{{ end }}}}
 ## Docker Metadata
 - Image Size: `{get_docker_image_size(args.docker_image, is_contribution=args.is_contribution)}`
@@ -105,41 +239,46 @@ PR_NUM: the PR number to post to. If not set, it will try to infer it from the l
 {{{{ end }}}}{{{{ if .Config.Cmd }}}}- Command: `{{{{ json .Config.Cmd }}}}`
 {{{{ end }}}}- Environment:{{{{ range .Config.Env }}}}{{{{ "\\n" }}}}  - `{{{{ . }}}}`{{{{ end }}}}
 - Labels:{{{{ range $key, $value := .Config.Labels }}}}{{{{ "\\n" }}}}  - `{{{{ $key }}}}:{{{{ $value }}}}`{{{{ end }}}}
-'''
-    docker_info = subprocess.check_output(["docker", "inspect", "-f", inspect_format, args.docker_image]).decode()
-    base_name = args.docker_image.split(':')[0]
+"""
+    docker_info = subprocess.check_output(
+        ["docker", "inspect", "-f", inspect_format, args.docker_image]
+    ).decode()
+    base_name = args.docker_image.split(":")[0]
     mode = "Dev"
-    if base_name.startswith('demisto/'):
+    if base_name.startswith("demisto/"):
         mode = "Production"
     title = f"# Docker Image Ready - {mode}\n\n"
     if args.is_contribution:
         saved_docker_image = convert_docker_image_tar(args.docker_image)
         message = (
-            title +
-            "Docker automatic build has completed. The Docker image is available from the assigned reviewer to be loaded locally.\n\n" +
-            "To load it locally run the following command:\n" +
-            "```bash\n" +
-            f"gunzip {saved_docker_image} | docker load\n" +
-            "```\n" +
-            docker_info
+            title
+            + "Docker automatic build has completed. The Docker image is available from the assigned reviewer to be loaded locally.\n\n"
+            + "To load it locally run the following command:\n"
+            + "```bash\n"
+            + f"gunzip {saved_docker_image} | docker load\n"
+            + "```\n"
+            + docker_info
         )
     else:
         message = (
-            title +
-            "Docker automatic build has deployed your docker image: {}\n".format(args.docker_image) +
-            "It is available now on docker hub at: https://hub.docker.com/r/{}/tags\n".format(base_name) +
-            "Get started by pulling the image:\n" +
-            "```\n" +
-            "docker pull {}\n".format(args.docker_image) +
-            "```\n" +
-            docker_info
+            title
+            + "Docker automatic build has deployed your docker image: {}\n".format(
+                args.docker_image
+            )
+            + "It is available now on docker hub at: https://hub.docker.com/r/{}/tags\n".format(
+                base_name
+            )
+            + "Get started by pulling the image:\n"
+            + "```\n"
+            + "docker pull {}\n".format(args.docker_image)
+            + "```\n"
+            + docker_info
         )
-    print("Going to post comment:\n\n{}".format(message))
-    res = requests.post(post_url, json={"body": message}, auth=(os.environ['XSOAR_BOT_GITHUB_TOKEN'], 'x-oauth-basic'))
-    try:
-        res.raise_for_status()
-    except Exception as ex:
-        print("Failed comment post: {}".format(ex))    
+
+    for pr_num, pr_url in pr_details_list:
+        post_comment(pr_url, message, args.dry_run)
+        if args.upload:
+            add_label(pr_num, "production", args.dry_run)
 
 
 if __name__ == "__main__":

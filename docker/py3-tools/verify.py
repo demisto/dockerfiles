@@ -25,6 +25,9 @@ from asana import Client
 # json2html
 import json2html
 
+# async
+import httpx
+import anyio
 
 # intezer_sdk
 from intezer_sdk import consts
