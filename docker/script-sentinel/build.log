@@ -1,0 +1,75 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 4.60kB done
+#1 WARN: FromAsCasing: 'as' and 'FROM' keywords' casing do not match (line 6)
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/ubuntu:24.04
+#2 DONE 0.7s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [builder 1/6] FROM docker.io/library/ubuntu:24.04@sha256:c35e29c9450151419d9448b0fd75374fec4fff364a27f176fb458d472dfc9e54
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 41.65kB 0.0s done
+#5 DONE 0.0s
+
+#6 [builder 4/6] RUN apt-get update && apt-get install -y --no-install-recommends     python3.12     python3-pip     python3-dev     python3-venv     gcc     g++     build-essential     libre2-10     libssl3     libboost-locale1.83.0     wget     && rm -rf /var/lib/apt/lists/*
+#6 CACHED
+
+#7 [stage-1  8/17] RUN apt-get update && apt-get install -y --no-install-recommends     python3.12     python3-pip     libssl3     libre2-10     && rm -rf /var/lib/apt/lists/*
+#7 CACHED
+
+#8 [stage-1  5/17] COPY --from=builder /usr/lib/x86_64-linux-gnu/libcrypto.so.1.1* /usr/lib/x86_64-linux-gnu/
+#8 CACHED
+
+#9 [builder 5/6] RUN cd /tmp     && dpkg -i /tmp/libssl1.1_1.1.1f-1ubuntu2_amd64.deb     && rm /tmp/libssl1.1_1.1.1f-1ubuntu2_amd64.deb     && wget -q http://archive.ubuntu.com/ubuntu/pool/main/r/re2/libre2-5_20200101+dfsg-1build1_amd64.deb     && dpkg -i libre2-5_20200101+dfsg-1build1_amd64.deb     && rm libre2-5_20200101+dfsg-1build1_amd64.deb     && cd /usr/lib/x86_64-linux-gnu     && ln -sf libre2.so.5.0.0 libre2.so.5     && ln -s libboost_locale.so.1.83.0 libboost_locale.so.1.71.0
+#9 CACHED
+
+#10 [stage-1  4/17] COPY --from=builder /usr/lib/x86_64-linux-gnu/libssl.so.1.1* /usr/lib/x86_64-linux-gnu/
+#10 CACHED
+
+#11 [builder 3/6] COPY ml_models/libssl1.1_1.1.1f-1ubuntu2_amd64.deb /tmp/
+#11 CACHED
+
+#12 [builder 2/6] WORKDIR /app
+#12 CACHED
+
+#13 [stage-1  7/17] COPY --from=builder /usr/lib/x86_64-linux-gnu/libboost_locale.so.1.83.0 /usr/lib/x86_64-linux-gnu/
+#13 CACHED
+
+#14 [stage-1  3/17] COPY --from=builder /usr/lib/x86_64-linux-gnu/libre2.so.5* /usr/lib/x86_64-linux-gnu/
+#14 CACHED
+
+#15 [stage-1  6/17] COPY --from=builder /usr/lib/x86_64-linux-gnu/libboost_locale.so.1.71.0 /usr/lib/x86_64-linux-gnu/
+#15 CACHED
+
+#16 [builder 6/6] RUN pip3 install --no-cache-dir --break-system-packages     numpy>=1.19.0     lightgbm>=3.0.0     tree-sitter>=0.25.2     tree-sitter-language-pack     pyyaml>=6.0.2     python-dotenv>=1.0.1     rich>=13.7.0     yara-python>=4.3.0
+#16 CACHED
+
+#17 [stage-1  9/17] COPY --from=builder /usr/local/lib/python3.12/dist-packages /usr/local/lib/python3.12/dist-packages
+#17 CACHED
+
+#18 [stage-1 10/17] RUN useradd -m -u 1000 sentinel &&     chown -R sentinel:sentinel /app
+#18 0.294 useradd: UID 1000 is not unique
+#18 ERROR: process "/bin/sh -c useradd -m -u 1000 sentinel &&     chown -R sentinel:sentinel /app" did not complete successfully: exit code: 4
+------
+ > [stage-1 10/17] RUN useradd -m -u 1000 sentinel &&     chown -R sentinel:sentinel /app:
+0.294 useradd: UID 1000 is not unique
+------
+
+ [33m1 warning found (use docker --debug to expand):
+[0m - FromAsCasing: 'as' and 'FROM' keywords' casing do not match (line 6)
+Dockerfile:98
+--------------------
+  97 |     # Create non-root user for security
+  98 | >>> RUN useradd -m -u 1000 sentinel && \
+  99 | >>>     chown -R sentinel:sentinel /app
+ 100 |     
+--------------------
+ERROR: failed to build: failed to solve: process "/bin/sh -c useradd -m -u 1000 sentinel &&     chown -R sentinel:sentinel /app" did not complete successfully: exit code: 4

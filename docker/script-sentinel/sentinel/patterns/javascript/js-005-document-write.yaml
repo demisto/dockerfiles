@@ -1,0 +1,41 @@
+# JavaScript Pattern: document.write() XSS Vector
+# Detects use of document.write() with user input
+
+id: JS-005
+name: document.write() XSS Vector
+description: |
+  Detects use of document.write() with variables or dangerous content.
+  While document.write() with static strings is used in legacy ads/analytics,
+  it becomes dangerous with dynamic content. Pattern focuses on variable
+  concatenation or script/event handler injection, not plain static strings.
+languages:
+  - javascript
+detection_type: regex
+# Focus on document.write with variables or dangerous tags, not static strings
+# Static document.write("<div>") is common in legacy code and analytics
+detection_logic: 'document\.write(?:ln)?\s*\([^)]*(?:\+|`|\$\{|<script|<iframe|onerror|onload)|document\.write(?:ln)?\s*\(\s*[a-zA-Z_$][a-zA-Z0-9_$]*\s*\)'
+severity: Low
+mitre_technique: T1059.007
+confidence: 0.65
+category: injection
+enabled: true
+paranoia_levels:
+  - 1
+  - 2
+  - 3
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-17"
+  updated: "2025-11-17"
+  references:
+    - "https://attack.mitre.org/techniques/T1059/007/"
+    - "https://developer.mozilla.org/en-US/docs/Web/API/Document/write"
+  tags:
+    - javascript
+    - xss
+    - document-write
+    - injection
+  examples:
+    - "document.write('<script>' + userInput + '</script>');"
+    - "document.writeln(untrustedData);"
+    - "document.write('<img src=x onerror=' + payload + '>');"

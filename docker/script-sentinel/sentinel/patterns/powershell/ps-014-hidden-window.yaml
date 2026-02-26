@@ -1,0 +1,35 @@
+# PowerShell Pattern: Hidden Window Execution
+# Detects execution with hidden windows
+
+id: PS-014
+name: Hidden Window Execution
+description: |
+  Detects PowerShell execution with hidden windows combined with suspicious
+  download/execute indicators. Hidden windows alone are common in legitimate
+  scheduled tasks, so this pattern requires combination with download, encoding,
+  or execution patterns to reduce false positives.
+languages:
+  - powershell
+detection_type: regex
+detection_logic: '(?i)(?:-WindowStyle\s+Hidden|-w\s+hidden|-NoNewWindow|CreateNoWindow\s*=\s*\$true|WindowStyle.*Hidden)(?=.*(?:DownloadString|DownloadFile|WebClient|Invoke-WebRequest|Start-BitsTransfer|Invoke-Expression|IEX|FromBase64String|encodedcommand|-enc\s))'
+severity: Medium
+mitre_technique: T1564.003
+confidence: 0.8
+category: defense_evasion
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-17"
+  updated: "2025-11-17"
+  references:
+    - "https://attack.mitre.org/techniques/T1564/003/"
+    - "https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_powershell_exe"
+  tags:
+    - powershell
+    - stealth
+    - defense-evasion
+    - hidden-window
+  examples:
+    - "powershell.exe -WindowStyle Hidden -ExecutionPolicy Bypass -File malware.ps1"
+    - "Start-Process powershell.exe -ArgumentList '-w hidden -enc JAB...' -NoNewWindow"
+    - "$psi = New-Object System.Diagnostics.ProcessStartInfo; $psi.WindowStyle = 'Hidden'"

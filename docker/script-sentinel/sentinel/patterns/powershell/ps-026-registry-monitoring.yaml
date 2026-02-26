@@ -1,0 +1,36 @@
+# PowerShell Pattern: Registry Monitoring
+# Detects continuous registry monitoring activity
+
+id: PS-026
+name: Registry Monitoring Activity
+description: |
+  Detects continuous monitoring of security-relevant registry keys in loops.
+  Simple registry reads are very common for admin scripts. Pattern focuses on
+  while loops with Run keys, security settings, or Compare-Object for change
+  detection which indicates surveillance of persistence or security configuration.
+languages:
+  - powershell
+detection_type: regex
+# Focus on infinite loops with security-relevant keys
+detection_logic: '(?i)(?:while\s*\(\s*\$true\s*\)[^\n]*(?:CurrentVersion\\\\Run|Policies\\\\System|Windows Defender)|Compare-Object[^\n]+(?:CurrentVersion\\\\Run|Policies))'
+severity: Low
+mitre_technique: T1012
+confidence: 0.75
+category: discovery
+enabled: true
+paranoia_levels:
+  - 2
+  - 3
+metadata:
+  author: Script Sentinel Team
+  created: "2025-01-19"
+  references:
+    - "https://attack.mitre.org/techniques/T1012/"
+    - "https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.management/get-itemproperty"
+  tags:
+    - registry-monitoring
+    - surveillance
+    - discovery
+  examples:
+    - "while ($true) { Get-ItemProperty -Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run' }"
+    - "Compare-Object $baseline (Get-ItemProperty -Path $regPath)"

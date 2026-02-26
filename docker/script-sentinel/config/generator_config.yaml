@@ -1,0 +1,29 @@
+# Pattern Generator Configuration
+# Used by sentinel-generate CLI
+
+llm:
+  provider: anthropic
+  model: claude-sonnet-4-20250514
+  timeout: 60
+  max_tokens: 4096
+  temperature: 0.3  # Lower for more deterministic output
+
+generation:
+  max_rules_per_run: 10
+  min_confidence: 0.7
+  batch_size: 5  # Scripts per LLM call
+
+templates:
+  path: rules/templates/
+  include_negative_examples: true
+
+staging:
+  base_dir: "rules/staging/"
+  yara_dir: "proposed_yara"
+  patterns_dir: "proposed_patterns"
+  obfuscation_dir: "proposed_obfuscation"
+  rejected_dir: "rejected"
+
+validation:
+  fp_threshold: 0.02  # Default 2% FP rate threshold
+  enabled: true

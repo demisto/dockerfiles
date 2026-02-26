@@ -1,0 +1,43 @@
+# PowerShell Pattern: SMB/RPC Lateral Movement
+# Detects SMB and RPC-based lateral movement techniques
+
+id: PS-042
+name: SMB/RPC Lateral Movement
+description: |
+  Detects PowerShell scripts performing lateral movement via SMB/RPC protocols.
+  This includes tools like Invoke-SMBExec, Invoke-TheHash, and similar frameworks
+  that use SMB named pipes, RPC calls, and service creation for remote command
+  execution. Common in pass-the-hash attacks and post-exploitation frameworks.
+languages:
+  - powershell
+detection_type: regex
+detection_logic: '(?i)(?:\bInvoke-SMBExec\b|\bInvoke-TheHash\b|\bSMBClient\b|\bSMBExec\b|\\\\pipe\\\\svcctl|\bOpenSCManager[AW]?\b|\bCreateService[AW]?\b|\bStartService[AW]?\b|\bRpcBindingSetAuthInfo\b|\bNetrShareEnum\b|\bNetrServerGetInfo\b|\bNTLM\b.*\bHash\b.*\bSMB\b|\bPass\b.*\bHash\b.*\bSMB\b|\bSMB\b.*\bExec\b|\bRPC\b.*\bExec\b)'
+severity: High
+mitre_technique: T1021.002
+confidence: 0.85
+category: lateral-movement
+enabled: true
+paranoia_levels:
+  - 1
+  - 2
+  - 3
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-25"
+  updated: "2025-11-25"
+  references:
+    - "https://attack.mitre.org/techniques/T1021/002/"
+    - "https://attack.mitre.org/techniques/T1550/002/"
+    - "https://github.com/Kevin-Robertson/Invoke-TheHash"
+  tags:
+    - powershell
+    - smb
+    - rpc
+    - lateral-movement
+    - pass-the-hash
+    - remote-execution
+  examples:
+    - "Invoke-SMBExec -Target 192.168.1.10 -Username admin -Hash $ntlmHash"
+    - "function Invoke-SMBExec { param($Target, $Command, $Hash) }"
+    - "$SMBClient = New-Object System.Net.Sockets.TcpClient; $SMBClient.Connect($Target, 445)"
+    - "OpenSCManagerW($target, $null, 0xF003F)"

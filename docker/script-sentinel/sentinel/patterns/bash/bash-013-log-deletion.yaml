@@ -1,0 +1,42 @@
+# Bash Pattern: Log File Deletion and Tampering
+# Detects attempts to delete or tamper with log files
+
+id: BASH-013
+name: Log File Deletion and Tampering
+description: |
+  Detects attempts to delete or tamper with security-relevant log files.
+  Focus on auth.log, secure, audit logs, and use of shred (secure deletion).
+  Simple log rotation or cleanup with rm *.log is common for legitimate maintenance.
+  Pattern targets security-relevant logs and secure deletion tools.
+languages:
+  - bash
+detection_type: regex
+# Focus on security-relevant logs and secure deletion
+# Simple rm of .log files is common for cleanup scripts
+detection_logic: 'rm\b[^\n]*(?:auth\.log|secure|audit|syslog|messages|wtmp|btmp|lastlog)|shred\b[^\n]*(?:/var/log|\.log)|>\s*/var/log/(?:auth|secure|audit|syslog|messages)'
+severity: High
+mitre_technique: T1070.002
+confidence: 0.7
+category: defense_evasion
+enabled: true
+paranoia_levels:
+  - 1
+  - 2
+  - 3
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-17"
+  updated: "2025-11-17"
+  references:
+    - "https://attack.mitre.org/techniques/T1070/002/"
+    - "https://attack.mitre.org/techniques/T1070/"
+  tags:
+    - bash
+    - log-deletion
+    - defense-evasion
+    - anti-forensics
+  examples:
+    - "rm -rf /var/log/auth.log /var/log/syslog"
+    - "> /var/log/apache2/access.log"
+    - "truncate -s 0 /var/log/messages"
+    - "shred -vfz -n 10 /var/log/secure"

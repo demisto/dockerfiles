@@ -1,0 +1,40 @@
+# JavaScript Pattern: String.fromCharCode Obfuscation
+# Detects character code array obfuscation
+
+id: JS-025
+name: String.fromCharCode Obfuscation
+description: |
+  Detects use of String.fromCharCode with multiple character codes or combined
+  with eval/Function, a common obfuscation technique. Single fromCharCode calls
+  are legitimate for character conversion. Pattern requires multiple codes or
+  execution context to indicate obfuscation intent.
+languages:
+  - javascript
+detection_type: regex
+# Require multiple char codes (3+) or combination with eval/Function
+# Single fromCharCode is too common for legitimate char conversion
+detection_logic: 'String\.fromCharCode\s*\(\s*\d+\s*,\s*\d+\s*,\s*\d+|fromCharCode\s*\(\s*\.\.\.|eval\s*\(.*fromCharCode|Function\s*\(.*fromCharCode|\.charCodeAt\s*\(\s*\d+\s*\)\s*[-+^]\s*\d+'
+severity: Medium
+mitre_technique: T1027
+confidence: 0.7
+category: obfuscation
+enabled: true
+paranoia_levels:
+  - 1
+  - 2
+  - 3
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-19"
+  updated: "2025-11-19"
+  references:
+    - "https://attack.mitre.org/techniques/T1027/"
+  tags:
+    - javascript
+    - obfuscation
+    - encoding
+    - fromcharcode
+  examples:
+    - "String.fromCharCode(...encoded)"
+    - "String.fromCharCode(104,116,116,112,115)"
+    - "c.charCodeAt(0) - 1"

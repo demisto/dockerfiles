@@ -1,0 +1,36 @@
+# PowerShell Pattern: Network Scanning with Test-Connection
+# Detects network scanning activity using Test-Connection cmdlet
+
+id: PS-027
+name: Network Scanning Activity
+description: |
+  Detects network scanning using Test-Connection in loops with IP ranges.
+  Single Test-Connection calls are common for connectivity testing.
+  Pattern focuses on range-based scanning (1..254, $_ variable in IP) which
+  indicates systematic host discovery rather than simple ping tests.
+languages:
+  - powershell
+detection_type: regex
+# Focus on IP range patterns - single Test-Connection is common for health checks
+detection_logic: '(?i)(?:\d+\.\.\d+\s*\|\s*ForEach[^\n]*Test-(?:Connection|NetConnection)|Test-(?:Connection|NetConnection)[^\n]*\$_[^\n]*\d{1,3}\.\d{1,3})'
+severity: Low
+mitre_technique: T1046
+confidence: 0.75
+category: discovery
+enabled: true
+paranoia_levels:
+  - 2
+  - 3
+metadata:
+  author: Script Sentinel Team
+  created: "2025-01-19"
+  references:
+    - "https://attack.mitre.org/techniques/T1046/"
+    - "https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.management/test-connection"
+  tags:
+    - network-scanning
+    - reconnaissance
+    - discovery
+  examples:
+    - "1..254 | ForEach-Object { Test-Connection -ComputerName \"192.168.1.$_\" }"
+    - "Test-Connection -ComputerName $ip -Count 1 -Quiet"

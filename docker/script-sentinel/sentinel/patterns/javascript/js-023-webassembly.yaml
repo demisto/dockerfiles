@@ -1,0 +1,38 @@
+# JavaScript Pattern: WebAssembly Payload Loading
+# Detects WebAssembly module loading and execution
+
+id: JS-023
+name: WebAssembly Payload Loading
+description: |
+  Detects loading and instantiation of WebAssembly modules which can be used
+  to execute binary payloads in the browser. While WebAssembly has legitimate
+  uses, attackers leverage it to bypass security controls, execute obfuscated
+  code, and perform operations that are difficult to analyze with traditional
+  JavaScript security tools.
+languages:
+  - javascript
+detection_type: regex
+detection_logic: 'WebAssembly\.(compile|instantiate|Module|Instance)|\.wasm|new\s+WebAssembly\.(Module|Instance)|fetch.*\.wasm'
+severity: High
+mitre_technique: T1027
+confidence: 0.8
+category: execution
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-19"
+  updated: "2025-11-19"
+  references:
+    - "https://attack.mitre.org/techniques/T1027/"
+    - "https://developer.mozilla.org/en-US/docs/WebAssembly"
+  tags:
+    - javascript
+    - webassembly
+    - wasm
+    - binary-payload
+    - obfuscation
+  examples:
+    - "WebAssembly.compile(buffer)"
+    - "WebAssembly.instantiate(module, imports)"
+    - "fetch('payload.wasm').then(r => r.arrayBuffer())"
+    - "new WebAssembly.Module(bytes)"
