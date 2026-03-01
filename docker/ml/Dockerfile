@@ -1,4 +1,4 @@
-FROM alpine:3.17.10 as files-src
+FROM alpine:3.23.3 as files-src
 RUN mkdir /ml
 COPY ./encrypted_model.b /ml/encrypted_model.b
 
@@ -11,7 +11,7 @@ RUN unzip /distilled_bert_base_uncased_tokenizer.zip -d /ml \
   && rm /distilled_bert_base_uncased_tokenizer.zip \
   && chmod -R 775 /ml
 
-FROM demisto/python3-deb:3.12.12.5919128
+FROM demisto/python3-deb:3.12.12.7090913
 
 COPY requirements.txt .
 
@@ -39,3 +39,7 @@ COPY --from=files-src --chown=demisto:demisto /ml /ml
 ENV HF_HOME='/ml/.cache'
 ENV NLTK_DATA='/ml/nltk_data'
 ENV MPLCONFIGDIR='/ml/matplotlib'
+
+# set the number of threads for numpy libs
+# ENV OPENBLAS_NUM_THREADS=1
+# ENV OMP_NUM_THREADS=4
