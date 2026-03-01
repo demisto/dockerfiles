@@ -1,0 +1,36 @@
+# PowerShell Pattern: Process Hollowing
+# Detects process hollowing injection techniques
+
+id: PS-031
+name: Process Hollowing
+description: |
+  Detects process hollowing techniques where a legitimate process is started
+  in a suspended state, its memory is unmapped, and malicious code is injected
+  before resuming execution. This advanced technique allows malware to run
+  under the guise of legitimate processes, evading detection.
+languages:
+  - powershell
+detection_type: regex
+detection_logic: 'NtUnmapViewOfSection|ZwUnmapViewOfSection|ResumeThread|SuspendThread|\.MainModule\.BaseAddress|ProcessStartInfo.*CreateNoWindow|Get-ProcAddress.*ntdll'
+severity: Critical
+mitre_technique: T1055.012
+confidence: 0.95
+category: injection
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-19"
+  updated: "2025-11-19"
+  references:
+    - "https://attack.mitre.org/techniques/T1055/012/"
+    - "https://www.elastic.co/blog/ten-process-injection-techniques-technical-survey-common-and-trending-process"
+  tags:
+    - powershell
+    - process-hollowing
+    - process-injection
+    - evasion
+  examples:
+    - "NtUnmapViewOfSection"
+    - "$process.MainModule.BaseAddress"
+    - "$processInfo.CreateNoWindow = $true"
+    - "Get-ProcAddress ntdll.dll NtUnmapViewOfSection"

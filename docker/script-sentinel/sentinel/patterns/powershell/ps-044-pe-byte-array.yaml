@@ -1,0 +1,41 @@
+# PowerShell Pattern: PE File as Byte Array
+# Detects Windows PE files embedded as PowerShell byte arrays
+
+id: PS-044
+name: PE File as Byte Array
+description: |
+  Detects PowerShell scripts containing Windows PE (Portable Executable) files
+  embedded as byte arrays. This is a common malware delivery technique where
+  executables are stored as arrays of bytes and later loaded into memory or
+  written to disk. The pattern identifies the MZ header (77,90) in byte array
+  format and large byte arrays that likely contain executable code.
+languages:
+  - powershell
+detection_type: regex
+detection_logic: '(?i)(?:\$\w+\s*=\s*\[byte\[\]\]\s*\(77,90,|byteArray\s*=\s*\[byte\[\]\]\s*\(77,90,|\[byte\[\]\]\s*\(77,90,144,0,|\[byte\[\]\]\s*\([0-9,\s]{500,})'
+severity: Critical
+mitre_technique: T1055.002
+confidence: 0.95
+category: execution
+enabled: true
+paranoia_levels:
+  - 1
+  - 2
+  - 3
+metadata:
+  author: Script Sentinel Team
+  created: "2025-11-25"
+  updated: "2025-11-25"
+  references:
+    - "https://attack.mitre.org/techniques/T1055/002/"
+    - "https://attack.mitre.org/techniques/T1027/009/"
+  tags:
+    - powershell
+    - byte-array
+    - pe-file
+    - reflective-loading
+    - in-memory-execution
+  examples:
+    - "$byteArray = [byte[]](77,90,144,0,3,0,0,0,4,0,0,0,255,255,0,0)"
+    - "$pe = [byte[]](77,90,144,0,3,0,0,0)"
+    - "[byte[]](77,90,144,0,3,0,0,0,4,0,0,0,255,255)"
