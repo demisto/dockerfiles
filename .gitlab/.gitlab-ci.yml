@@ -1,7 +1,7 @@
 variables:
-  CURRENT_BRANCH_NAME: fix-cve-remediation-crash-v2
+  CURRENT_BRANCH_NAME: autofix-CVE
 
 include:
   - file: "/.gitlab/ci/dockerfiles/.gitlab-ci.yml"
-    ref: fix-cve-remediation-crash-v2
+    ref: autofix-CVE
     project: "${CI_PROJECT_NAMESPACE}/infra"
