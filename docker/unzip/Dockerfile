@@ -22,7 +22,7 @@ RUN echo "deb http://deb.debian.org/debian bookworm contrib non-free" >> /etc/ap
 # Last modified: 2026-02-11T15:18:34.933506+00:00
     && rm -rf /var/lib/apt/lists/*
 
-RUN chown -R demisto:demisto /var/lib
+RUN mkdir -p /var/lib/demisto && chown -R demisto:demisto /var/lib/demisto
 
 ENV DEFAULT_USER="demisto"
 
