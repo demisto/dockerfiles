@@ -1,5 +1,6 @@
+# Last modified: 2026-02-11T15:18:34.933506+00:00
 
-FROM demisto/crypto:1.0.0.6308375
+FROM demisto/crypto:1.0.0.6932158
 
 COPY requirements.txt .
 COPY ansible /home/demisto/ansible
@@ -9,6 +10,7 @@ COPY ansible.cfg /etc/ansible/ansible.cfg
 RUN apk --update add --no-cache --virtual .build-dependencies \
     musl-dev libffi-dev openssl-dev build-base \
     && pip install --no-cache-dir -r requirements.txt \
+    && pip install --no-cache-dir "jaraco.context>=6.1.0" "wheel>=0.46.2" \
     && apk del .build-dependencies
 RUN apk --update add --no-cache openssl ca-certificates sshpass openssh-client rsync
 
