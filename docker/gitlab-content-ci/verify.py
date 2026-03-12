@@ -42,7 +42,7 @@ run("source ~/.bashrc && poetry --version", "Poetry")
 run("git --version", "git version")
 
 # Verify Neo4j
-run("neo4j --version", "neo4j")
+run("neo4j --version", "Neo4j")
 
 # Verify gsutil
 run("source ~/.bashrc && gsutil --version", "gsutil")
