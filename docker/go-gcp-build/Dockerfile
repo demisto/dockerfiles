@@ -1,4 +1,4 @@
-FROM circleci/golang:1.11.5-stretch-node
+FROM circleci/golang:1.26.1-node
 
 RUN sudo apt-get update && sudo apt-get install -y --no-install-recommends apt-transport-https
 
@@ -11,6 +11,7 @@ RUN echo "deb https://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo
   gcloud --version
 
 RUN sudo npm install -g firebase-tools && \
+  sudo npm audit fix --force -g 2>/dev/null || true && \
   firebase --version
 
 RUN curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sudo sh -s -- -b $(go env GOPATH)/bin v1.17.1 && \

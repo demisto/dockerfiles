@@ -35,6 +35,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && python3 -m pip install --no-cache-dir -r requirements.txt \
     && npm install -g npm@latest \
     && npm ci \
+    && npm audit fix --force 2>/dev/null || true \
     && npm install -g jsdoc-to-markdown@9.1.3\
     && npm list \
     && demisto-sdk --version
