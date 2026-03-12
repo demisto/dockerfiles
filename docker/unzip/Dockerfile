@@ -22,8 +22,7 @@ RUN echo "deb http://deb.debian.org/debian bookworm contrib non-free" >> /etc/ap
 # Last modified: 2026-02-11T15:18:34.933506+00:00
     && rm -rf /var/lib/apt/lists/*
 
-RUN groupadd -g 5000 cortex-content \
-  && useradd -u 5000 -g cortex-content -m cortex-content -s /bin/sh
+ENV DEFAULT_USER="demisto"
 
-USER cortex-content
-WORKDIR /home/cortex-content
+USER $DEFAULT_USER
+WORKDIR /home/$DEFAULT_USER
