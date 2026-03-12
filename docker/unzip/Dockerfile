@@ -21,3 +21,10 @@ RUN echo "deb http://deb.debian.org/debian bookworm contrib non-free" >> /etc/ap
     && apt-get install -y --no-install-recommends unrar \
 # Last modified: 2026-02-11T15:18:34.933506+00:00
     && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /var/lib/demisto && chown -R demisto:demisto /var/lib/demisto
+
+ENV DEFAULT_USER="demisto"
+
+USER $DEFAULT_USER
+WORKDIR /home/$DEFAULT_USER
