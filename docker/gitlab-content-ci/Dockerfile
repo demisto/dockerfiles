@@ -1,6 +1,6 @@
-FROM demisto/python3-deb:3.12.11.4424127
+FROM demisto/python3-deb:3.12.13.7425833
 
-ENV NODE_VERSION 14.16.0
+ENV NODE_VERSION 22.22.1
 ENV NVM_DIR /root/.nvm
 ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:/root/.local/bin:$PATH
 ENV NEO4J_CONF_FILE /etc/neo4j/neo4j.conf
@@ -11,11 +11,11 @@ RUN rm /bin/sh && ln -s /bin/bash /bin/sh && cat ~/.profile >> /etc/.profile
 
 RUN apt-get update
 RUN apt-get upgrade -y
-RUN apt-get update && apt-get install -y curl jq unzip openssh-client gcc libffi-dev libssl-dev git zip cowsay netcat-openbsd wget python3-pip software-properties-common
+RUN apt-get install -y curl jq unzip openssh-client gcc libffi-dev libssl-dev git zip cowsay netcat-openbsd wget python3-pip software-properties-common ripgrep
 # Upgrade Git to latest version from backports (already configured in base image)
 RUN apt-get update && apt-get install -y git && git --version
 
-RUN curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash \
+RUN curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash \
     && . $NVM_DIR/nvm.sh \
     && nvm install $NODE_VERSION \
     && nvm alias default $NODE_VERSION \
@@ -28,8 +28,8 @@ RUN apt-get install apt-transport-https ca-certificates gnupg gpgv -y --allow-do
     && apt-get update && apt-get install google-cloud-sdk -y && source ~/.bashrc && gsutil --version && gcloud --version
 
 # Installing the docker cli
-RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
-    && add-apt-repository "deb https://download.docker.com/linux/ubuntu bionic stable" \
+RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - \
+    && echo "deb [arch=amd64] https://download.docker.com/linux/debian bullseye stable" | tee /etc/apt/sources.list.d/docker.list \
     && apt-get update \
     && apt-get install docker-ce-cli -y && source ~/.bashrc && docker --version
 RUN apt-get install kubectl -y && source ~/.bashrc && ! kubectl version --output yaml
@@ -59,11 +59,11 @@ RUN git clone https://github.com/go-nv/goenv.git --depth 1 ~/.goenv
 RUN echo 'export GOENV_ROOT="$HOME/.goenv"' >> ~/.bashrc \
     && echo 'export PATH="$GOENV_ROOT/bin:$PATH"' >> ~/.bashrc \ 
     && source ~/.bashrc \
-    && goenv install 1.22.5 \
-    && goenv global 1.22.5 \
+    && goenv install 1.26.1 \
+    && goenv global 1.26.1 \
     && echo 'eval "$(goenv init -)"' >> ~/.bashrc \
     && echo 'export PATH="$GOROOT/bin:$PATH"' >> ~/.bashrc \
     && echo 'export PATH="$PATH:$GOPATH/bin"' >> ~/.bashrc \
     && source ~/.bashrc
-RUN curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.60.3
+RUN curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.64.8
 

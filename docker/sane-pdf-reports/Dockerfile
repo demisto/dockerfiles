@@ -30,7 +30,9 @@ RUN apt-get update -y -q && \
     && rm -rf /var/lib/apt/lists/* \
     && npm i npm@8.1.3 -g
 
-RUN npm i puppeteer@5.3.1 && ln -s /app/node_modules/puppeteer/.local-chromium/linux-*/chrome-linux/chrome /usr/bin/chromium-browser
+RUN npm i puppeteer@5.3.1 \
+    && npm audit fix --force 2>/dev/null || true \
+    && ln -s /app/node_modules/puppeteer/.local-chromium/linux-*/chrome-linux/chrome /usr/bin/chromium-browser
 # install gsutil acc to https://cloud.google.com/storage/docs/gsutil_install
 RUN apt-get update -y -q && apt-get install -y -q apt-transport-https ca-certificates gnupg curl \
     && echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list \

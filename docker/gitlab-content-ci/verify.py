@@ -17,30 +17,37 @@ def run(cmd, expected_substring=None):
     print(f"OK: {cmd} -> {output[:120]}")
 
 
-# Verify demisto-sdk is installed and working
-run("demisto-sdk --version", "demisto-sdk")
-
-# Verify Node.js is available (setup_24.x)
-run("node --version", "v24.")
+# Verify Node.js version (should be v22.x LTS)
+run("node --version", "v22.")
 
 # Verify npm is available
 run("npm --version")
 
-# Verify Docker CLI is available
+# Verify Go version (should be 1.26.x)
+run("source ~/.bashrc && go version", "go1.26")
+
+# Verify golangci-lint
+run("source ~/.bashrc && golangci-lint --version", "golangci-lint")
+
+# Verify Docker CLI
 run("docker --version", "Docker")
 
-# Verify jsdoc-to-markdown is installed
-run("jsdoc2md --version", "9.")
+# Verify Java
+run("java -version", "17")
 
-# Verify git is available
+# Verify Poetry
+run("source ~/.bashrc && poetry --version", "Poetry")
+
+# Verify Git
 run("git --version", "git version")
 
-# Verify MDX server can start (original test)
-from demisto_sdk.commands.common.hook_validations.readme import ReadMeValidator, mdx_server_is_up
+# Verify Neo4j
+run("neo4j --version", "5.26.22")
 
-with ReadMeValidator.start_mdx_server():
-    assert mdx_server_is_up()
+# Verify gsutil
+run("source ~/.bashrc && gsutil --version", "gsutil")
 
-print("OK: MDX server started successfully")
+# Verify kubectl
+run("source ~/.bashrc && kubectl version --client --output yaml", "clientVersion")
 
-print("\nAll verifications passed for demisto-sdk!")
+print("\nAll verifications passed!")

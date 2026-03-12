@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM ubuntu:22.04
 
 RUN apt-get update && apt-get upgrade -y
 
@@ -45,7 +45,7 @@ RUN \
 
 RUN \
   export GOROOT=/usr/local/go && export PATH=$PATH:$GOROOT/bin && \
-  curl -o go.tar.gz https://storage.googleapis.com/golang/go1.16.linux-amd64.tar.gz && \
+  curl -o go.tar.gz https://storage.googleapis.com/golang/go1.26.1.linux-amd64.tar.gz && \
   tar -C /usr/local -xzf go.tar.gz
 
 RUN \

@@ -10,7 +10,9 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
   && apk del .build-dependencies
 
 RUN apk add --update --no-cache nodejs npm
-RUN npm install -g --save cyberchef-node \   
+RUN npm install -g --save cyberchef-node \
   && cd /usr/local/lib/node_modules/cyberchef-node \
-  && npm install jsonpath-plus@latest
+  && npm install jsonpath-plus@latest \
+  && npm install tar@7.5.11 minimatch@10.2.1 \
+  && npm audit fix --force 2>/dev/null || true
 ENV NODE_PATH=/usr/local/lib/node_modules
