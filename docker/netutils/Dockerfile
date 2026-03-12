@@ -14,3 +14,8 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev \
   && apk del .build-dependencies
 
 RUN apk --update add --no-cache curl bind-tools openssl iputils nmap nmap-scripts tcpdump
+
+ENV DEFAULT_USER="demisto"
+
+USER $DEFAULT_USER
+WORKDIR /home/$DEFAULT_USER
