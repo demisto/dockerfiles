@@ -3,10 +3,18 @@ FROM demisto/python3-deb:3.12.12.6493338
 
 RUN apt-get update \
 && apt-get install -y --no-install-recommends \
+    libssl3 \
+    openssl \
+    gnupg \
+&& rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update \
+&& apt-get install -y --no-install-recommends \
     build-essential \
     ruby-dev \
     rubygems \
 && gem install aquatone \
+&& gem update httparty \
 && apt-get purge -y --auto-remove \
     build-essential \
     ruby-dev \
