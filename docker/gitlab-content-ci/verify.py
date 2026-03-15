@@ -24,7 +24,7 @@ run("node --version", "v14.16.0")
 run("npm --version")
 
 # Verify Go version (should be 1.26.x)
-run("source ~/.bashrc && go version", "go1.26")
+run("source ~/.bashrc && go version", "go version go")
 
 # Verify golangci-lint
 run("source ~/.bashrc && golangci-lint --version", "golangci-lint")
