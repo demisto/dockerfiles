@@ -2522,6 +2522,21 @@ files = [
 requests = ">=2.0.1,<3.0.0"
 
 [[package]]
+name = "respx"
+version = "0.22.0"
+description = "A utility for mocking out the Python HTTPX and HTTP Core libraries."
+optional = false
+python-versions = ">=3.8"
+groups = ["main"]
+files = [
+    {file = "respx-0.22.0-py2.py3-none-any.whl", hash = "sha256:631128d4c9aba15e56903fb5f66fb1eff412ce28dd387ca3a81339e52dbd3ad0"},
+    {file = "respx-0.22.0.tar.gz", hash = "sha256:3c8924caa2a50bd71aefc07aa812f2466ff489f1848c96e954a5362d17095d91"},
+]
+
+[package.dependencies]
+httpx = ">=0.25.0"
+
+[[package]]
 name = "rsa-archer"
 version = "0.1.9"
 description = "RSA Archer REST and GRC API library"
@@ -2788,15 +2803,23 @@ test = ["coverage", "pytest", "pytest-cov", "responses", "tox"]
 
 [[package]]
 name = "tld"
-version = "0.13.1"
+version = "0.13.2"
 description = "Extract the top-level domain (TLD) from the URL given."
 optional = false
 python-versions = ">=3.7"
 groups = ["main"]
 files = [
-    {file = "tld-0.13.1-py2.py3-none-any.whl", hash = "sha256:a2d35109433ac83486ddf87e3c4539ab2c5c2478230e5d9c060a18af4b03aa7c"},
-    {file = "tld-0.13.1.tar.gz", hash = "sha256:75ec00936cbcf564f67361c41713363440b6c4ef0f0c1592b5b0fbe72c17a350"},
+    {file = "tld-0.13.2-py2.py3-none-any.whl", hash = "sha256:9b8fdbdb880e7ba65b216a4937f2c94c49a7226723783d5838fc958ac76f4e0c"},
+    {file = "tld-0.13.2.tar.gz", hash = "sha256:d983fa92b9d717400742fca844e29d5e18271079c7bcfabf66d01b39b4a14345"},
 ]
+
+[package.extras]
+all = ["tld[build,dev,docs,lint,test]"]
+build = ["build", "pkginfo", "twine", "wheel"]
+dev = ["detect-secrets", "ipython", "uv"]
+docs = ["sphinx", "sphinx-autobuild", "sphinx-llms-txt-link", "sphinx-no-pragma", "sphinx-rtd-theme (>=1.3.0)", "sphinx-source-tree ; python_version > \"3.9\""]
+lint = ["doc8", "mypy", "pydoclint", "ruff"]
+test = ["coverage", "fake.py", "pytest", "pytest-codeblock", "pytest-cov", "pytest-ordering", "tox"]
 
 [[package]]
 name = "tldextract"
@@ -3133,4 +3156,4 @@ propcache = ">=0.2.1"
 [metadata]
 lock-version = "2.1"
 python-versions = "~3.12"
-content-hash = "64d5280e13792c2cd265edda29258c9ed47fe8b95ef6035416ce47f99502b3b6"
+content-hash = "d2e8a777b9420ab751c2a6afd575527d1cf9aa67f90ffdd761f5b98d3d707767"
