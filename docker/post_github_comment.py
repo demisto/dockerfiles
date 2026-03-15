@@ -11,6 +11,7 @@ import time
 from typing import List, Tuple, Optional, Set
 
 ARTIFACTS_FOLDER = Path(os.getenv("ARTIFACTS_FOLDER", "artifacts"))
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 
 
 def get_docker_image_size(docker_image, is_contribution: bool = False) -> str:
@@ -112,10 +113,9 @@ def get_pr_details(
         print("CI_COMMIT_REF_NAME not set. Cannot determine PR number.")
         return []
 
-    github_token = os.getenv("GITHUB_TOKEN")
-    if github_token and branch_name != "master":
+    if GITHUB_TOKEN and branch_name != "master":
         # Try to find PR by branch name
-        headers = {"Authorization": f"Bearer {github_token}"}
+        headers = {"Authorization": f"Bearer {GITHUB_TOKEN}"}
         # repo is hardcoded as demisto/dockerfiles in other places
         url = f"https://api.github.com/search/issues?q=repo:demisto/dockerfiles+is:pr+is:open+head:{branch_name}"
         try:
@@ -177,12 +177,14 @@ def add_label(pr_num: int, label: str, dry_run: bool):
     if dry_run:
         print(f"[DRY-RUN] Would have added label '{label}' to PR #{pr_num}")
     else:
+        # Adding a label to a PR requires admin rights, that's why we use the content bot and not the xsoar-bot.
         print(f"Adding '{label}' label to PR #{pr_num}")
         url = f"https://api.github.com/repos/demisto/dockerfiles/issues/{pr_num}/labels"
         res = requests.post(
             url,
+            verify=False,
             json={"labels": [label]},
-            auth=(os.environ["XSOAR_BOT_GITHUB_TOKEN"], "x-oauth-basic"),
+            auth=(GITHUB_TOKEN, "x-oauth-basic"),
         )
         try:
             res.raise_for_status()
