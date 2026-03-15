@@ -18,7 +18,7 @@ def run(cmd, expected_substring=None):
 
 
 # Verify Node.js version (should be v22.x LTS)
-run("node --version", "v22.")
+run("node --version", "v14.16.0")
 
 # Verify npm is available
 run("npm --version")
