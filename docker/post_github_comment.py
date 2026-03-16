@@ -11,6 +11,7 @@ import time
 from typing import List, Tuple, Optional, Set
 
 ARTIFACTS_FOLDER = Path(os.getenv("ARTIFACTS_FOLDER", "artifacts"))
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 
 
 def get_docker_image_size(docker_image, is_contribution: bool = False) -> str:
@@ -112,16 +113,47 @@ def get_pr_details(
         print("CI_COMMIT_REF_NAME not set. Cannot determine PR number.")
         return []
 
-    m = re.match(r"(\d+)/.*", branch_name)
-    if not m:
-        print(f"Could not extract PR number from branch name: {branch_name}")
-        return []
+    if GITHUB_TOKEN and branch_name != "master":
+        # Try to find PR by branch name
+        headers = {"Authorization": f"Bearer {GITHUB_TOKEN}"}
+        # repo is hardcoded as demisto/dockerfiles in other places
+        url = f"https://api.github.com/search/issues?q=repo:demisto/dockerfiles+is:pr+is:open+head:{branch_name}"
+        try:
+            res = requests.get(url, headers=headers, verify=False)
+            res.raise_for_status()
+            data = res.json()
+            if data.get("items"):
+                for pr in data["items"]:
+                    pr_num = pr["number"]
+                    pr_details.append(
+                        (
+                            pr_num,
+                            pr["url"],
+                        )
+                    )
+                return pr_details
+            else:
+                print(
+                    f"No open PR found for branch: {branch_name} via github api search. Falling back to regex."
+                )
+        except Exception as ex:
+            print(
+                f"Failed searching for PR for branch {branch_name}. Err: {ex}. Falling back to regex."
+            )
 
-    pr_num = int(m.group(1))
-    pr_details.append(
-        (pr_num, f"https://api.github.com/repos/demisto/dockerfiles/issues/{pr_num}")
-    )
-    return pr_details
+    # try to get from comment
+    last_comment = subprocess.check_output(["git", "log", "-1", "--pretty=%B"], text=True)
+    m = re.search(r"#(\d+)", last_comment, re.MULTILINE)
+    if m:
+        pr_num = int(m.group(1))
+        print(f"Issue id found from the last commit comment: {pr_num}")
+        pr_details.append(
+            (pr_num, f"https://api.github.com/repos/demisto/dockerfiles/issues/{pr_num}")
+        )
+        return pr_details
+
+    print("No issue id found in the last commit comment. Ignoring: \n------\n{}\n-------".format(last_comment))
+    return []
 
 
 def post_comment(pr_url: str, message: str, dry_run: bool):
@@ -145,12 +177,14 @@ def add_label(pr_num: int, label: str, dry_run: bool):
     if dry_run:
         print(f"[DRY-RUN] Would have added label '{label}' to PR #{pr_num}")
     else:
+        # Adding a label to a PR requires admin rights, that's why we use the content bot and not the xsoar-bot.
         print(f"Adding '{label}' label to PR #{pr_num}")
         url = f"https://api.github.com/repos/demisto/dockerfiles/issues/{pr_num}/labels"
         res = requests.post(
             url,
+            verify=False,
             json={"labels": [label]},
-            auth=(os.environ["XSOAR_BOT_GITHUB_TOKEN"], "x-oauth-basic"),
+            auth=(GITHUB_TOKEN, "x-oauth-basic"),
         )
         try:
             res.raise_for_status()
