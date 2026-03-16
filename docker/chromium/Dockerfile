@@ -41,6 +41,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 && echo "deb [arch=amd64]  http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
 && apt-get -y update && apt-get install -y google-chrome-stable \
 && apt-get install -y tigervnc-standalone-server x11-utils imagemagick \
+&& apt-get install -y --only-upgrade imagemagick imagemagick-6-common "libmagickcore-6*" "libmagickwand-6*" "libopenexr-3*" \
 && ./download_chromedriver.sh \
 && unzip chromedriver-linux64.zip \
 && mv chromedriver-linux64/chromedriver /usr/bin/chromedriver \
