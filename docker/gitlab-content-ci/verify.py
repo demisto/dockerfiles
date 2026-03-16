@@ -17,7 +17,10 @@ def run(cmd, expected_substring=None):
     print(f"OK: {cmd} -> {output[:120]}")
 
 
-# Verify Node.js version (should be v22.x LTS)
+# Verify Python version (should be 3.10.x)
+run("python3 --version", "Python 3.10")
+
+# Verify Node.js version (should be v14.x)
 run("node --version", "v14.16.0")
 
 # Verify npm is available
