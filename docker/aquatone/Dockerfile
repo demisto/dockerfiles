@@ -7,6 +7,7 @@ RUN apt-get update \
     ruby-dev \
     rubygems \
 && gem install aquatone \
+&& gem install httparty -v '>= 0.24.2' \
 && apt-get purge -y --auto-remove \
     build-essential \
     ruby-dev \
