@@ -9,6 +9,12 @@ ENV APOC_CONF_FILE /etc/neo4j/apoc.conf
 # Currently sh is linked to dash, linking it to /bin/bash instead.
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh && cat ~/.profile >> /etc/.profile
 
+# Bullseye is EOL — redirect repos to archive.debian.org
+RUN sed -i 's|deb http://deb.debian.org/debian bullseye|deb http://archive.debian.org/debian bullseye|g' /etc/apt/sources.list \
+    && sed -i 's|deb http://deb.debian.org/debian-security bullseye-security|deb http://archive.debian.org/debian-security bullseye-security|g' /etc/apt/sources.list \
+    && sed -i '/bullseye-updates/d' /etc/apt/sources.list \
+    && echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99no-check-valid-until
+
 RUN apt-get update
 RUN apt-get upgrade -y
 RUN apt-get update && apt-get install -y curl jq unzip openssh-client gcc libffi-dev libssl-dev git zip cowsay netcat-openbsd wget python3-pip software-properties-common
@@ -40,9 +46,8 @@ RUN apt-get install google-cloud-sdk-gke-gcloud-auth-plugin -y && source ~/.bash
 RUN apt-get install openjdk-17-jre -y && source ~/.bashrc && java -version
 RUN curl -sSL https://install.python-poetry.org | python3 - --version 1.8.2 && source ~/.bashrc && poetry --version
 
-# install neo4j
-RUN echo "deb http://httpredir.debian.org/debian stable-backports main" | tee -a /etc/apt/sources.list.d/stable-backports.list \
-    && wget -O - https://debian.neo4j.com/neotechnology.gpg.key | apt-key add - \
+# install neo4j (backports already configured in base image sources.list)
+RUN wget -O - https://debian.neo4j.com/neotechnology.gpg.key | apt-key add - \
     && echo 'deb https://debian.neo4j.com stable 5' | tee -a /etc/apt/sources.list.d/neo4j.list \
     && apt-get update
 RUN mkdir -p /var/lib/neo4j/plugins \
