@@ -8,7 +8,7 @@ permissions:
 jobs:
   autolock-automerge:
     runs-on: ubuntu-latest
-    if: ${{ github.actor == 'content-bot' }}
+    if: ${{ github.actor == 'BEAdi' }}
     steps:
       - name: Validate branch name
         id: validate_branch
