@@ -15,7 +15,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN echo "deb http://deb.debian.org/debian bookworm-backports main" >> /etc/apt/sources.list.d/backports.list \
   && apt-get update \
   && apt-get install -y --no-install-recommends -t bookworm-backports 7zip \
-  && ln -sf /usr/bin/7zz /usr/bin/7z \
   && rm -rf /var/lib/apt/lists/*
 
 # Add a new sources list file that includes the contrib and non-free repositories
