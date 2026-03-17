@@ -43,6 +43,15 @@ RUN gsutil cp -r gs://sane-reports-artifacts/sane-report.tar . \
 # Update permissions and ownership on /app dir
 RUN chown -R root:demisto /app/ && chmod 775 /app/ && chmod 775 /app/dist
 
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libnss3 \
+    nodejs \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pip3 install --no-cache-dir \
+    "urllib3>=2.6.3" \
+    "Markdown>=3.8.1"
+
 RUN npm uninstall -g npm && apt-get purge -y --auto-remove git npm apt-transport-https ca-certificates gnupg curl google-cloud-sdk \
     python3-dev \
     && rm -rf /var/lib/apt/lists/*
