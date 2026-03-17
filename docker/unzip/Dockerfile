@@ -11,8 +11,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   python3-dev \
 && rm -rf /var/lib/apt/lists/*
 
-# Installs p7zip-full for general archive extraction.
-RUN apt-get update && apt-get install -y --no-install-recommends p7zip-full \
+# Installs 7zip from backports (>= 23.00) for general archive extraction.
+RUN echo "deb http://deb.debian.org/debian bookworm-backports main" >> /etc/apt/sources.list.d/backports.list \
+  && apt-get update \
+  && apt-get install -y --no-install-recommends -t bookworm-backports 7zip \
+  && ln -sf /usr/bin/7zz /usr/bin/7z \
   && rm -rf /var/lib/apt/lists/*
 
 # Add a new sources list file that includes the contrib and non-free repositories
