@@ -9,7 +9,8 @@ COPY requirements.txt .
 COPY localtime /etc/localtime
 
 # Relevant for tldextract
-COPY --chmod=644 public_list.dat /var/public_list.dat
+COPY public_list.dat /var/public_list.dat
+RUN chmod 644 /var/public_list.dat
 
 RUN apk --update add --no-cache --virtual .build-dependencies \
   python3-dev build-base wget \

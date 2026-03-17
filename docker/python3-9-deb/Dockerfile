@@ -21,6 +21,7 @@ COPY requirements.txt .
 
 # Relevant for tldextract
 COPY public_list.dat /var/public_list.dat
+RUN chmod 644 /var/public_list.dat
 
 #Install tools for building binary deps (will be reomved later on)
 RUN apt-get update && apt-get install -y --no-install-recommends \
