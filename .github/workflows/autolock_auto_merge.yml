@@ -8,7 +8,7 @@ permissions:
 jobs:
   autolock-automerge:
     runs-on: ubuntu-latest
-    if: ${{ github.actor == 'BEAdi' }}
+    if: ${{ github.actor == 'content-bot' }}
     steps:
       - name: Validate branch name
         id: validate_branch
@@ -23,8 +23,22 @@ jobs:
             echo "Branch name '$BRANCH_NAME' does not start with 'autolock/' - skipping automerge"
           fi
       
-      - name: Approve and enable auto-merge
+      - name: Check commit count
         if: steps.validate_branch.outputs.valid_branch == 'true'
+        id: check_commits
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          COMMIT_COUNT=$(gh pr view "$PR_URL" --json commits --jq '.commits | length')
+          echo "commit_count=$COMMIT_COUNT" >> $GITHUB_OUTPUT
+          echo "PR has $COMMIT_COUNT commit(s)"
+          if [[ "$COMMIT_COUNT" -ne 1 ]]; then
+            echo "Skipping automerge - PR has $COMMIT_COUNT commits (expected exactly 1)"
+          fi
+
+      - name: Approve and enable auto-merge
+        if: steps.validate_branch.outputs.valid_branch == 'true' && steps.check_commits.outputs.commit_count == '1'
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
