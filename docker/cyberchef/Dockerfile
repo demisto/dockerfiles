@@ -9,9 +9,12 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies
 
-RUN apk add --update --no-cache nodejs npm
-RUN npm install -g tar@7.5.11 \
-  && npm install -g --save cyberchef-node \
+RUN apk add --update --no-cache nodejs npm \
+  && cd /usr/lib/node_modules/npm/node_modules/tar \
+  && npm install tar@7.5.11 --prefix /usr/lib/node_modules/npm/node_modules/tar --no-save 2>/dev/null; \
+  cp -rf /usr/lib/node_modules/npm/node_modules/tar/node_modules/tar/* /usr/lib/node_modules/npm/node_modules/tar/ 2>/dev/null; \
+  rm -rf /usr/lib/node_modules/npm/node_modules/tar/node_modules
+RUN npm install -g --save cyberchef-node \
   && cd /usr/local/lib/node_modules/cyberchef-node \
   && npm install jsonpath-plus@latest \
   && npm install tar@7.5.11
