@@ -1,6 +1,6 @@
-# Last modified: 2025-12-05T04:40:36.247324+00:00
+# Last modified: 2026-03-18T13:06:45.850759+00:00
 
-FROM demisto/python3:3.12.12.6151721
+FROM demisto/python3:3.12.13.7444307
 
 RUN mkdir /opt/scripts
 
@@ -13,4 +13,8 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev \
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies
 
-RUN apk --update add --no-cache curl bind-tools openssl iputils nmap nmap-scripts tcpdump
+RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories \
+  && apk --update add --no-cache \
+  curl=8.19.0-r0 \
+  libcurl=8.19.0-r0 \
+  bind-tools openssl iputils nmap nmap-scripts tcpdump
