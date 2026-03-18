@@ -13,4 +13,8 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev \
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies
 
-RUN apk --update add --no-cache curl bind-tools openssl iputils nmap nmap-scripts tcpdump
+RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories \
+  && apk --update add --no-cache \
+  curl=8.19.0-r0 \
+  libcurl=8.19.0-r0 \
+  bind-tools openssl iputils nmap nmap-scripts tcpdump
