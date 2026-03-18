@@ -11,6 +11,7 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
   && apk add --no-cache git  \
   && apk add --no-cache libstdc++  \
   && apk add --no-cache --upgrade grep  \
+  && apk add --no-cache --upgrade curl libcurl \
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies
 
