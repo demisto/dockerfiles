@@ -19,9 +19,11 @@ RUN sed -i '/bookworm-backports/d' /etc/apt/sources.list /etc/apt/sources.list.d
   zlib1g-dev \
 && rm -rf /var/lib/apt/lists/* \
 && touch /var/chrome_headless.log \
-&& chmod 777 /var/chrome_headless.log \
+&& chown demisto:demisto /var/chrome_headless.log \
+&& chmod 664 /var/chrome_headless.log \
 && touch /var/chrome_instances.json \
-&& chmod 777 /var/chrome_instances.json
+&& chown demisto:demisto /var/chrome_instances.json \
+&& chmod 664 /var/chrome_instances.json
 
 # Based on instructions at: https://tecadmin.net/setup-selenium-with-chromedriver-on-debian/
 # Will install the latest version available from the chrome repo.
@@ -78,4 +80,10 @@ RUN apt-get purge -y --auto-remove \
   libarchive13 \
 && rm -rf /var/lib/apt/lists/*
 
+RUN mkdir -p /var/lib/demisto && chown -R demisto:demisto /var/lib/demisto
+
 ENV CHROME_EXE="/opt/google/chrome/google-chrome"
+ENV DEFAULT_USER="demisto"
+
+USER $DEFAULT_USER
+WORKDIR /home/$DEFAULT_USER
