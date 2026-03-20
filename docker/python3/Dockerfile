@@ -6,7 +6,7 @@ RUN apk --update --no-cache upgrade
 
 COPY requirements.txt .
 
-COPY localtime /etc/localtime
+COPY --chmod=644 localtime /etc/localtime
 
 # Relevant for tldextract
 COPY --chmod=644 public_list.dat /var/public_list.dat
@@ -18,8 +18,8 @@ RUN apk --update add --no-cache --virtual .build-dependencies \
   && pip install --upgrade setuptools \
   && pip install --upgrade wheel>=0.46.2
 
-RUN addgroup -g 4000 demisto \
-  && adduser -u 4000 -G demisto -D demisto -s /bin/sh 
+RUN addgroup -g 5000 cortex-content \
+  && adduser -u 5000 -G cortex-content -D cortex-content -s /bin/sh
 
 # Handling the issue described here https://knowledgebase.paloaltonetworks.com/KCSArticleDetail?id=kA10g000000POJ0CAO&lang=en_US%E2%80%A9
 # by enabling UnsafeLegacyRenegotiation
@@ -34,3 +34,6 @@ Options = UnsafeLegacyRenegotiation\n' > /tmp/ssl.cnf \
 && sed -i '/providers = provider_sect/r /tmp/ssl.cnf' /etc/ssl/openssl.cnf \
 && rm /tmp/ssl.cnf \
 && grep -C 10 'Options = UnsafeLegacyRenegotiation' /etc/ssl/openssl.cnf
+
+USER cortex-content
+WORKDIR /home/cortex-content
