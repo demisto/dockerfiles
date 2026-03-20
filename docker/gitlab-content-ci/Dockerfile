@@ -1,4 +1,4 @@
-FROM demisto/python3-deb:3.12.11.4424127
+FROM demisto/python3-deb:3.10.14.101214
 
 ENV NODE_VERSION 14.16.0
 ENV NVM_DIR /root/.nvm
@@ -9,9 +9,14 @@ ENV APOC_CONF_FILE /etc/neo4j/apoc.conf
 # Currently sh is linked to dash, linking it to /bin/bash instead.
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh && cat ~/.profile >> /etc/.profile
 
-RUN apt-get update
-RUN apt-get upgrade -y
-RUN apt-get update && apt-get install -y curl jq unzip openssh-client gcc libffi-dev libssl-dev git zip cowsay netcat-openbsd wget python3-pip software-properties-common
+# Bullseye is EOL — redirect all repos to archive.debian.org, then update and install packages
+RUN echo 'deb http://archive.debian.org/debian bullseye main' > /etc/apt/sources.list \
+    && echo 'deb http://archive.debian.org/debian-security bullseye-security main' >> /etc/apt/sources.list \
+    && echo 'deb http://archive.debian.org/debian bullseye-backports main' >> /etc/apt/sources.list \
+    && echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99no-check-valid-until \
+    && apt-get update \
+    && apt-get upgrade -y \
+    && apt-get install -y curl jq unzip openssh-client gcc libffi-dev libssl-dev git zip cowsay netcat-openbsd wget python3-pip software-properties-common ripgrep
 # Upgrade Git to latest version from backports (already configured in base image)
 RUN apt-get update && apt-get install -y git && git --version
 
@@ -39,9 +44,8 @@ RUN apt-get install google-cloud-sdk-gke-gcloud-auth-plugin -y && source ~/.bash
 RUN apt-get install openjdk-17-jre -y && source ~/.bashrc && java -version
 RUN curl -sSL https://install.python-poetry.org | python3 - --version 1.8.2 && source ~/.bashrc && poetry --version
 
-# install neo4j
-RUN echo "deb http://httpredir.debian.org/debian stable-backports main" | tee -a /etc/apt/sources.list.d/stable-backports.list \
-    && wget -O - https://debian.neo4j.com/neotechnology.gpg.key | apt-key add - \
+# install neo4j (backports already configured in base image sources.list)
+RUN wget -O - https://debian.neo4j.com/neotechnology.gpg.key | apt-key add - \
     && echo 'deb https://debian.neo4j.com stable 5' | tee -a /etc/apt/sources.list.d/neo4j.list \
     && apt-get update
 RUN mkdir -p /var/lib/neo4j/plugins \
