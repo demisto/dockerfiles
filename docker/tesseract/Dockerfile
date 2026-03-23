@@ -18,5 +18,5 @@ done \
 && apt-get purge -y --auto-remove gcc g++ pkg-config make autoconf automake libtool libpng-dev git \
 libjpeg-dev libtiff5-dev zlib1g-dev libleptonica-dev libicu-dev libpango1.0-dev \
 && rm -rf /build \
-# Last modified: 2026-03-20T08:03:29.755531+00:00
+# Last modified: 2026-03-23T17:30:22.449326+00:00
 && tesseract --version --list-langs
