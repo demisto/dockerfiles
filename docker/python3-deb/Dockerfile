@@ -16,7 +16,24 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 RUN apt-get update && apt-get -t bookworm-backports -y --no-install-recommends upgrade \
 && rm -rf /var/lib/apt/lists/*
 
-# Upgrade ncurses packages to fixed version from sid
+COPY requirements.txt .
+
+# Relevant for tldextract
+COPY --chmod=644 public_list.dat /var/public_list.dat
+
+#Install tools for building binary deps (will be reomved later on)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  gcc \
+  python3-dev \
+&& pip install --no-cache-dir -r requirements.txt \
+&& apt-get purge -y --auto-remove \
+  gcc \
+  python3-dev \
+&& rm -rf /var/lib/apt/lists/* \
+&& pip install --upgrade setuptools \
+&& pip install --upgrade wheel>=0.46.2
+
+# Upgrade ncurses packages to fixed version from sid (after gcc purge to avoid libc6-dev conflict)
 RUN echo 'deb http://deb.debian.org/debian sid main' >> /etc/apt/sources.list \
 && apt-get update \
 && apt-get install -y --no-install-recommends \
@@ -26,23 +43,6 @@ RUN echo 'deb http://deb.debian.org/debian sid main' >> /etc/apt/sources.list \
   libtinfo6=6.6+20251231-1 \
 && sed -i '/sid/d' /etc/apt/sources.list \
 && rm -rf /var/lib/apt/lists/*
-
-COPY requirements.txt .
-
-# Relevant for tldextract
-COPY --chmod=644 public_list.dat /var/public_list.dat
-
-#Install tools for building binary deps (will be reomved later on)
-RUN apt-get update && apt-get install -y --no-install-recommends \
-  gcc \
-  python3-dev \ 
-&& pip install --no-cache-dir -r requirements.txt \
-&& apt-get purge -y --auto-remove \
-  gcc \
-  python3-dev \
-&& rm -rf /var/lib/apt/lists/* \
-&& pip install --upgrade setuptools \
-&& pip install --upgrade wheel>=0.46.2
 
 # Handling the issue described here https://knowledgebase.paloaltonetworks.com/KCSArticleDetail?id=kA10g000000POJ0CAO&lang=en_US%E2%80%A9
 # by enabling UnsafeLegacyRenegotiation
