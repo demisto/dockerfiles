@@ -2,9 +2,7 @@
 FROM python:3.12.11-alpine3.22
 
 # Upgrade all packages to latest
-RUN apk --update --no-cache upgrade \
-  && echo "https://dl-cdn.alpinelinux.org/alpine/v3.21/main" >> /etc/apk/repositories \
-  && apk add --no-cache libssl3=3.3.6-r0 libcrypto3=3.3.6-r0
+RUN apk --update --no-cache upgrade
 
 COPY requirements.txt .
 
@@ -26,7 +24,7 @@ RUN addgroup -g 4000 demisto \
 # Handling the issue described here https://knowledgebase.paloaltonetworks.com/KCSArticleDetail?id=kA10g000000POJ0CAO&lang=en_US%E2%80%A9
 # by enabling UnsafeLegacyRenegotiation
 # We add to the openssl_init section after the last element "providers = provider_sect"
-RUN cp /etc/ssl/openssl.cnf /etc/ssl/openssl.cnf.org && \ 
+RUN cp /etc/ssl/openssl.cnf /etc/ssl/openssl.cnf.org && \
 echo -e 'ssl_conf = ssl_sect\n\
 [ssl_sect]\n\
 system_default = system_default_sect\n\
@@ -35,4 +33,5 @@ system_default = system_default_sect\n\
 Options = UnsafeLegacyRenegotiation\n' > /tmp/ssl.cnf \
 && sed -i '/providers = provider_sect/r /tmp/ssl.cnf' /etc/ssl/openssl.cnf \
 && rm /tmp/ssl.cnf \
+&& sed -i '/\[legacy_sect\]/a activate = 1' /etc/ssl/openssl.cnf \
 && grep -C 10 'Options = UnsafeLegacyRenegotiation' /etc/ssl/openssl.cnf
