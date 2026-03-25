@@ -16,6 +16,17 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 RUN apt-get update && apt-get -t bookworm-backports -y --no-install-recommends upgrade \
 && rm -rf /var/lib/apt/lists/*
 
+# Upgrade ncurses packages to fixed version from sid
+RUN echo 'deb http://deb.debian.org/debian sid main' >> /etc/apt/sources.list \
+&& apt-get update \
+&& apt-get install -y --no-install-recommends \
+  libncursesw6=6.6+20251231-1 \
+  ncurses-base=6.6+20251231-1 \
+  ncurses-bin=6.6+20251231-1 \
+  libtinfo6=6.6+20251231-1 \
+&& sed -i '/sid/d' /etc/apt/sources.list \
+&& rm -rf /var/lib/apt/lists/*
+
 COPY requirements.txt .
 
 # Relevant for tldextract
