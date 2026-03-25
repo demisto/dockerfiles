@@ -10,6 +10,8 @@ RUN apk --update add --no-cache libxml2 \
   tshark \
   libmagic
 
+RUN apk upgrade wireshark-common tshark --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community
+
 RUN apk add --no-cache --virtual .libssh-build-deps cmake make gcc g++ openssl-dev zlib-dev \
   && wget --no-check-certificate -q -O libssh-0.11.4.tar.gz https://gitlab.com/libssh/libssh-mirror/-/archive/libssh-0.11.4/libssh-mirror-libssh-0.11.4.tar.gz \
   && tar xzf libssh-0.11.4.tar.gz \
