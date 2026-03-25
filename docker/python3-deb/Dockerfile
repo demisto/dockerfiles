@@ -33,16 +33,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 && pip install --upgrade setuptools \
 && pip install --upgrade wheel>=0.46.2
 
-# Upgrade ncurses packages to fixed version from sid (after gcc purge to avoid libc6-dev conflict)
-RUN echo 'deb http://deb.debian.org/debian sid main' >> /etc/apt/sources.list \
-&& apt-get update \
-&& apt-get install -y --no-install-recommends \
-  libncursesw6=6.6+20251231-1 \
-  ncurses-base=6.6+20251231-1 \
-  ncurses-bin=6.6+20251231-1 \
-  libtinfo6=6.6+20251231-1 \
-&& sed -i '/sid/d' /etc/apt/sources.list \
-&& rm -rf /var/lib/apt/lists/*
+# Remove vulnerable infocmp binary (CVE-2025-69720: buffer overflow in ncurses infocmp)
+RUN rm -f /usr/bin/infocmp
 
 # Handling the issue described here https://knowledgebase.paloaltonetworks.com/KCSArticleDetail?id=kA10g000000POJ0CAO&lang=en_US%E2%80%A9
 # by enabling UnsafeLegacyRenegotiation
