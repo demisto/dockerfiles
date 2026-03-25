@@ -2,7 +2,9 @@
 FROM python:3.12.8-alpine3.21
 
 # Upgrade all packages to latest
-RUN apk --update --no-cache upgrade
+RUN apk --update --no-cache upgrade \
+  && echo "https://dl-cdn.alpinelinux.org/alpine/v3.22/main" >> /etc/apk/repositories \
+  && apk add --no-cache "libssl3>=3.5.0"
 
 COPY requirements.txt .
 
