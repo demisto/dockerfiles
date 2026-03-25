@@ -1,10 +1,10 @@
 # Last modified: 2026-03-05T00:29:50.298621+00:00
-FROM python:3.12.8-alpine3.21
+FROM python:3.12.11-alpine3.22
 
 # Upgrade all packages to latest
 RUN apk --update --no-cache upgrade \
-  && echo "https://dl-cdn.alpinelinux.org/alpine/v3.22/main" >> /etc/apk/repositories \
-  && apk add --no-cache "libssl3>=3.5.0"
+  && echo "https://dl-cdn.alpinelinux.org/alpine/v3.21/main" >> /etc/apk/repositories \
+  && apk add --no-cache libssl3=3.3.6-r0 libcrypto3=3.3.6-r0
 
 COPY requirements.txt .
 
