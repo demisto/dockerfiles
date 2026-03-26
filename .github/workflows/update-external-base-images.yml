@@ -12,14 +12,18 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v2
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+      - env:
+          REPO_NAME: ${{ github.repository }}
+        run: echo "💡 The $REPO_NAME repository has been cloned to the runner."
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.12'
       - name: Setup Poetry
-        uses: Gr1N/setup-poetry@v8
+        uses: Gr1N/setup-poetry@15821dc8a61bc630db542ae4baf6a7c19a994844 # v8
       - name: run
+        env:
+          DISABLE_TIMESTAMP_AUTOUPDATES: ${{ vars.DISABLE_TIMESTAMP_AUTOUPDATES }}
         run: |
             git config --global user.email ""
             git config --global user.name "auto dockerfiles update"
@@ -28,7 +32,7 @@ jobs:
             pip install pipenv==2024.4.0
             pipenv install --python=$(which python)
             echo "==== Finished ===="
-            [[ ${{ vars.DISABLE_TIMESTAMP_AUTOUPDATES }} = 'true' ]] && tu_flag="--no-timestamp-updates"
+            [[ "$DISABLE_TIMESTAMP_AUTOUPDATES" = 'true' ]] && tu_flag="--no-timestamp-updates"
             echo tu_flag being passed is $tu_flag
             pipenv run python ./utils/auto_dockerfile_update/update_dockerfiles.py $tu_flag
             echo "Done!"
