@@ -43,7 +43,7 @@ RUN curl -sSL https://install.python-poetry.org | python3 - --version 1.8.5 && s
 
 # install neo4j
 RUN wget -O - https://debian.neo4j.com/neotechnology.gpg.key | gpg --dearmor -o /usr/share/keyrings/neo4j.gpg \
-    && echo 'deb [signed-by=/usr/share/keyrings/neo4j.gpg] https://debian.neo4j.com stable main' | tee /etc/apt/sources.list.d/neo4j.list \
+    && echo 'deb [signed-by=/usr/share/keyrings/neo4j.gpg] https://debian.neo4j.com stable latest' | tee /etc/apt/sources.list.d/neo4j.list \
     && apt-get update \
     && apt-get install neo4j=2026.02.3 -y \
     && rm -rf /var/lib/apt/lists/* \
