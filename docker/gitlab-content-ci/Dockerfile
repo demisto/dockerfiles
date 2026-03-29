@@ -55,7 +55,7 @@ RUN curl -sSL https://install.python-poetry.org | python3 - --version ${POETRY_V
 RUN wget -O - https://debian.neo4j.com/neotechnology.gpg.key | gpg --dearmor -o /usr/share/keyrings/neo4j.gpg \
     && echo 'deb [signed-by=/usr/share/keyrings/neo4j.gpg] https://debian.neo4j.com stable latest' | tee /etc/apt/sources.list.d/neo4j.list \
     && apt-get update \
-    && apt-get install neo4j=${NEO4J_VERSION} -y \
+    && apt-get install neo4j=1:${NEO4J_VERSION} -y \
     && rm -rf /var/lib/apt/lists/* \
     && mkdir -p /var/lib/neo4j/plugins \
     && wget -O /var/lib/neo4j/plugins/apoc-${APOC_VERSION}-core.jar https://github.com/neo4j/apoc/releases/download/${APOC_VERSION}/apoc-${APOC_VERSION}-core.jar \
