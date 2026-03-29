@@ -20,14 +20,14 @@ RUN curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash 
     && nvm use default
 
 # Installing the gsutil cli
-RUN apt-get install apt-transport-https ca-certificates gnupg gpgv -y --allow-downgrades\
-    && echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" |  tee -a /etc/apt/sources.list.d/google-cloud-sdk.list \
-    && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - \
+RUN apt-get install apt-transport-https ca-certificates gnupg gpgv -y --allow-downgrades \
+    && curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg \
+    && echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | tee /etc/apt/sources.list.d/google-cloud-sdk.list \
     && apt-get update && apt-get install google-cloud-sdk -y && source ~/.bashrc && gsutil --version && gcloud --version
 
 # Installing the docker cli
-RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - \
-    && echo "deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/debian trixie stable" | tee /etc/apt/sources.list.d/docker.list \
+RUN curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker.gpg \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker.gpg] https://download.docker.com/linux/debian trixie stable" | tee /etc/apt/sources.list.d/docker.list \
     && apt-get update \
     && apt-get install docker-ce-cli -y && source ~/.bashrc && docker --version
 RUN apt-get install kubectl -y && source ~/.bashrc && ! kubectl version --output yaml
@@ -38,8 +38,8 @@ RUN apt-get install openjdk-25-jre -y && source ~/.bashrc && java -version
 RUN curl -sSL https://install.python-poetry.org | python3 - --version 1.8.5 && source ~/.bashrc && poetry --version
 
 # install neo4j
-RUN wget -O - https://debian.neo4j.com/neotechnology.gpg.key | apt-key add - \
-    && echo 'deb https://debian.neo4j.com stable 5' | tee -a /etc/apt/sources.list.d/neo4j.list \
+RUN wget -O - https://debian.neo4j.com/neotechnology.gpg.key | gpg --dearmor -o /usr/share/keyrings/neo4j.gpg \
+    && echo 'deb [signed-by=/usr/share/keyrings/neo4j.gpg] https://debian.neo4j.com stable 5' | tee /etc/apt/sources.list.d/neo4j.list \
     && apt-get update
 RUN mkdir -p /var/lib/neo4j/plugins \
     && wget -O /var/lib/neo4j/plugins/apoc-5.26.23-core.jar https://github.com/neo4j/apoc/releases/download/5.26.23/apoc-5.26.23-core.jar \
