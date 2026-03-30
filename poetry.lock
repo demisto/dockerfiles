@@ -2113,14 +2113,14 @@ files = [
 
 [[package]]
 name = "pipenv"
-version = "2026.2.2"
+version = "2026.5.0"
 description = "Python Development Workflow for Humans."
 optional = false
 python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "pipenv-2026.2.2-py3-none-any.whl", hash = "sha256:11bb69a696dedc789ac1c37931a30f5fc67af15771690b4d6a52c9eab0b20854"},
-    {file = "pipenv-2026.2.2.tar.gz", hash = "sha256:56e635cd628644055b414bd01c1e7e33b2441cb46884fc94062cd54f980dd736"},
+    {file = "pipenv-2026.5.0-py3-none-any.whl", hash = "sha256:3c76103a0e5d39a37d912accdf44e309e18ed0d8351b8c60897e5d4ed08cbefc"},
+    {file = "pipenv-2026.5.0.tar.gz", hash = "sha256:5402ac5fb1dae2c3d89e504496502da21fa38ff7c293b2e289a809e2f77b036e"},
 ]
 
 [package.dependencies]
@@ -2130,6 +2130,7 @@ setuptools = ">=67"
 virtualenv = ">=20.24.2"
 
 [package.extras]
+completion = ["argcomplete (>=3.1)"]
 dev = ["beautifulsoup4", "black (==26.3.1)", "flake8 (>=3.3,<4)", "invoke", "parver", "sphinx", "towncrier"]
 safety = ["safety (>=3.0.0)"]
 tests = ["mock", "pytest (>=5)", "pytest-rerunfailures", "pytest-timeout", "pytest-xdist"]
@@ -3809,4 +3810,4 @@ pyyaml = "*"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<3.13"
-content-hash = "e8d816cf77cc07b3f920418aa4937d8ef29f39482e2362e2a983b3831ac41f11"
+content-hash = "a53c12a66a7de089e0b5165c9500e1e7d106a7f242b174a743c134721f2635f9"
