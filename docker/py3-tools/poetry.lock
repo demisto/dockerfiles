@@ -1327,22 +1327,15 @@ pyasn1 = ">=0.4.6"
 
 [[package]]
 name = "mail-parser"
-version = "4.1.4"
-description = "Improved wrapper for email standard library"
+version = "4.2.1"
+description = "A tool that parses emails by enhancing the Python standard library, extracting all details into a comprehensive object."
 optional = false
-python-versions = ">=3.8"
+python-versions = "<3.15,>=3.9"
 groups = ["main"]
 files = [
-    {file = "mail_parser-4.1.4-py3-none-any.whl", hash = "sha256:ec2f7996792d81c0beb174a14795865f9c0f09f47c8afc7b9f7c1240f59d71c2"},
-    {file = "mail_parser-4.1.4.tar.gz", hash = "sha256:b65abad3beee3ffb75c7851bc373412c69e1a22561d49dd7142ee7fb4321ed82"},
+    {file = "mail_parser-4.2.1-py3-none-any.whl", hash = "sha256:f7b46be5e0834173ca1538bf5b3cb118d4f169e7c16d157dd915aaa9bceba9a2"},
+    {file = "mail_parser-4.2.1.tar.gz", hash = "sha256:2ddd4e48bedbff28d09d0743e879d3818651d0301718838b1b81e7f93175d096"},
 ]
-
-[package.dependencies]
-six = "*"
-
-[package.extras]
-dev = ["build", "pre-commit", "twine", "wheel"]
-test = ["coverage", "pytest", "pytest-cov", "pytest-mock", "pytest-ordering"]
 
 [[package]]
 name = "markdownify"
