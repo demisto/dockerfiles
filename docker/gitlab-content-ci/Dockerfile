@@ -1,69 +1,82 @@
-FROM demisto/python3-deb:3.12.11.4424127
+FROM python:3.14.3-slim-trixie
 
-ENV NODE_VERSION 14.16.0
-ENV NVM_DIR /root/.nvm
-ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:/root/.local/bin:$PATH
-ENV NEO4J_CONF_FILE /etc/neo4j/neo4j.conf
-ENV APOC_CONF_FILE /etc/neo4j/apoc.conf
+# ── Version pins (update these to bump tools) ──
+ENV NODE_VERSION=24.14.1
+ENV NVM_VERSION=0.40.4
+ENV NEO4J_VERSION=2026.02.3
+ENV APOC_VERSION=2026.02.3
+ENV POETRY_VERSION=1.8.5
+ENV GO_VERSION=1.26.1
+ENV GOLANGCI_LINT_VERSION=2.11.4
+ENV OPENJDK_VERSION=25
+
+# ── Path & config ──
+ENV NVM_DIR=/root/.nvm
+ENV PATH=$NVM_DIR/versions/node/v$NODE_VERSION/bin:/root/.local/bin:$PATH
+ENV NEO4J_CONF_FILE=/etc/neo4j/neo4j.conf
+ENV APOC_CONF_FILE=/etc/neo4j/apoc.conf
 
 # Currently sh is linked to dash, linking it to /bin/bash instead.
-RUN rm /bin/sh && ln -s /bin/bash /bin/sh && cat ~/.profile >> /etc/.profile
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh && (test -f ~/.profile && cat ~/.profile >> /etc/.profile || true)
 
-RUN apt-get update
-RUN apt-get upgrade -y
-RUN apt-get update && apt-get install -y curl jq unzip openssh-client gcc libffi-dev libssl-dev git zip cowsay netcat-openbsd wget python3-pip software-properties-common
-# Upgrade Git to latest version from backports (already configured in base image)
-RUN apt-get update && apt-get install -y git && git --version
+RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
+    curl jq unzip openssh-client gcc libffi-dev libssl-dev git zip cowsay netcat-openbsd wget \
+    apt-transport-https ca-certificates gnupg gpgv \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash \
+# Node.js via NVM
+RUN curl https://raw.githubusercontent.com/nvm-sh/nvm/v${NVM_VERSION}/install.sh | bash \
     && . $NVM_DIR/nvm.sh \
     && nvm install $NODE_VERSION \
     && nvm alias default $NODE_VERSION \
-    && nvm use default
+    && nvm use default \
+    && npm install -g npm@latest picomatch@latest
 
-# Installing the gsutil cli
-RUN apt-get install apt-transport-https ca-certificates gnupg gpgv -y --allow-downgrades\
-    && echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" |  tee -a /etc/apt/sources.list.d/google-cloud-sdk.list \
-    && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - \
-    && apt-get update && apt-get install google-cloud-sdk -y && source ~/.bashrc && gsutil --version && gcloud --version
+# Google Cloud SDK
+RUN curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg \
+    && echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | tee /etc/apt/sources.list.d/google-cloud-sdk.list \
+    && apt-get update && apt-get install google-cloud-sdk google-cloud-sdk-gke-gcloud-auth-plugin -y \
+    && rm -rf /var/lib/apt/lists/* \
+    && source ~/.bashrc && gsutil --version && gcloud --version
 
-# Installing the docker cli
-RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
-    && add-apt-repository "deb https://download.docker.com/linux/ubuntu bionic stable" \
+# Docker CLI and Kubectl
+RUN curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker.gpg \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker.gpg] https://download.docker.com/linux/debian trixie stable" | tee /etc/apt/sources.list.d/docker.list \
     && apt-get update \
-    && apt-get install docker-ce-cli -y && source ~/.bashrc && docker --version
-RUN apt-get install kubectl -y && source ~/.bashrc && ! kubectl version --output yaml
-RUN apt-get install google-cloud-sdk-gke-gcloud-auth-plugin -y && source ~/.bashrc
+    && apt-get install docker-ce-cli kubectl -y \
+    && rm -rf /var/lib/apt/lists/* \
+    && source ~/.bashrc && docker --version && (! kubectl version --output yaml || true)
 
-# installations
-RUN apt-get install openjdk-17-jre -y && source ~/.bashrc && java -version
-RUN curl -sSL https://install.python-poetry.org | python3 - --version 1.8.2 && source ~/.bashrc && poetry --version
+# Java & Python Poetry
+RUN apt-get update && apt-get install openjdk-${OPENJDK_VERSION}-jre -y && rm -rf /var/lib/apt/lists/* && source ~/.bashrc && java -version
+RUN curl -sSL https://install.python-poetry.org | python3 - --version ${POETRY_VERSION} && source ~/.bashrc && poetry --version
 
-# install neo4j
-RUN echo "deb http://httpredir.debian.org/debian stable-backports main" | tee -a /etc/apt/sources.list.d/stable-backports.list \
-    && wget -O - https://debian.neo4j.com/neotechnology.gpg.key | apt-key add - \
-    && echo 'deb https://debian.neo4j.com stable 5' | tee -a /etc/apt/sources.list.d/neo4j.list \
-    && apt-get update
-RUN mkdir -p /var/lib/neo4j/plugins \
-    && wget -O /var/lib/neo4j/plugins/apoc-5.26.0-core.jar https://github.com/neo4j/apoc/releases/download/5.26.0/apoc-5.26.0-core.jar \
-    && apt-get install neo4j -y && source ~/.bashrc && neo4j --version && neo4j-admin --version \
-    && neo4j_conf_file="/etc/neo4j/neo4j.conf" \
+# Neo4j + APOC plugin
+RUN wget -O - https://debian.neo4j.com/neotechnology.gpg.key | gpg --dearmor -o /usr/share/keyrings/neo4j.gpg \
+    && echo 'deb [signed-by=/usr/share/keyrings/neo4j.gpg] https://debian.neo4j.com stable latest' | tee /etc/apt/sources.list.d/neo4j.list \
+    && apt-get update \
+    && apt-get install neo4j=1:${NEO4J_VERSION} -y \
+    && rm -rf /var/lib/apt/lists/* \
+    && mkdir -p /var/lib/neo4j/plugins \
+    && wget -O /var/lib/neo4j/plugins/apoc-${APOC_VERSION}-core.jar https://github.com/neo4j/apoc/releases/download/${APOC_VERSION}/apoc-${APOC_VERSION}-core.jar \
+    && source ~/.bashrc && neo4j --version && neo4j-admin --version \
     && echo "dbms.security.procedures.unrestricted=apoc.*" >> $NEO4J_CONF_FILE \
     && echo "dbms.security.procedures.allowlist=apoc.*" >> $NEO4J_CONF_FILE \
-    && apoc_conf_file="/etc/neo4j/apoc.conf" \
     && echo "apoc.export.file.enabled=true" > $APOC_CONF_FILE \
     && echo "apoc.import.file.enabled=true" >> $APOC_CONF_FILE \
     && echo "apoc.import.file.use_neo4j_config=true" >> $APOC_CONF_FILE
-# Installing goenv
+
+# Go via goenv
 RUN git clone https://github.com/go-nv/goenv.git --depth 1 ~/.goenv
 RUN echo 'export GOENV_ROOT="$HOME/.goenv"' >> ~/.bashrc \
-    && echo 'export PATH="$GOENV_ROOT/bin:$PATH"' >> ~/.bashrc \ 
+    && echo 'export PATH="$GOENV_ROOT/bin:$PATH"' >> ~/.bashrc \
     && source ~/.bashrc \
-    && goenv install 1.22.5 \
-    && goenv global 1.22.5 \
+    && goenv install ${GO_VERSION} \
+    && goenv global ${GO_VERSION} \
     && echo 'eval "$(goenv init -)"' >> ~/.bashrc \
     && echo 'export PATH="$GOROOT/bin:$PATH"' >> ~/.bashrc \
     && echo 'export PATH="$PATH:$GOPATH/bin"' >> ~/.bashrc \
     && source ~/.bashrc
-RUN curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.60.3
 
+# golangci-lint
+# RUN curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v${GOLANGCI_LINT_VERSION}
