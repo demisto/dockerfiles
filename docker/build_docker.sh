@@ -3,6 +3,48 @@
 # exit on errors
 set -e
 
+# Associative array to track failed docker images in upload mode
+# Keys: image_name, Values: step that failed
+declare -A FAILED_DOCKERS
+
+# Record a docker image failure for the JSON report
+# param $1: image name
+# param $2: step that failed (build, validation, push)
+# param $3: error message
+function record_failure {
+    local img="$1"
+    local step="$2"
+    local err_msg="$3"
+    FAILED_DOCKERS["${img}"]="${step}"
+    red_error "Image '${img}' failed at step '${step}': ${err_msg}"
+}
+
+# Write the failed dockers JSON report to ARTIFACTS_FOLDER
+function write_failed_dockers_report {
+    local report_file="${ARTIFACTS_FOLDER}/failed_dockers.json"
+    if [ ${#FAILED_DOCKERS[@]} -eq 0 ]; then
+        echo '{}' > "${report_file}"
+    else
+        echo '{' > "${report_file}"
+        local first=true
+        for img in "${!FAILED_DOCKERS[@]}"; do
+            if [ "${first}" = true ]; then
+                first=false
+            else
+                echo ',' >> "${report_file}"
+            fi
+            # Escape any double quotes in the image name (unlikely but safe)
+            local escaped_img="${img//\"/\\\"}"
+            local escaped_step="${FAILED_DOCKERS[$img]//\"/\\\"}"
+            printf '  "%s": {"step": "%s"}' "${escaped_img}" "${escaped_step}" >> "${report_file}"
+        done
+        echo '' >> "${report_file}"
+        echo '}' >> "${report_file}"
+    fi
+    echo "Failed dockers report written to ${report_file}"
+    cat "${report_file}"
+}
+
 REVISION=${CI_PIPELINE_ID:-$(date +%s)}
 PUSHED_DOCKERS=""
 IMAGE_ARTIFACTS=""
@@ -243,10 +285,24 @@ function docker_build {
     docker_login
     echo "### DOCKER LOGIN DONE ###"
 
+    set +e
     docker buildx build -f "$tmp_dir/Dockerfile" . -t ${image_full_name} \
         --label "org.opencontainers.image.authors=Demisto <containers@demisto.com>" \
         --label "org.opencontainers.image.version=${VERSION}" \
         --label "org.opencontainers.image.revision=${CI_COMMIT_SHA}"
+    local build_exit_code=$?
+    set -e
+
+    if [ $build_exit_code -ne 0 ]; then
+        if [ "${UPLOAD_MODE}" = "true" ]; then
+            record_failure "${image_name}" "build" "docker buildx build failed with exit code ${build_exit_code}"
+            rm -rf "$tmp_dir"
+            return 0
+        else
+            rm -rf "$tmp_dir"
+            return 1
+        fi
+    fi
 
     if [[ -e "dynamic_version.sh" ]]; then
       echo "dynamic_version.sh file was found"
@@ -260,10 +316,24 @@ function docker_build {
 
       echo "running docker build again with tag $image_full_name"
 
+      set +e
       docker buildx build -f "$tmp_dir/Dockerfile" . -t ${image_full_name} \
         --label "org.opencontainers.image.authors=Demisto <containers@demisto.com>" \
         --label "org.opencontainers.image.version=${VERSION}" \
         --label "org.opencontainers.image.revision=${CI_COMMIT_SHA}"
+      local rebuild_exit_code=$?
+      set -e
+
+      if [ $rebuild_exit_code -ne 0 ]; then
+          if [ "${UPLOAD_MODE}" = "true" ]; then
+              record_failure "${image_name}" "build" "docker buildx rebuild (dynamic version) failed with exit code ${rebuild_exit_code}"
+              rm -rf "$tmp_dir"
+              return 0
+          else
+              rm -rf "$tmp_dir"
+              return 1
+          fi
+      fi
     fi
     rm -rf "$tmp_dir"
 
@@ -315,20 +385,53 @@ function docker_build {
         echo "Skipping license verification for devonly image"
     else
         PY3CMD="python3"
+        set +e
         $PY3CMD ${DOCKER_SRC_DIR}/verify_licenses.py ${image_full_name}
+        local license_exit_code=$?
+        set -e
+        if [ $license_exit_code -ne 0 ]; then
+            if [ "${UPLOAD_MODE}" = "true" ]; then
+                record_failure "${image_name}" "validation" "verify_licenses.py failed with exit code ${license_exit_code}"
+                return 0
+            else
+                return 1
+            fi
+        fi
     fi
     local filename
     while IFS= read -r -d '' filename; do
         echo "==========================="
         echo "Verifying docker image by running the python script $filename within the docker image"
+        set +e
         cat "${filename}" | docker run --rm -i ${image_full_name} python '-'
+        local verify_exit_code=$?
+        set -e
+        if [ $verify_exit_code -ne 0 ]; then
+            if [ "${UPLOAD_MODE}" = "true" ]; then
+                record_failure "${image_name}" "validation" "verify script ${filename} failed with exit code ${verify_exit_code}"
+                return 0
+            else
+                return 1
+            fi
+        fi
     done < <(find . -name "*verify.py" -print0)
 
     if [ -f "verify.ps1" ]; then
         echo "==========================="
         echo "Verifying docker image by running the pwsh script verify.ps1 within the docker image"
         # use "tee" as powershell doesn't fail on throw when run with -c
+        set +e
         cat verify.ps1 | docker run --rm -i ${image_full_name} sh -c 'tee > verify.ps1; pwsh verify.ps1'
+        local ps_verify_exit_code=$?
+        set -e
+        if [ $ps_verify_exit_code -ne 0 ]; then
+            if [ "${UPLOAD_MODE}" = "true" ]; then
+                record_failure "${image_name}" "validation" "verify.ps1 failed with exit code ${ps_verify_exit_code}"
+                return 0
+            else
+                return 1
+            fi
+        fi
     fi
     docker_trust=0
     if sign_setup; then
@@ -340,8 +443,19 @@ function docker_build {
         if [ "${DRY_RUN}" = "true" ]; then
             echo "[DRY-RUN] Would have pushed to CR: ${CR_REPO}/${image_full_name}"
         else
+            set +e
             docker tag ${image_full_name} ${CR_REPO}/${image_full_name}
             docker push ${CR_REPO}/${image_full_name} > /dev/null
+            local cr_push_exit_code=$?
+            set -e
+            if [ $cr_push_exit_code -ne 0 ]; then
+                if [ "${UPLOAD_MODE}" = "true" ]; then
+                    record_failure "${image_name}" "push" "docker push to CR failed with exit code ${cr_push_exit_code}"
+                    return 0
+                else
+                    return 1
+                fi
+            fi
             echo "Done docker push for cr: ${image_full_name}"
         fi
     else
@@ -354,7 +468,18 @@ function docker_build {
             echo "[DRY-RUN] Would have pushed to Docker Hub: ${image_full_name}"
         else
             echo "Done docker login"
+            set +e
             env DOCKER_CONTENT_TRUST=$docker_trust DOCKER_CONFIG="${DOCKER_CONFIG}"  docker push ${image_full_name}
+            local dh_push_exit_code=$?
+            set -e
+            if [ $dh_push_exit_code -ne 0 ]; then
+                if [ "${UPLOAD_MODE}" = "true" ]; then
+                    record_failure "${image_name}" "push" "docker push to Docker Hub failed with exit code ${dh_push_exit_code}"
+                    return 0
+                else
+                    return 1
+                fi
+            fi
             echo "Done docker push for: ${image_full_name}"
             PUSHED_DOCKERS="${image_full_name},$PUSHED_DOCKERS"
             echo "debug pushed_dockers $PUSHED_DOCKERS"
@@ -516,7 +641,19 @@ for docker_dir in `find $SCRIPT_DIR -maxdepth 1 -mindepth 1 -type  d -print | so
         fi
         count=$((count+1))
         echo "=============== `date`: Starting docker build in dir: ${docker_dir} ($count of $total) ==============="
-        docker_build ${docker_dir}
+        if [ "${UPLOAD_MODE}" = "true" ]; then
+            # In upload mode, don't let a single image failure stop the entire build
+            set +e
+            docker_build ${docker_dir}
+            build_rc=$?
+            set -e
+            if [ $build_rc -ne 0 ]; then
+                failed_img_name=$(basename "${docker_dir}")
+                record_failure "${failed_img_name}" "build" "docker_build function returned non-zero exit code ${build_rc}"
+            fi
+        else
+            docker_build ${docker_dir}
+        fi
         cd ${CURRENT_DIR}
         echo ">>>>>>>>>>>>>>> `date`: Done docker build <<<<<<<<<<<<<"
     fi
@@ -541,4 +678,9 @@ if [ -n "${IMAGE_ARTIFACTS}" ]; then
   echo "Successfully saved:${IMAGE_ARTIFACTS}"
 else
     echo "No image artifacts were saved"
+fi
+
+# Write the failed dockers JSON report (always, even if empty)
+if [ "${UPLOAD_MODE}" = "true" ]; then
+    write_failed_dockers_report
 fi
