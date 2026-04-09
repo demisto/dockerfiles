@@ -7,7 +7,10 @@ set -e
 # Keys: image_name, Values: step that failed
 declare -A FAILED_DOCKERS
 
-# Record a docker image failure for the JSON report
+# Record a docker image failure and return the appropriate exit code.
+# In upload mode: records to FAILED_DOCKERS and returns 0 (continue).
+# In non-upload mode: logs the error and returns 1 (fail).
+# Usage: record_failure "image" "step" "message"; return $?
 # param $1: image name
 # param $2: step that failed (build, validation, push)
 # param $3: error message
@@ -15,8 +18,12 @@ function record_failure {
     local img="$1"
     local step="$2"
     local err_msg="$3"
-    FAILED_DOCKERS["${img}"]="${step}"
     red_error "Image '${img}' failed at step '${step}': ${err_msg}"
+    if [ "${UPLOAD_MODE}" = "true" ]; then
+        FAILED_DOCKERS["${img}"]="${step}"
+        return 0
+    fi
+    return 1
 }
 
 # Write the failed dockers JSON report to ARTIFACTS_FOLDER
@@ -232,7 +239,15 @@ function docker_build {
     if [[ "$(prop 'deprecated')" ]]; then
         echo "${DOCKER_ORG_DEMISTO}/${image_name} image is deprecated, checking whether the image is listed in the deprecated list or not"
         reason=$(prop 'deprecated_reason')
+        set +e
         ${PY3CMD} "${DOCKER_SRC_DIR}"/add_image_to_deprecated_or_internal_list.py "${DOCKER_ORG_DEMISTO}"/"${image_name}" "${reason}" "${DOCKER_SRC_DIR}"/deprecated_images.json
+        local deprecated_rc=$?
+        set -e
+        if [ $deprecated_rc -ne 0 ]; then
+            echo "Warning: add_image_to_deprecated_or_internal_list.py failed with exit code ${deprecated_rc}"
+            record_failure "${image_name}" "build" "add_image_to_deprecated_or_internal_list.py failed with exit code ${deprecated_rc}"
+            return $?
+        fi
     fi
 
     del_requirements=no
@@ -246,7 +261,15 @@ function docker_build {
           echo 'Not generating requirements as dont_generate_requirements is true' # only implemented for pipenv
         else
           pipenv --rm || echo "Proceeding. It is ok that no virtualenv is available to remove"
+          set +e
           pipenv install --deploy # fails if lock is outdated
+          local pipenv_rc=$?
+          set -e
+          if [ $pipenv_rc -ne 0 ]; then
+              echo "pipenv install --deploy failed with exit code ${pipenv_rc}"
+              record_failure "${image_name}" "build" "pipenv install --deploy failed with exit code ${pipenv_rc}"
+              return $?
+          fi
           PIPENV_YES=yes pipenv run pip freeze > requirements.txt
           echo "Pipfile lock generated requirements.txt: "
           echo "############ REQUIREMENTS.TXT ############"
@@ -267,7 +290,15 @@ function docker_build {
 
       echo "starting to install dependencies from poetry..."
       poetry --version
+      set +e
       poetry export -f requirements.txt --output requirements.txt --without-hashes
+      local poetry_rc=$?
+      set -e
+      if [ $poetry_rc -ne 0 ]; then
+          echo "poetry export failed with exit code ${poetry_rc}"
+          record_failure "${image_name}" "build" "poetry export failed with exit code ${poetry_rc}"
+          return $?
+      fi
       echo "poetry.lock generated requirements.txt file: "
       echo "############ REQUIREMENTS.TXT ############"
       cat requirements.txt
@@ -287,7 +318,14 @@ function docker_build {
     fi
 
     echo "### DOCKER LOGIN START ###"
-    docker_login
+    if ! docker_login; then
+        red_error "FATAL: docker login failed for image ${image_name}. Cannot proceed."
+        if [ "${UPLOAD_MODE}" = "true" ]; then
+            record_failure "${image_name}" "build" "docker login failed - fatal error"
+            write_failed_dockers_report
+        fi
+        exit 1
+    fi
     echo "### DOCKER LOGIN DONE ###"
 
     set +e
@@ -299,19 +337,27 @@ function docker_build {
     set -e
 
     if [ $build_exit_code -ne 0 ]; then
-        if [ "${UPLOAD_MODE}" = "true" ]; then
-            record_failure "${image_name}" "build" "docker buildx build failed with exit code ${build_exit_code}"
-            rm -rf "$tmp_dir"
-            return 0
-        else
-            rm -rf "$tmp_dir"
-            return 1
-        fi
+        rm -rf "$tmp_dir"
+        record_failure "${image_name}" "build" "docker buildx build failed with exit code ${build_exit_code}"
+        return $?
     fi
 
     if [[ -e "dynamic_version.sh" ]]; then
       echo "dynamic_version.sh file was found"
+      set +e
       dynamic_version=$(docker run --rm -i "$image_full_name" sh < dynamic_version.sh)
+      local dv_exit_code=$?
+      set -e
+      if [ $dv_exit_code -ne 0 ]; then
+          rm -rf "$tmp_dir"
+          record_failure "${image_name}" "build" "dynamic_version.sh execution failed with exit code ${dv_exit_code}"
+          return $?
+      fi
+      if [ -z "${dynamic_version}" ]; then
+          rm -rf "$tmp_dir"
+          record_failure "${image_name}" "build" "dynamic_version.sh returned empty version"
+          return $?
+      fi
       echo "dynamic_version $dynamic_version"
       VERSION="${dynamic_version}.${REVISION}"
       image_full_name="${DOCKER_ORG}/${image_name}:${VERSION}"
@@ -330,14 +376,9 @@ function docker_build {
       set -e
 
       if [ $rebuild_exit_code -ne 0 ]; then
-          if [ "${UPLOAD_MODE}" = "true" ]; then
-              record_failure "${image_name}" "build" "docker buildx rebuild (dynamic version) failed with exit code ${rebuild_exit_code}"
-              rm -rf "$tmp_dir"
-              return 0
-          else
-              rm -rf "$tmp_dir"
-              return 1
-          fi
+          rm -rf "$tmp_dir"
+          record_failure "${image_name}" "build" "docker buildx rebuild (dynamic version) failed with exit code ${rebuild_exit_code}"
+          return $?
       fi
     fi
     rm -rf "$tmp_dir"
@@ -366,7 +407,14 @@ function docker_build {
     echo "================= $(date): Starting version verification on image: ${image_name} ================="
     echo "Checking that the image python version match with the Pipfile/pyproject.toml python version..."
     # Get the python version from the docker metadata.
+    set +e
     PYTHON_VERSION=$(docker inspect "$image_full_name" | jq -r '.[].Config.Env[]|select(match("^PYTHON_VERSION"))|.[index("=")+1:]')
+    local inspect_rc=$?
+    set -e
+    if [ $inspect_rc -ne 0 ]; then
+        echo "Warning: docker inspect failed with exit code ${inspect_rc} for image ${image_full_name}"
+        PYTHON_VERSION=""
+    fi
     PY3CMD="python3"
     if [ -f "Pipfile" ]; then
         file_name="Pipfile"
@@ -395,12 +443,8 @@ function docker_build {
         local license_exit_code=$?
         set -e
         if [ $license_exit_code -ne 0 ]; then
-            if [ "${UPLOAD_MODE}" = "true" ]; then
-                record_failure "${image_name}" "validation" "verify_licenses.py failed with exit code ${license_exit_code}"
-                return 0
-            else
-                return 1
-            fi
+            record_failure "${image_name}" "validation" "verify_licenses.py failed with exit code ${license_exit_code}"
+            return $?
         fi
     fi
     local filename
@@ -412,12 +456,8 @@ function docker_build {
         local verify_exit_code=$?
         set -e
         if [ $verify_exit_code -ne 0 ]; then
-            if [ "${UPLOAD_MODE}" = "true" ]; then
-                record_failure "${image_name}" "validation" "verify script ${filename} failed with exit code ${verify_exit_code}"
-                return 0
-            else
-                return 1
-            fi
+            record_failure "${image_name}" "validation" "verify script ${filename} failed with exit code ${verify_exit_code}"
+            return $?
         fi
     done < <(find . -name "*verify.py" -print0)
 
@@ -430,12 +470,8 @@ function docker_build {
         local ps_verify_exit_code=$?
         set -e
         if [ $ps_verify_exit_code -ne 0 ]; then
-            if [ "${UPLOAD_MODE}" = "true" ]; then
-                record_failure "${image_name}" "validation" "verify.ps1 failed with exit code ${ps_verify_exit_code}"
-                return 0
-            else
-                return 1
-            fi
+            record_failure "${image_name}" "validation" "verify.ps1 failed with exit code ${ps_verify_exit_code}"
+            return $?
         fi
     fi
     docker_trust=0
@@ -450,16 +486,18 @@ function docker_build {
         else
             set +e
             docker tag ${image_full_name} ${CR_REPO}/${image_full_name}
+            local cr_tag_exit_code=$?
+            if [ $cr_tag_exit_code -ne 0 ]; then
+                set -e
+                record_failure "${image_name}" "push" "docker tag for CR failed with exit code ${cr_tag_exit_code}"
+                return $?
+            fi
             docker push ${CR_REPO}/${image_full_name} > /dev/null
             local cr_push_exit_code=$?
             set -e
             if [ $cr_push_exit_code -ne 0 ]; then
-                if [ "${UPLOAD_MODE}" = "true" ]; then
-                    record_failure "${image_name}" "push" "docker push to CR failed with exit code ${cr_push_exit_code}"
-                    return 0
-                else
-                    return 1
-                fi
+                record_failure "${image_name}" "push" "docker push to CR failed with exit code ${cr_push_exit_code}"
+                return $?
             fi
             echo "Done docker push for cr: ${image_full_name}"
         fi
@@ -478,12 +516,8 @@ function docker_build {
             local dh_push_exit_code=$?
             set -e
             if [ $dh_push_exit_code -ne 0 ]; then
-                if [ "${UPLOAD_MODE}" = "true" ]; then
-                    record_failure "${image_name}" "push" "docker push to Docker Hub failed with exit code ${dh_push_exit_code}"
-                    return 0
-                else
-                    return 1
-                fi
+                record_failure "${image_name}" "push" "docker push to Docker Hub failed with exit code ${dh_push_exit_code}"
+                return $?
             fi
             echo "Done docker push for: ${image_full_name}"
             PUSHED_DOCKERS="${image_full_name},$PUSHED_DOCKERS"
@@ -503,18 +537,21 @@ function docker_build {
             echo "Failed post_github_comment.py. Will stop build only if not on master"
             if [ "${CI_COMMIT_REF_NAME}" == "master" ]; then
                 echo "Continuing as we are on master branch..."
-            elif [ "${UPLOAD_MODE}" = "true" ]; then
-                record_failure "${image_name}" "push" "post_github_comment.py failed"
-                return 0
             else
+                record_failure "${image_name}" "push" "post_github_comment.py failed"
+                local pgc_rc=$?
+                if [ $pgc_rc -eq 0 ]; then
+                    return 0
+                fi
                 echo "failing build!!"
                 exit 5
             fi
         fi
     else
         echo "Skipping docker push"
-        if [ "${UPLOAD_MODE}" = "true" ]; then
-            record_failure "${image_name}" "push" "docker login failed, could not push image"
+        record_failure "${image_name}" "push" "docker login failed, could not push image"
+        local dl_rc=$?
+        if [ $dl_rc -eq 0 ]; then
             return 0
         fi
         if [ "${CI_COMMIT_REF_NAME}" == "master" ]; then
