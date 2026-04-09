@@ -9,3 +9,8 @@ RUN addgroup -g 4000 demisto \
   && apk update \
   && apk upgrade \
   && apk del less
+
+ENV DEFAULT_USER="demisto"
+
+USER $DEFAULT_USER
+WORKDIR /home/$DEFAULT_USER
