@@ -137,7 +137,7 @@ function cr_login {
     fi
     if [ $? -ne 0 ]; then
         echo "Failed docker login to CR repo"
-        exit 3;
+        return 3;
     fi
     CR_LOGIN_DONE=yes
     return 0;
@@ -198,6 +198,11 @@ function commit_dockerfiles_trust {
         done
         if [ "${COMMIT_DONE}" = "no" ]; then
             echo "Failed committing trust data"
+            if [ "${UPLOAD_MODE}" = "true" ]; then
+                echo "Continuing in upload mode despite trust commit failure"
+                cd "$cwd"
+                return 1
+            fi
             exit 5
         fi
     else
@@ -498,6 +503,9 @@ function docker_build {
             echo "Failed post_github_comment.py. Will stop build only if not on master"
             if [ "${CI_COMMIT_REF_NAME}" == "master" ]; then
                 echo "Continuing as we are on master branch..."
+            elif [ "${UPLOAD_MODE}" = "true" ]; then
+                record_failure "${image_name}" "push" "post_github_comment.py failed"
+                return 0
             else
                 echo "failing build!!"
                 exit 5
@@ -505,6 +513,10 @@ function docker_build {
         fi
     else
         echo "Skipping docker push"
+        if [ "${UPLOAD_MODE}" = "true" ]; then
+            record_failure "${image_name}" "push" "docker login failed, could not push image"
+            return 0
+        fi
         if [ "${CI_COMMIT_REF_NAME}" == "master" ]; then
           echo "Did not push image on master. Failing build"
           exit 1
@@ -662,7 +674,11 @@ if [ ${#errors[@]} != 0 ]; then
   for err in "${errors[@]}"; do
     red_error "$err"
   done
-  exit 1
+  if [ "${UPLOAD_MODE}" = "true" ]; then
+    echo "Errors found but continuing in upload mode (errors logged above)"
+  else
+    exit 1
+  fi
 fi
 
 
