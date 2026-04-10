@@ -168,6 +168,28 @@ function print_sub_separator {
     printf '%*s\n' "${TERM_WIDTH}" '' | tr ' ' "${ch}"
 }
 
+# -- GitLab CI section helpers ---------------------------------------------
+# Opens a collapsed section in GitLab CI; no-op otherwise
+# param $1: section id (alphanumeric + underscore)
+# param $2: section header text
+function gitlab_section_start {
+    if [ -n "${GITLAB_CI}" ]; then
+        local section_id="$1"
+        local header="$2"
+        # \e[0K clears the line; [collapsed=true] makes it collapsed by default
+        printf "\e[0Ksection_start:%s:%s[collapsed=true]\r\e[0K%s\n" "$(date +%s)" "${section_id}" "${header}"
+    fi
+}
+
+# Closes a GitLab CI section; no-op otherwise
+# param $1: section id
+function gitlab_section_end {
+    if [ -n "${GITLAB_CI}" ]; then
+        local section_id="$1"
+        printf "\e[0Ksection_end:%s:%s\r\e[0K\n" "$(date +%s)" "${section_id}"
+    fi
+}
+
 if [ -n "$GITLAB_CI" ]; then
     DOCKER_LOGIN_DONE=${DOCKER_LOGIN_DONE:-no}
     # Use plain buildkit progress in CI to avoid noisy progress bars
@@ -921,28 +943,6 @@ function print_build_banner {
         "Time  : $(date '+%Y-%m-%d %H:%M:%S')" \
         "Done  : ${completed}/${tot} completed"
     progress_bar "${completed}" "$tot"
-}
-
-# -- GitLab CI section helpers ---------------------------------------------
-# Opens a collapsed section in GitLab CI; no-op otherwise
-# param $1: section id (alphanumeric + underscore)
-# param $2: section header text
-function gitlab_section_start {
-    if [ -n "${GITLAB_CI}" ]; then
-        local section_id="$1"
-        local header="$2"
-        # \e[0K clears the line; [collapsed=true] makes it collapsed by default
-        printf "\e[0Ksection_start:%s:%s[collapsed=true]\r\e[0K%s\n" "$(date +%s)" "${section_id}" "${header}"
-    fi
-}
-
-# Closes a GitLab CI section; no-op otherwise
-# param $1: section id
-function gitlab_section_end {
-    if [ -n "${GITLAB_CI}" ]; then
-        local section_id="$1"
-        printf "\e[0Ksection_end:%s:%s\r\e[0K\n" "$(date +%s)" "${section_id}"
-    fi
 }
 
 # ============================================================================
