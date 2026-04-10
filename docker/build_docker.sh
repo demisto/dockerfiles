@@ -65,7 +65,6 @@ fi
 DOCKERFILES_TRUST_DIR="$(cd "${DOCKER_SRC_DIR}/.." && pwd)"
 DOCKERFILES_TRUST_DIR="${DOCKERFILES_TRUST_DIR}/dockerfiles-trust"
 
-echo "DOCKER_SRC_DIR: ${DOCKER_SRC_DIR}, DOCKERFILES_TRUST_DIR: ${DOCKERFILES_TRUST_DIR}"
 
 # parse a property form build.conf file in current dir
 # param $1: property name
@@ -188,6 +187,22 @@ function gitlab_section_end {
         local section_id="$1"
         printf "\e[0Ksection_end:%s:%s\r\e[0K\n" "$(date +%s)" "${section_id}"
     fi
+}
+
+# -- Logging helper -------------------------------------------------------
+# Prefixes every line from stdin with:
+#   [2024-07-21 07:18:07] [ 1/10] [image_name   ] <line>
+# param $1: image name
+# param $2: current 1-based index
+# param $3: total count
+# param $4: max image name length (for padding)
+# param $5: count field width (for padding)
+function log_prefix {
+    local img="$1" idx="$2" tot="$3" pad_name="$4" pad_count="$5"
+    while IFS= read -r line || [ -n "$line" ]; do
+        printf "[%s] [%${pad_count}d/%d] [%-${pad_name}s] %s\n" \
+            "$(date '+%Y-%m-%d %H:%M:%S')" "$idx" "$tot" "$img" "$line"
+    done
 }
 
 if [ -n "$GITLAB_CI" ]; then
@@ -804,21 +819,23 @@ _py3_ver=$(python3 --version 2>&1 || echo "python3 not found")
 print_box_banner \
     "DOCKER BUILD -- STARTUP CONFIGURATION" \
     "" \
-    "Date        : $(date '+%Y-%m-%d %H:%M:%S')" \
-    "Branch      : ${CI_COMMIT_REF_NAME:-N/A}" \
-    "Commit SHA  : ${CI_COMMIT_SHA:-N/A}" \
-    "Pipeline ID : ${CI_PIPELINE_ID:-N/A}" \
+    "Date             : $(date '+%Y-%m-%d %H:%M:%S')" \
+    "Branch           : ${CI_COMMIT_REF_NAME:-N/A}" \
+    "Commit SHA       : ${CI_COMMIT_SHA:-N/A}" \
+    "Pipeline ID      : ${CI_PIPELINE_ID:-N/A}" \
     "" \
-    "DOCKER_ORG  : ${DOCKER_ORG:-devdemisto}" \
-    "DIFF_COMPARE: ${DIFF_COMPARE}" \
-    "SCRIPT_DIR  : ${SCRIPT_DIR}" \
-    "PWD         : ${CURRENT_DIR}" \
+    "DOCKER_ORG       : ${DOCKER_ORG:-devdemisto}" \
+    "DIFF_COMPARE     : ${DIFF_COMPARE}" \
+    "DOCKER_SRC_DIR   : ${DOCKER_SRC_DIR}" \
+    "TRUST_DIR        : ${DOCKERFILES_TRUST_DIR}" \
+    "SCRIPT_DIR       : ${SCRIPT_DIR}" \
+    "PWD              : ${CURRENT_DIR}" \
     "" \
-    "Upload Mode : ${UPLOAD_MODE}" \
-    "Dry Run     : ${DRY_RUN}" \
+    "Upload Mode      : ${UPLOAD_MODE}" \
+    "Dry Run          : ${DRY_RUN}" \
     "" \
-    "Python      : ${_py_ver}" \
-    "Python3     : ${_py3_ver}"
+    "Python           : ${_py_ver}" \
+    "Python3          : ${_py3_ver}"
 
 # -- pyenv info (if available) --
 if [[ $(which pyenv 2>/dev/null) ]]; then
@@ -855,23 +872,35 @@ print_separator "="
 # PHASE 1: DISCOVERY -- find all changed docker directories before building
 # ============================================================================
 print_section_header "DISCOVERY PHASE: Scanning for changed Docker images..."
+echo "  DIFF_COMPARE: ${DIFF_COMPARE}"
+echo ""
+
+# Count total directories for progress display
+ALL_DOCKER_DIRS=()
+while IFS= read -r d; do
+    ALL_DOCKER_DIRS+=("$d")
+done < <(find "$SCRIPT_DIR" -maxdepth 1 -mindepth 1 -type d -print | sort)
+discovery_total=${#ALL_DOCKER_DIRS[@]}
+discovery_count_width=${#discovery_total}
 
 CHANGED_DOCKER_DIRS=()
-for docker_dir in $(find "$SCRIPT_DIR" -maxdepth 1 -mindepth 1 -type d -print | sort); do
-    echo "Checking dir: ${docker_dir} against ${DIFF_COMPARE}"
+discovery_idx=0
+for docker_dir in "${ALL_DOCKER_DIRS[@]}"; do
+    discovery_idx=$((discovery_idx + 1))
+    echo "Checking dir: ${docker_dir}" | log_prefix "discovery" "${discovery_idx}" "${discovery_total}" 15 "${discovery_count_width}"
     if [[ ${DIFF_COMPARE} = "ALL" ]] || [[ $(git --no-pager diff "${DIFF_COMPARE}" --name-status -- "${docker_dir}") ]]; then
         if [ -n "${DOCKER_INCLUDE_GREP}" ] && ! echo "${docker_dir}" | grep -qE "${DOCKER_INCLUDE_GREP}"; then
-            [[ -z "${docker_image_to_build}" ]] && echo "Skipping dir: '${docker_dir}' as not included in grep expression DOCKER_INCLUDE_GREP: '${DOCKER_INCLUDE_GREP}'"
+            [[ -z "${docker_image_to_build}" ]] && echo "Skipping: not in DOCKER_INCLUDE_GREP" | log_prefix "discovery" "${discovery_idx}" "${discovery_total}" 15 "${discovery_count_width}"
             continue
         fi
         CHANGED_DOCKER_DIRS+=("${docker_dir}")
-        echo "  >> Queued: $(basename "${docker_dir}")"
+        echo ">> Queued: $(basename "${docker_dir}")" | log_prefix "discovery" "${discovery_idx}" "${discovery_total}" 15 "${discovery_count_width}"
     fi
 done
 
 total=${#CHANGED_DOCKER_DIRS[@]}
 
-print_section_header "DISCOVERY COMPLETE: Found ${total} Docker image(s) to build"
+print_section_header "DISCOVERY COMPLETE: Found ${total} Docker image(s) to build (scanned ${discovery_total} directories)"
 
 if [ "${total}" -eq 0 ]; then
     echo "No changed Docker images found. Nothing to build."
@@ -889,22 +918,6 @@ done
 
 # Width of the count field (e.g. if total=100, count_width=3)
 count_width=${#total}
-
-# -- Logging helper -------------------------------------------------------
-# Prefixes every line from stdin with:
-#   [2024-07-21 07:18:07] [ 1/10] [image_name   ] <line>
-# param $1: image name
-# param $2: current 1-based index
-# param $3: total count
-# param $4: max image name length (for padding)
-# param $5: count field width (for padding)
-function log_prefix {
-    local img="$1" idx="$2" tot="$3" pad_name="$4" pad_count="$5"
-    while IFS= read -r line || [ -n "$line" ]; do
-        printf "[%s] [%${pad_count}d/%d] [%-${pad_name}s] %s\n" \
-            "$(date '+%Y-%m-%d %H:%M:%S')" "$idx" "$tot" "$img" "$line"
-    done
-}
 
 # -- tqdm-style progress bar (ASCII-safe) ----------------------------------
 # param $1: current (1-based)
@@ -1016,6 +1029,20 @@ BUILD_DURATION_FMT=$(printf '%02d:%02d:%02d' $((BUILD_DURATION/3600)) $(( (BUILD
 succeeded_count=${#SUCCEEDED_IMAGES[@]}
 failed_count=${#FAILED_DOCKERS[@]}
 
+# Determine pushed/artifacts status for summary
+if [ -n "$PUSHED_DOCKERS" ]; then
+    _pushed_status="Yes (${PUSHED_DOCKERS})"
+    echo "${PUSHED_DOCKERS}" > "${ARTIFACTS_FOLDER}/pushed_dockers.txt"
+else
+    _pushed_status="None"
+fi
+if [ -n "${IMAGE_ARTIFACTS}" ]; then
+    _artifacts_status="Yes (${IMAGE_ARTIFACTS})"
+    echo "${IMAGE_ARTIFACTS}" > "${ARTIFACTS_FOLDER}/image_artifacts.txt"
+else
+    _artifacts_status="None"
+fi
+
 print_box_banner \
     "BUILD SUMMARY" \
     "" \
@@ -1023,7 +1050,10 @@ print_box_banner \
     "Succeeded    : ${succeeded_count}" \
     "Failed       : ${failed_count}" \
     "Duration     : ${BUILD_DURATION_FMT}" \
-    "Finished at  : $(date '+%Y-%m-%d %H:%M:%S')"
+    "Finished at  : $(date '+%Y-%m-%d %H:%M:%S')" \
+    "" \
+    "Pushed       : ${_pushed_status}" \
+    "Artifacts    : ${_artifacts_status}"
 
 # -- Succeeded images --
 if [ "${succeeded_count}" -gt 0 ]; then
@@ -1059,20 +1089,6 @@ if [ ${#errors[@]} != 0 ]; then
 fi
 
 print_separator "="
-
-if [ -n "$PUSHED_DOCKERS" ]; then
-  echo "${PUSHED_DOCKERS}" > "${ARTIFACTS_FOLDER}/pushed_dockers.txt"
-  echo "Successfully pushed:${PUSHED_DOCKERS}"
-else
-    echo "No dockers were built and pushed"
-fi
-
-if [ -n "${IMAGE_ARTIFACTS}" ]; then
-  echo "${IMAGE_ARTIFACTS}" > "${ARTIFACTS_FOLDER}/image_artifacts.txt"
-  echo "Successfully saved:${IMAGE_ARTIFACTS}"
-else
-    echo "No image artifacts were saved"
-fi
 
 # Write the failed dockers JSON report (always, even if empty)
 if [ "${UPLOAD_MODE}" = "true" ]; then
