@@ -227,7 +227,7 @@ function docker_login {
             return 2;
         fi
     else
-        if ! docker login -u "${DOCKERHUB_USER}" -p "${DOCKERHUB_PASSWORD}"; then
+        if ! echo "${DOCKERHUB_PASSWORD}" | docker login -u "${DOCKERHUB_USER}" --password-stdin; then
             echo "Failed docker login for user: ${DOCKERHUB_USER}"
             return 2;
         fi
@@ -253,7 +253,7 @@ function cr_login {
             return 3;
         fi
     else
-        if ! docker login -u "${CR_USER}" -p "${CR_PASSWORD}" "${cr_url}"; then
+        if ! echo "${CR_PASSWORD}" | docker login -u "${CR_USER}" --password-stdin "${cr_url}"; then
             echo "Failed docker login to CR repo"
             return 3;
         fi
