@@ -54,6 +54,7 @@ function write_failed_dockers_report {
 
 REVISION=${CI_PIPELINE_ID:-$(date +%s)}
 PUSHED_DOCKERS=""
+SUCCEEDED_IMAGES=()
 IMAGE_ARTIFACTS=""
 CURRENT_DIR=$(pwd)
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
@@ -99,13 +100,13 @@ red_error() {
     echo -e "\033[0;31m$1\033[0m"
 }
 
-# ── Terminal width detection (fallback to 160 for CI / non-interactive) ──
+# -- Terminal width detection (fallback to 160 for CI / non-interactive) --
 TERM_WIDTH=$(tput cols 2>/dev/null || echo 160)
 if [ "${TERM_WIDTH}" -lt 40 ]; then
     TERM_WIDTH=160
 fi
 
-# ── Banner / separator helpers ──────────────────────────────────
+# -- Banner / separator helpers (ASCII-safe, no special unicode) ----------
 # Print a full-width line of a given character
 # param $1: fill character (default "=")
 function print_separator {
@@ -115,9 +116,8 @@ function print_separator {
 
 # Print a centered text line padded to terminal width
 # param $1: text to center
-# param $2: fill character (default " ")
 function print_centered {
-    local text="$1" ch="${2:- }"
+    local text="$1"
     local text_len=${#text}
     local pad_total=$((TERM_WIDTH - text_len))
     local pad_left=$((pad_total / 2))
@@ -125,7 +125,7 @@ function print_centered {
     if [ "${pad_total}" -le 0 ]; then
         echo "$text"
     else
-        printf '%*s%s%*s\n' "$pad_left" '' "$text" "$pad_right" '' | tr ' ' "${ch}" 2>/dev/null || echo "$text"
+        printf '%*s%s%*s\n' "$pad_left" '' "$text" "$pad_right" ''
     fi
 }
 
@@ -134,7 +134,7 @@ function print_centered {
 function print_box_banner {
     # Layout: "###   " (6) + inner_width + "   ###" (6) = inner_width + 12
     # Separator: "###" (3) + sep_inner + "###" (3) = sep_inner + 6
-    # For alignment: inner_width + 12 = sep_inner + 6  →  inner_width = TERM_WIDTH - 12
+    # For alignment: inner_width + 12 = sep_inner + 6  =>  inner_width = TERM_WIDTH - 12
     local inner_width=$((TERM_WIDTH - 12))
     if [ "${inner_width}" -lt 20 ]; then
         inner_width=20
@@ -162,14 +162,16 @@ function print_section_header {
 }
 
 # Print a sub-separator (shorter, for minor sections)
-# param $1: fill character (default "─")
+# param $1: fill character (default "-")
 function print_sub_separator {
-    local ch="${1:-─}"
+    local ch="${1:--}"
     printf '%*s\n' "${TERM_WIDTH}" '' | tr ' ' "${ch}"
 }
 
 if [ -n "$GITLAB_CI" ]; then
     DOCKER_LOGIN_DONE=${DOCKER_LOGIN_DONE:-no}
+    # Use plain buildkit progress in CI to avoid noisy progress bars
+    export BUILDKIT_PROGRESS=plain
 else
     DOCKER_LOGIN_DONE=${DOCKER_LOGIN_DONE:-yes}
 fi
@@ -390,13 +392,20 @@ function docker_build {
         echo "ENV DEPRECATED_REASON=\"$reason\"" >> "$tmp_dir/Dockerfile"
     fi
 
-    print_sub_separator "─"
+    print_sub_separator "-"
     echo "  DOCKER LOGIN START"
-    print_sub_separator "─"
-    docker_login
-    print_sub_separator "─"
+    print_sub_separator "-"
+    if ! docker_login; then
+        red_error "FATAL: docker login failed for image ${image_name}. Cannot proceed."
+        if [ "${UPLOAD_MODE}" = "true" ]; then
+            record_failure "${image_name}" "build" "docker login failed - fatal error"
+            write_failed_dockers_report
+        fi
+        exit 1
+    fi
+    print_sub_separator "-"
     echo "  DOCKER LOGIN DONE"
-    print_sub_separator "─"
+    print_sub_separator "-"
 
     set +e
     docker buildx build -f "$tmp_dir/Dockerfile" . -t "${image_full_name}" \
@@ -518,7 +527,7 @@ function docker_build {
     fi
     local filename
     while IFS= read -r -d '' filename; do
-        print_sub_separator "─"
+        print_sub_separator "-"
         echo "Verifying docker image by running the python script $filename within the docker image"
         set +e
         cat "${filename}" | docker run --rm -i "${image_full_name}" python '-'
@@ -531,7 +540,7 @@ function docker_build {
     done < <(find . -name "*verify.py" -print0)
 
     if [ -f "verify.ps1" ]; then
-        print_sub_separator "─"
+        print_sub_separator "-"
         echo "Verifying docker image by running the pwsh script verify.ps1 within the docker image"
         # use "tee" as powershell doesn't fail on throw when run with -c
         set +e
@@ -555,6 +564,12 @@ function docker_build {
         else
             set +e
             docker tag "${image_full_name}" "${CR_REPO}/${image_full_name}"
+            local cr_tag_exit_code=$?
+            if [ $cr_tag_exit_code -ne 0 ]; then
+                set -e
+                record_failure "${image_name}" "push" "docker tag for CR failed with exit code ${cr_tag_exit_code}"
+                return $?
+            fi
             docker push "${CR_REPO}/${image_full_name}" > /dev/null
             local cr_push_exit_code=$?
             set -e
@@ -633,9 +648,9 @@ function docker_build {
                 POST_COMMENT_ARGS+=("--dry-run")
             fi
             "${DOCKER_SRC_DIR}/post_github_comment.py" "${POST_COMMENT_ARGS[@]}"
-            print_sub_separator "─"
+            print_sub_separator "-"
             echo "Docker image [$image_full_name] has been saved as an artifact."
-            print_sub_separator "─"
+            print_sub_separator "-"
         fi
     fi
 
@@ -644,17 +659,62 @@ function docker_build {
 # default compare branch against master
 DIFF_COMPARE=origin/master...${CI_COMMIT_SHA}
 
+# -- Usage / Help ----------------------------------------------------------
+function usage {
+    cat <<EOF
+Usage: $(basename "$0") [OPTIONS] [IMAGE_NAME]
+
+Build, verify, and push Docker images that have changed relative to a base commit.
+
+Positional arguments:
+  IMAGE_NAME              Build only the specified image (by directory name).
+                          When provided, DIFF_COMPARE is set to ALL (build regardless of diff).
+
+Options:
+  --upload                Run in upload/production mode. Requires --last-upload-commit
+                          and --files-to-prs. Failures are recorded but do not stop the build.
+  --last-upload-commit SHA
+                          The commit SHA to compare against in upload mode.
+  --files-to-prs PATH    Path to the files_to_prs.json mapping file (upload mode).
+  --dry-run               Simulate the build: skip docker push and github comments.
+  -h, --help              Show this help message and exit.
+
+Environment variables:
+  CI_COMMIT_SHA           Current commit SHA (auto-set in CI).
+  CI_COMMIT_REF_NAME      Current branch name (auto-set in CI).
+  CI_PIPELINE_ID          Pipeline/revision ID (auto-set in CI).
+  DOCKER_ORG              Docker Hub organization (default: devdemisto, or demisto on master).
+  DOCKERHUB_USER          Docker Hub username for login.
+  DOCKERHUB_PASSWORD      Docker Hub password for login.
+  CR_REPO                 Container registry repo URL for secondary push.
+  CR_USER / CR_PASSWORD   Container registry credentials.
+  ARTIFACTS_FOLDER        Directory for build artifacts (default: artifacts).
+  GITLAB_CI               Set automatically in GitLab CI runners.
+
+Examples:
+  # Build all changed images (CI default):
+  ./$(basename "$0")
+
+  # Build a single image locally:
+  ./$(basename "$0") python3-deb
+
+  # Dry-run upload mode:
+  ./$(basename "$0") --upload --last-upload-commit abc123 --files-to-prs files.json --dry-run
+EOF
+}
+
 # PARSE ARGUMENTS
 UPLOAD_MODE="false"
 DRY_RUN="false"
 docker_image_to_build=""
 while [ "$#" -gt 0 ]; do
     case "$1" in
+        -h|--help) usage; exit 0;;
         --upload) UPLOAD_MODE="true"; shift;;
         --last-upload-commit) LAST_UPLOAD_COMMIT="$2"; shift 2;;
         --files-to-prs) FILES_TO_PRS="$2"; shift 2;;
         --dry-run) DRY_RUN="true"; shift;;
-        --*) echo "Unknown option: $1"; exit 1;;
+        --*) echo "Unknown option: $1"; usage; exit 1;;
         *) docker_image_to_build="$1"; shift;;
     esac
 done
@@ -705,42 +765,72 @@ if [[ ! $(which pyenv) ]] && [[ -n "${GITLAB_CI}" ]]; then
     pyenv shell system "$(pyenv versions --bare | grep 3.10)"
 fi
 
-echo "default python versions: "
-python --version || echo "python not found"
-python3 --version || echo "python3 not found"
-if [[ $(which pyenv) ]]; then
-    echo "pyenv versions:"
-    pyenv versions
-fi
-
-print_section_header "docker info"
-docker info
-print_separator "="
-
 if [ "${CI_COMMIT_REF_NAME}" == "master" ] && [ "${UPLOAD_MODE}" = "false" ]; then
     DIFF_COMPARE="HEAD^1...HEAD"
     DOCKER_ORG=demisto
     if [ "${DRY_RUN}" = "true" ]; then
         DOCKER_ORG=devdemisto
-        echo "[DRY-RUN] Overriding DOCKER_ORG to devdemisto"
     fi
 fi
 
-echo "DOCKER_ORG: ${DOCKER_ORG}, DIFF_COMPARE: [${DIFF_COMPARE}], SCRIPT_DIR: [${SCRIPT_DIR}], BRANCH: ${CI_COMMIT_REF_NAME}, PWD: [${CURRENT_DIR}]"
+# ============================================================================
+# STARTUP INFO -- show all configuration in a nicely formatted box
+# ============================================================================
+_py_ver=$(python --version 2>&1 || echo "python not found")
+_py3_ver=$(python3 --version 2>&1 || echo "python3 not found")
+
+print_box_banner \
+    "DOCKER BUILD -- STARTUP CONFIGURATION" \
+    "" \
+    "Date        : $(date '+%Y-%m-%d %H:%M:%S')" \
+    "Branch      : ${CI_COMMIT_REF_NAME:-N/A}" \
+    "Commit SHA  : ${CI_COMMIT_SHA:-N/A}" \
+    "Pipeline ID : ${CI_PIPELINE_ID:-N/A}" \
+    "" \
+    "DOCKER_ORG  : ${DOCKER_ORG:-devdemisto}" \
+    "DIFF_COMPARE: ${DIFF_COMPARE}" \
+    "SCRIPT_DIR  : ${SCRIPT_DIR}" \
+    "PWD         : ${CURRENT_DIR}" \
+    "" \
+    "Upload Mode : ${UPLOAD_MODE}" \
+    "Dry Run     : ${DRY_RUN}" \
+    "" \
+    "Python      : ${_py_ver}" \
+    "Python3     : ${_py3_ver}"
+
+# -- pyenv info (if available) --
+if [[ $(which pyenv 2>/dev/null) ]]; then
+    print_section_header "pyenv versions"
+    pyenv versions
+    print_separator "="
+fi
+
+# -- Docker Info (collapsed in GitLab CI) --
+gitlab_section_start "docker_info" "Docker Engine Info"
+print_section_header "docker info"
+docker info
+print_separator "="
+gitlab_section_end "docker_info"
 
 ARTIFACTS_FOLDER="${ARTIFACTS_FOLDER:-artifacts}"
 if [[ ! -d "${ARTIFACTS_FOLDER}" ]]; then
   mkdir -p "${ARTIFACTS_FOLDER}"
 fi
 
-# echo to bash env to be used in future steps
-echo "$DIFF_COMPARE" > "$ARTIFACTS_FOLDER/diff_compare.txt"
-echo "$SCRIPT_DIR" > "$ARTIFACTS_FOLDER/script_dir.txt"
-echo "$CURRENT_DIR" > "$ARTIFACTS_FOLDER/current_dir.txt"
-echo "$DOCKER_INCLUDE_GREP" > "$ARTIFACTS_FOLDER/docker_include_grep.txt"
+# Persist build context to artifacts for use in subsequent CI steps
+print_section_header "Saving build context to artifacts"
+echo "$DIFF_COMPARE" > "$ARTIFACTS_FOLDER/diff_compare.txt"          # git diff range used for change detection
+echo "$SCRIPT_DIR" > "$ARTIFACTS_FOLDER/script_dir.txt"              # absolute path to the docker/ script directory
+echo "$CURRENT_DIR" > "$ARTIFACTS_FOLDER/current_dir.txt"            # working directory at script start
+echo "$DOCKER_INCLUDE_GREP" > "$ARTIFACTS_FOLDER/docker_include_grep.txt"  # grep filter for specific image (if any)
+echo "  diff_compare.txt          : ${DIFF_COMPARE}"
+echo "  script_dir.txt            : ${SCRIPT_DIR}"
+echo "  current_dir.txt           : ${CURRENT_DIR}"
+echo "  docker_include_grep.txt   : ${DOCKER_INCLUDE_GREP:-<empty>}"
+print_separator "="
 
 # ============================================================================
-# PHASE 1: DISCOVERY — find all changed docker directories before building
+# PHASE 1: DISCOVERY -- find all changed docker directories before building
 # ============================================================================
 print_section_header "DISCOVERY PHASE: Scanning for changed Docker images..."
 
@@ -753,7 +843,7 @@ for docker_dir in $(find "$SCRIPT_DIR" -maxdepth 1 -mindepth 1 -type d -print | 
             continue
         fi
         CHANGED_DOCKER_DIRS+=("${docker_dir}")
-        echo "  → Queued: $(basename "${docker_dir}")"
+        echo "  >> Queued: $(basename "${docker_dir}")"
     fi
 done
 
@@ -778,7 +868,7 @@ done
 # Width of the count field (e.g. if total=100, count_width=3)
 count_width=${#total}
 
-# ── Logging helper ──────────────────────────────────────────────
+# -- Logging helper -------------------------------------------------------
 # Prefixes every line from stdin with:
 #   [2024-07-21 07:18:07] [ 1/10] [image_name   ] <line>
 # param $1: image name
@@ -794,7 +884,7 @@ function log_prefix {
     done
 }
 
-# ── tqdm-style progress bar ─────────────────────────────────────
+# -- tqdm-style progress bar (ASCII-safe) ----------------------------------
 # param $1: current (1-based)
 # param $2: total
 # param $3: bar width (default 40)
@@ -805,8 +895,8 @@ function progress_bar {
     local filled=$((current * width / total))
     local empty=$((width - filled))
     local bar=""
-    for ((i = 0; i < filled; i++)); do bar+="█"; done
-    for ((i = 0; i < empty; i++)); do bar+="░"; done
+    for ((i = 0; i < filled; i++)); do bar+="#"; done
+    for ((i = 0; i < empty; i++)); do bar+="."; done
     local elapsed=""
     if [ -n "${BUILD_START_EPOCH}" ]; then
         local now
@@ -817,7 +907,7 @@ function progress_bar {
     printf "\n  Progress: |%s| %3d%% (%d/%d)%s\n\n" "$bar" "$pct" "$current" "$total" "$elapsed"
 }
 
-# ── Large banner ────────────────────────────────────────────────
+# -- Large banner ----------------------------------------------------------
 # param $1: image name
 # param $2: current index (1-based)
 # param $3: total
@@ -833,7 +923,7 @@ function print_build_banner {
     progress_bar "${completed}" "$tot"
 }
 
-# ── GitLab CI section helpers ───────────────────────────────────
+# -- GitLab CI section helpers ---------------------------------------------
 # Opens a collapsed section in GitLab CI; no-op otherwise
 # param $1: section id (alphanumeric + underscore)
 # param $2: section header text
@@ -856,7 +946,7 @@ function gitlab_section_end {
 }
 
 # ============================================================================
-# PHASE 2: BUILD — iterate over discovered images with progress tracking
+# PHASE 2: BUILD -- iterate over discovered images with progress tracking
 # ============================================================================
 BUILD_START_EPOCH=$(date +%s)
 count=0
@@ -866,53 +956,109 @@ for docker_dir in "${CHANGED_DOCKER_DIRS[@]}"; do
     image_name_short=$(basename "${docker_dir}")
     section_id="docker_build_${image_name_short//[^a-zA-Z0-9_]/_}"
 
-    # ── Banner ──
+    # -- Banner --
     print_build_banner "${image_name_short}" "${count}" "${total}"
 
-    # ── GitLab collapsed section ──
-    gitlab_section_start "${section_id}" "🐳 [${count}/${total}] Building ${image_name_short}"
+    # -- GitLab collapsed section --
+    gitlab_section_start "${section_id}" "[${count}/${total}] Building ${image_name_short}"
 
+    # Run docker_build in the main shell (not a subshell pipe) so that
+    # variable changes (PUSHED_DOCKERS, FAILED_DOCKERS, errors, etc.) are preserved.
+    # We use process substitution to stream output through log_prefix in real-time
+    # while keeping docker_build in the current shell.
     if [ "${UPLOAD_MODE}" = "true" ]; then
         # In upload mode, don't let a single image failure stop the entire build
         set +e
-        docker_build "${docker_dir}" 2>&1 | log_prefix "${image_name_short}" "${count}" "${total}" "${max_name_len}" "${count_width}"
-        build_rc=${PIPESTATUS[0]}
+        docker_build "${docker_dir}" > >(log_prefix "${image_name_short}" "${count}" "${total}" "${max_name_len}" "${count_width}") 2>&1
+        build_rc=$?
         set -e
+        # Small delay to let the background log_prefix process flush
+        wait 2>/dev/null || true
         if [ "$build_rc" -ne 0 ]; then
             record_failure "${image_name_short}" "build" "docker_build function returned non-zero exit code ${build_rc}"
         fi
     else
-        docker_build "${docker_dir}" 2>&1 | log_prefix "${image_name_short}" "${count}" "${total}" "${max_name_len}" "${count_width}"
-        build_rc=${PIPESTATUS[0]}
+        set +e
+        docker_build "${docker_dir}" > >(log_prefix "${image_name_short}" "${count}" "${total}" "${max_name_len}" "${count_width}") 2>&1
+        build_rc=$?
+        set -e
+        wait 2>/dev/null || true
         if [ "$build_rc" -ne 0 ]; then
             exit "$build_rc"
         fi
     fi
     cd "${CURRENT_DIR}"
 
-    # ── Close GitLab section ──
+    # -- Close GitLab section --
     gitlab_section_end "${section_id}"
 
+    # Track succeeded images (those that didn't fail)
+    if [ "$build_rc" -eq 0 ]; then
+        SUCCEEDED_IMAGES+=("${image_name_short}")
+    fi
+
     echo ""
-    echo "$(date '+%Y-%m-%d %H:%M:%S') ✅ Done building ${image_name_short} (${count}/${total})"
+    echo "$(date '+%Y-%m-%d %H:%M:%S') Done building ${image_name_short} (${count}/${total})"
 done
 
 # Final progress
 if [ "${total}" -gt 0 ]; then
     progress_bar "${total}" "${total}"
-    echo "All ${total} Docker image(s) processed."
-fi
-if [ ${#errors[@]} != 0 ]; then
-  for err in "${errors[@]}"; do
-    red_error "$err"
-  done
-  if [ "${UPLOAD_MODE}" = "true" ]; then
-    echo "Errors found but continuing in upload mode (errors logged above)"
-  else
-    exit 1
-  fi
 fi
 
+# ============================================================================
+# BUILD SUMMARY -- show what succeeded and what failed
+# ============================================================================
+BUILD_END_EPOCH=$(date +%s)
+BUILD_DURATION=$((BUILD_END_EPOCH - BUILD_START_EPOCH))
+BUILD_DURATION_FMT=$(printf '%02d:%02d:%02d' $((BUILD_DURATION/3600)) $(( (BUILD_DURATION%3600)/60 )) $((BUILD_DURATION%60)))
+
+succeeded_count=${#SUCCEEDED_IMAGES[@]}
+failed_count=${#FAILED_DOCKERS[@]}
+
+print_box_banner \
+    "BUILD SUMMARY" \
+    "" \
+    "Total images : ${total}" \
+    "Succeeded    : ${succeeded_count}" \
+    "Failed       : ${failed_count}" \
+    "Duration     : ${BUILD_DURATION_FMT}" \
+    "Finished at  : $(date '+%Y-%m-%d %H:%M:%S')"
+
+# -- Succeeded images --
+if [ "${succeeded_count}" -gt 0 ]; then
+    echo ""
+    print_sub_separator "-"
+    echo "  SUCCEEDED IMAGES (${succeeded_count})"
+    print_sub_separator "-"
+    for img in "${SUCCEEDED_IMAGES[@]}"; do
+        echo "    [OK] ${img}"
+    done
+fi
+
+# -- Failed images with reasons --
+if [ "${failed_count}" -gt 0 ]; then
+    echo ""
+    print_sub_separator "-"
+    red_error "  FAILED IMAGES (${failed_count})"
+    print_sub_separator "-"
+    for img in "${!FAILED_DOCKERS[@]}"; do
+        red_error "    [FAIL] ${img} -- step: ${FAILED_DOCKERS[$img]}"
+    done
+fi
+
+# -- Version verification errors --
+if [ ${#errors[@]} != 0 ]; then
+    echo ""
+    print_sub_separator "-"
+    red_error "  VERSION VERIFICATION ERRORS (${#errors[@]})"
+    print_sub_separator "-"
+    for err in "${errors[@]}"; do
+        red_error "    ${err}"
+    done
+fi
+
+print_separator "="
 
 if [ -n "$PUSHED_DOCKERS" ]; then
   echo "${PUSHED_DOCKERS}" > "${ARTIFACTS_FOLDER}/pushed_dockers.txt"
@@ -931,4 +1077,9 @@ fi
 # Write the failed dockers JSON report (always, even if empty)
 if [ "${UPLOAD_MODE}" = "true" ]; then
     write_failed_dockers_report
+fi
+
+# Exit with error if there were failures in non-upload mode
+if [ ${#errors[@]} != 0 ] && [ "${UPLOAD_MODE}" != "true" ]; then
+    exit 1
 fi
