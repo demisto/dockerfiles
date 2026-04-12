@@ -2,4 +2,11 @@
 
 FROM demisto/powershell-ubuntu:7.5.0.6704649
 
+USER root
+
 RUN pwsh -c "Install-Module MicrosoftTeams -Force"
+
+ENV DEFAULT_USER="demisto"
+
+USER $DEFAULT_USER
+WORKDIR /home/$DEFAULT_USER
