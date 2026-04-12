@@ -2,6 +2,7 @@
 import argparse
 import json
 from pathlib import Path
+import warnings
 
 import requests
 import subprocess
@@ -9,6 +10,10 @@ import os
 import re
 import time
 from typing import List, Tuple, Optional, Set
+
+# Suppress SSL/TLS warnings (e.g. when verify=False is used)
+warnings.filterwarnings("ignore", message="Unverified HTTPS request")
+requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)  # type: ignore[attr-defined]
 
 ARTIFACTS_FOLDER = Path(os.getenv("ARTIFACTS_FOLDER", "artifacts"))
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")

@@ -662,14 +662,14 @@ urllib3 = "<2.1.0"
 
 [[package]]
 name = "demisto-sdk"
-version = "1.38.22"
+version = "1.38.23"
 description = "\"A Python library for the Demisto SDK\""
 optional = false
 python-versions = "<3.13,>=3.9"
 groups = ["main"]
 files = [
-    {file = "demisto_sdk-1.38.22-py3-none-any.whl", hash = "sha256:292052404b1fd0aab6e48ec6d66e251e7aaac3218e901a1feb55833c68271ffa"},
-    {file = "demisto_sdk-1.38.22.tar.gz", hash = "sha256:089a26210672cf71714969dbf6f54214375161c2029311da8ca7530f9da1081a"},
+    {file = "demisto_sdk-1.38.23-py3-none-any.whl", hash = "sha256:34b4631d05089686ee7087a024353258afa2d33549c8a1c9c277d9d1833b40a7"},
+    {file = "demisto_sdk-1.38.23.tar.gz", hash = "sha256:5b68f48f5c5ee20d8880e4afebe2e75e2421eab70ed1882d583a31432d67a0cc"},
 ]
 
 [package.dependencies]
@@ -2113,14 +2113,14 @@ files = [
 
 [[package]]
 name = "pipenv"
-version = "2026.2.2"
+version = "2026.5.2"
 description = "Python Development Workflow for Humans."
 optional = false
 python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "pipenv-2026.2.2-py3-none-any.whl", hash = "sha256:11bb69a696dedc789ac1c37931a30f5fc67af15771690b4d6a52c9eab0b20854"},
-    {file = "pipenv-2026.2.2.tar.gz", hash = "sha256:56e635cd628644055b414bd01c1e7e33b2441cb46884fc94062cd54f980dd736"},
+    {file = "pipenv-2026.5.2-py3-none-any.whl", hash = "sha256:e410bdd62535fdfb0f59db4c27e1394716a4056da6dfd3738c2b9e5af2039d80"},
+    {file = "pipenv-2026.5.2.tar.gz", hash = "sha256:cf5985038a4cc4a1ffe9b48a2e580d2595245823dcc5684d07b1a53929ab47cc"},
 ]
 
 [package.dependencies]
@@ -2130,6 +2130,7 @@ setuptools = ">=67"
 virtualenv = ">=20.24.2"
 
 [package.extras]
+completion = ["argcomplete (>=3.1)"]
 dev = ["beautifulsoup4", "black (==26.3.1)", "flake8 (>=3.3,<4)", "invoke", "parver", "sphinx", "towncrier"]
 safety = ["safety (>=3.0.0)"]
 tests = ["mock", "pytest (>=5)", "pytest-rerunfailures", "pytest-timeout", "pytest-xdist"]
@@ -3809,4 +3810,4 @@ pyyaml = "*"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<3.13"
-content-hash = "0292c7b7db362a2251690d7ed0b9a9528f00f7b6fe70e26765739ce4724d5df0"
+content-hash = "97d2136fdd9287276f1b51af6fa8cd1eb049a79098856ab5d2aefcf968bb2ad5"
