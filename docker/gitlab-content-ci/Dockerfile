@@ -1,4 +1,4 @@
-FROM python:3.14.3-slim-trixie
+FROM python:3.14.4-slim-trixie
 
 # ── Version pins (update these to bump tools) ──
 ENV NODE_VERSION=24.14.1
@@ -79,4 +79,4 @@ RUN echo 'export GOENV_ROOT="$HOME/.goenv"' >> ~/.bashrc \
     && source ~/.bashrc
 
 # golangci-lint
-# RUN curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v${GOLANGCI_LINT_VERSION}
+RUN curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v${GOLANGCI_LINT_VERSION}
