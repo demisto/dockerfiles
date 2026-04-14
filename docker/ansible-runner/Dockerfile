@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   openssh-client \
 && pip install pip==24.0 \
 && pip install --no-cache-dir -r requirements.txt \
+&& pip install --upgrade "pyopenssl>=26.0.0" "urllib3>=2.6.3" "azure-core>=1.38.0" \
 && pip install --upgrade pip \ 
 && pip install https://github.com/vmware/vsphere-automation-sdk-python/archive/refs/tags/v7.0.3.2.tar.gz \
 && pip install --upgrade azure-storage-blob \
