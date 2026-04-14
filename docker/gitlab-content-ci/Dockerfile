@@ -83,4 +83,4 @@ RUN echo 'export PATH="$PATH:$GOPATH/bin"' >> ~/.bashrc
 
 # golangci-lint
 RUN source ~/.bashrc
-RUN curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(source ~/.bashrc && go env GOPATH)/bin v${GOLANGCI_LINT_VERSION}
+# RUN curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(source ~/.bashrc && go env GOPATH)/bin v${GOLANGCI_LINT_VERSION}
