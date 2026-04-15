@@ -1,7 +1,7 @@
 variables:
-  CURRENT_BRANCH_NAME: cve-remediation-ai
+  CURRENT_BRANCH_NAME: parse-scan-reports-skip-no-fix-cves
 
 include:
   - file: "/.gitlab/ci/dockerfiles/.gitlab-ci.yml"
-    ref: cve-remediation-ai
+    ref: parse-scan-reports-skip-no-fix-cves
     project: "${CI_PROJECT_NAMESPACE}/infra"
