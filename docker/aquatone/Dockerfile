@@ -7,6 +7,9 @@ RUN apt-get update \
     ruby-dev \
     rubygems \
 && gem install aquatone \
+&& gem install httparty -v '>= 0.24.0' \
+&& gem install rake -v '>= 12.3.3' \
+&& gem install rexml -v '>= 3.2.5' \
 && apt-get purge -y --auto-remove \
     build-essential \
     ruby-dev \
