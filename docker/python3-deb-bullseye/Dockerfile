@@ -12,15 +12,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 && rm -rf /var/lib/apt/lists/*
 
-# Pin OpenSSL packages to patched versions
-RUN apt-get update && apt-get install -y --no-install-recommends \
-  libssl1.1=1.1.1w-0+deb11u5 \
-  openssl=1.1.1w-0+deb11u5 \
-&& rm -rf /var/lib/apt/lists/*
-
 # Mitigate glibc iconv vulnerability by removing IBM1390/IBM1399 charsets
 RUN rm -f /usr/lib/*/gconv/IBM1390.so /usr/lib/*/gconv/IBM1399.so \
 && iconvconfig
+
+# Mitigate OpenSSL CMS/CRL vulnerabilities by installing patched libssl/openssl from Debian Bookworm
+RUN echo 'deb http://deb.debian.org/debian-security bookworm-security main' > /etc/apt/sources.list.d/bookworm-security.list \
+&& apt-get update \
+&& apt-get install -y --no-install-recommends libssl3=3.0.19-1~deb12u2 openssl=3.0.19-1~deb12u2 \
+&& rm -rf /var/lib/apt/lists/* /etc/apt/sources.list.d/bookworm-security.list
 
 # Upgrade using backports
 RUN apt-get update && apt-get -t bullseye-backports -y --no-install-recommends upgrade \
