@@ -10,6 +10,9 @@ RUN apt-get update \
 && gem install httparty -v '>= 0.24.0' \
 && gem install rake -v '>= 12.3.3' \
 && gem install rexml -v '>= 3.2.5' \
+&& gem uninstall httparty -v '< 0.24.0' --force --ignore-dependencies \
+&& gem uninstall rake -v '< 13.4.0' --force --ignore-dependencies \
+&& gem uninstall rexml -v '< 3.4.0' --force --ignore-dependencies \
 && apt-get purge -y --auto-remove \
     build-essential \
     ruby-dev \
