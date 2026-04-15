@@ -1,6 +1,6 @@
-# Last modified: 2026-03-19T08:00:33.375233+00:00
+# Last modified: 2026-04-14T07:55:05.781647+00:00
 
-FROM demisto/btfl-soup:1.0.1.7742802
+FROM demisto/btfl-soup:1.0.1.8187750
 
 COPY requirements.txt .
 
