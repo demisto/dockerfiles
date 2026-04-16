@@ -1,4 +1,5 @@
-FROM demisto/python3-deb:3.12.11.4424127
+# Last modified: 2026-04-08T00:35:19.003711+00:00
+FROM demisto/python3-deb:3.12.13.8167125
 
 ENV NODE_VERSION 14.16.0
 ENV NVM_DIR /root/.nvm
