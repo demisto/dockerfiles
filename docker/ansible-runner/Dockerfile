@@ -1,6 +1,6 @@
-# Last modified: 2025-11-19T04:38:04.033173+00:00
+# Last modified: 2026-04-09T07:56:07.999309+00:00
 
-FROM demisto/python3-deb:3.12.12.5919128
+FROM demisto/python3-deb:3.12.13.7742802
 
 COPY requirements.txt .
 
@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   openssh-client \
 && pip install pip==24.0 \
 && pip install --no-cache-dir -r requirements.txt \
+&& pip install --upgrade "pyopenssl>=26.0.0" "urllib3>=2.6.3" "azure-core>=1.38.0" \
 && pip install --upgrade pip \ 
 && pip install https://github.com/vmware/vsphere-automation-sdk-python/archive/refs/tags/v7.0.3.2.tar.gz \
 && pip install --upgrade azure-storage-blob \
