@@ -462,7 +462,7 @@ function docker_build {
               record_failure "${image_name}" "build" "pipenv install --deploy failed with exit code ${pipenv_rc}"
               return $?
           fi
-          PIPENV_YES=yes pipenv run pip freeze > requirements.txt
+          pipenv requirements --exclude-markers > requirements.txt
           echo "Pipfile lock generated requirements.txt: "
           print_separator "#"
           cat requirements.txt
