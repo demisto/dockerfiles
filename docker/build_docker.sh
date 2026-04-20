@@ -5,7 +5,7 @@ set -e
 
 # Associative array to track failed docker images in upload mode
 # Keys: image_name, Values: step that failed
-declare -A FAILED_DOCKERS
+# declare -A FAILED_DOCKERS
 
 # -- Color support ---------------------------------------------------------
 # Detect color support: enabled if stdout is a terminal (or forced via env),
@@ -462,7 +462,7 @@ function docker_build {
               record_failure "${image_name}" "build" "pipenv install --deploy failed with exit code ${pipenv_rc}"
               return $?
           fi
-          PIPENV_YES=yes pipenv run pip freeze > requirements.txt
+          pipenv requirements --exclude-markers > requirements.txt
           echo "Pipfile lock generated requirements.txt: "
           print_separator "#"
           cat requirements.txt
