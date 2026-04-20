@@ -62,7 +62,7 @@ jobs:
             echo "Auto-merge was enabled by '$AUTO_MERGE_ENABLED_BY' - disabling"
             gh pr merge --disable-auto "$PR_URL"
           else
-            echo "Auto-merge  was enabled by user '$AUTO_MERGE_ENABLED_BY' - leaving it enabled"
+            echo "Auto-merge was enabled by user '$AUTO_MERGE_ENABLED_BY' - leaving it enabled"
           fi
       
       - name: Skip automerge
