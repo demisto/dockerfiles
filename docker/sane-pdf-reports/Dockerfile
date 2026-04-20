@@ -45,5 +45,5 @@ RUN gsutil cp -r gs://sane-reports-artifacts/sane-report.tar . \
 RUN chown -R root:demisto /app/ && chmod 775 /app/ && chmod 775 /app/dist
 
 RUN npm uninstall -g npm && apt-get purge -y --auto-remove git npm apt-transport-https ca-certificates gnupg curl google-cloud-sdk \
-    python3-dev lsb-release \
+    python3-dev \
     && rm -rf /var/lib/apt/lists/*
