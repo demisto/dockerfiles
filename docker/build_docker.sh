@@ -5,7 +5,7 @@ set -e
 
 # Associative array to track failed docker images in upload mode
 # Keys: image_name, Values: step that failed
-# declare -A FAILED_DOCKERS
+declare -A FAILED_DOCKERS
 
 # -- Color support ---------------------------------------------------------
 # Detect color support: enabled if stdout is a terminal (or forced via env),
