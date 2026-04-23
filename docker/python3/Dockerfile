@@ -4,6 +4,12 @@ FROM python:3.12.13-alpine3.23
 # Upgrade all packages to latest
 RUN apk --update --no-cache upgrade
 
+# This line can be removed once upgrading base image to alpine3.24
+RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories \
+  && apk --update add --no-cache \
+  curl=8.19.0-r0 \
+  libcurl=8.19.0-r0
+
 COPY requirements.txt .
 
 COPY localtime /etc/localtime
