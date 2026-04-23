@@ -1,9 +1,15 @@
-# Last modified: 2026-02-22T04:43:28.117575+00:00
-FROM demisto/python3:3.12.12.7090913
+# Last modified: 2026-04-12T08:19:31.369898+00:00
+FROM demisto/python3:3.12.13.8160132
 
 COPY requirements.txt .
 
 RUN apk --update add --no-cache librdkafka-dev libmagic
+
+# This line can be removed once upgrading base image to alpine3.24
+RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories \
+  && apk --update add --no-cache \
+  curl-dev=8.19.0-r0 \
+  libcurl=8.19.0-r0
 
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git \
   && pip install --no-cache-dir -r requirements.txt \
