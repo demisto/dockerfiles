@@ -1,4 +1,4 @@
-# Last modified: 2026-04-19T09:40:12.317166+00:00
+# Last modified: 2026-04-23T10:23:54.585153+00:00
 FROM mcr.microsoft.com/powershell:7.5-ubuntu-22.04
 
 # For the `no supported WSMan client library was found` error when using Ubuntu 20+
@@ -19,6 +19,18 @@ RUN apt-get update -y && \
     # upgrade all packages to latest
     apt-get -y --no-install-recommends upgrade && \
     # clean up apt lists
+    rm -rf /var/lib/apt/lists/*
+
+# Upgrade System.Security.Cryptography.Xml to 9.0.15 to address .NET security vulnerabilities
+RUN apt-get update -y && \
+    apt-get install -y --no-install-recommends unzip && \
+    wget -q https://api.nuget.org/v3-flatcontainer/system.security.cryptography.xml/9.0.15/system.security.cryptography.xml.9.0.15.nupkg -O /tmp/cryptoxml.nupkg && \
+    unzip -o /tmp/cryptoxml.nupkg "lib/net9.0/System.Security.Cryptography.Xml.dll" -d /tmp/cryptoxml && \
+    cp /tmp/cryptoxml/lib/net9.0/System.Security.Cryptography.Xml.dll /opt/microsoft/powershell/7/System.Security.Cryptography.Xml.dll && \
+    sed -i 's|System.Security.Cryptography.Xml/9.0.1|System.Security.Cryptography.Xml/9.0.15|g' /opt/microsoft/powershell/7/pwsh.deps.json && \
+    rm -rf /tmp/cryptoxml /tmp/cryptoxml.nupkg && \
+    apt-get purge -y unzip && \
+    apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/*
 
 # Set timezone to Etc/UTC for backwards comp. See: https://github.com/regebro/tzlocal/issues/101
