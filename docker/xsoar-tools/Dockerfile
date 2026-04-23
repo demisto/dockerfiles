@@ -13,6 +13,7 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
   && apk add --no-cache --upgrade grep  \
   && apk add --no-cache --upgrade curl \
   && pip install --no-cache-dir -r requirements.txt \
+  && pip install --no-cache-dir "lxml>=6.1.0" \
   && apk del .build-dependencies
 
 ADD https://raw.githubusercontent.com/demisto/content/master/Packs/Base/Scripts/CommonServerPython/CommonServerPython.py /home/demisto
