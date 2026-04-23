@@ -264,6 +264,7 @@ description = "cryptography is a package which provides cryptographic recipes an
 optional = false
 python-versions = "!=3.9.0,!=3.9.1,>=3.8"
 groups = ["main"]
+markers = "platform_python_implementation != \"PyPy\" or platform_system != \"Windows\" and platform_system != \"Darwin\""
 files = [
     {file = "cryptography-46.0.7-cp311-abi3-macosx_10_9_universal2.whl", hash = "sha256:ea42cbe97209df307fdc3b155f1b6fa2577c0defa8f1f7d3be7d31d189108ad4"},
     {file = "cryptography-46.0.7-cp311-abi3-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:b36a4695e29fe69215d75960b22577197aca3f7a25b9cf9d165dcfe9d80bc325"},
@@ -517,14 +518,14 @@ files = [
 
 [[package]]
 name = "pymisp"
-version = "2.5.33.1"
+version = "2.5.33.2"
 description = "Python API for MISP."
 optional = false
 python-versions = "<4.0,>=3.10"
 groups = ["main"]
 files = [
-    {file = "pymisp-2.5.33.1-py3-none-any.whl", hash = "sha256:7d7034bb5b05235e0836c15af9a8116d56a65247e0037a796216942a1d3eb977"},
-    {file = "pymisp-2.5.33.1.tar.gz", hash = "sha256:b5cd9aac342596fbe2696b7c3ee02a2a221574557c0334451b0d4e21a4c5928f"},
+    {file = "pymisp-2.5.33.2-py3-none-any.whl", hash = "sha256:6aa2a96061c74131b008bee6d1ccb795f82831ae97250d1ce7c38f280b5b2cba"},
+    {file = "pymisp-2.5.33.2.tar.gz", hash = "sha256:ed45ae12bb58082c5dd7e8bd35bee3a3b7eee54196d3451fa4bb7051535dbd2e"},
 ]
 
 [package.dependencies]
@@ -532,13 +533,14 @@ deprecated = ">=1.3.1"
 extract_msg = {version = ">=0.55.0", optional = true, markers = "extra == \"email\""}
 oletools = {version = ">=0.60.2", optional = true, markers = "extra == \"email\""}
 python-dateutil = ">=2.9.0.post0"
-requests = ">=2.32.5"
+requests = ">=2.33.1"
 
 [package.extras]
 brotli = ["urllib3[broti] (>=2.6.3)"]
-docs = ["docutils (>=0.22.4) ; python_version >= \"3.12\"", "myst-parser (>=5.0.0) ; python_version >= \"3.12\"", "sphinx (>=9.1.0) ; python_version >= \"3.12\"", "sphinx-autodoc-typehints (>=3.9.5) ; python_version >= \"3.12\""]
+docs = ["docutils (>=0.22.4) ; python_version >= \"3.12\"", "myst-parser (>=5.0.0) ; python_version >= \"3.12\"", "sphinx (>=9.1.0) ; python_version >= \"3.12\"", "sphinx-autodoc-typehints (>=3.9.11) ; python_version >= \"3.12\""]
 email = ["RTFDE (>=0.1.2.2) ; python_version <= \"3.10\"", "extract_msg (>=0.55.0)", "oletools (>=0.60.2)"]
-fileobjects = ["lief (>=0.17.4)", "pure-magic-rs (>=0.3.2)", "pydeep2 (>=0.5.1)"]
+fileobjects = ["lief (>=0.17.6)", "pure-magic-rs (>=0.3.3)", "pydeep2 (>=0.5.1)"]
+neo4j = ["neo4j (>=6.1)"]
 openioc = ["beautifulsoup4 (>=4.13.5,<4.14)"]
 pdfexport = ["reportlab (>=4.4.10)"]
 url = ["pyfaup-rs (>=0.4,<0.5)"]
@@ -587,25 +589,25 @@ files = [
 
 [[package]]
 name = "requests"
-version = "2.32.5"
+version = "2.33.1"
 description = "Python HTTP for Humans."
 optional = false
-python-versions = ">=3.9"
+python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "requests-2.32.5-py3-none-any.whl", hash = "sha256:2462f94637a34fd532264295e186976db0f5d453d1cdd31473c85a6a161affb6"},
-    {file = "requests-2.32.5.tar.gz", hash = "sha256:dbba0bac56e100853db0ea71b82b4dfd5fe2bf6d3754a8893c3af500cec7d7cf"},
+    {file = "requests-2.33.1-py3-none-any.whl", hash = "sha256:4e6d1ef462f3626a1f0a0a9c42dd93c63bad33f9f1c1937509b8c5c8718ab56a"},
+    {file = "requests-2.33.1.tar.gz", hash = "sha256:18817f8c57c6263968bc123d237e3b8b08ac046f5456bd1e307ee8f4250d3517"},
 ]
 
 [package.dependencies]
-certifi = ">=2017.4.17"
+certifi = ">=2023.5.7"
 charset_normalizer = ">=2,<4"
 idna = ">=2.5,<4"
-urllib3 = ">=1.21.1,<3"
+urllib3 = ">=1.26,<3"
 
 [package.extras]
 socks = ["PySocks (>=1.5.6,!=1.5.7)"]
-use-chardet-on-py3 = ["chardet (>=3.0.2,<6)"]
+use-chardet-on-py3 = ["chardet (>=3.0.2,<8)"]
 
 [[package]]
 name = "rtfde"

@@ -1,10 +1,11 @@
-# Last modified: 2025-09-26T16:38:42.136225+00:00
-FROM demisto/python3-deb-bullseye:3.12.11.5107758
+# Last modified: 2026-04-16T07:19:41.702839+00:00
+FROM demisto/python3-deb-bullseye:3.12.11.8290908
 
 WORKDIR "/app"
 
 SHELL ["/bin/bash", "-c"]
 RUN apt-get update -y -q && \
+    apt-get upgrade -y -q && \
     apt-get install -y -q nodejs \
     npm gconf-service \
     libasound2 libatk1.0-0 libatk-bridge2.0-0 \
@@ -44,5 +45,5 @@ RUN gsutil cp -r gs://sane-reports-artifacts/sane-report.tar . \
 RUN chown -R root:demisto /app/ && chmod 775 /app/ && chmod 775 /app/dist
 
 RUN npm uninstall -g npm && apt-get purge -y --auto-remove git npm apt-transport-https ca-certificates gnupg curl google-cloud-sdk \
-    python3-dev \
+    python3-dev lsb-release \
     && rm -rf /var/lib/apt/lists/*
