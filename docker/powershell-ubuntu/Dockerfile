@@ -27,6 +27,7 @@ RUN apt-get update -y && \
     wget -q https://api.nuget.org/v3-flatcontainer/system.security.cryptography.xml/9.0.15/system.security.cryptography.xml.9.0.15.nupkg -O /tmp/cryptoxml.nupkg && \
     unzip -o /tmp/cryptoxml.nupkg "lib/net9.0/System.Security.Cryptography.Xml.dll" -d /tmp/cryptoxml && \
     cp /tmp/cryptoxml/lib/net9.0/System.Security.Cryptography.Xml.dll /opt/microsoft/powershell/7/System.Security.Cryptography.Xml.dll && \
+    sed -i 's|System.Security.Cryptography.Xml/9.0.1|System.Security.Cryptography.Xml/9.0.15|g' /opt/microsoft/powershell/7/pwsh.deps.json && \
     rm -rf /tmp/cryptoxml /tmp/cryptoxml.nupkg && \
     apt-get purge -y unzip && \
     apt-get autoremove -y && \
