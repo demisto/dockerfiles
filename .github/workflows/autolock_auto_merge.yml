@@ -50,19 +50,14 @@ jobs:
       - name: Disable auto-merge if multiple commits
         if: steps.validate_branch.outputs.valid_branch == 'true' && steps.check_commits.outputs.commit_count != '1'
         env:
-          PR_NUMBER: ${{ github.event.pull_request.number }}
           PR_URL: ${{ github.event.pull_request.html_url }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "PR has ${{ steps.check_commits.outputs.commit_count }} commits (expected exactly 1)"
-          AUTO_MERGE_ENABLED_BY=$(gh api "repos/${{ github.repository }}/pulls/${PR_NUMBER}" --jq '.auto_merge.enabled_by.login // empty')
-          if [[ -z "$AUTO_MERGE_ENABLED_BY" ]]; then
-            echo "Auto-merge is not enabled - nothing to disable"
-          elif [[ "$AUTO_MERGE_ENABLED_BY" == "github-actions[bot]" ]]; then
-            echo "Auto-merge was enabled by '$AUTO_MERGE_ENABLED_BY' - disabling"
+          ENABLED_BY=$(gh pr view "$PR_URL" --json autoMergeRequest --jq '.autoMergeRequest.enabledBy.login // empty')
+          echo "PR has ${{ steps.check_commits.outputs.commit_count }} commits; auto-merge enabled by: '${ENABLED_BY:-none}'"
+          if [[ "$ENABLED_BY" == "github-actions[bot]" ]]; then
+            echo "Disabling bot-enabled auto-merge"
             gh pr merge --disable-auto "$PR_URL"
-          else
-            echo "Auto-merge was enabled by user '$AUTO_MERGE_ENABLED_BY' - leaving it enabled"
           fi
       
       - name: Skip automerge
