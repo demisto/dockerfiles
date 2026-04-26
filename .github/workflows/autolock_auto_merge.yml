@@ -8,7 +8,7 @@ permissions:
 jobs:
   autolock-automerge:
     runs-on: ubuntu-latest
-    if: ${{ github.actor == 'content-bot' }}
+    if: ${{ github.event.pull_request.user.login == 'content-bot' }}
     steps:
       - name: Validate branch name
         id: validate_branch
@@ -55,7 +55,7 @@ jobs:
         run: |
           ENABLED_BY=$(gh pr view "$PR_URL" --json autoMergeRequest --jq '.autoMergeRequest.enabledBy.login // empty')
           echo "PR has ${{ steps.check_commits.outputs.commit_count }} commits; auto-merge enabled by: '${ENABLED_BY:-none}'"
-          if [[ "$ENABLED_BY" == "github-actions[bot]" ]]; then
+          if [[ "$ENABLED_BY" == "app/github-actions" ]]; then
             echo "Disabling bot-enabled auto-merge"
             gh pr merge --disable-auto "$PR_URL"
           fi
