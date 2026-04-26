@@ -8,8 +8,16 @@ permissions:
 jobs:
   autolock-automerge:
     runs-on: ubuntu-latest
-    if: ${{ github.event.pull_request.user.login == 'content-bot' }}
+    if: ${{ github.actor == 'content-bot' }}
     steps:
+      - name: Debug context
+        run: |
+          echo "github.actor: ${{ github.actor }}"
+          echo "github.event.pull_request.user.login: ${{ github.event.pull_request.user.login }}"
+          echo "github.event.sender.login: ${{ github.event.sender.login }}"
+          echo "github.head_ref: ${{ github.head_ref }}"
+          echo "github.event.action: ${{ github.event.action }}"
+
       - name: Validate branch name
         id: validate_branch
         env:
