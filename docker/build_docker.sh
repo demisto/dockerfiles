@@ -681,6 +681,11 @@ function docker_build {
             IMAGE_ARTIFACTS="${IMAGE_SAVE}"
         fi
         gzip "${IMAGE_SAVE}"
+        if [ -n "${PUSHED_DOCKERS}" ]; then
+            PUSHED_DOCKERS="${PUSHED_DOCKERS},${image_full_name}"
+        else
+            PUSHED_DOCKERS="${image_full_name}"
+        fi
         print_sub_separator "-"
         echo "Docker image [${image_full_name}] saved to ${IMAGE_SAVE}.gz"
         print_sub_separator "-"
