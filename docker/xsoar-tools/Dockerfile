@@ -1,17 +1,24 @@
-# Last modified: 2026-01-13T12:12:40.104277+00:00
+# Last modified: 2026-04-23T11:18:37.611994+00:00
 
-FROM demisto/python3:3.12.12.6663663
+FROM demisto/python3:3.12.13.8319994
 
 ENV DEMISTO_SDK_IGNORE_CONTENT_WARNING true
 ENV DEMISTO_SDK_SKIP_LOGGER_SETUP true
 
 COPY requirements.txt .
 
+# This line can be removed once upgrading base image to alpine3.24
+RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories \
+  && apk --update add --no-cache \
+  curl=8.19.0-r0 \
+  libcurl=8.19.0-r0
+
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base libffi-dev openssl-dev \
   && apk add --no-cache git  \
   && apk add --no-cache libstdc++  \
   && apk add --no-cache --upgrade grep  \
   && pip install --no-cache-dir -r requirements.txt \
+  && pip install --no-cache-dir "lxml>=6.1.0" \
   && apk del .build-dependencies
 
 ADD https://raw.githubusercontent.com/demisto/content/master/Packs/Base/Scripts/CommonServerPython/CommonServerPython.py /home/demisto
