@@ -669,6 +669,24 @@ function docker_build {
             return $?
         fi
     fi
+    # -- TAR MODE: save image as gzipped tar and skip all pushes --
+    if [ "${TAR_MODE}" = "true" ]; then
+        IMAGE_NAME_SAVE="$(echo "${image_full_name}" | sed -e 's/\//__/g').tar"
+        IMAGE_SAVE="${ARTIFACTS_FOLDER}/${IMAGE_NAME_SAVE}"
+        echo "Saving docker image to tar: ${IMAGE_SAVE}"
+        docker save -o "${IMAGE_SAVE}" "${image_full_name}"
+        if [ -n "${IMAGE_ARTIFACTS}" ]; then
+            IMAGE_ARTIFACTS="${IMAGE_ARTIFACTS},${IMAGE_SAVE}"
+        else
+            IMAGE_ARTIFACTS="${IMAGE_SAVE}"
+        fi
+        gzip "${IMAGE_SAVE}"
+        print_sub_separator "-"
+        echo "Docker image [${image_full_name}] saved to ${IMAGE_SAVE}.gz"
+        print_sub_separator "-"
+        return 0
+    fi
+
     docker_trust=0
     if sign_setup; then
         docker_trust=1
@@ -801,6 +819,8 @@ Options:
   --last-upload-commit SHA
                           The commit SHA to compare against in upload mode.
   --files-to-prs PATH    Path to the files_to_prs.json mapping file (upload mode).
+  --tar                   Build and save the image as a gzipped tar file in ARTIFACTS_FOLDER.
+                          Skips all pushes (Docker Hub and container registry).
   --dry-run               Simulate the build: skip docker push and github comments.
   --no-color              Disable colored output (also respects NO_COLOR env var).
   -h, --help              Show this help message and exit.
@@ -826,12 +846,16 @@ Examples:
 
   # Dry-run upload mode:
   ./$(basename "$0") --upload --last-upload-commit abc123 --files-to-prs files.json --dry-run
+
+  # Build a single image and save as tar (no push):
+  ./$(basename "$0") --tar python3-deb
 EOF
 }
 
 # PARSE ARGUMENTS
 UPLOAD_MODE="false"
 DRY_RUN="false"
+TAR_MODE="true"
 docker_image_to_build=""
 while [ "$#" -gt 0 ]; do
     case "$1" in
@@ -839,6 +863,7 @@ while [ "$#" -gt 0 ]; do
         --upload) UPLOAD_MODE="true"; shift;;
         --last-upload-commit) LAST_UPLOAD_COMMIT="$2"; shift 2;;
         --files-to-prs) FILES_TO_PRS="$2"; shift 2;;
+        --tar) TAR_MODE="true"; shift;;
         --dry-run) DRY_RUN="true"; shift;;
         --no-color) NO_COLOR="true"; shift;;
         --*) echo "Unknown option: $1"; usage; exit 1;;
@@ -930,6 +955,7 @@ print_box_banner \
     "PWD              : ${CURRENT_DIR}" \
     "" \
     "Upload Mode      : ${_upload_info}" \
+    "Tar Mode         : ${TAR_MODE}" \
     "Dry Run          : ${DRY_RUN}" \
     "Colors           : ${COLOR_ENABLED}" \
     "" \
