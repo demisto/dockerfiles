@@ -518,14 +518,14 @@ files = [
 
 [[package]]
 name = "pymisp"
-version = "2.5.33.2"
+version = "2.5.34.1"
 description = "Python API for MISP."
 optional = false
 python-versions = "<4.0,>=3.10"
 groups = ["main"]
 files = [
-    {file = "pymisp-2.5.33.2-py3-none-any.whl", hash = "sha256:6aa2a96061c74131b008bee6d1ccb795f82831ae97250d1ce7c38f280b5b2cba"},
-    {file = "pymisp-2.5.33.2.tar.gz", hash = "sha256:ed45ae12bb58082c5dd7e8bd35bee3a3b7eee54196d3451fa4bb7051535dbd2e"},
+    {file = "pymisp-2.5.34.1-py3-none-any.whl", hash = "sha256:7ed974fa4ab325ddcb8eee4be7d6723636f849516c54a055da1ea1638cbfcd37"},
+    {file = "pymisp-2.5.34.1.tar.gz", hash = "sha256:dc7d44213064b5fc920dfeb8feae21165eb6543288e3809f2a5c6dd86ec37fa5"},
 ]
 
 [package.dependencies]
@@ -537,7 +537,7 @@ requests = ">=2.33.1"
 
 [package.extras]
 brotli = ["urllib3[broti] (>=2.6.3)"]
-docs = ["docutils (>=0.22.4) ; python_version >= \"3.12\"", "myst-parser (>=5.0.0) ; python_version >= \"3.12\"", "sphinx (>=9.1.0) ; python_version >= \"3.12\"", "sphinx-autodoc-typehints (>=3.9.11) ; python_version >= \"3.12\""]
+docs = ["docutils (>=0.22.4) ; python_version >= \"3.12\"", "myst-parser (>=5.0.0) ; python_version >= \"3.12\"", "sphinx (>=9.1.0) ; python_version >= \"3.12\"", "sphinx-autodoc-typehints (>=3.10.2) ; python_version >= \"3.12\""]
 email = ["RTFDE (>=0.1.2.2) ; python_version <= \"3.10\"", "extract_msg (>=0.55.0)", "oletools (>=0.60.2)"]
 fileobjects = ["lief (>=0.17.6)", "pure-magic-rs (>=0.3.3)", "pydeep2 (>=0.5.1)"]
 neo4j = ["neo4j (>=6.1)"]
