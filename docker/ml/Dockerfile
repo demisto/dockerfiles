@@ -36,6 +36,13 @@ COPY oob_evaluation.txt /ml
 RUN chown -R demisto:demisto /ml && chmod -R 775 /ml
 COPY --from=files-src --chown=demisto:demisto /ml /ml
 
+RUN mkdir -p /var/lib/demisto && chown -R demisto:demisto /var/lib/demisto
+
 ENV HF_HOME='/ml/.cache'
 ENV NLTK_DATA='/ml/nltk_data'
 ENV MPLCONFIGDIR='/ml/matplotlib'
+
+ENV DEFAULT_USER="demisto"
+
+USER $DEFAULT_USER
+WORKDIR /home/$DEFAULT_USER
