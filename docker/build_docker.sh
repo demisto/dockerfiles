@@ -669,8 +669,36 @@ function docker_build {
             return $?
         fi
     fi
-    # -- TAR MODE: save image as gzipped tar and skip all pushes --
+    docker_trust=0
+    if sign_setup; then
+        docker_trust=1
+        echo "using DOCKER_TRUST=${docker_trust} DOCKER_CONFIG=${DOCKER_CONFIG}"
+    fi
+
+    # -- TAR MODE: sign the image, save as gzipped tar, skip pushes to Docker Hub and CR --
     if [ "${TAR_MODE}" = "true" ]; then
+        # Sign the image via Docker Content Trust push (required to generate trust metadata)
+        DOCKER_LOGIN_DONE="no"
+        if [ "$docker_trust" == "1" ] && docker_login; then
+            if [ "${DRY_RUN}" = "true" ]; then
+                echo "[DRY-RUN] Would have signed image: ${image_full_name}"
+            else
+                echo "Pushing image with Docker Content Trust for signing..."
+                set +e
+                env DOCKER_CONTENT_TRUST="$docker_trust" DOCKER_CONFIG="${DOCKER_CONFIG}" docker push "${image_full_name}"
+                local sign_push_exit_code=$?
+                set -e
+                if [ $sign_push_exit_code -ne 0 ]; then
+                    record_failure "${image_name}" "push" "docker push for signing failed with exit code ${sign_push_exit_code}"
+                    return $?
+                fi
+                echo "Done signing push for: ${image_full_name}"
+                commit_dockerfiles_trust
+            fi
+        else
+            echo "Skipping image signing (trust not configured or docker login failed)"
+        fi
+
         IMAGE_NAME_SAVE="$(echo "${image_full_name}" | sed -e 's/\//__/g' -e 's/:/_/g').tar"
         IMAGE_SAVE="${ARTIFACTS_FOLDER}/${IMAGE_NAME_SAVE}"
         echo "Saving docker image to tar: ${IMAGE_SAVE}"
@@ -686,16 +714,34 @@ function docker_build {
         else
             PUSHED_DOCKERS="${image_full_name}"
         fi
+
+        # Post GitHub comment (same as normal flow)
+        POST_COMMENT_ARGS=("${image_full_name}")
+        if [ "${UPLOAD_MODE}" = "true" ]; then
+            POST_COMMENT_ARGS+=("--upload" "--files-to-prs" "${FILES_TO_PRS}")
+        fi
+        if [ "${DRY_RUN}" = "true" ]; then
+            POST_COMMENT_ARGS+=("--dry-run")
+        fi
+        if ! "${DOCKER_SRC_DIR}/post_github_comment.py" "${POST_COMMENT_ARGS[@]}"; then
+            echo "Failed post_github_comment.py. Will stop build only if not on master"
+            if [ "${CI_COMMIT_REF_NAME}" == "master" ]; then
+                echo "Continuing as we are on master branch..."
+            else
+                record_failure "${image_name}" "push" "post_github_comment.py failed"
+                local pgc_rc=$?
+                if [ $pgc_rc -eq 0 ]; then
+                    return 0
+                fi
+                echo "failing build!!"
+                exit 5
+            fi
+        fi
+
         print_sub_separator "-"
-        echo "Docker image [${image_full_name}] saved to ${IMAGE_SAVE}.gz"
+        echo "Docker image [${image_full_name}] saved to ${IMAGE_SAVE}.gz (signed: $( [ "$docker_trust" == "1" ] && echo "yes" || echo "no" ))"
         print_sub_separator "-"
         return 0
-    fi
-
-    docker_trust=0
-    if sign_setup; then
-        docker_trust=1
-        echo "using DOCKER_TRUST=${docker_trust} DOCKER_CONFIG=${DOCKER_CONFIG}"
     fi
 
     if [ -n "$CR_REPO" ] && cr_login; then
@@ -824,8 +870,9 @@ Options:
   --last-upload-commit SHA
                           The commit SHA to compare against in upload mode.
   --files-to-prs PATH    Path to the files_to_prs.json mapping file (upload mode).
-  --tar                   Build and save the image as a gzipped tar file in ARTIFACTS_FOLDER.
-                          Skips all pushes (Docker Hub and container registry).
+  --tar                   Build, sign, and save the image as a gzipped tar file in ARTIFACTS_FOLDER.
+                           Skips pushes to Docker Hub and container registry, but still signs the
+                           image via Docker Content Trust and posts GitHub comments.
   --dry-run               Simulate the build: skip docker push and github comments.
   --no-color              Disable colored output (also respects NO_COLOR env var).
   -h, --help              Show this help message and exit.
