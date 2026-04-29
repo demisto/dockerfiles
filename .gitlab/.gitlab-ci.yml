@@ -1,7 +1,7 @@
 variables:
-  CURRENT_BRANCH_NAME: "ae-docker-build"
+  CURRENT_BRANCH_NAME: "CIAC-16368"
 
 include:
   - file: "/.gitlab/ci/dockerfiles/.gitlab-ci.yml"
-    ref: "ae-docker-build"
+    ref: "CIAC-16368"
     project: "${CI_PROJECT_NAMESPACE}/infra"
