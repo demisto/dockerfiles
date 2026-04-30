@@ -1,7 +1,7 @@
 variables:
-  CURRENT_BRANCH_NAME: "CIAC-16368"
+  CURRENT_BRANCH_NAME: "ae-CIAC-16368"
 
 include:
   - file: "/.gitlab/ci/dockerfiles/.gitlab-ci.yml"
-    ref: "CIAC-16368"
+    ref: "ae-CIAC-16368"
     project: "${CI_PROJECT_NAMESPACE}/infra"
