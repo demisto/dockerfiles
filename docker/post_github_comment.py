@@ -66,7 +66,7 @@ def get_docker_image_size(docker_image, is_contribution: bool = False) -> str:
 def convert_docker_image_tar(docker_image: str) -> str:
     """
     Helper function to convert the Docker image to a valid path.
-    For example, `devdemisto/bottle2:1.0.0.89478.tar.gz` -> `devdemisto_bottle2:1.0.0.89478.tar.gz`.
+    For example, `devdemisto/bottle2:1.0.0.89478` -> `devdemisto__bottle2_1.0.0.89478.tar.gz`.
 
     Arguments:
     - `docker_image` (``str``): The docker image filename.
@@ -74,7 +74,7 @@ def convert_docker_image_tar(docker_image: str) -> str:
     Returns:
     - `str` of the fixed Docker image TAR.
     """
-    return f"{docker_image.replace('/', '__')}.tar.gz"
+    return f"{docker_image.replace('/', '__').replace(':', '_')}.tar.gz"
 
 
 def get_pr_details(
