@@ -1,4 +1,4 @@
-# Last modified: 2026-05-03T07:55:11.364145+00:00
+# Last modified: 2026-05-03T13:34:32.412796+00:00
 
 FROM demisto/python3-deb:3.12.13.8430800
 
@@ -14,9 +14,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   openssh-client \
 && pip install pip==24.0 \
 && pip install --no-cache-dir -r requirements.txt \
-&& pip install --upgrade pip \ 
+&& pip install --upgrade pip \
 && pip install https://github.com/vmware/vsphere-automation-sdk-python/archive/refs/tags/v7.0.3.2.tar.gz \
 && pip install --upgrade azure-storage-blob \
+&& pip install "pyopenssl>=26.0.0" \
+&& pip install "urllib3>=2.6.3" \
+&& pip install "azure-core>=1.38.0" \
 && pip uninstall aiohttp -y \
 && apt-get purge -y --auto-remove \
   gcc \
