@@ -286,7 +286,7 @@ function log_prefix {
 }
 
 if [ -n "$GITLAB_CI" ]; then
-    DOCKER_LOGIN_DONE=${DOCKER_LOGIN_DONE:-no}
+    DOCKER_LOGIN_DONE=${DOCKER_LOGIN_DONE:-yes}
     # Use plain buildkit progress in CI to avoid noisy progress bars
     export BUILDKIT_PROGRESS=plain
 else
