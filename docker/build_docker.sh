@@ -695,26 +695,6 @@ function docker_build {
                 return $?
             fi
             echo "Done docker push for cr: ${image_full_name}"
-        fi
-    else
-        echo "Skipping docker push for cr"
-    fi
-
-    DOCKER_LOGIN_DONE="no"
-    if docker_login; then
-        if [ "${DRY_RUN}" = "true" ]; then
-            echo "[DRY-RUN] Would have pushed to Docker Hub: ${image_full_name}"
-        else
-            echo "Done docker login"
-            set +e
-            env DOCKER_CONTENT_TRUST="$docker_trust" DOCKER_CONFIG="${DOCKER_CONFIG}" docker push "${image_full_name}"
-            local dh_push_exit_code=$?
-            set -e
-            if [ $dh_push_exit_code -ne 0 ]; then
-                record_failure "${image_name}" "push" "docker push to Docker Hub failed with exit code ${dh_push_exit_code}"
-                return $?
-            fi
-            echo "Done docker push for: ${image_full_name}"
             if [ -n "${PUSHED_DOCKERS}" ]; then
                 PUSHED_DOCKERS="${PUSHED_DOCKERS},${image_full_name}"
             else
@@ -747,10 +727,10 @@ function docker_build {
             fi
         fi
     else
-        echo "Skipping docker push"
-        record_failure "${image_name}" "push" "docker login failed, could not push image"
-        local dl_rc=$?
-        if [ $dl_rc -eq 0 ]; then
+        echo "Skipping docker push for cr (CR_REPO not set or cr_login failed)"
+        record_failure "${image_name}" "push" "CR login failed or CR_REPO not set, could not push image"
+        local cr_fail_rc=$?
+        if [ $cr_fail_rc -eq 0 ]; then
             return 0
         fi
         if [ "${CI_COMMIT_REF_NAME}" == "master" ]; then
