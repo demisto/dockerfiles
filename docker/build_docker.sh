@@ -413,7 +413,7 @@ function commit_dockerfiles_trust {
 # build docker.
 # Param $1: docker dir with all relevant files
 function docker_build {
-    DOCKER_ORG=${DOCKER_ORG:-devdemisto}
+    DOCKER_ORG=${DOCKER_ORG:-devtestdemisto}
     DOCKER_ORG_DEMISTO=demisto
     image_name=$(basename "$1")
     echo "Starting build for dir: $1, image: ${image_name}, pwd: $(pwd)"
@@ -809,7 +809,7 @@ Environment variables:
   CI_COMMIT_SHA           Current commit SHA (auto-set in CI).
   CI_COMMIT_REF_NAME      Current branch name (auto-set in CI).
   CI_PIPELINE_ID          Pipeline/revision ID (auto-set in CI).
-  DOCKER_ORG              Docker Hub organization (default: devdemisto, or demisto on master).
+  DOCKER_ORG              Docker Hub organization (default: devtestdemisto, or demisto on master).
   DOCKERHUB_USER          Docker Hub username for login.
   DOCKERHUB_PASSWORD      Docker Hub password for login.
   CR_REPO                 Container registry repo URL for secondary push.
@@ -870,8 +870,8 @@ if [ "${UPLOAD_MODE}" = "true" ]; then
     DIFF_COMPARE="${LAST_UPLOAD_COMMIT}...${CI_COMMIT_SHA}"
     DOCKER_ORG=demisto
     if [ "${DRY_RUN}" = "true" ]; then
-        DOCKER_ORG=devdemisto
-        echo "[DRY-RUN] Overriding DOCKER_ORG to devdemisto"
+        DOCKER_ORG=devtestdemisto
+        echo "[DRY-RUN] Overriding DOCKER_ORG to devtestdemisto"
     fi
 fi
 
@@ -898,7 +898,7 @@ if [ "${CI_COMMIT_REF_NAME}" == "master" ] && [ "${UPLOAD_MODE}" = "false" ]; th
     DIFF_COMPARE="HEAD^1...HEAD"
     DOCKER_ORG=demisto
     if [ "${DRY_RUN}" = "true" ]; then
-        DOCKER_ORG=devdemisto
+        DOCKER_ORG=devtestdemisto
     fi
 fi
 
@@ -922,7 +922,7 @@ print_box_banner \
     "Commit SHA       : ${CI_COMMIT_SHA:-N/A}" \
     "Pipeline ID      : ${CI_PIPELINE_ID:-N/A}" \
     "" \
-    "DOCKER_ORG       : ${DOCKER_ORG:-devdemisto}" \
+    "DOCKER_ORG       : ${DOCKER_ORG:-devtestdemisto}" \
     "DIFF_COMPARE     : ${DIFF_COMPARE}" \
     "DOCKER_SRC_DIR   : ${DOCKER_SRC_DIR}" \
     "TRUST_DIR        : ${DOCKERFILES_TRUST_DIR}" \
