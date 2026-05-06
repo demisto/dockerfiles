@@ -224,40 +224,40 @@ tracing = ["opentelemetry-api (>=1.26,<2.0)"]
 
 [[package]]
 name = "azure-identity"
-version = "1.25.1"
+version = "1.25.3"
 description = "Microsoft Azure Identity Library for Python"
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "azure_identity-1.25.1-py3-none-any.whl", hash = "sha256:e9edd720af03dff020223cd269fa3a61e8f345ea75443858273bcb44844ab651"},
-    {file = "azure_identity-1.25.1.tar.gz", hash = "sha256:87ca8328883de6036443e1c37b40e8dc8fb74898240f61071e09d2e369361456"},
+    {file = "azure_identity-1.25.3-py3-none-any.whl", hash = "sha256:f4d0b956a8146f30333e071374171f3cfa7bdb8073adb8c3814b65567aa7447c"},
+    {file = "azure_identity-1.25.3.tar.gz", hash = "sha256:ab23c0d63015f50b630ef6c6cf395e7262f439ce06e5d07a64e874c724f8d9e6"},
 ]
 
 [package.dependencies]
 azure-core = ">=1.31.0"
 cryptography = ">=2.5"
-msal = ">=1.30.0"
+msal = ">=1.35.1"
 msal-extensions = ">=1.2.0"
 typing-extensions = ">=4.0.0"
 
 [[package]]
 name = "azure-kusto-data"
-version = "6.0.3"
+version = "6.0.4"
 description = "Kusto Data Client"
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "azure_kusto_data-6.0.3-py3-none-any.whl", hash = "sha256:6178721157d43e3b7b270ec09f87f50af3e99473c82e853a2f23c2e0e42dca33"},
-    {file = "azure_kusto_data-6.0.3.tar.gz", hash = "sha256:1337d346f12e234e3c5e5c6c7aff5054129629df085f6fe01aa555cdedf29f09"},
+    {file = "azure_kusto_data-6.0.4-py3-none-any.whl", hash = "sha256:7dad0628ccd47e5dd0692b41ebaaa878db28f9711435063d7c51cec7e3857307"},
+    {file = "azure_kusto_data-6.0.4.tar.gz", hash = "sha256:409e2e14aec6dfbedc9d5bb03e1440dabbc252b10fd03437bc523f29dbda4710"},
 ]
 
 [package.dependencies]
 azure-core = ">=1.35.0,<2"
-azure-identity = ">=1.24.0,<2"
+azure-identity = ">=1.25.3,<2"
 ijson = ">=3.4.0,<3.5.0"
-msal = ">=1.34.0b1,<2"
+msal = ">=1.35.1,<2"
 python-dateutil = ">=2.9.0"
 requests = ">=2.32.4"
 
@@ -792,14 +792,14 @@ files = [
 
 [[package]]
 name = "msal"
-version = "1.34.0"
+version = "1.36.0"
 description = "The Microsoft Authentication Library (MSAL) for Python library enables your app to access the Microsoft Cloud by supporting authentication of users with Microsoft Azure Active Directory accounts (AAD) and Microsoft Accounts (MSA) using industry standard OAuth2 and OpenID Connect."
 optional = false
 python-versions = ">=3.8"
 groups = ["main"]
 files = [
-    {file = "msal-1.34.0-py3-none-any.whl", hash = "sha256:f669b1644e4950115da7a176441b0e13ec2975c29528d8b9e81316023676d6e1"},
-    {file = "msal-1.34.0.tar.gz", hash = "sha256:76ba83b716ea5a6d75b0279c0ac353a0e05b820ca1f6682c0eb7f45190c43c2f"},
+    {file = "msal-1.36.0-py3-none-any.whl", hash = "sha256:36ecac30e2ff4322d956029aabce3c82301c29f0acb1ad89b94edcabb0e58ec4"},
+    {file = "msal-1.36.0.tar.gz", hash = "sha256:3f6a4af2b036b476a4215111c4297b4e6e236ed186cd804faefba23e4990978b"},
 ]
 
 [package.dependencies]
@@ -808,7 +808,7 @@ PyJWT = {version = ">=1.0.0,<3", extras = ["crypto"]}
 requests = ">=2.0.0,<3"
 
 [package.extras]
-broker = ["pymsalruntime (>=0.14,<0.19) ; python_version >= \"3.6\" and platform_system == \"Windows\"", "pymsalruntime (>=0.17,<0.19) ; python_version >= \"3.8\" and platform_system == \"Darwin\"", "pymsalruntime (>=0.18,<0.19) ; python_version >= \"3.8\" and platform_system == \"Linux\""]
+broker = ["pymsalruntime (>=0.14,<0.21) ; python_version >= \"3.8\" and platform_system == \"Windows\"", "pymsalruntime (>=0.17,<0.21) ; python_version >= \"3.8\" and platform_system == \"Darwin\"", "pymsalruntime (>=0.18,<0.21) ; python_version >= \"3.8\" and platform_system == \"Linux\""]
 
 [[package]]
 name = "msal-extensions"
