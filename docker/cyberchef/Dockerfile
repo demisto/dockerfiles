@@ -13,7 +13,11 @@ RUN apk add --update --no-cache nodejs npm \
   && cd /usr/lib/node_modules/npm/node_modules/tar \
   && npm install tar@7.5.11 --prefix /usr/lib/node_modules/npm/node_modules/tar --no-save 2>/dev/null; \
   cp -rf /usr/lib/node_modules/npm/node_modules/tar/node_modules/tar/* /usr/lib/node_modules/npm/node_modules/tar/ 2>/dev/null; \
-  rm -rf /usr/lib/node_modules/npm/node_modules/tar/node_modules
+  rm -rf /usr/lib/node_modules/npm/node_modules/tar/node_modules \
+  && cd /usr/lib/node_modules/npm/node_modules/brace-expansion \
+  && npm install brace-expansion@5.0.5 --prefix /usr/lib/node_modules/npm/node_modules/brace-expansion --no-save 2>/dev/null; \
+  cp -rf /usr/lib/node_modules/npm/node_modules/brace-expansion/node_modules/brace-expansion/* /usr/lib/node_modules/npm/node_modules/brace-expansion/ 2>/dev/null; \
+  rm -rf /usr/lib/node_modules/npm/node_modules/brace-expansion/node_modules
 RUN npm install -g --save cyberchef-node \
   && cd /usr/local/lib/node_modules/cyberchef-node \
   && npm install jsonpath-plus@latest
