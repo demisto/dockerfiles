@@ -8,4 +8,8 @@ RUN addgroup -g 4000 demisto \
   && adduser -u 4000 -G demisto -D demisto -s /bin/sh \
   && apk update \
   && apk upgrade \
+  && apk -X https://dl-cdn.alpinelinux.org/alpine/edge/main upgrade \
+    openssh-client-common \
+    openssh-client-default \
+    openssh-keygen \
   && apk del less
