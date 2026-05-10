@@ -699,8 +699,12 @@ function docker_build {
             echo "Skipping image signing (trust not configured or docker login failed)"
         fi
 
-        IMAGE_NAME_SAVE="$(echo "${image_full_name}" | sed -e 's/\//__/g').tar"
-        IMAGE_SAVE="${ARTIFACTS_FOLDER}/${IMAGE_NAME_SAVE}"
+        IMAGE_NAME_SAVE="$(echo "${image_full_name}" | sed -e 's/\//__/g' -e 's/:/_/g').tar"
+        TAR_SAVE_DIR="${SAVE_DIR:-${ARTIFACTS_FOLDER}}"
+        if [[ ! -d "${TAR_SAVE_DIR}" ]]; then
+            mkdir -p "${TAR_SAVE_DIR}"
+        fi
+        IMAGE_SAVE="${TAR_SAVE_DIR}/${IMAGE_NAME_SAVE}"
         echo "Saving docker image to tar: ${IMAGE_SAVE}"
         docker save -o "${IMAGE_SAVE}" "${image_full_name}"
         if [ -n "${IMAGE_ARTIFACTS}" ]; then
@@ -827,8 +831,12 @@ function docker_build {
           exit 1
         fi
         if [ -n "$CI" ]; then
-            IMAGE_NAME_SAVE="$(echo "${image_full_name}" | sed -e 's/\//__/g').tar"
-            IMAGE_SAVE="${ARTIFACTS_FOLDER}/${IMAGE_NAME_SAVE}"
+            IMAGE_NAME_SAVE="$(echo "${image_full_name}" | sed -e 's/\//__/g' -e 's/:/_/g').tar"
+            TAR_SAVE_DIR="${SAVE_DIR:-${ARTIFACTS_FOLDER}}"
+            if [[ ! -d "${TAR_SAVE_DIR}" ]]; then
+                mkdir -p "${TAR_SAVE_DIR}"
+            fi
+            IMAGE_SAVE="${TAR_SAVE_DIR}/${IMAGE_NAME_SAVE}"
             echo "Creating artifact of docker image at ${IMAGE_SAVE}"
             docker save -o "${IMAGE_SAVE}" "${image_full_name}"
             if [ -n "${IMAGE_ARTIFACTS}" ]; then
@@ -873,6 +881,8 @@ Options:
   --tar                   Build, sign, and save the image as a gzipped tar file in ARTIFACTS_FOLDER.
                            Skips pushes to Docker Hub and container registry, but still signs the
                            image via Docker Content Trust and posts GitHub comments.
+  --save-dir DIR          Save docker tar files under the specified directory instead of
+                           ARTIFACTS_FOLDER. The directory will be created if it does not exist.
   --dry-run               Simulate the build: skip docker push and github comments.
   --no-color              Disable colored output (also respects NO_COLOR env var).
   -h, --help              Show this help message and exit.
@@ -901,13 +911,17 @@ Examples:
 
   # Build a single image and save as tar (no push):
   ./$(basename "$0") --tar python3-deb
+
+  # Build and save tar files to a custom directory:
+  ./$(basename "$0") --tar --save-dir /tmp/my-dockers python3-deb
 EOF
 }
 
 # PARSE ARGUMENTS
 UPLOAD_MODE="false"
 DRY_RUN="false"
-TAR_MODE="true"
+TAR_MODE="false"
+SAVE_DIR=""
 docker_image_to_build=""
 while [ "$#" -gt 0 ]; do
     case "$1" in
@@ -916,6 +930,7 @@ while [ "$#" -gt 0 ]; do
         --last-upload-commit) LAST_UPLOAD_COMMIT="$2"; shift 2;;
         --files-to-prs) FILES_TO_PRS="$2"; shift 2;;
         --tar) TAR_MODE="true"; shift;;
+        --save-dir) SAVE_DIR="$2"; shift 2;;
         --dry-run) DRY_RUN="true"; shift;;
         --no-color) NO_COLOR="true"; shift;;
         --*) echo "Unknown option: $1"; usage; exit 1;;
@@ -1008,6 +1023,7 @@ print_box_banner \
     "" \
     "Upload Mode      : ${_upload_info}" \
     "Tar Mode         : ${TAR_MODE}" \
+    "Save Dir         : ${SAVE_DIR:-<default: ARTIFACTS_FOLDER>}" \
     "Dry Run          : ${DRY_RUN}" \
     "Colors           : ${COLOR_ENABLED}" \
     "" \
