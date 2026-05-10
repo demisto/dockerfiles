@@ -1,7 +1,7 @@
 variables:
-  CURRENT_BRANCH_NAME: autofix-CVE
+  CURRENT_BRANCH_NAME: fix/create-pr-cve-merge
 
 include:
   - file: "/.gitlab/ci/dockerfiles/.gitlab-ci.yml"
-    ref: autofix-CVE
+    ref: fix/create-pr-cve-merge
     project: "${CI_PROJECT_NAMESPACE}/infra"
