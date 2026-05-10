@@ -17,4 +17,11 @@ RUN addgroup -g 4000 demisto \
 RUN wget -q https://api.nuget.org/v3-flatcontainer/system.security.cryptography.xml/9.0.15/system.security.cryptography.xml.9.0.15.nupkg -O /tmp/cryptography-xml.nupkg \
   && unzip -o /tmp/cryptography-xml.nupkg lib/net9.0/System.Security.Cryptography.Xml.dll -d /tmp/nuget \
   && cp /tmp/nuget/lib/net9.0/System.Security.Cryptography.Xml.dll /opt/microsoft/powershell/7/System.Security.Cryptography.Xml.dll \
-  && rm -rf /tmp/cryptography-xml.nupkg /tmp/nuget
+  && rm -rf /tmp/cryptography-xml.nupkg /tmp/nuget \
+  && sed -i \
+    -e 's|"System.Security.Cryptography.Xml": "9.0.1"|"System.Security.Cryptography.Xml": "9.0.15"|g' \
+    -e 's|System.Security.Cryptography.Xml/9.0.1|System.Security.Cryptography.Xml/9.0.15|g' \
+    -e 's|system.security.cryptography.xml/9.0.1|system.security.cryptography.xml/9.0.15|g' \
+    -e 's|system.security.cryptography.xml.9.0.1.nupkg.sha512|system.security.cryptography.xml.9.0.15.nupkg.sha512|g' \
+    -e 's|sha512-eFRm7+6IALzJ5PY44K+IxQ//nvNHjV852UfEJpHSAlyZ8jqI1lU/qtNEcJDkPj7E3tischIpcSlAFtp2UBvL+w==|sha512-89ApI4Lknb2WCsUVliJrmT0xbTcAKq6cGnxwu7AQPuqb4LfLwxme2/JfZ/WmhOz5x98/s0rfcQvNtP+v75SuOw==|g' \
+    /opt/microsoft/powershell/7/pwsh.deps.json
