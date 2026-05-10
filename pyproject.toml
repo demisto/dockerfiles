@@ -41,3 +41,9 @@ addopts = """
     --junitxml=report.xml
     """
 python_files = "test_*.py *_test.py"
+
+[tool.ruff.lint.per-file-ignores]
+# docker/*/verify.py files import packages purely to verify that the
+# corresponding Docker image actually ships them. Ignoring F401 (unused-import)
+# and F403 (`import *`) prevents `ruff --fix` from silently stripping them.
+"docker/*/verify.py" = ["F401", "F403"]

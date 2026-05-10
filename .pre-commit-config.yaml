@@ -37,6 +37,9 @@ repos:
   - id: pycln
     args:
     - --all
+    # docker/*/verify.py files import packages purely to verify that the
+    # corresponding Docker image actually ships them. pycln must not touch them.
+    exclude: ^docker/.*/verify\.py$
 - repo: https://github.com/pre-commit/mirrors-mypy
   rev: v1.10.1
   hooks:
@@ -57,8 +60,11 @@ repos:
       - types-tabulate
       - types-dateparser
     types: [python]
+    # docker/*/verify.py files import image-only packages (exchangelib, lxml,
+    # future, _sqlite3, ...) that aren't installed in the repo's dev env.
+    # They run inside the built Docker image, so mypy must skip them locally.
     #duplicate here and in pyproject.toml because https://github.com/python/mypy/issues/13916
-    exclude: artifacts*|.*_test|test_.*|test_data|tests_data|.venv
+    exclude: artifacts*|.*_test|test_.*|test_data|tests_data|.venv|docker/.*/verify\.py
 -   repo: https://github.com/koalaman/shellcheck-precommit
     rev: v0.10.0
     hooks:
