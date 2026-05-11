@@ -102,6 +102,7 @@ function write_failed_dockers_report {
 
 REVISION=${CI_PIPELINE_ID:-$(date +%s)}
 PUSHED_DOCKERS=""
+CONTRIBUTION_DOCKERS=""
 SUCCEEDED_IMAGES=()
 IMAGE_ARTIFACTS=""
 CURRENT_DIR=$(pwd)
@@ -719,29 +720,6 @@ function docker_build {
             PUSHED_DOCKERS="${image_full_name}"
         fi
 
-        # Post GitHub comment (same as normal flow)
-        POST_COMMENT_ARGS=("${image_full_name}")
-        if [ "${UPLOAD_MODE}" = "true" ]; then
-            POST_COMMENT_ARGS+=("--upload" "--files-to-prs" "${FILES_TO_PRS}")
-        fi
-        if [ "${DRY_RUN}" = "true" ]; then
-            POST_COMMENT_ARGS+=("--dry-run")
-        fi
-        if ! "${DOCKER_SRC_DIR}/post_github_comment.py" "${POST_COMMENT_ARGS[@]}"; then
-            echo "Failed post_github_comment.py. Will stop build only if not on master"
-            if [ "${CI_COMMIT_REF_NAME}" == "master" ]; then
-                echo "Continuing as we are on master branch..."
-            else
-                record_failure "${image_name}" "push" "post_github_comment.py failed"
-                local pgc_rc=$?
-                if [ $pgc_rc -eq 0 ]; then
-                    return 0
-                fi
-                echo "failing build!!"
-                exit 5
-            fi
-        fi
-
         print_sub_separator "-"
         echo "Docker image [${image_full_name}] saved to ${IMAGE_SAVE}.gz (signed: $( [ "$docker_trust" == "1" ] && echo "yes" || echo "no" ))"
         print_sub_separator "-"
@@ -798,27 +776,6 @@ function docker_build {
                 commit_dockerfiles_trust
             fi
         fi
-        POST_COMMENT_ARGS=("${image_full_name}")
-        if [ "${UPLOAD_MODE}" = "true" ]; then
-            POST_COMMENT_ARGS+=("--upload" "--files-to-prs" "${FILES_TO_PRS}")
-        fi
-        if [ "${DRY_RUN}" = "true" ]; then
-            POST_COMMENT_ARGS+=("--dry-run")
-        fi
-        if ! "${DOCKER_SRC_DIR}/post_github_comment.py" "${POST_COMMENT_ARGS[@]}"; then
-            echo "Failed post_github_comment.py. Will stop build only if not on master"
-            if [ "${CI_COMMIT_REF_NAME}" == "master" ]; then
-                echo "Continuing as we are on master branch..."
-            else
-                record_failure "${image_name}" "push" "post_github_comment.py failed"
-                local pgc_rc=$?
-                if [ $pgc_rc -eq 0 ]; then
-                    return 0
-                fi
-                echo "failing build!!"
-                exit 5
-            fi
-        fi
     else
         echo "Skipping docker push"
         record_failure "${image_name}" "push" "docker login failed, could not push image"
@@ -845,11 +802,11 @@ function docker_build {
                 IMAGE_ARTIFACTS="${IMAGE_SAVE}"
             fi
             gzip "${IMAGE_SAVE}"
-            POST_COMMENT_ARGS=("${image_full_name}" "--is_contribution")
-            if [ "${DRY_RUN}" = "true" ]; then
-                POST_COMMENT_ARGS+=("--dry-run")
+            if [ -n "${CONTRIBUTION_DOCKERS}" ]; then
+                CONTRIBUTION_DOCKERS="${CONTRIBUTION_DOCKERS},${image_full_name}"
+            else
+                CONTRIBUTION_DOCKERS="${image_full_name}"
             fi
-            "${DOCKER_SRC_DIR}/post_github_comment.py" "${POST_COMMENT_ARGS[@]}"
             print_sub_separator "-"
             echo "Docker image [$image_full_name] has been saved as an artifact."
             print_sub_separator "-"
@@ -1239,6 +1196,9 @@ if [ -n "${IMAGE_ARTIFACTS}" ]; then
     echo "${IMAGE_ARTIFACTS}" > "${ARTIFACTS_FOLDER}/image_artifacts.txt"
 else
     _artifacts_status="None"
+fi
+if [ -n "${CONTRIBUTION_DOCKERS}" ]; then
+    echo "${CONTRIBUTION_DOCKERS}" > "${ARTIFACTS_FOLDER}/contribution_dockers.txt"
 fi
 
 print_box_banner \
