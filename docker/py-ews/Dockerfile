@@ -1,4 +1,3 @@
-
 FROM demisto/python3-deb:3.12.13.8857500
 
 # Basic linux utilities
@@ -31,7 +30,7 @@ RUN apt-get update && apt-get install -y -f --no-install-recommends \
     libcom-err2=1.47.0-2+b2 \
     libkrb5-dev \
 && pip install --no-cache-dir pipenv \
-&& pipenv install --system --deploy \
+&& pipenv install --system \
 && apt-get purge -y --auto-remove \
   gcc \
   python3-dev \
