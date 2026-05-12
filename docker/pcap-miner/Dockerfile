@@ -8,7 +8,8 @@ RUN apk update && apk upgrade
 RUN apk --update add --no-cache libxml2 \
   libxslt \
   tshark \
-  libmagic
+  libmagic \
+&& apk del --no-cache wireshark-common
 
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git \
   libxml2-dev \

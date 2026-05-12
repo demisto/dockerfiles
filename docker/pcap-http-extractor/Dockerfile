@@ -15,4 +15,5 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
   tshark \
+&& apt-get remove -y wireshark-common \
 && rm -rf /var/lib/apt/lists/*
