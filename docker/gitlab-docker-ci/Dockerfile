@@ -1,12 +1,24 @@
 FROM devdemisto/gitlab-content-ci:3.14.4.8350800
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
     curl \
-    liblzma-dev \
     libbz2-dev \
-    libssl-dev \
+    libffi-dev \
+    libgdbm-dev \
+    liblzma-dev \
     libreadline-dev \
     libsqlite3-dev \
+    libssl-dev \
+    libxml2-dev \
+    libxmlsec1-dev \
+    llvm \
+    make \
+    patch \
+    tk-dev \
+    uuid-dev \
+    wget \
+    xz-utils \
  && rm -rf /var/lib/apt/lists/*
 
 # Set environment variables for pyenv
