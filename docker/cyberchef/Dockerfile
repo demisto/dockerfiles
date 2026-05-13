@@ -1,5 +1,5 @@
-# Last modified: 2026-04-23T11:18:37.611994+00:00
-FROM demisto/python3:3.12.13.8319994
+# Last modified: 2026-05-12T04:43:40.954754+00:00
+FROM demisto/python3:3.12.13.8927230
 
 COPY requirements.txt .
 COPY bake.js /bake.js
@@ -10,11 +10,11 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
   && apk del .build-dependencies
 
 RUN apk add --update --no-cache nodejs npm \
-  && cd /usr/lib/node_modules/npm/node_modules/tar \
-  && npm install tar@7.5.11 --prefix /usr/lib/node_modules/npm/node_modules/tar --no-save 2>/dev/null; \
-  cp -rf /usr/lib/node_modules/npm/node_modules/tar/node_modules/tar/* /usr/lib/node_modules/npm/node_modules/tar/ 2>/dev/null; \
-  rm -rf /usr/lib/node_modules/npm/node_modules/tar/node_modules
+  && npm install -g npm@latest \
+  && rm -rf /usr/lib/node_modules/npm /usr/bin/npm /usr/bin/npx
+
 RUN npm install -g --save cyberchef-node \
   && cd /usr/local/lib/node_modules/cyberchef-node \
   && npm install jsonpath-plus@latest
+
 ENV NODE_PATH=/usr/local/lib/node_modules
