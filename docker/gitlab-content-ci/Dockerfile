@@ -9,6 +9,16 @@ ENV APOC_CONF_FILE /etc/neo4j/apoc.conf
 # Currently sh is linked to dash, linking it to /bin/bash instead.
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh && cat ~/.profile >> /etc/.profile
 
+# Debian 11 (Bullseye) is EOL: bullseye-backports was removed from deb.debian.org
+# and moved to archive.debian.org. Repoint sources and disable Valid-Until check
+# so apt-get update succeeds. Remove this block once the base image is migrated to Bookworm.
+RUN sed -i 's|http://deb.debian.org/debian bullseye-backports|http://archive.debian.org/debian bullseye-backports|g' \
+        /etc/apt/sources.list 2>/dev/null || true \
+ && (ls /etc/apt/sources.list.d/*.list >/dev/null 2>&1 \
+        && sed -i 's|http://deb.debian.org/debian bullseye-backports|http://archive.debian.org/debian bullseye-backports|g' \
+            /etc/apt/sources.list.d/*.list || true) \
+ && echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99no-check-valid-until
+
 RUN apt-get update
 RUN apt-get upgrade -y
 RUN apt-get update && apt-get install -y curl jq unzip openssh-client gcc libffi-dev libssl-dev git zip cowsay netcat-openbsd wget python3-pip software-properties-common
