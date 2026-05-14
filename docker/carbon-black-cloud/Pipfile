@@ -1,17 +1,16 @@
-[[source]]
-url = "https://pypi.org/simple"
-verify_ssl = true
-name = "pypi"
+[dev-packages]
+cbapi = "*"
 
 [packages]
 carbon-black-cloud-sdk = "*"
 cbapi = "*"
 referencing = "<=0.37.0"
-
-[dev-packages]
-cbapi = "*"
-
-
+protobuf = ">=6.33.5,<7"
 
 [requires]
 python_version = "3.12"
+
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
