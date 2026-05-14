@@ -1,4 +1,4 @@
-FROM devdemisto/gitlab-content-ci:3.14.4.8350800
+FROM devdemisto/gitlab-content-ci:1.0.0.8995382
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
