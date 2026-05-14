@@ -1,12 +1,13 @@
-[[source]]
-name = "pypi"
-url = "https://pypi.org/simple"
-verify_ssl = true
-
 [dev-packages]
 
 [packages]
 google-cloud-container = "*"
+protobuf = ">=7.34.0"  # protobuf is pulled in by google-cloud-container. We pin it explicitly to get a newer version .
 
 [requires]
 python_version = "3.12"
+
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
