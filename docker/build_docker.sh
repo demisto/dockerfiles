@@ -110,6 +110,9 @@ DOCKER_SRC_DIR=${SCRIPT_DIR}
 if [[ "${DOCKER_SRC_DIR}" != /* ]]; then
     DOCKER_SRC_DIR="${CURRENT_DIR}/${SCRIPT_DIR}"
 fi
+DOCKERFILES_TRUST_DIR="$(cd "${DOCKER_SRC_DIR}/.." && pwd)"
+DOCKERFILES_TRUST_DIR="${DOCKERFILES_TRUST_DIR}/dockerfiles-trust"
+
 # parse a property form build.conf file in current dir
 # param $1: property name
 # param $2: default value
@@ -282,9 +285,103 @@ function log_prefix {
 }
 
 if [ -n "$GITLAB_CI" ]; then
+    DOCKER_LOGIN_DONE=${DOCKER_LOGIN_DONE:-no}
     # Use plain buildkit progress in CI to avoid noisy progress bars
     export BUILDKIT_PROGRESS=plain
+else
+    DOCKER_LOGIN_DONE=${DOCKER_LOGIN_DONE:-yes}
 fi
+function docker_login {
+    if [ "${DOCKER_LOGIN_DONE}" = "yes" ]; then
+        return 0;
+    fi
+    if [ -z "${DOCKERHUB_USER}" ]; then
+        echo "DOCKERHUB_USER not set. Not logging in to docker hub"
+        return 1;
+    fi
+    if [ -z "$DOCKERHUB_PASSWORD" ]; then
+        #for local testing scenarios to allow password to be passed via stdin
+        if ! docker login -u "${DOCKERHUB_USER}"; then
+            echo "Failed docker login for user: ${DOCKERHUB_USER}"
+            return 2;
+        fi
+    else
+        if ! echo "${DOCKERHUB_PASSWORD}" | docker login -u "${DOCKERHUB_USER}" --password-stdin; then
+            echo "Failed docker login for user: ${DOCKERHUB_USER}"
+            return 2;
+        fi
+    fi
+    DOCKER_LOGIN_DONE=yes
+    return 0;
+}
+
+SIGN_SETUP_DONE=no
+DOCKERFILES_TRUST_GIT_URL=""
+function sign_setup {
+    if [ "${SIGN_SETUP_DONE}" = "yes" ]; then
+        return 0;
+    fi
+    if [ -z "${DOCKER_CONTENT_TRUST_REPOSITORY_PASSPHRASE}" ] || [ -z "${DOCKER_CONTENT_TRUST_ROOT_PASSPHRASE}" ] || [ -z "${DOCKERFILES_TRUST_GIT_HTTPS}" ]; then
+        echo "Content trust passphrases not set. Not setting up docker signing."
+        return 1;
+    fi
+    DOCKERFILES_TRUST_GIT_URL="https://oauth2:${GITHUB_TOKEN}@${DOCKERFILES_TRUST_GIT_HTTPS}"
+
+    if [ ! -d "${DOCKERFILES_TRUST_DIR}" ]; then
+        git clone "${DOCKERFILES_TRUST_GIT_URL}" "${DOCKERFILES_TRUST_DIR}"
+        git remote set-url origin "${DOCKERFILES_TRUST_GIT_URL}"
+        git config --file "${DOCKERFILES_TRUST_DIR}/.git/config"  user.email "dc-builder@users.noreply.github.com"
+        git config --file "${DOCKERFILES_TRUST_DIR}/.git/config" user.name "dc-builder"
+    else
+        echo "${DOCKERFILES_TRUST_DIR} already checked out"
+    fi
+    export DOCKER_CONFIG="${DOCKERFILES_TRUST_DIR}/.docker"
+    SIGN_SETUP_DONE=yes
+    return 0;
+}
+
+function commit_dockerfiles_trust {
+    if [ "${DRY_RUN}" = "true" ]; then
+        echo "[DRY-RUN] Would have committed docker trust data"
+        return
+    fi
+    cwd="$PWD"
+    cd "${DOCKERFILES_TRUST_DIR}"
+    if [[ $(git status --short) ]]; then
+        echo "dockerfiles-trust: found modified/new files to commit"
+        git stash
+        git pull --no-rebase
+        git stash list | grep -q 'stash' && git checkout stash -- .
+        git add -A
+        echo "starting commit loop..."
+        git commit -m "$(date): trust update from PR: ${CI_COMMIT_REF_NAME} commit: ${CI_COMMIT_SHA}"
+        COMMIT_DONE=no
+        for i in 1 2 3 4 5; do
+            echo "Attempt $i to push..."
+            if git push --set-upstream "${DOCKERFILES_TRUST_GIT_URL}"; then
+                echo "Push done successfully"
+                COMMIT_DONE=yes
+                break;
+            else
+                echo "Push failed. Trying pull and then another..."
+                sleep $(((RANDOM % 10) + 1))
+                git pull --rebase
+            fi
+        done
+        if [ "${COMMIT_DONE}" = "no" ]; then
+            echo "Failed committing trust data"
+            if [ "${UPLOAD_MODE}" = "true" ]; then
+                echo "Continuing in upload mode despite trust commit failure"
+                cd "$cwd"
+                return 1
+            fi
+            exit 5
+        fi
+    else
+        echo "dockerfiles-trust: no changed files. nothing to commit and push"
+    fi
+    cd "$cwd"
+}
 
 # build docker.
 # Param $1: docker dir with all relevant files
@@ -530,8 +627,36 @@ function docker_build {
             return $?
         fi
     fi
-    # -- TAR MODE: save as gzipped tar --
+    docker_trust=0
+    if sign_setup; then
+        docker_trust=1
+        echo "using DOCKER_TRUST=${docker_trust} DOCKER_CONFIG=${DOCKER_CONFIG}"
+    fi
+
+    # -- TAR MODE: sign the image, save as gzipped tar --
     if [ "${TAR_MODE}" = "true" ]; then
+        # Sign the image via Docker Content Trust push (required to generate trust metadata)
+        DOCKER_LOGIN_DONE="no"
+        if [ "$docker_trust" == "1" ] && docker_login; then
+            if [ "${DRY_RUN}" = "true" ]; then
+                echo "[DRY-RUN] Would have signed image: ${image_full_name}"
+            else
+                echo "Pushing image with Docker Content Trust for signing..."
+                set +e
+                env DOCKER_CONTENT_TRUST="$docker_trust" DOCKER_CONFIG="${DOCKER_CONFIG}" docker push "${image_full_name}"
+                local sign_push_exit_code=$?
+                set -e
+                if [ $sign_push_exit_code -ne 0 ]; then
+                    record_failure "${image_name}" "push" "docker push for signing failed with exit code ${sign_push_exit_code}"
+                    return $?
+                fi
+                echo "Done signing push for: ${image_full_name}"
+                commit_dockerfiles_trust
+            fi
+        else
+            echo "Skipping image signing (trust not configured or docker login failed)"
+        fi
+
         IMAGE_NAME_SAVE="$(echo "${image_full_name}" | sed -e 's/\//__/g' -e 's/:/_/g').tar"
         TAR_SAVE_DIR="${SAVE_DIR:-${ARTIFACTS_FOLDER}}"
         if [[ ! -d "${TAR_SAVE_DIR}" ]]; then
@@ -554,9 +679,31 @@ function docker_build {
         fi
 
         print_sub_separator "-"
-        echo "Docker image [${image_full_name}] saved to ${IMAGE_SAVE}.gz"
+        echo "Docker image [${image_full_name}] saved to ${IMAGE_SAVE}.gz (signed: $( [ "$docker_trust" == "1" ] && echo "yes" || echo "no" ))"
         print_sub_separator "-"
         return 0
+    fi
+
+    # Sign the image via Docker Content Trust push (required to generate trust metadata)
+    DOCKER_LOGIN_DONE="no"
+    if [ "$docker_trust" == "1" ] && docker_login; then
+        if [ "${DRY_RUN}" = "true" ]; then
+            echo "[DRY-RUN] Would have signed image: ${image_full_name}"
+        else
+            echo "Pushing image with Docker Content Trust for signing..."
+            set +e
+            env DOCKER_CONTENT_TRUST="$docker_trust" DOCKER_CONFIG="${DOCKER_CONFIG}" docker push "${image_full_name}"
+            local sign_push_exit_code=$?
+            set -e
+            if [ $sign_push_exit_code -ne 0 ]; then
+                record_failure "${image_name}" "push" "docker push for signing failed with exit code ${sign_push_exit_code}"
+                return $?
+            fi
+            echo "Done signing push for: ${image_full_name}"
+            commit_dockerfiles_trust
+        fi
+    else
+        echo "Skipping image signing (trust not configured or docker login failed)"
     fi
 
     # Track the successfully built image
@@ -721,6 +868,7 @@ print_box_banner \
     "DOCKER_ORG       : ${DOCKER_ORG:-devdemisto}" \
     "DIFF_COMPARE     : ${DIFF_COMPARE}" \
     "DOCKER_SRC_DIR   : ${DOCKER_SRC_DIR}" \
+    "TRUST_DIR        : ${DOCKERFILES_TRUST_DIR}" \
     "SCRIPT_DIR       : ${SCRIPT_DIR}" \
     "PWD              : ${CURRENT_DIR}" \
     "" \
