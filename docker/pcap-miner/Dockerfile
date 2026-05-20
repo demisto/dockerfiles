@@ -5,7 +5,7 @@ COPY requirements.txt .
 
 RUN apk update && apk upgrade
 
-RUN apk --update add --no-cache libxml2 \
+RUN apk --update add --no-cache "libxml2>=2.15.3" \
   libxslt \
   tshark \
   libmagic
