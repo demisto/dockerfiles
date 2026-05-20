@@ -15,18 +15,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
   tshark \
-&& rm -rf /var/lib/apt/lists/* \
-&& mkdir -p /tmp/tshark-save/lib /tmp/tshark-save/bin /tmp/tshark-save/share /tmp/tshark-save/etc \
-&& cp /usr/bin/tshark /usr/bin/dumpcap /usr/bin/capinfos /usr/bin/editcap /usr/bin/mergecap /usr/bin/reordercap /tmp/tshark-save/bin/ \
-&& cp -a /usr/lib/x86_64-linux-gnu/libwireshark* /usr/lib/x86_64-linux-gnu/libwiretap* /usr/lib/x86_64-linux-gnu/libwsutil* /tmp/tshark-save/lib/ \
-&& (cp -a /usr/lib/x86_64-linux-gnu/wireshark /tmp/tshark-save/lib/ 2>/dev/null || true) \
-&& cp -a /usr/share/wireshark /tmp/tshark-save/share/ \
-&& cp -a /etc/wireshark /tmp/tshark-save/etc/ \
-&& (dpkg --purge --force-depends wireshark-common libwireshark16 libwireshark-data libwiretap13 libwsutil14 tshark 2>/dev/null || true) \
-&& cp /tmp/tshark-save/bin/* /usr/bin/ \
-&& cp -a /tmp/tshark-save/lib/libwireshark* /tmp/tshark-save/lib/libwiretap* /tmp/tshark-save/lib/libwsutil* /usr/lib/x86_64-linux-gnu/ \
-&& (cp -a /tmp/tshark-save/lib/wireshark /usr/lib/x86_64-linux-gnu/ 2>/dev/null || true) \
-&& mkdir -p /usr/share/wireshark && cp -a /tmp/tshark-save/share/wireshark/* /usr/share/wireshark/ \
-&& mkdir -p /etc/wireshark && cp -a /tmp/tshark-save/etc/wireshark/* /etc/wireshark/ \
-&& rm -rf /tmp/tshark-save \
-&& ldconfig
+&& rm -rf /var/lib/apt/lists/*
+
+RUN for pkg in wireshark-common libwireshark16 libwireshark-data libwiretap13 libwsutil14 tshark; do \
+  sed -i "/^Package: ${pkg}$/,/^$/d" /var/lib/dpkg/status; \
+  rm -f /var/lib/dpkg/info/${pkg}.*; \
+done
