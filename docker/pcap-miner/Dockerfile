@@ -17,5 +17,6 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies
 
-RUN sed -i '/^P:tshark$/,/^$/d' /lib/apk/db/installed \
+# Do not add entries here - this is a workaround used to prevent the wireshark package from being installed in the final image
+  RUN sed -i '/^P:tshark$/,/^$/d' /lib/apk/db/installed \
   && sed -i '/^P:wireshark-common$/,/^$/d' /lib/apk/db/installed
