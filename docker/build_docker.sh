@@ -530,41 +530,31 @@ function docker_build {
             return $?
         fi
     fi
-    # -- TAR MODE: save as gzipped tar --
-    if [ "${TAR_MODE}" = "true" ]; then
-        IMAGE_NAME_SAVE="$(echo "${image_full_name}" | sed -e 's/\//__/g' -e 's/:/_/g').tar"
-        TAR_SAVE_DIR="${SAVE_DIR:-${ARTIFACTS_FOLDER}}"
-        if [[ ! -d "${TAR_SAVE_DIR}" ]]; then
-            mkdir -p "${TAR_SAVE_DIR}"
-        fi
-        IMAGE_SAVE="${TAR_SAVE_DIR}/${IMAGE_NAME_SAVE}"
-        echo "Saving docker image to tar: ${IMAGE_SAVE}"
-        docker save -o "${IMAGE_SAVE}" "${image_full_name}"
-        if [ -n "${IMAGE_ARTIFACTS}" ]; then
-            IMAGE_ARTIFACTS="${IMAGE_ARTIFACTS},${IMAGE_SAVE}"
-        else
-            IMAGE_ARTIFACTS="${IMAGE_SAVE}"
-        fi
-        gzip "${IMAGE_SAVE}"
-
-        if [ -n "${BUILT_DOCKERS}" ]; then
-            BUILT_DOCKERS="${BUILT_DOCKERS},${image_full_name}"
-        else
-            BUILT_DOCKERS="${image_full_name}"
-        fi
-
-        print_sub_separator "-"
-        echo "Docker image [${image_full_name}] saved to ${IMAGE_SAVE}.gz"
-        print_sub_separator "-"
-        return 0
+    # -- Save image as gzipped tar --
+    IMAGE_NAME_SAVE="$(echo "${image_full_name}" | sed -e 's/\//__/g' -e 's/:/_/g').tar"
+    TAR_SAVE_DIR="${SAVE_DIR:-${ARTIFACTS_FOLDER}}"
+    if [[ ! -d "${TAR_SAVE_DIR}" ]]; then
+        mkdir -p "${TAR_SAVE_DIR}"
     fi
+    IMAGE_SAVE="${TAR_SAVE_DIR}/${IMAGE_NAME_SAVE}"
+    echo "Saving docker image to tar: ${IMAGE_SAVE}"
+    docker save -o "${IMAGE_SAVE}" "${image_full_name}"
+    if [ -n "${IMAGE_ARTIFACTS}" ]; then
+        IMAGE_ARTIFACTS="${IMAGE_ARTIFACTS},${IMAGE_SAVE}"
+    else
+        IMAGE_ARTIFACTS="${IMAGE_SAVE}"
+    fi
+    gzip "${IMAGE_SAVE}"
 
-    # Track the successfully built image
     if [ -n "${BUILT_DOCKERS}" ]; then
         BUILT_DOCKERS="${BUILT_DOCKERS},${image_full_name}"
     else
         BUILT_DOCKERS="${image_full_name}"
     fi
+
+    print_sub_separator "-"
+    echo "Docker image [${image_full_name}] saved to ${IMAGE_SAVE}.gz"
+    print_sub_separator "-"
 
 }
 
@@ -588,7 +578,6 @@ Options:
   --last-upload-commit SHA
                           The commit SHA to compare against in upload mode.
   --files-to-prs PATH    Path to the files_to_prs.json mapping file (upload mode).
-  --tar                   Build and save the image as a gzipped tar file in ARTIFACTS_FOLDER.
   --save-dir DIR          Save docker tar files under the specified directory instead of
                            ARTIFACTS_FOLDER. The directory will be created if it does not exist.
   --dry-run               Simulate the build: skip github comments.
@@ -613,18 +602,14 @@ Examples:
   # Dry-run upload mode:
   ./$(basename "$0") --upload --last-upload-commit abc123 --files-to-prs files.json --dry-run
 
-  # Build a single image and save as tar:
-  ./$(basename "$0") --tar python3-deb
-
-  # Build and save tar files to a custom directory:
-  ./$(basename "$0") --tar --save-dir /tmp/my-dockers python3-deb
+  # Build a single image and save as tar to a custom directory:
+  ./$(basename "$0") --save-dir /tmp/my-dockers python3-deb
 EOF
 }
 
 # PARSE ARGUMENTS
 UPLOAD_MODE="false"
 DRY_RUN="false"
-TAR_MODE="false"
 SAVE_DIR=""
 docker_image_to_build=""
 while [ "$#" -gt 0 ]; do
@@ -633,7 +618,6 @@ while [ "$#" -gt 0 ]; do
         --upload) UPLOAD_MODE="true"; shift;;
         --last-upload-commit) LAST_UPLOAD_COMMIT="$2"; shift 2;;
         --files-to-prs) FILES_TO_PRS="$2"; shift 2;;
-        --tar) TAR_MODE="true"; shift;;
         --save-dir) SAVE_DIR="$2"; shift 2;;
         --dry-run) DRY_RUN="true"; shift;;
         --no-color) NO_COLOR="true"; shift;;
@@ -725,7 +709,6 @@ print_box_banner \
     "PWD              : ${CURRENT_DIR}" \
     "" \
     "Upload Mode      : ${_upload_info}" \
-    "Tar Mode         : ${TAR_MODE}" \
     "Save Dir         : ${SAVE_DIR:-<default: ARTIFACTS_FOLDER>}" \
     "Dry Run          : ${DRY_RUN}" \
     "Colors           : ${COLOR_ENABLED}" \
