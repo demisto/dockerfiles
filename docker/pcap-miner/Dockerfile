@@ -5,14 +5,16 @@ COPY requirements.txt .
 
 RUN apk update && apk upgrade
 
-RUN apk --update add --no-cache "libxml2>=2.15.3" \
+RUN apk --update add --no-cache libxml2 \
   libxslt \
   tshark \
   libmagic
 
+# Upgrade libxml2 from source (2.15.3 not yet in Alpine repos). Remove once base image ships libxml2>=2.15.3.
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git \
-  libxml2-dev \
-  libxslt-dev \
+  libxml2-dev libxslt-dev \
+  && wget -qO- https://download.gnome.org/sources/libxml2/2.15/libxml2-2.15.3.tar.xz | tar xJ \
+  && cd libxml2-2.15.3 && ./configure --prefix=/usr --with-python=no -q && make -j$(nproc) -s && make install -s && cd .. && rm -rf libxml2-2.15.3 \
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies
 
