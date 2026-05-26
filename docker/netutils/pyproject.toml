@@ -1,3 +1,7 @@
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
 [tool.poetry]
 name = "netutils"
 version = "0.1.0"
@@ -7,15 +11,11 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "~3.12"
-requests = {extras = ["socks"],version = "*"}
+requests = {extras = ["socks"], version = "*"}
 netaddr = "*"
 python-libnmap = "*"
 websockets = ">=12.0.0"
 dnspython = "*"
-aiohttp = "*"
+aiohttp = ">=3.13.3"
 aiolimiter = "*"
 psutil = "7.1.3"
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
