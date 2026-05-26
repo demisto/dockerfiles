@@ -1,12 +1,1 @@
-# Last modified: 2026-05-24T04:59:15.316168+00:00
-FROM demisto/python3-deb:3.12.13.9224111
-
-COPY requirements.txt .
-
-RUN apt-get update \
-&& apt-get install -y --no-install-recommends \
-  gcc \
-  python3-dev gfortran wget git g++ pkg-config libhdf5-dev \
-&& pip install --no-cache-dir -r requirements.txt \
-&& apt-get purge -y --auto-remove gcc \
-  python3-dev gfortran wget git g++ pkg-config libhdf5-dev
+FROM python:3.12-slim
