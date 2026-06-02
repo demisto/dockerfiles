@@ -1,3 +1,7 @@
-import threatzone
+from threatzone import ThreatZone, ThreatZoneError
 
-print("threatzone imported successfully.")
+client = ThreatZone(api_key="dummy-key-for-verification")
+
+assert issubclass(ThreatZoneError, Exception)
+
+print("threatzone imported and ThreatZone client initialized successfully.")
