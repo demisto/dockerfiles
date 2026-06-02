@@ -1,6 +1,4 @@
-# Last modified: 2026-05-28T04:47:40.026542+00:00
-
-FROM demisto/python3-deb:3.12.13.9224111
+FROM demisto/python3-deb:3.12.12.5919128
 
 # Basic linux utilities
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -10,6 +8,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Upgrade all packages to latest
 RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 && rm -rf /var/lib/apt/lists/*
+
+RUN sed -i 's/@SECLEVEL=2/@SECLEVEL=0/g' /etc/ssl/openssl.cnf || true
 
 COPY Pipfile.lock .
 COPY Pipfile .
