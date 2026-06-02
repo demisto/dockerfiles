@@ -9,8 +9,8 @@ RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositor
   && apk --update add --no-cache \
   librdkafka-dev \
   libmagic \
-  curl-dev \
-  libcurl
+  curl-dev=8.20.0-r1 \
+  libcurl=8.20.0-r1
 
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git \
   && pip install --no-cache-dir -r requirements.txt \
