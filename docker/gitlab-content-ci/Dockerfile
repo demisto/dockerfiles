@@ -47,7 +47,7 @@ RUN echo "deb http://httpredir.debian.org/debian stable-backports main" | tee -a
 RUN mkdir -p /var/lib/neo4j/plugins \
     && wget -O /var/lib/neo4j/plugins/apoc-5.26.0-core.jar https://github.com/neo4j/apoc/releases/download/5.26.0/apoc-5.26.0-core.jar \
     && apt-get install neo4j -y && source ~/.bashrc && neo4j --version && neo4j-admin --version \
-    && wget -O /var/lib/neo4j/lib/guava-33.4.0-jre.jar https://repo1.maven.org/maven2/com/google/guava/guava/33.4.0-jre/guava-33.4.0-jre.jar \
+    && wget -O /usr/share/neo4j/lib/guava-33.4.0-jre.jar https://repo1.maven.org/maven2/com/google/guava/guava/33.4.0-jre/guava-33.4.0-jre.jar \
     && neo4j_conf_file="/etc/neo4j/neo4j.conf" \
     && echo "dbms.security.procedures.unrestricted=apoc.*" >> $NEO4J_CONF_FILE \
     && echo "dbms.security.procedures.allowlist=apoc.*" >> $NEO4J_CONF_FILE \
