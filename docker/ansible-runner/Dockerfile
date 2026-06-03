@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   openssh-client \
 && pip install pip==24.0 \
 && pip install --no-cache-dir -r requirements.txt \
-&& pip install --upgrade pip \ 
+&& pip install --upgrade pip \
 && pip install https://github.com/vmware/vsphere-automation-sdk-python/archive/refs/tags/v7.0.3.2.tar.gz \
 && pip install --upgrade azure-storage-blob \
 && pip uninstall aiohttp -y \
