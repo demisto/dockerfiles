@@ -1,4 +1,4 @@
-FROM devdemisto/gitlab-content-ci:1.0.0.8995382
+FROM devdemisto/gitlab-content-ci:1.0.0.9847357
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
