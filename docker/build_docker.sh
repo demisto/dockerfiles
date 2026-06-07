@@ -60,7 +60,7 @@ function setup_colors {
 # In non-upload mode: logs the error and returns 1 (fail).
 # Usage: record_failure "image" "step" "message"; return $?
 # param $1: image name
-# param $2: step that failed (build, validation, sign)
+# param $2: step that failed (build, validation)
 # param $3: error message
 function record_failure {
     local img="$1"
