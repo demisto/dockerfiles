@@ -17,8 +17,8 @@ def run(cmd, expected_substring=None):
     print(f"OK: {cmd} -> {output[:120]}")
 
 
-# Verify Python version (should be 3.10.x)
-run("python3 --version", "Python 3.10")
+# Verify Python version (should be 3.12.x, matching base image demisto/python3-deb:3.12.x)
+run("python3 --version", "Python 3.12")
 
 # Verify Node.js version (should be v14.x)
 run("node --version", "v14.16.0")
