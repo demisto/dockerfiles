@@ -10,6 +10,7 @@ import dns.resolver
 import pyads
 import bs4
 import ping3
+import psutil
 
 def lookup_dns_record(domain, record_type='A'):
     """
@@ -38,4 +39,5 @@ lookup = lookup_dns_record("google.com")
 print(f"pyads version: {pyads.__version__}")
 print(f"bs4 version: {bs4.__version__}")
 print(f"ping3 version: {ping3.__version__}")
+print(f"CPU Count: {psutil.cpu_count()}")
 print("All is good. PANW IoT python packages imported successfully!")

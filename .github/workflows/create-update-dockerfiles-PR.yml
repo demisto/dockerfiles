@@ -70,7 +70,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: pull-request
       id: open-pr
-      uses: repo-sync/pull-request@v2
+      uses: repo-sync/pull-request@7e79a9f5dc3ad0ce53138f01df2fad14a04831c5 # v2
       with:
         GITHUB_TOKEN: ${{secrets.CONTENT_BOT_TOKEN}}
         source_branch: "${{ matrix.branches }}"

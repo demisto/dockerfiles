@@ -1,4 +1,4 @@
-# Last modified: 2025-08-26T15:26:42+03:00
+# Last modified: 2026-04-15T09:26:42+03:00
 FROM python:3.12.11-slim-bullseye
 
 RUN echo 'deb http://archive.debian.org/debian bullseye-backports main' >> /etc/apt/sources.list
@@ -19,12 +19,12 @@ RUN apt-get update && apt-get -t bullseye-backports -y --no-install-recommends u
 COPY requirements.txt .
 
 # Relevant for tldextract
-COPY public_list.dat /var/public_list.dat
+COPY --chmod=644 public_list.dat /var/public_list.dat
 
 #Install tools for building binary deps (will be reomved later on)
 RUN apt-get update && apt-get install -y --no-install-recommends \
   gcc \
-  python3-dev \ 
+  python3-dev \
 && pip install --no-cache-dir -r requirements.txt \
 && apt-get purge -y --auto-remove \
   gcc \

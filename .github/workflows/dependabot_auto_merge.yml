@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: Dependabot metadata
         id: metadata
-        uses: dependabot/fetch-metadata@v1.3.6
+        uses: dependabot/fetch-metadata@4de7a6c08ce727a42e0adbbdc345f761a01240ce # v1.3.6
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
       
@@ -89,11 +89,17 @@ jobs:
         if: |
           steps.check_breaking.outputs.has_breaking_changes == 'true' ||
           (steps.metadata.outputs.update-type == 'version-update:semver-major' && steps.evaluate_major.outputs.should_merge_major != 'true')
+        env:
+          HAS_BREAKING_CHANGES: ${{ steps.check_breaking.outputs.has_breaking_changes }}
+          UPDATE_TYPE: ${{ steps.metadata.outputs.update-type }}
+          SHOULD_MERGE_MAJOR: ${{ steps.evaluate_major.outputs.should_merge_major }}
+          PERCENTAGE_INCREASE: ${{ steps.evaluate_major.outputs.percentage_increase }}
+          VERSION_THRESHOLD: ${{ env.MAJOR_VERSION_THRESHOLD }}
         run: |
           echo "Skipping automerge due to:"
-          if [ "${{ steps.check_breaking.outputs.has_breaking_changes }}" = "true" ]; then
+          if [ "$HAS_BREAKING_CHANGES" = "true" ]; then
             echo "  - Breaking changes detected in PR description"
           fi
-          if [ "${{ steps.metadata.outputs.update-type }}" = "version-update:semver-major" ] && [ "${{ steps.evaluate_major.outputs.should_merge_major }}" != "true" ]; then
-            echo "  - Major version increase (${{ steps.evaluate_major.outputs.percentage_increase }}%) exceeds threshold (${{ env.MAJOR_VERSION_THRESHOLD }}%)"
+          if [ "$UPDATE_TYPE" = "version-update:semver-major" ] && [ "$SHOULD_MERGE_MAJOR" != "true" ]; then
+            echo "  - Major version increase (${PERCENTAGE_INCREASE}%) exceeds threshold (${VERSION_THRESHOLD}%)"
           fi

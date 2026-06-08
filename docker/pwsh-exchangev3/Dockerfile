@@ -1,6 +1,6 @@
-# Last modified: 2026-01-25T13:36:39.650738+00:00
+# Last modified: 2026-04-26T18:44:50.376392+00:00
 
-FROM demisto/powershell-ubuntu:7.5.0.6704649
+FROM demisto/powershell-ubuntu:7.5.0.8425368
 
 RUN pwsh -c "Set-PSRepository -Name PSGallery -InstallationPolicy Trusted -ErrorAction Stop"
 RUN pwsh -c "Install-Module -Name ExchangeOnlineManagement -Scope AllUsers -Force -ErrorAction Stop"
