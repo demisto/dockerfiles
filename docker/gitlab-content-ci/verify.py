@@ -44,8 +44,8 @@ run("source ~/.bashrc && poetry --version", "Poetry")
 # Verify Git
 run("git --version", "git version")
 
-# Verify Neo4j
-run("neo4j --version", "5.26.22")
+# Verify Neo4j (installed from stable 5 apt repo, patch version may float)
+run("neo4j --version", "5.")
 
 # Verify gsutil
 run("source ~/.bashrc && gsutil --version", "gsutil")
