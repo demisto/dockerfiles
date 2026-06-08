@@ -9,9 +9,8 @@ ENV APOC_CONF_FILE /etc/neo4j/apoc.conf
 # Currently sh is linked to dash, linking it to /bin/bash instead.
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh && cat ~/.profile >> /etc/.profile
 
-# Bullseye is EOL — redirect all repos to archive.debian.org, then update and install packages
+# Bullseye is EOL — redirect repos to archive.debian.org (security mirror no longer available), then update and install packages
 RUN echo 'deb http://archive.debian.org/debian bullseye main' > /etc/apt/sources.list \
-    && echo 'deb http://archive.debian.org/debian-security bullseye-security main' >> /etc/apt/sources.list \
     && echo 'deb http://archive.debian.org/debian bullseye-backports main' >> /etc/apt/sources.list \
     && echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99no-check-valid-until \
     && apt-get update \
