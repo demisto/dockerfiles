@@ -1,7 +1,7 @@
-# Last modified: 2026-05-21T00:52:16.108226+00:00
-FROM python:3.12.13-slim-bookworm
+# Last modified: 2026-06-09T10:49:00.000000+00:00
+FROM python:3.12.13-slim-trixie
 
-RUN echo 'deb http://deb.debian.org/debian bookworm-backports main' >> /etc/apt/sources.list
+RUN echo 'deb http://deb.debian.org/debian trixie-backports main' >> /etc/apt/sources.list
 
 # Basic linux utilities
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -13,7 +13,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade \
 && rm -rf /var/lib/apt/lists/*
 
 # Upgrade using backports
-RUN apt-get update && apt-get -t bookworm-backports -y --no-install-recommends upgrade \
+RUN apt-get update && apt-get -t trixie-backports -y --no-install-recommends upgrade \
 && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
