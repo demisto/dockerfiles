@@ -2,8 +2,8 @@
 # NOTE: THIS DOCKERFILE IS BASED UPON: https://raw.githubusercontent.com/docker-library/python/f1e613f48eb4fc88748b36787f5ed74c14914636/2.7/alpine3.11/Dockerfile
 # We only change to use the latest Alpine version. 
 
-# Last modified: 2025-11-30T00:00:00.000000+00:00
-FROM alpine:3.18
+# Last modified: 2026-06-10T00:56:22.628472+00:00
+FROM alpine:3.24
 
 # ensure local python is preferred over distribution python
 ENV PATH /usr/local/bin:$PATH
