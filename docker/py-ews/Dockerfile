@@ -9,7 +9,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Upgrade all packages to latest
 RUN apt-get update && apt-get -y --no-install-recommends upgrade \
-&& rm -rf /var/lib/apt/lists/*
+&& rm -rf /var/lib/apt/lists/* \
+&& sed -i 's/SECLEVEL=2/SECLEVEL=0/g' /etc/ssl/openssl.cnf
 
 COPY Pipfile.lock .
 COPY Pipfile .
