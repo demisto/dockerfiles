@@ -17,6 +17,7 @@ RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositor
   && apk --update add --no-cache \
   curl=8.20.0-r1 \
   libcurl=8.20.0-r1 \
+  sqlite-libs=3.53.2-r0 \
   bind-tools openssl iputils
 
 # Provide a minimal nmap stub so python-libnmap can initialise without the real nmap binary
