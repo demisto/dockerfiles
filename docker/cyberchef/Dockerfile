@@ -11,6 +11,9 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
 
 RUN apk add --update --no-cache nodejs npm \
   && npm install -g npm@latest \
+  && npm install -g undici@6.27.0 \
+  && rm -rf /usr/local/lib/node_modules/npm/node_modules/undici \
+  && mv /usr/local/lib/node_modules/undici /usr/local/lib/node_modules/npm/node_modules/undici \
   && rm -rf /usr/lib/node_modules/npm /usr/bin/npm /usr/bin/npx
 
 RUN npm install -g --save cyberchef-node \
