@@ -17,6 +17,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 && pip install --upgrade pip \
 && pip install https://github.com/vmware/vsphere-automation-sdk-python/archive/refs/tags/v7.0.3.2.tar.gz \
 && pip install --upgrade azure-storage-blob \
+&& pip install cryptography==48.0.1 \
 && pip uninstall aiohttp -y \
 && apt-get purge -y --auto-remove \
   gcc \
