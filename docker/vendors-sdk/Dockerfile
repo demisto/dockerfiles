@@ -14,5 +14,4 @@ RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositor
 
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git \
   && pip install --no-cache-dir -r requirements.txt \
-  && pip install --no-cache-dir cryptography>=48.0.1 starlette>=1.3.1 \
   && apk del .build-dependencies
