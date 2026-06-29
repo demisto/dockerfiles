@@ -60,7 +60,7 @@ function setup_colors {
 # In non-upload mode: logs the error and returns 1 (fail).
 # Usage: record_failure "image" "step" "message"; return $?
 # param $1: image name
-# param $2: step that failed (build, validation, push)
+# param $2: step that failed (build, validation, sign)
 # param $3: error message
 function record_failure {
     local img="$1"
@@ -101,7 +101,7 @@ function write_failed_dockers_report {
 }
 
 REVISION=${CI_PIPELINE_ID:-$(date +%s)}
-PUSHED_DOCKERS=""
+BUILT_DOCKERS=""
 SUCCEEDED_IMAGES=()
 IMAGE_ARTIFACTS=""
 CURRENT_DIR=$(pwd)
@@ -110,10 +110,6 @@ DOCKER_SRC_DIR=${SCRIPT_DIR}
 if [[ "${DOCKER_SRC_DIR}" != /* ]]; then
     DOCKER_SRC_DIR="${CURRENT_DIR}/${SCRIPT_DIR}"
 fi
-DOCKERFILES_TRUST_DIR="$(cd "${DOCKER_SRC_DIR}/.." && pwd)"
-DOCKERFILES_TRUST_DIR="${DOCKERFILES_TRUST_DIR}/dockerfiles-trust"
-
-
 # parse a property form build.conf file in current dir
 # param $1: property name
 # param $2: default value
@@ -286,129 +282,9 @@ function log_prefix {
 }
 
 if [ -n "$GITLAB_CI" ]; then
-    DOCKER_LOGIN_DONE=${DOCKER_LOGIN_DONE:-no}
     # Use plain buildkit progress in CI to avoid noisy progress bars
     export BUILDKIT_PROGRESS=plain
-else
-    DOCKER_LOGIN_DONE=${DOCKER_LOGIN_DONE:-yes}
 fi
-function docker_login {
-    if [ "${DOCKER_LOGIN_DONE}" = "yes" ]; then
-        return 0;
-    fi
-    if [ -z "${DOCKERHUB_USER}" ]; then
-        echo "DOCKERHUB_USER not set. Not logging in to docker hub"
-        return 1;
-    fi
-    if [ -z "$DOCKERHUB_PASSWORD" ]; then
-        #for local testing scenarios to allow password to be passed via stdin
-        if ! docker login -u "${DOCKERHUB_USER}"; then
-            echo "Failed docker login for user: ${DOCKERHUB_USER}"
-            return 2;
-        fi
-    else
-        if ! echo "${DOCKERHUB_PASSWORD}" | docker login -u "${DOCKERHUB_USER}" --password-stdin; then
-            echo "Failed docker login for user: ${DOCKERHUB_USER}"
-            return 2;
-        fi
-    fi
-    DOCKER_LOGIN_DONE=yes
-    return 0;
-}
-
-CR_LOGIN_DONE=no
-function cr_login {
-    if [ "${CR_LOGIN_DONE}" = "yes" ]; then
-        return 0;
-    fi
-    if [ -z "${CR_USER}" ]; then
-        echo "CR_USER not set. Not logging in to container registry"
-        return 1;
-    fi
-    cr_url="https://$(echo "${CR_REPO}" | cut -d / -f 1)"
-    if [ -z "$CR_PASSWORD" ]; then
-        #for local testing scenarios to allow password to be passed via stdin
-        if ! docker login -u "${CR_USER}" "${cr_url}"; then
-            echo "Failed docker login to CR repo"
-            return 3;
-        fi
-    else
-        if ! echo "${CR_PASSWORD}" | docker login -u "${CR_USER}" --password-stdin "${cr_url}"; then
-            echo "Failed docker login to CR repo"
-            return 3;
-        fi
-    fi
-    CR_LOGIN_DONE=yes
-    return 0;
-}
-
-SIGN_SETUP_DONE=no
-DOCKERFILES_TRUST_GIT_URL=""
-function sign_setup {
-    if [ "${SIGN_SETUP_DONE}" = "yes" ]; then
-        return 0;
-    fi
-    if [ -z "${DOCKER_CONTENT_TRUST_REPOSITORY_PASSPHRASE}" ] || [ -z "${DOCKER_CONTENT_TRUST_ROOT_PASSPHRASE}" ] || [ -z "${DOCKERFILES_TRUST_GIT_HTTPS}" ]; then
-        echo "Content trust passphrases not set. Not setting up docker signing."
-        return 1;
-    fi
-    DOCKERFILES_TRUST_GIT_URL="https://oauth2:${GITHUB_TOKEN}@${DOCKERFILES_TRUST_GIT_HTTPS}"
-
-    if [ ! -d "${DOCKERFILES_TRUST_DIR}" ]; then
-        git clone "${DOCKERFILES_TRUST_GIT_URL}" "${DOCKERFILES_TRUST_DIR}"
-        git remote set-url origin "${DOCKERFILES_TRUST_GIT_URL}"
-        git config --file "${DOCKERFILES_TRUST_DIR}/.git/config"  user.email "dc-builder@users.noreply.github.com"
-        git config --file "${DOCKERFILES_TRUST_DIR}/.git/config" user.name "dc-builder"
-    else
-        echo "${DOCKERFILES_TRUST_DIR} already checked out"
-    fi
-    export DOCKER_CONFIG="${DOCKERFILES_TRUST_DIR}/.docker"
-    SIGN_SETUP_DONE=yes
-    return 0;
-}
-
-function commit_dockerfiles_trust {
-    if [ "${DRY_RUN}" = "true" ]; then
-        echo "[DRY-RUN] Would have committed docker trust data"
-        return
-    fi
-    cwd="$PWD"
-    cd "${DOCKERFILES_TRUST_DIR}"
-    if [[ $(git status --short) ]]; then
-        echo "dockerfiles-trust: found modified/new files to commit"
-        git stash
-        git pull --no-rebase
-        git stash list | grep -q 'stash' && git checkout stash -- .
-        git add -A
-        echo "starting commit loop..."
-        git commit -m "$(date): trust update from PR: ${CI_COMMIT_REF_NAME} commit: ${CI_COMMIT_SHA}"
-        COMMIT_DONE=no
-        for i in 1 2 3 4 5; do
-            echo "Attempt $i to push..."
-            if git push --set-upstream "${DOCKERFILES_TRUST_GIT_URL}"; then
-                echo "Push done successfully"
-                COMMIT_DONE=yes
-                break;
-            else
-                echo "Push failed. Trying pull and then another..."
-                sleep $(((RANDOM % 10) + 1))
-                git pull --rebase
-            fi
-        done
-        if [ "${COMMIT_DONE}" = "no" ]; then
-            echo "Failed committing trust data"
-            if [ "${UPLOAD_MODE}" = "true" ]; then
-                echo "Continuing in upload mode despite trust commit failure"
-                cd "$cwd"
-                return 1
-            fi
-            exit 5
-        fi
-    else
-        echo "dockerfiles-trust: no changed files. nothing to commit and push"
-    fi
-    cd "$cwd"
-}
 
 # build docker.
 # Param $1: docker dir with all relevant files
@@ -508,21 +384,6 @@ function docker_build {
         reason=$(prop 'deprecated_reason')
         echo "ENV DEPRECATED_REASON=\"$reason\"" >> "$tmp_dir/Dockerfile"
     fi
-
-    print_sub_separator "-"
-    echo "  DOCKER LOGIN START"
-    print_sub_separator "-"
-    if ! docker_login; then
-        red_error "FATAL: docker login failed for image ${image_name}. Cannot proceed."
-        if [ "${UPLOAD_MODE}" = "true" ]; then
-            record_failure "${image_name}" "build" "docker login failed - fatal error"
-            write_failed_dockers_report
-        fi
-        exit 1
-    fi
-    print_sub_separator "-"
-    echo "  DOCKER LOGIN DONE"
-    print_sub_separator "-"
 
     set +e
     docker buildx build -f "$tmp_dir/Dockerfile" . -t "${image_full_name}" \
@@ -669,115 +530,31 @@ function docker_build {
             return $?
         fi
     fi
-    docker_trust=0
-    if sign_setup; then
-        docker_trust=1
-        echo "using DOCKER_TRUST=${docker_trust} DOCKER_CONFIG=${DOCKER_CONFIG}"
+    # -- Save image as gzipped tar --
+    IMAGE_NAME_SAVE="$(echo "${image_full_name}" | sed -e 's/\//__/g' -e 's/:/_/g').tar"
+    TAR_SAVE_DIR="${SAVE_DIR:-${ARTIFACTS_FOLDER}}"
+    if [[ ! -d "${TAR_SAVE_DIR}" ]]; then
+        mkdir -p "${TAR_SAVE_DIR}"
+    fi
+    IMAGE_SAVE="${TAR_SAVE_DIR}/${IMAGE_NAME_SAVE}"
+    echo "Saving docker image to tar: ${IMAGE_SAVE}"
+    docker save -o "${IMAGE_SAVE}" "${image_full_name}"
+    if [ -n "${IMAGE_ARTIFACTS}" ]; then
+        IMAGE_ARTIFACTS="${IMAGE_ARTIFACTS},${IMAGE_SAVE}"
+    else
+        IMAGE_ARTIFACTS="${IMAGE_SAVE}"
+    fi
+    gzip "${IMAGE_SAVE}"
+
+    if [ -n "${BUILT_DOCKERS}" ]; then
+        BUILT_DOCKERS="${BUILT_DOCKERS},${image_full_name}"
+    else
+        BUILT_DOCKERS="${image_full_name}"
     fi
 
-    if [ -n "$CR_REPO" ] && cr_login; then
-        if [ "${DRY_RUN}" = "true" ]; then
-            echo "[DRY-RUN] Would have pushed to CR: ${CR_REPO}/${image_full_name}"
-        else
-            set +e
-            docker tag "${image_full_name}" "${CR_REPO}/${image_full_name}"
-            local cr_tag_exit_code=$?
-            if [ $cr_tag_exit_code -ne 0 ]; then
-                set -e
-                record_failure "${image_name}" "push" "docker tag for CR failed with exit code ${cr_tag_exit_code}"
-                return $?
-            fi
-            docker push "${CR_REPO}/${image_full_name}" > /dev/null
-            local cr_push_exit_code=$?
-            set -e
-            if [ $cr_push_exit_code -ne 0 ]; then
-                record_failure "${image_name}" "push" "docker push to CR failed with exit code ${cr_push_exit_code}"
-                return $?
-            fi
-            echo "Done docker push for cr: ${image_full_name}"
-        fi
-    else
-        echo "Skipping docker push for cr"
-    fi
-
-    DOCKER_LOGIN_DONE="no"
-    if docker_login; then
-        if [ "${DRY_RUN}" = "true" ]; then
-            echo "[DRY-RUN] Would have pushed to Docker Hub: ${image_full_name}"
-        else
-            echo "Done docker login"
-            set +e
-            env DOCKER_CONTENT_TRUST="$docker_trust" DOCKER_CONFIG="${DOCKER_CONFIG}" docker push "${image_full_name}"
-            local dh_push_exit_code=$?
-            set -e
-            if [ $dh_push_exit_code -ne 0 ]; then
-                record_failure "${image_name}" "push" "docker push to Docker Hub failed with exit code ${dh_push_exit_code}"
-                return $?
-            fi
-            echo "Done docker push for: ${image_full_name}"
-            if [ -n "${PUSHED_DOCKERS}" ]; then
-                PUSHED_DOCKERS="${PUSHED_DOCKERS},${image_full_name}"
-            else
-                PUSHED_DOCKERS="${image_full_name}"
-            fi
-            echo "debug pushed_dockers $PUSHED_DOCKERS"
-            if [[ "$docker_trust" == "1" ]]; then
-                commit_dockerfiles_trust
-            fi
-        fi
-        POST_COMMENT_ARGS=("${image_full_name}")
-        if [ "${UPLOAD_MODE}" = "true" ]; then
-            POST_COMMENT_ARGS+=("--upload" "--files-to-prs" "${FILES_TO_PRS}")
-        fi
-        if [ "${DRY_RUN}" = "true" ]; then
-            POST_COMMENT_ARGS+=("--dry-run")
-        fi
-        if ! "${DOCKER_SRC_DIR}/post_github_comment.py" "${POST_COMMENT_ARGS[@]}"; then
-            echo "Failed post_github_comment.py. Will stop build only if not on master"
-            if [ "${CI_COMMIT_REF_NAME}" == "master" ]; then
-                echo "Continuing as we are on master branch..."
-            else
-                record_failure "${image_name}" "push" "post_github_comment.py failed"
-                local pgc_rc=$?
-                if [ $pgc_rc -eq 0 ]; then
-                    return 0
-                fi
-                echo "failing build!!"
-                exit 5
-            fi
-        fi
-    else
-        echo "Skipping docker push"
-        record_failure "${image_name}" "push" "docker login failed, could not push image"
-        local dl_rc=$?
-        if [ $dl_rc -eq 0 ]; then
-            return 0
-        fi
-        if [ "${CI_COMMIT_REF_NAME}" == "master" ]; then
-          echo "Did not push image on master. Failing build"
-          exit 1
-        fi
-        if [ -n "$CI" ]; then
-            IMAGE_NAME_SAVE="$(echo "${image_full_name}" | sed -e 's/\//__/g').tar"
-            IMAGE_SAVE="${ARTIFACTS_FOLDER}/${IMAGE_NAME_SAVE}"
-            echo "Creating artifact of docker image at ${IMAGE_SAVE}"
-            docker save -o "${IMAGE_SAVE}" "${image_full_name}"
-            if [ -n "${IMAGE_ARTIFACTS}" ]; then
-                IMAGE_ARTIFACTS="${IMAGE_ARTIFACTS},${IMAGE_SAVE}"
-            else
-                IMAGE_ARTIFACTS="${IMAGE_SAVE}"
-            fi
-            gzip "${IMAGE_SAVE}"
-            POST_COMMENT_ARGS=("${image_full_name}" "--is_contribution")
-            if [ "${DRY_RUN}" = "true" ]; then
-                POST_COMMENT_ARGS+=("--dry-run")
-            fi
-            "${DOCKER_SRC_DIR}/post_github_comment.py" "${POST_COMMENT_ARGS[@]}"
-            print_sub_separator "-"
-            echo "Docker image [$image_full_name] has been saved as an artifact."
-            print_sub_separator "-"
-        fi
-    fi
+    print_sub_separator "-"
+    echo "Docker image [${image_full_name}] saved to ${IMAGE_SAVE}.gz"
+    print_sub_separator "-"
 
 }
 
@@ -789,7 +566,7 @@ function usage {
     cat <<EOF
 Usage: $(basename "$0") [OPTIONS] [IMAGE_NAME]
 
-Build, verify, and push Docker images that have changed relative to a base commit.
+Build and verify Docker images that have changed relative to a base commit.
 
 Positional arguments:
   IMAGE_NAME              Build only the specified image (by directory name).
@@ -801,7 +578,9 @@ Options:
   --last-upload-commit SHA
                           The commit SHA to compare against in upload mode.
   --files-to-prs PATH    Path to the files_to_prs.json mapping file (upload mode).
-  --dry-run               Simulate the build: skip docker push and github comments.
+  --save-dir DIR          Save docker tar files under the specified directory instead of
+                           ARTIFACTS_FOLDER. The directory will be created if it does not exist.
+  --dry-run               Simulate the build: skip github comments.
   --no-color              Disable colored output (also respects NO_COLOR env var).
   -h, --help              Show this help message and exit.
 
@@ -810,10 +589,6 @@ Environment variables:
   CI_COMMIT_REF_NAME      Current branch name (auto-set in CI).
   CI_PIPELINE_ID          Pipeline/revision ID (auto-set in CI).
   DOCKER_ORG              Docker Hub organization (default: devdemisto, or demisto on master).
-  DOCKERHUB_USER          Docker Hub username for login.
-  DOCKERHUB_PASSWORD      Docker Hub password for login.
-  CR_REPO                 Container registry repo URL for secondary push.
-  CR_USER / CR_PASSWORD   Container registry credentials.
   ARTIFACTS_FOLDER        Directory for build artifacts (default: artifacts).
   GITLAB_CI               Set automatically in GitLab CI runners.
 
@@ -826,12 +601,16 @@ Examples:
 
   # Dry-run upload mode:
   ./$(basename "$0") --upload --last-upload-commit abc123 --files-to-prs files.json --dry-run
+
+  # Build a single image and save as tar to a custom directory:
+  ./$(basename "$0") --save-dir /tmp/my-dockers python3-deb
 EOF
 }
 
 # PARSE ARGUMENTS
 UPLOAD_MODE="false"
 DRY_RUN="false"
+SAVE_DIR=""
 docker_image_to_build=""
 while [ "$#" -gt 0 ]; do
     case "$1" in
@@ -839,6 +618,7 @@ while [ "$#" -gt 0 ]; do
         --upload) UPLOAD_MODE="true"; shift;;
         --last-upload-commit) LAST_UPLOAD_COMMIT="$2"; shift 2;;
         --files-to-prs) FILES_TO_PRS="$2"; shift 2;;
+        --save-dir) SAVE_DIR="$2"; shift 2;;
         --dry-run) DRY_RUN="true"; shift;;
         --no-color) NO_COLOR="true"; shift;;
         --*) echo "Unknown option: $1"; usage; exit 1;;
@@ -925,11 +705,11 @@ print_box_banner \
     "DOCKER_ORG       : ${DOCKER_ORG:-devdemisto}" \
     "DIFF_COMPARE     : ${DIFF_COMPARE}" \
     "DOCKER_SRC_DIR   : ${DOCKER_SRC_DIR}" \
-    "TRUST_DIR        : ${DOCKERFILES_TRUST_DIR}" \
     "SCRIPT_DIR       : ${SCRIPT_DIR}" \
     "PWD              : ${CURRENT_DIR}" \
     "" \
     "Upload Mode      : ${_upload_info}" \
+    "Save Dir         : ${SAVE_DIR:-<default: ARTIFACTS_FOLDER>}" \
     "Dry Run          : ${DRY_RUN}" \
     "Colors           : ${COLOR_ENABLED}" \
     "" \
@@ -1080,7 +860,7 @@ for docker_dir in "${CHANGED_DOCKER_DIRS[@]}"; do
     gitlab_section_start "${section_id}" "[${count}/${total}] Building ${image_name_short}"
 
     # Run docker_build in the main shell (not a subshell pipe) so that
-    # variable changes (PUSHED_DOCKERS, FAILED_DOCKERS, errors, etc.) are preserved.
+    # variable changes (BUILT_DOCKERS, FAILED_DOCKERS, errors, etc.) are preserved.
     # We use process substitution to stream output through log_prefix in real-time
     # while keeping docker_build in the current shell.
     if [ "${UPLOAD_MODE}" = "true" ]; then
@@ -1133,12 +913,12 @@ BUILD_DURATION_FMT=$(printf '%02d:%02d:%02d' $((BUILD_DURATION/3600)) $(( (BUILD
 succeeded_count=${#SUCCEEDED_IMAGES[@]}
 failed_count=${#FAILED_DOCKERS[@]}
 
-# Determine pushed/artifacts status for summary
-if [ -n "$PUSHED_DOCKERS" ]; then
-    _pushed_status="Yes"
-    echo "${PUSHED_DOCKERS}" > "${ARTIFACTS_FOLDER}/pushed_dockers.txt"
+# Determine built/artifacts status for summary
+if [ -n "$BUILT_DOCKERS" ]; then
+    _built_status="Yes"
+    echo "${BUILT_DOCKERS}" > "${ARTIFACTS_FOLDER}/built_dockers.txt"
 else
-    _pushed_status="No"
+    _built_status="No"
 fi
 if [ -n "${IMAGE_ARTIFACTS}" ]; then
     _artifacts_status="Yes"
@@ -1156,7 +936,7 @@ print_box_banner \
     "Duration     : ${BUILD_DURATION_FMT}" \
     "Finished at  : $(date '+%Y-%m-%d %H:%M:%S')" \
     "" \
-    "Pushed       : ${_pushed_status}" \
+    "Built        : ${_built_status}" \
     "Artifacts    : ${_artifacts_status}"
 
 # -- Succeeded images --
