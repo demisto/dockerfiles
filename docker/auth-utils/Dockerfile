@@ -8,6 +8,5 @@ RUN apk --update add --no-cache krb5 krb5-libs openssl-dev openssl
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev libffi-dev gcc build-base wget git \
   krb5-dev \
   && pip install --no-cache-dir -r requirements.txt \
-  && pip install --no-cache-dir "cryptography>=48.0.1" \
   && apk del .build-dependencies
 
