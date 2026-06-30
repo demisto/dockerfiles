@@ -504,14 +504,14 @@ tests-mypy = ["mypy (>=1.11.1) ; platform_python_implementation == \"CPython\" a
 
 [[package]]
 name = "azure-cli-core"
-version = "2.85.0"
+version = "2.87.0"
 description = "Microsoft Azure Command-Line Tools Core Module"
 optional = false
 python-versions = ">=3.10.0"
 groups = ["main"]
 files = [
-    {file = "azure_cli_core-2.85.0-py3-none-any.whl", hash = "sha256:044d743e5d3e4a57c01df712d9fdead14f4b77a57564fc23b2a6c18e2d9f51b4"},
-    {file = "azure_cli_core-2.85.0.tar.gz", hash = "sha256:a5bb30cd88eb0a5082c46be9da2ed5a51509e2b94a1b5574e7f63faa4bb1e1d9"},
+    {file = "azure_cli_core-2.87.0-py3-none-any.whl", hash = "sha256:d06b85594e60d9c27a6bf0f8d004f48bda1d0327a49fe474415cac2fef7661bb"},
+    {file = "azure_cli_core-2.87.0.tar.gz", hash = "sha256:3e2511eac61b3c8b5481630fdd631adb21bd650a173273759f32e30f61872b47"},
 ]
 
 [package.dependencies]
@@ -523,13 +523,13 @@ cryptography = "*"
 distro = {version = "*", markers = "sys_platform == \"linux\""}
 humanfriendly = ">=10.0,<11.0"
 jmespath = "*"
-knack = ">=0.11.0,<0.12.0"
+knack = ">=0.14.0,<0.15.0"
 microsoft-security-utilities-secret-masker = ">=1.0.0b4,<1.1.0"
 msal = [
-    {version = "1.35.1", markers = "sys_platform != \"win32\""},
-    {version = "1.35.1", extras = ["broker"], markers = "sys_platform == \"win32\""},
+    {version = "1.36.0", markers = "sys_platform != \"win32\""},
+    {version = "1.36.0", extras = ["broker"], markers = "sys_platform == \"win32\""},
 ]
-msal-extensions = "1.2.0"
+msal-extensions = "1.3.1"
 packaging = ">=20.9"
 pkginfo = ">=1.5.0.1"
 psutil = {version = ">=5.9", markers = "sys_platform != \"cygwin\""}
@@ -2113,14 +2113,14 @@ files = [
 
 [[package]]
 name = "knack"
-version = "0.11.0"
+version = "0.14.0"
 description = "A Command-Line Interface framework"
 optional = false
 python-versions = "*"
 groups = ["main"]
 files = [
-    {file = "knack-0.11.0-py3-none-any.whl", hash = "sha256:6704c867840978a119a193914a90e2e98c7be7dff764c8fcd8a2286c5a978d00"},
-    {file = "knack-0.11.0.tar.gz", hash = "sha256:eb6568001e9110b1b320941431c51033d104cc98cda2254a5c2b09ba569fd494"},
+    {file = "knack-0.14.0-py3-none-any.whl", hash = "sha256:0a54976bbc595a8fd90c412b661200bd4fc53b929e92dd610deaea494226526f"},
+    {file = "knack-0.14.0.tar.gz", hash = "sha256:2ddd32fd6343ec9b6ed0da729b212362d0e6b1208c0162633c90cb6f94a05877"},
 ]
 
 [package.dependencies]
@@ -2369,14 +2369,14 @@ files = [
 
 [[package]]
 name = "msal"
-version = "1.35.1"
+version = "1.36.0"
 description = "The Microsoft Authentication Library (MSAL) for Python library enables your app to access the Microsoft Cloud by supporting authentication of users with Microsoft Azure Active Directory accounts (AAD) and Microsoft Accounts (MSA) using industry standard OAuth2 and OpenID Connect."
 optional = false
 python-versions = ">=3.8"
 groups = ["main"]
 files = [
-    {file = "msal-1.35.1-py3-none-any.whl", hash = "sha256:8f4e82f34b10c19e326ec69f44dc6b30171f2f7098f3720ea8a9f0c11832caa3"},
-    {file = "msal-1.35.1.tar.gz", hash = "sha256:70cac18ab80a053bff86219ba64cfe3da1f307c74b009e2da57ef040eb1b5656"},
+    {file = "msal-1.36.0-py3-none-any.whl", hash = "sha256:36ecac30e2ff4322d956029aabce3c82301c29f0acb1ad89b94edcabb0e58ec4"},
+    {file = "msal-1.36.0.tar.gz", hash = "sha256:3f6a4af2b036b476a4215111c4297b4e6e236ed186cd804faefba23e4990978b"},
 ]
 
 [package.dependencies]
@@ -2394,19 +2394,21 @@ broker = ["pymsalruntime (>=0.14,<0.21) ; python_version >= \"3.8\" and platform
 
 [[package]]
 name = "msal-extensions"
-version = "1.2.0"
+version = "1.3.1"
 description = "Microsoft Authentication Library extensions (MSAL EX) provides a persistence API that can save your data on disk, encrypted on Windows, macOS and Linux. Concurrent data access will be coordinated by a file lock mechanism."
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "msal_extensions-1.2.0-py3-none-any.whl", hash = "sha256:cf5ba83a2113fa6dc011a254a72f1c223c88d7dfad74cc30617c4679a417704d"},
-    {file = "msal_extensions-1.2.0.tar.gz", hash = "sha256:6f41b320bfd2933d631a215c91ca0dd3e67d84bd1a2f50ce917d5874ec646bef"},
+    {file = "msal_extensions-1.3.1-py3-none-any.whl", hash = "sha256:96d3de4d034504e969ac5e85bae8106c8373b5c6568e4c8fa7af2eca9dbe6bca"},
+    {file = "msal_extensions-1.3.1.tar.gz", hash = "sha256:c5b0fd10f65ef62b5f1d62f4251d51cbcaf003fcedae8c91b040a488614be1a4"},
 ]
 
 [package.dependencies]
 msal = ">=1.29,<2"
-portalocker = ">=1.4,<3"
+
+[package.extras]
+portalocker = ["portalocker (>=1.4,<4)"]
 
 [[package]]
 name = "msgraph-core"
