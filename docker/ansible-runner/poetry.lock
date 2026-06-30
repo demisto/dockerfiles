@@ -982,20 +982,20 @@ msrestazure = ">=0.4.32,<2.0.0"
 
 [[package]]
 name = "azure-mgmt-managedservices"
-version = "1.0.0"
-description = "Microsoft Azure Managed Services Client Library for Python"
+version = "6.0.1"
+description = "Microsoft Azure Managedservices Management Client Library for Python"
 optional = false
-python-versions = "*"
+python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "azure-mgmt-managedservices-1.0.0.zip", hash = "sha256:fed8399fc6773aada37c1d0496a46f59410d77c9494d0ca5967c531c3376ad19"},
-    {file = "azure_mgmt_managedservices-1.0.0-py2.py3-none-any.whl", hash = "sha256:cc05519a528ad6c1fe87c18da34c6fac62f0a097ee6e73630826fdc598bce869"},
+    {file = "azure_mgmt_managedservices-6.0.1-py3-none-any.whl", hash = "sha256:976936473bb4797be9f1f85ad2f4eb14b438533354944814ce0b2a777dec0f98"},
+    {file = "azure_mgmt_managedservices-6.0.1.tar.gz", hash = "sha256:2a702946254fbdc63ac2cb0aad6a34416d236048488413068dcec426933a0483"},
 ]
 
 [package.dependencies]
-azure-common = ">=1.1,<2.0"
-msrest = ">=0.5.0"
-msrestazure = ">=0.4.32,<2.0.0"
+azure-mgmt-core = ">=1.6.0"
+isodate = ">=0.6.1"
+typing-extensions = ">=4.6.0"
 
 [[package]]
 name = "azure-mgmt-managementgroups"
@@ -3844,4 +3844,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = "~3.12"
-content-hash = "93a302ec6ac48df9fa89e403d4318d734322378fa9924e3af73d29b84e5bf545"
+content-hash = "b9a218c7846b6afead708709646ee1e71909843b415580870d40f61e210522ab"
