@@ -33,12 +33,36 @@ from future import utils as future_utils
 from requests.exceptions import ConnectionError
 from _sqlite3 import *
 # verify that we support dh 1024
+import ssl
 import requests
-requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS ='@SECLEVEL=0:ECDHE+AESGCM:ECDHE+CHACHA20:DHE+AESGCM:DHE+CHACHA20:ECDH+AESGCM:DH+AESGCM:' \
-                         'ECDH+AES:DH+AES:RSA+ANESGCM:RSA+AES:!aNULL:!eNULL:!MD5:!DSS'
-                         # same string used in CSP, override py3 hardening
+from requests.adapters import HTTPAdapter
+from urllib3.util.ssl_ import create_urllib3_context
+
+# same cipher string used in CSP, override py3 hardening to allow legacy DH-1024 servers
+LEGACY_CIPHERS = ('@SECLEVEL=0:ECDHE+AESGCM:ECDHE+CHACHA20:DHE+AESGCM:DHE+CHACHA20:ECDH+AESGCM:DH+AESGCM:'
+                  'ECDH+AES:DH+AES:RSA+ANESGCM:RSA+AES:!aNULL:!eNULL:!MD5:!DSS')
+
+
+class LegacyCipherAdapter(HTTPAdapter):
+    def _build_legacy_context(self):
+        context = create_urllib3_context(ciphers=LEGACY_CIPHERS)
+        context.check_hostname = False
+        context.verify_mode = ssl.CERT_NONE
+        return context
+
+    def init_poolmanager(self, *args, **kwargs):
+        kwargs['ssl_context'] = self._build_legacy_context()
+        return super().init_poolmanager(*args, **kwargs)
+
+    def proxy_manager_for(self, *args, **kwargs):
+        kwargs['ssl_context'] = self._build_legacy_context()
+        return super().proxy_manager_for(*args, **kwargs)
+
+
 requests.packages.urllib3.disable_warnings()
-res = requests.get('https://dh1024.badssl.com/', verify=False)
+session = requests.Session()
+session.mount('https://', LegacyCipherAdapter())
+res = session.get('https://dh1024.badssl.com/', verify=False)
 res.raise_for_status()
 
 # verify dateaparser works. We had a case that it failed with timezone issues
