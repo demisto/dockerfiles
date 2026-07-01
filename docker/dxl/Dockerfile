@@ -11,5 +11,6 @@ RUN apk --update add --no-cache --virtual .build-dependencies \
     libffi-dev \
     openssl-dev \
     && pip install --no-cache-dir -r requirements.txt \
+    && pip install --no-cache-dir --no-deps "msgpack>=1.2.1" \
     && apk del .build-dependencies
 
