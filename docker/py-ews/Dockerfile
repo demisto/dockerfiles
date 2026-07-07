@@ -1,6 +1,5 @@
-# Last modified: 2026-07-07T04:51:01.974363+00:00
 
-FROM demisto/python3-deb:3.12.13.10786156
+FROM demisto/python3-deb:3.12.12.5919128
 
 # Basic linux utilities
 RUN apt-get update && apt-get install -y --no-install-recommends \
