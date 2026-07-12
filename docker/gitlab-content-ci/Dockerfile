@@ -1,7 +1,7 @@
 FROM python:3.14.4-slim-trixie
 
 # ── Version pins (update these to bump tools) ──
-ENV NODE_VERSION=24.14.1
+ENV NODE_VERSION=24.15.0
 ENV NVM_VERSION=0.40.4
 ENV NEO4J_VERSION=2026.03.1
 ENV APOC_VERSION=2026.03.1
