@@ -11,18 +11,21 @@ from sqlalchemy.engine.url import URL
 from sqlalchemy.sql import text
 import psycopg2
 import pyodbc
-import cx_Oracle
+import oracledb
 import teradatasqlalchemy
 
 assert 'FreeTDS' in pyodbc.drivers()
 assert 'ODBC Driver 18 for SQL Server' in pyodbc.drivers(), pyodbc.drivers()
 
+# Enable thick mode to use Oracle Instant Client libraries
+oracledb.init_oracle_client()
+
 try:
     # make sure oracle manages to load tns client libraries.
     # Will fail but we want to be sure we don't fail on loading the driver
-    cx_Oracle.connect()
+    oracledb.connect()
 except Exception as ex:
-    assert 'ORA-12162' in str(ex)
+    assert 'ORA-12162' in str(ex) or 'DPY-4027' in str(ex), f"Unexpected Oracle error: {ex}"
 
 # freetds test
 engine = sqlalchemy.create_engine('mssql+pyodbc:///testuser:testpass@127.0.0.1:1433/TEST?driver=FreeTDS')

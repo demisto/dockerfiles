@@ -7,6 +7,54 @@ set -e
 # Keys: image_name, Values: step that failed
 declare -A FAILED_DOCKERS
 
+# -- Color support ---------------------------------------------------------
+# Detect color support: enabled if stdout is a terminal (or forced via env),
+# disabled with --no-color flag or when piped/redirected.
+NO_COLOR="false"   # set to "true" by --no-color flag
+
+function setup_colors {
+    if [ "${NO_COLOR}" = "true" ]; then
+        COLOR_ENABLED="false"
+    elif [ -t 1 ] && [ -z "${NO_COLOR_ENV+x}" ]; then
+        # stdout is a terminal and NO_COLOR env var is not set
+        local colors
+        colors=$(tput colors 2>/dev/null || echo 0)
+        if [ "${colors}" -ge 8 ]; then
+            COLOR_ENABLED="true"
+        else
+            COLOR_ENABLED="false"
+        fi
+    else
+        COLOR_ENABLED="false"
+    fi
+
+    if [ "${COLOR_ENABLED}" = "true" ]; then
+        C_RESET='\033[0m'
+        C_GRAY='\033[0;90m'        # log prefix (dark gray)
+        C_LOG='\033[0;37m'         # log body (light gray / white)
+        C_LABEL='\033[0;36m'       # banner labels (cyan)
+        C_VALUE='\033[1;37m'       # banner values (bold white)
+        C_TITLE='\033[1;33m'       # banner titles (bold yellow)
+        C_BORDER='\033[0;35m'      # banner borders (magenta)
+        C_BAR_FILL='\033[1;32m'    # progress bar filled (bold green)
+        C_BAR_EMPTY='\033[0;90m'   # progress bar empty (dark gray)
+        C_RED='\033[0;31m'         # errors (red)
+        C_GREEN='\033[0;32m'       # success (green)
+    else
+        C_RESET=''
+        C_GRAY=''
+        C_LOG=''
+        C_LABEL=''
+        C_VALUE=''
+        C_TITLE=''
+        C_BORDER=''
+        C_BAR_FILL=''
+        C_BAR_EMPTY=''
+        C_RED=''
+        C_GREEN=''
+    fi
+}
+
 # Record a docker image failure and return the appropriate exit code.
 # In upload mode: records to FAILED_DOCKERS and returns 0 (continue).
 # In non-upload mode: logs the error and returns 1 (fail).
@@ -96,7 +144,7 @@ function get_version_from_file() {
 }
 
 red_error() {
-    echo -e "\033[0;31m$1\033[0m"
+    echo -e "${C_RED}$1${C_RESET}"
 }
 
 # -- Terminal width detection (fallback to 160 for CI / non-interactive) --
@@ -129,6 +177,8 @@ function print_centered {
 }
 
 # Print a boxed banner with ### borders, auto-sized to terminal width
+# Lines containing " : " are split into label (colored C_LABEL) and value (colored C_VALUE).
+# Lines that don't contain " : " are treated as titles (colored C_TITLE), or blank.
 # param $@: lines of text to display inside the box
 function print_box_banner {
     # Layout: "###   " (6) + inner_width + "   ###" (6) = inner_width + 12
@@ -140,13 +190,42 @@ function print_box_banner {
     fi
     local sep_inner=$((inner_width + 6))  # keeps total width consistent
     echo ""
-    printf '###%*s###\n' "${sep_inner}" '' | tr ' ' '='
-    printf '###%*s###\n' "${sep_inner}" ''
+    local sep_line
+    sep_line=$(printf '%*s' "${sep_inner}" '' | tr ' ' '=')
+    printf '%b###%s###%b\n' "${C_BORDER}" "${sep_line}" "${C_RESET}"
+    printf '%b###%*s###%b\n' "${C_BORDER}" "${sep_inner}" '' "${C_RESET}"
     for line_text in "$@"; do
-        printf '###   %-*s   ###\n' "${inner_width}" "${line_text}"
+        if [ -z "${line_text}" ]; then
+            # Empty line
+            printf '%b###%b   %-*s   %b###%b\n' "${C_BORDER}" "${C_RESET}" "${inner_width}" "" "${C_BORDER}" "${C_RESET}"
+        elif [[ "${line_text}" == *" : "* ]]; then
+            # Label : Value line -- split at first " : "
+            local label="${line_text%% : *} : "
+            local value="${line_text#* : }"
+            local label_len=${#label}
+            local value_len=${#value}
+            local pad=$((inner_width - label_len - value_len))
+            if [ "${pad}" -lt 0 ]; then pad=0; fi
+            printf '%b###%b   %b%s%b%b%s%b%*s   %b###%b\n' \
+                "${C_BORDER}" "${C_RESET}" \
+                "${C_LABEL}" "${label}" "${C_RESET}" \
+                "${C_VALUE}" "${value}" "${C_RESET}" \
+                "${pad}" '' \
+                "${C_BORDER}" "${C_RESET}"
+        else
+            # Title line (no " : " separator)
+            local text_len=${#line_text}
+            local pad=$((inner_width - text_len))
+            if [ "${pad}" -lt 0 ]; then pad=0; fi
+            printf '%b###%b   %b%s%b%*s   %b###%b\n' \
+                "${C_BORDER}" "${C_RESET}" \
+                "${C_TITLE}" "${line_text}" "${C_RESET}" \
+                "${pad}" '' \
+                "${C_BORDER}" "${C_RESET}"
+        fi
     done
-    printf '###%*s###\n' "${sep_inner}" ''
-    printf '###%*s###\n' "${sep_inner}" '' | tr ' ' '='
+    printf '%b###%*s###%b\n' "${C_BORDER}" "${sep_inner}" '' "${C_RESET}"
+    printf '%b###%s###%b\n' "${C_BORDER}" "${sep_line}" "${C_RESET}"
 }
 
 # Print a simple section header with separator lines
@@ -200,8 +279,9 @@ function gitlab_section_end {
 function log_prefix {
     local img="$1" idx="$2" tot="$3" pad_name="$4" pad_count="$5"
     while IFS= read -r line || [ -n "$line" ]; do
-        printf "[%s] [%${pad_count}d/%d] [%-${pad_name}s] %s\n" \
-            "$(date '+%Y-%m-%d %H:%M:%S')" "$idx" "$tot" "$img" "$line"
+        printf "%b[%s] [%${pad_count}d/%d] [%-${pad_name}s]%b %b%s%b\n" \
+            "${C_GRAY}" "$(date '+%Y-%m-%d %H:%M:%S')" "$idx" "$tot" "$img" "${C_RESET}" \
+            "${C_LOG}" "$line" "${C_RESET}"
     done
 }
 
@@ -382,7 +462,7 @@ function docker_build {
               record_failure "${image_name}" "build" "pipenv install --deploy failed with exit code ${pipenv_rc}"
               return $?
           fi
-          PIPENV_YES=yes pipenv run pip freeze > requirements.txt
+          pipenv requirements --exclude-markers > requirements.txt
           echo "Pipfile lock generated requirements.txt: "
           print_separator "#"
           cat requirements.txt
@@ -635,7 +715,11 @@ function docker_build {
                 return $?
             fi
             echo "Done docker push for: ${image_full_name}"
-            PUSHED_DOCKERS="${image_full_name},$PUSHED_DOCKERS"
+            if [ -n "${PUSHED_DOCKERS}" ]; then
+                PUSHED_DOCKERS="${PUSHED_DOCKERS},${image_full_name}"
+            else
+                PUSHED_DOCKERS="${image_full_name}"
+            fi
             echo "debug pushed_dockers $PUSHED_DOCKERS"
             if [[ "$docker_trust" == "1" ]]; then
                 commit_dockerfiles_trust
@@ -678,7 +762,11 @@ function docker_build {
             IMAGE_SAVE="${ARTIFACTS_FOLDER}/${IMAGE_NAME_SAVE}"
             echo "Creating artifact of docker image at ${IMAGE_SAVE}"
             docker save -o "${IMAGE_SAVE}" "${image_full_name}"
-            IMAGE_ARTIFACTS="${IMAGE_SAVE},${IMAGE_ARTIFACTS}"
+            if [ -n "${IMAGE_ARTIFACTS}" ]; then
+                IMAGE_ARTIFACTS="${IMAGE_ARTIFACTS},${IMAGE_SAVE}"
+            else
+                IMAGE_ARTIFACTS="${IMAGE_SAVE}"
+            fi
             gzip "${IMAGE_SAVE}"
             POST_COMMENT_ARGS=("${image_full_name}" "--is_contribution")
             if [ "${DRY_RUN}" = "true" ]; then
@@ -714,6 +802,7 @@ Options:
                           The commit SHA to compare against in upload mode.
   --files-to-prs PATH    Path to the files_to_prs.json mapping file (upload mode).
   --dry-run               Simulate the build: skip docker push and github comments.
+  --no-color              Disable colored output (also respects NO_COLOR env var).
   -h, --help              Show this help message and exit.
 
 Environment variables:
@@ -751,6 +840,7 @@ while [ "$#" -gt 0 ]; do
         --last-upload-commit) LAST_UPLOAD_COMMIT="$2"; shift 2;;
         --files-to-prs) FILES_TO_PRS="$2"; shift 2;;
         --dry-run) DRY_RUN="true"; shift;;
+        --no-color) NO_COLOR="true"; shift;;
         --*) echo "Unknown option: $1"; usage; exit 1;;
         *) docker_image_to_build="$1"; shift;;
     esac
@@ -764,6 +854,9 @@ if [[ -n "${docker_image_to_build}" ]]; then
     DIFF_COMPARE="ALL"
     DOCKER_INCLUDE_GREP="/${docker_image_to_build}$"
 fi
+
+# Initialize color support (after --no-color flag is parsed)
+setup_colors
 
 if [ "${UPLOAD_MODE}" = "true" ]; then
     if [ -z "${LAST_UPLOAD_COMMIT}" ]; then
@@ -780,7 +873,6 @@ if [ "${UPLOAD_MODE}" = "true" ]; then
         DOCKER_ORG=devdemisto
         echo "[DRY-RUN] Overriding DOCKER_ORG to devdemisto"
     fi
-    echo "Running in upload mode. Comparing against last upload commit: ${LAST_UPLOAD_COMMIT}"
 fi
 
 if [ -z "${CI_COMMIT_SHA}" ]; then
@@ -816,6 +908,12 @@ fi
 _py_ver=$(python --version 2>&1 || echo "python not found")
 _py3_ver=$(python3 --version 2>&1 || echo "python3 not found")
 
+# Build upload mode info line
+_upload_info="${UPLOAD_MODE}"
+if [ "${UPLOAD_MODE}" = "true" ]; then
+    _upload_info="${UPLOAD_MODE} (comparing against: ${LAST_UPLOAD_COMMIT})"
+fi
+
 print_box_banner \
     "DOCKER BUILD -- STARTUP CONFIGURATION" \
     "" \
@@ -831,8 +929,9 @@ print_box_banner \
     "SCRIPT_DIR       : ${SCRIPT_DIR}" \
     "PWD              : ${CURRENT_DIR}" \
     "" \
-    "Upload Mode      : ${UPLOAD_MODE}" \
+    "Upload Mode      : ${_upload_info}" \
     "Dry Run          : ${DRY_RUN}" \
+    "Colors           : ${COLOR_ENABLED}" \
     "" \
     "Python           : ${_py_ver}" \
     "Python3          : ${_py3_ver}"
@@ -929,9 +1028,10 @@ function progress_bar {
     local pct=$((current * 100 / total))
     local filled=$((current * width / total))
     local empty=$((width - filled))
-    local bar=""
-    for ((i = 0; i < filled; i++)); do bar+="#"; done
-    for ((i = 0; i < empty; i++)); do bar+="."; done
+    local bar_filled=""
+    local bar_empty=""
+    for ((i = 0; i < filled; i++)); do bar_filled+="#"; done
+    for ((i = 0; i < empty; i++)); do bar_empty+="."; done
     local elapsed=""
     if [ -n "${BUILD_START_EPOCH}" ]; then
         local now
@@ -939,7 +1039,11 @@ function progress_bar {
         local secs=$((now - BUILD_START_EPOCH))
         elapsed=" elapsed $(printf '%02d:%02d:%02d' $((secs/3600)) $(( (secs%3600)/60 )) $((secs%60)))"
     fi
-    printf "\n  Progress: |%s| %3d%% (%d/%d)%s\n\n" "$bar" "$pct" "$current" "$total" "$elapsed"
+    printf "\n  %bProgress:%b |%b%s%b%b%s%b| %b%3d%% (%d/%d)%s%b\n\n" \
+        "${C_LABEL}" "${C_RESET}" \
+        "${C_BAR_FILL}" "${bar_filled}" "${C_RESET}" \
+        "${C_BAR_EMPTY}" "${bar_empty}" "${C_RESET}" \
+        "${C_VALUE}" "$pct" "$current" "$total" "$elapsed" "${C_RESET}"
 }
 
 # -- Large banner ----------------------------------------------------------
@@ -1031,13 +1135,13 @@ failed_count=${#FAILED_DOCKERS[@]}
 
 # Determine pushed/artifacts status for summary
 if [ -n "$PUSHED_DOCKERS" ]; then
-    _pushed_status="Yes (${PUSHED_DOCKERS})"
+    _pushed_status="Yes"
     echo "${PUSHED_DOCKERS}" > "${ARTIFACTS_FOLDER}/pushed_dockers.txt"
 else
-    _pushed_status="None"
+    _pushed_status="No"
 fi
 if [ -n "${IMAGE_ARTIFACTS}" ]; then
-    _artifacts_status="Yes (${IMAGE_ARTIFACTS})"
+    _artifacts_status="Yes"
     echo "${IMAGE_ARTIFACTS}" > "${ARTIFACTS_FOLDER}/image_artifacts.txt"
 else
     _artifacts_status="None"
@@ -1062,7 +1166,7 @@ if [ "${succeeded_count}" -gt 0 ]; then
     echo "  SUCCEEDED IMAGES (${succeeded_count})"
     print_sub_separator "-"
     for img in "${SUCCEEDED_IMAGES[@]}"; do
-        echo "    [OK] ${img}"
+        echo -e "    ${C_GREEN}[OK]${C_RESET} ${img}"
     done
 fi
 
@@ -1073,7 +1177,7 @@ if [ "${failed_count}" -gt 0 ]; then
     red_error "  FAILED IMAGES (${failed_count})"
     print_sub_separator "-"
     for img in "${!FAILED_DOCKERS[@]}"; do
-        red_error "    [FAIL] ${img} -- step: ${FAILED_DOCKERS[$img]}"
+        echo -e "    ${C_RED}[FAIL]${C_RESET} ${img} -- step: ${FAILED_DOCKERS[$img]}"
     done
 fi
 
