@@ -14,7 +14,9 @@ ENV OPENJDK_VERSION=25
 # interpreters via `poetry env use <X.Y>`. The base image already ships 3.14, so
 # 3.14 is intentionally omitted from PYENV_PYTHON_VERSIONS to avoid a redundant
 # source build; a `python3.14` shim is created from the system interpreter below.
-ENV PYENV_VERSION=2.4.19
+# pyenv must be new enough to ship python-build definitions for the patch
+# releases below; older tags fail with "definition not found".
+ENV PYENV_VERSION=2.7.3
 ENV PYENV_PYTHON_VERSIONS="3.11.13 3.12.11 3.13.5"
 
 # ── Path & config ──
@@ -78,14 +80,20 @@ RUN rm -rf /var/lib/apt/lists/*
 RUN git clone --depth 1 --branch v${PYENV_VERSION} https://github.com/pyenv/pyenv.git ${PYENV_ROOT}
 # Compile each extra interpreter and create a global `pythonX.Y` symlink for it so
 # `poetry env use X.Y` (which resolves `pythonX.Y` from PATH) works in any job.
-RUN for full in ${PYENV_PYTHON_VERSIONS}; do \
-      ${PYENV_ROOT}/bin/pyenv install -s "${full}"; \
+# `set -e` aborts the build if any version fails to build (no silent -s skipping),
+# so a missing python-build definition is a hard error rather than a no-op.
+RUN set -e; \
+    for full in ${PYENV_PYTHON_VERSIONS}; do \
+      "${PYENV_ROOT}/bin/pyenv" install "${full}"; \
       minor="$(echo "${full}" | grep -o -E '^3\.[0-9]+')"; \
       ln -sf "${PYENV_ROOT}/versions/${full}/bin/python${minor}" "/usr/local/bin/python${minor}"; \
     done
-# Provide a python3.14 shim from the base image's system interpreter so the whole
-# 3.11-3.14 matrix is uniformly available without a redundant pyenv build.
-RUN ln -sf "$(command -v python3.14 || command -v python3)" /usr/local/bin/python3.14
+# Ensure a python3.14 shim exists for the matrix. The base image already provides
+# /usr/local/bin/python3.14, so only create the link when it is genuinely missing
+# to avoid `ln` erroring on a self-referential symlink.
+RUN if ! command -v python3.14 >/dev/null 2>&1; then \
+      ln -sf "$(command -v python3)" /usr/local/bin/python3.14; \
+    fi
 # Smoke-test that every matrix interpreter is resolvable on PATH.
 RUN for v in 3.11 3.12 3.13 3.14; do "python${v}" --version; done
 
