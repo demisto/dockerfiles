@@ -6,7 +6,15 @@ COPY requirements.txt .
 
 ENV TLDEXTRACT_CACHE="/tldextractcahce"
 
-RUN apk --update add nginx && \
+# XSUP-72663 ISOLATION (Variant B): keep the NEW nginx (1.30 from the 3.24 base)
+# but DOWNGRADE musl to 1.2.5 by pulling it from the Alpine v3.23 repo.
+#   nginx = 1.30.x (NEW)  |  musl = 1.2.5 (OLD)  |  base Alpine = 3.24.1
+# If EDL WORKS here -> musl 1.2.6 is the cause. If it FAILS -> musl is NOT the cause.
+RUN echo "https://dl-cdn.alpinelinux.org/alpine/v3.23/main" >> /etc/apk/repositories && \
+  apk update && \
+  apk add "musl=~1.2.5" "musl-utils=~1.2.5" && \
+  apk --update add nginx && \
+  nginx -v && \
   mkdir -p /run/nginx && \
   mkdir -p /var/lib/nginx/tmp/cache && \
   mkdir -p /etc/nginx/ssl && \
