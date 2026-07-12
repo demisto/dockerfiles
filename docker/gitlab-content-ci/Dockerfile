@@ -9,6 +9,13 @@ ENV POETRY_VERSION=1.8.5
 ENV GO_VERSION=1.26.2
 ENV GOLANGCI_LINT_VERSION=2.11.4
 ENV OPENJDK_VERSION=25
+# pyenv + the extra CPython patch versions installed alongside the base image's
+# system Python (3.14). These enable the CI unit-test matrix to run against real
+# interpreters via `poetry env use <X.Y>`. The base image already ships 3.14, so
+# 3.14 is intentionally omitted from PYENV_PYTHON_VERSIONS to avoid a redundant
+# source build; a `python3.14` shim is created from the system interpreter below.
+ENV PYENV_VERSION=2.4.19
+ENV PYENV_PYTHON_VERSIONS="3.11.13 3.12.11 3.13.5"
 
 # ── Path & config ──
 ENV NVM_DIR=/root/.nvm
@@ -55,6 +62,32 @@ RUN rm -rf /var/lib/apt/lists/*
 RUN source ~/.bashrc && java -version
 RUN curl -sSL https://install.python-poetry.org | python3 - --version ${POETRY_VERSION}
 RUN source ~/.bashrc && poetry --version
+
+# Multi-version Python for the CI unit-test matrix.
+# The base image ships only Python 3.14. To let jobs run `poetry env use <X.Y>`
+# against real interpreters (3.11-3.14), we build the missing versions with pyenv
+# and expose `pythonX.Y` shims on PATH. The system `python3` stays 3.14 so poetry
+# and every other tool above are unaffected.
+ENV PYENV_ROOT=/opt/pyenv
+# Build dependencies required to compile CPython from source (pyenv). Kept minimal
+# and cleaned up afterwards to limit image bloat.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential libbz2-dev libreadline-dev libsqlite3-dev liblzma-dev \
+    zlib1g-dev libncursesw5-dev tk-dev libgdbm-dev libnss3-dev
+RUN rm -rf /var/lib/apt/lists/*
+RUN git clone --depth 1 --branch v${PYENV_VERSION} https://github.com/pyenv/pyenv.git ${PYENV_ROOT}
+# Compile each extra interpreter and create a global `pythonX.Y` symlink for it so
+# `poetry env use X.Y` (which resolves `pythonX.Y` from PATH) works in any job.
+RUN for full in ${PYENV_PYTHON_VERSIONS}; do \
+      ${PYENV_ROOT}/bin/pyenv install -s "${full}"; \
+      minor="$(echo "${full}" | grep -o -E '^3\.[0-9]+')"; \
+      ln -sf "${PYENV_ROOT}/versions/${full}/bin/python${minor}" "/usr/local/bin/python${minor}"; \
+    done
+# Provide a python3.14 shim from the base image's system interpreter so the whole
+# 3.11-3.14 matrix is uniformly available without a redundant pyenv build.
+RUN ln -sf "$(command -v python3.14 || command -v python3)" /usr/local/bin/python3.14
+# Smoke-test that every matrix interpreter is resolvable on PATH.
+RUN for v in 3.11 3.12 3.13 3.14; do "python${v}" --version; done
 
 # Neo4j + APOC plugin
 RUN wget -O - https://debian.neo4j.com/neotechnology.gpg.key | gpg --dearmor -o /usr/share/keyrings/neo4j.gpg
