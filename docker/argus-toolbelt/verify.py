@@ -42,7 +42,7 @@ from argus_api.lib.events.v1.pcap import get_pcap
 from argus_api.lib.pdns.v3.search import search_records
 from argus_api.lib.reputation.v1.observation import (
     fetch_observations_for_domain,
-    fetch_observations_for_i_p,
+    fetch_observations_for_ip,
 )
 
 print("All is well in the world of Argus API")
