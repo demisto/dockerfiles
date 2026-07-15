@@ -1,5 +1,5 @@
-# Last modified: 2026-05-17T04:58:52.124093+00:00
-FROM demisto/python3-deb:3.12.13.9059085
+# Last modified: 2026-07-14T07:50:42.385524+00:00
+FROM demisto/python3-deb:3.12.13.10786156
 RUN apt-get update && apt-get upgrade -y && apt-get -t bookworm-backports install  \
     gcc g++ wget git pkg-config \
     make autoconf automake libtool libpng-dev  \
