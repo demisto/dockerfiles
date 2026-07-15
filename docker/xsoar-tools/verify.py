@@ -22,5 +22,6 @@ _ = orjson.__name__
 print('orjson is good')
 
 import nltk  # noqa: F401  # noqa: F401
+_ = nltk.__name__
 
 print('nltk is good')
