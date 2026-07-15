@@ -62,6 +62,10 @@
          "wrapt": {
             "docker_images": ["readpdf"],
             "notes": "The package has BSD-2 license, however their license was removed from the setup file, but they have a BSD license in their license file see https://github.com/GrahamDumpleton/wrapt/blob/ad97a2aa802391e2cffd31b601801214436d7ddd/LICENSE"
+        },
+        "cuda-toolkit": {
+            "docker_images": ["media-analysis"],
+            "notes": "Empty meta-package (no code) with no license metadata on PyPI. Our code does not link to it. See https://developer.nvidia.com/cuda-toolkit"
         }
     }
 }
