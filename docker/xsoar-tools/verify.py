@@ -20,6 +20,6 @@ import orjson  # noqa: F401
 
 print('orjson is good')
 
-import nltk  # noqa: F401
+import nltk  # noqa: F401  # noqa: F401
 
 print('nltk is good')
