@@ -17,7 +17,7 @@ _ = ujson.__name__
 print('ujson is good')
 
 import orjson  # noqa: F401
-orjson.__name__
+_ = orjson.__name__
 
 print('orjson is good')
 
