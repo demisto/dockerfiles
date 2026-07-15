@@ -12,6 +12,7 @@ from cryptography.fernet import Fernet
 print('cryptography is good')
 
 import ujson  # noqa: F401
+_ = ujson.__name__
 
 print('ujson is good')
 
