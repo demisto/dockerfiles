@@ -7,7 +7,7 @@ from demisto_sdk.commands.common.tools import _get_file_id, get_file_displayed_n
 
 print('demisto-sdk is good')
 
-from cryptography.fernet import Fernet
+import cryptography.fernet  # noqa: F401
 
 print('cryptography is good')
 
