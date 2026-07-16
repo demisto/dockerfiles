@@ -662,14 +662,14 @@ urllib3 = "<2.1.0"
 
 [[package]]
 name = "demisto-sdk"
-version = "1.38.23"
+version = "1.38.25"
 description = "\"A Python library for the Demisto SDK\""
 optional = false
 python-versions = "<3.13,>=3.9"
 groups = ["main"]
 files = [
-    {file = "demisto_sdk-1.38.23-py3-none-any.whl", hash = "sha256:34b4631d05089686ee7087a024353258afa2d33549c8a1c9c277d9d1833b40a7"},
-    {file = "demisto_sdk-1.38.23.tar.gz", hash = "sha256:5b68f48f5c5ee20d8880e4afebe2e75e2421eab70ed1882d583a31432d67a0cc"},
+    {file = "demisto_sdk-1.38.25-py3-none-any.whl", hash = "sha256:0dbc306ae00b3930ff3ca39af298dfda82947b2e34f4e876af771a59b7730562"},
+    {file = "demisto_sdk-1.38.25.tar.gz", hash = "sha256:737dfa0034487bd91f56402940e7f42b7d64d68bc66e3acb2c265fc61e627013"},
 ]
 
 [package.dependencies]
@@ -706,7 +706,7 @@ more-itertools = ">=10.0.0,<11.0.0"
 mypy = ">=0.982,<0.983"
 neo4j = ">=5.14.0,<6.0.0"
 networkx = ">=2.7.1,<3.0.0"
-nltk = "3.9.1"
+nltk = {version = "3.9.4", markers = "python_version >= \"3.10\" and python_full_version <= \"3.14.0\""}
 ordered-set = ">=4.1.0,<5.0.0"
 orjson = ">=3.8.3,<4.0.0"
 packaging = ">=24.0,<25.0"
@@ -1889,14 +1889,14 @@ test = ["codecov (>=2.1)", "pytest (>=7.2)", "pytest-cov (>=4.0)"]
 
 [[package]]
 name = "nltk"
-version = "3.9.1"
+version = "3.9.4"
 description = "Natural Language Toolkit"
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "nltk-3.9.1-py3-none-any.whl", hash = "sha256:4fa26829c5b00715afe3061398a8989dc643b92ce7dd93fb4585a70930d168a1"},
-    {file = "nltk-3.9.1.tar.gz", hash = "sha256:87d127bd3de4bd89a4f81265e5fa59cb1b199b27440175370f7417d2bc7ae868"},
+    {file = "nltk-3.9.4-py3-none-any.whl", hash = "sha256:f2fa301c3a12718ce4a0e9305c5675299da5ad9e26068218b69d692fda84828f"},
+    {file = "nltk-3.9.4.tar.gz", hash = "sha256:ed03bc098a40481310320808b2db712d95d13ca65b27372f8a403949c8b523d0"},
 ]
 
 [package.dependencies]
@@ -3810,4 +3810,4 @@ pyyaml = "*"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<3.13"
-content-hash = "97d2136fdd9287276f1b51af6fa8cd1eb049a79098856ab5d2aefcf968bb2ad5"
+content-hash = "d282c53a9a4cd4ab33ed6372a02999aaca842466caf8ce86183035b5f3265503"

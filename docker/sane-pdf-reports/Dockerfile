@@ -1,5 +1,5 @@
-# Last modified: 2026-04-16T07:19:41.702839+00:00
-FROM demisto/python3-deb-bullseye:3.12.11.8290908
+# Last modified: 2026-07-14T07:50:42.385524+00:00
+FROM demisto/python3-deb-bullseye:3.12.11.10786156
 
 WORKDIR "/app"
 
