@@ -372,6 +372,25 @@ files = [
 ]
 
 [[package]]
+name = "ciaops"
+version = "3.1.0"
+description = "Python library - modules for processing data from the TI, ASM and DRP system collected in one library. This library simplifies work with the products API and gives you the flexibility to customize the search and retrieval of data from the system."
+optional = false
+python-versions = ">=3.10"
+groups = ["main"]
+files = [
+    {file = "ciaops-3.1.0-py3-none-any.whl", hash = "sha256:0304b5d56191dcf774cccd727e3616ead90c7cecf7d7a64097d81d324d6dbbdc"},
+    {file = "ciaops-3.1.0.tar.gz", hash = "sha256:c8d5f1fa502b91ce7bcc1d5bda2fa1a4c7e3886358300437b65a80c74620ee5d"},
+]
+
+[package.dependencies]
+requests = ">=2.31.0"
+urllib3 = ">=2.0.2"
+
+[package.extras]
+misp = ["pyaml (>=25.7.0)"]
+
+[[package]]
 name = "click"
 version = "8.4.1"
 description = "Composable command line interface toolkit"
