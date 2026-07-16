@@ -18,6 +18,7 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
   && apk add --no-cache git  \
   && apk add --no-cache libstdc++  \
   && apk add --no-cache --upgrade grep  \
+  && pip install --no-cache-dir "setuptools-scm<10" \
   && pip install --no-cache-dir -r requirements.txt \
   && pip install --no-cache-dir "lxml>=6.1.0" \
   && apk del .build-dependencies
