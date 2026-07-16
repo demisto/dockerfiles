@@ -11,7 +11,8 @@ COPY requirements.txt .
 RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories \
   && apk --update add --no-cache \
   curl=8.21.0-r0 \
-  libcurl=8.21.0-r0
+  libcurl=8.21.0-r0 \
+  && sed -i '/alpine\/edge\/main/d' /etc/apk/repositories
 
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base libffi-dev openssl-dev \
   && apk add --no-cache git  \
