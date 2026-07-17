@@ -4,8 +4,17 @@ version = "0.1.0"
 description = ""
 authors = []
 
+[[tool.poetry.source]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+priority = "explicit"
+
 [tool.poetry.dependencies]
 python = "~3.12"
+
+torch = { version = "*", source = "pytorch-cpu" }
+torchvision = { version = "*", source = "pytorch-cpu" }
+
 opencv-python-headless = "*"
 easyocr = "*"
 pyppeteer = "*"
