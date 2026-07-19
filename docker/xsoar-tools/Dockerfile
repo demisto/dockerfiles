@@ -10,13 +10,15 @@ COPY requirements.txt .
 # This line can be removed once upgrading base image to alpine3.24
 RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories \
   && apk --update add --no-cache \
-  curl=8.19.0-r0 \
-  libcurl=8.19.0-r0
+  curl=8.21.0-r0 \
+  libcurl=8.21.0-r0 \
+  && sed -i '/alpine\/edge\/main/d' /etc/apk/repositories
 
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base libffi-dev openssl-dev \
   && apk add --no-cache git  \
   && apk add --no-cache libstdc++  \
   && apk add --no-cache --upgrade grep  \
+  && pip install --no-cache-dir "setuptools-scm<10" \
   && pip install --no-cache-dir -r requirements.txt \
   && pip install --no-cache-dir "lxml>=6.1.0" \
   && apk del .build-dependencies
