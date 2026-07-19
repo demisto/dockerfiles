@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import argparse
-import os
 import sys
-import re
 
 
 def main():
@@ -46,32 +44,41 @@ def list_verify_script_files_require_update(changed_files) -> set:
 def get_updated_dockers(changed_files) -> set:
     """
     This function lists the dockers that are being updated at the current pr.
+
+    A docker image is identified by the first path segment after ``docker/``
+    (i.e. ``docker/<image>/...``).
+
     Args:
         changed_files: the list of files that are being changed in the current pr.
 
     Returns: the set of the dockers that are being updated at the current pr.
     """
-    dockers = []
-    pattern = re.compile("docker\/.*\/.*")
+    dockers = set()
     for file_path in changed_files:
-        if pattern.match(file_path):
-            dockers.append(os.path.basename(os.path.dirname(file_path)))
-    return set(dockers)
+        parts = file_path.split("/")
+        if len(parts) >= 3 and parts[0] == "docker":
+            dockers.add(parts[1])
+    return dockers
 
 
 def get_updated_verify_script_files(changed_files) -> set:
     """
-    This function lists the verify.py and verify.ps1 files that are being updated at the current pr.
+    This function lists the dockers whose verify.py or verify.ps1 file is being updated at the current pr.
+
+    The verify script lives at the docker image root (``docker/<image>/verify.py``
+    or ``docker/<image>/verify.ps1``), alongside the Dockerfile.
+
     Args:
         changed_files: the list of files that are being changed in the current pr.
 
-    Returns: the list of the verify.py and verify.ps1 files that are being updated at the current pr.
+    Returns: the set of dockers whose verify.py or verify.ps1 file is being updated at the current pr.
     """
-    verify_script_files = []
+    verify_script_files = set()
     for file_path in changed_files:
-        if file_path.endswith("verify.py") or file_path.endswith("verify.ps1"):
-            verify_script_files.append(os.path.basename(os.path.dirname(file_path)))
-    return set(verify_script_files)
+        parts = file_path.split("/")
+        if len(parts) == 3 and parts[0] == "docker" and parts[2] in ("verify.py", "verify.ps1"):
+            verify_script_files.add(parts[1])
+    return verify_script_files
 
 
 if __name__ == '__main__':
