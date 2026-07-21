@@ -1,5 +1,5 @@
-# Last modified: 2026-07-21T01:01:38.650825+00:00
-FROM demisto/opencv:1.0.0.11188826
+# Last modified: 2026-07-21T05:34:09.942524+00:00
+FROM demisto/opencv:1.0.0.11193239
 
 COPY requirements.txt .
 
