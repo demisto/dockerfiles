@@ -7,14 +7,12 @@ ENV EASYOCR_MODULE_PATH=/root/.EasyOCR
 COPY requirements.txt .
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    openssl=3.0.20-1~deb12u2 libssl3=3.0.20-1~deb12u2 \ # can be removed
     libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 \
     libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 \
     libgbm1 libasound2 libpango-1.0-0 libcairo2 fonts-liberation \
     && pip install --no-cache-dir -r requirements.txt \
-    && pip install --no-cache-dir --upgrade "urllib3>=2.6.3" \ # can be removed
     && rm -rf /var/lib/apt/lists/*
 
 RUN python -c "import easyocr; easyocr.Reader(['en','es'], gpu=False)"
 
-RUN python -c "from pyppeteer.chromium_downloader import download_chromium; download_chromium()"
+RUN python -m playwright install chromium
