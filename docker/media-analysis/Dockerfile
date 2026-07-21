@@ -15,4 +15,4 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN python -c "import easyocr; easyocr.Reader(['en','es'], gpu=False)"
 
-RUN python -c "from pyppeteer.chromium_downloader import download_chromium; download_chromium()"
+RUN python -m playwright install chromium
