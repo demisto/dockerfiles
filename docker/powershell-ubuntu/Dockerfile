@@ -1,4 +1,4 @@
-# Last modified: 2026-06-11T04:49:12.706525+00:00
+# Last modified: 2026-07-23T05:00:02.676736+00:00
 FROM mcr.microsoft.com/powershell:7.5-ubuntu-22.04
 
 # For the `no supported WSMan client library was found` error when using Ubuntu 20+
