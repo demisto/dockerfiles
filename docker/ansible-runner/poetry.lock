@@ -913,20 +913,20 @@ msrestazure = ">=0.4.27,<2.0.0"
 
 [[package]]
 name = "azure-mgmt-hdinsight"
-version = "9.0.0"
-description = "Microsoft Azure HDInsight Management Client Library for Python"
+version = "9.0.1"
+description = "Microsoft Azure Hdinsight Management Client Library for Python"
 optional = false
-python-versions = "*"
+python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "azure-mgmt-hdinsight-9.0.0.zip", hash = "sha256:41ebdc69c0d1f81d25dd30438c14fff4331f66639f55805b918b9649eaffe78a"},
-    {file = "azure_mgmt_hdinsight-9.0.0-py2.py3-none-any.whl", hash = "sha256:1df6d8284bc173d8d556a31a9bde677ada0fe1f52227c5d499ab05fcd71b8d4f"},
+    {file = "azure_mgmt_hdinsight-9.0.1-py3-none-any.whl", hash = "sha256:4fd8b77fd84f91b682b9d4982838e6bec23c7e6f0d1e967b4a74f18a9bb680ec"},
+    {file = "azure_mgmt_hdinsight-9.0.1.tar.gz", hash = "sha256:1145559a2c3ee114246924f1a4e035db9fc008fd715d4dcfae3ad9821f99f48c"},
 ]
 
 [package.dependencies]
-azure-common = ">=1.1,<2.0"
-azure-mgmt-core = ">=1.2.0,<2.0.0"
-msrest = ">=0.6.21"
+azure-mgmt-core = ">=1.6.0"
+isodate = ">=0.6.1"
+typing-extensions = ">=4.6.0"
 
 [[package]]
 name = "azure-mgmt-iothub"
@@ -3845,4 +3845,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = "~3.12"
-content-hash = "ee42ec81eeb9f46a21dca87c3c65bc72e0d28f0a6e879b29db6e74d6484c1cba"
+content-hash = "ffd21240f81b6f1bd9b86c574f2f66db5b6a017b2d58e6621ed8ea23c4a07593"
