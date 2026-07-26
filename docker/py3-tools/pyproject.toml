@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "py3-tools"
-version = "0.1.0"
+version = "0.1.1"
 description = ""
 authors = ["Your Name <you@example.com>"]
 readme = "README.md"
@@ -53,12 +53,13 @@ opensearch_dsl = "*"
 aiohttp = "*"
 pycryptodome = "*"
 requests-toolbelt = "*"
-urllib3 = "^2.6.3"
+urllib3 = "^2.7.0"
 pydantic = ">=2.7.1"
 json2html = "*"
 httpx = "*"
 anyio = "*"
 respx = "*"
+cryptography = ">=48.0.1"
 
 [build-system]
 requires = ["poetry-core"]
