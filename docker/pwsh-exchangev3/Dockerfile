@@ -1,6 +1,6 @@
-# Last modified: 2026-07-23T00:00:00.000000+00:00
+# Last modified: 2026-07-26T12:49:56.990721+00:00
 
-FROM demisto/powershell-ubuntu:7.5.0.10049856
+FROM demisto/powershell-ubuntu:7.5.0.11326619
 
 RUN pwsh -c "Set-PSRepository -Name PSGallery -InstallationPolicy Trusted -ErrorAction Stop"
 # Pin ExchangeOnlineManagement to 3.9.2. Version 3.10.0 introduced a regression in the
