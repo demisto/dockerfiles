@@ -1,5 +1,5 @@
-# Last modified: 2026-06-14T07:15:20.954157+00:00
-FROM demisto/faker3:1.0.0.10120494 AS build
+# Last modified: 2026-07-23T20:49:49.917940+00:00
+FROM demisto/faker3:1.0.0.11285256 AS build
 RUN mkdir -p /perf
 COPY script.py /perf
 
