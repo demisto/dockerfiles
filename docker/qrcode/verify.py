@@ -1,6 +1,9 @@
-# XSUP-72883: side-effect imports; loading cv2/pyzbar runs the FIPS self-test at build.
-import cv2  # noqa: F401
-import pyzbar.pyzbar  # noqa: F401
-import wurlitzer  # noqa: F401
+import importlib
+
+# XSUP-72883: loading cv2/pyzbar runs the OpenSSL FIPS self-test at build time,
+# so a wheel with a broken bundled OpenSSL fails the build here (not on a host).
+# Imported dynamically for their side effects only.
+for _module in ("cv2", "pyzbar.pyzbar"):
+    importlib.import_module(_module)
 
 print("qrcode verify OK")
