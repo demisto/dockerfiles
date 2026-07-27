@@ -6,8 +6,6 @@ name = "pypi"
 [packages]
 pyzbar = "*"
 wurlitzer = "*"
-# XSUP-72883: pin cv2 to 4.x; opencv 5.x wheels bundle OpenSSL 1.1.1k that fails FIPS self-test.
-opencv-contrib-python = "==4.12.0.88"
 
 [dev-packages]
 
