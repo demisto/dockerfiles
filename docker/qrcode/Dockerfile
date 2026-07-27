@@ -1,3 +1,5 @@
+# Last modified: 2026-07-27T09:20:28.296998+00:00
+
 FROM demisto/opencv:1.0.0.11195141
 
 COPY Pipfile.lock .
