@@ -5,4 +5,4 @@ os.environ["OPENSSL_FORCE_FIPS_MODE"] = "1"
 
 import cv2
 
-print("opencv verify OK")
+print(f"opencv verify OK (cv2 {cv2.__version__})")
