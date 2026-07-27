@@ -10,7 +10,7 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
   && apk del .build-dependencies
 
 RUN apk add --update --no-cache nodejs npm \
-  && npm install -g npm@latest \
+  && npm install -g npm@latest brace-expansion@5.0.8 \
   && rm -rf /usr/lib/node_modules/npm /usr/bin/npm /usr/bin/npx
 
 RUN npm install -g --save cyberchef-node \
