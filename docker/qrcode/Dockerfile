@@ -5,7 +5,6 @@ FROM demisto/opencv:1.0.0.11195141
 COPY Pipfile.lock .
 COPY Pipfile .
 
-# libzbar0: pyzbar runtime dep (build tools removed afterwards).
 RUN apt-get update && apt-get -t bookworm-backports install -y --no-install-recommends \
   gcc \
   python3-dev \
