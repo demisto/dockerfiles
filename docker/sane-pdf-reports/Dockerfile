@@ -4,6 +4,7 @@ FROM demisto/python3-deb-bullseye:3.12.11.10786156
 WORKDIR "/app"
 
 SHELL ["/bin/bash", "-c"]
+# hadolint ignore=DL3008,DL3015,DL3027,DL3016
 RUN apt-get update -y -q && \
     apt-get upgrade -y -q && \
     apt-get install -y -q nodejs \
@@ -29,21 +30,28 @@ RUN apt-get update -y -q && \
     fonts-noto-core \
     libgbm-dev \
     && rm -rf /var/lib/apt/lists/* \
-    && npm i npm@8.1.3 -g
+    && npm install -g npm@8.19.4
 
-RUN npm i puppeteer@5.3.1 && ln -s /app/node_modules/puppeteer/.local-chromium/linux-*/chrome-linux/chrome /usr/bin/chromium-browser
+# hadolint ignore=DL3016,DL3059
+RUN echo '{"name":"app","version":"1.0.0","overrides":{"brace-expansion":"5.0.8"}}' > package.json && \
+    npm install puppeteer@5.3.1 && \
+    ln -s /app/node_modules/puppeteer/.local-chromium/linux-*/chrome-linux/chrome /usr/bin/chromium-browser
 # install gsutil acc to https://cloud.google.com/storage/docs/gsutil_install
+# hadolint ignore=DL3008,DL3015,DL4006,DL3059,DL3009
 RUN apt-get update -y -q && apt-get install -y -q apt-transport-https ca-certificates gnupg curl \
     && echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list \
     && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg && apt-get update -y && apt-get install google-cloud-sdk -y
 
 
+# hadolint ignore=DL3059
 RUN gsutil cp -r gs://sane-reports-artifacts/sane-report.tar . \
     && tar -xvf sane-report.tar && rm -f sane-report.tar
 
 # Update permissions and ownership on /app dir
+# hadolint ignore=DL3059
 RUN chown -R root:demisto /app/ && chmod 775 /app/ && chmod 775 /app/dist
 
+# hadolint ignore=DL3059,DL3016
 RUN npm uninstall -g npm && apt-get purge -y --auto-remove git npm apt-transport-https ca-certificates gnupg curl google-cloud-sdk \
     python3-dev lsb-release \
     && rm -rf /var/lib/apt/lists/*
