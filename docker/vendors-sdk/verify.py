@@ -17,5 +17,6 @@ import hcl
 import cymruwhois
 import jbxapi
 import cyberintegrations
+import ciaops
 
 print('Verify of vendors-sdk image passed!')
