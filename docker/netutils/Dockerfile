@@ -14,11 +14,17 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev \
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies
 
-RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories \
-  && apk --update add --no-cache \
-  curl=8.20.0-r1 \
-  libcurl=8.20.0-r1 \
-  sqlite-libs=3.53.2-r0 \
+# Install runtime networking tools from the base image's stable Alpine repo.
+# We intentionally do NOT add the rolling `edge` repo: edge is continuously
+# rebuilt and old `-rN` package revisions are purged, which caused this build
+# to fail with `apk` exit code 2 when pinned versions vanished. The current
+# stable base (v3.24/main) already ships curl/libcurl 8.21.0 and sqlite-libs
+# 3.53.2, so a floor-pin (>=) on curl/libcurl keeps the security guarantee
+# without brittle exact-revision pinning.
+RUN apk --update add --no-cache \
+  "curl>=8.21.0" \
+  "libcurl>=8.21.0" \
+  sqlite-libs \
   bind-tools openssl iputils
 
 # Provide a minimal nmap stub so python-libnmap can initialise without the real nmap binary
