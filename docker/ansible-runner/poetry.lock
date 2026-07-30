@@ -2411,35 +2411,35 @@ portalocker = ["portalocker (>=1.4,<4)"]
 
 [[package]]
 name = "msgraph-core"
-version = "1.3.3"
+version = "1.5.1"
 description = "Core component of the Microsoft Graph Python SDK"
 optional = false
-python-versions = ">=3.9"
+python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "msgraph_core-1.3.3-py3-none-any.whl", hash = "sha256:9dbbc0c88e174c1d5da1c17d286965d6b26ebaf24996c7af64a39e2069006cf6"},
-    {file = "msgraph_core-1.3.3.tar.gz", hash = "sha256:a3226b08b4cf9b6dbb16b868be21d5f82d8ee514ae8e46d9f0cad896159ef8d3"},
+    {file = "msgraph_core-1.5.1-py3-none-any.whl", hash = "sha256:929758ca0ba5dc4231aff051d7dda93f4faba2dbf781e178ef86d36b4592ea12"},
+    {file = "msgraph_core-1.5.1.tar.gz", hash = "sha256:1eecc9089ead63ab9cfca4cfb0751fc664088d6a53fc9ee1fc0574eddfba030b"},
 ]
 
 [package.dependencies]
 httpx = {version = ">=0.23.0", extras = ["http2"]}
-microsoft-kiota-abstractions = ">=1.8.0,<2.0.0"
-microsoft-kiota-authentication-azure = ">=1.8.0,<2.0.0"
-microsoft-kiota-http = ">=1.8.0,<2.0.0"
+microsoft-kiota-abstractions = ">=1.11.6,<2.0.0"
+microsoft-kiota-authentication-azure = ">=1.11.6,<2.0.0"
+microsoft-kiota-http = ">=1.11.6,<2.0.0"
 
 [package.extras]
 dev = ["bumpver", "isort", "mypy", "pylint", "pytest", "yapf"]
 
 [[package]]
 name = "msgraph-sdk"
-version = "1.50.0"
+version = "1.60.0"
 description = "The Microsoft Graph Python SDK"
 optional = false
-python-versions = ">=3.9"
+python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "msgraph_sdk-1.50.0-py3-none-any.whl", hash = "sha256:09f40855418e3c1c7f7b04167aaf40bab4dbdc6daa3111bcbd4d84ca311e7d6c"},
-    {file = "msgraph_sdk-1.50.0.tar.gz", hash = "sha256:ff537ce4a3e94f0cffb95a81ee01a87cf3c154f8ad70c761ae9ce739c83f942f"},
+    {file = "msgraph_sdk-1.60.0-py3-none-any.whl", hash = "sha256:2cc481ca7645711f6f97cba5737840ada1f44bf553c3673b60d573988f21830f"},
+    {file = "msgraph_sdk-1.60.0.tar.gz", hash = "sha256:620335e73219afb42243239f082ca92661459a1fe2436e9f468907044049ce82"},
 ]
 
 [package.dependencies]
@@ -2448,7 +2448,7 @@ microsoft-kiota-serialization-form = ">=1.8.0,<2.0.0"
 microsoft-kiota-serialization-json = ">=1.8.0,<2.0.0"
 microsoft-kiota-serialization-multipart = ">=1.8.0,<2.0.0"
 microsoft-kiota-serialization-text = ">=1.8.0,<2.0.0"
-msgraph_core = ">=1.3.1"
+msgraph_core = ">=1.5.1"
 
 [package.extras]
 dev = ["bumpver", "isort", "mypy", "pylint", "pytest", "yapf"]
