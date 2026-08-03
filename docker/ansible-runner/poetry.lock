@@ -2454,17 +2454,18 @@ dev = ["bumpver", "isort", "mypy", "pylint", "pytest", "yapf"]
 
 [[package]]
 name = "msrest"
-version = "0.6.21"
+version = "0.7.1"
 description = "AutoRest swagger generator Python client runtime."
 optional = false
-python-versions = "*"
+python-versions = ">=3.6"
 groups = ["main"]
 files = [
-    {file = "msrest-0.6.21-py2.py3-none-any.whl", hash = "sha256:c840511c845330e96886011a236440fafc2c9aff7b2df9c0a92041ee2dee3782"},
-    {file = "msrest-0.6.21.tar.gz", hash = "sha256:72661bc7bedc2dc2040e8f170b6e9ef226ee6d3892e01affd4d26b06474d68d8"},
+    {file = "msrest-0.7.1-py3-none-any.whl", hash = "sha256:21120a810e1233e5e6cc7fe40b474eeb4ec6f757a15d7cf86702c369f9567c32"},
+    {file = "msrest-0.7.1.zip", hash = "sha256:6e7661f46f3afd88b75667b7187a92829924446c7ea1d169be8c4bb7eeb788b9"},
 ]
 
 [package.dependencies]
+azure-core = ">=1.24.0"
 certifi = ">=2017.4.17"
 isodate = ">=0.6.0"
 requests = ">=2.16,<3.0"
@@ -3845,4 +3846,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = "~3.12"
-content-hash = "58545dd6b6643740da7a4f66aa41059ab6ff8f8a0dea0fd30d094083e50127a5"
+content-hash = "7f2be6153ed98987ce1277c269b9850400a9e1fff2f9ddf4211d9cf6f2b17e10"
