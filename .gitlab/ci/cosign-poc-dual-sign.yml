@@ -43,25 +43,23 @@
 # (The job only runs when RUN_COSIGN_POC == "true", so it is inert otherwise.)
 # =============================================================================
 
-# NOTE on stages: GitLab REFUSES to create a pipeline whose only jobs live in
-# the built-in `.pre` / `.post` stages -- it reports "The resulting pipeline
-# would have been empty". Since this POC job is normally the only job in the
-# pipeline, it must sit in a real stage. We declare a dedicated `cosign-poc`
-# stage; when this file is included alongside the infra template, GitLab merges
-# the `stages` lists rather than replacing them.
+# NOTE on stages: do NOT declare a top-level `stages:` key here. Included files
+# are merged into one pipeline config and `stages:` REPLACES the list rather
+# than extending it -- doing so removes the infra template's stages and breaks
+# its jobs ("chosen stage <x> does not exist"). `.pre` is a built-in stage that
+# always exists, so the job can use it without declaring anything.
+#
+# `.pre` is also safe against the "resulting pipeline would have been empty"
+# error here, because the infra template contributes its own jobs to the
+# pipeline -- this job is never the only one present.
 
-stages:
-  - cosign-poc
-
-# Declared at the top level so the variable ALWAYS exists when rules are
-# evaluated. If it is only supplied via the "Run pipeline" form, a typo or a
-# missed field makes the rule false and GitLab reports
-# "The resulting pipeline would have been empty".
+# Declared at the top level so the variable ALWAYS exists when evaluated,
+# regardless of whether it was supplied on the "Run pipeline" form.
 variables:
   RUN_COSIGN_POC: "true"
 
 cosign-poc:dual-sign:
-  stage: cosign-poc
+  stage: .pre
   image: docker:27-cli
   services:
     - name: docker:27-dind
