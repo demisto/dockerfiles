@@ -53,6 +53,13 @@
 stages:
   - cosign-poc
 
+# Declared at the top level so the variable ALWAYS exists when rules are
+# evaluated. If it is only supplied via the "Run pipeline" form, a typo or a
+# missed field makes the rule false and GitLab reports
+# "The resulting pipeline would have been empty".
+variables:
+  RUN_COSIGN_POC: "true"
+
 cosign-poc:dual-sign:
   stage: cosign-poc
   image: docker:27-cli
@@ -73,16 +80,11 @@ cosign-poc:dual-sign:
     # false "DUAL-SIGN CONFIRMED". Off until we can verify DCT properly.
     VERIFY_DCT: "false"
     COSIGN_VERSION: "v2.4.1"
-  rules:
-    # Runs only when explicitly requested via RUN_COSIGN_POC=true, so it can
-    # never fire on a normal pipeline. Deliberately `when: always` rather than
-    # `when: manual`: a pipeline whose only job is manual is treated as empty
-    # by GitLab ("The resulting pipeline would have been empty"), and manual
-    # jobs also cannot be played by scheduled pipelines.
-    - if: '$RUN_COSIGN_POC == "true"'
-      when: always
-      allow_failure: false
-    - when: never
+  # No `rules:` / `only:` at all -- the job always exists, which makes it
+  # impossible for GitLab to consider the pipeline empty. Set
+  # RUN_COSIGN_POC to anything other than "true" to disable it; the script
+  # itself exits early in that case.
+  when: always
   before_script:
     - apk add --no-cache bash curl
   script:

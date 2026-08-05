@@ -65,7 +65,19 @@ require_var() {
 }
 
 # ---------------------------------------------------------------------------
-# 0. Validate configuration
+# 0. Opt-in guard
+# ---------------------------------------------------------------------------
+# The CI job itself is unconditional (a job gated purely by `rules:` can make
+# GitLab reject the pipeline as empty). The opt-in check lives here instead:
+# unless RUN_COSIGN_POC is exactly "true", exit successfully without doing
+# anything.
+if [ "${RUN_COSIGN_POC:-}" != "true" ]; then
+    log "RUN_COSIGN_POC is not 'true' (got: '${RUN_COSIGN_POC:-<unset>}'). Nothing to do."
+    exit 0
+fi
+
+# ---------------------------------------------------------------------------
+# 1. Validate configuration
 # ---------------------------------------------------------------------------
 log "Target image: ${TARGET_IMAGE}"
 
