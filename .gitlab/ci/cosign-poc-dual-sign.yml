@@ -63,10 +63,19 @@ cosign-poc:dual-sign:
     # Defaults (overridable at pipeline run time):
     TARGET_IMAGE: "demisto/python3:3.7.5.4328"
     COSIGN_TLOG_UPLOAD: "false"
-    VERIFY_DCT: "true"
+    # DCT verification via `DOCKER_CONTENT_TRUST=1 docker pull` is a NO-OP on
+    # Docker 25+ (verified: it returns exit 0 even for unsigned images, and
+    # `docker trust` was removed entirely). Leaving this on would produce a
+    # false "DUAL-SIGN CONFIRMED". Off until we can verify DCT properly.
+    VERIFY_DCT: "false"
     COSIGN_VERSION: "v2.4.1"
   rules:
-    # Only ever surface this job when explicitly requested, and make it manual.
+    # Scheduled pipelines cannot press "play" on a manual job, so when this is
+    # driven by a pipeline schedule run it automatically instead.
+    - if: '$RUN_COSIGN_POC == "true" && $CI_PIPELINE_SOURCE == "schedule"'
+      when: always
+      allow_failure: false
+    # Web / API / push triggers: keep it manual so it never runs by accident.
     - if: '$RUN_COSIGN_POC == "true"'
       when: manual
       allow_failure: false
