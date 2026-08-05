@@ -43,15 +43,23 @@
 # (The job only runs when RUN_COSIGN_POC == "true", so it is inert otherwise.)
 # =============================================================================
 
-# NOTE on stages: do NOT declare a top-level `stages:` key here. Included files
-# are merged into one pipeline config and `stages:` REPLACES the list rather
-# than extending it -- doing so removes the infra template's stages and breaks
-# its jobs ("chosen stage <x> does not exist"). `.pre` is a built-in stage that
-# always exists, so the job can use it without declaring anything.
+# NOTE on stages -- this is fiddly, so the reasoning is recorded here:
 #
-# `.pre` is also safe against the "resulting pipeline would have been empty"
-# error here, because the infra template contributes its own jobs to the
-# pipeline -- this job is never the only one present.
+#  * Do NOT declare a top-level `stages:` key. Included files merge into one
+#    config and `stages:` REPLACES the list instead of extending it, which
+#    deletes the infra template's stages and breaks its jobs with
+#    "chosen stage <x> does not exist". (Stage validation happens at parse
+#    time, so this breaks even jobs that rules would have excluded.)
+#
+#  * Do NOT use `.pre` / `.post` either. On this branch every infra job is
+#    excluded by its own rules, so this job ends up being the only one in the
+#    pipeline -- and GitLab rejects a pipeline made up solely of `.pre`/`.post`
+#    jobs with "The resulting pipeline would have been empty".
+#
+#  * Therefore: use a REAL stage that the infra template already defines, and
+#    declare nothing. `fan-in` is known to exist (it appeared in a GitLab
+#    stage-validation error). If infra ever renames it, pick another stage from
+#    CI/CD > Editor > "View merged YAML".
 
 # Declared at the top level so the variable ALWAYS exists when evaluated,
 # regardless of whether it was supplied on the "Run pipeline" form.
@@ -59,7 +67,7 @@ variables:
   RUN_COSIGN_POC: "true"
 
 cosign-poc:dual-sign:
-  stage: .pre
+  stage: fan-in
   image: docker:27-cli
   services:
     - name: docker:27-dind
