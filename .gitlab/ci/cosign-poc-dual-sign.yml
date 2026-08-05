@@ -72,7 +72,7 @@ cosign-poc:dual-sign:
   rules:
     # Scheduled pipelines cannot press "play" on a manual job, so when this is
     # driven by a pipeline schedule run it automatically instead.
-    - if: '$RUN_COSIGN_POC == "true" && $CI_PIPELINE_SOURCE == "schedule"'
+    - if: '$RUN_COSIGN_POC == "true"'
       when: always
       allow_failure: false
     # Web / API / push triggers: keep it manual so it never runs by accident.
