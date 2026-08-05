@@ -43,14 +43,18 @@
 # (The job only runs when RUN_COSIGN_POC == "true", so it is inert otherwise.)
 # =============================================================================
 
-# NOTE: intentionally no top-level `stages:` key. This file works both as a
-# standalone pipeline (CI_CONFIG_PATH) and when `include:`d into the main
-# pipeline. Declaring `stages:` would OVERRIDE the stage list coming from the
-# infra template on include, breaking jobs whose stage disappears. `.pre` is a
-# built-in stage that always exists, so it needs no declaration either way.
+# NOTE on stages: GitLab REFUSES to create a pipeline whose only jobs live in
+# the built-in `.pre` / `.post` stages -- it reports "The resulting pipeline
+# would have been empty". Since this POC job is normally the only job in the
+# pipeline, it must sit in a real stage. We declare a dedicated `cosign-poc`
+# stage; when this file is included alongside the infra template, GitLab merges
+# the `stages` lists rather than replacing them.
+
+stages:
+  - cosign-poc
 
 cosign-poc:dual-sign:
-  stage: .pre
+  stage: cosign-poc
   image: docker:27-cli
   services:
     - name: docker:27-dind
@@ -70,14 +74,13 @@ cosign-poc:dual-sign:
     VERIFY_DCT: "false"
     COSIGN_VERSION: "v2.4.1"
   rules:
-    # Scheduled pipelines cannot press "play" on a manual job, so when this is
-    # driven by a pipeline schedule run it automatically instead.
+    # Runs only when explicitly requested via RUN_COSIGN_POC=true, so it can
+    # never fire on a normal pipeline. Deliberately `when: always` rather than
+    # `when: manual`: a pipeline whose only job is manual is treated as empty
+    # by GitLab ("The resulting pipeline would have been empty"), and manual
+    # jobs also cannot be played by scheduled pipelines.
     - if: '$RUN_COSIGN_POC == "true"'
       when: always
-      allow_failure: false
-    # Web / API / push triggers: keep it manual so it never runs by accident.
-    - if: '$RUN_COSIGN_POC == "true"'
-      when: manual
       allow_failure: false
     - when: never
   before_script:
