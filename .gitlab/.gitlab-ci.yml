@@ -5,3 +5,6 @@ include:
   - file: "/.gitlab/ci/dockerfiles/.gitlab-ci.yml"
     ref: $INFRA_BRANCH
     project: "${CI_PROJECT_NAMESPACE}/infra"
+  # CIAC-16370 dual-sign POC. The job inside is gated on RUN_COSIGN_POC == "true"
+  # and is `when: manual`, so it stays invisible on normal pipeline runs.
+  - local: "/.gitlab/ci/cosign-poc-dual-sign.yml"
