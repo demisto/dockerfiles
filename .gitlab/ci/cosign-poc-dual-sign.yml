@@ -1,0 +1,77 @@
+# =============================================================================
+# Dual-sign POC pipeline (CIAC-16370)
+# =============================================================================
+# A standalone, MANUALLY-TRIGGERED job that proves an existing (DCT-signed)
+# demisto image can additionally be signed with Sigstore/cosign ("dual sign")
+# and that both signatures verify.
+#
+# It is self-contained (docker-in-docker) and does NOT depend on the infra CI
+# templates, so it can be triggered independently of the normal build pipeline.
+#
+# ---------------------------------------------------------------------------
+# HOW TO RUN
+# ---------------------------------------------------------------------------
+# 1. Make sure these CI/CD variables exist (Settings > CI/CD > Variables),
+#    ideally masked + protected.
+#
+#    Signing key -- ONE of:
+#       COSIGN_KEY_REF       preferred: a KMS URI, e.g. gcpkms://projects/...
+#                            (no password needed; auth via the runner's GCP creds)
+#       COSIGN_PRIVATE_KEY   static key fallback: PEM contents of the private key
+#       COSIGN_PASSWORD      password protecting COSIGN_PRIVATE_KEY
+#
+#    Registry credentials:
+#       DOCKERHUB_USER       Docker Hub user (needs push to the target repo)
+#       DOCKERHUB_PASSWORD   Docker Hub password / access token
+#
+#    Optional:
+#       COSIGN_PUBLIC_KEY    PEM of the public key used to verify. If omitted it
+#                            is derived from the signing key (guaranteed to match).
+#
+# 2. Run a new pipeline (CI/CD > Pipelines > Run pipeline) with variable:
+#       RUN_COSIGN_POC = true
+#    Optionally override:
+#       TARGET_IMAGE        (default: demisto/python3:3.7.5.4328)
+#       COSIGN_TLOG_UPLOAD  (default: false)
+#       VERIFY_DCT          (default: true)
+#
+# 3. The `cosign-poc:dual-sign` job appears as a manual job -- press play.
+#
+# To include this file in the pipeline, add to the repo root .gitlab-ci.yml:
+#   include:
+#     - local: "/.gitlab/ci/cosign-poc-dual-sign.yml"
+# (The job only runs when RUN_COSIGN_POC == "true", so it is inert otherwise.)
+# =============================================================================
+
+# NOTE: intentionally no top-level `stages:` key. This file works both as a
+# standalone pipeline (CI_CONFIG_PATH) and when `include:`d into the main
+# pipeline. Declaring `stages:` would OVERRIDE the stage list coming from the
+# infra template on include, breaking jobs whose stage disappears. `.pre` is a
+# built-in stage that always exists, so it needs no declaration either way.
+
+cosign-poc:dual-sign:
+  stage: .pre
+  image: docker:27-cli
+  services:
+    - name: docker:27-dind
+      alias: docker
+  variables:
+    DOCKER_HOST: "tcp://docker:2376"
+    DOCKER_TLS_CERTDIR: "/certs"
+    DOCKER_TLS_VERIFY: "1"
+    DOCKER_CERT_PATH: "/certs/client"
+    # Defaults (overridable at pipeline run time):
+    TARGET_IMAGE: "demisto/python3:3.7.5.4328"
+    COSIGN_TLOG_UPLOAD: "false"
+    VERIFY_DCT: "true"
+    COSIGN_VERSION: "v2.4.1"
+  rules:
+    # Only ever surface this job when explicitly requested, and make it manual.
+    - if: '$RUN_COSIGN_POC == "true"'
+      when: manual
+      allow_failure: false
+    - when: never
+  before_script:
+    - apk add --no-cache bash curl
+  script:
+    - bash docker/cosign-poc/dual_sign_ci_test.sh

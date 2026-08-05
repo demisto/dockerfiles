@@ -410,6 +410,91 @@ function commit_dockerfiles_trust {
     cd "$cwd"
 }
 
+# ---------------------------------------------------------------------------
+# CIAC-16370: Sigstore/cosign signing (dual-sign alongside DCT/Notary).
+#
+# Signs an image by DIGEST (immutable) using cosign. This is ADDITIVE and
+# NON-FATAL: if cosign is not installed or no key is configured, signing is
+# skipped and the build continues unchanged. The existing Docker Content Trust
+# (DCT) path is left completely untouched.
+#
+# Key configuration -- one of the following:
+#   COSIGN_KEY_REF       Preferred. A cosign key reference, e.g. a KMS URI:
+#                          gcpkms://projects/<proj>/locations/<loc>/keyRings/\
+#                          <ring>/cryptoKeys/<key>/cryptoKeyVersions/<n>
+#                        With KMS no password is needed; auth comes from the
+#                        environment's GCP credentials.
+#   COSIGN_PRIVATE_KEY   Fallback (local/dev): PEM contents of a cosign private
+#                        key. Requires COSIGN_PASSWORD. Used as env://... ref.
+#
+# Other env vars:
+#   COSIGN_PASSWORD      Password protecting COSIGN_PRIVATE_KEY (static key only).
+#   COSIGN_TLOG_UPLOAD   "true"|"false" -- upload the signature to the PUBLIC
+#                        sigstore Rekor transparency log. Default: "false".
+#                        Keep false for internal images: it avoids a public
+#                        record of signing activity and removes a hard runtime
+#                        dependency on rekor.sigstore.dev during signing.
+#                        NOTE: verification of signatures made with tlog upload
+#                        disabled requires `cosign verify --insecure-ignore-tlog=true`.
+#
+# Param $1: fully-qualified image ref that has already been PUSHED (repo/name:tag).
+#           The ref must be resolvable to a registry digest (i.e. already pushed).
+# ---------------------------------------------------------------------------
+COSIGN_MISSING_WARNED="no"
+function cosign_sign {
+    local image_ref="$1"
+
+    # Resolve which key reference to use. Prefer an explicit (KMS) reference;
+    # fall back to an in-env PEM for local/dev usage.
+    local key_ref="${COSIGN_KEY_REF:-}"
+    if [ -z "${key_ref}" ] && [ -n "${COSIGN_PRIVATE_KEY:-}" ]; then
+        key_ref="env://COSIGN_PRIVATE_KEY"
+    fi
+
+    if [ -z "${key_ref}" ]; then
+        echo "cosign signing not configured (no COSIGN_KEY_REF / COSIGN_PRIVATE_KEY). Skipping for ${image_ref}."
+        return 1
+    fi
+
+    if ! command -v cosign >/dev/null 2>&1; then
+        if [ "${COSIGN_MISSING_WARNED}" = "no" ]; then
+            echo "cosign binary not found on PATH. Skipping cosign signing."
+            COSIGN_MISSING_WARNED="yes"
+        fi
+        return 1
+    fi
+
+    if [ "${DRY_RUN:-false}" = "true" ]; then
+        echo "[DRY-RUN] Would have cosign-signed: ${image_ref}"
+        return 0
+    fi
+
+    # Resolve the pushed image to an immutable digest reference. Signing a tag
+    # signs whatever the tag points to; signing the digest is race-free.
+    local digest_ref
+    digest_ref=$(docker inspect --format='{{index .RepoDigests 0}}' "${image_ref}" 2>/dev/null)
+    if [ -z "${digest_ref}" ]; then
+        # Fall back to signing the tag ref directly (cosign will resolve it).
+        echo "Could not resolve RepoDigest for ${image_ref}; signing tag ref directly."
+        digest_ref="${image_ref}"
+    fi
+
+    echo "cosign signing: ${digest_ref} (tlog upload: ${COSIGN_TLOG_UPLOAD:-false})"
+    set +e
+    COSIGN_PASSWORD="${COSIGN_PASSWORD:-}" cosign sign --yes \
+        --tlog-upload="${COSIGN_TLOG_UPLOAD:-false}" \
+        --key "${key_ref}" \
+        "${digest_ref}"
+    local cosign_exit_code=$?
+    set -e
+    if [ "${cosign_exit_code}" -ne 0 ]; then
+        echo "WARNING: cosign sign failed for ${digest_ref} (exit ${cosign_exit_code}). Non-fatal."
+        return 1
+    fi
+    echo "Done cosign signing: ${digest_ref}"
+    return 0
+}
+
 # build docker.
 # Param $1: docker dir with all relevant files
 function docker_build {
@@ -695,6 +780,9 @@ function docker_build {
                 return $?
             fi
             echo "Done docker push for cr: ${image_full_name}"
+            # POC (CIAC-16370): cosign-sign the image in the container registry (GCR).
+            # Non-fatal: signing problems never break the existing push flow.
+            cosign_sign "${CR_REPO}/${image_full_name}" || true
         fi
     else
         echo "Skipping docker push for cr"
@@ -724,6 +812,9 @@ function docker_build {
             if [[ "$docker_trust" == "1" ]]; then
                 commit_dockerfiles_trust
             fi
+            # POC (CIAC-16370): dual-sign the Docker Hub image with cosign in
+            # addition to the existing DCT/Notary signature above. Non-fatal.
+            cosign_sign "${image_full_name}" || true
         fi
         POST_COMMENT_ARGS=("${image_full_name}")
         if [ "${UPLOAD_MODE}" = "true" ]; then
@@ -814,6 +905,19 @@ Environment variables:
   DOCKERHUB_PASSWORD      Docker Hub password for login.
   CR_REPO                 Container registry repo URL for secondary push.
   CR_USER / CR_PASSWORD   Container registry credentials.
+  COSIGN_KEY_REF          (CIAC-16370) cosign key reference used to additionally
+                          sign pushed images with Sigstore/cosign alongside the
+                          existing DCT signature. Preferred form is a KMS URI:
+                          gcpkms://projects/<p>/locations/<l>/keyRings/<r>/
+                          cryptoKeys/<k>/cryptoKeyVersions/<n> (no password
+                          needed). Optional; unset = cosign signing disabled.
+  COSIGN_PRIVATE_KEY      Fallback for local/dev: PEM contents of a cosign
+                          private key. Used only if COSIGN_KEY_REF is unset.
+  COSIGN_PASSWORD         Password protecting COSIGN_PRIVATE_KEY (static key only).
+  COSIGN_TLOG_UPLOAD      "true"|"false" - upload signatures to the PUBLIC
+                          sigstore Rekor transparency log. Default: "false".
+                          Verifying signatures made with this disabled requires
+                          'cosign verify --insecure-ignore-tlog=true'.
   ARTIFACTS_FOLDER        Directory for build artifacts (default: artifacts).
   GITLAB_CI               Set automatically in GitLab CI runners.
 
