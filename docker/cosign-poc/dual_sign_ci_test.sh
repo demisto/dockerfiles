@@ -81,6 +81,26 @@ fi
 # ---------------------------------------------------------------------------
 log "Target image: ${TARGET_IMAGE}"
 
+# Production safety guard.
+# Signing writes a `sha256-<digest>.sig` tag into the SAME repository as the
+# image. For a `demisto/...` repo that is a customer-facing production
+# namespace, and Docker Hub tag deletion is a manual chore. Require an explicit
+# acknowledgement so a forgotten/defaulted TARGET_IMAGE can never silently sign
+# production. (This exact scenario happened once: an uncommitted default meant
+# CI fell back to demisto/python3 instead of the intended devdemisto image.)
+case "${TARGET_IMAGE}" in
+    demisto/*)
+        if [ "${ALLOW_PRODUCTION_SIGNING:-}" != "true" ]; then
+            fail "refusing to sign PRODUCTION image '${TARGET_IMAGE}'"
+            echo "       Signing adds a .sig tag to a customer-facing repo."
+            echo "       Use a devdemisto/... image, or set ALLOW_PRODUCTION_SIGNING=true"
+            echo "       if you genuinely intend to sign production."
+            exit 2
+        fi
+        log "ALLOW_PRODUCTION_SIGNING=true - proceeding against PRODUCTION ${TARGET_IMAGE}"
+        ;;
+esac
+
 # Resolve the signing key reference: prefer an explicit (KMS) ref, otherwise
 # fall back to an in-env PEM. Mirrors cosign_sign() in docker/build_docker.sh.
 COSIGN_KEY_REF="${COSIGN_KEY_REF:-}"

@@ -78,7 +78,10 @@ cosign-poc:dual-sign:
     DOCKER_TLS_VERIFY: "1"
     DOCKER_CERT_PATH: "/certs/client"
     # Defaults (overridable at pipeline run time):
-    TARGET_IMAGE: "demisto/python3:3.7.5.4328"
+    # Default to a DEV image so the first runs never touch a production repo.
+    # NOTE: tag numbering differs between orgs -- 3.7.5.4328 exists under
+    # demisto/ but NOT under devdemisto/. Verified present: 3.9.9.25548.
+    TARGET_IMAGE: "devdemisto/python3:3.9.9.25548"
     COSIGN_TLOG_UPLOAD: "false"
     # DCT verification via `DOCKER_CONTENT_TRUST=1 docker pull` is a NO-OP on
     # Docker 25+ (verified: it returns exit 0 even for unsigned images, and
