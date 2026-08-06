@@ -37,6 +37,22 @@
 #
 # 3. The `cosign-poc:dual-sign` job appears as a manual job -- press play.
 #
+# ---------------------------------------------------------------------------
+# HOW TO CLEAN UP (remove the POC signatures)
+# ---------------------------------------------------------------------------
+# Run a pipeline with:
+#       RUN_COSIGN_POC = true
+#       CLEANUP_MODE   = true
+# Optionally:
+#       DRY_RUN        = true    report what would be deleted, delete nothing
+#       CLEANUP_IMAGES = "repo:tag repo:tag"   override the default pair
+#
+# In cleanup mode the job runs docker/cosign-poc/cleanup_signatures.sh instead
+# of the signing script. It removes only the `sha256-<digest>.sig` tags; the
+# images themselves are never modified. No signing key is needed -- deleting a
+# signature does not require the key that produced it, only DELETE rights on
+# the repository.
+#
 # To include this file in the pipeline, add to the repo root .gitlab-ci.yml:
 #   include:
 #     - local: "/.gitlab/ci/cosign-poc-dual-sign.yml"
@@ -83,6 +99,12 @@ cosign-poc:dual-sign:
     # demisto/ but NOT under devdemisto/. Verified present: 3.9.9.25548.
     TARGET_IMAGE: "devdemisto/python3:3.9.9.25548"
     COSIGN_TLOG_UPLOAD: "false"
+    # Cleanup switch -- see "HOW TO CLEAN UP" above. Set to "true" at pipeline
+    # run time to delete the POC signatures instead of creating them.
+    CLEANUP_MODE: "false"
+    # The two images signed during the POC. Cleanup targets these by default.
+    CLEANUP_IMAGES: "demisto/python3:3.7.5.4328 devdemisto/python3:3.9.9.25548"
+    DRY_RUN: "false"
     # DCT verification via `DOCKER_CONTENT_TRUST=1 docker pull` is a NO-OP on
     # Docker 25+ (verified: it returns exit 0 even for unsigned images, and
     # `docker trust` was removed entirely). Leaving this on would produce a
@@ -97,4 +119,10 @@ cosign-poc:dual-sign:
   before_script:
     - apk add --no-cache bash curl
   script:
-    - bash docker/cosign-poc/dual_sign_ci_test.sh
+    - |
+      if [ "${CLEANUP_MODE}" = "true" ]; then
+        echo "CLEANUP_MODE=true -- removing POC cosign signatures"
+        bash docker/cosign-poc/cleanup_signatures.sh
+      else
+        bash docker/cosign-poc/dual_sign_ci_test.sh
+      fi
