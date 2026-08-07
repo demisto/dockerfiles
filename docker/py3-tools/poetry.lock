@@ -1330,15 +1330,18 @@ pyasn1 = ">=0.4.6"
 
 [[package]]
 name = "mail-parser"
-version = "4.2.1"
+version = "4.5.0"
 description = "A tool that parses emails by enhancing the Python standard library, extracting all details into a comprehensive object."
 optional = false
 python-versions = "<3.15,>=3.9"
 groups = ["main"]
 files = [
-    {file = "mail_parser-4.2.1-py3-none-any.whl", hash = "sha256:f7b46be5e0834173ca1538bf5b3cb118d4f169e7c16d157dd915aaa9bceba9a2"},
-    {file = "mail_parser-4.2.1.tar.gz", hash = "sha256:2ddd4e48bedbff28d09d0743e879d3818651d0301718838b1b81e7f93175d096"},
+    {file = "mail_parser-4.5.0-py3-none-any.whl", hash = "sha256:27ce06c80d2bf3680bc0a8d4aadef05a4f5ff6ebf13f6a668b8182bdcccdd72e"},
+    {file = "mail_parser-4.5.0.tar.gz", hash = "sha256:9ce06b44332115d43b82ee6d21a77a4e2a25cc42e219efe43730534b70c77a7e"},
 ]
+
+[package.extras]
+outlook = ["extract-msg (>=0.54)"]
 
 [[package]]
 name = "markdownify"
