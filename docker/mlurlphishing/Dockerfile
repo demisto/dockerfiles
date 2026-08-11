@@ -17,3 +17,12 @@ python3-dev \
   python3-dev \
   libxrender-dev \
 && rm -rf /var/lib/apt/lists/*
+# ---------------------------------------------------------------------------
+# TEMPORARY: image-size padding for testing only. DO NOT MERGE TO PRODUCTION.
+# Writes ~1.2GB of incompressible random data as a dedicated final layer so
+# the total image size is approximately 2GB. Random data is used (instead of
+# fallocate/truncate) because sparse/zero-filled files can be stored compactly
+# in the image layer and would not reliably grow the image.
+# To revert: delete this entire block (the file lives in its own layer).
+# ---------------------------------------------------------------------------
+RUN dd if=/dev/urandom of=/padding.bin bs=1M count=1200
