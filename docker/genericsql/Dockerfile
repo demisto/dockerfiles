@@ -1,6 +1,6 @@
-# Last modified: 2026-08-12T04:46:22.523486+00:00
+# Last modified: 2026-08-13T04:46:29.063010+00:00
 
-FROM demisto/python3-deb:3.12.13.11753038
+FROM demisto/python3-deb:3.12.13.11879924
 
 COPY requirements.txt .
 COPY odbcinst.ini /etc/odbcinst.ini
