@@ -611,14 +611,14 @@ packaging = "*"
 
 [[package]]
 name = "domaintools-api"
-version = "2.7.4"
+version = "2.9.0"
 description = "DomainTools Official Python API"
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "domaintools_api-2.7.4-py2.py3-none-any.whl", hash = "sha256:14b6f77fa88fac4e1bccba550000ac4be2aca5bc42f78754dcf40773a40d21fc"},
-    {file = "domaintools_api-2.7.4.tar.gz", hash = "sha256:810767fab065f053280bb226d15c44df3e8825162122ff43e63df2c13a01ea1a"},
+    {file = "domaintools_api-2.9.0-py2.py3-none-any.whl", hash = "sha256:e7a5792728132a08331eca064f412461ee38a1818eea3e50216f871c118d985c"},
+    {file = "domaintools_api-2.9.0.tar.gz", hash = "sha256:38e5be9dbc79592bbd6f50d8aa12cdc5c01da5d19f1e1bc1bc1f153e8ba4f4e3"},
 ]
 
 [package.dependencies]
@@ -628,7 +628,7 @@ rich = "*"
 typer = "*"
 
 [package.extras]
-test = ["mock", "pytest"]
+test = ["mock", "pytest", "pytest-asyncio", "pytest-cov", "vcrpy", "yarl"]
 
 [[package]]
 name = "duo-client"
