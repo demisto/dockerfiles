@@ -12,6 +12,7 @@ import bs4
 import ping3
 import psutil
 import asyncua
+import cloudvision
 
 def lookup_dns_record(domain, record_type='A'):
     """
