@@ -251,14 +251,14 @@ files = [
 
 [[package]]
 name = "anyio"
-version = "4.13.0"
+version = "4.14.2"
 description = "High-level concurrency and networking framework on top of asyncio or Trio"
 optional = false
 python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "anyio-4.13.0-py3-none-any.whl", hash = "sha256:08b310f9e24a9594186fd75b4f73f4a4152069e3853f1ed8bfbf58369f4ad708"},
-    {file = "anyio-4.13.0.tar.gz", hash = "sha256:334b70e641fd2221c1505b3890c69882fe4a2df910cba14d97019b90b24439dc"},
+    {file = "anyio-4.14.2-py3-none-any.whl", hash = "sha256:9f505dda5ac9f0c8309b5e8bd445a8c2bf7246f3ce950121e45ea15bc41d1494"},
+    {file = "anyio-4.14.2.tar.gz", hash = "sha256:cfa139f3ed1a23ee8f88a145ddb5ac7605b8bbfd8592baacd7ce3d8bb4313c7f"},
 ]
 
 [package.dependencies]
@@ -396,14 +396,14 @@ files = [
 
 [[package]]
 name = "beautifulsoup4"
-version = "4.14.3"
+version = "4.15.0"
 description = "Screen-scraping library"
 optional = false
 python-versions = ">=3.7.0"
 groups = ["main"]
 files = [
-    {file = "beautifulsoup4-4.14.3-py3-none-any.whl", hash = "sha256:0918bfe44902e6ad8d57732ba310582e98da931428d231a5ecb9e7c703a735bb"},
-    {file = "beautifulsoup4-4.14.3.tar.gz", hash = "sha256:6292b1c5186d356bba669ef9f7f051757099565ad9ada5dd630bd9de5fa7fb86"},
+    {file = "beautifulsoup4-4.15.0-py3-none-any.whl", hash = "sha256:d6f88de62e1d4e38ecb1077eb9724cd0eff29d2a08ca16a401e9b9e93f117cf9"},
+    {file = "beautifulsoup4-4.15.0.tar.gz", hash = "sha256:288e3ca7d54b06f2ac191970bc275c1939cb46d450b255bf6718b04aa37ab4f7"},
 ]
 
 [package.dependencies]
@@ -760,14 +760,15 @@ trio = ["trio (>=0.30)"]
 wmi = ["wmi (>=1.5.1) ; platform_system == \"Windows\""]
 
 [[package]]
-name = "docopt"
-version = "0.6.2"
-description = "Pythonic argument parser, that will make you smile"
+name = "docopt-ng"
+version = "0.9.0"
+description = "Jazzband-maintained fork of docopt, the humane command line arguments parser."
 optional = false
-python-versions = "*"
+python-versions = ">=3.7"
 groups = ["main"]
 files = [
-    {file = "docopt-0.6.2.tar.gz", hash = "sha256:49b3a825280bd66b3aa83585ef59c4a8c82f2c8a522dbe754a8bc8d08c85c491"},
+    {file = "docopt_ng-0.9.0-py3-none-any.whl", hash = "sha256:bfe4c8b03f9fca424c24ee0b4ffa84bf7391cb18c29ce0f6a8227a3b01b81ff9"},
+    {file = "docopt_ng-0.9.0.tar.gz", hash = "sha256:91c6da10b5bb6f2e9e25345829fb8278c78af019f6fc40887ad49b060483b1d7"},
 ]
 
 [[package]]
@@ -826,18 +827,30 @@ test = ["pytest (>=7.4,<8.0)"]
 
 [[package]]
 name = "feedparser"
-version = "6.0.12"
+version = "6.0.13"
 description = "Universal feed parser, handles RSS 0.9x, RSS 1.0, RSS 2.0, CDF, Atom 0.3, and Atom 1.0 feeds"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "feedparser-6.0.12-py3-none-any.whl", hash = "sha256:6bbff10f5a52662c00a2e3f86a38928c37c48f77b3c511aedcd51de933549324"},
-    {file = "feedparser-6.0.12.tar.gz", hash = "sha256:64f76ce90ae3e8ef5d1ede0f8d3b50ce26bcce71dd8ae5e82b1cd2d4a5f94228"},
+    {file = "feedparser-6.0.13-py3-none-any.whl", hash = "sha256:ff00fcd62a1bba943ad6dadb7e3139bc3e2d9e027859343283112d605e794e52"},
+    {file = "feedparser-6.0.13.tar.gz", hash = "sha256:ceba9cd98a0a4bfc17e24e8ea47e649f194fbf881d417fd5bd0af2927a03c5c9"},
 ]
 
 [package.dependencies]
-sgmllib3k = "*"
+feedparser-sgmllib = ">=1,<2"
+
+[[package]]
+name = "feedparser-sgmllib"
+version = "1.0.0"
+description = "sgmllib from Python 2.7. For feedparser use only."
+optional = false
+python-versions = ">=3.10"
+groups = ["main"]
+files = [
+    {file = "feedparser_sgmllib-1.0.0-py3-none-any.whl", hash = "sha256:d0d5daf29b3f315396d4d5a65b5fe28862d1bc4ea37dec826ccbf1021034a959"},
+    {file = "feedparser_sgmllib-1.0.0.tar.gz", hash = "sha256:f73861ca2f6bb2798b2499fbab62d34bd27fd13379704a38ed616c67eb0a76a6"},
+]
 
 [[package]]
 name = "filelock"
@@ -1005,14 +1018,14 @@ files = [
 
 [[package]]
 name = "geopy"
-version = "2.4.1"
+version = "2.5.0"
 description = "Python Geocoding Toolbox"
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 groups = ["main"]
 files = [
-    {file = "geopy-2.4.1-py3-none-any.whl", hash = "sha256:ae8b4bc5c1131820f4d75fce9d4aaaca0c85189b3aa5d64c3dcaf5e3b7b882a7"},
-    {file = "geopy-2.4.1.tar.gz", hash = "sha256:50283d8e7ad07d89be5cb027338c6365a32044df3ae2556ad3f52f4840b3d0d1"},
+    {file = "geopy-2.5.0-py3-none-any.whl", hash = "sha256:8ad8cc226b505ca4d272ae9a2eeba08b8a2c565fc9a04eaefc33ad49c32b51aa"},
+    {file = "geopy-2.5.0.tar.gz", hash = "sha256:7b6c849f18108dcce4faa3d614e2801107b465f7b05fd3c1db9db12e225ae950"},
 ]
 
 [package.dependencies]
@@ -1020,10 +1033,10 @@ geographiclib = ">=1.52,<3"
 
 [package.extras]
 aiohttp = ["aiohttp"]
-dev = ["coverage", "flake8 (>=5.0,<5.1)", "isort (>=5.10.0,<5.11.0)", "pytest (>=3.10)", "pytest-asyncio (>=0.17)", "readme-renderer", "sphinx (<=4.3.2)", "sphinx-issues", "sphinx-rtd-theme (>=0.5.0)"]
-dev-docs = ["readme-renderer", "sphinx (<=4.3.2)", "sphinx-issues", "sphinx-rtd-theme (>=0.5.0)"]
-dev-lint = ["flake8 (>=5.0,<5.1)", "isort (>=5.10.0,<5.11.0)"]
-dev-test = ["coverage", "pytest (>=3.10)", "pytest-asyncio (>=0.17)", "sphinx (<=4.3.2)"]
+dev = ["coverage", "flake8 (>=7.1.2,<7.4)", "isort (>=5.13.2,<8.1)", "pytest (>=3.10)", "pytest-asyncio (>=0.17)", "readme_renderer", "sphinx (<=9.1.0)", "sphinx (<=9.1.0)", "sphinx-issues", "sphinx_rtd_theme (>=3.1.0)"]
+dev-docs = ["readme_renderer", "sphinx (<=9.1.0)", "sphinx-issues", "sphinx_rtd_theme (>=3.1.0)"]
+dev-lint = ["flake8 (>=7.1.2,<7.4)", "isort (>=5.13.2,<8.1)"]
+dev-test = ["coverage", "pytest (>=3.10)", "pytest-asyncio (>=0.17)", "sphinx (<=9.1.0)"]
 requests = ["requests (>=2.16.2)", "urllib3 (>=1.24.2)"]
 timezone = ["pytz"]
 
@@ -1222,14 +1235,14 @@ all = ["mypy (>=1.11.2)", "pytest (>=8.3.2)", "ruff (>=0.6.2)"]
 
 [[package]]
 name = "imap-tools"
-version = "1.13.0"
+version = "1.14.0"
 description = "Work with email by IMAP"
 optional = false
-python-versions = "*"
+python-versions = ">=3.8"
 groups = ["main"]
 files = [
-    {file = "imap_tools-1.13.0-py3-none-any.whl", hash = "sha256:656c37beba22ab2929b73c07d0ca397ae8805b670d390b1127723e3335244e6d"},
-    {file = "imap_tools-1.13.0.tar.gz", hash = "sha256:0da0d72c921a724cba09b959bad9bfaf60bca537a697e69a076fdf607ef5775c"},
+    {file = "imap_tools-1.14.0-py3-none-any.whl", hash = "sha256:eab3506e701eba44269bc04760b8b29a96c93b173553057180fe40a084d65426"},
+    {file = "imap_tools-1.14.0.tar.gz", hash = "sha256:d730a35763c09ca02be45b93c8d5d638d9f098876c95841c7ce4d337ede403da"},
 ]
 
 [[package]]
@@ -1329,14 +1342,14 @@ files = [
 
 [[package]]
 name = "markdownify"
-version = "1.2.2"
+version = "1.2.3"
 description = "Convert HTML to markdown."
 optional = false
 python-versions = "*"
 groups = ["main"]
 files = [
-    {file = "markdownify-1.2.2-py3-none-any.whl", hash = "sha256:3f02d3cc52714084d6e589f70397b6fc9f2f3a8531481bf35e8cc39f975e186a"},
-    {file = "markdownify-1.2.2.tar.gz", hash = "sha256:b274f1b5943180b031b699b199cbaeb1e2ac938b75851849a31fd0c3d6603d09"},
+    {file = "markdownify-1.2.3-py3-none-any.whl", hash = "sha256:a189a0bedfd14009030fde5f85bb6f77c56897cb839b5c25315dd7d4e3e290ba"},
+    {file = "markdownify-1.2.3.tar.gz", hash = "sha256:1a176f05522c8a2cb1dd3ab9d307dcdadbed5c26ae717855bfc42b3b6d38d937"},
 ]
 
 [package.dependencies]
@@ -2550,17 +2563,6 @@ python-http-client = ">=3.2.1"
 werkzeug = {version = ">=2.3.5", markers = "python_version >= \"3.12\""}
 
 [[package]]
-name = "sgmllib3k"
-version = "1.0.0"
-description = "Py3k port of sgmllib."
-optional = false
-python-versions = "*"
-groups = ["main"]
-files = [
-    {file = "sgmllib3k-1.0.0.tar.gz", hash = "sha256:7868fb1c8bfa764c1ac563d3cf369c381d1325d36124933a726f29fcdaa812e9"},
-]
-
-[[package]]
 name = "simplejson"
 version = "3.20.2"
 description = "Simple, fast, extensible JSON encoder/decoder for Python"
@@ -2748,18 +2750,18 @@ test = ["coverage", "pytest", "pytest-cov"]
 
 [[package]]
 name = "stomp-py"
-version = "8.2.0"
+version = "9.0.0"
 description = "Python STOMP client, supporting versions 1.0, 1.1 and 1.2 of the protocol"
 optional = false
-python-versions = "<4.0,>=3.7"
+python-versions = "<4.0,>=3.10"
 groups = ["main"]
 files = [
-    {file = "stomp_py-8.2.0-py3-none-any.whl", hash = "sha256:fad24e51b505996015a39ca1632df4e0225c1c552980955e21f2aebfc0d9d85c"},
-    {file = "stomp_py-8.2.0.tar.gz", hash = "sha256:9908689361e263bf198e6acfb3c4386759fb7df7d141f4384d7414771c68d7fc"},
+    {file = "stomp_py-9.0.0-py3-none-any.whl", hash = "sha256:d115c85950b92dad358d11bc361b23d23994d21ff7eef50119f487f718ea4be2"},
+    {file = "stomp_py-9.0.0.tar.gz", hash = "sha256:77b63fdd6cb2fb5e3d7032c5e1cde70c005f498d6096b77827efe71913196464"},
 ]
 
 [package.dependencies]
-docopt = ">=0.6.2,<0.7.0"
+docopt-ng = ">=0.9.0,<0.10.0"
 websocket-client = ">=1.2.3,<2.0.0"
 
 [[package]]
@@ -2839,14 +2841,14 @@ files = [
 
 [[package]]
 name = "tweepy"
-version = "4.16.0"
+version = "4.17.0"
 description = "Library for accessing the X API (Twitter)"
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "tweepy-4.16.0-py3-none-any.whl", hash = "sha256:48d1a1eb311d2c4b8990abcfa6f9fa2b2ad61be05c723b1a9b4f242656badae2"},
-    {file = "tweepy-4.16.0.tar.gz", hash = "sha256:1d95cbdc50bf6353a387f881f2584eaf60d14e00dbbdd8872a73de79c66878e3"},
+    {file = "tweepy-4.17.0-py3-none-any.whl", hash = "sha256:1244d7f2959091542f8e4a2c0c4256294e3beb69c0aa26eaf634b126d81eee49"},
+    {file = "tweepy-4.17.0.tar.gz", hash = "sha256:c232e9fffa0b15b81d5ff8ec59d46af85e330285ffc3e64614d2418fb9af71b5"},
 ]
 
 [package.dependencies]
