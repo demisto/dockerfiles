@@ -1,4 +1,4 @@
-# Last modified: 2026-07-14T07:50:42.385524+00:00
+# Last modified: 2026-07-27T04:44:18.718308+00:00
 FROM demisto/python3-deb-bullseye:3.12.11.10786156
 
 WORKDIR "/app"
@@ -29,9 +29,13 @@ RUN apt-get update -y -q && \
     fonts-noto-core \
     libgbm-dev \
     && rm -rf /var/lib/apt/lists/* \
-    && npm i npm@8.1.3 -g
+    && npm install -g npm@8.19.4
 
-RUN npm i puppeteer@5.3.1 && ln -s /app/node_modules/puppeteer/.local-chromium/linux-*/chrome-linux/chrome /usr/bin/chromium-browser
+# This line can be removed after puppeteer will update the brace-expansion in their side to >=5.0.8
+# https://github.com/puppeteer/puppeteer/blob/main/package-lock.json
+RUN echo '{"name":"app","version":"1.0.0","overrides":{"brace-expansion":"5.0.8"}}' > package.json && \
+    npm install puppeteer@5.3.1 && \
+    ln -s /app/node_modules/puppeteer/.local-chromium/linux-*/chrome-linux/chrome /usr/bin/chromium-browser
 # install gsutil acc to https://cloud.google.com/storage/docs/gsutil_install
 RUN apt-get update -y -q && apt-get install -y -q apt-transport-https ca-certificates gnupg curl \
     && echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list \
