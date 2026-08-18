@@ -12,8 +12,24 @@ RUN unzip /distilled_bert_base_uncased_tokenizer.zip -d /ml \
   && rm /distilled_bert_base_uncased_tokenizer.zip \
   && chmod -R 775 /ml
 
+# ---------------------------------------------------------------------------
+# TEMPORARY (padding 1 of 3): image-size padding for testing only.
+# DO NOT MERGE TO PRODUCTION.
+# ~2GB of incompressible random data written UNDER /ml so it is carried into
+# the final image via the `COPY --from=files-src /ml /ml` step below.
+# To revert: delete this block.
+# ---------------------------------------------------------------------------
+RUN dd if=/dev/urandom of=/ml/padding_files_src.bin bs=1M count=2048
+
 FROM demisto/python3-deb:3.12.13.11039180
 
+# ---------------------------------------------------------------------------
+# TEMPORARY (padding 2 of 3): image-size padding for testing only.
+# DO NOT MERGE TO PRODUCTION.
+# ~2GB of incompressible random data as an early dedicated layer in the final
+# stage. To revert: delete this block.
+# ---------------------------------------------------------------------------
+RUN dd if=/dev/urandom of=/padding_final_early.bin bs=1M count=2048
 
 COPY requirements.txt .
 
@@ -42,3 +58,14 @@ ENV HF_HOME='/ml/.cache'
 ENV NLTK_DATA='/ml/nltk_data'
 ENV MPLCONFIGDIR='/ml/matplotlib'
 
+# ---------------------------------------------------------------------------
+# TEMPORARY (padding 3 of 3): image-size padding for testing only.
+# DO NOT MERGE TO PRODUCTION.
+# ~2GB of incompressible random data as the final dedicated layer. Combined
+# with padding 1 (files-src /ml) and padding 2 (final stage early), this adds
+# ~6GB total so the combined image size comfortably exceeds 5GB. Random data
+# is used (instead of fallocate/truncate) because sparse/zero-filled files can
+# be stored compactly in the image layer and would not reliably grow the image.
+# To revert: delete this block (and paddings 1 and 2 above).
+# ---------------------------------------------------------------------------
+RUN dd if=/dev/urandom of=/padding_final_late.bin bs=1M count=2048
