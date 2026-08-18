@@ -9,6 +9,8 @@
 #   1. `poc:generate-matrix`  discovers changed images and GENERATES a child
 #      pipeline YAML with one build job per image.
 #   2. `poc:run-builds`       triggers that generated child pipeline.
+#   3. `poc:fan-in`           consolidates results after all builds finish
+#      (POC-scale analogue of the real `save_results` step).
 #
 # A dynamic child pipeline is required because GitLab needs the matrix/job set at
 # pipeline-definition time; the set of changed images is only known at runtime.
@@ -26,6 +28,7 @@ variables:
 stages:
   - poc-generate
   - poc-build
+  - fan-in
 
 # -----------------------------------------------------------------------------
 # Stage 1: discover changed images and generate a child pipeline (one job/image)
@@ -70,3 +73,39 @@ poc:run-builds:
       - artifact: poc-child-pipeline.yml
         job: poc:generate-matrix
     strategy: depend
+
+# -----------------------------------------------------------------------------
+# Stage 3: fan-in / consolidation (POC-scale analogue of the real `save_results`)
+# -----------------------------------------------------------------------------
+# The per-image builds run in the CHILD pipeline triggered by `poc:run-builds`.
+# Because that trigger uses `strategy: depend`, `poc:run-builds` only succeeds
+# once every child build job finishes, and this job only starts afterwards. This
+# is where the full implementation will merge per-image results, write carry-over
+# state to GCS, and post the Slack summary. For the POC we just consolidate the
+# metadata (the changed-image list) to prove the parallel-then-fan-in flow works.
+#
+# `when: always` so we still summarize even if a child build failed — the real
+# save_results must run regardless to record failures for the next run.
+poc:fan-in:
+  stage: fan-in
+  image: "${POC_PY_IMAGE}"
+  needs:
+    - job: poc:generate-matrix
+      artifacts: true
+    - job: poc:run-builds
+  when: always
+  script:
+    - echo "===== POC fan-in: consolidating per-image build results ====="
+    - |
+      if [ -s changed_images.txt ]; then
+        COUNT=$(grep -c . changed_images.txt || echo 0)
+      else
+        COUNT=0
+      fi
+    - echo "Images dispatched to per-image build jobs: ${COUNT}"
+    - echo "Image list:" && (cat changed_images.txt 2>/dev/null || echo "(none)")
+    # In the full implementation this step will: merge per-image failure metadata,
+    # compute the carry-over set, persist it to the GCS bucket, and post a Slack
+    # summary. Kept as a placeholder in the POC.
+    - echo "TODO(full impl): merge results, write GCS carry-over, post Slack summary."
+    - echo "===== POC fan-in complete ====="
