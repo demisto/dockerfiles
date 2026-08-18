@@ -5,3 +5,7 @@ include:
   - file: "/.gitlab/ci/dockerfiles/.gitlab-ci.yml"
     ref: $INFRA_BRANCH
     project: "${CI_PROJECT_NAMESPACE}/infra"
+  # CIAC-17423 POC: per-image parallel build. Runs as part of the MR pipeline so we
+  # can verify the parallel fan-out (one build job per changed image) passes on CI.
+  # Remove this local include once the POC is validated.
+  - local: "/.gitlab/poc-parallel.gitlab-ci.yml"

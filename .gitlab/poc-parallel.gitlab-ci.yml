@@ -1,0 +1,72 @@
+# =============================================================================
+# CIAC-17423 — PARALLEL BUILD POC (standalone, self-contained)
+# =============================================================================
+# Purpose: prove on CI that building each changed docker image in its OWN job
+# (per-image parallelism) works, so no single job accumulates the whole batch on
+# disk. This is intentionally minimal and independent of the `infra` pipeline.
+#
+# How it works (GitLab dynamic child pipeline pattern):
+#   1. `poc:generate-matrix`  discovers changed images and GENERATES a child
+#      pipeline YAML with one build job per image.
+#   2. `poc:run-builds`       triggers that generated child pipeline.
+#
+# A dynamic child pipeline is required because GitLab needs the matrix/job set at
+# pipeline-definition time; the set of changed images is only known at runtime.
+#
+# To try it: include this file from the pipeline you run, or run it directly as
+# the CI config for a POC branch. Adjust `POC_BASE_REF` to your MR target branch.
+# =============================================================================
+
+variables:
+  # Base ref to diff against for discovering changed images.
+  POC_BASE_REF: "origin/master"
+  # Image used to run the small python/git discovery step.
+  POC_PY_IMAGE: "python:3.10-slim"
+
+stages:
+  - poc-generate
+  - poc-build
+
+# -----------------------------------------------------------------------------
+# Stage 1: discover changed images and generate a child pipeline (one job/image)
+# -----------------------------------------------------------------------------
+poc:generate-matrix:
+  stage: poc-generate
+  image: "${POC_PY_IMAGE}"
+  before_script:
+    # git is needed for the diff-based discovery; slim images may lack it.
+    - apt-get update -qq && apt-get install -y -qq git >/dev/null
+    # Ensure the base ref is available for diffing in a shallow CI checkout.
+    - git fetch --no-tags --depth=1 origin "${POC_BASE_REF#origin/}" || true
+  script:
+    - echo "Discovering changed images against ${POC_BASE_REF}..."
+    - |
+      python docker/parallel_poc/get_changed_images.py \
+        --diff-compare "${POC_BASE_REF}...HEAD" \
+        --format lines \
+        --output changed_images.txt
+    - echo "Changed images:" && cat changed_images.txt || true
+    # Generate the child pipeline YAML: one build job per changed image.
+    - python docker/parallel_poc/generate_child_pipeline.py \
+        --images-file changed_images.txt \
+        --output poc-child-pipeline.yml
+    - echo "----- generated child pipeline -----" && cat poc-child-pipeline.yml
+  artifacts:
+    paths:
+      - poc-child-pipeline.yml
+      - changed_images.txt
+    expire_in: 1 day
+
+# -----------------------------------------------------------------------------
+# Stage 2: run the generated child pipeline (fans out to one job per image)
+# -----------------------------------------------------------------------------
+poc:run-builds:
+  stage: poc-build
+  needs:
+    - job: poc:generate-matrix
+      artifacts: true
+  trigger:
+    include:
+      - artifact: poc-child-pipeline.yml
+        job: poc:generate-matrix
+    strategy: depend
