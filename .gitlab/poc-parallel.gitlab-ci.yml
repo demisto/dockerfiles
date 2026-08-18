@@ -1,9 +1,9 @@
 # =============================================================================
-# CIAC-17423 — PARALLEL BUILD POC (standalone, self-contained)
+# CIAC-17423 — PARALLEL BUILD POC (additive overlay for the MR pipeline)
 # =============================================================================
 # Purpose: prove on CI that building each changed docker image in its OWN job
 # (per-image parallelism) works, so no single job accumulates the whole batch on
-# disk. This is intentionally minimal and independent of the `infra` pipeline.
+# disk.
 #
 # How it works (GitLab dynamic child pipeline pattern):
 #   1. `poc:generate-matrix`  discovers changed images and GENERATES a child
@@ -12,11 +12,12 @@
 #   3. `poc:fan-in`           consolidates results after all builds finish
 #      (POC-scale analogue of the real `save_results` step).
 #
-# A dynamic child pipeline is required because GitLab needs the matrix/job set at
-# pipeline-definition time; the set of changed images is only known at runtime.
-#
-# To try it: include this file from the pipeline you run, or run it directly as
-# the CI config for a POC branch. Adjust `POC_BASE_REF` to your MR target branch.
+# IMPORTANT: this file is merged into the MR pipeline alongside the `infra`
+# include. GitLab MERGES included configs, and a top-level `stages:` key in a
+# later-included file REPLACES the stage list contributed by earlier includes —
+# which would orphan infra jobs (e.g. `jobs-done-check-on-push`). To stay purely
+# additive we therefore DO NOT declare `stages:` here and instead place every POC
+# job on the always-present reserved `.pre` stage, ordering them with `needs:`.
 # =============================================================================
 
 variables:
@@ -25,16 +26,11 @@ variables:
   # Image used to run the small python/git discovery step.
   POC_PY_IMAGE: "python:3.10-slim"
 
-stages:
-  - poc-generate
-  - poc-build
-  - fan-in
-
 # -----------------------------------------------------------------------------
-# Stage 1: discover changed images and generate a child pipeline (one job/image)
+# Step 1: discover changed images and generate a child pipeline (one job/image)
 # -----------------------------------------------------------------------------
 poc:generate-matrix:
-  stage: poc-generate
+  stage: .pre
   image: "${POC_PY_IMAGE}"
   before_script:
     # git is needed for the diff-based discovery; slim images may lack it.
@@ -61,10 +57,10 @@ poc:generate-matrix:
     expire_in: 1 day
 
 # -----------------------------------------------------------------------------
-# Stage 2: run the generated child pipeline (fans out to one job per image)
+# Step 2: run the generated child pipeline (fans out to one job per image)
 # -----------------------------------------------------------------------------
 poc:run-builds:
-  stage: poc-build
+  stage: .pre
   needs:
     - job: poc:generate-matrix
       artifacts: true
@@ -75,28 +71,25 @@ poc:run-builds:
     strategy: depend
 
 # -----------------------------------------------------------------------------
-# Stage 3: fan-in / consolidation (POC-scale analogue of the real `save_results`)
+# Step 3: fan-in / consolidation (POC-scale analogue of the real `save_results`)
 # -----------------------------------------------------------------------------
 # The per-image builds run in the CHILD pipeline triggered by `poc:run-builds`.
 # Because that trigger uses `strategy: depend`, `poc:run-builds` only succeeds
-# once every child build job finishes, and this job only starts afterwards. This
-# is where the full implementation will merge per-image results, write carry-over
-# state to GCS, and post the Slack summary. For the POC we just consolidate the
-# metadata (the changed-image list) to prove the parallel-then-fan-in flow works.
+# once every child build job finishes, and this job only starts afterwards
+# (enforced via `needs`). This is where the full implementation will merge
+# per-image results, write carry-over state to GCS, and post the Slack summary.
+# For the POC we just consolidate the metadata (the changed-image list).
 #
 # `when: always` so we still summarize even if a child build failed — the real
 # save_results must run regardless to record failures for the next run.
 poc:fan-in:
-  stage: fan-in
+  stage: .pre
   image: "${POC_PY_IMAGE}"
   needs:
     - job: poc:generate-matrix
       artifacts: true
     - job: poc:run-builds
   when: always
-  # In the full implementation this step will merge per-image failure metadata,
-  # compute the carry-over set, persist it to the GCS bucket, and post a Slack
-  # summary. Kept as a metadata-only consolidation in the POC.
   script:
     - 'echo "===== POC fan-in: consolidating per-image build results ====="'
     - 'COUNT=$(grep -c . changed_images.txt 2>/dev/null || echo 0); echo "Images dispatched to per-image build jobs: ${COUNT}"'
