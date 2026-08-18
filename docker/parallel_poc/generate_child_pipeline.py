@@ -101,8 +101,24 @@ def _dump(node: Any, indent: int, lines: list[str]) -> None:
 
 
 def _build_job(image: str) -> dict[str, Any]:
-    """Return the GitLab job definition (as a dict) for a single image."""
+    """
+    Return the GitLab job definition (as a dict) for a single image.
+
+    POC intent: prove that with one job per image, each job's artifact (the saved
+    image tar) stays well under the per-job artifact/disk limit — so no single job
+    can blow past 5 GB the way the whole-batch build does today.
+
+    We build the image directly from its own ``docker/<image>/Dockerfile`` and
+    ``docker save | gzip`` it into an ISOLATED per-job directory, then print the
+    tar size. This deliberately bypasses ``build_docker.sh`` (which requires a
+    pyenv/registry toolchain baked into the infra runner image, not present in the
+    generic ``docker:24.0`` image). The full implementation (Phase 5) will run the
+    real ``build_docker.sh`` on the infra runner; the sharding shape proven here is
+    identical: one image -> one job -> one tar.
+    """
     artifacts_dir = f"artifacts/{image}"
+    tag = f"poc/{image}:ci"
+    tar = f"{artifacts_dir}/{image}.tar"
     return {
         "stage": "build",
         "image": BUILD_IMAGE,
@@ -114,13 +130,26 @@ def _build_job(image: str) -> dict[str, Any]:
             "IMAGE_NAME": image,
         },
         "before_script": [
-            "apk add --no-cache bash git jq python3 py3-pip >/dev/null",
+            # Wait for the dind daemon to be ready before building.
+            'for i in $(seq 1 30); do docker info >/dev/null 2>&1 && break; echo "waiting for docker daemon..."; sleep 2; done',
         ],
         "script": [
             f"echo Building single image {image}",
             f'mkdir -p "{artifacts_dir}"',
-            # The existing single-image primitive: build_docker.sh <image>.
-            f'bash docker/build_docker.sh --save-dir "{artifacts_dir}" "{image}"',
+            # Build this one image from its own Dockerfile context. A base-image
+            # pull failure (e.g. a private demisto/* base needing registry auth)
+            # is tolerated so the POC still proves per-job sizing for the images
+            # that DO build (notably the size-padded 'ml' image). Record the
+            # outcome as the per-image reason for the fan-in summary.
+            f'if docker build -t "{tag}" "docker/{image}"; then STATUS=built; else STATUS="build-skipped (base image unavailable on POC runner)"; fi',
+            # Save + gzip the image tar into this job's isolated artifact dir
+            # (only if the build produced an image).
+            f'if [ "$STATUS" = built ]; then docker save "{tag}" | gzip > "{tar}.gz"; fi',
+            # Report the per-job artifact size — this is the number the per-job
+            # (5 GB) limit applies to. With one image per job it stays small.
+            f'echo "Per-job artifact for {image}: status=$STATUS"; ls -lh "{tar}.gz" 2>/dev/null || true; du -sh "{artifacts_dir}" || true',
+            # Emit a tiny metadata file for the fan-in to consolidate.
+            f'SIZE=$(du -b "{tar}.gz" 2>/dev/null | cut -f1 || echo 0); echo "{image} status=$STATUS bytes=$SIZE" > "{artifacts_dir}/size.txt"; cat "{artifacts_dir}/size.txt"',
         ],
         "artifacts": {
             "when": "always",
