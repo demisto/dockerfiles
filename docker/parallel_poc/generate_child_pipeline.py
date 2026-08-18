@@ -11,6 +11,12 @@ The list of images is read from a newline-separated file (produced by
 ``get_changed_images.py --format lines``). If the list is empty, a harmless
 no-op job is emitted so the child pipeline is still valid.
 
+The pipeline is assembled as a Python dict and serialized with ``yaml.safe_dump``
+so that every value is correctly quoted. Hand-writing YAML is error-prone: a
+script line like ``echo "Building single image: ml"`` contains a ``: `` and, if
+emitted unquoted, YAML parses it as a mapping instead of a string — which GitLab
+rejects with "script config should be a string".
+
 Usage:
     python docker/parallel_poc/generate_child_pipeline.py \
         --images-file changed_images.txt \
@@ -20,6 +26,9 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
+from typing import Any
+
+import yaml
 
 # Image the per-image build jobs run in. This POC uses docker-in-docker so
 # `build_docker.sh` (which calls `docker buildx`) works inside CI.
@@ -44,56 +53,66 @@ def _job_name(image: str) -> str:
     return f"poc-build:{safe}"
 
 
-def render_pipeline(images: list[str]) -> str:
-    """Render the child-pipeline YAML as a string."""
-    header = [
-        "# AUTO-GENERATED child pipeline for the CIAC-17423 parallel-build POC.",
-        "# One job per changed image; each builds a single image in isolation.",
-        "",
-        "stages:",
-        "  - build",
-        "",
-    ]
+def _build_job(image: str) -> dict[str, Any]:
+    """Return the GitLab job definition (as a dict) for a single image."""
+    artifacts_dir = f"artifacts/{image}"
+    return {
+        "stage": "build",
+        "image": BUILD_IMAGE,
+        "services": [DIND_SERVICE],
+        "variables": {
+            "DOCKER_TLS_CERTDIR": "/certs",
+            # Isolate this job's build artifacts so nothing is shared across jobs.
+            "ARTIFACTS_FOLDER": artifacts_dir,
+            "IMAGE_NAME": image,
+        },
+        "before_script": [
+            "apk add --no-cache bash git jq python3 py3-pip >/dev/null",
+        ],
+        "script": [
+            f"echo Building single image {image}",
+            f'mkdir -p "{artifacts_dir}"',
+            # The existing single-image primitive: build_docker.sh <image>.
+            f'bash docker/build_docker.sh --save-dir "{artifacts_dir}" "{image}"',
+        ],
+        "artifacts": {
+            "when": "always",
+            "paths": [f"{artifacts_dir}/"],
+            "expire_in": "1 day",
+        },
+    }
+
+
+def build_pipeline(images: list[str]) -> dict[str, Any]:
+    """Assemble the child-pipeline definition as a dict."""
+    pipeline: dict[str, Any] = {"stages": ["build"]}
 
     if not images:
-        header += [
-            "poc-build:noop:",
-            "  stage: build",
-            "  image: alpine:3.19",
-            "  script:",
-            '    - echo "No changed images detected — nothing to build."',
-            "",
-        ]
-        return "\n".join(header)
+        pipeline["poc-build:noop"] = {
+            "stage": "build",
+            "image": "alpine:3.19",
+            "script": ["echo No changed images detected - nothing to build."],
+        }
+        return pipeline
 
-    lines = header
     for image in images:
-        lines += [
-            f"{_job_name(image)}:",
-            "  stage: build",
-            f"  image: {BUILD_IMAGE}",
-            "  services:",
-            f"    - {DIND_SERVICE}",
-            "  variables:",
-            "    DOCKER_TLS_CERTDIR: \"/certs\"",
-            "    # Isolate this job's build artifacts so nothing is shared across jobs.",
-            f"    ARTIFACTS_FOLDER: \"artifacts/{image}\"",
-            f"    IMAGE_NAME: \"{image}\"",
-            "  before_script:",
-            "    - apk add --no-cache bash git jq python3 py3-pip >/dev/null",
-            "  script:",
-            f'    - echo "Building single image: {image}"',
-            f'    - mkdir -p "artifacts/{image}"',
-            # The existing single-image primitive: build_docker.sh <image>.
-            f'    - bash docker/build_docker.sh --save-dir "artifacts/{image}" "{image}"',
-            "  artifacts:",
-            "    when: always",
-            "    paths:",
-            f"      - artifacts/{image}/",
-            "    expire_in: 1 day",
-            "",
-        ]
-    return "\n".join(lines)
+        pipeline[_job_name(image)] = _build_job(image)
+    return pipeline
+
+
+def render_pipeline(images: list[str]) -> str:
+    """Render the child-pipeline YAML as a string."""
+    header = (
+        "# AUTO-GENERATED child pipeline for the CIAC-17423 parallel-build POC.\n"
+        "# One job per changed image; each builds a single image in isolation.\n"
+    )
+    body = yaml.safe_dump(
+        build_pipeline(images),
+        default_flow_style=False,
+        sort_keys=False,
+        width=4096,
+    )
+    return header + body
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
