@@ -94,18 +94,12 @@ poc:fan-in:
       artifacts: true
     - job: poc:run-builds
   when: always
+  # In the full implementation this step will merge per-image failure metadata,
+  # compute the carry-over set, persist it to the GCS bucket, and post a Slack
+  # summary. Kept as a metadata-only consolidation in the POC.
   script:
-    - echo "===== POC fan-in: consolidating per-image build results ====="
-    - |
-      if [ -s changed_images.txt ]; then
-        COUNT=$(grep -c . changed_images.txt || echo 0)
-      else
-        COUNT=0
-      fi
-    - echo "Images dispatched to per-image build jobs: ${COUNT}"
-    - echo "Image list:" && (cat changed_images.txt 2>/dev/null || echo "(none)")
-    # In the full implementation this step will: merge per-image failure metadata,
-    # compute the carry-over set, persist it to the GCS bucket, and post a Slack
-    # summary. Kept as a placeholder in the POC.
-    - echo "TODO(full impl): merge results, write GCS carry-over, post Slack summary."
-    - echo "===== POC fan-in complete ====="
+    - 'echo "===== POC fan-in: consolidating per-image build results ====="'
+    - 'COUNT=$(grep -c . changed_images.txt 2>/dev/null || echo 0); echo "Images dispatched to per-image build jobs: ${COUNT}"'
+    - 'echo "Image list:"; cat changed_images.txt 2>/dev/null || echo "(none)"'
+    - 'echo "TODO(full impl): merge results, write GCS carry-over, post Slack summary."'
+    - 'echo "===== POC fan-in complete ====="'
