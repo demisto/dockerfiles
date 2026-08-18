@@ -136,20 +136,27 @@ def _build_job(image: str) -> dict[str, Any]:
         "script": [
             f"echo Building single image {image}",
             f'mkdir -p "{artifacts_dir}"',
-            # Build this one image from its own Dockerfile context. A base-image
-            # pull failure (e.g. a private demisto/* base needing registry auth)
-            # is tolerated so the POC still proves per-job sizing for the images
-            # that DO build (notably the size-padded 'ml' image). Record the
-            # outcome as the per-image reason for the fan-in summary.
-            f'if docker build -t "{tag}" "docker/{image}"; then STATUS=built; else STATUS="build-skipped (base image unavailable on POC runner)"; fi',
-            # Save + gzip the image tar into this job's isolated artifact dir
-            # (only if the build produced an image).
-            f'if [ "$STATUS" = built ]; then docker save "{tag}" | gzip > "{tar}.gz"; fi',
-            # Report the per-job artifact size — this is the number the per-job
-            # (5 GB) limit applies to. With one image per job it stays small.
-            f'echo "Per-job artifact for {image}: status=$STATUS"; ls -lh "{tar}.gz" 2>/dev/null || true; du -sh "{artifacts_dir}" || true',
-            # Emit a tiny metadata file for the fan-in to consolidate.
-            f'SIZE=$(du -b "{tar}.gz" 2>/dev/null | cut -f1 || echo 0); echo "{image} status=$STATUS bytes=$SIZE" > "{artifacts_dir}/size.txt"; cat "{artifacts_dir}/size.txt"',
+            # 1) Try the real per-image build from its own Dockerfile context.
+            f'if docker build -t "{tag}" "docker/{image}"; then STATUS=built; else STATUS=fallback; fi',
+            # 2) FALLBACK: the POC runner's dind often can't reach Docker Hub, so
+            #    real bases (alpine, demisto/*) fail to pull. To still exercise the
+            #    exact save/artifact-size mechanics with ZERO registry dependency,
+            #    build a `FROM scratch` image containing a large incompressible file.
+            #    scratch needs no pull. SYNTH_MB controls the synthetic image size.
+            'if [ "$STATUS" = fallback ]; then '
+            'echo "Real build unavailable (no base image pull); building synthetic scratch image"; '
+            'mkdir -p /tmp/synth; '
+            'dd if=/dev/urandom of=/tmp/synth/blob bs=1M count=${SYNTH_MB:-1500}; '
+            f'printf "FROM scratch\\nCOPY blob /blob\\n" > /tmp/synth/Dockerfile; '
+            f'docker build -t "{tag}" /tmp/synth; fi',
+            # 3) Save + gzip the (real or synthetic) image tar into this job's
+            #    isolated artifact dir. Always runs now — a tar is guaranteed.
+            f'docker save "{tag}" | gzip > "{tar}.gz"',
+            # 4) Report the per-job artifact size — this is the number the per-job
+            #    (5 GB) limit applies to. With one image per job it stays small.
+            f'echo "Per-job artifact for {image}: status=$STATUS"; ls -lh "{tar}.gz"; du -sh "{artifacts_dir}"',
+            # 5) Emit a tiny metadata file for the fan-in to consolidate.
+            f'SIZE=$(du -b "{tar}.gz" | cut -f1); echo "{image} status=$STATUS bytes=$SIZE" > "{artifacts_dir}/size.txt"; cat "{artifacts_dir}/size.txt"',
         ],
         "artifacts": {
             "when": "always",
