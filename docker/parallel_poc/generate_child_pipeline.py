@@ -124,14 +124,25 @@ def _build_job(image: str) -> dict[str, Any]:
         "image": BUILD_IMAGE,
         "services": [DIND_SERVICE],
         "variables": {
+            # --- docker-in-docker over TCP (Kubernetes executor) ---
+            # On the Kubernetes executor dind runs as a SERVICE container reachable
+            # over TCP, not the local unix socket. Without DOCKER_HOST the docker CLI
+            # tries unix:///var/run/docker.sock and fails with
+            # "Cannot connect to the Docker daemon". Point it at the dind service
+            # with TLS (DOCKER_TLS_CERTDIR mounts client certs under /certs/client).
+            "DOCKER_HOST": "tcp://docker:2376",
             "DOCKER_TLS_CERTDIR": "/certs",
+            "DOCKER_TLS_VERIFY": "1",
+            "DOCKER_CERT_PATH": "/certs/client",
             # Isolate this job's build artifacts so nothing is shared across jobs.
             "ARTIFACTS_FOLDER": artifacts_dir,
             "IMAGE_NAME": image,
         },
         "before_script": [
-            # Wait for the dind daemon to be ready before building.
-            'for i in $(seq 1 30); do docker info >/dev/null 2>&1 && break; echo "waiting for docker daemon..."; sleep 2; done',
+            # Wait for the dind daemon to accept connections before building.
+            'for i in $(seq 1 45); do docker info >/dev/null 2>&1 && break; echo "waiting for docker daemon ($i)..."; sleep 2; done',
+            # Fail fast (with a clear message) if the daemon never came up.
+            'docker info >/dev/null 2>&1 || { echo "ERROR: docker daemon not reachable at $DOCKER_HOST"; exit 1; }',
         ],
         "script": [
             f"echo Building single image {image}",
