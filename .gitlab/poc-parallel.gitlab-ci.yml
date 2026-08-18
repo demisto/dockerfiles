@@ -39,16 +39,11 @@ poc:generate-matrix:
     - git fetch --no-tags --depth=1 origin "${POC_BASE_REF#origin/}" || true
   script:
     - echo "Discovering changed images against ${POC_BASE_REF}..."
-    - |
-      python docker/parallel_poc/get_changed_images.py \
-        --diff-compare "${POC_BASE_REF}...HEAD" \
-        --format lines \
-        --output changed_images.txt
+    - python docker/parallel_poc/get_changed_images.py --diff-compare "${POC_BASE_REF}...HEAD" --format lines --output changed_images.txt
     - echo "Changed images:" && cat changed_images.txt || true
     # Generate the child pipeline YAML: one build job per changed image.
-    - python docker/parallel_poc/generate_child_pipeline.py \
-        --images-file changed_images.txt \
-        --output poc-child-pipeline.yml
+    # NOTE: single line — bare list entries do not honor '\' line continuation.
+    - python docker/parallel_poc/generate_child_pipeline.py --images-file changed_images.txt --output poc-child-pipeline.yml
     - echo "----- generated child pipeline -----" && cat poc-child-pipeline.yml
   artifacts:
     paths:
