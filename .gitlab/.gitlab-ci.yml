@@ -1,7 +1,9 @@
 variables:
-  CURRENT_BRANCH_NAME: $INFRA_BRANCH
+  # TODO: revert before merge — pinned to test the scan-artifacts bridge-name fix.
+  CURRENT_BRANCH_NAME: fix/scan-artifacts-bridge-job-name
 
 include:
   - file: "/.gitlab/ci/dockerfiles/.gitlab-ci.yml"
-    ref: $INFRA_BRANCH
+    # TODO: revert to `ref: $INFRA_BRANCH` before merge.
+    ref: fix/scan-artifacts-bridge-job-name
     project: "${CI_PROJECT_NAMESPACE}/infra"
