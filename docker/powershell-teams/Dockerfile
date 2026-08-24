@@ -1,5 +1,5 @@
-# Last modified: 2026-04-26T18:44:50.376392+00:00
+# Last modified: 2026-07-26T12:50:00.594456+00:00
 
-FROM demisto/powershell-ubuntu:7.5.0.8425368
+FROM demisto/powershell-ubuntu:7.5.0.11326619
 
 RUN pwsh -c "Install-Module MicrosoftTeams -Force"

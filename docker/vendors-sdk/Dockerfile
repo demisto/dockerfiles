@@ -1,5 +1,5 @@
-# Last modified: 2026-05-31T04:45:24.911063+00:00
-FROM demisto/python3:3.12.13.9059085
+# Last modified: 2026-06-24T04:49:35.532453+00:00
+FROM demisto/python3:3.12.13.10404775
 
 COPY requirements.txt .
 
@@ -9,8 +9,8 @@ RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositor
   && apk --update add --no-cache \
   librdkafka-dev \
   libmagic \
-  curl-dev=8.20.0-r1 \
-  libcurl=8.20.0-r1
+  curl-dev=8.21.0-r0 \
+  libcurl=8.21.0-r0
 
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git \
   && pip install --no-cache-dir -r requirements.txt \

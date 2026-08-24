@@ -11,6 +11,8 @@ import pyads
 import bs4
 import ping3
 import psutil
+import asyncua
+import cloudvision
 
 def lookup_dns_record(domain, record_type='A'):
     """
@@ -40,4 +42,6 @@ print(f"pyads version: {pyads.__version__}")
 print(f"bs4 version: {bs4.__version__}")
 print(f"ping3 version: {ping3.__version__}")
 print(f"CPU Count: {psutil.cpu_count()}")
+print(f"asyncua version: {asyncua.__version__}")
+print(f"cloudvision version: {cloudvision.__version__}")
 print("All is good. PANW IoT python packages imported successfully!")

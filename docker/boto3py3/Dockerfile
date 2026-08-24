@@ -1,8 +1,10 @@
-# Last modified: 2026-04-12T08:19:31.369898+00:00
+# Last modified: 2026-07-20T17:05:25.307741+00:00
 
-FROM demisto/python3:3.12.13.8160132
+FROM demisto/python3:3.12.13.10404775
 
 COPY requirements.txt .
+
+RUN apk --update add --no-cache openssl=3.5.7-r0
 
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git \
   && pip install --no-cache-dir -r requirements.txt \
