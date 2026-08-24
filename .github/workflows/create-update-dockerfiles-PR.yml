@@ -5,17 +5,22 @@ on:
     workflows: [Update external base images, Update internal base images]
     types: completed
   workflow_dispatch:
+  push:
+    branches:
+      - CIAC-17423-Recovery-mechanism-for-dockerfiles-upload
 
 jobs:
   # ------------------------
   get_branches:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     outputs:
       branches: ${{ steps.generate-matrix.outputs.branches }}
     steps:
       - name: Check out repository code
         uses: actions/checkout@v2
+        with:
+          ref: CIAC-17423-Recovery-mechanism-for-dockerfiles-upload
       - name: Generate Matrix
         id: generate-matrix
         env:
@@ -68,6 +73,8 @@ jobs:
         branches: ${{ fromJSON(needs.get_branches.outputs.branches) }}
     steps:
     - uses: actions/checkout@v2
+      with:
+        ref: CIAC-17423-Recovery-mechanism-for-dockerfiles-upload
     - name: pull-request
       id: open-pr
       uses: repo-sync/pull-request@7e79a9f5dc3ad0ce53138f01df2fad14a04831c5 # v2
