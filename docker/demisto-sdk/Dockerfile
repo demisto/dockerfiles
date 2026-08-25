@@ -1,9 +1,9 @@
-# Last modified: 2026-08-25T01:52:15.769861+00:00
+# Last modified: 2026-08-25T02:33:22.183568+00:00
 FROM demisto/python3-deb:3.12.13.12042988
 
 WORKDIR /content
 
-# Cache bust attempt 6
+# Cache bust attempt 10
 
 ADD https://raw.githubusercontent.com/demisto/demisto-sdk/master/package.json /content/
 ADD https://raw.githubusercontent.com/demisto/demisto-sdk/master/package-lock.json /content/
@@ -11,7 +11,7 @@ ADD https://raw.githubusercontent.com/demisto/demisto-sdk/master/package-lock.js
 ADD requirements.txt .
 
 
-RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get install \
+RUN echo "Cache bust 2024-05-20-v4" && apt-get update && apt-get -y --no-install-recommends upgrade && apt-get install \
     git \
     gcc \
     ca-certificates \
@@ -37,9 +37,15 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && python3 -m pip install --no-cache-dir -r requirements.txt \
     && python3 -m pip install --no-cache-dir gitpython>=3.1.48 cryptography>=50.0.0 nltk>=3.10.0 protobuf>=6.33.5 soupsieve>=2.8.4 ujson>=5.12.1 urllib3>=2.6.3 orjson>=3.11.5 \
     && npm install -g npm@latest \
-    && npm ci \
-    && npm install brace-expansion@^5.0.8 ip-address@^10.3.1 tar@^7.5.21 linkify-it@^5.0.2 @hapi/content@^6.0.1 \
-    && npm install -g jsdoc-to-markdown@9.1.3\
+    && npm pkg set overrides.ip-address="^10.3.1" \
+    && npm pkg set overrides.tar="^7.5.21" \
+    && npm pkg set overrides.linkify-it="^5.0.2" \
+    && npm pkg set overrides.content="^6.0.1" \
+    && npm pkg set overrides.@hapi/content="^6.0.1" \
+    && npm pkg set overrides.brace-expansion="^5.0.8" \
+    && rm -f package-lock.json \
+    && npm install \
+    && npm install -g jsdoc-to-markdown@9.1.3 ip-address@^10.3.1 tar@^7.5.21 linkify-it@^5.0.2 @hapi/content@^6.0.1 brace-expansion@^5.0.8 \
     && npm list \
     && demisto-sdk --version
 
