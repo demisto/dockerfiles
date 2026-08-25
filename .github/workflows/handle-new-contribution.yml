@@ -20,7 +20,7 @@ jobs:
           PR_URL: ${{github.event.pull_request.html_url}}
         run: |
           echo "get content_roles.json using curl"
-          contrib_tl=$( curl https://raw.githubusercontent.com/demisto/content/master/.github/content_roles.json | jq .CONTRIBUTION_TL -r )
+          contrib_tl=$( curl https://raw.githubusercontent.com/demisto/content/master/.github/content_roles.json | jq .CONTRIBUTION_DOCKERFILES_REVIEWER -r )
           echo "$contrib_tl"
           echo "Finished retrieving the contribution TL username"
           
