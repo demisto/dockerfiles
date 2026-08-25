@@ -1,4 +1,4 @@
-# Last modified: 2026-08-25T04:44:33.546955+00:00
+# Last modified: 2026-08-25T05:18:45.787770+00:00
 
 
 FROM demisto/python3:3.12.14.12277297
@@ -8,6 +8,7 @@ COPY requirements.txt .
 
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git libffi-dev \
   && pip install --no-cache-dir -r requirements.txt \
+  && pip install --no-cache-dir aiohttp==3.14.3 cryptography==50.0.0 \
   && apk del .build-dependencies
 
 
