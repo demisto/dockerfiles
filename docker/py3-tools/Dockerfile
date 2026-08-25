@@ -1,4 +1,4 @@
-# Last modified: 2026-08-18T04:58:42.187191+00:00
+# Last modified: 2026-08-25T00:47:28.502974+00:00
 
 
 FROM demisto/python3:3.12.13.12042988
@@ -6,8 +6,10 @@ FROM demisto/python3:3.12.13.12042988
 COPY requirements.txt .
 
 
-RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git libffi-dev \
+RUN echo "Cache buster 2026-08-19" && \
+    apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git libffi-dev \
   && pip install --no-cache-dir -r requirements.txt \
+  && pip install --no-cache-dir -U cryptography>=50.0.0 aiohttp>=3.14.3 \
   && apk del .build-dependencies
 
 
