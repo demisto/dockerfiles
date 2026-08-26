@@ -8,7 +8,6 @@ COPY requirements.txt .
 
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git libffi-dev \
   && pip install --no-cache-dir -r requirements.txt \
-  && pip install --no-cache-dir aiohttp==3.14.3 cryptography==50.0.0 \
   && apk del .build-dependencies
 
 
