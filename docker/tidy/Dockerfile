@@ -1,4 +1,4 @@
-# Last modified: 2026-08-05T09:25:20.914492+00:00
+# Last modified: 2026-08-24T12:13:08.304497+00:00
 
 FROM demisto/crypto:1.0.0.11658507
 
@@ -15,8 +15,8 @@ RUN apk --update add --no-cache openssl ca-certificates sshpass rsync
 
 # This line can be removed once upgrading base image to alpine3.24
 RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories \
-  && apk --update add --no-cache \
-  openssh-client=10.3_p1-r0
+  && apk --update add --no-cache --upgrade \
+  "openssh-client>=10.4"
 
 RUN ansible-galaxy install -c elliotweiser.osx-command-line-tools
 RUN ansible-galaxy collection install -c geerlingguy.mac
