@@ -1,4 +1,4 @@
-# Last modified: 2026-08-06T05:33:52.999336+00:00
+# Last modified: 2026-08-26T12:52:47.440764+00:00
 FROM alpine:3.17.10 as files-src
 RUN mkdir /ml
 COPY ./encrypted_model.b /ml/encrypted_model.b
@@ -12,7 +12,7 @@ RUN unzip /distilled_bert_base_uncased_tokenizer.zip -d /ml \
   && rm /distilled_bert_base_uncased_tokenizer.zip \
   && chmod -R 775 /ml
 
-FROM demisto/python3-deb:3.12.13.11694875
+FROM demisto/python3-deb:3.12.14.12322615
 
 COPY requirements.txt .
 
