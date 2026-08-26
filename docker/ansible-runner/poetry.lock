@@ -504,36 +504,37 @@ tests-mypy = ["mypy (>=1.11.1) ; platform_python_implementation == \"CPython\" a
 
 [[package]]
 name = "azure-cli-core"
-version = "2.0.43"
+version = "2.0.31"
 description = "Microsoft Azure Command-Line Tools Core Module"
 optional = false
 python-versions = "*"
 groups = ["main"]
 files = [
-    {file = "azure-cli-core-2.0.43.tar.gz", hash = "sha256:98566c97db39f8f44e74584921bc3e71a6aed2f3b936e33adfb904fd6e7f0823"},
-    {file = "azure_cli_core-2.0.43-py2.py3-none-any.whl", hash = "sha256:bc8037df724e9e0f420f180ee0109267dbe7ea093c9f439b25b197590eb741e1"},
+    {file = "azure-cli-core-2.0.31.tar.gz", hash = "sha256:1884b9df309e81b47fd0d20afb25e1fb83df92ba4eeb18f9c6bb2267e17058e4"},
+    {file = "azure_cli_core-2.0.31-py2.py3-none-any.whl", hash = "sha256:485a546923c19d5c48f3bfc4fd172e45d7bf078325b5b89a47734645dfb0eb61"},
 ]
 
 [package.dependencies]
+adal = ">=0.4.7"
 applicationinsights = ">=0.11.1"
 argcomplete = ">=1.8.0"
 azure-cli-nspkg = ">=2.0.0"
 colorama = ">=0.3.9"
 humanfriendly = ">=4.7"
 jmespath = "*"
-knack = "0.4.1"
+knack = "0.3.2"
 msrest = ">=0.4.4"
 msrestazure = ">=0.4.25"
-paramiko = ">=2.0.8"
+paramiko = "*"
 pip = "*"
 pygments = "*"
 PyJWT = "*"
-pyopenssl = ">=17.1.0"
-pyyaml = ">=3.13"
+pyopenssl = ">=16.2"
+pyyaml = "*"
 requests = "*"
 six = "*"
 tabulate = ">=0.7.7,<=0.8.2"
-wheel = "0.30.0"
+wheel = "*"
 
 [[package]]
 name = "azure-cli-nspkg"
@@ -2088,14 +2089,14 @@ files = [
 
 [[package]]
 name = "knack"
-version = "0.4.1"
+version = "0.3.2"
 description = "A Command-Line Interface framework"
 optional = false
 python-versions = "*"
 groups = ["main"]
 files = [
-    {file = "knack-0.4.1-py2.py3-none-any.whl", hash = "sha256:58161e64f2649423a96b48fb3f6342c439cf493ebd086cf633ebca7f31d9581f"},
-    {file = "knack-0.4.1.tar.gz", hash = "sha256:ba45fd69c2faf91fd3d6e95cec1c0ef7e0f4362e33c59bf5a260216ffcb859a0"},
+    {file = "knack-0.3.2-py2.py3-none-any.whl", hash = "sha256:736595001d882a94af539ed8c8fa541faad8e01df099214817ec20d1ad682603"},
+    {file = "knack-0.3.2.tar.gz", hash = "sha256:aaf825bf9929edffc7a6f067fde44873666d3cd6e43d9557b060d8c9c3f2af5c"},
 ]
 
 [package.dependencies]
@@ -3448,20 +3449,18 @@ test = ["websockets"]
 
 [[package]]
 name = "wheel"
-version = "0.30.0"
-description = "A built-package format for Python."
+version = "0.48.0"
+description = "Command line tool for manipulating wheel files"
 optional = false
-python-versions = "*"
+python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "wheel-0.30.0-py2.py3-none-any.whl", hash = "sha256:e721e53864f084f956f40f96124a74da0631ac13fbbd1ba99e8e2b5e9cafdf64"},
-    {file = "wheel-0.30.0.tar.gz", hash = "sha256:9515fe0a94e823fd90b08d22de45d7bde57c90edce705b22f5e1ecf7e1b653c8"},
+    {file = "wheel-0.48.0-py3-none-any.whl", hash = "sha256:3217dcc807155e45db462d7ef2431f5ddda0d7273b700d05a67b271ceb1287ab"},
+    {file = "wheel-0.48.0.tar.gz", hash = "sha256:94800765601e9171bf5d58d066e640662842bcedcbab982b2c90787a2c987322"},
 ]
 
-[package.extras]
-faster-signatures = ["ed25519ll"]
-signatures = ["keyring", "keyrings.alt", "pyxdg ; sys_platform != \"win32\""]
-test = ["jsonschema", "pytest (>=3.0.0)", "pytest-cov"]
+[package.dependencies]
+packaging = ">=24.0"
 
 [[package]]
 name = "wrapt"

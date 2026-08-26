@@ -1,4 +1,4 @@
-# Last modified: 2026-08-26T05:40:08.624429+00:00
+# Last modified: 2026-08-26T06:39:47.078491+00:00
 
 FROM demisto/python3-deb:3.12.14.12322615
 
@@ -18,6 +18,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
  && pip install https://github.com/vmware/vsphere-automation-sdk-python/archive/refs/tags/v7.0.3.2.tar.gz \
  && pip install --upgrade azure-storage-blob \
  && pip uninstall aiohttp -y \
+ && echo "Cache bust 987654321" \
+ && pip install "wheel>=0.38.1" \
  && apt-get purge -y --auto-remove \
   gcc \
   python3-dev \
