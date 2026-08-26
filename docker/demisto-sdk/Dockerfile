@@ -1,4 +1,5 @@
-FROM demisto/python3-deb:3.12.12.5919128
+# Last modified: 2026-08-26T04:50:52.139913+00:00
+FROM demisto/python3-deb:3.12.14.12322615
 
 WORKDIR /content
 
