@@ -1,5 +1,5 @@
-# Last modified: 2026-07-27T09:37:53.061036+00:00
-FROM demisto/python3-deb:3.12.13.11039180
+# Last modified: 2026-08-26T12:53:05.097801+00:00
+FROM demisto/python3-deb:3.12.14.12322615
 # Part of IOT - XSOAR integration project. 
 # See docs at: https://docs.paloaltonetworks.com/iot/iot-security-integration/get-started-with-iot-security-integrations/third-party-integrations-using-on-premises-xsoar#id99b6436d-38d5-464d-9f8f-87bc84d6b628
 
