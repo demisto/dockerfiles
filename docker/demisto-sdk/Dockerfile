@@ -1,4 +1,4 @@
-# Last modified: 2026-08-26T04:50:52.139913+00:00
+# Last modified: 2026-08-26T05:33:09.175546+00:00
 FROM demisto/python3-deb:3.12.14.12322615
 
 WORKDIR /content
@@ -37,6 +37,8 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && npm install -g npm@latest \
     && npm ci \
     && npm install -g jsdoc-to-markdown@9.1.3\
+    && npm install ip-address@">=10.3.1" tar@">=7.5.21" linkify-it@">=5.0.2" @hapi/content@">=6.0.1" brace-expansion@">=5.0.8" \
+    && npm install -g ip-address@">=10.3.1" tar@">=7.5.21" linkify-it@">=5.0.2" @hapi/content@">=6.0.1" brace-expansion@">=5.0.8" \
     && npm list \
     && demisto-sdk --version
 
