@@ -1,7 +1,7 @@
 variables:
-  CURRENT_BRANCH_NAME: $INFRA_BRANCH
+  CURRENT_BRANCH_NAME: "fix/twistlock-ssl-verify-infra-venv"
 
 include:
   - file: "/.gitlab/ci/dockerfiles/.gitlab-ci.yml"
-    ref: $INFRA_BRANCH
+    ref: "fix/twistlock-ssl-verify-infra-venv"
     project: "${CI_PROJECT_NAMESPACE}/infra"
