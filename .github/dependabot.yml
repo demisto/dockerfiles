@@ -239,6 +239,8 @@ updates:
       interval: daily
   - package-ecosystem: pip
     directory: /docker/py3ews
+    ignore:
+      - dependency-name: "requests-ntlm"
     schedule:
       interval: daily
   - package-ecosystem: pip
@@ -429,6 +431,8 @@ updates:
       interval: daily
   - package-ecosystem: pip
     directory: /docker/py-ews
+    ignore:
+      - dependency-name: "requests-ntlm"
     schedule:
       interval: daily
   - package-ecosystem: pip
