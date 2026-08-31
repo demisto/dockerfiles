@@ -1,5 +1,5 @@
-# Last modified: 2026-07-20T17:05:15.167742+00:00
-FROM demisto/python3:3.12.13.10404775
+# Last modified: 2026-08-26T16:53:59.927652+00:00
+FROM demisto/python3:3.12.14.12343672
 
 COPY requirements.txt .
 
@@ -17,7 +17,20 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
   && apk del .build-dependencies
 
 RUN mkdir /ml
-RUN python -c "import nltk; nltk.download('wordnet', download_dir='/ml/nltk_data'); nltk.download('stopwords', download_dir='/ml/nltk_data'); nltk.download('punkt_tab', download_dir='/ml/nltk_data')"
+# nltk.download() returns False on failure instead of raising, so its result must be
+# checked: a transient CDN error must fail the build rather than ship empty corpora.
+RUN NLTK_MAX_ATTEMPTS=3; NLTK_RETRY_DELAY_SECONDS=5; \
+    for resource in wordnet stopwords punkt_tab; do \
+        attempt=1; \
+        until python -c "import sys, nltk; sys.exit(0 if nltk.download('$resource', download_dir='/ml/nltk_data') else 1)"; do \
+            if [ "$attempt" -ge "$NLTK_MAX_ATTEMPTS" ]; then \
+                echo "ERROR: failed to download NLTK resource '$resource' after $NLTK_MAX_ATTEMPTS attempts" >&2; \
+                exit 1; \
+            fi; \
+            attempt=$((attempt + 1)); \
+            sleep "$NLTK_RETRY_DELAY_SECONDS"; \
+        done; \
+    done
 
 ENV NLTK_DATA='/ml/nltk_data'
 RUN chown -R demisto:demisto /ml && chmod -R 775 /ml
