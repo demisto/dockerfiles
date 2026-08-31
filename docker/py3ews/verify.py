@@ -29,11 +29,14 @@ import tzlocal
 import hashlib
 import future
 import requests_ntlm
-from spnego._ntlm_raw.crypto import ntowfv1
+import ntlm_auth
 
 test = tzlocal.get_localzone()
 
-# Make sure NTLM hashing works without OpenSSL's md4 (XSUP-75734):
-assert ntowfv1("pass").hex() == "36aa83bdcab3c9fdaf321ca42a31c3fc"
+# Make sure MD4 is enabled:
+hashlib.algorithms_available
+print(hashlib.algorithms_available)
+assert 'md4' in hashlib.algorithms_available
+hashlib.new('md4', b"text")
 
 print('all is good, `get_localzone() -> {}` is working'.format(test))
