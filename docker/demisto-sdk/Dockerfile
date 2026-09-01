@@ -1,4 +1,4 @@
-# Last modified: 2026-09-01T06:06:08.064165+00:00
+# Last modified: 2026-09-01T06:54:27.028555+00:00
 FROM demisto/python3-deb:3.12.14.12343672
 
 WORKDIR /content
@@ -33,6 +33,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian \
     $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null \
     && apt-get update && apt-get install docker-ce-cli -y \
+    && apt-get install --only-upgrade docker-ce-cli -y \
     && python3 -m pip install --no-cache-dir -r requirements.txt \
     && npm install -g npm@latest \
     && npm ci \
