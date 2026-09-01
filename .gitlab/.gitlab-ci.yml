@@ -1,7 +1,7 @@
 variables:
-  CURRENT_BRANCH_NAME: $INFRA_BRANCH
+  CURRENT_BRANCH_NAME: yair/refactor-cve-create-prs-lock
 
 include:
   - file: "/.gitlab/ci/dockerfiles/.gitlab-ci.yml"
-    ref: $INFRA_BRANCH
+    ref: yair/refactor-cve-create-prs-lock
     project: "${CI_PROJECT_NAMESPACE}/infra"
