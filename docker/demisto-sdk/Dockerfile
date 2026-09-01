@@ -1,4 +1,5 @@
-FROM demisto/python3-deb:3.12.12.5919128
+# Last modified: 2026-09-01T06:54:27.028555+00:00
+FROM demisto/python3-deb:3.12.14.12343672
 
 WORKDIR /content
 
@@ -32,10 +33,23 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian \
     $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null \
     && apt-get update && apt-get install docker-ce-cli -y \
+    && apt-get install --only-upgrade docker-ce-cli -y \
     && python3 -m pip install --no-cache-dir -r requirements.txt \
     && npm install -g npm@latest \
     && npm ci \
-    && npm install -g jsdoc-to-markdown@9.1.3\
+    && npm pkg set 'overrides.ip-address=^10.3.1' \
+    && npm pkg set 'overrides.tar=^7.5.21' \
+    && npm pkg set 'overrides.linkify-it=^5.0.1' \
+    && npm pkg set 'overrides.@hapi/content=^6.0.1' \
+    && npm install \
+    && npm install -g jsdoc-to-markdown@9.1.3 \
+    && cd "$(npm root -g)/jsdoc-to-markdown" \
+    && npm pkg set 'overrides.ip-address=^10.3.1' \
+    && npm pkg set 'overrides.tar=^7.5.21' \
+    && npm pkg set 'overrides.linkify-it=^5.0.1' \
+    && npm pkg set 'overrides.@hapi/content=^6.0.1' \
+    && npm install \
+    && cd /content \
     && npm list \
     && demisto-sdk --version
 
