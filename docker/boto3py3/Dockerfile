@@ -9,3 +9,5 @@ RUN apk --update add --no-cache openssl=3.5.7-r0
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git \
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies
+
+# CIAC-17423 parallel-build POC: touch to include in 30-image parallel test

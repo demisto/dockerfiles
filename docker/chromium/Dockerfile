@@ -79,3 +79,5 @@ RUN apt-get purge -y --auto-remove \
 && rm -rf /var/lib/apt/lists/*
 
 ENV CHROME_EXE="/opt/google/chrome/google-chrome"
+
+# CIAC-17423 parallel-build POC: touch to include in 30-image parallel test

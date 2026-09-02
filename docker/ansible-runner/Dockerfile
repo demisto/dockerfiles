@@ -24,3 +24,5 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   linux-libc-dev \
   libc6-dev \
 && rm -rf /var/lib/apt/lists/*
+
+# CIAC-17423 parallel-build POC: touch to include in 30-image parallel test

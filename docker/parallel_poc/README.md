@@ -68,8 +68,12 @@ Adjust `POC_BASE_REF` (default `origin/master`) to your MR target branch if need
 
 ## Notes / limitations (POC scope)
 
-- Uses `docker:24.0` + `docker:24.0-dind` so `build_docker.sh`'s `docker buildx`
-  works inside CI. The real pipeline may use a different runner/executor.
+- Uses `docker:24.0` + `docker:24.0-dind` so `docker build` works inside CI. The
+  real pipeline may use a different runner/executor.
+- Each job builds the **real** image from `docker/<image>/`. There is no synthetic
+  fallback: if a real build fails (e.g. a base image can't be pulled), the job
+  fails. This is intentional so the run reflects the true 30-way parallel build
+  capability of the runners.
 - No push, no scan, no carry-over/GCS, no Slack — those come in the full
   implementation (see the plan). The POC only proves the **parallel per-image build**
   succeeds.

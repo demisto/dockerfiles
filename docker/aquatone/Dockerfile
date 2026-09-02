@@ -17,3 +17,4 @@ RUN apt-get update \
 && rm -rf /var/lib/apt/lists/* \
 && find /usr/lib/ruby/gems/*/specifications/default/ -name "bundler-*.gemspec" -delete\
 && gem install bundler
+# CIAC-17423 parallel-build POC: touch to include in 30-image parallel test

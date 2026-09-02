@@ -8,3 +8,5 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
   && pip install --no-cache-dir -r requirements.txt \
   && pip install --no-cache-dir "pyopenssl>=26.0.0" "cryptography>=48.0.1" "urllib3>=2.6.3" \
   && apk del .build-dependencies
+
+# CIAC-17423 parallel-build POC: touch to include in 30-image parallel test

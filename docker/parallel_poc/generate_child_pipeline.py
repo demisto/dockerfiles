@@ -3,9 +3,11 @@
 POC helper for CIAC-17423 (per-image parallel build).
 
 Generates a GitLab **child pipeline** YAML with one build job per changed image.
-Each generated job runs ``docker/build_docker.sh <image>`` — the existing
-single-image build path — so every image builds in its own isolated job. This is
-what keeps any single job's disk/artifact footprint small (no whole-batch pile-up).
+Each generated job builds exactly one REAL image from ``docker/<image>/`` in its
+own isolated job, so every image builds independently. This is what keeps any
+single job's disk/artifact footprint small (no whole-batch pile-up) and lets us
+verify the runners can build many images (e.g. 30) in parallel. If a real build
+fails, its job fails — there is no synthetic-image fallback.
 
 The list of images is read from a newline-separated file (produced by
 ``get_changed_images.py --format lines``). If the list is empty, a harmless
@@ -104,17 +106,16 @@ def _build_job(image: str) -> dict[str, Any]:
     """
     Return the GitLab job definition (as a dict) for a single image.
 
-    POC intent: prove that with one job per image, each job's artifact (the saved
-    image tar) stays well under the per-job artifact/disk limit — so no single job
-    can blow past 5 GB the way the whole-batch build does today.
+    POC intent: prove the runners can build 30 images in parallel — one REAL image
+    build per job — and that each job's saved-image artifact stays under the per-job
+    (5 GB) disk/artifact limit.
 
     We build the image directly from its own ``docker/<image>/Dockerfile`` and
-    ``docker save | gzip`` it into an ISOLATED per-job directory, then print the
-    tar size. This deliberately bypasses ``build_docker.sh`` (which requires a
-    pyenv/registry toolchain baked into the infra runner image, not present in the
-    generic ``docker:24.0`` image). The full implementation (Phase 5) will run the
-    real ``build_docker.sh`` on the infra runner; the sharding shape proven here is
-    identical: one image -> one job -> one tar.
+    ``docker save | gzip`` it into an ISOLATED per-job directory, then print the tar
+    size. If the real build fails (e.g. a base image can't be pulled), the job
+    FAILS — we no longer substitute a synthetic image, because the goal now is to
+    verify the real 30-way parallel build capability, not just the artifact
+    mechanics.
     """
     artifacts_dir = f"artifacts/{image}"
     tag = f"poc/{image}:ci"
@@ -147,27 +148,16 @@ def _build_job(image: str) -> dict[str, Any]:
         "script": [
             f"echo Building single image {image}",
             f'mkdir -p "{artifacts_dir}"',
-            # 1) Try the real per-image build from its own Dockerfile context.
-            f'if docker build -t "{tag}" "docker/{image}"; then STATUS=built; else STATUS=fallback; fi',
-            # 2) FALLBACK: the POC runner's dind often can't reach Docker Hub, so
-            #    real bases (alpine, demisto/*) fail to pull. To still exercise the
-            #    exact save/artifact-size mechanics with ZERO registry dependency,
-            #    build a `FROM scratch` image containing a large incompressible file.
-            #    scratch needs no pull. SYNTH_MB controls the synthetic image size.
-            'if [ "$STATUS" = fallback ]; then '
-            'echo "Real build unavailable (no base image pull); building synthetic scratch image"; '
-            'mkdir -p /tmp/synth; '
-            'dd if=/dev/urandom of=/tmp/synth/blob bs=1M count=${SYNTH_MB:-1500}; '
-            f'printf "FROM scratch\\nCOPY blob /blob\\n" > /tmp/synth/Dockerfile; '
-            f'docker build -t "{tag}" /tmp/synth; fi',
-            # 3) Save + gzip the (real or synthetic) image tar into this job's
-            #    isolated artifact dir. Always runs now — a tar is guaranteed.
+            # 1) Build the REAL per-image image from its own Dockerfile context.
+            #    No synthetic fallback: if this fails, the job fails.
+            f'docker build -t "{tag}" "docker/{image}"',
+            # 2) Save + gzip the image tar into this job's isolated artifact dir.
             f'docker save "{tag}" | gzip > "{tar}.gz"',
-            # 4) Report the per-job artifact size — this is the number the per-job
+            # 3) Report the per-job artifact size — this is the number the per-job
             #    (5 GB) limit applies to. With one image per job it stays small.
-            f'echo "Per-job artifact for {image}: status=$STATUS"; ls -lh "{tar}.gz"; du -sh "{artifacts_dir}"',
-            # 5) Emit a tiny metadata file for the fan-in to consolidate.
-            f'SIZE=$(du -b "{tar}.gz" | cut -f1); echo "{image} status=$STATUS bytes=$SIZE" > "{artifacts_dir}/size.txt"; cat "{artifacts_dir}/size.txt"',
+            f'echo "Per-job artifact for {image}:"; ls -lh "{tar}.gz"; du -sh "{artifacts_dir}"',
+            # 4) Emit a tiny metadata file for the fan-in to consolidate.
+            f'SIZE=$(du -b "{tar}.gz" | cut -f1); echo "{image} bytes=$SIZE" > "{artifacts_dir}/size.txt"; cat "{artifacts_dir}/size.txt"',
         ],
         "artifacts": {
             "when": "always",
