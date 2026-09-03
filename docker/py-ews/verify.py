@@ -30,6 +30,7 @@ from exchangelib.version import (EXCHANGE_2007, EXCHANGE_2010,
                                  EXCHANGE_2010_SP2, EXCHANGE_2013,
                                  EXCHANGE_2016, EXCHANGE_2019)
 from future import utils as future_utils
+from ntlm_auth.compute_hash import _ntowfv1
 from requests.exceptions import ConnectionError
 from _sqlite3 import *
 
@@ -66,3 +67,11 @@ res.raise_for_status()
 
 # verify dateaparser works. We had a case that it failed with timezone issues
 dateparser.parse("10 minutes")
+
+# Make sure MD4 is enabled - NTLM authentication (XSUP-76118) cannot work without it.
+print(hashlib.algorithms_available)
+assert 'md4' in hashlib.algorithms_available
+hashlib.new('md4', b"text")
+
+# Verify the exact frame that NTLM authentication goes through
+assert _ntowfv1('Password01').hex() == '7100a909c7ff05b266af3c42ec058c33'
