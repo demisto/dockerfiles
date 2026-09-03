@@ -154,26 +154,49 @@ def _build_job(image: str) -> dict[str, Any]:
             #    the real build derives requirements.txt from the lock file. Without
             #    this step `docker build` fails with:
             #      COPY requirements.txt .: "/requirements.txt": not found
-            #    pipenv/poetry aren't in the docker:24.0 (alpine) image, so install
-            #    them on demand only when needed. Skip entirely if a committed
-            #    requirements.txt already exists.
-            f'cd "docker/{image}"',
-            'if [ -f requirements.txt ]; then '
+            #
+            #    Two constraints shape how we do this:
+            #    (a) We can't run pip/pipenv/poetry on the docker:24.0 host: its
+            #        Alpine (musl) python is broken here — pip fails to even import
+            #        with "ImportError: ... pyexpat ...
+            #        XML_SetAllocTrackerActivationThreshold: symbol not found"
+            #        (a musl/expat ABI mismatch).
+            #    (b) dind runs as a SEPARATE daemon over TCP, so `docker run -v`
+            #        bind-mounts a path from the DIND container's filesystem, not
+            #        this job's — the generated file would be invisible to the later
+            #        `docker build` context upload.
+            #
+            #    Solution (daemon-agnostic, no bind mount): pipe a tar of the image
+            #    dir INTO a Debian-based python:3.10-slim container on stdin, run the
+            #    real pipenv/poetry generation inside it, and stream a tar containing
+            #    ONLY requirements.txt back OUT on stdout, which we extract into this
+            #    job's image dir. python:3.10-slim has a working expat/pip and matches
+            #    the real infra runner's toolchain. Skip if a committed
+            #    requirements.txt already exists or no lock file is present.
+            f'if [ -f "docker/{image}/requirements.txt" ]; then '
             'echo "requirements.txt already present - using committed file"; '
-            'elif [ -f Pipfile ]; then '
-            'echo "Generating requirements.txt from Pipfile.lock (pipenv)"; '
-            'apk add --no-cache python3 py3-pip >/dev/null; '
-            'pip install --quiet --break-system-packages pipenv; '
-            'pipenv requirements --exclude-markers > requirements.txt; '
-            'elif [ -f pyproject.toml ]; then '
-            'echo "Generating requirements.txt from poetry.lock (poetry)"; '
-            'apk add --no-cache python3 py3-pip >/dev/null; '
-            'pip install --quiet --break-system-packages poetry; '
-            'poetry export -f requirements.txt --output requirements.txt --without-hashes; '
+            f'elif [ -f "docker/{image}/Pipfile" ]; then '
+            'echo "Generating requirements.txt from Pipfile.lock (pipenv, in python:3.10-slim)"; '
+            f'tar -C "docker/{image}" -cf - . | docker run --rm -i python:3.10-slim '
+            'sh -c "mkdir -p /w && tar -C /w -xf - && cd /w && pip install --quiet pipenv && '
+            'pipenv requirements --exclude-markers > requirements.txt && tar -C /w -cf - requirements.txt" '
+            f'| tar -C "docker/{image}" -xf -; '
+            f'elif [ -f "docker/{image}/pyproject.toml" ]; then '
+            'echo "Generating requirements.txt from poetry.lock (poetry, in python:3.10-slim)"; '
+            # NOTE: Poetry 2.x removed the built-in `export` command; it now lives in
+            # the separate `poetry-plugin-export` package, so we install both. (The
+            # real infra runner uses an older poetry where `export` is built in.)
+            f'tar -C "docker/{image}" -cf - . | docker run --rm -i python:3.10-slim '
+            'sh -c "mkdir -p /w && tar -C /w -xf - && cd /w && pip install --quiet poetry poetry-plugin-export && '
+            'poetry export -f requirements.txt --output requirements.txt --without-hashes && tar -C /w -cf - requirements.txt" '
+            f'| tar -C "docker/{image}" -xf -; '
             'else '
             'echo "No Pipfile/pyproject.toml - Dockerfile is expected to not need requirements.txt"; '
             'fi',
-            'cd "$CI_PROJECT_DIR"',
+            # Fail fast with a clear message if generation was expected but produced nothing.
+            f'if [ -f "docker/{image}/Pipfile" ] || [ -f "docker/{image}/pyproject.toml" ]; then '
+            f'test -s "docker/{image}/requirements.txt" || {{ echo "ERROR: requirements.txt was not generated for {image}"; exit 1; }}; '
+            f'echo "--- generated requirements.txt ({image}) ---"; cat "docker/{image}/requirements.txt"; fi',
             # 2) Build the REAL per-image image from its own Dockerfile context.
             #    No synthetic fallback: if this fails, the job fails.
             f'docker build -t "{tag}" "docker/{image}"',
