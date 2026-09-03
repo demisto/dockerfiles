@@ -25,6 +25,11 @@ variables:
   POC_BASE_REF: "origin/master"
   # Image used to run the small python/git discovery step.
   POC_PY_IMAGE: "python:3.10-slim"
+  # Explicit image list override (space-separated). When non-empty, the build set
+  # is EXACTLY these images and the git-diff discovery is skipped. Defaults to the
+  # 5 longest-building images so the POC stresses worst-case parallel build load.
+  # Set to "" to fall back to diff-based discovery against POC_BASE_REF.
+  POC_IMAGES: "feed-performance-test ml aquatone sane-pdf-reports media-analysis"
 
 # -----------------------------------------------------------------------------
 # Step 1: discover changed images and generate a child pipeline (one job/image)
@@ -38,9 +43,16 @@ poc:generate-matrix:
     # Ensure the base ref is available for diffing in a shallow CI checkout.
     - git fetch --no-tags --depth=1 origin "${POC_BASE_REF#origin/}" || true
   script:
-    - echo "Discovering changed images against ${POC_BASE_REF}..."
-    - python docker/parallel_poc/get_changed_images.py --diff-compare "${POC_BASE_REF}...HEAD" --format lines --output changed_images.txt
-    - echo "Changed images:" && cat changed_images.txt || true
+    # If POC_IMAGES is set, use that explicit list; otherwise discover via git diff.
+    - |
+      if [ -n "${POC_IMAGES}" ]; then
+        echo "Using explicit POC_IMAGES override: ${POC_IMAGES}"
+        printf "%s\n" ${POC_IMAGES} > changed_images.txt
+      else
+        echo "Discovering changed images against ${POC_BASE_REF}..."
+        python docker/parallel_poc/get_changed_images.py --diff-compare "${POC_BASE_REF}...HEAD" --format lines --output changed_images.txt
+      fi
+    - echo "Images to build:" && cat changed_images.txt || true
     # Generate the child pipeline YAML: one build job per changed image.
     # NOTE: single line — bare list entries do not honor '\' line continuation.
     - python docker/parallel_poc/generate_child_pipeline.py --images-file changed_images.txt --output poc-child-pipeline.yml
