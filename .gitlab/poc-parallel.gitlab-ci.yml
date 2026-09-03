@@ -27,9 +27,11 @@ variables:
   POC_PY_IMAGE: "python:3.10-slim"
   # Explicit image list override (space-separated). When non-empty, the build set
   # is EXACTLY these images and the git-diff discovery is skipped. Defaults to the
-  # 5 longest-building images so the POC stresses worst-case parallel build load.
+  # 30 longest-building images (all known-good builds, including the 5 slowest:
+  # feed-performance-test, ml, aquatone, sane-pdf-reports, media-analysis) so the
+  # POC stresses worst-case parallel build load at a realistic fan-out width.
   # Set to "" to fall back to diff-based discovery against POC_BASE_REF.
-  POC_IMAGES: "feed-performance-test ml aquatone sane-pdf-reports media-analysis"
+  POC_IMAGES: "feed-performance-test ml aquatone sane-pdf-reports media-analysis ansible-runner sklearn google-vision-api googleapi-python3 oci m2crypto google-kms keepercommander mlclustering snowflake fastapi office-utils taxii panw-iot py3-tools opnsense xsoar-tools xpanse-ml-ev2 cyberchef mcp python-phash python3-deb datadog-api-client slackv3 ippysocks-py3"
 
 # -----------------------------------------------------------------------------
 # Step 1: discover changed images and generate a child pipeline (one job/image)
