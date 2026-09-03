@@ -148,15 +148,41 @@ def _build_job(image: str) -> dict[str, Any]:
         "script": [
             f"echo Building single image {image}",
             f'mkdir -p "{artifacts_dir}"',
-            # 1) Build the REAL per-image image from its own Dockerfile context.
+            # 1) Generate requirements.txt exactly like build_docker.sh does BEFORE
+            #    `docker build`. Most Dockerfiles do `COPY requirements.txt .`, but
+            #    the repo commits a Pipfile/pyproject.toml (not requirements.txt) and
+            #    the real build derives requirements.txt from the lock file. Without
+            #    this step `docker build` fails with:
+            #      COPY requirements.txt .: "/requirements.txt": not found
+            #    pipenv/poetry aren't in the docker:24.0 (alpine) image, so install
+            #    them on demand only when needed. Skip entirely if a committed
+            #    requirements.txt already exists.
+            f'cd "docker/{image}"',
+            'if [ -f requirements.txt ]; then '
+            'echo "requirements.txt already present - using committed file"; '
+            'elif [ -f Pipfile ]; then '
+            'echo "Generating requirements.txt from Pipfile.lock (pipenv)"; '
+            'apk add --no-cache python3 py3-pip >/dev/null; '
+            'pip install --quiet --break-system-packages pipenv; '
+            'pipenv requirements --exclude-markers > requirements.txt; '
+            'elif [ -f pyproject.toml ]; then '
+            'echo "Generating requirements.txt from poetry.lock (poetry)"; '
+            'apk add --no-cache python3 py3-pip >/dev/null; '
+            'pip install --quiet --break-system-packages poetry; '
+            'poetry export -f requirements.txt --output requirements.txt --without-hashes; '
+            'else '
+            'echo "No Pipfile/pyproject.toml - Dockerfile is expected to not need requirements.txt"; '
+            'fi',
+            'cd "$CI_PROJECT_DIR"',
+            # 2) Build the REAL per-image image from its own Dockerfile context.
             #    No synthetic fallback: if this fails, the job fails.
             f'docker build -t "{tag}" "docker/{image}"',
-            # 2) Save + gzip the image tar into this job's isolated artifact dir.
+            # 3) Save + gzip the image tar into this job's isolated artifact dir.
             f'docker save "{tag}" | gzip > "{tar}.gz"',
-            # 3) Report the per-job artifact size — this is the number the per-job
+            # 4) Report the per-job artifact size — this is the number the per-job
             #    (5 GB) limit applies to. With one image per job it stays small.
             f'echo "Per-job artifact for {image}:"; ls -lh "{tar}.gz"; du -sh "{artifacts_dir}"',
-            # 4) Emit a tiny metadata file for the fan-in to consolidate.
+            # 5) Emit a tiny metadata file for the fan-in to consolidate.
             f'SIZE=$(du -b "{tar}.gz" | cut -f1); echo "{image} bytes=$SIZE" > "{artifacts_dir}/size.txt"; cat "{artifacts_dir}/size.txt"',
         ],
         "artifacts": {
