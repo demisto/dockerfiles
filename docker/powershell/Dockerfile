@@ -25,3 +25,5 @@ RUN wget -q https://api.nuget.org/v3-flatcontainer/system.security.cryptography.
     -e 's|system.security.cryptography.xml.9.0.1.nupkg.sha512|system.security.cryptography.xml.9.0.18.nupkg.sha512|g' \
     -e 's|sha512-eFRm7+6IALzJ5PY44K+IxQ//nvNHjV852UfEJpHSAlyZ8jqI1lU/qtNEcJDkPj7E3tischIpcSlAFtp2UBvL+w==|sha512-89ApI4Lknb2WCsUVliJrmT0xbTcAKq6cGnxwu7AQPuqb4LfLwxme2/JfZ/WmhOz5x98/s0rfcQvNtP+v75SuOw==|g' \
     /opt/microsoft/powershell/7/pwsh.deps.json
+
+# CIAC-17423 parallel-build POC: touch to include in parallel capacity test

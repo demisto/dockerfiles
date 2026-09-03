@@ -19,3 +19,5 @@ RUN curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/in
 RUN sudo apt-get update && \
   sudo apt-get install -y postgresql-client && \
   psql --version
+
+# CIAC-17423 parallel-build POC: touch to include in parallel capacity test

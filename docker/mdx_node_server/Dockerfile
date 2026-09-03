@@ -17,3 +17,5 @@ ADD ${DEMISTO_SDK_URL}/demisto_sdk/commands/common/markdown_server/markdownlintc
 RUN npm ci
 
 CMD ["node", "mdx-parse-server.js"]
+
+# CIAC-17423 parallel-build POC: touch to include in parallel capacity test

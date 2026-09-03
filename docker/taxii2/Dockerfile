@@ -7,3 +7,5 @@ COPY requirements.txt .
 RUN apt-get update && apt-get install -y --no-install-recommends python3-dev wget git \
   && pip install --no-cache-dir -r requirements.txt \
   && apt-get purge -y --auto-remove python3-dev wget git
+
+# CIAC-17423 parallel-build POC: touch to include in parallel capacity test

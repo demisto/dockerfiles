@@ -7,3 +7,5 @@ RUN echo "StrictHostKeyChecking no" >> /root/.ssh/config
 RUN echo "LogLevel ERROR" >> /root/.ssh/config
 
 RUN apt-get update && apt-get install -y --no-install-recommends openssh-client
+
+# CIAC-17423 parallel-build POC: touch to include in parallel capacity test

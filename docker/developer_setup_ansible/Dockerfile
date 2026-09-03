@@ -41,3 +41,5 @@ VOLUME [ "/ansible/playbooks" ]
 # # Run ansible to configure things
 ENV ANSIBLE_HOST_KEY_CHECKING=False
 ENTRYPOINT [ "ansible-playbook", "playbook.yml", "-v"]
+
+# CIAC-17423 parallel-build POC: touch to include in parallel capacity test

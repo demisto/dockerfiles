@@ -22,3 +22,5 @@ RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
 # Creating a user with home directory that matces the home directory of github actions, and give the user sudo access
 #RUN groupadd --gid 1000 github && mkdir -p /github/ && useradd -m -d /github/home --uid 1000 --gid root --shell /bin/bash github
+
+# CIAC-17423 parallel-build POC: touch to include in parallel capacity test

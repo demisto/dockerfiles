@@ -62,6 +62,24 @@ def _repo_root() -> Path:
         return Path(__file__).resolve().parents[2]
 
 
+def _is_deprecated(image_dir: Path) -> bool:
+    """
+    Return True if the image's ``build.conf`` marks it ``deprecated=true``.
+
+    The real pipeline gives deprecated images special (skip/no-rebuild) handling,
+    and some are unbuildable (e.g. legacy Python 2 images whose committed lock file
+    no longer resolves). We therefore exclude them from the parallel build set, the
+    same way the real build does, instead of trying to fix dead images in place.
+    """
+    conf = image_dir / "build.conf"
+    if not conf.is_file():
+        return False
+    for line in conf.read_text(encoding="utf-8").splitlines():
+        if line.strip().lower() == "deprecated=true":
+            return True
+    return False
+
+
 def get_changed_image_names(diff_compare: str, repo_root: Path | None = None) -> list[str]:
     """
     Return the sorted, de-duplicated list of image directory names under ``docker/``
@@ -73,8 +91,9 @@ def get_changed_image_names(diff_compare: str, repo_root: Path | None = None) ->
 
     Returns:
         Sorted list of image names (the directory name directly under ``docker/``).
-        Only directories that still exist on disk and contain a ``Dockerfile`` are
-        returned (a deleted image directory cannot be built).
+        Only directories that still exist on disk, contain a ``Dockerfile``, and are
+        NOT marked ``deprecated=true`` in build.conf are returned (a deleted or
+        deprecated image cannot / should not be built).
     """
     root = repo_root or _repo_root()
     changed_files = _run_git(
@@ -91,8 +110,13 @@ def get_changed_image_names(diff_compare: str, repo_root: Path | None = None) ->
         image_name = parts[1]
         image_dir = root / DOCKER_DIR / image_name
         # Only include buildable dirs: must exist and contain a Dockerfile.
-        if (image_dir / "Dockerfile").is_file():
-            images.add(image_name)
+        if not (image_dir / "Dockerfile").is_file():
+            continue
+        # Skip deprecated images (mirrors the real pipeline; some are unbuildable).
+        if _is_deprecated(image_dir):
+            print(f"Skipping deprecated image: {image_name}", file=sys.stderr)
+            continue
+        images.add(image_name)
 
     return sorted(images)
 

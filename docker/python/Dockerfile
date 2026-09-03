@@ -182,3 +182,5 @@ RUN apk --update add --no-cache --virtual .build-dependencies build-base wget \
 
 RUN addgroup -g 4000 demisto \
   && adduser -u 4000 -G demisto -D demisto -s /bin/sh 
+
+# CIAC-17423 parallel-build POC: touch to include in parallel capacity test

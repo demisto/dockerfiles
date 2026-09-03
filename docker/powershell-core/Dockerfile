@@ -176,3 +176,5 @@ RUN addgroup -g 4000 demisto \
   && adduser -u 4000 -G demisto -D demisto -s /bin/sh 
 
 CMD ["python2"]
+
+# CIAC-17423 parallel-build POC: touch to include in parallel capacity test

@@ -67,3 +67,5 @@ RUN echo 'export GOENV_ROOT="$HOME/.goenv"' >> ~/.bashrc \
     && source ~/.bashrc
 RUN curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.60.3
 
+
+# CIAC-17423 parallel-build POC: touch to include in parallel capacity test
