@@ -6,7 +6,8 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-requests-ntlm = "==1.1.0" # lock because of https://github.com/requests/requests-ntlm/issues/136
+pyspnego = ">=0.5.2" # <0.5.2 calls hashlib.new('md4'), fails under OpenSSL 3.x (XSUP-75734)
+requests-ntlm = ">=1.3.0"
 
 
 [requires]
