@@ -2,13 +2,13 @@ variables:
   # TEMPORARY (CIAC-16370): pin the infra ref to the branch that contains the new
   # cosign sign jobs so the pipeline picks them up. REVERT THIS BEFORE MERGE.
   INFRA_BRANCH: ciac-16370-cosign-sign-jobs
-  CURRENT_BRANCH_NAME: $INFRA_BRANCH
+  CURRENT_BRANCH_NAME: ciac-16370-cosign-sign-jobs
   # CIAC-16370: KMS key used by the cosign sign jobs. This is a resource path (not a
   # secret), so it is safe to define here and avoids per-project CI variable setup.
   COSIGN_KEY_REF: "gcpkms://projects/xdr-cloud-hsm-prod-eu-01/locations/global/keyRings/cortex-xdr-software/cryptoKeys/cosign-signing-key/cryptoKeyVersions/1"
 
 include:
   - file: "/.gitlab/ci/dockerfiles/.gitlab-ci.yml"
-    ref: $INFRA_BRANCH
+    ref: ciac-16370-cosign-sign-jobs
     project: "${CI_PROJECT_NAMESPACE}/infra"
   - local: "/.gitlab/ci/cosign-poc-dual-sign.yml"
