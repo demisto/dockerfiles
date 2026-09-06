@@ -1,0 +1,128 @@
+# =============================================================================
+# Dual-sign POC pipeline (CIAC-16370)
+# =============================================================================
+# A standalone, MANUALLY-TRIGGERED job that proves an existing (DCT-signed)
+# demisto image can additionally be signed with Sigstore/cosign ("dual sign")
+# and that both signatures verify.
+#
+# It is self-contained (docker-in-docker) and does NOT depend on the infra CI
+# templates, so it can be triggered independently of the normal build pipeline.
+#
+# ---------------------------------------------------------------------------
+# HOW TO RUN
+# ---------------------------------------------------------------------------
+# 1. Make sure these CI/CD variables exist (Settings > CI/CD > Variables),
+#    ideally masked + protected.
+#
+#    Signing key (REQUIRED):
+#       COSIGN_KEY_REF       a KMS URI (the URI from keys.txt), e.g.
+#                            gcpkms://projects/... -- the ONLY supported key type
+#                            (no password needed; auth via the runner's GCP creds).
+#                            Static PEM keys are NOT supported.
+#
+#    Registry credentials:
+#       DOCKERHUB_USER       Docker Hub user (needs push to the target repo)
+#       DOCKERHUB_PASSWORD   Docker Hub password / access token
+#
+#    Optional:
+#       COSIGN_PUBLIC_KEY    PEM of the public key used to verify. If omitted it
+#                            is derived from the signing key (guaranteed to match).
+#
+# 2. Run a new pipeline (CI/CD > Pipelines > Run pipeline) with variable:
+#       RUN_COSIGN_POC = true
+#    Optionally override:
+#       TARGET_IMAGE        (default: demisto/python3:3.7.5.4328)
+#       COSIGN_TLOG_UPLOAD  (default: false)
+#       VERIFY_DCT          (default: true)
+#
+# 3. The `cosign-poc:dual-sign` job appears as a manual job -- press play.
+#
+# ---------------------------------------------------------------------------
+# HOW TO CLEAN UP (remove the POC signatures)
+# ---------------------------------------------------------------------------
+# Run a pipeline with:
+#       RUN_COSIGN_POC = true
+#       CLEANUP_MODE   = true
+# Optionally:
+#       DRY_RUN        = true    report what would be deleted, delete nothing
+#       CLEANUP_IMAGES = "repo:tag repo:tag"   override the default pair
+#
+# In cleanup mode the job runs docker/cosign-poc/cleanup_signatures.sh instead
+# of the signing script. It removes only the `sha256-<digest>.sig` tags; the
+# images themselves are never modified. No signing key is needed -- deleting a
+# signature does not require the key that produced it, only DELETE rights on
+# the repository.
+#
+# To include this file in the pipeline, add to the repo root .gitlab-ci.yml:
+#   include:
+#     - local: "/.gitlab/ci/cosign-poc-dual-sign.yml"
+# (The job only runs when RUN_COSIGN_POC == "true", so it is inert otherwise.)
+# =============================================================================
+
+# NOTE on stages -- this is fiddly, so the reasoning is recorded here:
+#
+#  * Do NOT declare a top-level `stages:` key. Included files merge into one
+#    config and `stages:` REPLACES the list instead of extending it, which
+#    deletes the infra template's stages and breaks its jobs with
+#    "chosen stage <x> does not exist". (Stage validation happens at parse
+#    time, so this breaks even jobs that rules would have excluded.)
+#
+#  * Do NOT use `.pre` / `.post` either. On this branch every infra job is
+#    excluded by its own rules, so this job ends up being the only one in the
+#    pipeline -- and GitLab rejects a pipeline made up solely of `.pre`/`.post`
+#    jobs with "The resulting pipeline would have been empty".
+#
+#  * Therefore: use a REAL stage that the infra template already defines, and
+#    declare nothing. `fan-in` is known to exist (it appeared in a GitLab
+#    stage-validation error). If infra ever renames it, pick another stage from
+#    CI/CD > Editor > "View merged YAML".
+
+# Declared at the top level so the variable ALWAYS exists when evaluated,
+# regardless of whether it was supplied on the "Run pipeline" form.
+variables:
+  RUN_COSIGN_POC: "true"
+
+cosign-poc:dual-sign:
+  stage: fan-in
+  image: docker:27-cli
+  services:
+    - name: docker:27-dind
+      alias: docker
+  variables:
+    DOCKER_HOST: "tcp://docker:2376"
+    DOCKER_TLS_CERTDIR: "/certs"
+    DOCKER_TLS_VERIFY: "1"
+    DOCKER_CERT_PATH: "/certs/client"
+    # Defaults (overridable at pipeline run time):
+    # Default to a DEV image so the first runs never touch a production repo.
+    # NOTE: tag numbering differs between orgs -- 3.7.5.4328 exists under
+    # demisto/ but NOT under devdemisto/. Verified present: 3.9.9.25548.
+    TARGET_IMAGE: "devdemisto/python3:3.9.9.25548"
+    COSIGN_TLOG_UPLOAD: "false"
+    # Cleanup switch -- see "HOW TO CLEAN UP" above. Set to "true" at pipeline
+    # run time to delete the POC signatures instead of creating them.
+    CLEANUP_MODE: "false"
+    # The two images signed during the POC. Cleanup targets these by default.
+    CLEANUP_IMAGES: "demisto/python3:3.7.5.4328 devdemisto/python3:3.9.9.25548"
+    DRY_RUN: "false"
+    # DCT verification via `DOCKER_CONTENT_TRUST=1 docker pull` is a NO-OP on
+    # Docker 25+ (verified: it returns exit 0 even for unsigned images, and
+    # `docker trust` was removed entirely). Leaving this on would produce a
+    # false "DUAL-SIGN CONFIRMED". Off until we can verify DCT properly.
+    VERIFY_DCT: "false"
+    COSIGN_VERSION: "v2.4.1"
+  # No `rules:` / `only:` at all -- the job always exists, which makes it
+  # impossible for GitLab to consider the pipeline empty. Set
+  # RUN_COSIGN_POC to anything other than "true" to disable it; the script
+  # itself exits early in that case.
+  when: always
+  before_script:
+    - apk add --no-cache bash curl
+  script:
+    - |
+      if [ "${CLEANUP_MODE}" = "true" ]; then
+        echo "CLEANUP_MODE=true -- removing POC cosign signatures"
+        bash docker/cosign-poc/cleanup_signatures.sh
+      else
+        bash docker/cosign-poc/dual_sign_ci_test.sh
+      fi

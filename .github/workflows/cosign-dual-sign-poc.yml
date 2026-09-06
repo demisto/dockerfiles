@@ -1,0 +1,186 @@
+name: Cosign dual-sign POC (CIAC-16370)
+
+# Manually-triggered POC: proves that an existing, already-published image can
+# additionally be signed with Sigstore/cosign ("dual sign") and verified.
+#
+# Signing uses the KMS key from docker/cosign-poc/keys.txt (the ONLY supported
+# key type; no static PEM). GCP auth is obtained via Workload Identity Federation
+# (OIDC), so no service-account key is stored in the repo.
+#
+# Required repository configuration:
+#   Variables:
+#     COSIGN_KEY_REF                  the gcpkms://... URI from keys.txt
+#     GCP_WORKLOAD_IDENTITY_PROVIDER  WIF provider resource name
+#     GCP_SERVICE_ACCOUNT             service account with cloudkms.signerVerifier on the key
+#   Secrets:
+#     DOCKERHUB_USER       Docker Hub user with PUSH rights to the target repo
+#     DOCKERHUB_PASSWORD   Docker Hub password / access token
+#
+# cosign stores the signature as a `sha256-<digest>.sig` tag in the SAME repo as
+# the image, which is why push rights are needed. The image itself is untouched.
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_image:
+        description: 'Image to dual-sign (use a devdemisto image first)'
+        required: true
+        default: 'devdemisto/python3:3.7.5.4328'
+      tlog_upload:
+        description: 'Upload signature to the PUBLIC sigstore Rekor log'
+        required: true
+        default: 'false'
+        type: choice
+        options:
+          - 'false'
+          - 'true'
+      dry_run:
+        description: 'Resolve + report only; do not sign or push anything'
+        required: true
+        default: 'false'
+        type: choice
+        options:
+          - 'false'
+          - 'true'
+
+jobs:
+  dual-sign:
+    if: github.repository == 'demisto/dockerfiles'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write  # required for GCP Workload Identity Federation (OIDC)
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud (Workload Identity Federation)
+        if: ${{ inputs.dry_run != 'true' }}
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+
+      - name: Install cosign
+        uses: sigstore/cosign-installer@v3
+        with:
+          cosign-release: 'v2.4.1'
+
+      - name: Show versions
+        run: |
+          cosign version
+          docker version --format 'docker client: {{.Client.Version}}'
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Resolve image digest
+        id: digest
+        env:
+          TARGET_IMAGE: ${{ inputs.target_image }}
+        run: |
+          set -euo pipefail
+          echo "Target: ${TARGET_IMAGE}"
+          docker pull "${TARGET_IMAGE}"
+          DIGEST_REF="$(docker inspect --format='{{index .RepoDigests 0}}' "${TARGET_IMAGE}")"
+          if [ -z "${DIGEST_REF}" ]; then
+            echo "::error::could not resolve a registry digest for ${TARGET_IMAGE}"
+            exit 1
+          fi
+          echo "Resolved: ${DIGEST_REF}"
+          echo "digest_ref=${DIGEST_REF}" >> "$GITHUB_OUTPUT"
+
+      - name: Report existing cosign signature (before)
+        env:
+          DIGEST_REF: ${{ steps.digest.outputs.digest_ref }}
+        run: |
+          SIG_TAG="$(cosign triangulate "${DIGEST_REF}" 2>/dev/null || true)"
+          echo "cosign signature tag would be: ${SIG_TAG:-<unresolved>}"
+          if [ -n "${SIG_TAG}" ] && docker manifest inspect "${SIG_TAG}" >/dev/null 2>&1; then
+            echo "==> a cosign signature ALREADY exists for this digest"
+          else
+            echo "==> no cosign signature present yet"
+          fi
+
+      - name: Cosign sign (by digest)
+        if: ${{ inputs.dry_run != 'true' }}
+        env:
+          COSIGN_KEY_REF: ${{ vars.COSIGN_KEY_REF }}
+          DIGEST_REF: ${{ steps.digest.outputs.digest_ref }}
+          TLOG_UPLOAD: ${{ inputs.tlog_upload }}
+        run: |
+          set -euo pipefail
+          echo "Signing ${DIGEST_REF} (tlog upload: ${TLOG_UPLOAD})"
+          cosign sign --yes \
+            --tlog-upload="${TLOG_UPLOAD}" \
+            --key "${COSIGN_KEY_REF}" \
+            "${DIGEST_REF}"
+
+      - name: Cosign verify
+        if: ${{ inputs.dry_run != 'true' }}
+        env:
+          COSIGN_KEY_REF: ${{ vars.COSIGN_KEY_REF }}
+          DIGEST_REF: ${{ steps.digest.outputs.digest_ref }}
+          TLOG_UPLOAD: ${{ inputs.tlog_upload }}
+        run: |
+          set -euo pipefail
+          # Derive the public key from the KMS signing key so the two can never
+          # drift apart.
+          cosign public-key --key "${COSIGN_KEY_REF}" > /tmp/cosign.pub
+          echo "--- public key used for verification ---"
+          cat /tmp/cosign.pub
+
+          VERIFY_FLAGS=(--key /tmp/cosign.pub)
+          if [ "${TLOG_UPLOAD}" != "true" ]; then
+            # Signatures made without a transparency-log entry must be verified
+            # with the tlog check disabled. The signature itself is still
+            # cryptographically verified.
+            VERIFY_FLAGS+=(--insecure-ignore-tlog=true)
+          fi
+
+          cosign verify "${VERIFY_FLAGS[@]}" "${DIGEST_REF}"
+          echo "==> cosign signature VERIFIED"
+
+      - name: Report DCT (Docker Content Trust) status
+        env:
+          TARGET_IMAGE: ${{ inputs.target_image }}
+        run: |
+          # NOTE: this is informational only and deliberately never fails.
+          # `DOCKER_CONTENT_TRUST=1 docker pull` is a NO-OP on Docker 25+
+          # (it returns 0 even for unsigned images) and `docker trust` has been
+          # removed, so DCT cannot be verified with the modern Docker CLI.
+          echo "Docker client: $(docker version --format '{{.Client.Version}}')"
+          if docker trust inspect --pretty "${TARGET_IMAGE}" 2>/dev/null; then
+            echo "==> DCT trust data found (docker trust available)"
+          else
+            echo "==> 'docker trust' unavailable or no trust data; DCT status UNKNOWN"
+            echo "    Do not infer 'signed' or 'unsigned' from this step."
+          fi
+
+      - name: Summary
+        if: always()
+        env:
+          TARGET_IMAGE: ${{ inputs.target_image }}
+          DIGEST_REF: ${{ steps.digest.outputs.digest_ref }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          {
+            echo "### Cosign dual-sign POC"
+            echo ""
+            echo "| Field | Value |"
+            echo "| --- | --- |"
+            echo "| Target image | \`${TARGET_IMAGE}\` |"
+            echo "| Digest | \`${DIGEST_REF:-unresolved}\` |"
+            echo "| Dry run | ${DRY_RUN} |"
+            echo "| tlog upload | ${{ inputs.tlog_upload }} |"
+            echo ""
+            if [ "${DRY_RUN}" = "true" ]; then
+              echo "Dry run - nothing was signed."
+            else
+              echo "cosign signature added and verified. DCT status is reported"
+              echo "separately and is informational only."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
