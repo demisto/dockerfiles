@@ -164,7 +164,7 @@ docker/build_docker.sh --upload --last-upload-commit HEAD~1 --files-to-prs /dev/
 Use [`verify_dual_sign.sh`](verify_dual_sign.sh):
 
 ```bash
-./docker/cosign-poc/verify_dual_sign.sh devdemisto/python3:<version> cosign.pub
+./cosign/verify_dual_sign.sh devdemisto/python3:<version> cosign.pub
 ```
 
 Or manually. The signature lives in the separate `<org>-signatures/<image>` repo,

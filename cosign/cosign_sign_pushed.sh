@@ -18,7 +18,7 @@
 #
 # Signing key (REQUIRED):
 #   COSIGN_KEY_REF        A cosign KMS key reference (the ONLY supported key type),
-#                         e.g. the URI from docker/cosign-poc/keys.txt:
+#                         e.g. the URI from cosign/keys.txt:
 #                           gcpkms://projects/<p>/locations/<l>/keyRings/<r>/
 #                           cryptoKeys/<k>/cryptoKeyVersions/<n>
 #                         With KMS no password is required; auth comes from the

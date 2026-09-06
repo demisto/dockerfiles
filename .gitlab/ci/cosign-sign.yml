@@ -5,7 +5,7 @@
 # the legacy Docker Content Trust (DCT) sign job. It consumes the list of pushed
 # images produced by build_docker.sh (artifacts/pushed_dockers.txt) and adds a
 # Sigstore/cosign signature to every image via
-# docker/cosign-poc/cosign_sign_pushed.sh.
+# cosign/cosign_sign_pushed.sh.
 #
 # WHY A SEPARATE JOB:
 #   Decoupling cosign from the build/push step and from the DCT sign job means
@@ -61,7 +61,7 @@ cosign:
         echo "COSIGN_SIGN_ENABLED is not 'true' (got: '${COSIGN_SIGN_ENABLED}'). Skipping cosign signing."
         exit 0
       fi
-      bash docker/cosign-poc/cosign_sign_pushed.sh
+      bash cosign/cosign_sign_pushed.sh
 
 # =============================================================================
 # INFRA COPY-PASTE SNIPPET (do NOT enable here; paste into the infra template)
@@ -85,7 +85,7 @@ cosign:
 #       COSIGN_SIGN_ENABLED: "true"
 #     script:
 #       - !reference [.docker-login]
-#       - bash docker/cosign-poc/cosign_sign_pushed.sh
+#       - bash cosign/cosign_sign_pushed.sh
 #       - job-done
 #
 # Upload flow -> add to .gitlab/ci/dockerfiles/.gitlab-ci.dockerfiles-upload.yml,
@@ -110,7 +110,7 @@ cosign:
 #     script:
 #       - !reference [.check-pipeline-should-be-skipped]
 #       - !reference [.docker-login]
-#       - bash docker/cosign-poc/cosign_sign_pushed.sh
+#       - bash cosign/cosign_sign_pushed.sh
 #       - job-done
 #
 # RETIRING DCT LATER: delete the `sign` and `dockerfiles-upload-sign` jobs. These

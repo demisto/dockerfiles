@@ -3,7 +3,7 @@ name: Cosign dual-sign POC (CIAC-16370)
 # Manually-triggered POC: proves that an existing, already-published image can
 # additionally be signed with Sigstore/cosign ("dual sign") and verified.
 #
-# Signing uses the KMS key from docker/cosign-poc/keys.txt (the ONLY supported
+# Signing uses the KMS key from cosign/keys.txt (the ONLY supported
 # key type; no static PEM). GCP auth is obtained via Workload Identity Federation
 # (OIDC), so no service-account key is stored in the repo.
 #

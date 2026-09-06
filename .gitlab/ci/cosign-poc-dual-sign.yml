@@ -47,7 +47,7 @@
 #       DRY_RUN        = true    report what would be deleted, delete nothing
 #       CLEANUP_IMAGES = "repo:tag repo:tag"   override the default pair
 #
-# In cleanup mode the job runs docker/cosign-poc/cleanup_signatures.sh instead
+# In cleanup mode the job runs cosign/cleanup_signatures.sh instead
 # of the signing script. It removes only the `sha256-<digest>.sig` tags; the
 # images themselves are never modified. No signing key is needed -- deleting a
 # signature does not require the key that produced it, only DELETE rights on
@@ -122,7 +122,7 @@ cosign-poc:dual-sign:
     - |
       if [ "${CLEANUP_MODE}" = "true" ]; then
         echo "CLEANUP_MODE=true -- removing POC cosign signatures"
-        bash docker/cosign-poc/cleanup_signatures.sh
+        bash cosign/cleanup_signatures.sh
       else
-        bash docker/cosign-poc/dual_sign_ci_test.sh
+        bash cosign/dual_sign_ci_test.sh
       fi
