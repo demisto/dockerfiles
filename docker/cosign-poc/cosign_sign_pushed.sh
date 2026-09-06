@@ -85,17 +85,9 @@ cosign_signature_repo() {
 }
 
 # ---------------------------------------------------------------------------
-# 1. Resolve the signing key
-# ---------------------------------------------------------------------------
-COSIGN_KEY_REF="${COSIGN_KEY_REF:-}"
-if [[ -z "${COSIGN_KEY_REF}" ]]; then
-  fail "COSIGN_KEY_REF is required (the KMS URI from keys.txt). Static PEM keys are not supported."
-  exit 2
-fi
-log "using cosign key ref: ${COSIGN_KEY_REF%%://*}://..."
-
-# ---------------------------------------------------------------------------
-# 2. Gather the list of images to sign
+# 1. Gather the list of images to sign FIRST, so that when nothing was built
+#    (the common case) we exit immediately without doing docker login or
+#    installing cosign. Mirrors the DCT sign job's early no-op behavior.
 # ---------------------------------------------------------------------------
 images_csv="${BUILT_DOCKERS:-${PUSHED_DOCKERS:-}}"
 if [[ -z "${images_csv}" ]]; then
@@ -113,6 +105,16 @@ fi
 # Split the comma-separated list into an array.
 IFS=',' read -r -a IMAGES <<<"${images_csv}"
 log "images to sign: ${#IMAGES[@]}"
+
+# ---------------------------------------------------------------------------
+# 2. Resolve the signing key (only reached when there is something to sign).
+# ---------------------------------------------------------------------------
+COSIGN_KEY_REF="${COSIGN_KEY_REF:-}"
+if [[ -z "${COSIGN_KEY_REF}" ]]; then
+  fail "COSIGN_KEY_REF is required (the KMS URI from keys.txt). Static PEM keys are not supported."
+  exit 2
+fi
+log "using cosign key ref: ${COSIGN_KEY_REF%%://*}://..."
 
 # ---------------------------------------------------------------------------
 # 3. Ensure cosign is available
