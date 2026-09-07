@@ -1,9 +1,9 @@
-# Last modified: 2026-07-14T07:50:42.385524+00:00
-FROM demisto/python3-deb:3.11.10.117398
+# Last modified: 2026-09-07T20:42:03.988265+00:00
+FROM demisto/python3-deb:3.12.14.12844876
 # because of this issue we still using 3.11 https://github.com/mandiant/stringsifter/issues/41
 
 COPY requirements.txt .
-# The base image demisto/python3-deb:3.11.10.117398 has bullseye-backports repository configured in its apt sources,
+# The base image demisto/python3-deb:3.12.14.12844876 has bullseye-backports repository configured in its apt sources,
 # but this repository is returning a 404 Not Found error because it's no longer available.
 RUN sed -i '/bullseye-backports/d' /etc/apt/sources.list /etc/apt/sources.list.d/* 2>/dev/null || true \
     && apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends python3-dev  \
