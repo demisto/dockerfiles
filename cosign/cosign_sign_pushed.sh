@@ -127,6 +127,21 @@ if ! command -v cosign >/dev/null 2>&1; then
 fi
 cosign version 2>/dev/null | grep GitVersion || true
 
+# Determine the cosign major version so we can pass the correct tlog flags.
+# cosign v3 defaults to --use-signing-config=true, which is incompatible with
+# --tlog-upload=false; disabling the transparency log there also requires
+# --use-signing-config=false. cosign v2 has no --use-signing-config flag.
+COSIGN_MAJOR="$(cosign version 2>/dev/null | sed -n 's/^GitVersion:[[:space:]]*v\{0,1\}\([0-9]*\).*/\1/p' | head -n1)"
+COSIGN_MAJOR="${COSIGN_MAJOR:-2}"
+log "detected cosign major version: ${COSIGN_MAJOR}"
+
+# Build the transparency-log flag set once, based on version.
+TLOG_FLAGS=(--tlog-upload="${COSIGN_TLOG_UPLOAD}")
+if [[ "${COSIGN_TLOG_UPLOAD}" != "true" && "${COSIGN_MAJOR}" -ge 3 ]]; then
+  # v3+: must also opt out of the default signing-config to allow tlog-upload=false.
+  TLOG_FLAGS+=(--use-signing-config=false)
+fi
+
 # ---------------------------------------------------------------------------
 # 4. Docker Hub login (needed to resolve digests and push the .sig)
 # ---------------------------------------------------------------------------
@@ -176,7 +191,7 @@ for image_ref in "${IMAGES[@]}"; do
 
   if COSIGN_REPOSITORY="${sig_repo}" \
     cosign sign --yes \
-    --tlog-upload="${COSIGN_TLOG_UPLOAD}" \
+    "${TLOG_FLAGS[@]}" \
     --key "${COSIGN_KEY_REF}" \
     "${digest_ref}"; then
     ok "signed ${digest_ref} (signature in ${sig_repo})"
