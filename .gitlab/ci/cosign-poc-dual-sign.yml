@@ -84,6 +84,14 @@ variables:
 
 cosign-poc:dual-sign:
   stage: fan-in
+  # Run on the same runner as the production sign job. That runner carries the
+  # GCP workload identity with access to the cosign KMS key; the default/shared
+  # runners do NOT, and cosign then fails with
+  #   PermissionDenied: cloudkms.cryptoKeys.get denied on .../cosign-signing-key.
+  # BUILD_JOB_TAG (= cortex-content-1738) is defined by the included infra
+  # workflow config and is in scope for this merged pipeline.
+  tags:
+    - $BUILD_JOB_TAG
   image: docker:27-cli
   services:
     - name: docker:27-dind
