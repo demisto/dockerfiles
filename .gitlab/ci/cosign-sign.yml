@@ -1,0 +1,124 @@
+# =============================================================================
+# Standalone cosign signing job (CIAC-16370)
+# =============================================================================
+# A dedicated `cosign` signing job, separate from the build/push step AND from
+# the legacy Docker Content Trust (DCT) sign job. It consumes the list of pushed
+# images produced by build_docker.sh (artifacts/pushed_dockers.txt) and adds a
+# Sigstore/cosign signature to every image via
+# cosign/cosign_sign_pushed.sh.
+#
+# WHY A SEPARATE JOB:
+#   Decoupling cosign from the build/push step and from the DCT sign job means
+#   that when DCT is retired, the legacy sign jobs can be deleted with ZERO
+#   changes to build or to cosign.
+#
+# This file is SELF-CONTAINED (docker-in-docker, no infra-only anchors) so it can
+# be `include`d directly from this repo's pipeline for testing:
+#     include:
+#       - local: "/.gitlab/ci/cosign-sign.yml"
+#
+# For the PRODUCTION wiring inside the infra dockerfiles template (which uses the
+# infra-local anchors .default-job-settings / .docker_services / the *-rule
+# anchors), copy the snippet in the comment block at the BOTTOM of this file into
+# the infra template instead of including this file.
+#
+# -----------------------------------------------------------------------------
+# REQUIRED CI/CD VARIABLES (Settings > CI/CD > Variables; masked + protected)
+# -----------------------------------------------------------------------------
+#   COSIGN_KEY_REF        KMS key ref (gcpkms://... from keys.txt); the ONLY
+#                         supported key type. No password. Static PEM not supported.
+#   DOCKERHUB_USER        Docker Hub user with PUSH rights to the <org>-signatures repos.
+#   DOCKERHUB_PASSWORD    Docker Hub password / access token.
+# Optional:
+#   COSIGN_TLOG_UPLOAD    default "false" (no public Rekor upload).
+#   COSIGN_SIGN_ENABLED   default "true"; set to anything else to make the job a no-op.
+#   COSIGN_VERSION        cosign release to install. Default v2.4.1.
+#   DRY_RUN               "true" to report without signing.
+#   PUSHED_DOCKERS        Comma-separated refs to sign; overrides the artifact file.
+# =============================================================================
+
+cosign:
+  stage: sign
+  # Run on the KMS-authorized runner (same as the infra sign job). The cosign
+  # KMS key is only reachable from this runner's GCP identity; default/shared
+  # runners fail with PermissionDenied on cloudkms.cryptoKeys.get.
+  # BUILD_JOB_TAG (= cortex-content-1738) comes from the included infra config.
+  tags:
+    - $BUILD_JOB_TAG
+  image: docker:27-cli
+  services:
+    - name: docker:27-dind
+      alias: docker
+  variables:
+    DOCKER_HOST: "tcp://docker:2376"
+    DOCKER_TLS_CERTDIR: "/certs"
+    DOCKER_TLS_VERIFY: "1"
+    DOCKER_CERT_PATH: "/certs/client"
+    ARTIFACTS_FOLDER: "artifacts"
+    COSIGN_TLOG_UPLOAD: "false"
+    COSIGN_VERSION: "v2.4.1"
+    COSIGN_SIGN_ENABLED: "true"
+    DRY_RUN: "false"
+  before_script:
+    - apk add --no-cache bash curl
+  script:
+    - |
+      if [ "${COSIGN_SIGN_ENABLED}" != "true" ]; then
+        echo "COSIGN_SIGN_ENABLED is not 'true' (got: '${COSIGN_SIGN_ENABLED}'). Skipping cosign signing."
+        exit 0
+      fi
+      bash cosign/cosign_sign_pushed.sh
+
+# =============================================================================
+# INFRA COPY-PASTE SNIPPET (do NOT enable here; paste into the infra template)
+# =============================================================================
+# Build flow -> add to .gitlab/ci/dockerfiles/.gitlab-ci.on-push.yml, next to `sign`:
+#
+#   cosign:
+#     stage: sign
+#     tags:
+#       - $BUILD_JOB_TAG
+#     extends:
+#       - .build-docker-pipeline-rule
+#       - .default-job-settings
+#       - .docker_services
+#     needs:
+#       - cloning-repositories
+#       - trigger-scan-publish
+#       - build_docker_images
+#     variables:
+#       COSIGN_TLOG_UPLOAD: "false"
+#       COSIGN_SIGN_ENABLED: "true"
+#     script:
+#       - !reference [.docker-login]
+#       - bash cosign/cosign_sign_pushed.sh
+#       - job-done
+#
+# Upload flow -> add to .gitlab/ci/dockerfiles/.gitlab-ci.dockerfiles-upload.yml,
+# next to `dockerfiles-upload-sign`:
+#
+#   dockerfiles-upload-cosign:
+#     stage: sign
+#     tags:
+#       - $BUILD_JOB_TAG
+#     extends:
+#       - .docker-upload-rule
+#       - .default-job-settings
+#       - .docker_services
+#     needs:
+#       - dockerfiles-upload-cloning-repositories
+#       - dockerfiles-upload-trigger-scan-publish
+#       - dockerfiles-upload-build-images
+#       - dockerfiles-upload-check-running-pipeline
+#     variables:
+#       COSIGN_TLOG_UPLOAD: "false"
+#       COSIGN_SIGN_ENABLED: "true"
+#     script:
+#       - !reference [.check-pipeline-should-be-skipped]
+#       - !reference [.docker-login]
+#       - bash cosign/cosign_sign_pushed.sh
+#       - job-done
+#
+# RETIRING DCT LATER: delete the `sign` and `dockerfiles-upload-sign` jobs. These
+# cosign jobs do not depend on them and are unaffected.
+# =============================================================================
