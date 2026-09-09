@@ -118,10 +118,51 @@ for namespace in ${SIG_NAMESPACES}; do
 done
 
 rm -f /tmp/create_repo_resp.json
+
+# ---------------------------------------------------------------------------
+# 3. Diagnostics: prove who we are and whether the target repos are reachable
+#    with these credentials. This is what determines if cosign will be able to
+#    push the .sig (cosign uses registry basic-auth, but Hub permissions are the
+#    same underlying membership).
+# ---------------------------------------------------------------------------
+echo ""
+log "--- diagnostics ---"
+
+# 3a. Authenticated account.
+whoami_json="$(curl -sS -f "${HUB_API}/user/" -H "Authorization: JWT ${token}" 2>/dev/null || true)"
+hub_username="$(echo "${whoami_json}" | jq -r '.username // empty' 2>/dev/null)"
+log "authenticated as: ${hub_username:-<unknown>}"
+
+# 3b. For each namespace, show whether the account can see it as an org it
+#     belongs to, and GET each repo back to confirm read access.
+for namespace in ${SIG_NAMESPACES}; do
+  org_code="$(curl -sS -o /dev/null -w '%{http_code}' \
+    "${HUB_API}/orgs/${namespace}/" -H "Authorization: JWT ${token}" 2>/dev/null || true)"
+  case "${org_code}" in
+    200) log "namespace '${namespace}': visible to this account (org GET 200)" ;;
+    404) log "namespace '${namespace}': NOT FOUND as an org (org GET 404) - it may not exist, or is a user namespace" ;;
+    401 | 403) log "namespace '${namespace}': FORBIDDEN (org GET ${org_code}) - account is not a member" ;;
+    *) log "namespace '${namespace}': org GET returned ${org_code}" ;;
+  esac
+
+  for image in ${SIG_IMAGES}; do
+    repo_code="$(curl -sS -o /dev/null -w '%{http_code}' \
+      "${HUB_API}/repositories/${namespace}/${image}/" \
+      -H "Authorization: JWT ${token}" 2>/dev/null || true)"
+    case "${repo_code}" in
+      200) ok "repo '${namespace}/${image}': reachable (repo GET 200)" ;;
+      *)
+        fail "repo '${namespace}/${image}': NOT reachable (repo GET ${repo_code})"
+        overall_rc=1
+        ;;
+    esac
+  done
+done
+
 echo ""
 if [[ "${overall_rc}" -eq 0 ]]; then
-  ok "all signature repos provisioned"
+  ok "all signature repos provisioned and reachable"
 else
-  fail "one or more signature repos could not be provisioned - see messages above"
+  fail "one or more signature repos could not be provisioned/reached - see messages above"
 fi
 exit "${overall_rc}"
