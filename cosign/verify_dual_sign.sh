@@ -26,31 +26,11 @@ fi
 RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; RESET='\033[0m'
 overall_rc=0
 
-# Map an image ref to the repository where its cosign signature is stored.
-# Must match cosign_signature_repo() in docker/build_docker.sh:
-#   [registry/]<org>/<image>[:tag|@digest] -> [registry/]<org>-signatures/<image>
-cosign_signature_repo() {
-    local ref="$1"
-    local repo="${ref%%@*}"
-    repo="${repo%:*}"
-    local org_path="${repo%/*}"
-    local image_name="${repo##*/}"
-    local org="${org_path##*/}"
-    local prefix="${org_path%/*}"
-    local sig_org="${org}-signatures"
-    if [ "${prefix}" = "${org_path}" ]; then
-        echo "${sig_org}/${image_name}"
-    else
-        echo "${prefix}/${sig_org}/${image_name}"
-    fi
-}
-
-# Signatures live in a SEPARATE repo; point cosign at it. Allow an explicit
-# override via COSIGN_REPOSITORY, otherwise derive it from the image ref.
-SIG_REPO="${COSIGN_REPOSITORY:-$(cosign_signature_repo "${IMAGE_REF}")}"
+# Signatures are CO-LOCATED with the image (same repo), which is cosign's default,
+# so no COSIGN_REPOSITORY override is needed to find them.
 
 echo -e "${YELLOW}== Verifying dual signatures for: ${IMAGE_REF} ==${RESET}"
-echo -e "${YELLOW}   (cosign signature repo: ${SIG_REPO})${RESET}"
+echo -e "${YELLOW}   (cosign signature co-located with the image)${RESET}"
 
 # --- 1. cosign / Sigstore -------------------------------------------------
 echo -e "\n${YELLOW}[1/2] cosign (Sigstore) verification${RESET}"
@@ -61,12 +41,12 @@ elif [ ! -f "${COSIGN_PUB}" ]; then
     echo -e "${RED}cosign public key not found: ${COSIGN_PUB}${RESET}"
     overall_rc=1
 else
-    if COSIGN_REPOSITORY="${SIG_REPO}" cosign verify --key "${COSIGN_PUB}" "${IMAGE_REF}" >/dev/null 2>&1; then
+    if cosign verify --key "${COSIGN_PUB}" "${IMAGE_REF}" >/dev/null 2>&1; then
         echo -e "${GREEN}OK: cosign signature is valid.${RESET}"
     else
         echo -e "${RED}FAIL: cosign verification failed.${RESET}"
         # Re-run without suppression to surface the error to the operator.
-        COSIGN_REPOSITORY="${SIG_REPO}" cosign verify --key "${COSIGN_PUB}" "${IMAGE_REF}" || true
+        cosign verify --key "${COSIGN_PUB}" "${IMAGE_REF}" || true
         overall_rc=1
     fi
 fi

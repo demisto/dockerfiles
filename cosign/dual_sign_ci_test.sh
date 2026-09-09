@@ -62,25 +62,6 @@ require_var() {
     fi
 }
 
-# Map an image ref to the repository where its cosign signature is stored.
-# Must match cosign_signature_repo() in docker/build_docker.sh:
-#   [registry/]<org>/<image>[:tag|@digest] -> [registry/]<org>-signatures/<image>
-cosign_signature_repo() {
-    local ref="$1"
-    local repo="${ref%%@*}"
-    repo="${repo%:*}"
-    local org_path="${repo%/*}"
-    local image_name="${repo##*/}"
-    local org="${org_path##*/}"
-    local prefix="${org_path%/*}"
-    local sig_org="${org}-signatures"
-    if [ "${prefix}" = "${org_path}" ]; then
-        echo "${sig_org}/${image_name}"
-    else
-        echo "${prefix}/${sig_org}/${image_name}"
-    fi
-}
-
 # ---------------------------------------------------------------------------
 # 0. Opt-in guard
 # ---------------------------------------------------------------------------
@@ -166,25 +147,22 @@ if [ -z "${DIGEST_REF}" ]; then
 fi
 ok "resolved digest ref: ${DIGEST_REF}"
 
-# Signatures are stored in a SEPARATE repo (not next to the image). Derive it
-# from the image ref (overridable via COSIGN_REPOSITORY). The signing identity
-# must have PUSH rights to this repo.
-SIG_REPO="${COSIGN_REPOSITORY:-$(cosign_signature_repo "${TARGET_IMAGE}")}"
-log "cosign signature repo: ${SIG_REPO}"
+# Signatures are stored CO-LOCATED with the image (cosign's default: a
+# `sha256-<digest>.sig` tag in the SAME repo). This needs no extra Docker Hub
+# namespace/org -- only push rights on the image repo.
 
 # ---------------------------------------------------------------------------
 # 4. cosign sign (by digest) -- the "second" signature (DCT is the first)
 # ---------------------------------------------------------------------------
-log "cosign signing ${DIGEST_REF} -> ${SIG_REPO} (tlog upload: ${COSIGN_TLOG_UPLOAD})"
-if ! COSIGN_REPOSITORY="${SIG_REPO}" \
-     cosign sign --yes \
+log "cosign signing ${DIGEST_REF} (signature co-located; tlog upload: ${COSIGN_TLOG_UPLOAD})"
+if ! cosign sign --yes \
        --tlog-upload="${COSIGN_TLOG_UPLOAD}" \
        --key "${COSIGN_KEY_REF}" \
        "${DIGEST_REF}"; then
     fail "cosign sign failed"
     exit 1
 fi
-ok "cosign signature pushed for ${DIGEST_REF} (stored in ${SIG_REPO})"
+ok "cosign signature pushed for ${DIGEST_REF} (co-located in the image repo)"
 
 # ---------------------------------------------------------------------------
 # 5. cosign verify (positive) with the public key
@@ -209,10 +187,10 @@ if [ "${COSIGN_TLOG_UPLOAD}" != "true" ]; then
     COSIGN_VERIFY_FLAGS+=(--insecure-ignore-tlog=true)
 fi
 
-log "cosign verifying ${DIGEST_REF} (signature repo: ${SIG_REPO})"
-if ! COSIGN_REPOSITORY="${SIG_REPO}" cosign verify "${COSIGN_VERIFY_FLAGS[@]}" "${DIGEST_REF}" >/dev/null 2>&1; then
+log "cosign verifying ${DIGEST_REF} (signature co-located)"
+if ! cosign verify "${COSIGN_VERIFY_FLAGS[@]}" "${DIGEST_REF}" >/dev/null 2>&1; then
     fail "cosign verify failed"
-    COSIGN_REPOSITORY="${SIG_REPO}" cosign verify "${COSIGN_VERIFY_FLAGS[@]}" "${DIGEST_REF}" || true
+    cosign verify "${COSIGN_VERIFY_FLAGS[@]}" "${DIGEST_REF}" || true
     exit 1
 fi
 ok "cosign signature verified"

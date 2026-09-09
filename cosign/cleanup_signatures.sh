@@ -4,11 +4,10 @@
 # ===========================================
 # Removes the cosign signatures created during the dual-sign POC.
 #
-# Signatures are stored as a `sha256-<digest>.sig` TAG in a SEPARATE signature
-# repository (see cosign_signature_repo): <org>/<image> -> <org>-signatures/<image>.
-# The digest is still resolved from the IMAGE repo, but the .sig tag is deleted
-# from the SIGNATURE repo. Removing one deletes only that tag -- the image itself
-# is never touched and normal pulls are unaffected either way.
+# Signatures are stored as a `sha256-<digest>.sig` TAG CO-LOCATED with the image,
+# i.e. in the SAME repository as the image. The digest is resolved from the image
+# repo and the .sig tag is deleted from that same repo. Removing it deletes only
+# that tag -- the image itself is never touched and normal pulls are unaffected.
 #
 # Deleting a manifest requires DELETE permission on the repository, which is a
 # separate grant from push on Docker Hub. Running this from CI is often the only
@@ -41,25 +40,6 @@ RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; RESET='\033[0m'
 log()  { echo -e "${YELLOW}[cleanup] $*${RESET}"; }
 ok()   { echo -e "${GREEN}[cleanup] OK: $*${RESET}"; }
 fail() { echo -e "${RED}[cleanup] FAIL: $*${RESET}"; }
-
-# Map an image ref to the repository where its cosign signature is stored.
-# Must match cosign_signature_repo() in docker/build_docker.sh:
-#   [registry/]<org>/<image>[:tag|@digest] -> [registry/]<org>-signatures/<image>
-cosign_signature_repo() {
-    local ref="$1"
-    local repo="${ref%%@*}"
-    repo="${repo%:*}"
-    local org_path="${repo%/*}"
-    local image_name="${repo##*/}"
-    local org="${org_path##*/}"
-    local prefix="${org_path%/*}"
-    local sig_org="${org}-signatures"
-    if [ "${prefix}" = "${org_path}" ]; then
-        echo "${sig_org}/${image_name}"
-    else
-        echo "${prefix}/${sig_org}/${image_name}"
-    fi
-}
 
 for v in DOCKERHUB_USER DOCKERHUB_PASSWORD; do
     if [ -z "${!v:-}" ]; then
@@ -154,10 +134,11 @@ overall_rc=0
 for IMAGE_REF in ${CLEANUP_IMAGES}; do
     echo ""
     log "=== ${IMAGE_REF} ==="
-    # The image lives in REPO; the signature lives in the separate SIG_REPO.
+    # Signatures are CO-LOCATED with the image, so the signature repo IS the
+    # image repo.
     REPO="${IMAGE_REF%:*}"
-    SIG_REPO="$(cosign_signature_repo "${IMAGE_REF}")"
-    log "signature repo: ${SIG_REPO}"
+    SIG_REPO="${REPO}"
+    log "signature repo (co-located): ${SIG_REPO}"
 
     # Resolve the digest from the IMAGE repo (that is what the .sig tag is keyed on).
     DIGEST="$(resolve_digest "${IMAGE_REF}")"
@@ -184,10 +165,10 @@ for IMAGE_REF in ${CLEANUP_IMAGES}; do
 
     # Attempt 1: cosign clean. Works on registries that implement the
     # registry-v2 delete API (GCR/GAR/ECR/Harbor). Expected to fail on
-    # Docker Hub; its failure is informational, not fatal. COSIGN_REPOSITORY
-    # points cosign at the separate signature repo.
+    # Docker Hub; its failure is informational, not fatal. The signature is
+    # co-located with the image, so cosign cleans it from the image repo.
     log "attempt 1/2: cosign clean"
-    COSIGN_REPOSITORY="${SIG_REPO}" cosign clean --force "${REPO}@${DIGEST}" 2>&1 | sed 's/^/    /' || true
+    cosign clean --force "${REPO}@${DIGEST}" 2>&1 | sed 's/^/    /' || true
 
     # Attempt 2: Docker Hub web API -- the only delete path docker.io supports.
     # The tag lives in the signature repo, so delete it from there.
