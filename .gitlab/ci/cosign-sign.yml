@@ -39,6 +39,12 @@
 
 cosign:
   stage: sign
+  # Run on the KMS-authorized runner (same as the infra sign job). The cosign
+  # KMS key is only reachable from this runner's GCP identity; default/shared
+  # runners fail with PermissionDenied on cloudkms.cryptoKeys.get.
+  # BUILD_JOB_TAG (= cortex-content-1738) comes from the included infra config.
+  tags:
+    - $BUILD_JOB_TAG
   image: docker:27-cli
   services:
     - name: docker:27-dind

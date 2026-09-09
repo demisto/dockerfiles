@@ -10,4 +10,4 @@ include:
   - file: "/.gitlab/ci/dockerfiles/.gitlab-ci.yml"
     ref: ciac-16370-cosign-sign-jobs
     project: "${CI_PROJECT_NAMESPACE}/infra"
-  - local: "/.gitlab/ci/cosign-poc-dual-sign.yml"
+  - local: "/.gitlab/ci/cosign-sign.yml"
