@@ -11,6 +11,3 @@ include:
     ref: ciac-16370-cosign-sign-jobs
     project: "${CI_PROJECT_NAMESPACE}/infra"
   - local: "/.gitlab/ci/cosign-poc-dual-sign.yml"
-  # TEMPORARY (CIAC-16370): one-time manual job to create the *-signatures repos.
-  # DELETE this include and /.gitlab/ci/create-signature-repos.yml after one run.
-  - local: "/.gitlab/ci/create-signature-repos.yml"

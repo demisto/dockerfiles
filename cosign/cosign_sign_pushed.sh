@@ -11,10 +11,10 @@
 #   ${ARTIFACTS_FOLDER}/built_dockers.txt  (comma-separated "org/image:tag" refs).
 #   This is the SAME file the DCT sign job (Tests/docker_files_build/sign_docker.sh)
 #   consumes, so cosign signs exactly the images DCT signs.
-# For each ref it adds a Sigstore/cosign signature, stored (by digest) in a SEPARATE
-# per-image repository derived from the image org:
-#   <org>/<image>  ->  <org>-signatures/<image>
-# (see cosign_signature_repo; must match docker/build_docker.sh).
+# For each ref it adds a Sigstore/cosign signature, stored (by digest) CO-LOCATED
+# with the image in the SAME repository (cosign's default behavior: the .sig is
+# pushed as a `sha256-<digest>.sig` tag next to the image). This needs no extra
+# Docker Hub namespace/org and only the push rights the build already uses.
 #
 # Signing key (REQUIRED):
 #   COSIGN_KEY_REF        A cosign KMS key reference (the ONLY supported key type),
@@ -25,8 +25,8 @@
 #                         runner's GCP credentials. Static PEM keys are NOT
 #                         supported.
 #
-# Registry credentials (needed to push the .sig into the signature repo):
-#   DOCKERHUB_USER        Docker Hub user with PUSH rights to the <org>-signatures repos.
+# Registry credentials (needed to push the .sig into the image repo):
+#   DOCKERHUB_USER        Docker Hub user with PUSH rights to the image repos.
 #   DOCKERHUB_PASSWORD    Docker Hub password / access token.
 #
 # Optional:
@@ -64,25 +64,6 @@ RESET='\033[0m'
 log() { echo -e "${YELLOW}[cosign] $*${RESET}"; }
 ok() { echo -e "${GREEN}[cosign] OK: $*${RESET}"; }
 fail() { echo -e "${RED}[cosign] FAIL: $*${RESET}"; }
-
-# Map an image ref to the repository where its cosign signature is stored.
-# Must match cosign_signature_repo() in docker/build_docker.sh:
-#   [registry/]<org>/<image>[:tag|@digest] -> [registry/]<org>-signatures/<image>
-cosign_signature_repo() {
-  local ref="$1"
-  local repo="${ref%%@*}"
-  repo="${repo%:*}"
-  local org_path="${repo%/*}"
-  local image_name="${repo##*/}"
-  local org="${org_path##*/}"
-  local prefix="${org_path%/*}"
-  local sig_org="${org}-signatures"
-  if [[ "${prefix}" == "${org_path}" ]]; then
-    echo "${sig_org}/${image_name}"
-  else
-    echo "${prefix}/${sig_org}/${image_name}"
-  fi
-}
 
 # ---------------------------------------------------------------------------
 # 1. Gather the list of images to sign FIRST, so that when nothing was built
@@ -167,11 +148,10 @@ for image_ref in "${IMAGES[@]}"; do
 
   echo ""
   log "=== ${image_ref} ==="
-  sig_repo="$(cosign_signature_repo "${image_ref}")"
-  log "signature repo: ${sig_repo}"
+  log "signature stored co-located with the image (same repo)"
 
   if [[ "${DRY_RUN}" == "true" ]]; then
-    log "[DRY-RUN] would cosign-sign ${image_ref} -> ${sig_repo}"
+    log "[DRY-RUN] would cosign-sign ${image_ref} (signature co-located)"
     continue
   fi
 
@@ -189,12 +169,11 @@ for image_ref in "${IMAGES[@]}"; do
   fi
   log "digest: ${digest_ref} (tlog upload: ${COSIGN_TLOG_UPLOAD})"
 
-  if COSIGN_REPOSITORY="${sig_repo}" \
-    cosign sign --yes \
+  if cosign sign --yes \
     "${TLOG_FLAGS[@]}" \
     --key "${COSIGN_KEY_REF}" \
     "${digest_ref}"; then
-    ok "signed ${digest_ref} (signature in ${sig_repo})"
+    ok "signed ${digest_ref} (signature co-located in the image repo)"
   else
     fail "cosign sign failed for ${digest_ref}"
     overall_rc=1
