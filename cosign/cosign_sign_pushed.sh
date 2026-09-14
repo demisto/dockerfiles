@@ -11,10 +11,14 @@
 #   ${ARTIFACTS_FOLDER}/built_dockers.txt  (comma-separated "org/image:tag" refs).
 #   This is the SAME file the DCT sign job (Tests/docker_files_build/sign_docker.sh)
 #   consumes, so cosign signs exactly the images DCT signs.
-# For each ref it adds a Sigstore/cosign signature, stored (by digest) CO-LOCATED
-# with the image in the SAME repository (cosign's default behavior: the .sig is
-# pushed as a `sha256-<digest>.sig` tag next to the image). This needs no extra
-# Docker Hub namespace/org and only the push rights the build already uses.
+# For each ref it adds a Sigstore/cosign signature, stored (by digest) in a
+# SEPARATE signature repository (NOT co-located with the image). The signature
+# repo stays in the SAME org/registry as the image; only the image name is
+# prefixed, so the signature lives in a sibling repo:
+#   <org>/<image>  ->  <org>/${COSIGN_SIG_PREFIX}<image>
+#   e.g. demisto/python3  ->  demisto/sig-python3
+# cosign is pointed at that repo via the COSIGN_REPOSITORY env var, keeping the
+# `sha256-<digest>.sig` artifacts out of the image repo's tag list.
 #
 # Signing key (REQUIRED):
 #   COSIGN_KEY_REF        A cosign KMS key reference (the ONLY supported key type),
@@ -25,8 +29,8 @@
 #                         runner's GCP credentials. Static PEM keys are NOT
 #                         supported.
 #
-# Registry credentials (needed to push the .sig into the image repo):
-#   DOCKERHUB_USER        Docker Hub user with PUSH rights to the image repos.
+# Registry credentials (needed to push the .sig into the signature repo):
+#   DOCKERHUB_USER        Docker Hub user with PUSH rights to the signature repos.
 #   DOCKERHUB_PASSWORD    Docker Hub password / access token.
 #
 # Optional:
@@ -36,6 +40,10 @@
 #   BUILT_DOCKERS         Comma-separated refs; overrides the file entirely.
 #                         (PUSHED_DOCKERS_FILE / PUSHED_DOCKERS are still honored as
 #                         backward-compatible aliases.)
+#   COSIGN_SIG_PREFIX     Prefix applied to the image name to form the sibling
+#                         signature repo in the SAME org:
+#                         <org>/<image> -> <org>/${COSIGN_SIG_PREFIX}<image>.
+#                         Default "sig-" (e.g. demisto/python3 -> demisto/sig-python3).
 #   COSIGN_TLOG_UPLOAD    "true"|"false" -- upload to the PUBLIC Rekor log. Default "false".
 #   COSIGN_VERSION        cosign release to install if absent. Default v2.4.1.
 #   DRY_RUN               "true" to report what would be signed without signing.
@@ -48,8 +56,12 @@
 set -uo pipefail
 
 readonly DEFAULT_COSIGN_VERSION="v2.4.1"
+# Signatures go to a sibling repo in the SAME org, with the image name prefixed
+# by this value (demisto/python3 -> demisto/sig-python3).
+readonly DEFAULT_COSIGN_SIG_PREFIX="sig-"
 
 ARTIFACTS_FOLDER="${ARTIFACTS_FOLDER:-artifacts}"
+COSIGN_SIG_PREFIX="${COSIGN_SIG_PREFIX:-${DEFAULT_COSIGN_SIG_PREFIX}}"
 # Read the same list the DCT sign job uses (built_dockers.txt). Accept the legacy
 # PUSHED_DOCKERS_FILE as a backward-compatible alias if explicitly set.
 BUILT_DOCKERS_FILE="${BUILT_DOCKERS_FILE:-${PUSHED_DOCKERS_FILE:-${ARTIFACTS_FOLDER}/built_dockers.txt}}"
@@ -137,8 +149,38 @@ if ! echo "${DOCKERHUB_PASSWORD}" | docker login -u "${DOCKERHUB_USER}" --passwo
 fi
 
 # ---------------------------------------------------------------------------
-# 5. Sign each image by digest, into its per-image signature repo
+# 5. Sign each image by digest, into a SEPARATE per-image signature repo that
+#    lives in the SAME org/registry as the image (sibling repo).
+#
+#    The signature repo keeps the image's registry+org and prefixes the image
+#    name with COSIGN_SIG_PREFIX:
+#      <org>/<image>[:tag]  ->  <org>/${COSIGN_SIG_PREFIX}<image>
+#      e.g. demisto/python3:3.10  ->  demisto/sig-python3
+#    cosign is redirected to that repo via COSIGN_REPOSITORY, so the .sig is
+#    NOT stored next to the image.
 # ---------------------------------------------------------------------------
+log "signatures will be stored in sibling repos: <org>/${COSIGN_SIG_PREFIX}<image>"
+
+# Derive the signature repository (COSIGN_REPOSITORY value) for an image ref.
+#   demisto/python3:3.10  ->  demisto/sig-python3
+# Preserves the registry host and org; only the tag/digest is stripped and the
+# image name is prefixed with COSIGN_SIG_PREFIX.
+cosign_signature_repo() {
+  local ref="$1"
+  # Drop tag (":tag") and digest ("@sha256:...") if present.
+  ref="${ref%%@*}"
+  ref="${ref%:*}"
+  # Split into the repo prefix (registry/org) and the final image name.
+  local repo_prefix="${ref%/*}"
+  local image_name="${ref##*/}"
+  if [[ "${repo_prefix}" == "${ref}" ]]; then
+    # No slash in the ref (bare image name): no org to preserve.
+    echo "${COSIGN_SIG_PREFIX}${image_name}"
+  else
+    echo "${repo_prefix}/${COSIGN_SIG_PREFIX}${image_name}"
+  fi
+}
+
 overall_rc=0
 for image_ref in "${IMAGES[@]}"; do
   # Trim surrounding whitespace.
@@ -146,12 +188,14 @@ for image_ref in "${IMAGES[@]}"; do
   image_ref="${image_ref%"${image_ref##*[![:space:]]}"}"
   [[ -z "${image_ref}" ]] && continue
 
+  sig_repo="$(cosign_signature_repo "${image_ref}")"
+
   echo ""
   log "=== ${image_ref} ==="
-  log "signature stored co-located with the image (same repo)"
+  log "signature stored in separate repo: ${sig_repo}"
 
   if [[ "${DRY_RUN}" == "true" ]]; then
-    log "[DRY-RUN] would cosign-sign ${image_ref} (signature co-located)"
+    log "[DRY-RUN] would cosign-sign ${image_ref} (signature -> ${sig_repo})"
     continue
   fi
 
@@ -169,11 +213,11 @@ for image_ref in "${IMAGES[@]}"; do
   fi
   log "digest: ${digest_ref} (tlog upload: ${COSIGN_TLOG_UPLOAD})"
 
-  if cosign sign --yes \
+  if COSIGN_REPOSITORY="${sig_repo}" cosign sign --yes \
     "${TLOG_FLAGS[@]}" \
     --key "${COSIGN_KEY_REF}" \
     "${digest_ref}"; then
-    ok "signed ${digest_ref} (signature co-located in the image repo)"
+    ok "signed ${digest_ref} (signature -> ${sig_repo})"
   else
     fail "cosign sign failed for ${digest_ref}"
     overall_rc=1

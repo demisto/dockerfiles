@@ -27,9 +27,12 @@
 # -----------------------------------------------------------------------------
 #   COSIGN_KEY_REF        KMS key ref (gcpkms://... from keys.txt); the ONLY
 #                         supported key type. No password. Static PEM not supported.
-#   DOCKERHUB_USER        Docker Hub user with PUSH rights to the <org>-signatures repos.
+#   DOCKERHUB_USER        Docker Hub user with PUSH rights to the sibling signature repos.
 #   DOCKERHUB_PASSWORD    Docker Hub password / access token.
 # Optional:
+#   COSIGN_SIG_PREFIX     Prefix for the sibling signature repo in the SAME org:
+#                         <org>/<image> -> <org>/${COSIGN_SIG_PREFIX}<image>.
+#                         Default "sig-" (e.g. demisto/python3 -> demisto/sig-python3).
 #   COSIGN_TLOG_UPLOAD    default "false" (no public Rekor upload).
 #   COSIGN_SIGN_ENABLED   default "true"; set to anything else to make the job a no-op.
 #   COSIGN_VERSION        cosign release to install. Default v2.4.1.
@@ -55,6 +58,9 @@ cosign:
     DOCKER_TLS_VERIFY: "1"
     DOCKER_CERT_PATH: "/certs/client"
     ARTIFACTS_FOLDER: "artifacts"
+    # Store signatures in a sibling repo in the SAME org:
+    # demisto/python3 -> demisto/sig-python3.
+    COSIGN_SIG_PREFIX: "sig-"
     COSIGN_TLOG_UPLOAD: "false"
     COSIGN_VERSION: "v2.4.1"
     COSIGN_SIGN_ENABLED: "true"
