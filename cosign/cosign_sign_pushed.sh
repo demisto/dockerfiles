@@ -1,58 +1,5 @@
 #!/usr/bin/env bash
-#
-# Standalone cosign signing job (CIAC-16370)
-# ==========================================
-# Signs images that were ALREADY built and pushed by the dockerfiles build flow, in
-# a dedicated CI job that is completely independent of the build/push step and of the
-# existing Docker Content Trust (DCT) signing. This lets the legacy DCT sign job be
-# deleted later without touching the build.
-#
-# Input: the list of built/pushed images written by build_docker.sh to
-#   ${ARTIFACTS_FOLDER}/built_dockers.txt  (comma-separated "org/image:tag" refs).
-#   This is the SAME file the DCT sign job (Tests/docker_files_build/sign_docker.sh)
-#   consumes, so cosign signs exactly the images DCT signs.
-# For each ref it adds a Sigstore/cosign signature, stored (by digest) in a
-# SEPARATE signature repository (NOT co-located with the image). The signature
-# repo stays in the SAME org/registry as the image; only the image name is
-# prefixed, so the signature lives in a sibling repo:
-#   <org>/<image>  ->  <org>/${COSIGN_SIG_PREFIX}<image>
-#   e.g. demisto/python3  ->  demisto/sig-python3
-# cosign is pointed at that repo via the COSIGN_REPOSITORY env var, keeping the
-# `sha256-<digest>.sig` artifacts out of the image repo's tag list.
-#
-# Signing key (REQUIRED):
-#   COSIGN_KEY_REF        A cosign KMS key reference (the ONLY supported key type),
-#                         e.g. the URI from cosign/keys.txt:
-#                           gcpkms://projects/<p>/locations/<l>/keyRings/<r>/
-#                           cryptoKeys/<k>/cryptoKeyVersions/<n>
-#                         With KMS no password is required; auth comes from the
-#                         runner's GCP credentials. Static PEM keys are NOT
-#                         supported.
-#
-# Registry credentials (needed to push the .sig into the signature repo):
-#   DOCKERHUB_USER        Docker Hub user with PUSH rights to the signature repos.
-#   DOCKERHUB_PASSWORD    Docker Hub password / access token.
-#
-# Optional:
-#   ARTIFACTS_FOLDER      Where build_docker.sh wrote its artifacts. Default: artifacts.
-#   BUILT_DOCKERS_FILE    Explicit path to the built-images list. Default:
-#                         ${ARTIFACTS_FOLDER}/built_dockers.txt.
-#   BUILT_DOCKERS         Comma-separated refs; overrides the file entirely.
-#                         (PUSHED_DOCKERS_FILE / PUSHED_DOCKERS are still honored as
-#                         backward-compatible aliases.)
-#   COSIGN_SIG_PREFIX     Prefix applied to the image name to form the sibling
-#                         signature repo in the SAME org:
-#                         <org>/<image> -> <org>/${COSIGN_SIG_PREFIX}<image>.
-#                         Default "sig-" (e.g. demisto/python3 -> demisto/sig-python3).
-#   COSIGN_TLOG_UPLOAD    "true"|"false" -- upload to the PUBLIC Rekor log. Default "false".
-#   COSIGN_VERSION        cosign release to install if absent. Default v2.4.1.
-#   DRY_RUN               "true" to report what would be signed without signing.
-#
-# Exit codes:
-#   0  all resolvable images signed (or nothing to do)
-#   1  at least one image failed to sign
-#   2  missing required configuration
-#
+
 set -uo pipefail
 
 readonly DEFAULT_COSIGN_VERSION="v2.4.1"

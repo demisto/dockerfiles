@@ -11,9 +11,14 @@ later without touching the build.
 | File | Purpose |
 | --- | --- |
 | [`cosign_sign_pushed.sh`](cosign_sign_pushed.sh) | Signs images that were already built/pushed. Reads the built-images list, adds a cosign signature per image, stores it in a sibling signature repo. |
-| [`.gitlab/ci/cosign-sign.yml`](../.gitlab/ci/cosign-sign.yml) | Standalone GitLab CI `cosign` sign job that runs the script against `artifacts/built_dockers.txt`. |
 | [`../utils/verify_signature.sh`](../utils/verify_signature.sh) | Verifier helper: derives the signature repo and runs `cosign verify` for a given image. |
 | `cosign.pub` | Public key for verifiers (not secret). Derived from the KMS key with `cosign public-key` (see below) and distributed to consumers. |
+
+The GitLab CI `cosign` sign job that runs [`cosign_sign_pushed.sh`](cosign_sign_pushed.sh)
+against `artifacts/built_dockers.txt` lives in the **infra dockerfiles template**
+(the `${CI_PROJECT_NAMESPACE}/infra` project, alongside the build/push and legacy
+DCT sign jobs), not in this repo. This repo only provides the signing script it
+invokes.
 
 ## Where signatures are stored
 
@@ -35,9 +40,9 @@ Signing does **not** modify the image itself.
 A cosign **KMS key reference** is the ONLY supported signing key; static PEM keys
 are not supported. The private key never leaves KMS; CI holds only the
 `gcpkms://` reference, and authentication comes from the runner's GCP
-credentials (no password/raw key in CI). The reference is defined as
-`COSIGN_KEY_REF` in [`../.gitlab/.gitlab-ci.yml`](../.gitlab/.gitlab-ci.yml) (a
-resource path, not a secret).
+credentials (no password/raw key in CI). The reference is supplied to the job as
+`COSIGN_KEY_REF` from the infra dockerfiles template (a resource path, not a
+secret).
 
 Derive the public key for verifiers:
 
@@ -49,7 +54,7 @@ cosign public-key --key "$COSIGN_KEY_REF" > cosign.pub
 
 | Variable | Purpose |
 | --- | --- |
-| `COSIGN_KEY_REF` | Required. KMS key reference (`gcpkms://...`); the only supported key type. Defined in the pipeline config. |
+| `COSIGN_KEY_REF` | Required. KMS key reference (`gcpkms://...`); the only supported key type. Supplied by the infra dockerfiles template. |
 | `DOCKERHUB_USER` | Docker Hub user with **push** rights to the `<org>/sig-*` signature repos. |
 | `DOCKERHUB_PASSWORD` | Docker Hub password / access token. |
 | `COSIGN_SIG_PREFIX` | Optional. Prefix for the sibling signature repo. Default `sig-`. |
