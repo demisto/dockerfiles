@@ -1,6 +1,8 @@
-# Last modified: 2026-08-05T06:04:32.325941+00:00
+# Last modified: 2026-09-13T05:25:31.978779+00:00
 
 FROM demisto/crypto:1.0.0.11658507
+
+RUN apk add --no-cache 'openssl>=3.5.8'
 
 COPY requirements.txt .
 
