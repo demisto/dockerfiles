@@ -1,6 +1,6 @@
-# Last modified: 2026-09-01T01:19:15.467177+00:00
+# Last modified: 2026-09-14T20:44:06.446156+00:00
 
-FROM demisto/m2crypto:1.0.0.12571702
+FROM demisto/m2crypto:1.0.0.13053055
 
 # Upgrade all packages to latest
 RUN apk --update --no-cache upgrade
