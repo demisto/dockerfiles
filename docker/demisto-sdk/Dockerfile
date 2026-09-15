@@ -1,4 +1,4 @@
-# Last modified: 2026-09-15T08:05:48.192251+00:00
+# Last modified: 2026-09-15T08:57:29.422633+00:00
 FROM demisto/python3-deb:3.12.14.13053055
 
 WORKDIR /content
@@ -29,16 +29,16 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && apt update \
     && apt-get install -y nodejs \
     # install docker
-    && curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg \
-    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian \
-    $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null \
-    && apt-get update && apt-get install docker-ce-cli -y && apt-get install --only-upgrade docker-ce-cli -y \
+    && ARCH=$(uname -m) && if [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "arm64" ]; then ARCH="aarch64"; else ARCH="x86_64"; fi \
+    && curl -fsSL "https://download.docker.com/linux/static/stable/$ARCH/docker-27.5.1.tgz" | tar xz \
+    && mv docker/docker /usr/local/bin/ \
+    && rm -rf docker \
     && python3 -m pip install --no-cache-dir -r requirements.txt \
     && npm install -g npm@latest \
-    && node -e "const fs=require('fs'); const pkg=JSON.parse(fs.readFileSync('./package.json')); pkg.overrides={...pkg.overrides, 'ip-address':'>=10.3.1', 'tar':'>=7.5.21', 'linkify-it':'>=5.0.1', '@hapi/content':'>=6.0.1'}; fs.writeFileSync('./package.json', JSON.stringify(pkg));" \
+    && node -e "const fs=require('fs'); const pkg=JSON.parse(fs.readFileSync('./package.json')); pkg.dependencies={...pkg.dependencies, 'jsdoc-to-markdown':'9.1.3'}; pkg.overrides={...pkg.overrides, 'ip-address':'>=10.3.1', 'tar':'>=7.5.21', 'linkify-it':'>=5.0.1', '@hapi/content':'>=6.0.1'}; fs.writeFileSync('./package.json', JSON.stringify(pkg));" \
     && npm install --package-lock-only \
     && npm ci \
-    && npm install -g jsdoc-to-markdown@latest \
+    && ln -s /content/node_modules/.bin/jsdoc2md /usr/local/bin/jsdoc2md \
     && npm list \
     && demisto-sdk --version
 
