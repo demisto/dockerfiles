@@ -1,4 +1,4 @@
-# Last modified: 2026-09-15T05:44:57.313696+00:00
+# Last modified: 2026-09-15T08:05:48.192251+00:00
 FROM demisto/python3-deb:3.12.14.13053055
 
 WORKDIR /content
@@ -35,10 +35,10 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && apt-get update && apt-get install docker-ce-cli -y && apt-get install --only-upgrade docker-ce-cli -y \
     && python3 -m pip install --no-cache-dir -r requirements.txt \
     && npm install -g npm@latest \
+    && node -e "const fs=require('fs'); const pkg=JSON.parse(fs.readFileSync('./package.json')); pkg.overrides={...pkg.overrides, 'ip-address':'>=10.3.1', 'tar':'>=7.5.21', 'linkify-it':'>=5.0.1', '@hapi/content':'>=6.0.1'}; fs.writeFileSync('./package.json', JSON.stringify(pkg));" \
+    && npm install --package-lock-only \
     && npm ci \
-    && npm install ip-address@^10.3.1 tar@^7.5.21 linkify-it@^5.0.1 @hapi/content@^6.0.1 \
-    && npm install -g jsdoc-to-markdown@9.1.3 \
-    && npm install -g ip-address@^10.3.1 tar@^7.5.21 linkify-it@^5.0.1 @hapi/content@^6.0.1 \
+    && npm install -g jsdoc-to-markdown@latest \
     && npm list \
     && demisto-sdk --version
 
