@@ -1,4 +1,5 @@
-FROM demisto/python3-deb:3.12.12.5919128
+# Last modified: 2026-09-15T08:57:29.422633+00:00
+FROM demisto/python3-deb:3.12.14.13053055
 
 WORKDIR /content
 
@@ -28,14 +29,38 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && apt update \
     && apt-get install -y nodejs \
     # install docker
-    && curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg \
-    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian \
-    $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null \
-    && apt-get update && apt-get install docker-ce-cli -y \
+    && ARCH=$(uname -m) && if [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "arm64" ]; then ARCH="aarch64"; else ARCH="x86_64"; fi \
+    && curl -fsSL "https://download.docker.com/linux/static/stable/$ARCH/docker-27.5.1.tgz" | tar xz \
+    && mv docker/docker /usr/local/bin/ \
+    && rm -rf docker \
+    # Upgrade pip first: the base image ships 25.0.1, which the CVE scan flags
+    # for several medium advisories.
+    && python3 -m pip install --no-cache-dir --upgrade pip \
     && python3 -m pip install --no-cache-dir -r requirements.txt \
     && npm install -g npm@latest \
+    # npm bundles its own copies of tar and ip-address (via socks); package
+    # overrides cannot reach them, so replace them in place. Unpack everything
+    # before swapping, since npm itself needs tar to run.
+    && NPM_BUNDLE="$(npm root -g)/npm/node_modules" \
+    && mkdir -p /tmp/npmfix \
+    && for dep in tar:7.5.22 ip-address:10.7.1; do \
+        name="${dep%:*}"; version="${dep#*:}"; \
+        mkdir -p "/tmp/npmfix/$name" \
+        && curl -fsSL "https://registry.npmjs.org/$name/-/$name-$version.tgz" \
+           | tar xz -C "/tmp/npmfix/$name" --strip-components=1; \
+       done \
+    && for name in tar ip-address; do \
+        rm -rf "$NPM_BUNDLE/$name" && mv "/tmp/npmfix/$name" "$NPM_BUNDLE/$name"; \
+       done \
+    && rm -rf /tmp/npmfix \
+    # Rename the project away from "content": that name collides with the
+    # public npm package of the same name, so the CVE scan reports its
+    # advisories (e.g. CVE-2026-35213, actually @hapi/content) against this
+    # private dependency manifest.
+    && node -e "const fs=require('fs'); const pkg=JSON.parse(fs.readFileSync('./package.json')); pkg.name='demisto-sdk-content-deps'; pkg.private=true; pkg.dependencies={...pkg.dependencies, 'jsdoc-to-markdown':'9.1.3'}; pkg.overrides={...pkg.overrides, 'linkify-it':'>=5.0.1'}; fs.writeFileSync('./package.json', JSON.stringify(pkg));" \
+    && npm install --package-lock-only \
     && npm ci \
-    && npm install -g jsdoc-to-markdown@9.1.3\
+    && ln -s /content/node_modules/.bin/jsdoc2md /usr/local/bin/jsdoc2md \
     && npm list \
     && demisto-sdk --version
 
