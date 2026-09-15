@@ -57,7 +57,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     # public npm package of the same name, so the CVE scan reports its
     # advisories (e.g. CVE-2026-35213, actually @hapi/content) against this
     # private dependency manifest.
-    && node -e "const fs=require('fs'); const pkg=JSON.parse(fs.readFileSync('./package.json')); pkg.name='demisto-sdk-content-deps'; pkg.private=true; pkg.dependencies={...pkg.dependencies, 'jsdoc-to-markdown':'9.1.3'}; pkg.overrides={...pkg.overrides, 'ip-address':'>=10.3.1', 'tar':'>=7.5.21', 'linkify-it':'>=5.0.1', '@hapi/content':'>=6.0.1'}; fs.writeFileSync('./package.json', JSON.stringify(pkg));" \
+    && node -e "const fs=require('fs'); const pkg=JSON.parse(fs.readFileSync('./package.json')); pkg.name='demisto-sdk-content-deps'; pkg.private=true; pkg.dependencies={...pkg.dependencies, 'jsdoc-to-markdown':'9.1.3'}; pkg.overrides={...pkg.overrides, 'linkify-it':'>=5.0.1'}; fs.writeFileSync('./package.json', JSON.stringify(pkg));" \
     && npm install --package-lock-only \
     && npm ci \
     && ln -s /content/node_modules/.bin/jsdoc2md /usr/local/bin/jsdoc2md \
