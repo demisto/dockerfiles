@@ -35,6 +35,16 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && rm -rf docker \
     && python3 -m pip install --no-cache-dir -r requirements.txt \
     && npm install -g npm@latest \
+    # npm bundles its own copies of tar and ip-address (via socks); package
+    # overrides cannot reach them, so replace them in place.
+    && NPM_BUNDLE="$(npm root -g)/npm/node_modules" \
+    && for dep in tar@7.5.22 ip-address@10.7.1; do \
+        name="${dep%@*}"; \
+        rm -rf "$NPM_BUNDLE/$name" \
+        && mkdir -p "$NPM_BUNDLE/$name" \
+        && curl -fsSL "$(npm view "$dep" dist.tarball)" \
+           | tar xz -C "$NPM_BUNDLE/$name" --strip-components=1; \
+       done \
     && node -e "const fs=require('fs'); const pkg=JSON.parse(fs.readFileSync('./package.json')); pkg.dependencies={...pkg.dependencies, 'jsdoc-to-markdown':'9.1.3'}; pkg.overrides={...pkg.overrides, 'ip-address':'>=10.3.1', 'tar':'>=7.5.21', 'linkify-it':'>=5.0.1', '@hapi/content':'>=6.0.1'}; fs.writeFileSync('./package.json', JSON.stringify(pkg));" \
     && npm install --package-lock-only \
     && npm ci \
