@@ -33,6 +33,9 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && curl -fsSL "https://download.docker.com/linux/static/stable/$ARCH/docker-27.5.1.tgz" | tar xz \
     && mv docker/docker /usr/local/bin/ \
     && rm -rf docker \
+    # Upgrade pip first: the base image ships 25.0.1, which the CVE scan flags
+    # for several medium advisories.
+    && python3 -m pip install --no-cache-dir --upgrade pip \
     && python3 -m pip install --no-cache-dir -r requirements.txt \
     && npm install -g npm@latest \
     # npm bundles its own copies of tar and ip-address (via socks); package
