@@ -65,3 +65,11 @@ repos:
     hooks:
     -   id: shellcheck
         args: ["--severity=error"]
+-   repo: local
+    hooks:
+    -   id: validate-image-names
+        name: validate docker image names (no reserved 'sig-' prefix)
+        entry: python3 docker/validate_image_names.py
+        language: system
+        pass_filenames: false
+        always_run: true
