@@ -33,13 +33,11 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && curl -fsSL "https://download.docker.com/linux/static/stable/$ARCH/docker-27.5.1.tgz" | tar xz \
     && mv docker/docker /usr/local/bin/ \
     && rm -rf docker \
-    # Upgrade pip first: the base image ships 25.0.1, which the CVE scan flags
-    # for several medium advisories.
+    # base image ships pip 25.0.1, which the CVE scan flags
     && python3 -m pip install --no-cache-dir --upgrade pip \
     && python3 -m pip install --no-cache-dir -r requirements.txt \
     && npm install -g npm@latest \
-    # npm bundles its own copies of tar and ip-address (via socks); package
-    # overrides cannot reach them, so replace them in place.
+    # npm bundles its own tar and ip-address; overrides cannot reach them
     && NPM_BUNDLE="$(npm root -g)/npm/node_modules" \
     && for dep in tar:7.5.22 ip-address:10.7.1; do \
         name="${dep%:*}"; version="${dep#*:}"; \
@@ -47,10 +45,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
         && curl -fsSL "https://registry.npmjs.org/$name/-/$name-$version.tgz" \
            | tar xz -C "$NPM_BUNDLE/$name" --strip-components=1; \
        done \
-    # Rename the project away from "content": that name collides with the
-    # public npm package of the same name, so the CVE scan reports its
-    # advisories (e.g. CVE-2026-35213, actually @hapi/content) against this
-    # private dependency manifest.
+    # "content" collides with the public npm package, so the scan reports its CVEs here
     && node -e "const fs=require('fs'); const pkg=JSON.parse(fs.readFileSync('./package.json')); pkg.name='demisto-sdk-content-deps'; pkg.private=true; pkg.overrides={...pkg.overrides, 'linkify-it':'>=5.0.1'}; fs.writeFileSync('./package.json', JSON.stringify(pkg));" \
     && npm install --package-lock-only \
     && npm ci \
