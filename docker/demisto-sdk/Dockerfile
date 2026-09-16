@@ -39,20 +39,14 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && python3 -m pip install --no-cache-dir -r requirements.txt \
     && npm install -g npm@latest \
     # npm bundles its own copies of tar and ip-address (via socks); package
-    # overrides cannot reach them, so replace them in place. Unpack everything
-    # before swapping, since npm itself needs tar to run.
+    # overrides cannot reach them, so replace them in place.
     && NPM_BUNDLE="$(npm root -g)/npm/node_modules" \
-    && mkdir -p /tmp/npmfix \
     && for dep in tar:7.5.22 ip-address:10.7.1; do \
         name="${dep%:*}"; version="${dep#*:}"; \
-        mkdir -p "/tmp/npmfix/$name" \
+        rm -rf "$NPM_BUNDLE/$name" && mkdir -p "$NPM_BUNDLE/$name" \
         && curl -fsSL "https://registry.npmjs.org/$name/-/$name-$version.tgz" \
-           | tar xz -C "/tmp/npmfix/$name" --strip-components=1; \
+           | tar xz -C "$NPM_BUNDLE/$name" --strip-components=1; \
        done \
-    && for name in tar ip-address; do \
-        rm -rf "$NPM_BUNDLE/$name" && mv "/tmp/npmfix/$name" "$NPM_BUNDLE/$name"; \
-       done \
-    && rm -rf /tmp/npmfix \
     # Rename the project away from "content": that name collides with the
     # public npm package of the same name, so the CVE scan reports its
     # advisories (e.g. CVE-2026-35213, actually @hapi/content) against this
