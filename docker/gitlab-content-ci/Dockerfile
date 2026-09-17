@@ -40,13 +40,16 @@ RUN apt-get install openjdk-17-jre -y && source ~/.bashrc && java -version
 RUN curl -sSL https://install.python-poetry.org | python3 - --version 1.8.2 && source ~/.bashrc && poetry --version
 
 # install neo4j
+ENV NEO4J_VERSION 5.26.30
 RUN echo "deb http://httpredir.debian.org/debian stable-backports main" | tee -a /etc/apt/sources.list.d/stable-backports.list \
     && wget -O - https://debian.neo4j.com/neotechnology.gpg.key | apt-key add - \
     && echo 'deb https://debian.neo4j.com stable 5' | tee -a /etc/apt/sources.list.d/neo4j.list \
     && apt-get update
-RUN mkdir -p /var/lib/neo4j/plugins \
-    && wget -O /var/lib/neo4j/plugins/apoc-5.26.0-core.jar https://github.com/neo4j/apoc/releases/download/5.26.0/apoc-5.26.0-core.jar \
-    && apt-get install neo4j=1:5.26.0 -y && source ~/.bashrc && neo4j --version && neo4j-admin --version \
+RUN apt-get install neo4j="1:${NEO4J_VERSION}" -y && source ~/.bashrc && neo4j --version && neo4j-admin --version \
+    && installed_neo4j_version="$(neo4j-admin --version)" \
+    && echo "Installed Neo4j version: ${installed_neo4j_version}" \
+    && mkdir -p /var/lib/neo4j/plugins \
+    && wget -O "/var/lib/neo4j/plugins/apoc-${installed_neo4j_version}-core.jar" "https://github.com/neo4j/apoc/releases/download/${installed_neo4j_version}/apoc-${installed_neo4j_version}-core.jar" \
     && neo4j_conf_file="/etc/neo4j/neo4j.conf" \
     && echo "dbms.security.procedures.unrestricted=apoc.*" >> $NEO4J_CONF_FILE \
     && echo "dbms.security.procedures.allowlist=apoc.*" >> $NEO4J_CONF_FILE \
