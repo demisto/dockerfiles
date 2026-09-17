@@ -67,3 +67,8 @@ RUN echo 'export GOENV_ROOT="$HOME/.goenv"' >> ~/.bashrc \
     && source ~/.bashrc
 RUN curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.60.3
 
+ENV COSIGN_VERSION v3.0.2
+RUN curl -sSL -o /usr/local/bin/cosign "https://github.com/sigstore/cosign/releases/download/${COSIGN_VERSION}/cosign-linux-amd64" \
+    && chmod +x /usr/local/bin/cosign \
+    && cosign version
+
