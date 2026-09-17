@@ -46,7 +46,7 @@ RUN echo "deb http://httpredir.debian.org/debian stable-backports main" | tee -a
     && apt-get update
 RUN mkdir -p /var/lib/neo4j/plugins \
     && wget -O /var/lib/neo4j/plugins/apoc-5.26.0-core.jar https://github.com/neo4j/apoc/releases/download/5.26.0/apoc-5.26.0-core.jar \
-    && apt-get install neo4j -y && source ~/.bashrc && neo4j --version && neo4j-admin --version \
+    && apt-get install neo4j=1:5.26.0 -y && source ~/.bashrc && neo4j --version && neo4j-admin --version \
     && neo4j_conf_file="/etc/neo4j/neo4j.conf" \
     && echo "dbms.security.procedures.unrestricted=apoc.*" >> $NEO4J_CONF_FILE \
     && echo "dbms.security.procedures.allowlist=apoc.*" >> $NEO4J_CONF_FILE \
