@@ -33,7 +33,7 @@ RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
     && apt-get update \
     && apt-get install docker-ce-cli -y && source ~/.bashrc && docker --version
 RUN apt-get install kubectl -y && source ~/.bashrc && ! kubectl version --output yaml
-RUN apt-get install google-cloud-sdk-gke-gcloud-auth-plugin -y && source ~/.bashrc
+RUN apt-get install google-cloud-cli-gke-gcloud-auth-plugin -y && source ~/.bashrc
 
 # installations
 RUN apt-get install openjdk-17-jre -y && source ~/.bashrc && java -version
