@@ -1,12 +1,9 @@
-# Last modified: 2026-08-26T16:53:54.705129+00:00
+# Last modified: 2026-09-17T05:01:17.099150+00:00
 
-FROM demisto/python3:3.12.14.12343672
+FROM demisto/python3:3.12.14.13053055
 
 COPY requirements.txt .
 
-RUN apk add --update --no-cache libxslt libxml2
-
-RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git \
-  g++ gcc libxslt-dev \
-  && pip install --no-cache-dir -r requirements.txt \
-  && apk del .build-dependencies
+# The lxml wheel statically links its own libxml2/libxslt, so the system
+# copies are not needed at runtime and only add an outdated parser to the image.
+RUN pip install --no-cache-dir -r requirements.txt
