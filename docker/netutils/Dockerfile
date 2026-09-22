@@ -1,7 +1,7 @@
+# Last modified: 2026-09-15T05:03:39.053769+00:00
 
-# Last modified: 2026-07-20T17:05:42.491693+00:00
 
-FROM demisto/python3:3.12.13.10404775
+FROM demisto/python3:3.12.14.13053055
 
 RUN mkdir /opt/scripts
 
@@ -16,9 +16,9 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev \
 
 RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories \
   && apk --update add --no-cache \
-  curl=8.21.0-r0 \
-  libcurl=8.21.0-r0 \
-  sqlite-libs=3.53.2-r0 \
+  curl=8.22.0-r0 \
+  libcurl=8.22.0-r0 \
+  sqlite-libs=3.53.4-r0 \
   bind-tools openssl iputils
 
 # Provide a minimal nmap stub so python-libnmap can initialise without the real nmap binary
