@@ -17,7 +17,7 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev \
 RUN apk --update add --no-cache \
   curl=8.22.0-r0 \
   libcurl=8.22.0-r0 \
-  sqlite-libs=3.53.2-r0 \
+  sqlite-libs \
   bind-tools openssl iputils
 
 # Provide a minimal nmap stub so python-libnmap can initialise without the real nmap binary
