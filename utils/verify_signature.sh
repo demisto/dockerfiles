@@ -6,7 +6,12 @@
 # prefixed by "sig-" (e.g. demisto/python3 -> demisto/sig-python3). This script
 # derives that repo for you, so you only pass the image reference.
 #
+# If no org is given, the image is assumed to live in the "demisto" org
+# (override with DEFAULT_ORG=<org>), so "python3:3.10" means "demisto/python3:3.10".
+#
 # Usage:
+#   ./verify_signature.sh <image>:<tag>
+#   ./verify_signature.sh <image>@sha256:<digest>
 #   ./verify_signature.sh <org>/<image>:<tag>
 #   ./verify_signature.sh <org>/<image>@sha256:<digest>
 #
@@ -19,12 +24,27 @@
 set -euo pipefail
 
 readonly PUBLIC_KEY="${PUBLIC_KEY:-cosign.pub}"
+readonly DEFAULT_ORG="${DEFAULT_ORG:-demisto}"
 readonly SIG_PREFIX="sig-"
 
 image_ref="${1:-}"
 if [[ -z "$image_ref" ]]; then
-  echo "usage: $0 <org>/<image>:<tag>|@sha256:<digest>" >&2
+  echo "usage: $0 [<org>/]<image>:<tag>|@sha256:<digest>  (default org: ${DEFAULT_ORG})" >&2
   exit 1
+fi
+
+# Require an explicit tag or digest: cosign would otherwise fall back to
+# ":latest", which demisto images do not publish.
+last_segment="${image_ref##*/}"
+if [[ "$last_segment" != *:* && "$last_segment" != *@* ]]; then
+  echo "error: '${image_ref}' has no tag or digest" >&2
+  echo "       use <image>:<tag> or <image>@sha256:<digest> (e.g. python3:3.10.13.12345)" >&2
+  exit 1
+fi
+
+# Bare image name (no org) -> prefix the default org.
+if [[ "$image_ref" != */* ]]; then
+  image_ref="${DEFAULT_ORG}/${image_ref}"
 fi
 
 if ! command -v cosign >/dev/null 2>&1; then
@@ -47,11 +67,7 @@ signature_repo() {
   ref="${ref%:*}"  # drop :tag
   local repo_prefix="${ref%/*}"
   local image_name="${ref##*/}"
-  if [[ "$repo_prefix" == "$ref" ]]; then
-    echo "${SIG_PREFIX}${image_name}"
-  else
-    echo "${repo_prefix}/${SIG_PREFIX}${image_name}"
-  fi
+  echo "${repo_prefix}/${SIG_PREFIX}${image_name}"
 }
 
 repo="$(signature_repo "$image_ref")"
