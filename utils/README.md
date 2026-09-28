@@ -15,7 +15,7 @@ template) and is documented there. This repo only provides the verifier.
 
 The public key needed to verify signatures (`cosign.pub`) is published here:
 
-- https://xsoar.pan.dev/docs/integrations/cosign-signature
+- https://xsoar.pan.dev/docs/integrations/dockerimage-signature
 
 The private signing key never leaves GCP KMS; only the public key is
 distributed to verifiers. Download `cosign.pub` from the link above and keep it
