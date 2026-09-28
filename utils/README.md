@@ -30,14 +30,19 @@ in your working directory (or point `PUBLIC_KEY` at it).
 ## Usage
 
 ```bash
+./utils/verify_signature.sh <image>:<tag>
+./utils/verify_signature.sh <image>@sha256:<digest>
 ./utils/verify_signature.sh <org>/<image>:<tag>
-./utils/verify_signature.sh <org>/<image>@sha256:<digest>
 ```
+
+If no org is given, the `demisto` org is assumed, so you only need the image name.
+A tag or digest is required (there is no `latest` fallback). A digest is the
+strongest check because it pins the exact image that was signed.
 
 Example:
 
 ```bash
-./utils/verify_signature.sh demisto/python3:3.10
+./utils/verify_signature.sh python3:3.10   # same as demisto/python3:3.10
 ```
 
 ## Environment variables
@@ -45,6 +50,7 @@ Example:
 | Variable | Purpose |
 | --- | --- |
 | `PUBLIC_KEY` | Optional. Path to the cosign public key. Default `cosign.pub` in the current directory. |
+| `DEFAULT_ORG` | Optional. Org used when the image reference has no org. Default `demisto`. |
 
 ## Exit codes
 
