@@ -1,11 +1,12 @@
-# Last modified: 2026-09-03T12:48:53.688820+00:00
+# Last modified: 2026-09-20T04:44:17.833959+00:00
 
-FROM demisto/crypto:1.0.0.12701738
+FROM demisto/crypto:1.0.0.12833174
 
 COPY requirements.txt .
 
-RUN apk --update add --no-cache libxslt-dev \
-  && apk --update add --no-cache --virtual .build-dependencies python3-dev gcc build-base wget git libffi-dev openssl-dev python3-dev libxml2-dev \
+# The lxml wheel statically links its own libxml2/libxslt, so the system
+# copies are not needed at runtime and only add an outdated parser to the image.
+RUN apk --update add --no-cache --virtual .build-dependencies python3-dev gcc build-base wget git libffi-dev openssl-dev \
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies
 # Handling the issue described here: https://github.com/ecederstrand/exchangelib/issues/608

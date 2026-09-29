@@ -1,12 +1,11 @@
-# Last modified: 2026-09-03T12:49:11.813535+00:00
+# Last modified: 2026-09-20T04:44:17.833959+00:00
 
-FROM demisto/btfl-soup:1.0.1.12689358
+FROM demisto/btfl-soup:1.0.1.13176850
 
 COPY requirements.txt .
 
-RUN apk add --update --no-cache libxslt libxml2
-
+# No libxml2/libxslt packages: the lxml wheel statically links its own.
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git \
-  g++ gcc libxslt-dev \
+  g++ gcc \
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies
