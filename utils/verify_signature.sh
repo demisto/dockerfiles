@@ -20,6 +20,8 @@ set -euo pipefail
 
 readonly PUBLIC_KEY="${PUBLIC_KEY:-cosign.pub}"
 readonly SIG_PREFIX="sig-"
+# Emitted by cosign for --insecure-ignore-tlog; expected since signing has tlog upload off.
+readonly TLOG_WARNING="WARNING: Skipping tlog verification"
 
 image_ref="${1:-}"
 if [[ -z "$image_ref" ]]; then
@@ -57,7 +59,8 @@ signature_repo() {
 repo="$(signature_repo "$image_ref")"
 echo "verifying ${image_ref} (signature repo: ${repo})"
 
+# Filter only the expected tlog warning from stderr; cosign's exit code is preserved.
 COSIGN_REPOSITORY="$repo" cosign verify \
   --key "$PUBLIC_KEY" \
   --insecure-ignore-tlog=true \
-  "$image_ref"
+  "$image_ref" 2> >(grep -vF "$TLOG_WARNING" >&2)
