@@ -1,7 +1,7 @@
 variables:
-  CURRENT_BRANCH_NAME: ciac-16370-cosign-sign-jobs
+  CURRENT_BRANCH_NAME: improve-script
 
 include:
   - file: "/.gitlab/ci/dockerfiles/.gitlab-ci.yml"
-    ref: ciac-16370-cosign-sign-jobs
+    ref: improve-script
     project: "${CI_PROJECT_NAMESPACE}/infra"
