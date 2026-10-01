@@ -31,13 +31,15 @@ in your working directory (or point `PUBLIC_KEY` at it).
 
 ```bash
 ./utils/verify_signature.sh <image>:<tag>
+./utils/verify_signature.sh <image>@sha256:<digest>
+./utils/verify_signature.sh <image>:<tag>@sha256:<digest>
 ./utils/verify_signature.sh <org>/<image>:<tag>
 ```
 
 If no org is given, the `demisto` org is assumed, so you only need the image name.
-A tag is required (there is no `latest` fallback). Images are signed by digest;
-cosign resolves the tag to its current digest and verifies the signature attached
-to it. Digest references are rejected.
+A tag or digest is required (there is no `latest` fallback). Images are signed by
+digest. As with `cosign verify`, you can pass a tag (resolved to its current
+digest), a digest, or both. A digest pins the exact image that was signed.
 
 Example:
 
