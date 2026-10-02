@@ -25,7 +25,7 @@ RUN curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash 
 RUN apt-get install apt-transport-https ca-certificates gnupg gpgv -y --allow-downgrades\
     && echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" |  tee -a /etc/apt/sources.list.d/google-cloud-sdk.list \
     && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - \
-    && apt-get update && apt-get install google-cloud-sdk -y && source ~/.bashrc && gsutil --version && gcloud --version
+    && apt-get update && apt-get install google-cloud-cli -y && source ~/.bashrc && gsutil --version && gcloud --version
 
 # Installing the docker cli
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
@@ -33,20 +33,23 @@ RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
     && apt-get update \
     && apt-get install docker-ce-cli -y && source ~/.bashrc && docker --version
 RUN apt-get install kubectl -y && source ~/.bashrc && ! kubectl version --output yaml
-RUN apt-get install google-cloud-sdk-gke-gcloud-auth-plugin -y && source ~/.bashrc
+RUN apt-get install google-cloud-cli-gke-gcloud-auth-plugin -y && source ~/.bashrc
 
 # installations
 RUN apt-get install openjdk-17-jre -y && source ~/.bashrc && java -version
 RUN curl -sSL https://install.python-poetry.org | python3 - --version 1.8.2 && source ~/.bashrc && poetry --version
 
 # install neo4j
+ENV NEO4J_VERSION 5.26.30
 RUN echo "deb http://httpredir.debian.org/debian stable-backports main" | tee -a /etc/apt/sources.list.d/stable-backports.list \
     && wget -O - https://debian.neo4j.com/neotechnology.gpg.key | apt-key add - \
     && echo 'deb https://debian.neo4j.com stable 5' | tee -a /etc/apt/sources.list.d/neo4j.list \
     && apt-get update
-RUN mkdir -p /var/lib/neo4j/plugins \
-    && wget -O /var/lib/neo4j/plugins/apoc-5.26.0-core.jar https://github.com/neo4j/apoc/releases/download/5.26.0/apoc-5.26.0-core.jar \
-    && apt-get install neo4j -y && source ~/.bashrc && neo4j --version && neo4j-admin --version \
+RUN apt-get install neo4j="1:${NEO4J_VERSION}" -y && source ~/.bashrc && neo4j --version && neo4j-admin --version \
+    && installed_neo4j_version="$(neo4j-admin --version)" \
+    && echo "Installed Neo4j version: ${installed_neo4j_version}" \
+    && mkdir -p /var/lib/neo4j/plugins \
+    && wget -O "/var/lib/neo4j/plugins/apoc-${installed_neo4j_version}-core.jar" "https://github.com/neo4j/apoc/releases/download/${installed_neo4j_version}/apoc-${installed_neo4j_version}-core.jar" \
     && neo4j_conf_file="/etc/neo4j/neo4j.conf" \
     && echo "dbms.security.procedures.unrestricted=apoc.*" >> $NEO4J_CONF_FILE \
     && echo "dbms.security.procedures.allowlist=apoc.*" >> $NEO4J_CONF_FILE \
@@ -66,4 +69,9 @@ RUN echo 'export GOENV_ROOT="$HOME/.goenv"' >> ~/.bashrc \
     && echo 'export PATH="$PATH:$GOPATH/bin"' >> ~/.bashrc \
     && source ~/.bashrc
 RUN curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.60.3
+# Installing cosign
+ENV COSIGN_VERSION v3.0.2
+RUN curl -sSL -o /usr/local/bin/cosign "https://github.com/sigstore/cosign/releases/download/${COSIGN_VERSION}/cosign-linux-amd64" \
+    && chmod +x /usr/local/bin/cosign \
+    && cosign version
 
