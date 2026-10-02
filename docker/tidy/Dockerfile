@@ -1,6 +1,6 @@
-# Last modified: 2026-09-02T04:44:39.587002+00:00
+# Last modified: 2026-09-07T12:51:01.627184+00:00
 
-FROM demisto/crypto:1.0.0.11658507
+FROM demisto/crypto:1.0.0.12833174
 
 COPY requirements.txt .
 COPY ansible /home/demisto/ansible
