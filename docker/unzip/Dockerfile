@@ -17,7 +17,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends p7zip-full \
   && rm -rf /var/lib/apt/lists/*
 
 # Add a new sources list file that includes the contrib and non-free repositories
-RUN echo "deb http://deb.debian.org/debian bookworm contrib non-free" >> /etc/apt/sources.list.d/contrib-nonfree.list \
+RUN echo "deb http://deb.debian.org/debian trixie contrib non-free" >> /etc/apt/sources.list.d/contrib-nonfree.list \
     && apt-get update \
     && apt-get install -y --no-install-recommends unrar \
     && rm -rf /var/lib/apt/lists/*
