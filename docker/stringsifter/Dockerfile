@@ -3,9 +3,11 @@ FROM demisto/python3-deb:3.11.10.117398
 # because of this issue we still using 3.11 https://github.com/mandiant/stringsifter/issues/41
 
 COPY requirements.txt .
-# The base image demisto/python3-deb:3.11.10.117398 has bullseye-backports repository configured in its apt sources,
-# but this repository is returning a 404 Not Found error because it's no longer available.
+# The base image has a bullseye-backports repository configured in its apt sources,
+# but that repository is no longer available.
+# Debian 11 has reached end of life; its packages are served from the archive host.
 RUN sed -i '/bullseye-backports/d' /etc/apt/sources.list /etc/apt/sources.list.d/* 2>/dev/null || true \
+    && sed -i 's|http://deb.debian.org|http://archive.debian.org|g' /etc/apt/sources.list \
     && apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends python3-dev  \
     make gcc g++ wget git libgomp1 \
     && pip install --no-cache-dir -r requirements.txt \

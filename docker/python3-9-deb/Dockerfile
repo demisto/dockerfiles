@@ -2,7 +2,9 @@
 # Last modified: 2025-07-02T00:16:41.025418+00:00
 FROM python:3.9.23-slim-bullseye
 
-RUN echo 'deb http://deb.debian.org/debian bullseye-backports main' >> /etc/apt/sources.list
+# Debian 11 has reached end of life; its packages are served from the archive host.
+RUN sed -i 's|http://deb.debian.org|http://archive.debian.org|g' /etc/apt/sources.list \
+  && echo 'deb http://archive.debian.org/debian bullseye-backports main' >> /etc/apt/sources.list
 
 # Basic linux utilities
 RUN apt-get update && apt-get install -y --no-install-recommends \
