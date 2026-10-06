@@ -1,5 +1,5 @@
-# Last modified: 2026-07-20T17:02:47.141334+00:00
-FROM demisto/python3-deb:3.12.13.11039180
+# Last modified: 2026-10-05T04:45:02.498905+00:00
+FROM demisto/python3-deb:3.12.14.13495286
 
 RUN apt-get update \
 && apt-get install -y --no-install-recommends \
@@ -15,5 +15,7 @@ RUN apt-get update \
     ruby-dev \
     rubygems \
 && rm -rf /var/lib/apt/lists/* \
-&& find /usr/lib/ruby/gems/*/specifications/default/ -name "bundler-*.gemspec" -delete\
-&& gem install bundler
+&& find /usr/lib/ruby/gems/*/specifications/default/ -name "bundler-*.gemspec" -delete \
+&& gem install bundler \
+&& find /usr/lib/ruby/gems/*/specifications/default/ -name "resolv-*.gemspec" -delete \
+&& gem install resolv -v 0.3.2

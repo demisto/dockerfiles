@@ -50,6 +50,13 @@ xml_obj = fromstring(xml)
 assert xml_obj.tag == 'book'
 print('defusedxml installed correctly')
 
+import respx
+import httpx
+with respx.mock:
+    respx.get("https://example.org/").respond(204)
+    assert httpx.get("https://example.org/").status_code == 204
+print('respx installed correctly')
+
 import setuptools
 print(f'Using setuptools version {setuptools.__version__}')
 

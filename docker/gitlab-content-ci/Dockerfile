@@ -9,6 +9,7 @@ ENV POETRY_VERSION=1.8.5
 ENV GO_VERSION=1.26.2
 ENV GOLANGCI_LINT_VERSION=2.11.4
 ENV OPENJDK_VERSION=25
+ENV COSIGN_VERSION=v3.0.2
 # pyenv + the extra CPython patch versions installed alongside the base image's
 # system Python (3.14). These enable the CI unit-test matrix to run against real
 # interpreters via `poetry env use <X.Y>`. The base image already ships 3.14, so
@@ -45,7 +46,7 @@ RUN npm install -g npm@latest picomatch@latest
 # Google Cloud SDK
 RUN curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
 RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | tee /etc/apt/sources.list.d/google-cloud-sdk.list
-RUN apt-get update && apt-get install google-cloud-sdk google-cloud-sdk-gke-gcloud-auth-plugin -y
+RUN apt-get update && apt-get install google-cloud-cli google-cloud-cli-gke-gcloud-auth-plugin -y
 RUN rm -rf /var/lib/apt/lists/*
 RUN source ~/.bashrc && gsutil --version
 RUN source ~/.bashrc && gcloud --version
@@ -121,6 +122,11 @@ RUN source ~/.bashrc && goenv global ${GO_VERSION}
 RUN echo 'eval "$(goenv init -)"' >> ~/.bashrc
 RUN echo 'export PATH="$GOROOT/bin:$PATH"' >> ~/.bashrc
 RUN echo 'export PATH="$PATH:$GOPATH/bin"' >> ~/.bashrc
+
+# cosign
+RUN curl -sSL -o /usr/local/bin/cosign "https://github.com/sigstore/cosign/releases/download/${COSIGN_VERSION}/cosign-linux-amd64" \
+    && chmod +x /usr/local/bin/cosign \
+    && cosign version
 
 # golangci-lint
 RUN source ~/.bashrc
