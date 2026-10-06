@@ -1,13 +1,13 @@
-FROM python:3.14.4-slim-trixie
+FROM python:3.14.8-slim-trixie
 
 # ── Version pins (update these to bump tools) ──
-ENV NODE_VERSION=24.15.0
-ENV NVM_VERSION=0.40.4
-ENV NEO4J_VERSION=2026.03.1
-ENV APOC_VERSION=2026.03.1
+ENV NODE_VERSION=24.21.0
+ENV NVM_VERSION=0.40.8
+ENV NEO4J_VERSION=2026.09.0
+ENV APOC_VERSION=2026.09.0
 ENV POETRY_VERSION=1.8.5
-ENV GO_VERSION=1.26.2
-ENV GOLANGCI_LINT_VERSION=2.11.4
+ENV GO_VERSION=1.27.1
+ENV GOLANGCI_LINT_VERSION=2.14.0
 ENV OPENJDK_VERSION=25
 ENV COSIGN_VERSION=v3.0.2
 # pyenv + the extra CPython patch versions installed alongside the base image's
@@ -17,7 +17,7 @@ ENV COSIGN_VERSION=v3.0.2
 # source build; a `python3.14` shim is created from the system interpreter below.
 # pyenv must be new enough to ship python-build definitions for the patch
 # releases below; older tags fail with "definition not found".
-ENV PYENV_VERSION=2.7.3
+ENV PYENV_VERSION=2.8.8
 ENV PYENV_PYTHON_VERSIONS="3.11.13 3.12.11 3.13.5"
 
 # ── Path & config ──
