@@ -1,5 +1,5 @@
-# Last modified: 2026-08-06T05:33:10.197637+00:00
-FROM demisto/python3-deb:3.12.13.11694875
+# Last modified: 2026-10-05T04:45:02.498905+00:00
+FROM demisto/python3-deb:3.12.14.13495286
 
 COPY requirements.txt .
 
@@ -17,7 +17,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends p7zip-full \
   && rm -rf /var/lib/apt/lists/*
 
 # Add a new sources list file that includes the contrib and non-free repositories
-RUN echo "deb http://deb.debian.org/debian bookworm contrib non-free" >> /etc/apt/sources.list.d/contrib-nonfree.list \
+RUN echo "deb http://deb.debian.org/debian trixie contrib non-free" >> /etc/apt/sources.list.d/contrib-nonfree.list \
     && apt-get update \
     && apt-get install -y --no-install-recommends unrar \
     && rm -rf /var/lib/apt/lists/*
