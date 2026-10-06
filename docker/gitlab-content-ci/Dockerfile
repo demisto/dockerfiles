@@ -9,7 +9,7 @@ ENV POETRY_VERSION=1.8.5
 ENV GO_VERSION=1.27.1
 ENV GOLANGCI_LINT_VERSION=2.14.0
 ENV OPENJDK_VERSION=25
-ENV COSIGN_VERSION=v3.0.2
+ENV COSIGN_VERSION=v3.1.3
 # pyenv + the extra CPython patch versions installed alongside the base image's
 # system Python (3.14). These enable the CI unit-test matrix to run against real
 # interpreters via `poetry env use <X.Y>`. The base image already ships 3.14, so
