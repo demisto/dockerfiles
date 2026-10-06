@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   unixodbc \
   freetds-bin \
   libpq5 \
-  libaio1 \
+  libaio1t64 \
   wget \
   unzip \
   libssl3 \

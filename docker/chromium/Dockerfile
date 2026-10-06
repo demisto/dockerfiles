@@ -5,7 +5,7 @@ COPY requirements.txt .
 
 ARG POPPLER_VERSION=25.09.1
 
-RUN sed -i '/bookworm-backports/d' /etc/apt/sources.list /etc/apt/sources.list.d/* 2>/dev/null || true \
+RUN sed -i '/trixie-backports/d' /etc/apt/sources.list /etc/apt/sources.list.d/* 2>/dev/null || true \
 && apt-get clean && apt-get update && apt-get install -y --no-install-recommends \
   python3-dev \
   wget \
@@ -37,8 +37,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   libgtk-3-0 \
   curl \
   unzip \
-&& curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-&& echo "deb [arch=amd64]  http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
+&& curl -sS https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg \
+&& echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
 && apt-get -y update && apt-get install -y google-chrome-stable \
 && apt-get install -y tigervnc-standalone-server x11-utils imagemagick \
 && ./download_chromedriver.sh \

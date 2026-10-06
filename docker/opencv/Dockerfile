@@ -11,7 +11,8 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
   libglib2.0-0 \
   libsm6 \
   libxext6 \
-  libgl1-mesa-glx \
+  libgl1 \
+  libglx-mesa0 \
   libxrender1 \
   libxrender-dev \
 && pip install --no-cache-dir -r requirements.txt \

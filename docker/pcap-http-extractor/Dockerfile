@@ -5,7 +5,7 @@ FROM demisto/python3-deb:3.12.13.11694875
 COPY requirements.txt .
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-  dpkg=1.21.23 \
+  dpkg \
   gcc \
   python3-dev \
 && pip install --no-cache-dir -r requirements.txt \
