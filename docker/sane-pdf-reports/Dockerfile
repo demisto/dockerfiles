@@ -4,6 +4,9 @@ FROM demisto/python3-deb-bullseye:3.12.11.12343672
 WORKDIR "/app"
 
 SHELL ["/bin/bash", "-c"]
+
+# Debian 11 has reached end of life; its packages are served from the archive host.
+RUN sed -i 's|http://deb.debian.org|http://archive.debian.org|g' /etc/apt/sources.list
 RUN apt-get update -y -q && \
     apt-get upgrade -y -q && \
     apt-get install -y -q nodejs \
@@ -31,15 +34,15 @@ RUN apt-get update -y -q && \
     && rm -rf /var/lib/apt/lists/* \
     && npm install -g npm@8.19.4
 
-# This line can be removed after puppeteer will update the brace-expansion in their side to >=5.0.8
+# This line can be removed after puppeteer will update the brace-expansion in their side to >=5.0.12
 # https://github.com/puppeteer/puppeteer/blob/main/package-lock.json
-RUN echo '{"name":"app","version":"1.0.0","overrides":{"brace-expansion":"5.0.8"}}' > package.json && \
+RUN echo '{"name":"app","version":"1.0.0","overrides":{"brace-expansion":"5.0.12"}}' > package.json && \
     npm install puppeteer@5.3.1 && \
     ln -s /app/node_modules/puppeteer/.local-chromium/linux-*/chrome-linux/chrome /usr/bin/chromium-browser
 # install gsutil acc to https://cloud.google.com/storage/docs/gsutil_install
 RUN apt-get update -y -q && apt-get install -y -q apt-transport-https ca-certificates gnupg curl \
     && echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list \
-    && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg && apt-get update -y && apt-get install google-cloud-sdk -y
+    && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg && apt-get update -y && apt-get install google-cloud-cli -y
 
 
 RUN gsutil cp -r gs://sane-reports-artifacts/sane-report.tar . \
@@ -48,6 +51,6 @@ RUN gsutil cp -r gs://sane-reports-artifacts/sane-report.tar . \
 # Update permissions and ownership on /app dir
 RUN chown -R root:demisto /app/ && chmod 775 /app/ && chmod 775 /app/dist
 
-RUN npm uninstall -g npm && apt-get purge -y --auto-remove git npm apt-transport-https ca-certificates gnupg curl google-cloud-sdk \
+RUN npm uninstall -g npm && apt-get purge -y --auto-remove git npm apt-transport-https ca-certificates gnupg curl google-cloud-cli \
     python3-dev lsb-release \
     && rm -rf /var/lib/apt/lists/*
