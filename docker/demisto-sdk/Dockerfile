@@ -1,5 +1,5 @@
 # Last modified: 2026-09-20T04:44:17.833959+00:00
-FROM demisto/python3-deb:3.12.14.13053055
+FROM demisto/python3-deb:3.12.14.13495286
 
 WORKDIR /content
 
@@ -39,14 +39,14 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && npm install -g npm@latest \
     # npm bundles its own tar and ip-address; overrides cannot reach them
     && NPM_BUNDLE="$(npm root -g)/npm/node_modules" \
-    && for dep in tar:7.5.22 ip-address:10.7.1; do \
+    && for dep in tar:7.5.22 ip-address:10.7.1 brace-expansion:5.0.12; do \
         name="${dep%:*}"; version="${dep#*:}"; \
         rm -rf "$NPM_BUNDLE/$name" && mkdir -p "$NPM_BUNDLE/$name" \
         && curl -fsSL "https://registry.npmjs.org/$name/-/$name-$version.tgz" \
            | tar xz -C "$NPM_BUNDLE/$name" --strip-components=1; \
        done \
     # "content" collides with the public npm package, so the scan reports its CVEs here
-    && node -e "const fs=require('fs'); const pkg=JSON.parse(fs.readFileSync('./package.json')); pkg.name='demisto-sdk-content-deps'; pkg.private=true; pkg.overrides={...pkg.overrides, 'linkify-it':'>=5.0.1'}; fs.writeFileSync('./package.json', JSON.stringify(pkg));" \
+    && node -e "const fs=require('fs'); const pkg=JSON.parse(fs.readFileSync('./package.json')); pkg.name='demisto-sdk-content-deps'; pkg.private=true; pkg.overrides={...pkg.overrides, 'linkify-it':'>=5.0.1', 'brace-expansion':'>=5.0.11'}; fs.writeFileSync('./package.json', JSON.stringify(pkg));" \
     && npm install --package-lock-only \
     && npm ci \
     && npm install -g jsdoc-to-markdown@9.1.3 \
