@@ -1,5 +1,5 @@
-# Last modified: 2026-09-20T04:44:17.833959+00:00
-FROM demisto/python3-deb:3.12.14.13053055
+# Last modified: 2026-10-07T05:01:16.001413+00:00
+FROM demisto/python3-deb:3.12.14.13495286
 
 WORKDIR /content
 
@@ -39,7 +39,7 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && npm install -g npm@latest \
     # npm bundles its own tar and ip-address; overrides cannot reach them
     && NPM_BUNDLE="$(npm root -g)/npm/node_modules" \
-    && for dep in tar:7.5.22 ip-address:10.7.1; do \
+    && for dep in tar:7.5.22 ip-address:10.7.1 brace-expansion:5.0.12; do \
         name="${dep%:*}"; version="${dep#*:}"; \
         rm -rf "$NPM_BUNDLE/$name" && mkdir -p "$NPM_BUNDLE/$name" \
         && curl -fsSL "https://registry.npmjs.org/$name/-/$name-$version.tgz" \
