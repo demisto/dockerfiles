@@ -1,6 +1,6 @@
-# Last modified: 2026-08-06T05:33:41.893165+00:00
+# Last modified: 2026-10-07T05:01:16.001413+00:00
 
-FROM demisto/python3-deb:3.12.13.11694875
+FROM demisto/python3-deb:3.12.14.13495286
 
 # Basic linux utilities
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -43,7 +43,7 @@ RUN apt-get update && apt-get install -y -f --no-install-recommends \
     libxslt-dev \
     libssl-dev \
 && apt-get install -y -f --no-install-recommends --allow-downgrades \
-    libcom-err2=1.47.0-2+b2 \
+    libcom-err2 \
     libkrb5-dev \
 && pip install --no-cache-dir pipenv \
 && pipenv install --system --deploy \
