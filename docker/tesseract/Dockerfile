@@ -1,14 +1,14 @@
 # Last modified: 2026-08-06T05:33:16.007032+00:00
-FROM demisto/python3-deb:3.12.13.11694875
-RUN apt-get update && apt-get upgrade -y && apt-get -t bookworm-backports install  \
+FROM demisto/python3-deb:3.12.14.13495286
+RUN apt-get update && apt-get upgrade -y && apt-get -t trixie-backports install  \
     gcc g++ wget git pkg-config \
     make autoconf automake libtool libpng-dev  \
     libjpeg-dev libtiff5-dev zlib1g-dev libleptonica-dev  \
-    libicu-dev libpango1.0-dev liblept5 -y \
+    libicu-dev libpango1.0-dev libleptonica6 -y \
 && mkdir /build && cd /build && git clone --depth 1 https://github.com/tesseract-ocr/tesseract.git \
 && cd tesseract  \
 && ./autogen.sh && ./configure && gmake && make install && ldconfig \
-&& apt-get -t bookworm-backports install -y --no-install-recommends imagemagick file \
+&& apt-get -t trixie-backports install -y --no-install-recommends imagemagick file \
 && rm -rf /var/lib/apt/lists/* \
 && mkdir -p /usr/local/share/tessdata \
 && cd /usr/local/share/tessdata \
