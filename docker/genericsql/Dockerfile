@@ -1,6 +1,6 @@
-# Last modified: 2026-08-20T04:42:14.829609+00:00
+# Last modified: 2026-10-07T05:01:16.001413+00:00
 
-FROM demisto/python3-deb:3.12.13.12042988
+FROM demisto/python3-deb:3.12.14.13495286
 
 COPY requirements.txt .
 COPY odbcinst.ini /etc/odbcinst.ini
@@ -9,11 +9,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   unixodbc \
   freetds-bin \
   libpq5 \
-  libaio1 \
+  libaio1t64 \
   wget \
   unzip \
   libssl3 \
 && rm -rf /var/lib/apt/lists/*
+
+# The t64 rebuild ships libaio.so.1t64; the Oracle client looks for libaio.so.1.
+RUN ln -sf /usr/lib/x86_64-linux-gnu/libaio.so.1t64 /usr/lib/x86_64-linux-gnu/libaio.so.1
 
 # install oracle instant client
 RUN mkdir -p /opt/oracle && \
