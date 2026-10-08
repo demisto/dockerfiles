@@ -17,6 +17,14 @@ from dxltieclient.constants import (
     HashType,
     TrustLevel,
 )
+from dxlclient.message import Message, Request
 test = Broker("test.com")
 
 print('All packages were imported successfully')
+
+# dxlclient requires msgpack<1.0.0: msgpack 1.x returns str instead of bytes and breaks message unpacking
+request = Request("/test/topic")
+request.payload = b'{"hashes":[]}'
+message = Message._from_bytes(request._to_bytes())
+assert message.payload == b'{"hashes":[]}', f"DXL message round-trip failed: {message.payload!r}"
+print('DXL message serialization round-trip succeeded')
