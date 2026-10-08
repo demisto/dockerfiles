@@ -1,7 +1,7 @@
 variables:
-  CURRENT_BRANCH_NAME: improve-script
+  CURRENT_BRANCH_NAME: disable-DCT
 
 include:
   - file: "/.gitlab/ci/dockerfiles/.gitlab-ci.yml"
-    ref: improve-script
+    ref: disable-DCT
     project: "${CI_PROJECT_NAMESPACE}/infra"
