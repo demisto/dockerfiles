@@ -1,7 +1,7 @@
 variables:
-  CURRENT_BRANCH_NAME: $INFRA_BRANCH
+  CURRENT_BRANCH_NAME: cve-remediation-gcp-project
 
 include:
   - file: "/.gitlab/ci/dockerfiles/.gitlab-ci.yml"
-    ref: $INFRA_BRANCH
+    ref: cve-remediation-gcp-project
     project: "${CI_PROJECT_NAMESPACE}/infra"
