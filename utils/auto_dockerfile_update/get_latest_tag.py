@@ -1,12 +1,68 @@
+import os
+import time
+
 import requests
-from typing import List, Dict, Tuple, Union
+from typing import List, Dict, Optional, Tuple, Union
 import re
 
 VERSION_REGEX = re.compile(r"([\d]+(?:\.[\d]+)+)|([\d]+)$")
 
+DOCKERHUB_LOGIN_URL = "https://hub.docker.com/v2/users/login"
+REQUEST_TIMEOUT = 30
+MAX_RATE_LIMIT_RETRIES = 5
+
+_dockerhub_jwt: Optional[str] = None
+_dockerhub_jwt_fetched = False
+
+
+def _get_dockerhub_jwt(refresh: bool = False) -> Optional[str]:
+    """Log in to Docker Hub once per process with DOCKERHUB_USER/DOCKERHUB_PASSWORD.
+
+    Returns None (anonymous access) when the credentials are missing or the login fails.
+    """
+    global _dockerhub_jwt, _dockerhub_jwt_fetched
+    if _dockerhub_jwt_fetched and not refresh:
+        return _dockerhub_jwt
+    _dockerhub_jwt_fetched = True
+    _dockerhub_jwt = None
+    user, password = os.getenv("DOCKERHUB_USER"), os.getenv("DOCKERHUB_PASSWORD")
+    if not (user and password):
+        print("DOCKERHUB_USER/DOCKERHUB_PASSWORD not set, using anonymous Docker Hub API access")
+        return None
+    try:
+        res = requests.post(DOCKERHUB_LOGIN_URL, json={"username": user, "password": password}, timeout=REQUEST_TIMEOUT)
+    except requests.RequestException as e:
+        print(f"Docker Hub login failed: {e}, using anonymous access")
+        return None
+    if res.status_code != 200:
+        print(f"Docker Hub login failed: HTTP {res.status_code} {res.text[:200]!r}, using anonymous access")
+        return None
+    _dockerhub_jwt = res.json().get("token")
+    return _dockerhub_jwt
+
+
+def dockerhub_get(url: str, params: Optional[Dict] = None) -> requests.Response:
+    """GET a hub.docker.com API URL, authenticated when credentials exist, retrying on 429."""
+    token = _get_dockerhub_jwt()
+    refreshed = False
+    for attempt in range(MAX_RATE_LIMIT_RETRIES):
+        headers = {"Authorization": f"Bearer {token}"} if token else {}
+        res = requests.get(url, params=params, headers=headers, timeout=REQUEST_TIMEOUT)
+        if res.status_code == 401 and token and not refreshed:
+            token, refreshed = _get_dockerhub_jwt(refresh=True), True
+            continue
+        if res.status_code != 429:
+            break
+        retry_after = res.headers.get("Retry-After", "")
+        time.sleep(int(retry_after) if retry_after.isdigit() else 2 ** attempt)
+    if res.status_code != 200:
+        print(f"Docker Hub API {url} returned HTTP {res.status_code} "
+              f"(authenticated={bool(token)}, cf-ray={res.headers.get('cf-ray')}): {res.text[:200]!r}")
+    return res
+
 
 def get_dockerhub_tags_list(base_url=f'https://hub.docker.com/v2/repositories', page_size=100, repo="library",
-                            image_name=None, page="", full_url="", name=""):
+                            image_name=None, page="", full_url="", name="", ordering=""):
     """
     Get tags list from dockerhub api
     Args:
@@ -16,6 +72,7 @@ def get_dockerhub_tags_list(base_url=f'https://hub.docker.com/v2/repositories', 
         image_name (str): docker image name
         page (int): current page to retrieve, for pagination
         name (str): filtering option used by dockerhub website
+        ordering (str): sort order, e.g. 'last_updated'
         full_url (str): If provided will ignore the previous arguments and use the full url instead.
 
     Returns:
@@ -28,8 +85,10 @@ def get_dockerhub_tags_list(base_url=f'https://hub.docker.com/v2/repositories', 
         params['page'] = page
     if name:
         params['name'] = name
+    if ordering:
+        params['ordering'] = ordering
     params['page_size'] = page_size
-    res = requests.get(full_url, params=params)
+    res = dockerhub_get(full_url, params=params)
 
     if res.status_code == 200:
         return res.json()
