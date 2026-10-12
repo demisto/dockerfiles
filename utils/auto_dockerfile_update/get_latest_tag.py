@@ -1,3 +1,4 @@
+import functools
 import os
 import time
 
@@ -11,20 +12,12 @@ DOCKERHUB_LOGIN_URL = "https://hub.docker.com/v2/users/login"
 REQUEST_TIMEOUT = 30
 MAX_RATE_LIMIT_RETRIES = 5
 
-_dockerhub_jwt: Optional[str] = None
-_dockerhub_jwt_fetched = False
-
-
-def _get_dockerhub_jwt(refresh: bool = False) -> Optional[str]:
+@functools.lru_cache(maxsize=1)
+def _get_dockerhub_jwt() -> Optional[str]:
     """Log in to Docker Hub once per process with DOCKERHUB_USER/DOCKERHUB_PASSWORD.
 
     Returns None (anonymous access) when the credentials are missing or the login fails.
     """
-    global _dockerhub_jwt, _dockerhub_jwt_fetched
-    if _dockerhub_jwt_fetched and not refresh:
-        return _dockerhub_jwt
-    _dockerhub_jwt_fetched = True
-    _dockerhub_jwt = None
     user, password = os.getenv("DOCKERHUB_USER"), os.getenv("DOCKERHUB_PASSWORD")
     if not (user and password):
         print("DOCKERHUB_USER/DOCKERHUB_PASSWORD not set, using anonymous Docker Hub API access")
@@ -37,8 +30,7 @@ def _get_dockerhub_jwt(refresh: bool = False) -> Optional[str]:
     if res.status_code != 200:
         print(f"Docker Hub login failed: HTTP {res.status_code} {res.text[:200]!r}, using anonymous access")
         return None
-    _dockerhub_jwt = res.json().get("token")
-    return _dockerhub_jwt
+    return res.json().get("token")
 
 
 def dockerhub_get(url: str, params: Optional[Dict] = None) -> requests.Response:
@@ -49,7 +41,8 @@ def dockerhub_get(url: str, params: Optional[Dict] = None) -> requests.Response:
         headers = {"Authorization": f"Bearer {token}"} if token else {}
         res = requests.get(url, params=params, headers=headers, timeout=REQUEST_TIMEOUT)
         if res.status_code == 401 and token and not refreshed:
-            token, refreshed = _get_dockerhub_jwt(refresh=True), True
+            _get_dockerhub_jwt.cache_clear()
+            token, refreshed = _get_dockerhub_jwt(), True
             continue
         if res.status_code != 429:
             break

@@ -12,9 +12,10 @@ def _response(status_code, json_data=None, headers=None):
 
 
 @pytest.fixture(autouse=True)
-def reset_jwt_cache(monkeypatch):
-    monkeypatch.setattr(glt, "_dockerhub_jwt", None)
-    monkeypatch.setattr(glt, "_dockerhub_jwt_fetched", False)
+def reset_jwt_cache():
+    glt._get_dockerhub_jwt.cache_clear()
+    yield
+    glt._get_dockerhub_jwt.cache_clear()
 
 
 def test_tags_request_is_authenticated_and_login_cached(monkeypatch):
