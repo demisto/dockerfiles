@@ -81,6 +81,8 @@ LINUX_DIST_TO_SUFFIX = {
 def kebab_case_type(arg_value):
     if not re.match(r'^([a-z][a-z0-9]*)(-[a-z0-9]+)*$', arg_value):
         raise argparse.ArgumentTypeError('must follow kebab-case convention. See: https://wiki.c2.com/?KebabCase')
+    if arg_value.startswith('sig-'):
+        raise argparse.ArgumentTypeError("must not start with 'sig-' (reserved for cosign signature repositories)")
     return arg_value
 
 
