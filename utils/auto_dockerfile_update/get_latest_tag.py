@@ -12,12 +12,20 @@ DOCKERHUB_LOGIN_URL = "https://hub.docker.com/v2/users/login"
 REQUEST_TIMEOUT = 30
 MAX_RATE_LIMIT_RETRIES = 5
 
+# Set when DOCKERHUB_USER/PASSWORD are configured but the login call itself fails
+# (bad credentials, account locked, API down) - as opposed to credentials being unset,
+# which is expected in local/dev runs. Callers use this to alert a human instead of
+# silently falling back to anonymous access, which just resurfaces later as 403s.
+dockerhub_login_failed = False
+
+
 @functools.lru_cache(maxsize=1)
 def _get_dockerhub_jwt() -> Optional[str]:
     """Log in to Docker Hub once per process with DOCKERHUB_USER/DOCKERHUB_PASSWORD.
 
     Returns None (anonymous access) when the credentials are missing or the login fails.
     """
+    global dockerhub_login_failed
     user, password = os.getenv("DOCKERHUB_USER"), os.getenv("DOCKERHUB_PASSWORD")
     if not (user and password):
         print("DOCKERHUB_USER/DOCKERHUB_PASSWORD not set, using anonymous Docker Hub API access")
@@ -26,9 +34,11 @@ def _get_dockerhub_jwt() -> Optional[str]:
         res = requests.post(DOCKERHUB_LOGIN_URL, json={"username": user, "password": password}, timeout=REQUEST_TIMEOUT)
     except requests.RequestException as e:
         print(f"Docker Hub login failed: {e}, using anonymous access")
+        dockerhub_login_failed = True
         return None
     if res.status_code != 200:
         print(f"Docker Hub login failed: HTTP {res.status_code} {res.text[:200]!r}, using anonymous access")
+        dockerhub_login_failed = True
         return None
     return res.json().get("token")
 
