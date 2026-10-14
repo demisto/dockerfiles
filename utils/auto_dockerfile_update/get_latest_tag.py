@@ -12,10 +12,8 @@ DOCKERHUB_LOGIN_URL = "https://hub.docker.com/v2/users/login"
 REQUEST_TIMEOUT = 30
 MAX_RATE_LIMIT_RETRIES = 5
 
-# Set when DOCKERHUB_USER/PASSWORD are configured but the login call itself fails
-# (bad credentials, account locked, API down) - as opposed to credentials being unset,
-# which is expected in local/dev runs. Callers use this to alert a human instead of
-# silently falling back to anonymous access, which just resurfaces later as 403s.
+# True only when configured credentials are rejected (not when they're simply unset).
+# Lets callers alert a human instead of silently degrading to anonymous access.
 dockerhub_login_failed = False
 
 
