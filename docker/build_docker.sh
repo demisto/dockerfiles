@@ -293,11 +293,6 @@ function docker_build {
     DOCKER_ORG_DEMISTO=demisto
     image_name=$(basename "$1")
     echo "Starting build for dir: $1, image: ${image_name}, pwd: $(pwd)"
-    # "sig-" is reserved for cosign signature repositories (demisto/python3 -> demisto/sig-python3).
-    if [[ "${image_name}" == sig-* ]]; then
-        record_failure "${image_name}" "validation" "image name must not start with 'sig-' (reserved for cosign signature repositories)"
-        return $?
-    fi
     cd "$1"
     if  [[ "${CI_COMMIT_REF_NAME}" == "master" ]] && [[ "$(prop 'devonly')" ]]; then
         echo "== skipping image [${image_name}] as it is marked devonly =="
