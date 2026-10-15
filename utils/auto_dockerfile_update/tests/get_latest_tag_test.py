@@ -90,7 +90,6 @@ def test_refreshes_expired_token_on_401_mid_flight(monkeypatch):
     """
     monkeypatch.setenv("DOCKERHUB_USER", "u")
     monkeypatch.setenv("DOCKERHUB_PASSWORD", "p")
-    glt._get_dockerhub_jwt.cache_clear()
     with patch.object(glt.requests, "post", return_value=_response(200, {"token": "stale-jwt"})):
         assert glt._get_dockerhub_jwt() == "stale-jwt"
 
