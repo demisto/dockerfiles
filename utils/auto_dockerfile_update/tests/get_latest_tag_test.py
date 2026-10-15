@@ -77,6 +77,33 @@ def test_login_failure_with_credentials_sets_flag(monkeypatch):
     assert glt.dockerhub_login_failed is True
 
 
+def test_refreshes_expired_token_on_401_mid_flight(monkeypatch):
+    """
+    Given
+        - a cached JWT that Docker Hub now rejects with 401 (e.g. it expired
+          mid-run), and credentials that are still valid
+    When
+        - calling dockerhub_get
+    Then
+        - it re-logs in once, retries with the fresh token, and returns the
+          successful response instead of surfacing the 401
+    """
+    monkeypatch.setenv("DOCKERHUB_USER", "u")
+    monkeypatch.setenv("DOCKERHUB_PASSWORD", "p")
+    glt._get_dockerhub_jwt.cache_clear()
+    with patch.object(glt.requests, "post", return_value=_response(200, {"token": "stale-jwt"})):
+        assert glt._get_dockerhub_jwt() == "stale-jwt"
+
+    responses = [_response(401, "Unauthorized"), _response(200, {"ok": True})]
+    with patch.object(glt.requests, "get", side_effect=responses) as get, \
+            patch.object(glt.requests, "post", return_value=_response(200, {"token": "fresh-jwt"})) as post:
+        res = glt.dockerhub_get("https://hub.docker.com/x")
+    assert res.status_code == 200
+    assert post.call_count == 1
+    assert get.call_args_list[0].kwargs["headers"] == {"Authorization": "Bearer stale-jwt"}
+    assert get.call_args_list[1].kwargs["headers"] == {"Authorization": "Bearer fresh-jwt"}
+
+
 def test_retries_on_429(monkeypatch):
     """
     Given
