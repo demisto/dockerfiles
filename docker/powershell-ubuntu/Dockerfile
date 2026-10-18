@@ -2,7 +2,7 @@
 FROM mcr.microsoft.com/powershell:7.5-ubuntu-22.04
 
 # For the `no supported WSMan client library was found` error when using Ubuntu 20+
-RUN sh -c "yes | pwsh -Command 'Install-Module -Name PSWSMan'"
+RUN sh -c "yes | pwsh -Command 'Install-Module -Name PSWSMan -RequiredVersion 2.3.1'"
 RUN pwsh -Command 'Install-WSMan'
 
 # Update, install gss-ntlmssp, upgrade packages, and clean up in a single layer
