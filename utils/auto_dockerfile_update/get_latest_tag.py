@@ -38,6 +38,7 @@ def _get_dockerhub_jwt() -> Optional[str]:
         print(f"Docker Hub login failed: HTTP {res.status_code} {res.text[:200]!r}, using anonymous access")
         dockerhub_login_failed = True
         return None
+    print(f"Docker Hub login succeeded as {user!r}, using authenticated API access")
     return res.json().get("token")
 
 
