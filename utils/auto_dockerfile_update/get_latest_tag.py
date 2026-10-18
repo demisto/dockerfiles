@@ -64,7 +64,7 @@ def dockerhub_get(url: str, params: Optional[Dict] = None) -> requests.Response:
 
 
 def get_dockerhub_tags_list(base_url=f'https://hub.docker.com/v2/repositories', page_size=100, repo="library",
-                            image_name=None, page="", full_url="", name="", ordering=""):
+                            image_name=None, page="", full_url="", name=""):
     """
     Get tags list from dockerhub api
     Args:
@@ -74,7 +74,6 @@ def get_dockerhub_tags_list(base_url=f'https://hub.docker.com/v2/repositories', 
         image_name (str): docker image name
         page (int): current page to retrieve, for pagination
         name (str): filtering option used by dockerhub website
-        ordering (str): sort order, e.g. 'last_updated'
         full_url (str): If provided will ignore the previous arguments and use the full url instead.
 
     Returns:
@@ -87,8 +86,6 @@ def get_dockerhub_tags_list(base_url=f'https://hub.docker.com/v2/repositories', 
         params['page'] = page
     if name:
         params['name'] = name
-    if ordering:
-        params['ordering'] = ordering
     params['page_size'] = page_size
     res = dockerhub_get(full_url, params=params)
 
