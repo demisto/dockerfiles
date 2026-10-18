@@ -21,18 +21,14 @@ RUN apt-get update -y && \
     # clean up apt lists
     rm -rf /var/lib/apt/lists/*
 
-# Upgrade System.Security.Cryptography.Xml and System.Security.Cryptography.Pkcs to 9.0.21 to address .NET security issues
+# Upgrade System.Security.Cryptography.Xml to 9.0.18 to address .NET security issues
 RUN apt-get update -y && \
     apt-get install -y --no-install-recommends unzip && \
-    wget -q https://api.nuget.org/v3-flatcontainer/system.security.cryptography.xml/9.0.21/system.security.cryptography.xml.9.0.21.nupkg -O /tmp/cryptoxml.nupkg && \
+    wget -q https://api.nuget.org/v3-flatcontainer/system.security.cryptography.xml/9.0.18/system.security.cryptography.xml.9.0.18.nupkg -O /tmp/cryptoxml.nupkg && \
     unzip -o /tmp/cryptoxml.nupkg "lib/net9.0/System.Security.Cryptography.Xml.dll" -d /tmp/cryptoxml && \
     cp /tmp/cryptoxml/lib/net9.0/System.Security.Cryptography.Xml.dll /opt/microsoft/powershell/7/System.Security.Cryptography.Xml.dll && \
-    sed -i 's|System.Security.Cryptography.Xml/9.0.1|System.Security.Cryptography.Xml/9.0.21|g' /opt/microsoft/powershell/7/pwsh.deps.json && \
-    wget -q https://api.nuget.org/v3-flatcontainer/system.security.cryptography.pkcs/9.0.21/system.security.cryptography.pkcs.9.0.21.nupkg -O /tmp/cryptopkcs.nupkg && \
-    unzip -o /tmp/cryptopkcs.nupkg "lib/net9.0/System.Security.Cryptography.Pkcs.dll" -d /tmp/cryptopkcs && \
-    cp /tmp/cryptopkcs/lib/net9.0/System.Security.Cryptography.Pkcs.dll /opt/microsoft/powershell/7/System.Security.Cryptography.Pkcs.dll && \
-    sed -i 's|System.Security.Cryptography.Pkcs/9.0.1|System.Security.Cryptography.Pkcs/9.0.21|g' /opt/microsoft/powershell/7/pwsh.deps.json && \
-    rm -rf /tmp/cryptoxml /tmp/cryptoxml.nupkg /tmp/cryptopkcs /tmp/cryptopkcs.nupkg && \
+    sed -i 's|System.Security.Cryptography.Xml/9.0.1|System.Security.Cryptography.Xml/9.0.18|g' /opt/microsoft/powershell/7/pwsh.deps.json && \
+    rm -rf /tmp/cryptoxml /tmp/cryptoxml.nupkg && \
     apt-get purge -y unzip && \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/*
