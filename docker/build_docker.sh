@@ -648,7 +648,8 @@ if [ "${UPLOAD_MODE}" = "true" ]; then
         exit 1
     fi
     DIFF_COMPARE="${LAST_UPLOAD_COMMIT}...${CI_COMMIT_SHA}"
-    DOCKER_ORG=demisto
+    # TEMPORARY (CIAC-17423 testing only) - remove before merge.
+    DOCKER_ORG="${UPLOAD_DOCKER_ORG:-demisto}"
     if [ "${DRY_RUN}" = "true" ]; then
         DOCKER_ORG=devdemisto
         echo "[DRY-RUN] Overriding DOCKER_ORG to devdemisto"
