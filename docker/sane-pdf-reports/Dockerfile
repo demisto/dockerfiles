@@ -5,7 +5,7 @@ WORKDIR "/app"
 
 SHELL ["/bin/bash", "-c"]
 
-RUN pip install --no-cache-dir "urllib3>=2.8.0"
+RUN pip install --no-cache-dir "urllib3>=2.8.0" "certifi>=2026.10.19"
 
 # Debian 11 has reached end of life; its packages are served from the archive host.
 RUN sed -i 's|http://deb.debian.org|http://archive.debian.org|g' /etc/apt/sources.list
