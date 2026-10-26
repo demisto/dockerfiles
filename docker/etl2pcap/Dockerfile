@@ -1,5 +1,5 @@
-# Last modified: 2026-10-05T04:45:02.498905+00:00
-FROM demisto/python3:3.12.14.13495286
+# Last modified: 2026-10-26T08:55:15.749210+00:00
+FROM demisto/python3:3.12.15.14069087
 
 RUN mkdir /var/opt/etl
 
