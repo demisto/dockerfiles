@@ -16,8 +16,8 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev \
 
 RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories \
   && apk --update add --no-cache \
-  curl=8.22.0-r0 \
-  libcurl=8.22.0-r0 \
+  curl=8.23.0-r0 \
+  libcurl=8.23.0-r0 \
   sqlite-libs=3.53.4-r0 \
   bind-tools openssl iputils
 
