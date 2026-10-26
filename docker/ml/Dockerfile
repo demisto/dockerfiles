@@ -1,4 +1,4 @@
-# Last modified: 2026-10-11T04:47:13.200743+00:00
+# Last modified: 2026-10-26T05:51:06.900244+00:00
 FROM alpine:3.17.10 as files-src
 RUN mkdir /ml
 COPY ./encrypted_model.b /ml/encrypted_model.b
@@ -12,7 +12,7 @@ RUN unzip /distilled_bert_base_uncased_tokenizer.zip -d /ml \
   && rm /distilled_bert_base_uncased_tokenizer.zip \
   && chmod -R 775 /ml
 
-FROM demisto/python3-deb:3.12.14.12343672
+FROM demisto/python3-deb:3.12.15.14089014
 
 COPY requirements.txt .
 
@@ -21,7 +21,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   gcc python3-dev pipenv gfortran wget git g++ pkg-config libhdf5-dev \
   && pip install --no-cache-dir -r requirements.txt \
   && apt-get purge -y --auto-remove \
-  gcc python3-dev gfortran wget git g++ pkg-config libhdf5-dev \
+  gcc python3-dev pipenv gfortran wget git g++ pkg-config libhdf5-dev \
   && apt-get upgrade -y \
   && apt-get install -y perl libsqlite3-0
 
