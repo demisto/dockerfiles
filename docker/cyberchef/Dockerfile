@@ -1,5 +1,5 @@
-# Last modified: 2026-10-05T04:45:02.498905+00:00
-FROM demisto/python3:3.12.14.13495286
+# Last modified: 2026-10-26T07:35:35.615486+00:00
+FROM demisto/python3:3.12.15.14069087
 
 COPY requirements.txt .
 COPY bake.js /bake.js
@@ -14,6 +14,7 @@ RUN apk add --update --no-cache nodejs npm \
 
 RUN npm install -g --save cyberchef-node \
   && cd /usr/local/lib/node_modules/cyberchef-node \
+  && npm pkg set overrides.zod="4.6.6" \
   && npm install jsonpath-plus@latest \
   && npm cache clean --force \
   && apk del npm \
