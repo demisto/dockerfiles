@@ -33,7 +33,9 @@ RUN NLTK_MAX_ATTEMPTS=3; NLTK_RETRY_DELAY_SECONDS=5; \
     done
 
 ENV NLTK_DATA='/ml/nltk_data'
-RUN chown -R demisto:demisto /ml && chmod -R 775 /ml
+# nltk>=3.10.4 only reads data owned by root or the running user and not group/world-writable.
+RUN chown -R demisto:demisto /ml && chmod -R 775 /ml \
+  && chown -R root:root /ml/nltk_data && chmod -R go-w /ml/nltk_data
 
 # set the number of threads for numpy libs
 ENV OPENBLAS_NUM_THREADS=1
