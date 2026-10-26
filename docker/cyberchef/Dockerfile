@@ -1,4 +1,4 @@
-# Last modified: 2026-10-26T05:51:06.900244+00:00
+# Last modified: 2026-10-26T06:46:21.642929+00:00
 FROM demisto/python3:3.12.15.14069087
 
 COPY requirements.txt .
@@ -14,7 +14,7 @@ RUN apk add --update --no-cache nodejs npm \
 
 RUN npm install -g --save cyberchef-node \
   && cd /usr/local/lib/node_modules/cyberchef-node \
-  && npm install jsonpath-plus@latest \
+  && npm install jsonpath-plus@latest zod@4.6.6 \
   && npm cache clean --force \
   && apk del npm \
   && rm -rf /usr/lib/node_modules/npm /usr/bin/npm /usr/bin/npx \
