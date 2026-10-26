@@ -8,8 +8,8 @@ ENV DEMISTO_SDK_SKIP_LOGGER_SETUP true
 COPY requirements.txt .
 
 RUN apk --update add --no-cache \
-  curl=8.22.0-r0 \
-  libcurl=8.22.0-r0
+  curl=8.23.0-r0 \
+  libcurl=8.23.0-r0
 
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base libffi-dev openssl-dev \
   && apk add --no-cache git  \
