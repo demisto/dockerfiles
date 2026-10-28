@@ -1,4 +1,4 @@
-# Last modified: 2026-10-27T06:06:48.190565+00:00
+# Last modified: 2026-10-28T06:16:02.383844+00:00
 
 FROM demisto/opencv:1.0.0.14109060
 
