@@ -1,4 +1,4 @@
-# Last modified: 2026-10-27T06:06:48.190565+00:00
+# Last modified: 2026-10-28T06:16:02.383844+00:00
 FROM alpine:3.17.10 as files-src
 COPY weights /yolo-coco
 RUN cd yolo-coco \
