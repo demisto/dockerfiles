@@ -530,6 +530,19 @@ function docker_build {
             return $?
         fi
     fi
+
+    if [ -f "verify.js" ]; then
+        print_sub_separator "-"
+        echo "Verifying docker image by running the node script verify.js within the docker image"
+        set +e
+        cat verify.js | docker run --rm -i "${image_full_name}" node -
+        local js_verify_exit_code=$?
+        set -e
+        if [ $js_verify_exit_code -ne 0 ]; then
+            record_failure "${image_name}" "validation" "verify.js failed with exit code ${js_verify_exit_code}"
+            return $?
+        fi
+    fi
     # -- Save image as gzipped tar --
     IMAGE_NAME_SAVE="$(echo "${image_full_name}" | sed -e 's/\//__/g' -e 's/:/_/g').tar"
     TAR_SAVE_DIR="${SAVE_DIR:-${ARTIFACTS_FOLDER}}"
