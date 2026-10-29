@@ -1,10 +1,13 @@
-# Last modified: 2026-10-29T09:30:00.000000+00:00
-# demisto/python3 is amd64-only, so the node stage must match it
-FROM --platform=linux/amd64 node:22-alpine AS node
+# Last modified: 2026-10-29T15:20:00.000000+00:00
+FROM node:22.23.4-alpine3.24
 
-FROM demisto/python3:3.12.15.14069087
+# Upgrade all packages to latest (same as demisto/python3)
+RUN apk --update --no-cache upgrade
 
-# Node.js 22 runtime (copied from the official image so the version is pinned independently of the Alpine repo)
-# libatomic is unused by Node 22/24 but required by Node 26+, so a future version bump won't fail on libatomic.so.1
-RUN apk --update add --no-cache libstdc++ libgcc libatomic
-COPY --from=node /usr/local/bin/node /usr/local/bin/node
+# Content runs scripts only; package managers are not needed at runtime and are a CVE source
+RUN rm -rf /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/corepack /opt/yarn-* \
+  /usr/local/bin/npm /usr/local/bin/npx /usr/local/bin/corepack /usr/local/bin/yarn /usr/local/bin/yarnpkg
+
+# Same unprivileged user as the other demisto images
+RUN addgroup -g 4000 demisto \
+  && adduser -u 4000 -G demisto -D demisto -s /bin/sh
