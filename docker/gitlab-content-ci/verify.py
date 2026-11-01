@@ -28,4 +28,8 @@ assert (
     cosign_version in cosign_output
 ), f"expected cosign {cosign_version}, got: {cosign_output}"
 
+# ripgrep
+rg_output = run("rg", "--version")
+assert rg_output.startswith("ripgrep"), f"unexpected rg output: {rg_output}"
+
 print("All is good. gitlab-content-ci tools verified successfully")
