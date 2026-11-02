@@ -1,4 +1,4 @@
-# Last modified: 2026-11-02T06:50:07.303789+00:00
+# Last modified: 2026-11-02T07:18:57.927188+00:00
 FROM demisto/python3:3.12.15.14069087
 
 ENV MSGPACK_PUREPYTHON=1
@@ -12,4 +12,5 @@ RUN apk --update add --no-cache --virtual .build-dependencies \
     libffi-dev \
     openssl-dev \
     && pip install --no-cache-dir -r requirements.txt \
+    && pip install --no-cache-dir "msgpack>=1.2.3" \
     && apk del .build-dependencies
