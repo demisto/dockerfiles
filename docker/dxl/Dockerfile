@@ -1,5 +1,5 @@
-# Last modified: 2026-10-05T04:45:02.498905+00:00
-FROM demisto/python3:3.12.14.13495286
+# Last modified: 2026-11-02T06:16:22.852245+00:00
+FROM demisto/python3:3.12.15.14069087
 
 
 COPY requirements.txt .
