@@ -1,7 +1,7 @@
 variables:
-  CURRENT_BRANCH_NAME: $INFRA_BRANCH
+  CURRENT_BRANCH_NAME: add-validation-for-cosign
 
 include:
   - file: "/.gitlab/ci/dockerfiles/.gitlab-ci.yml"
-    ref: $INFRA_BRANCH
+    ref: add-validation-for-cosign
     project: "${CI_PROJECT_NAMESPACE}/infra"
