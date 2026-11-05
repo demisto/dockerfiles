@@ -37,6 +37,7 @@ RUN apt-get install google-cloud-cli-gke-gcloud-auth-plugin -y && source ~/.bash
 
 # installations
 RUN apt-get install openjdk-17-jre -y && source ~/.bashrc && java -version
+RUN apt-get install ripgrep -y && rg --version
 RUN curl -sSL https://install.python-poetry.org | python3 - --version 1.8.2 && source ~/.bashrc && poetry --version
 
 # install neo4j
