@@ -334,21 +334,18 @@ ssh = ["bcrypt (>=3.1.5)"]
 
 [[package]]
 name = "deprecated"
-version = "1.3.1"
+version = "3.0.1"
 description = "Python @deprecated decorator to deprecate old python classes, functions or methods."
 optional = false
-python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,>=2.7"
+python-versions = ">=3.12"
 groups = ["main"]
 files = [
-    {file = "deprecated-1.3.1-py2.py3-none-any.whl", hash = "sha256:597bfef186b6f60181535a29fbe44865ce137a5079f295b479886c82729d5f3f"},
-    {file = "deprecated-1.3.1.tar.gz", hash = "sha256:b1b50e0ff0c1fddaa5708a2c6b0a6588bb09b892825ab2b214ac9ea9d92a5223"},
+    {file = "deprecated-3.0.1-py3-none-any.whl", hash = "sha256:eda314c115e8bc0fe52b90a6869e19240ac3cedb7449adfdba5981cf9ef693e1"},
+    {file = "deprecated-3.0.1.tar.gz", hash = "sha256:2f5a9fecc9961e26462846cf1e57f73a612b1d0b79c27dceeed8de647beadcee"},
 ]
 
 [package.dependencies]
-wrapt = ">=1.10,<3"
-
-[package.extras]
-dev = ["PyTest", "PyTest-Cov", "bump2version (<1)", "setuptools ; python_version >= \"3.12\"", "tox"]
+wrapt = ">=1.16,<3"
 
 [[package]]
 name = "easygui"
@@ -375,14 +372,14 @@ files = [
 
 [[package]]
 name = "extract-msg"
-version = "0.56.1"
+version = "0.58.2"
 description = "Extracts emails and attachments saved in Microsoft Outlook's .msg files"
 optional = false
 python-versions = ">=3.8"
 groups = ["main"]
 files = [
-    {file = "extract_msg-0.56.1-py3-none-any.whl", hash = "sha256:3690ee28cbc5a8affa9c07d5e902464743949fcf2033f24b926d7c08485b42a9"},
-    {file = "extract_msg-0.56.1.tar.gz", hash = "sha256:de94121cf5503377d932d503280293837baf630cd51ce36de901936b3172c43a"},
+    {file = "extract_msg-0.58.2-py3-none-any.whl", hash = "sha256:6211f7ebe146855a6d69aef60f14c197b583ffef00b9dc190e35644b2ea1ebd7"},
+    {file = "extract_msg-0.58.2.tar.gz", hash = "sha256:83bc225a0942d80fd97a445c0724e6472b3d821b59df1a5634421bbd19e265fa"},
 ]
 
 [package.dependencies]
@@ -400,6 +397,7 @@ encoding = ["chardet (>=3.0.0,<6)"]
 image = ["Pillow (>=9.5.0,<10)"]
 mime = ["python-magic (>=0.4.27,<0.5)"]
 readthedocs = ["sphinx-rtd-theme"]
+test = ["pypdf (<7.0.0)"]
 
 [[package]]
 name = "idna"
@@ -520,33 +518,32 @@ files = [
 
 [[package]]
 name = "pymisp"
-version = "2.5.34.3"
+version = "3.0.0"
 description = "Python API for MISP."
 optional = false
-python-versions = "<4.0,>=3.10"
+python-versions = "<3.16,>=3.11"
 groups = ["main"]
 files = [
-    {file = "pymisp-2.5.34.3-py3-none-any.whl", hash = "sha256:b7fa62210a5ca5090d2c8cfc455b0abc2ac62e6d31583f244bc0fb775540db95"},
-    {file = "pymisp-2.5.34.3.tar.gz", hash = "sha256:16026f36c785e2bc32c378e8475f1cede099cbf66f16dfeeec80a2bbd91e5f5b"},
+    {file = "pymisp-3.0.0-py3-none-any.whl", hash = "sha256:0c6175b5a91e22a0693f0b83eec5ed98cedae3387031c9b25f21a3c29fa88f1e"},
+    {file = "pymisp-3.0.0.tar.gz", hash = "sha256:cae124f52d897aeb15d4f9483ef4e4a3ba47c7086e370b34cc31b144f85b38e5"},
 ]
 
 [package.dependencies]
-deprecated = ">=1.3.1"
-extract_msg = {version = ">=0.56.1", optional = true, markers = "extra == \"email\""}
+deprecated = {version = ">=3", markers = "python_version >= \"3.12\""}
+extract_msg = {version = ">=0.57.0", optional = true, markers = "extra == \"email\""}
 oletools = {version = ">=0.60.2", optional = true, markers = "extra == \"email\""}
-python-dateutil = ">=2.9.0.post0"
+python-dateutil = ">=3.0.0"
 requests = ">=2.34.2"
 
 [package.extras]
-brotli = ["urllib3[broti] (>=2.7.0)"]
-docs = ["docutils (<0.23) ; python_version >= \"3.12\"", "myst-parser (>=5.1.0) ; python_version >= \"3.12\"", "sphinx (>=9.1.0) ; python_version >= \"3.12\"", "sphinx-autodoc-typehints (>=3.13.6) ; python_version >= \"3.12\""]
-email = ["RTFDE (>=0.1.2.2) ; python_version <= \"3.10\"", "extract_msg (>=0.56.1)", "oletools (>=0.60.2)"]
-fileobjects = ["lief (>=1.0.0)", "pure-magic-rs (>=0.4.3)", "pydeep2 (>=0.5.1)"]
-neo4j = ["neo4j (>=6.3.0)"]
-openioc = ["beautifulsoup4 (>=4.15.0)"]
-pdfexport = ["reportlab (>=5.0.1)"]
+brotli = ["urllib3[broti] (>=2.8.0)"]
+docs = ["docutils (<0.23) ; python_version >= \"3.13\"", "myst-parser (>=5.1.0) ; python_version >= \"3.13\"", "sphinx (>=9.2.0) ; python_version >= \"3.13\"", "sphinx-autodoc-typehints (>=3.17.4) ; python_version >= \"3.13\""]
+email = ["RTFDE (>=0.1.2.2) ; python_version <= \"3.10\"", "extract_msg (>=0.57.0)", "oletools (>=0.60.2)"]
+fileobjects = ["lief (>=1.0.0)", "pure-magic-rs (>=0.5.1)", "pydeep2 (>=0.5.1)"]
+neo4j = ["neo4j (>=6.4.1)"]
+pdfexport = ["reportlab (>=5.1.0)"]
 url = ["pyfaup-rs (>=0.4,<0.5)"]
-virustotal = ["validators (>=0.35.0)"]
+virustotal = ["validators (>=0.36.0) ; python_version == \"3.11\"", "validators (>=0.36.0) ; python_version >= \"3.12\""]
 
 [[package]]
 name = "pyparsing"
@@ -565,18 +562,18 @@ diagrams = ["jinja2", "railroad-diagrams"]
 
 [[package]]
 name = "python-dateutil"
-version = "2.9.0.post0"
+version = "4.0.0"
 description = "Extensions to the standard Python datetime module"
 optional = false
-python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,>=2.7"
+python-versions = ">=3.11"
 groups = ["main"]
 files = [
-    {file = "python-dateutil-2.9.0.post0.tar.gz", hash = "sha256:37dd54208da7e1cd875388217d5e00ebd4179249f90fb72437e91a35459a0ad3"},
-    {file = "python_dateutil-2.9.0.post0-py2.py3-none-any.whl", hash = "sha256:a8b2bc7bffae282281c8140a97d3aa9c14da0b136dfe83f850eea9a5f7470427"},
+    {file = "python_dateutil-4.0.0-py3-none-any.whl", hash = "sha256:a5e246f79eb80475e691bf93862cead98decd8a498cf53ba0516fcdc0f50dc1c"},
+    {file = "python_dateutil-4.0.0.tar.gz", hash = "sha256:d7295ff14fdc0f92f662100bfb6c551d160ca090f2939f1ec5b9794265c03f06"},
 ]
 
 [package.dependencies]
-six = ">=1.5"
+tzdata = "*"
 
 [[package]]
 name = "red-black-tree-mod"
@@ -631,18 +628,6 @@ dev = ["coverage (>=7.2.2,<7.3.0)", "lxml (>=4.6,<5.0)", "mypy (>=1.1,<2.0)", "p
 msg-parse = ["extract-msg (>=0.27,<1.0)"]
 
 [[package]]
-name = "six"
-version = "1.17.0"
-description = "Python 2 and 3 compatibility utilities"
-optional = false
-python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,>=2.7"
-groups = ["main"]
-files = [
-    {file = "six-1.17.0-py2.py3-none-any.whl", hash = "sha256:4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274"},
-    {file = "six-1.17.0.tar.gz", hash = "sha256:ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"},
-]
-
-[[package]]
 name = "soupsieve"
 version = "2.9"
 description = "A modern CSS selector implementation for Beautiful Soup."
@@ -661,7 +646,6 @@ description = "Provider of IANA time zone data"
 optional = false
 python-versions = ">=2"
 groups = ["main"]
-markers = "platform_system == \"Windows\""
 files = [
     {file = "tzdata-2025.1-py2.py3-none-any.whl", hash = "sha256:7e127113816800496f027041c570f50bcd464a020098a3b6b199517772303639"},
     {file = "tzdata-2025.1.tar.gz", hash = "sha256:24894909e88cdb28bd1636c6887801df64cb485bd593f2fd83ef29075a81d694"},
