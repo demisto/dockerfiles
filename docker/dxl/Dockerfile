@@ -10,18 +10,12 @@ RUN apk --update add --no-cache --virtual .build-dependencies \
     git \
     libffi-dev \
     openssl-dev \
-    zip \
-    unzip \
     && pip install --no-cache-dir -r requirements.txt \
+    # dxlclient pins msgpack<1.0; keep its 0.x wire format on msgpack 1.x
     && pip install --no-cache-dir --no-deps "msgpack>=1.2.3" \
-    && pip download --no-deps dxlclient \
-    && WHL=$(ls dxlclient-*.whl) \
-    && unzip "$WHL" -d dxlclient_src \
-    && find dxlclient_src -name "*.py" -exec sed -i 's/import msgpack/import dxlclient.msgpack_wrapper as msgpack/g' {} + \
-    && find dxlclient_src -name "*.py" -exec sed -i 's/from msgpack import/from dxlclient.msgpack_wrapper import/g' {} + \
-    && echo "import msgpack as _msgpack; globals().update(_msgpack.__dict__); unpackb = lambda *a, **kw: _msgpack.unpackb(*a, **dict(kw, raw=True)); unpack = lambda *a, **kw: _msgpack.unpack(*a, **dict(kw, raw=True)); Unpacker = lambda *a, **kw: _msgpack.Unpacker(*a, **dict(kw, raw=True))" > dxlclient_src/dxlclient/msgpack_wrapper.py \
-    && rm "$WHL" && cd dxlclient_src && zip -r "../$WHL" . \
-    && cd .. \
-    && pip install --force-reinstall --no-deps "$WHL" \
-    && rm -rf dxlclient_src "$WHL" \
+    && F="$(python -c 'import dxlclient.message as m; print(m.__file__)')" \
+    && sed -i -e "s/msgpack.Packer()/msgpack.Packer(use_bin_type=False)/" \
+        -e "s/msgpack.Unpacker(buf)/msgpack.Unpacker(buf, raw=True)/" "$F" \
+    && grep -q "use_bin_type=False" "$F" && grep -q "raw=True" "$F" \
     && apk del .build-dependencies
+
