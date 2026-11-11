@@ -1,5 +1,5 @@
-# Last modified: 2026-10-25T05:49:12.030962+00:00
-FROM python:3.12.15-slim-trixie
+# Last modified: 2026-11-11T00:19:48.422798+00:00
+FROM python:3.12.16-slim-trixie
 
 RUN echo 'deb http://deb.debian.org/debian trixie-backports main' >> /etc/apt/sources.list
 
