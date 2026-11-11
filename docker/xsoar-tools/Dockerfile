@@ -18,7 +18,7 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
   && pip install --no-cache-dir "setuptools-scm<10" \
   && pip install --no-cache-dir -r requirements.txt \
   && pip install --no-cache-dir "lxml>=6.1.0" \
-  && pip install --no-cache-dir --no-deps "virtualenv>=21.14.9" \
+  && pip install --no-cache-dir --no-deps "virtualenv>=21.14.9" "certifi>=2026.10.19" "uv>=0.13.4" \
   && apk del .build-dependencies
 
 ADD https://raw.githubusercontent.com/demisto/content/master/Packs/Base/Scripts/CommonServerPython/CommonServerPython.py /home/demisto
