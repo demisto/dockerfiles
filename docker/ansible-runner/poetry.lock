@@ -1011,20 +1011,20 @@ typing-extensions = ">=4.6.0"
 
 [[package]]
 name = "azure-mgmt-loganalytics"
-version = "1.0.0"
-description = "Microsoft Azure Log Analytics Management Client Library for Python"
+version = "14.0.0"
+description = "Microsoft Azure Loganalytics Management Client Library for Python"
 optional = false
-python-versions = "*"
+python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "azure-mgmt-loganalytics-1.0.0.zip", hash = "sha256:7eb052a1c4bb037c06a0aff740378bd54a6ae256bf5cb71faa14b4eb61281488"},
-    {file = "azure_mgmt_loganalytics-1.0.0-py2.py3-none-any.whl", hash = "sha256:042b059884a3d1aae4ecedb372b36939ef9623e5c4bc2537d0c0406c206cef0e"},
+    {file = "azure_mgmt_loganalytics-14.0.0-py3-none-any.whl", hash = "sha256:f8c9938c4d51a6f472e253e631f67ecb043fabf4e55ac79b1e1f299dc5e46b3d"},
+    {file = "azure_mgmt_loganalytics-14.0.0.tar.gz", hash = "sha256:200ecc8744b616c67b40a2e39d11831a0606021db8a199c79bfc246f8806ad35"},
 ]
 
 [package.dependencies]
-azure-common = ">=1.1,<2.0"
-msrest = ">=0.5.0"
-msrestazure = ">=0.4.32,<2.0.0"
+azure-mgmt-core = ">=1.6.0"
+isodate = ">=0.6.1"
+typing-extensions = ">=4.6.0"
 
 [[package]]
 name = "azure-mgmt-managedservices"
@@ -3997,4 +3997,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = "~3.12"
-content-hash = "dd21eba6a852f6184612dcec026fdb7f89ff5df41ea5bea19e575c63aac11d07"
+content-hash = "6be12d0d1e99c4c9f29b3f69dbfd8ae4c4a7168d950ed581592d6e11467a24fc"
