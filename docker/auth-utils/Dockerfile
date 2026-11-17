@@ -11,4 +11,4 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev libffi
   && apk del .build-dependencies
 
 
-# CIAC-17423 parallel-build POC: touch to include in 30-image parallel test
+# CIAC-17423 
