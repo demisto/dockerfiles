@@ -10,6 +10,7 @@ import sqlalchemy
 from sqlalchemy.engine.url import URL
 from sqlalchemy.sql import text
 import psycopg2
+import psycopg
 import pyodbc
 import oracledb
 import teradatasqlalchemy
@@ -47,5 +48,11 @@ except TypeError as ex:
         or ("bytes" in msg or "bytestring" in msg)
     ), "Expected TypeError when passing str to sha2_rsa_encrypt"
 
+
+# psycopg 3 must use the precompiled binary implementation (no libpq build at runtime)
+assert psycopg.pq.__impl__ in ("binary", "c"), f"Unexpected psycopg implementation: {psycopg.pq.__impl__}"
+# SQLAlchemy dialects for both PostgreSQL drivers must load
+sqlalchemy.create_engine('postgresql+psycopg://user:pass@127.0.0.1/db')
+sqlalchemy.create_engine('postgresql+psycopg2://user:pass@127.0.0.1/db')
 
 print("All is good. All imported successfully")
