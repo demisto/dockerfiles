@@ -1,6 +1,8 @@
-# Last modified: 2026-11-03T06:14:01.908365+00:00
+# Last modified: 2026-11-15T06:37:02.259514+00:00
 
-FROM demisto/btfl-soup:1.0.1.14304551
+FROM demisto/btfl-soup:1.0.1.14606498
+
+RUN apk add --no-cache "krb5>=1.22.3-r0" "krb5-libs>=1.22.3-r0"
 
 COPY requirements.txt .
 
