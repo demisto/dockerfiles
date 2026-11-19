@@ -10,7 +10,7 @@
         {
             "name": "Apache Software License, Version 2.0",
             "url": "https://www.apache.org/licenses/LICENSE-2.0",
-            "regex": "Apache",
+            "regex": "Apache(?!\\D*1\\.0)",
             "additional_urls": [
                 "https://aka.ms/azps-license",
                 "http://aka.ms/azps-license",
@@ -43,11 +43,6 @@
             "regex": "Public Domain"
         },
         {
-            "name": "Academic Free License (AFL)",
-            "url": "https://opensource.org/licenses/AFL-3.0",
-            "regex": "Academic Free License"
-        },
-        {
             "name": "ISC License (ISCL)",
             "url": "https://opensource.org/licenses/ISC",
             "regex": "ISC"
@@ -65,7 +60,7 @@
         {
             "name": "Creative Common \"Attribution\" license (CC-BY)",
             "url": "https://creativecommons.org/licenses/by/4.0/",
-            "regex": "CC-BY"
+            "regex": "CC-BY(?!\\W?[SN])"
         },
         {
             "name": "Artistic License",
