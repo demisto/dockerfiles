@@ -13,11 +13,11 @@ teradatasqlalchemy = "*"
 # to keep the bundled Go binary on a current toolchain and dependency set.
 teradatasql = ">=20.0.0.75"
 pymysql = "*"
-psycopg2-binary = "*"
 pyodbc = "*"
 oracledb = "*"
 expiringdict = "*"
 cryptography = "*"
+psycopg = {extras = ["binary"], version = "*"}
 
 [requires]
 python_version = "3.12"
