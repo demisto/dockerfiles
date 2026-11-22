@@ -1,5 +1,7 @@
-# Last modified: 2026-11-22T21:54:01.296564+00:00
+# Last modified: 2026-11-22T22:17:59.732838+00:00
 FROM demisto/python3:3.12.15.14069087
+
+RUN apk add --upgrade --no-cache openssl krb5 krb5-libs
 
 COPY requirements.txt .
 
