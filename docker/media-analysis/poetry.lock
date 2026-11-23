@@ -1424,7 +1424,29 @@ files = [
     {file = "typing_extensions-4.16.0.tar.gz", hash = "sha256:dc983d19a509c94dba722ee6abd33940f7c05a89e243c47e907eb4db6f1a43e5"},
 ]
 
+[[package]]
+name = "yt-dlp"
+version = "2026.10.26"
+description = "A feature-rich command-line audio/video downloader"
+optional = false
+python-versions = ">=3.11"
+groups = ["main"]
+files = [
+    {file = "yt_dlp-2026.10.26-py3-none-any.whl", hash = "sha256:a05c5b5d8562f7e8a62f5334348b406af4930d56d3a65f8021d14af0e22339ae"},
+    {file = "yt_dlp-2026.10.26.tar.gz", hash = "sha256:abe5c6b94c3b2f0560500add1c42e0a97641752743a5b65588ac2007a6e23eb6"},
+]
+
+[package.extras]
+curl-cffi = ["curl-cffi (>=0.5.10,<0.6.dev0 || >=0.10.dev0,<0.18) ; implementation_name == \"cpython\""]
+default = ["brotli ; implementation_name == \"cpython\" and sys_platform != \"ios\"", "brotlicffi ; implementation_name != \"cpython\"", "certifi (>=2026.10.19)", "mutagen", "pycryptodomex", "requests (>=2.32.2,<3)", "urllib3 (>=2.0.2,<3)", "websockets (>=13.0)", "yt-dlp-ejs (==0.8.0)"]
+deno = ["deno (>=2.9.8)"]
+pin = ["brotli (==1.2.1) ; implementation_name == \"cpython\" and sys_platform != \"ios\"", "brotlicffi (==1.2.1.0) ; implementation_name != \"cpython\"", "certifi (==2026.10.23)", "charset-normalizer (==3.5.2)", "idna (==3.20)", "mutagen (==1.48.1)", "pycparser (==3.11) ; implementation_name != \"PyPy\" and implementation_name != \"cpython\"", "pycryptodomex (==3.24.1)", "requests (==2.34.2)", "urllib3 (==2.8.0)", "websockets (==17.3)", "yt-dlp-ejs (==0.8.0)"]
+pin-curl-cffi = ["certifi (==2026.10.23) ; implementation_name == \"cpython\"", "cffi (==2.1.1) ; implementation_name == \"cpython\"", "curl-cffi (==0.17.0) ; implementation_name == \"cpython\"", "pycparser (==3.11) ; implementation_name == \"cpython\""]
+pin-deno = ["deno (==2.9.8)"]
+pin-secretstorage = ["cffi (==2.1.1) ; platform_python_implementation != \"PyPy\"", "cryptography (==50.0.2)", "jeepney (==0.9.0)", "pycparser (==3.11) ; implementation_name != \"PyPy\" and platform_python_implementation != \"PyPy\"", "secretstorage (==3.5.0)"]
+secretstorage = ["secretstorage"]
+
 [metadata]
 lock-version = "2.1"
 python-versions = "~3.12"
-content-hash = "fa647cd3e1bf9e70c88290431ac28959b626d704df7817ee74e4ed4020cd3aa8"
+content-hash = "d4ad5c3d1a2fd9f07fe36ca14f3c6f6a0c1aa89087f48c31ca44fafceec4b0c7"
