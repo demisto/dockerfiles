@@ -214,21 +214,22 @@ all = ["coverage (>=7.10.0)", "hypothesis (>=6.141.1)", "mypy (>=1.11.2)", "pyte
 
 [[package]]
 name = "openshell"
-version = "0.1.7"
-description = "OpenShell is the safe, private runtime for autonomous AI agents. "
+version = "0.1.9"
+description = "Python SDK for OpenShell sandbox management and command execution."
 optional = false
 python-versions = ">=3.11"
 groups = ["main"]
 files = [
-    {file = "openshell-0.1.7-py3-none-any.whl", hash = "sha256:21de1816fd3dc5627c625782c616816ddb8cf6d40ed2aaf568c8d941fffb65c1"},
+    {file = "openshell-0.1.9-py3-none-any.whl", hash = "sha256:5805829ef04b98d84dd6b2f4707f079c87bf8a4225a516b3b11bc6f84d56a9be"},
+    {file = "openshell-0.1.9.tar.gz", hash = "sha256:dd61158edaf3c89e405430aa6c6ff00a0ea6feb8124ca29ed63abbdd3d521ffd"},
 ]
 
 [package.dependencies]
 cloudpickle = ">=3.0"
 googleapis-common-protos = ">=1.63"
-grpcio = ">=1.60"
+grpcio = ">=1.78.2"
 httpx = ">=0.27"
-protobuf = ">=4.25"
+protobuf = ">=6.31.1"
 
 [[package]]
 name = "protobuf"
