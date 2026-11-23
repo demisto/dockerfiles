@@ -1,5 +1,5 @@
-# Last modified: 2026-10-11T04:47:13.200743+00:00
-FROM demisto/python3-deb:3.12.14.13495286
+# Last modified: 2026-11-09T05:54:27.221724+00:00
+FROM demisto/python3-deb:3.12.15.14089014
 
 WORKDIR /content
 
@@ -33,9 +33,11 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
     && curl -fsSL "https://download.docker.com/linux/static/stable/$ARCH/docker-27.5.1.tgz" | tar xz \
     && mv docker/docker /usr/local/bin/ \
     && rm -rf docker \
-    # base image ships pip 25.0.1, which the CVE scan flags
+    # base image ships an outdated pip 25.0.1
     && python3 -m pip install --no-cache-dir --upgrade pip \
     && python3 -m pip install --no-cache-dir -r requirements.txt \
+    # demisto-py and demisto-sdk cap certifi, uv and packaging; sdk only shells out to the uv binary
+    && python3 -m pip install --no-cache-dir --no-deps certifi==2026.10.23 uv==0.13.7 virtualenv==21.15.6 \
     && npm install -g npm@latest \
     # npm bundles its own tar and ip-address; overrides cannot reach them
     && NPM_BUNDLE="$(npm root -g)/npm/node_modules" \
@@ -45,8 +47,8 @@ RUN apt-get update && apt-get -y --no-install-recommends upgrade && apt-get inst
         && curl -fsSL "https://registry.npmjs.org/$name/-/$name-$version.tgz" \
            | tar xz -C "$NPM_BUNDLE/$name" --strip-components=1; \
        done \
-    # "content" collides with the public npm package, so the scan reports its CVEs here
-    && node -e "const fs=require('fs'); const pkg=JSON.parse(fs.readFileSync('./package.json')); pkg.name='demisto-sdk-content-deps'; pkg.private=true; pkg.overrides={...pkg.overrides, 'linkify-it':'>=5.0.1'}; fs.writeFileSync('./package.json', JSON.stringify(pkg));" \
+    # "content" collides with the public npm package name
+    && node -e "const fs=require('fs'); const pkg=JSON.parse(fs.readFileSync('./package.json')); pkg.name='demisto-sdk-content-deps'; pkg.private=true; pkg.overrides={...pkg.overrides, 'linkify-it':'^5.0.1', 'markdown-it':'^14.3.2'}; fs.writeFileSync('./package.json', JSON.stringify(pkg));" \
     && npm install --package-lock-only \
     && npm ci \
     && npm install -g jsdoc-to-markdown@9.1.3 \

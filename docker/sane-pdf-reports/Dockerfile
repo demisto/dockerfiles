@@ -1,11 +1,11 @@
-# Last modified: 2026-10-11T15:52:22.288545+00:00
+# Last modified: 2026-10-25T05:49:12.030962+00:00
 FROM demisto/python3-deb-bullseye:3.12.11.12343672
 
 WORKDIR "/app"
 
 SHELL ["/bin/bash", "-c"]
 
-RUN pip install --no-cache-dir "urllib3>=2.8.0"
+RUN pip install --no-cache-dir "urllib3>=2.8.0" "certifi>=2026.10.19"
 
 # Debian 11 has reached end of life; its packages are served from the archive host.
 RUN sed -i 's|http://deb.debian.org|http://archive.debian.org|g' /etc/apt/sources.list

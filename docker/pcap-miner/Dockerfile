@@ -1,19 +1,24 @@
-# Last modified: 2026-10-11T04:47:13.200743+00:00
-FROM demisto/python3:3.12.14.13053055
+# Last modified: 2026-11-16T05:52:41.920083+00:00
+FROM demisto/python3:3.12.16.14740428
 
 COPY requirements.txt .
 
 RUN apk update && apk upgrade
 
-RUN apk --update add --no-cache libxml2 \
+RUN apk --update add --no-cache --upgrade \
+  libxml2 \
+  glib \
   libxslt \
   tshark \
-  libmagic
+  libmagic \
+  --repository=http://dl-cdn.alpinelinux.org/alpine/edge/main \
+  --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community
 
-# Upgrade libxml2 from source (2.15.3 not yet in Alpine repos). Remove once base image ships libxml2>=2.15.3.
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base wget git \
   libxml2-dev \
   libxslt-dev \
+  --repository=http://dl-cdn.alpinelinux.org/alpine/edge/main \
+  --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community \
   && pip install --no-cache-dir -r requirements.txt \
   && apk del .build-dependencies
 

@@ -1,8 +1,8 @@
-# Last modified: 2026-10-01T04:51:39.970523+00:00
+# Last modified: 2026-11-16T05:52:41.920083+00:00
 
 # Note: use this image as a base if you are dependent upon cryptography
 # See teams image for an example.
-FROM demisto/python3:3.12.14.13053055
+FROM demisto/python3:3.12.16.14740428
 
 COPY requirements.txt .
 

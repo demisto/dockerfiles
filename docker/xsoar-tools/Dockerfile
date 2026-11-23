@@ -1,6 +1,6 @@
-# Last modified: 2026-09-15T05:03:39.053769+00:00
+# Last modified: 2026-11-11T12:18:07.438692+00:00
 
-FROM demisto/python3:3.12.14.13053055
+FROM demisto/python3:3.12.15.14069087
 
 ENV DEMISTO_SDK_IGNORE_CONTENT_WARNING true
 ENV DEMISTO_SDK_SKIP_LOGGER_SETUP true
@@ -8,8 +8,8 @@ ENV DEMISTO_SDK_SKIP_LOGGER_SETUP true
 COPY requirements.txt .
 
 RUN apk --update add --no-cache \
-  curl=8.22.0-r0 \
-  libcurl=8.22.0-r0
+  "curl>=8.22.0-r0" \
+  "libcurl>=8.22.0-r0"
 
 RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-base libffi-dev openssl-dev \
   && apk add --no-cache git  \
@@ -18,6 +18,7 @@ RUN apk --update add --no-cache --virtual .build-dependencies python3-dev build-
   && pip install --no-cache-dir "setuptools-scm<10" \
   && pip install --no-cache-dir -r requirements.txt \
   && pip install --no-cache-dir "lxml>=6.1.0" \
+  && pip install --no-cache-dir --no-deps "virtualenv>=21.14.9" "certifi>=2026.10.19" "uv>=0.13.4" \
   && apk del .build-dependencies
 
 ADD https://raw.githubusercontent.com/demisto/content/master/Packs/Base/Scripts/CommonServerPython/CommonServerPython.py /home/demisto
