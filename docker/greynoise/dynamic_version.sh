@@ -1,0 +1,1 @@
+pip freeze | grep -i '^greynoise==' | grep -o -E '[0-9]+\.[0-9]+(\.[0-9]+)?'
