@@ -1,8 +1,40 @@
+import functools
+import os
+
 import requests
-from typing import List, Dict, Tuple, Union
+from typing import List, Dict, Optional, Tuple, Union
 import re
 
 VERSION_REGEX = re.compile(r"([\d]+(?:\.[\d]+)+)|([\d]+)$")
+
+DOCKERHUB_AUTH_URL = "https://hub.docker.com/v2/auth/token"
+REQUEST_TIMEOUT = 30
+
+
+@functools.lru_cache(maxsize=1)
+def _get_dockerhub_token() -> Optional[str]:
+    """Get a Docker Hub access token once per process from DOCKERHUB_USER/DOCKERHUB_PASSWORD.
+
+    Returns None (anonymous access) when the credentials are missing or the login fails.
+    """
+    user, password = os.getenv("DOCKERHUB_USER"), os.getenv("DOCKERHUB_PASSWORD")
+    if not (user and password):
+        print("DOCKERHUB_USER/DOCKERHUB_PASSWORD not set, using anonymous Docker Hub API access")
+        return None
+    try:
+        res = requests.post(DOCKERHUB_AUTH_URL, json={"identifier": user, "secret": password}, timeout=REQUEST_TIMEOUT)
+        res.raise_for_status()
+        return res.json()["access_token"]
+    except (requests.RequestException, ValueError, KeyError) as e:
+        print(f"Docker Hub login failed: {e}, using anonymous access")
+        return None
+
+
+def dockerhub_get(url: str, params: Optional[Dict] = None) -> requests.Response:
+    """GET a hub.docker.com API URL, authenticated when credentials are available."""
+    token = _get_dockerhub_token()
+    headers = {"Authorization": f"Bearer {token}"} if token else {}
+    return requests.get(url, params=params, headers=headers, timeout=REQUEST_TIMEOUT)
 
 
 def get_dockerhub_tags_list(base_url=f'https://hub.docker.com/v2/repositories', page_size=100, repo="library",
@@ -29,7 +61,7 @@ def get_dockerhub_tags_list(base_url=f'https://hub.docker.com/v2/repositories', 
     if name:
         params['name'] = name
     params['page_size'] = page_size
-    res = requests.get(full_url, params=params)
+    res = dockerhub_get(full_url, params=params)
 
     if res.status_code == 200:
         return res.json()
