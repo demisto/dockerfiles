@@ -1,4 +1,4 @@
-FROM demisto/python3-deb:3.12.14.12343672
+FROM demisto/python3-deb:3.12.15.14990175
 
 ENV PYTHONUNBUFFERED=1
 ENV PIP_NO_CACHE_DIR=1
@@ -7,6 +7,7 @@ ENV EASYOCR_MODULE_PATH=/root/.EasyOCR
 COPY requirements.txt .
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    ffmpeg \
     libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 \
     libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 \
     libgbm1 libasound2 libpango-1.0-0 libcairo2 fonts-liberation \
