@@ -30,11 +30,23 @@ def _get_dockerhub_token() -> Optional[str]:
         return None
 
 
-def dockerhub_get(url: str, params: Optional[Dict] = None) -> requests.Response:
-    """GET a hub.docker.com API URL, authenticated when credentials are available."""
-    token = _get_dockerhub_token()
+def _hub_get(url: str, params: Optional[Dict], token: Optional[str]) -> requests.Response:
     headers = {"Authorization": f"Bearer {token}"} if token else {}
     return requests.get(url, params=params, headers=headers, timeout=REQUEST_TIMEOUT)
+
+
+def dockerhub_get(url: str, params: Optional[Dict] = None) -> requests.Response:
+    """GET a hub.docker.com API URL, authenticated when credentials are available.
+
+    Docker Hub tokens expire after a few minutes, so a 401 triggers one fresh login and retry.
+    """
+    token = _get_dockerhub_token()
+    res = _hub_get(url, params, token)
+    if res.status_code == 401 and token:
+        print("Docker Hub token expired, logging in again")
+        _get_dockerhub_token.cache_clear()
+        res = _hub_get(url, params, _get_dockerhub_token())
+    return res
 
 
 def get_dockerhub_tags_list(base_url=f'https://hub.docker.com/v2/repositories', page_size=100, repo="library",

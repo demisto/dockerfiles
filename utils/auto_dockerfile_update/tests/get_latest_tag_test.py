@@ -56,6 +56,26 @@ def test_anonymous_without_credentials(monkeypatch):
     assert get.call_args.kwargs["headers"] == {}
 
 
+def test_expired_token_triggers_one_relogin(monkeypatch):
+    """
+    Given
+        - a cached Docker Hub token that has expired (tags request returns 401)
+    When
+        - fetching tags
+    Then
+        - a fresh token is fetched once and the request is retried with it
+    """
+    monkeypatch.setenv("DOCKERHUB_USER", "u")
+    monkeypatch.setenv("DOCKERHUB_PASSWORD", "p")
+    logins = [_response(200, {"access_token": "old"}), _response(200, {"access_token": "new"})]
+    with patch.object(glt.requests, "post", side_effect=logins) as post, \
+            patch.object(glt.requests, "get", side_effect=[_response(401), _response(200, {"results": []})]) as get:
+        assert glt.get_dockerhub_tags_list(repo="demisto", image_name="python3") == {"results": []}
+    assert post.call_count == 2
+    assert [c.kwargs["headers"] for c in get.call_args_list] == [
+        {"Authorization": "Bearer old"}, {"Authorization": "Bearer new"}]
+
+
 def test_falls_back_to_anonymous_when_login_fails(monkeypatch):
     """
     Given
