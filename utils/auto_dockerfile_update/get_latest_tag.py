@@ -26,10 +26,12 @@ def _get_dockerhub_token() -> Optional[str]:
     try:
         res = requests.post(DOCKERHUB_AUTH_URL, json={"identifier": user, "secret": password}, timeout=REQUEST_TIMEOUT)
         res.raise_for_status()
-        return res.json()["access_token"]
+        token = res.json()["access_token"]
     except (requests.RequestException, ValueError, KeyError) as e:
         print(f"Docker Hub login failed: {e}, using anonymous access")
         return None
+    print("Docker Hub login succeeded, using authenticated API access")
+    return token
 
 
 def _hub_get(url: str, params: Optional[Dict], token: Optional[str]) -> requests.Response:
