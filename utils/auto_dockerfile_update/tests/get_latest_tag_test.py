@@ -5,8 +5,8 @@ import pytest
 from utils.auto_dockerfile_update import get_latest_tag as glt
 
 
-def _response(status_code, json_data=None):
-    res = MagicMock(status_code=status_code, text=str(json_data))
+def _response(status_code, json_data=None, headers=None):
+    res = MagicMock(status_code=status_code, text=str(json_data), headers=headers or {})
     res.json.return_value = json_data
     res.raise_for_status.side_effect = None if status_code < 400 else glt.requests.HTTPError(str(status_code))
     return res
@@ -74,6 +74,25 @@ def test_expired_token_triggers_one_relogin(monkeypatch):
     assert post.call_count == 2
     assert [c.kwargs["headers"] for c in get.call_args_list] == [
         {"Authorization": "Bearer old"}, {"Authorization": "Bearer new"}]
+
+
+@pytest.mark.parametrize("retry_after, expected_wait", [("5", 5), ("3600", glt.RATE_LIMIT_MAX_WAIT), ("", glt.RATE_LIMIT_MAX_WAIT)])
+def test_rate_limit_waits_retry_after_capped_and_retries_once(monkeypatch, retry_after, expected_wait):
+    """
+    Given
+        - the tags request is rate limited (429) with a Retry-After header
+    When
+        - fetching tags
+    Then
+        - the request is retried once after Retry-After seconds, capped at RATE_LIMIT_MAX_WAIT
+    """
+    monkeypatch.delenv("DOCKERHUB_USER", raising=False)
+    monkeypatch.delenv("DOCKERHUB_PASSWORD", raising=False)
+    responses = [_response(429, headers={"Retry-After": retry_after}), _response(200, {"results": []})]
+    with patch.object(glt.requests, "get", side_effect=responses) as get, patch.object(glt.time, "sleep") as sleep:
+        assert glt.get_dockerhub_tags_list(repo="demisto", image_name="python3") == {"results": []}
+    sleep.assert_called_once_with(expected_wait)
+    assert get.call_count == 2
 
 
 def test_falls_back_to_anonymous_when_login_fails(monkeypatch):

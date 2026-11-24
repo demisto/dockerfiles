@@ -1,5 +1,6 @@
 import functools
 import os
+import time
 
 import requests
 from typing import List, Dict, Optional, Tuple, Union
@@ -9,6 +10,7 @@ VERSION_REGEX = re.compile(r"([\d]+(?:\.[\d]+)+)|([\d]+)$")
 
 DOCKERHUB_AUTH_URL = "https://hub.docker.com/v2/auth/token"
 REQUEST_TIMEOUT = 30
+RATE_LIMIT_MAX_WAIT = 60
 
 
 @functools.lru_cache(maxsize=1)
@@ -39,13 +41,21 @@ def dockerhub_get(url: str, params: Optional[Dict] = None) -> requests.Response:
     """GET a hub.docker.com API URL, authenticated when credentials are available.
 
     Docker Hub tokens expire after a few minutes, so a 401 triggers one fresh login and retry.
+    A 429 is retried once after the Retry-After header (capped), as documented in the Docker Hub API reference.
     """
     token = _get_dockerhub_token()
     res = _hub_get(url, params, token)
     if res.status_code == 401 and token:
         print("Docker Hub token expired, logging in again")
         _get_dockerhub_token.cache_clear()
-        res = _hub_get(url, params, _get_dockerhub_token())
+        token = _get_dockerhub_token()
+        res = _hub_get(url, params, token)
+    if res.status_code == 429:
+        retry_after = res.headers.get("Retry-After", "")
+        wait = min(int(retry_after), RATE_LIMIT_MAX_WAIT) if retry_after.isdigit() else RATE_LIMIT_MAX_WAIT
+        print(f"Docker Hub rate limit hit, retrying in {wait}s")
+        time.sleep(wait)
+        res = _hub_get(url, params, token)
     return res
 
 
