@@ -1,4 +1,4 @@
-# Last modified: 2026-11-15T00:21:33.207921+00:00
+# Last modified: 2026-11-25T00:19:23.592765+00:00
 FROM python:3.12.16-slim-trixie
 
 RUN echo 'deb http://deb.debian.org/debian trixie-backports main' >> /etc/apt/sources.list
